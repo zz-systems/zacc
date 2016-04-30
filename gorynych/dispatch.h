@@ -103,39 +103,39 @@ namespace zzsystems { namespace gorynych {
 	using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;
 
 	// single branch
-#define BRANCH(name)\
-	if (sysinfo.has##name()) \
+#define BRANCH(sysinfo, body, branch_name) \
+	if (sysinfo.has##branch_name()) \
 	{ \
-		using capability = capability_##name \
-		using vreal = static_dispatcher<capability>::vreal;\
+		using capability = capability_##branch_name; \
+		using vreal = static_dispatcher<capability>::vreal; \
 		using vint	= static_dispatcher<capability>::vint; \
-		name##_BRANCH;\
-		body;\
+		body; \
 	}
 
 	// Dynamic dispatch: Select branch to run
 #define SIMD_DISPATCH(sysinfo, body) \
 	do { \
-		BRANCH(AVX2) \
-		else BRANCH(AVX1) \
-		else BRANCH(SSE4FMA) \
-		else BRANCH(SSE4) \
-		else BRANCH(SSSE3) \
-		else BRANCH(SSE3) \
-		else BRANCH(SSE2) \
-		else BRANCH(FPU) \
+		BRANCH(sysinfo, body, AVX2) \
+		else BRANCH(sysinfo, body, AVX1) \
+		else BRANCH(sysinfo, body, SSE4FMA) \
+		else BRANCH(sysinfo, body, SSE4) \
+		else BRANCH(sysinfo, body, SSSE3) \
+		else BRANCH(sysinfo, body, SSE3) \
+		else BRANCH(sysinfo, body, SSE2) \
+		else BRANCH(sysinfo, body, FPU) \
 	} while(false)
 
 	// Dynamic dispatch: (Pre)build branches	
 #define SIMD_BUILD(sysinfo, body) \
 	do { \
-		BRANCH(AVX2) \
-		BRANCH(AVX1) \
-		BRANCH(SSE4FMA) \
-		BRANCH(SSE4) \
-		BRANCH(SSSE3) \
-		BRANCH(SSE3) \
-		BRANCH(SSE2) \
-		BRANCH(FPU) \
+		BRANCH(sysinfo, body, AVX2) \
+		BRANCH(sysinfo, body, AVX1) \
+		BRANCH(sysinfo, body, SSE4FMA) \
+		BRANCH(sysinfo, body, SSE4) \
+		BRANCH(sysinfo, body, SSSE3) \
+		BRANCH(sysinfo, body, SSE3) \
+		BRANCH(sysinfo, body, SSE2) \
+		BRANCH(sysinfo, body, FPU) \
 	} while(false)
+
 }}

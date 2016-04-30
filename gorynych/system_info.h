@@ -116,7 +116,7 @@ namespace zzsystems { namespace gorynych {
 			return hasFlag(CAPABILITY_AVX1) && hasFlag(CAPABILITY_AVX2);
 		}
 
-		bool hasAVX() const
+		bool hasAVX1() const
 		{
 			return hasFlag(CAPABILITY_AVX1);// && !hasFlag(CAPABILITY_AVX2);
 		}
@@ -138,10 +138,10 @@ namespace zzsystems { namespace gorynych {
 
 		bool hasSSE3() const
 		{
-			return hasFlag(CAPABILITY_SSE3) && hasSSE();
+			return hasFlag(CAPABILITY_SSE3) && hasSSE2();
 		}
 
-		bool hasSSE() const
+		bool hasSSE2() const
 		{
 			return hasFlag(CAPABILITY_SSE2);
 		}
@@ -180,14 +180,14 @@ namespace zzsystems { namespace gorynych {
 	{
 		static constexpr int feature_flags = featuremask();
 
-		static constexpr bool has_sse			= (featuremask() & CAPABILITY_SSE2) || (featuremask() & CAPABILITY_SSE41);
-		static constexpr bool has_fma			= (featuremask() & CAPABILITY_FMA3) || (featuremask() & CAPABILITY_FMA4);
-		static constexpr bool has_sse41			= (featuremask() & CAPABILITY_SSE41);
-		static constexpr bool has_sse42			= (featuremask() & CAPABILITY_SSE42);
-		static constexpr bool has_avx			= (featuremask() & CAPABILITY_AVX1);
-		static constexpr bool has_avx2			= (featuremask() & CAPABILITY_AVX2);
-		static constexpr bool has_avx512		= (featuremask() & CAPABILITY_AVX512);
-		static constexpr bool use_fast_float	= (featuremask() & CAPABILITY_FASTFLOAT);
+		static constexpr bool has_sse			= 0 != (featuremask() & CAPABILITY_SSE2) || (featuremask() & CAPABILITY_SSE41);
+		static constexpr bool has_fma			= 0 != (featuremask() & CAPABILITY_FMA3) || (featuremask() & CAPABILITY_FMA4);
+		static constexpr bool has_sse41			= 0 != (featuremask() & CAPABILITY_SSE41);
+		static constexpr bool has_sse42			= 0 != (featuremask() & CAPABILITY_SSE42);
+		static constexpr bool has_avx			= 0 != (featuremask() & CAPABILITY_AVX1);
+		static constexpr bool has_avx2			= 0 != (featuremask() & CAPABILITY_AVX2);
+		static constexpr bool has_avx512		= 0 != (featuremask() & CAPABILITY_AVX512);
+		static constexpr bool use_fast_float	= 0 != (featuremask() & CAPABILITY_FASTFLOAT);
 	};
 
 	// shortcuts

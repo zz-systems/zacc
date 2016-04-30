@@ -47,9 +47,9 @@ namespace zzsystems { namespace gorynych
 	ANY(TType)
 	struct cfl
 	{
-		CONSTDEF(TType, ones,	0xFFFF'FFFF);
-		CONSTDEF(TType, intmin, 0x8000'0001);
-		CONSTDEF(TType, intmax, 0x7FFF'FFFF);
+		CONSTDEF(TType, ones,	-1);
+		CONSTDEF(TType, intmin, numeric_limits<int>::min());
+		CONSTDEF(TType, intmax, numeric_limits<int>::max());
 
 		CONSTDEF(TType, _0, 0);	
 		CONSTDEF(TType, _1, 1);
@@ -68,8 +68,8 @@ namespace zzsystems { namespace gorynych
 		CONSTDEF(TType, _14, 14);
 		CONSTDEF(TType, _15, 15);
 
-		CONSTDEF(TType, sign1all0, 0x8000'0000);
-		CONSTDEF(TType, sign0all1, 0x7FFF'FFFF);
+		CONSTDEF(TType, sign1all0, numeric_limits<int>::min());
+		CONSTDEF(TType, sign0all1, numeric_limits<int>::max());
 	};	
 
 	template <>
@@ -82,7 +82,7 @@ namespace zzsystems { namespace gorynych
 	struct cfl<_int4>
 	{
 		CONSTDEF(_int4, _0, _mm_setzero_si128());
-		CONSTDEF(_int4, ones, _0() == _0());
+		CONSTDEF(_int4, ones, _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128()));
 		CONSTDEF(_int4, intmin, -(ones >> 1));
 		CONSTDEF(_int4, intmax, ones() >> 1);
 
@@ -141,7 +141,7 @@ namespace zzsystems { namespace gorynych
 	struct cfl<_int8>
 	{
 		CONSTDEF(_int8, _0, _mm256_setzero_si256());
-		CONSTDEF(_int8, ones, _0() == _0());
+		CONSTDEF(_int8, ones, _mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256()));
 		CONSTDEF(_int8, intmin, -(ones() >> 1));
 		CONSTDEF(_int8, intmax, ones() >> 1);
 
@@ -170,7 +170,7 @@ namespace zzsystems { namespace gorynych
 	struct cfl<_int4x2>
 	{
 		CONSTDEF(_int4x2, _0, _int4x2(_mm_setzero_si128(), _mm_setzero_si128()));
-		CONSTDEF(_int4x2, ones, _0() == _0());
+		CONSTDEF(_int4x2, ones, _int4x2(_mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128()), _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128())));
 		CONSTDEF(_int4x2, intmin, -(ones() >> 1));
 		CONSTDEF(_int4x2, intmax, ones() >> 1);
 

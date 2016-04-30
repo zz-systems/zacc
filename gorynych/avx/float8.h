@@ -78,7 +78,7 @@ namespace zzsystems { namespace gorynych {
 		// Return true if all bits are set to 1
 		explicit operator bool()
 		{
-			return _mm256_test_all_ones(_mm256_castps_si256(this->val));
+			return _mm256_test_all_ones(_mm256_castps_si256(this->val)) != 0;
 		}
 
 		// Generate value with all bits set to 1
@@ -169,7 +169,7 @@ namespace zzsystems { namespace gorynych {
 	// Bitwise not
 	FEATURE_UN_OP(~, _float8, HAS_AVX1)	
 	{
-		BODY(a ^ _float8::ones());
+		BODY(a ^ _float8(_float8::ones()));
 	}
 
 	// Bitwise or

@@ -77,15 +77,23 @@ namespace zzsystems { namespace gorynych {
 	FEATURE
 	_int4 vgather(const int* memloc, _int4 index)
 	{
-		auto i = extract(index);
-		return _mm_set_epi32(memloc[i[3]], memloc[i[2]], memloc[i[1]], memloc[i[0]]);
+		int* i = extract(index);
+		return _mm_set_epi32(
+			memloc[static_cast<size_t>(i[3])], 
+			memloc[static_cast<size_t>(i[2])],
+			memloc[static_cast<size_t>(i[1])], 
+			memloc[static_cast<size_t>(i[0])]);
 	}
 
 	FEATURE
 		_float4 vgather(const float* memloc, _int4 index)
 	{
-		auto i = extract(index);
-		return _mm_set_ps(memloc[i[3]], memloc[i[2]], memloc[i[1]], memloc[i[0]]);
+		int* i = extract(index);
+		return _mm_set_ps(
+			memloc[static_cast<size_t>(i[3])], 
+			memloc[static_cast<size_t>(i[2])], 
+			memloc[static_cast<size_t>(i[1])], 
+			memloc[static_cast<size_t>(i[0])]);
 	}
 
 	// Integer SQRT =============================================================================================	

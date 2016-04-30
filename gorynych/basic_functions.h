@@ -56,15 +56,15 @@ namespace zzsystems {
 		ANY(TProcess)
 			inline TProcess vsel(const bool condition, const TProcess &choice1, const TProcess &choice2)
 		{
-			return vsel<bool, TProcess>(condition, choice1, choice2);
-		}
-
-		// branched select (if - then - else) for any condition
-		ANY2(TCondition, TProcess)
-			inline TProcess vsel(const TCondition condition, const TProcess &choice1, const TProcess &choice2)
-		{
 			return (condition ? choice1 : choice2);
 		}
+
+		//// branched select (if - then - else) for any condition
+		//ANY2(TCondition, TProcess)
+		//	inline TProcess vsel(const TCondition condition, const TProcess &choice1, const TProcess &choice2)
+		//{
+		//	return (condition ? choice1 : choice2);
+		//}
 
 		// Multiply-Add (compatible with specialized fused mul-add implementations)		
 		// [y = a * b + c]
@@ -78,9 +78,9 @@ namespace zzsystems {
 		ANY(TType) TRI_FUNC(vclamp, TType) { BODY(vmin(vmax(a, b), c)); }
 
 		// Clamp float32 to int32/2 range
-		SIMD_ENABLED_F BIN_FUNC(clamp_int32, vreal)
+		SIMD_ENABLED_F UN_FUNC(clamp_int32, vreal)
 		{
-			BODY(vclamp<vreal>(val, -1073741824.0, 1073741824.0));
+			BODY(vclamp<vreal>(a, -1073741824.0, 1073741824.0));
 		}
 
 		// absolute value
@@ -93,8 +93,8 @@ namespace zzsystems {
 		ANY(TType) BIN_FUNC(vmax, TType) { BODY(std::max<TType>(a, b)); }
 
 		// truncate decimal part (1.5 -> 1.0)
-		UN_FUNC(vtrunc, double) { BODY(static_cast<int>(a)); }
-		UN_FUNC(vtrunc, float)	{ BODY(static_cast<int>(a)); }
+		UN_FUNC(vtrunc, double) { BODY(static_cast<double>(static_cast<int>(a))); }
+		UN_FUNC(vtrunc, float)	{ BODY(static_cast<float>(static_cast<int>(a))); }
 
 		// floor
 		UN_FUNC(vfloor, double) { BODY(std::floor(a)); }
@@ -112,4 +112,17 @@ namespace zzsystems {
 		UN_FUNC(vsqrt, double)	{ BODY(std::sqrt(a)); }
 		UN_FUNC(vsqrt, float)	{ BODY(std::sqrtf(a)); }
 		UN_FUNC(vsqrt, int)		{ BODY(static_cast<int>(::floor(::sqrt(static_cast<double>(a))))); }
+
+
+		SIMD_ENABLED_F
+			bool is_set(vreal value)
+		{
+			return static_cast<bool>(value);
+		}
+
+		template<>
+		bool is_set(float value)
+		{
+			return value != 0;
+		}
 }}

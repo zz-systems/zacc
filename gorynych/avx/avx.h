@@ -54,11 +54,11 @@ namespace zzsystems { namespace gorynych {
 	//inline int8::int8(const double4& rhs) : int8(rhs.val) { }
 
 	FEATURE
-		_int4x2::_int4x2(const _float8& rhs) : _int4x2(_mm256_extractf128_ps(rhs.val, 1), _mm256_extractf128_ps(rhs.val, 0)) { }
+		_int4x2::int4x2(const _float8& rhs) : int4x2(_mm256_extractf128_ps(rhs.val, 1), _mm256_extractf128_ps(rhs.val, 0)) { }
 	FEATURE
-		_int4x2::_int4x2(const _int4x2& rhs) : _int4x2(rhs.hi, rhs.lo) { }
+		_int4x2::int4x2(const _int4x2& rhs) : int4x2(rhs.hi, rhs.lo) { }
 	FEATURE
-		_int4x2::_int4x2(const _int4& rhs_hi, const _int4& rhs_lo) : _int4x2(rhs_hi.val, rhs_lo.val) { }
+		_int4x2::int4x2(const _int4& rhs_hi, const _int4& rhs_lo) : int4x2(rhs_hi.val, rhs_lo.val) { }
 
 	FEATURE
 		_float8::float8(const _float8& rhs) : float8(rhs.val) { }

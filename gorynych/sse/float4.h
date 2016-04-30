@@ -77,7 +77,7 @@ namespace zzsystems { namespace gorynych {
 		//template<enable_if_t<HAS_SSE, bool>>
 		explicit inline operator bool()
 		{
-			return _mm_test_all_ones(_mm_castps_si128(this->val));
+			return _mm_test_all_ones(_mm_castps_si128(this->val)) != 0;
 		}
 
 		static inline auto ones()

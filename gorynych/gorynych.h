@@ -41,17 +41,11 @@
 
 namespace std
 {
-	constexpr std::size_t operator "" _z(unsigned long long int x)
-	{
-		return x;
-	}
-
-
 	template <class T>
-	inline void hash_combine(size_t& seed, const T& v)
+	inline void hash_combine(int& seed, const T& v)
 	{
 		hash<T> hasher;
-		seed ^= hasher(v) + 0x9e3779b9_z + (seed << 6) + (seed >> 2);
+		seed ^= hasher(v) + static_cast<int>(0x9e3779b9) + (seed << 6) + (seed >> 2);
 	}
 
 	FEATURE

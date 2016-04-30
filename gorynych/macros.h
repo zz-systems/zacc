@@ -63,7 +63,7 @@ namespace zzsystems { namespace gorynych {
 		template<typename floatType = std::enable_if<std::is_floating_point<floatType>::value, floatType>::type>
 	
 	// shortcut(vreal): define checked integral type to use on SIMD-enabled functions/types. 
-	#define SIMD_ENABLED_F SIMD_ENABLE(vreal)
+	#define SIMD_ENABLED_F SIMD_ENABLE_F(vreal)
 
 	// define checked integral type to use on SIMD-enabled functions/types. 
 	#define SIMD_ENABLE_I(intType) \

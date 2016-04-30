@@ -25,6 +25,13 @@
 
 // Extensions for Microsoft unit testing framework.
 
+
+#if defined (_MSC_VER) && defined(MS_CPP_UNITTESTFRAMEWORK) 
+	#define INTERNALS_VISIBLE_TO_TEST(class_name) friend class class_name
+#else
+	#define INTERNALS_VISIBLE_TO_TEST(class_name) {}
+#endif
+
 #if defined (_MSC_VER) && defined(MS_CPP_UNITTESTFRAMEWORK)
 
 #include "gorynych.h"
