@@ -121,7 +121,7 @@ namespace zzsystems {
 		}
 
 		template<>
-		bool is_set(float value)
+		inline bool is_set(float value)
 		{
 			return value != 0;
 		}
