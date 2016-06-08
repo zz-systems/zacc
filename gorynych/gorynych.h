@@ -23,13 +23,24 @@
 //---------------------------------------------------------------------------------
 #pragma once
 
+#include "macros.h"
+#include "util/memory.h"
+#include "util/collections.h"
+
+//#if defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA)
 #include "sse/sse.h"
+//#endif
+
+//#if defined(COMPILE_AVX1) || defined(COMPILE_AVX2)
 #include "avx/avx.h"
+//#endif
+
+#if defined(COMPILE_OPENCL)
 #include "opencl/opencl.h"
+#endif
+
 #include "x87/SISD.h"
-
 #include "dependencies.h"
-
 #include "fastload.h"
 
 #ifdef _MSC_VER
@@ -41,7 +52,8 @@
 
 namespace std
 {
-	template <class T>
+
+	/*template <class T>
 	inline void hash_combine(int& seed, const T& v)
 	{
 		hash<T> hasher;
@@ -61,7 +73,7 @@ namespace std
 			result_type result = 0;
 
 			for (size_t i = 0; i < zzsystems::gorynych::dim<argument_type>(); i++)
-				hash_combine<float>(result, v[i]);
+				std::hash_combine<float>(static_cast<ulong>(result), v[i]);
 
 			return result;
 		}
@@ -84,5 +96,9 @@ namespace std
 
 			return result;
 		}
-	};	
+	};*/
 }
+
+namespace zzsystems { namespace gorynych {
+
+    }}

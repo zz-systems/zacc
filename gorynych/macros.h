@@ -23,19 +23,46 @@
 //---------------------------------------------------------------------------------
 
 #pragma once
+#include <type_traits>
 
 // This file defines the most important macro black magic used in gorynych and derived projects. 
 
 namespace zzsystems { namespace gorynych {
-	
+
+
+	template<typename T>
+	struct is_vint : std::false_type {};
+
+	template<typename T>
+	struct is_vreal : std::false_type {};
+
+	template<>
+	struct is_vint<int> : std::true_type {};
+
+	template<>
+	struct is_vreal<float> : std::true_type {};
+
+	template<typename scalar>
+	struct __scalar_type
+	{
+		typedef scalar type;
+		//scalar value;
+		//static_assert(!std::is_same<scalar, void>::value, "shit");
+	};
+
+	template<typename>
+	struct scalar_type : public __scalar_type<void>
+	{};
+
+	template<>
+	struct scalar_type<int> : public __scalar_type<int>
+	{};
+
+	template<>
+	struct scalar_type<float> : public __scalar_type<float>
+	{};
 	// Basic stuff ------------------------------------------------------------------------------------------------------
 	
-	// memory alignment
-	#if _MSC_VER < 1900  
-		#define ALIGN(bytes) __declspec(align(bytes))
-	#else 
-		#define ALIGN(bytes) alignas(bytes)
-	#endif
 
 	#define FORCEINLINE __forceinline
 
@@ -50,27 +77,12 @@ namespace zzsystems { namespace gorynych {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	// vectorized type SFINAE stuff -------------------------------------------------------------------------------------
-	// define checked floating and integral type to use on SIMD-enabled functions/types. 
-	#define SIMD_ENABLE(floatType, intType) \
-		template<	typename floatType	= std::enable_if<std::is_floating_point<floatType>::value, floatType>::type, \
-					typename intType	= std::enable_if<std::is_integral<intType>::value, intType>::type>
 
-	#define SIMD_ENABLED \
-		SIMD_ENABLE(vreal, vint)
-
-	// define checked floating type to use on SIMD-enabled functions/types. 
-	#define SIMD_ENABLE_F(floatType) \
-		template<typename floatType = std::enable_if<std::is_floating_point<floatType>::value, floatType>::type>
-	
-	// shortcut(vreal): define checked integral type to use on SIMD-enabled functions/types. 
-	#define SIMD_ENABLED_F SIMD_ENABLE_F(vreal)
-
-	// define checked integral type to use on SIMD-enabled functions/types. 
-	#define SIMD_ENABLE_I(intType) \
-		template<typename intType = std::enable_if<std::is_integral<intType>::value, intType>::type>
-	
-	// shortcut(vint): define checked integral type to use on SIMD-enabled functions/types. 
-	#define SIMD_ENABLED_I SIMD_ENABLE_I(vint)
+	#define SIMD_ENABLED template<typename vreal, typename vint>
+	#define SIMD_ENABLED_F template<typename vreal>
+	#define SIMD_ENABLED_I template<typename vint>
+	#define SIMD_ENABLED_FUNC_I SIMD_ENABLED inline typename std::enabled_if<is_vint<vint>::value && is_vreal<vreal>::value, vint>
+	#define SIMD_ENABLED_FUNC_F SIMD_ENABLED inline typename std::enabled_if<is_vint<vint>::value && is_vreal<vreal>::value, vreal>
 
 	// Featuremask template. Important for static branch dispatching
 	#define FEATURE template<typename featuremask>
@@ -83,7 +95,7 @@ namespace zzsystems { namespace gorynych {
 	// Argument defintion, passing --------------------------------------------------------------------------------------
 	
 	// shortcut: unary argument list
-	#define UN_ARG  (a.val)
+	#define UN_ARG (a.val)
 	
 	// shortcut: binary argument list
 	#define BIN_ARG (a.val, b.val)
@@ -108,10 +120,14 @@ namespace zzsystems { namespace gorynych {
 	
 	// Pass 8 constructor arguments
 	#define VPASS8 _7, _6, _5, _4, _3, _2, _1, _0
+
+	#define DUP4(i) i, i, i, i
+	#define DUP8(i) DUP4(i), DUP4(i)
 	//-------------------------------------------------------------------------------------------------------------------
 
 	// Operator declarations --------------------------------------------------------------------------------------------
-	
+
+
 	// Assignment operator
 	#define ASSIGN_OP(op, type) \
 		inline type& operator op(type &a, const type &b)
@@ -122,27 +138,27 @@ namespace zzsystems { namespace gorynych {
 
 	// Unary operator
 	#define UN_OP(op, type) \
-		inline type operator op(const type &a)	
+		inline type operator op(const type a)
 
 	// Binary operator
 	#define BIN_OP(op, type) \
-		inline type operator op(const type &a, const type &b)
+		inline type operator op(const type a, const type b)
 
 	// Shift operator 
 	#define SHIFT_OP(op, type) \
-		inline type operator op(const type &a, const int sa)
+		inline type operator op(const type a, const int sa)
 
 	// Converting unary operator
 	#define UN_OP_STUB(op, type, convertable) \
-		inline friend const type operator op(const convertable &a)	{ return op static_cast<type>(a); }		
+		inline friend const type operator op(const convertable a)	{ return op static_cast<type>(a); }
 
 	// Converting binary operator (A <- A op (A)B)
 	#define BIN_OP_STUB_AB(op, type, convertable) \
-		inline friend type operator op(const type &a, const convertable &b) { return a op static_cast<type>(b); }
+		inline friend type operator op(const type a, const convertable b) { return a op static_cast<type>(b); }
 
 	// Converting binary operator (A <- (A)B op A)
 	#define BIN_OP_STUB_BA(op, type, convertable) \
-		inline friend type operator op(const convertable &a, const type &b) { return static_cast<type>(a) op b; }
+		inline friend type operator op(const convertable a, const type &b) { return static_cast<type>(a) op b; }
 
 	// Permutated pair of converting binary operators
 	#define BIN_OP_STUB(op, type, convertable) \
@@ -160,15 +176,15 @@ namespace zzsystems { namespace gorynych {
 
 	// shortcut: unary operator declaration
 	#define FEATURE_UN_OP(op, TType, condition) \
-		FEATURE_OP(op, TType, condition) (const TType &a)	
+		FEATURE_OP(op, TType, condition) (const TType a)
 
 	// shortcut: binary operator declaration
 	#define FEATURE_BIN_OP(op, TType, condition) \
-		FEATURE_OP(op, TType, condition) (const TType &a, const TType &b)
+		FEATURE_OP(op, TType, condition) (const TType a, const TType b)
 
 	// shortcut: shift operator declaration
 	#define FEATURE_SHIFT_OP(op, TType, condition) \
-		FEATURE_OP(op, TType, condition) (const TType &a, const int sa)
+		FEATURE_OP(op, TType, condition) (const TType a, const int sa)
 	//-------------------------------------------------------------------------------------------------------------------
 
 	// Function declarations --------------------------------------------------------------------------------------------
@@ -191,15 +207,15 @@ namespace zzsystems { namespace gorynych {
 
 	// shortcut: unary function declaration
 	#define FEATURE_UN_FUNC(name, TType, condition) \
-	FEATURE_RET(TType, condition) name(const TType &a)
+	FEATURE_RET(TType, condition) name(const TType a)
 
 	// shortcut: binary function declaration
 	#define FEATURE_BIN_FUNC(name, TType, condition) \
-	FEATURE_RET(TType, condition) name(const TType &a, const TType &b)
+	FEATURE_RET(TType, condition) name(const TType a, const TType b)
 
 	// shortcut: ternary function declaration
 	#define FEATURE_TRI_FUNC(name, TType, condition) \
-	FEATURE_RET(TType, condition) name(const TType &a, const TType &b, const TType &c)
+	FEATURE_RET(TType, condition) name(const TType a, const TType b, const TType c)
 
 	//-------------------------------------------------------------------------------------------------------------------
 

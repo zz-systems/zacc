@@ -28,6 +28,22 @@
 #include <algorithm>
 #include <iostream>
 
+#ifdef _WIN32
+
+//  Windows
+#define cpuid(info, x)    __cpuidex(info, x, 0)
+
+#else
+
+//  GCC Intrinsics
+#include <cpuid.h>
+#define cpuid(info, x) __cpuid_count(x, 0, info[0], info[1], info[2], info[3])
+//inline void cpuid(int info[4], int InfoType){
+//	__cpuid_count(InfoType, 0, info[0], info[1], info[2], info[3]);
+//}
+
+#endif
+
 using namespace std;
 
 namespace zzsystems { namespace gorynych {
@@ -55,7 +71,26 @@ namespace zzsystems { namespace gorynych {
 		CAPABILITY_OPENCL	= 1 << 11,
 		CAPABILITY_FPGA		= 1 << 12
 	};
-		
+
+#if defined(FASTFLOAT)
+	using capability_AVX2		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 | CAPABILITY_AVX2 >;
+	using capability_AVX1		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 >;
+	using capability_SSE4FMA	= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_FMA3>;
+	using capability_SSE4		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41>;
+	using capability_SSSE3		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3>;
+	using capability_SSE3		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3>;
+	using capability_SSE2		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2>;
+	using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;
+#else
+		using capability_AVX2		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 | CAPABILITY_AVX2 >;
+		using capability_AVX1		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 >;
+		using capability_SSE4FMA	= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_FMA3>;
+		using capability_SSE4		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41>;
+		using capability_SSSE3		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3>;
+		using capability_SSE3		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3>;
+		using capability_SSE2		= integral_constant<int, CAPABILITY_SSE2>;
+		using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;
+#endif
 	struct system_info
 	{
 		int feature_flags;
@@ -64,7 +99,7 @@ namespace zzsystems { namespace gorynych {
 			: feature_flags(CAPABILITY_NONE)
 		{
 			int cpuInfo[4];
-			__cpuid(cpuInfo, 1);
+			cpuid(cpuInfo, 1);
 
 			// SSE2:
 			feature_flags |= cpuInfo[3] & (1 << 26) ? CAPABILITY_SSE2 : CAPABILITY_NONE;
@@ -88,7 +123,7 @@ namespace zzsystems { namespace gorynych {
 			feature_flags |= cpuInfo[2] & (1 << 28) ? CAPABILITY_AVX1 : CAPABILITY_NONE;
 			
 			// Extended CPU info
-			__cpuid(cpuInfo, 7);
+			cpuid(cpuInfo, 7);
 
 			feature_flags |= cpuInfo[1] & (1 << 5) ? CAPABILITY_AVX2 : CAPABILITY_NONE;
 			feature_flags |= cpuInfo[1] & (1 << 16) ? CAPABILITY_AVX512 : CAPABILITY_NONE;
@@ -180,7 +215,9 @@ namespace zzsystems { namespace gorynych {
 	{
 		static constexpr int feature_flags = featuremask();
 
-		static constexpr bool has_sse			= 0 != (featuremask() & CAPABILITY_SSE2) || (featuremask() & CAPABILITY_SSE41);
+		static constexpr bool has_sse2			= 0 != (featuremask() & CAPABILITY_SSE2);
+		static constexpr bool has_sse3			= 0 != (featuremask() & CAPABILITY_SSE3);
+		static constexpr bool has_ssse3			= 0 != (featuremask() & CAPABILITY_SSSE3);
 		static constexpr bool has_fma			= 0 != (featuremask() & CAPABILITY_FMA3) || (featuremask() & CAPABILITY_FMA4);
 		static constexpr bool has_sse41			= 0 != (featuremask() & CAPABILITY_SSE41);
 		static constexpr bool has_sse42			= 0 != (featuremask() & CAPABILITY_SSE42);
@@ -193,7 +230,9 @@ namespace zzsystems { namespace gorynych {
 	// shortcuts
 	#define _dispatcher dispatcher<featuremask>
 
-	#define HAS_SSE _dispatcher::has_sse
+	#define HAS_SSE _dispatcher::has_sse2
+	#define HAS_SSE3 _dispatcher::has_sse3
+	#define HAS_SSSE3 _dispatcher::has_ssse3
 	#define HAS_FMA _dispatcher::has_fma
 	#define HAS_SSE41 _dispatcher::has_sse41
 	#define HAS_SSE42 _dispatcher::has_sse42

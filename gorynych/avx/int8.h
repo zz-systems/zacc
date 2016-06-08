@@ -36,19 +36,40 @@ namespace zzsystems { namespace gorynych {
 
 	FEATURE
 	struct ALIGN(32) int8 {
+
+		typedef featuremask capability;
+#ifdef MSC_VER
 		__m256i val;
+#else
+		//union
+		//{
+		__m256i val;
+			//int32_t m256_i32[8];
+		//};
+#endif
 
 		int8() = default;
-		int8(const int32_t rhs)		: val(_mm256_set1_epi32(rhs)) {}
+//		int8(const int32_t rhs)		: val(_mm256_set_epi32(DUP8(rhs))) {}
+//
+//		int8(VARGS8(uint8_t))		: val(_mm256_set_epi32(VPASS8)) {}
+//		int8(VARGS8(int))			: val(_mm256_set_epi32(VPASS8)) {}
+//		int8(VARGS8(float))			: val(_mm256_cvtps_epi32(_mm256_set_ps(VPASS8))) {}
+//
+//		int8(const __m256& rhs)		: val(_mm256_cvtps_epi32(rhs)) {}
+//		int8(const __m256i& rhs)	: val(rhs) {}
+//		int8(const __m256d& rhs)	: val(_mm256_castsi128_si256(_mm256_cvtpd_epi32(rhs))) {}
 
-		int8(VARGS8(uint8_t))		: val(_mm256_set_epi32(VPASS8)) {}
-		int8(VARGS8(int))			: val(_mm256_set_epi32(VPASS8)) {}
-		int8(VARGS8(float))			: val(_mm256_cvtps_epi32(_mm256_set_ps(VPASS8))) {}
+		int8(const int rhs)			{ val = _mm256_set_epi32(DUP8(rhs)); }
+		int8(int* rhs)				{ val = _mm256_load_si256((__m256i*)rhs); }
 
-		int8(const __m256& rhs)		: val(_mm256_cvtps_epi32(rhs)) {}
-		int8(const __m256i& rhs)	: val(rhs) {}
-		int8(const __m256d& rhs)	: val(_mm256_castsi128_si256(_mm256_cvtpd_epi32(rhs))) {}
+		int8(VARGS8(uint8_t))		{ val = _mm256_set_epi32(VPASS8); }
+		int8(VARGS8(int))			{ val = _mm256_set_epi32(VPASS8); }
+		int8(VARGS8(float))			{ val = _mm256_cvtps_epi32(_mm256_set_ps(VPASS8)); }
 
+		int8(const __m256 rhs)		{ val = _mm256_cvtps_epi32(rhs); }
+		int8(const __m256i rhs)	{ val = rhs; }
+		int8(const __m256d rhs)	{ val = _mm256_castsi128_si256(_mm256_cvtpd_epi32(rhs)); }
+		
 		int8(const _float8&	rhs);
 		int8(const _int8&	rhs);
 		//int8(const double4&	rhs);
@@ -67,6 +88,7 @@ namespace zzsystems { namespace gorynych {
 		BIN_OP_STUB(>, _int8, int)
 		BIN_OP_STUB(<, _int8, int)
 		BIN_OP_STUB(== , _int8, int)
+		BIN_OP_STUB(!= , _int8, int)
 
 		explicit inline operator bool()
 		{
@@ -109,6 +131,11 @@ namespace zzsystems { namespace gorynych {
 		BIN_BODY(_mm256_cmpeq_epi32);
 	}
 
+	FEATURE_BIN_OP(!=, _int8, HAS_AVX2)
+	{
+		BIN_BODY(_mm256_cmpneq_epi32_mask);
+	}
+
 	FEATURE_UN_OP(~, _int8, HAS_AVX2)
 	{
 		BODY(_mm256_xor_si256(a.val, _mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256())));
@@ -148,7 +175,12 @@ namespace zzsystems { namespace gorynych {
 	FEATURE_SHIFT_OP(>> , _int8, HAS_AVX2) { return _mm256_srli_epi32(a.val, sa); }
 
 	FEATURE_SHIFT_OP(<< , _int8, HAS_AVX2) { return _mm256_slli_epi32(a.val, sa); }
-	
+
+
+	FEATURE_UN_FUNC(vabs, _int8, HAS_AVX2)
+	{
+		BODY(vmax(-a, a));
+	}
 	
 	FEATURE_BIN_FUNC(vmin, _int8, HAS_AVX2) { BIN_BODY(_mm256_min_epi32); }
 

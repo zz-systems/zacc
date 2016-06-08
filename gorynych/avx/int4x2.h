@@ -40,11 +40,14 @@ namespace zzsystems { namespace gorynych {
 
 	FEATURE
 	struct ALIGN(32) int4x2 {
+		typedef featuremask capability;
+
 		_int4 lo, hi;
 
 		int4x2() = default;
 		int4x2(const int32_t rhs)		: lo(rhs), hi(rhs) {}
 
+		int4x2(int* rhs)					: lo(rhs), hi(rhs + 4) {}
 		int4x2(VARGS8(uint32_t))		: lo(VPASS4), hi(VPASS4_HI) {}
 		int4x2(VARGS8(int))				: lo(VPASS4), hi(VPASS4_HI) {}
 		int4x2(VARGS8(float))			: lo(VPASS4), 
@@ -164,8 +167,13 @@ namespace zzsystems { namespace gorynych {
 	FEATURE_SHIFT_OP(<< , _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
 		return{ a.hi << sa, a.lo << sa };
-	}	
-	
+	}
+
+	FEATURE_UN_FUNC(vabs, _int4x2, HAS_AVX1 && !HAS_AVX2)
+	{
+		return { vmax(-a.hi, a.hi), vmax(-a.lo, a.lo) };
+	}
+
 	FEATURE_BIN_FUNC(vmin, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
 		return{ vmin(a.hi, b.hi), vmin(a.lo, b.lo) };

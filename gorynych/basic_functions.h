@@ -26,6 +26,19 @@
 
 #include "macros.h"
 #include <algorithm>
+#include <cstdlib>
+#include <cmath>
+//class type;
+
+namespace std
+{
+#ifndef WIN32
+    //float fabs(float val) { return std::abs(val); }
+	//float floorf(float val) { return std::floor(val); }
+	//float ceilf(float val) { return std::ceil(val); }
+	//float sqrtf(float val) { return std::sqrt(val); }
+#endif
+}
 
 namespace zzsystems { 	
 	
@@ -52,6 +65,8 @@ namespace zzsystems {
 		ANY(T)
 			constexpr size_t dim() { BODY(sizeof(T) >> 2); }
 
+
+
 		// branched select (if - then - else) for boolean condition		
 		ANY(TProcess)
 			inline TProcess vsel(const bool condition, const TProcess &choice1, const TProcess &choice2)
@@ -74,6 +89,15 @@ namespace zzsystems {
 		// [y = a * b - c]
 		ANY(TType) TRI_FUNC(vfmsub, TType) { BODY(a * b - c); }
 
+		// absolute value
+		//UN_FUNC(vabs, double)	{ BODY(std::fabs(a)); }
+		UN_FUNC(vabs, float)	{ BODY(std::abs(a)); }
+		UN_FUNC(vabs, int)		{ BODY(std::abs(a)); }
+
+		// min / max
+		ANY(TType) BIN_FUNC(vmin, TType) { BODY(std::min<TType>(a, b)); }
+		ANY(TType) BIN_FUNC(vmax, TType) { BODY(std::max<TType>(a, b)); }
+
 		// Clamp: min(max(val, minval), maxval)
 		ANY(TType) TRI_FUNC(vclamp, TType) { BODY(vmin(vmax(a, b), c)); }
 
@@ -83,34 +107,25 @@ namespace zzsystems {
 			BODY(vclamp<vreal>(a, -1073741824.0, 1073741824.0));
 		}
 
-		// absolute value
-		UN_FUNC(vabs, double)	{ BODY(std::fabs(a)); }
-		UN_FUNC(vabs, float)	{ BODY(std::fabsf(a)); }
-		UN_FUNC(vabs, int)		{ BODY(std::abs(a)); }
-
-		// min / max
-		ANY(TType) BIN_FUNC(vmin, TType) { BODY(std::min<TType>(a, b)); }
-		ANY(TType) BIN_FUNC(vmax, TType) { BODY(std::max<TType>(a, b)); }
-
 		// truncate decimal part (1.5 -> 1.0)
 		UN_FUNC(vtrunc, double) { BODY(static_cast<double>(static_cast<int>(a))); }
 		UN_FUNC(vtrunc, float)	{ BODY(static_cast<float>(static_cast<int>(a))); }
 
 		// floor
 		UN_FUNC(vfloor, double) { BODY(std::floor(a)); }
-		UN_FUNC(vfloor, float)	{ BODY(std::floorf(a)); }
+		UN_FUNC(vfloor, float)	{ BODY(std::floor(a)); }
 
 		// ceil
 		UN_FUNC(vceil, double)	{ BODY(std::ceil(a)); }
-		UN_FUNC(vceil, float)	{ BODY(std::ceilf(a)); }
+		UN_FUNC(vceil, float)	{ BODY(std::ceil(a)); }
 
 		// round 
 		UN_FUNC(vround, double) { BODY(std::round(a)); }
-		UN_FUNC(vround, float)	{ BODY(std::roundf(a)); }		
+		UN_FUNC(vround, float)	{ BODY(std::round(a)); }
 
 		// square root
 		UN_FUNC(vsqrt, double)	{ BODY(std::sqrt(a)); }
-		UN_FUNC(vsqrt, float)	{ BODY(std::sqrtf(a)); }
+		UN_FUNC(vsqrt, float)	{ BODY(std::sqrt(a)); }
 		UN_FUNC(vsqrt, int)		{ BODY(static_cast<int>(::floor(::sqrt(static_cast<double>(a))))); }
 
 

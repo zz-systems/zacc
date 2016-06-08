@@ -23,28 +23,43 @@
 //---------------------------------------------------------------------------------
 #pragma once
 
-#include "../dependencies.h"
 
 #include "int4x2.h"
 #include "int8.h"
 #include "float8.h"
 #include "double4.h"
+#include "../dependencies.h"
+
+
 
 // Traits =========================================================================================================
-FEATURE
-struct std::_Is_integral<zzsystems::gorynych::_int8> : std::true_type {	};
+namespace std {
 
-FEATURE
-struct std::_Is_integral<zzsystems::gorynych::_int4x2> : std::true_type {	};
-
-FEATURE
-struct std::_Is_floating_point<zzsystems::gorynych::_float8> : std::true_type {	};
-
+}
 //template<>
 //struct std::_Is_floating_point<zzsystems::gorynych::double2>	: std::true_type {	};
 
 namespace zzsystems { namespace gorynych {
 
+	FEATURE
+	struct is_vint<zzsystems::gorynych::_int8 > : std::true_type {
+	};
+
+	FEATURE
+	struct is_vint<zzsystems::gorynych::_int4x2 > : std::true_type {
+	};
+
+	FEATURE
+	struct is_vreal<zzsystems::gorynych::_float8 > : std::true_type {
+	};
+
+	FEATURE
+	struct scalar_type<_float8> : public __scalar_type<float>
+	{};
+
+	FEATURE
+	struct scalar_type<_int8> : public __scalar_type<int32_t>
+	{};
 	// Converting constructors ===================================================================================
 	FEATURE
 		_int8::int8(const _float8& rhs) : int8(rhs.val) { }
@@ -65,7 +80,7 @@ namespace zzsystems { namespace gorynych {
 	FEATURE
 		_float8::float8(const _int8& rhs) : float8(rhs.val) { }
 	FEATURE
-		_float8::float8(const _int4x2& rhs) 
+		_float8::float8(const _int4x2& rhs)
 		: float8(_mm256_set_m128(_mm_cvtepi32_ps(rhs.hi.val), _mm_cvtepi32_ps(rhs.lo.val)))
 	{
 		_mm256_zeroupper();
@@ -76,36 +91,74 @@ namespace zzsystems { namespace gorynych {
 	inline double4::double4(const int8& rhs) : double4(rhs.val) { }
 	inline double4::double4(const double4& rhs) : double4(rhs.val) { }*/
 
-	FEATURE int32_t* extract(_int8 &src)
+	FEATURE void extract(_int8 &src, int32_t* target)
 	{
-		return src.val.m256i_i32;
+		//return src.val.m256i_i32;
+#ifdef MSC_VER
+		return src.val.m256_i32;
+#else
+		for(size_t i = 0; i < dim<_int8>(); i++)
+			target[i] = _mm256_extract_epi32(src.val, i);
+#endif
 	}
 	FEATURE
-		const int32_t* extract(const _int8 &src)
+		void extract(const _int8 &src, int32_t* target)
 	{
-		return src.val.m256i_i32;
+		//return src.val.m256i_i32;
+#ifdef MSC_VER
+		return src.val.m256_i32;
+#else
+		for(size_t i = 0; i < dim<_int8>(); i++)
+			target[i] = _mm256_extract_epi32(src.val, i);
+#endif
 	}
 
-	FEATURE int32_t* extract(_int4x2 &src)
+	FEATURE void extract(_int4x2 &src, int32_t* target)
 	{
-		return src.hi.val.m128i_i32;
+		//return src.hi.val.m128i_i32;
+#ifdef MSC_VER
+		return src.hi.val.m128_i32;
+#else
+		for(size_t i = 0; i < dim<_int4>(); i++)
+			target[i] = _mm_extract_epi32(src.hi.val, i);
+		for(size_t i = 0; i < dim<_int4>(); i++)
+			target[i + 4] = _mm_extract_epi32(src.hi.val, i + 4);
+#endif
 	}
 
 	FEATURE
-		const int32_t* extract(const _int4x2 &src)
+		void extract(const _int4x2 &src, int32_t* target)
 	{
-		return src.hi.val.m128i_i32;
+		//return src.hi.val.m128i_i32;
+#ifdef MSC_VER
+		return src.val.m128_i32;
+#else
+		for(size_t i = 0; i < dim<_int4>(); i++)
+			target[i] = _mm_extract_epi32(src.hi.val, i);
+		for(size_t i = 0; i < dim<_int4>(); i++)
+			target[i + 4] = _mm_extract_epi32(src.hi.val, i + 4);
+#endif
 	}
 
-	FEATURE float* extract(_float8 &src)
+	FEATURE void extract(_float8 &src, float* target)
 	{
+		//return src.val.m256_f32;
+#ifdef MSC_VER
 		return src.val.m256_f32;
+#else
+	_mm256_store_ps(target, src.val);
+#endif
 	}
 
 	FEATURE
-		const float* extract(const _float8 &src)
+		void extract(const _float8 &src, float *target)
 	{
+		//return src.val.m256_f32;
+#ifdef MSC_VER
 		return src.val.m256_f32;
+#else
+		_mm256_store_ps(target, src.val);
+#endif
 	}
 
 	FEATURE

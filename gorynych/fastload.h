@@ -28,13 +28,14 @@
 // This is yet to be tested / benchmarked.
 
 #include "dependencies.h"
+#include "dispatch.h"
 #include "gorynych.h"
 
 namespace zzsystems { namespace gorynych
 {	
 	
 	// Shorcut for "constant" declaration
-#define CONSTDEF(TType, name, body) static TType name() { return static_cast<TType>(body); }
+#define CONSTDEF(TType, name, body) static inline TType name() { return static_cast<TType>(body); }
 
 	ANY(TType)
 	struct consts
@@ -44,224 +45,153 @@ namespace zzsystems { namespace gorynych
 		CONSTDEF(TType, sqrt3,	1.73205080756887729353);
 	};
 
-	ANY(TType)
-	struct cfl
+
+		template<typename type>
+		struct ccl
+		{
+			static inline type zeros() 			{ return 0x0; }
+			static inline type ones() 			{ return 0xFFFFFFFF; }
+			//static inline type min() 			{ return 0x80000000; }//*/{ return std::numeric_limits<int>::min(); }
+			//static inline type max() 			{ return 0x7FFFFFFF; }//*/{ return std::numeric_limits<int>::max(); }
+
+			//static inline type sign1all0() 		{ return 0x80000000; }
+			//static inline type sign0all1() 		{ return 0x7FFFFFFF; }
+		};
+
+		template<> inline float ccl<float>::ones() 		{ return numeric_limits<float>::quiet_NaN(); }
+		//template<> inline float ccl<float>::min() 		{ return -ccl<int>::min(); }
+
+#if defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA) || defined(COMPILE_AVX1)
+
+	FEATURE
+	struct ccl<_int4>
 	{
-		CONSTDEF(TType, ones,	-1);
-		CONSTDEF(TType, intmin, numeric_limits<int>::min());
-		CONSTDEF(TType, intmax, numeric_limits<int>::max());
+		static inline _int4 zeros()			{ return _mm_setzero_si128();}
+		static inline _int4 ones() 			{ return _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128()); }
+		//static inline _int4 min() 			{ return ones() << 31; }
+		//static inline _int4 max() 			{ return ones() >> 1;}
+		//static inline _int4 sign1all0() 	{ return ones() << 31;}
+		//static inline _int4 sign0all1() 	{ return ones() >> 1; }
+	};
 
-		CONSTDEF(TType, _0, 0);	
-		CONSTDEF(TType, _1, 1);
-		CONSTDEF(TType, _2, 2);
-		CONSTDEF(TType, _3, 3);
-		CONSTDEF(TType, _4, 4);
-		CONSTDEF(TType, _5, 5);
-		CONSTDEF(TType, _6, 6);
-		CONSTDEF(TType, _7, 7);
-		CONSTDEF(TType, _8, 8);
-		CONSTDEF(TType, _9, 9);
-		CONSTDEF(TType, _10, 10);
-		CONSTDEF(TType, _11, 11);
-		CONSTDEF(TType, _12, 12);
-		CONSTDEF(TType, _13, 13);
-		CONSTDEF(TType, _14, 14);
-		CONSTDEF(TType, _15, 15);
-
-		CONSTDEF(TType, sign1all0, numeric_limits<int>::min());
-		CONSTDEF(TType, sign0all1, numeric_limits<int>::max());
-	};	
-
-	template <>
-	inline float cfl<float>::ones()
+	FEATURE
+	struct ccl<_float4>
 	{
-		return numeric_limits<float>::quiet_NaN();
+		static inline _float4 zeros()		{ return _mm_setzero_ps();}
+		static inline _float4 ones() 		{ return _mm_castsi128_ps(_mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128())); }
+		//static inline _float4 min() 		{ return -(ccl<_int4>::min()); }
+		//static inline _float4 max() 		{ return (ccl<_int4>::max()); }
+		//static inline _float4 sign1all0() 	{ return _mm_castsi128_ps(ccl<_int4>::sign1all0().val);}
+		//static inline _float4 sign0all1() 	{ return _mm_castsi128_ps(ccl<_int4>::sign0all1().val); }
+	};
+#endif
+#if defined(COMPILE_AVX2)
+
+	FEATURE
+	struct ccl<_int8>
+	{
+		static inline _int8 zeros()			{ return _mm256_setzero_si256();}
+		static inline _int8 ones() 			{ return _mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256()); }
+		//static inline _int8 min() 			{ return ones() << 31; }
+		//static inline _int8 max() 			{ return ones() >> 1;}
+		//static inline _int8 sign1all0() 	{ return ones() << 31;}
+		//static inline _int8 sign0all1() 	{ return ones() >> 1; }
+	};
+
+	FEATURE
+	struct ccl<_float8>
+	{
+		static inline _float8 zeros()		{ return _mm256_setzero_ps();}
+		static inline _float8 ones() 		{ return _mm256_castsi256_ps(_mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256())); }
+		//static inline _float8 min() 		{ return -(ccl<_int8>::min()); }
+		//static inline _float8 max() 		{ return (ccl<_int8>::max()); }
+		//static inline _float8 sign1all0() 	{ return _mm256_castsi256_ps(ccl<_int8>::sign1all0().val);}
+		//static inline _float8 sign0all1() 	{ return _mm256_castsi256_ps(ccl<_int8>::sign0all1().val); }
+	};
+#elif defined(COMPILE_AVX1)
+	FEATURE
+	struct ccl<_int4x2>
+	{
+		static inline _int4x2 zeros()		{ return {_mm_setzero_si128(), _mm_setzero_si128()};}
+		static inline _int4x2 ones() 		{ return { _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128()), _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128())}; }
+		static inline _int4x2 min() 		{ return ones() << 31; }
+		static inline _int4x2 max() 		{ return ones() >> 1;}
+		//static inline _int4x2 sign1all0() 	{ return ones() << 31;}
+		//static inline _int4x2 sign0all1() 	{ return ones() >> 1; }
+	};
+
+	FEATURE
+	struct ccl<_float8>
+	{
+		static inline _float8 zeros()		{ return _mm256_setzero_ps();}
+		static inline _float8 ones() 		{ return _mm256_castsi256_ps(_mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256())); }
+		static inline _float8 min() 		{ return -ccl<_int4x2>::min(); }
+		static inline _float8 max() 		{ return ccl<_int4x2>::max(); }
+		//static inline _float8 sign1all0() 	{ return _mm256_castsi256_ps(_mm256_set_m128i(ccl<_int4>::sign1all0().val, ccl<_int4>::zeros().val));}
+		//static inline _float8 sign0all1() 	{ return _mm256_castsi256_ps(_mm256_set_m128i(ccl<_int4>::sign0all1().val, ccl<_int4>::ones().val)); }
+	};
+#endif
+
+//#if defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA) || defined(COMPILE_AVX1) || defined(COMPILE_AVX2)
+
+template<typename type, int value>
+struct cfl : ccl<type>
+{
+	static inline type val() { return value; }
+};
+
+
+#define CFL_TYPE(capability) static_dispatcher<capability>::vint
+#define CFL_SPECIALIZATION(capability, for_value)\
+        template<> inline CFL_TYPE(capability) cfl<CFL_TYPE(capability), for_value>::val()
+
+#define CFL_SPECIALIZATIONS(capability) \
+	CFL_SPECIALIZATION(capability, -1) 	{ return ccl<CFL_TYPE(capability)>::ones(); } \
+	CFL_SPECIALIZATION(capability, 0) 	{ return ccl<CFL_TYPE(capability)>::zeros(); } \
+	CFL_SPECIALIZATION(capability, 1) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31; } \
+	CFL_SPECIALIZATION(capability, 2) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 1; } \
+	CFL_SPECIALIZATION(capability, 3) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30; } \
+	CFL_SPECIALIZATION(capability, 4) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 2; } \
+	CFL_SPECIALIZATION(capability, 5) 	{ return cfl<CFL_TYPE(capability), 1>::val() + cfl<CFL_TYPE(capability), 4>::val(); } \
+	CFL_SPECIALIZATION(capability, 6) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30 << 1; } \
+	CFL_SPECIALIZATION(capability, 7) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 29; } \
+	CFL_SPECIALIZATION(capability, 8) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 3; } \
+	CFL_SPECIALIZATION(capability, 9) 	{ return cfl<CFL_TYPE(capability), 8>::val() + cfl<CFL_TYPE(capability), 1>::val(); } \
+	CFL_SPECIALIZATION(capability, 10) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 3>::val(); } \
+	CFL_SPECIALIZATION(capability, 11) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 4>::val(); } \
+	CFL_SPECIALIZATION(capability, 12) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30 << 2; } \
+	CFL_SPECIALIZATION(capability, 13) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 6>::val(); } \
+	CFL_SPECIALIZATION(capability, 14) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 29 << 1; } \
+	CFL_SPECIALIZATION(capability, 15) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 8>::val(); }\
+	template<int value> \
+	struct cfl<static_dispatcher<capability>::vreal, value> \
+	{ \
+		static inline static_dispatcher<capability>::vreal val() 	{ return cfl<static_dispatcher<capability>::vint, value>::val(); } \
 	}
+/*
+#if defined(COMPILE_AVX2)
+		CFL_SPECIALIZATIONS(capability_AVX2);
+#elif defined(COMPILE_AVX1)
+		CFL_SPECIALIZATIONS(capability_AVX1);
+#elif defined(COMPILE_SSE4FMA)
+		CFL_SPECIALIZATIONS(capability_SSE4FMA);
+#elif defined(COMPILE_SSE4)
+        CFL_SPECIALIZATIONS(capability_SSE4);
+#elif defined(COMPILE_SSSE3)
+        CFL_SPECIALIZATIONS(capability_SSSE3);
+#elif defined(COMPILE_SSE3)
+        CFL_SPECIALIZATIONS(capability_SSE3);
+#elif defined(COMPILE_SSE2)
+        CFL_SPECIALIZATIONS(capability_SSE2);
+#else
+        CFL_SPECIALIZATIONS(capability_FPU);
 
-	FEATURE
-	struct cfl<_int4>
-	{
-		CONSTDEF(_int4, _0, _mm_setzero_si128());
-		CONSTDEF(_int4, ones, _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128()));
-		CONSTDEF(_int4, intmin, -(ones >> 1));
-		CONSTDEF(_int4, intmax, ones() >> 1);
-
-		CONSTDEF(_int4, _1, ones() >> 31);
-		CONSTDEF(_int4, _2, ones() >> 31 << 1);
-		CONSTDEF(_int4, _3, ones() >> 30);
-		CONSTDEF(_int4, _4, ones() >> 31 << 2);
-		CONSTDEF(_int4, _5, _4() + _1());
-		CONSTDEF(_int4, _6, ones() >> 30 << 1);
-		CONSTDEF(_int4, _7, ones() >> 29);
-		CONSTDEF(_int4, _8, ones() >> 31 << 3);
-
-		CONSTDEF(_int4, _9, _8() + _1());
-		CONSTDEF(_int4, _10, _8() + _2());
-		CONSTDEF(_int4, _11, _8() + _3());
-		CONSTDEF(_int4, _12, _8() + _4());
-		CONSTDEF(_int4, _13, _8() + _5());
-		CONSTDEF(_int4, _14, _8() + _6());
-		CONSTDEF(_int4, _15, ones() >> 28);
-
-		CONSTDEF(_int4, sign1all0, ones() << 31);
-		CONSTDEF(_int4, sign0all1, ones() >> 1);
-	};
-
-	FEATURE
-	struct cfl<_float4>
-	{
-		CONSTDEF(_float4, _0, cfl<_int4>::_0());
-		CONSTDEF(_float4, ones, _mm_castsi128_ps(cfl<_int4>::ones().val));
-
-		CONSTDEF(_float4,  intmin, -(ones() >> 1));
-		CONSTDEF(_float4,  intmax, ones() >> 1);
-
-		CONSTDEF(_float4, _1, cfl<_int4>::_1());
-		CONSTDEF(_float4, _2, cfl<_int4>::_2());
-		CONSTDEF(_float4, _3, cfl<_int4>::_3());
-		CONSTDEF(_float4, _4, cfl<_int4>::_4());
-		CONSTDEF(_float4, _5, cfl<_int4>::_5());
-		CONSTDEF(_float4, _6, cfl<_int4>::_6());
-		CONSTDEF(_float4, _7, cfl<_int4>::_7());
-		CONSTDEF(_float4, _8, cfl<_int4>::_8());
-
-		CONSTDEF(_float4, _9,  cfl<_int4>::_9());
-		CONSTDEF(_float4, _10, cfl<_int4>::_10());
-		CONSTDEF(_float4, _11, cfl<_int4>::_11());
-		CONSTDEF(_float4, _12, cfl<_int4>::_12());
-		CONSTDEF(_float4, _13, cfl<_int4>::_13());
-		CONSTDEF(_float4, _14, cfl<_int4>::_14());
-		CONSTDEF(_float4, _15, cfl<_int4>::_15());
-
-		CONSTDEF(_float4, sign1all0, _mm_castsi128_ps(cfl<_int4>::sign1all0().val));
-		CONSTDEF(_float4, sign0all1, _mm_castsi128_ps(cfl<_int4>::sign0all1().val));
-	};
-
-	FEATURE
-	struct cfl<_int8>
-	{
-		CONSTDEF(_int8, _0, _mm256_setzero_si256());
-		CONSTDEF(_int8, ones, _mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256()));
-		CONSTDEF(_int8, intmin, -(ones() >> 1));
-		CONSTDEF(_int8, intmax, ones() >> 1);
-
-		CONSTDEF(_int8, _1, ones() >> 31);
-		CONSTDEF(_int8, _2, ones() >> 31 << 1);
-		CONSTDEF(_int8, _3, ones() >> 30);
-		CONSTDEF(_int8, _4, ones() >> 31 << 2);
-		CONSTDEF(_int8, _5, _4() + _1());
-		CONSTDEF(_int8, _6, ones() >> 30 << 1);
-		CONSTDEF(_int8, _7, ones() >> 29);
-		CONSTDEF(_int8, _8, ones() >> 31 << 3);
-
-		CONSTDEF(_int8, _9, _8() + _1());
-		CONSTDEF(_int8, _10, _8() + _2());
-		CONSTDEF(_int8, _11, _8() + _3());
-		CONSTDEF(_int8, _12, _8() + _4());
-		CONSTDEF(_int8, _13, _8() + _5());
-		CONSTDEF(_int8, _14, _8() + _6());
-		CONSTDEF(_int8, _15, ones() >> 28);
-
-		CONSTDEF(_int8, sign1all0, ones() << 31);
-		CONSTDEF(_int8, sign0all1, ones() >> 1);
-	};
-
-	FEATURE
-	struct cfl<_int4x2>
-	{
-		CONSTDEF(_int4x2, _0, _int4x2(_mm_setzero_si128(), _mm_setzero_si128()));
-		CONSTDEF(_int4x2, ones, _int4x2(_mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128()), _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128())));
-		CONSTDEF(_int4x2, intmin, -(ones() >> 1));
-		CONSTDEF(_int4x2, intmax, ones() >> 1);
-
-		CONSTDEF(_int4x2, _1, ones() >> 31);
-		CONSTDEF(_int4x2, _2, ones() >> 31 << 1);
-		CONSTDEF(_int4x2, _3, ones() >> 30);
-		CONSTDEF(_int4x2, _4, ones() >> 31 << 2);
-		CONSTDEF(_int4x2, _5, _4() + _1());
-		CONSTDEF(_int4x2, _6, ones() >> 30 << 1);
-		CONSTDEF(_int4x2, _7, ones() >> 29);
-		CONSTDEF(_int4x2, _8, ones() >> 31 << 3);
-
-		CONSTDEF(_int4x2, _9, _8() + _1());
-		CONSTDEF(_int4x2, _10, _8() + _2());
-		CONSTDEF(_int4x2, _11, _8() + _3());
-		CONSTDEF(_int4x2, _12, _8() + _4());
-		CONSTDEF(_int4x2, _13, _8() + _5());
-		CONSTDEF(_int4x2, _14, _8() + _6());
-		CONSTDEF(_int4x2, _15, ones() >> 28);
-
-		CONSTDEF(_int4x2, sign1all0, ones() << 31);
-		CONSTDEF(_int4x2, sign0all1, ones() >> 1);
-	};
-
-	template<>
-	//struct cfl<enable_if_t<_dispatcher::has_avx && _dispatcher::has_avx2, _float8>>
-	struct cfl<float8<capability_AVX2>>
-	{
-		using featuremask = capability_AVX2;
-
-		CONSTDEF(_float8, _0, cfl<_int8>::_0());
-		CONSTDEF(_float8, ones, _mm256_castsi256_ps(cfl<_int8>::ones().val));
-
-		CONSTDEF(_float8,  intmin, _mm256_castsi256_ps((-(cfl<_int8>::ones() >> 1)).val));
-		CONSTDEF(_float8,  intmax, _mm256_castsi256_ps((cfl<_int8>::ones() >> 1).val));
-
-		CONSTDEF(_float8, _1, cfl<_int8>::_1());
-		CONSTDEF(_float8, _2, cfl<_int8>::_2());
-		CONSTDEF(_float8, _3, cfl<_int8>::_3());
-		CONSTDEF(_float8, _4, cfl<_int8>::_4());
-		CONSTDEF(_float8, _5, cfl<_int8>::_5());
-		CONSTDEF(_float8, _6, cfl<_int8>::_6());
-		CONSTDEF(_float8, _7, cfl<_int8>::_7());
-		CONSTDEF(_float8, _8, cfl<_int8>::_8());
-
-		CONSTDEF(_float8, _9, cfl<_int8>::_9());
-		CONSTDEF(_float8, _10, cfl<_int8>::_10());
-		CONSTDEF(_float8, _11, cfl<_int8>::_11());
-		CONSTDEF(_float8, _12, cfl<_int8>::_12());
-		CONSTDEF(_float8, _13, cfl<_int8>::_13());
-		CONSTDEF(_float8, _14, cfl<_int8>::_14());
-		CONSTDEF(_float8, _15, cfl<_int8>::_15());
-
-		CONSTDEF(_float8, sign1all0, _mm256_castsi256_ps(cfl<_int8>::sign1all0().val));
-		CONSTDEF(_float8, sign0all1, _mm256_castsi256_ps(cfl<_int8>::sign0all1().val));
-	};
-
-	template<>
-	//struct cfl<enable_if_t<_dispatcher::has_avx && !_dispatcher::has_avx2, _float8>>
-	struct cfl<float8<capability_AVX1>>
-	{
-		using featuremask = capability_AVX1;
-
-		CONSTDEF(_float8, _0, cfl<_int4x2>::_0());
-		CONSTDEF(_float8, ones, _float8(cfl<_int4x2>::ones()));
-
-		CONSTDEF(_float8,  intmin, _float8(-(cfl<_int4x2>::ones() >> 1)));
-		CONSTDEF(_float8,  intmax, _float8(cfl<_int4x2>::ones() >> 1));
-
-		CONSTDEF(_float8, _1, cfl<_int4x2>::_1());
-		CONSTDEF(_float8, _2, cfl<_int4x2>::_2());
-		CONSTDEF(_float8, _3, cfl<_int4x2>::_3());
-		CONSTDEF(_float8, _4, cfl<_int4x2>::_4());
-		CONSTDEF(_float8, _5, cfl<_int4x2>::_5());
-		CONSTDEF(_float8, _6, cfl<_int4x2>::_6());
-		CONSTDEF(_float8, _7, cfl<_int4x2>::_7());
-		CONSTDEF(_float8, _8, cfl<_int4x2>::_8());
-
-		CONSTDEF(_float8, _9, cfl<_int4x2>::_9());
-		CONSTDEF(_float8, _10, cfl<_int4x2>::_10());
-		CONSTDEF(_float8, _11, cfl<_int4x2>::_11());
-		CONSTDEF(_float8, _12, cfl<_int4x2>::_12());
-		CONSTDEF(_float8, _13, cfl<_int4x2>::_13());
-		CONSTDEF(_float8, _14, cfl<_int4x2>::_14());
-		CONSTDEF(_float8, _15, cfl<_int4x2>::_15());
-
-		CONSTDEF(_float8, sign1all0, _float8(cfl<_int4x2>::sign1all0()));
-		CONSTDEF(_float8, sign0all1, _float8(cfl<_int4x2>::sign0all1()));
-	};
-
-
+        //template<> float ccl<float>::sign1all0() 	{ return -0 }
+		//template<> float ccl<float>::sign0all1() 	{ int temp = 0x7FFFFFFF; return *reinterpret_cast<float*>(&temp); }
+#endif
+#undef CFL_SPECIALIZATIONS
+*/
+//#endif
 #define FLR cfl<vreal>
 #define FLI cfl<vint>
 

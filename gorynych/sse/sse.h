@@ -29,16 +29,30 @@
 #include "double2.h"
 
 // Traits =========================================================================================================
-FEATURE
-struct std::_Is_integral<zzsystems::gorynych::_int4>	: std::true_type {	};
+namespace std {
 
-FEATURE
-struct std::_Is_floating_point<zzsystems::gorynych::_float4>	: std::true_type {	};
-
+}
 //template<>
 //struct std::_Is_floating_point<zzsystems::gorynych::double2>	: std::true_type {	};
 
 namespace zzsystems { namespace gorynych {
+
+		FEATURE
+		struct is_vint<zzsystems::gorynych::_int4 > : std::true_type {
+		};
+
+		FEATURE
+		struct is_vreal<zzsystems::gorynych::_float4 > : std::true_type {
+		};
+
+
+		FEATURE
+		struct scalar_type<_float4> : public __scalar_type<float>
+		{};
+
+		FEATURE
+		struct scalar_type<_int4> : public __scalar_type<int>
+		{};
 
 	// Converting constructors ===================================================================================
 	FEATURE
@@ -57,27 +71,53 @@ namespace zzsystems { namespace gorynych {
 	inline double2::double2(const double2& rhs) : double2(rhs.val) { }	*/
 
 	FEATURE
-	int32_t* extract(_int4 &src)
+	void extract(_int4 &src, int* target)
 	{
+#ifdef MSC_VER
 		return src.val.m128i_i32;
+#else
+        //for(size_t i = 0; i < dim<_int4>; i++)
+		target[0] = _mm_extract_epi32(src.val, 0);
+		target[1] = _mm_extract_epi32(src.val, 1);
+		target[2] = _mm_extract_epi32(src.val, 2);
+		target[3] = _mm_extract_epi32(src.val, 3);
+#endif
 	}
 
 	FEATURE
-	const int32_t* extract(const _int4 &src)
+	void extract(const _int4 &src, int* target)
 	{
+#ifdef MSC_VER
 		return src.val.m128i_i32;
+#else
+		_mm_store_si128((__m128i*)target, src.val);
+#endif
 	}
 
 	FEATURE
-	const float* extract(const _float4 &src)
-	{		
-		return src.val.m128_f32;		
+	void extract(_float4 &src, float *target)
+	{
+#ifdef MSC_VER
+		return src.val.m128_f32;
+#else
+		_mm_store_ps(target, src.val);
+#endif
 	}
-	
 	FEATURE
+	void extract(const _float4 &src, float *target)
+	{
+#ifdef MSC_VER
+		return src.val.m128_f32;
+#else
+		_mm_store_ps(target, src.val);
+#endif
+	}
+
+		FEATURE
 	_int4 vgather(const int* memloc, _int4 index)
 	{
-		int* i = extract(index);
+		int i[dim<_int4>()];
+		extract(index, i);
 		return _mm_set_epi32(
 			memloc[static_cast<size_t>(i[3])], 
 			memloc[static_cast<size_t>(i[2])],
@@ -88,7 +128,9 @@ namespace zzsystems { namespace gorynych {
 	FEATURE
 		_float4 vgather(const float* memloc, _int4 index)
 	{
-		int* i = extract(index);
+		int i[dim<_int4>()];
+		extract(index, i);
+
 		return _mm_set_ps(
 			memloc[static_cast<size_t>(i[3])], 
 			memloc[static_cast<size_t>(i[2])], 

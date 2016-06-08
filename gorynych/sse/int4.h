@@ -36,11 +36,21 @@ namespace zzsystems { namespace gorynych {
 #define _float4 float4<featuremask>
 
 	FEATURE
-	struct ALIGN(16) int4 {
+	struct ALIGN(16) int4
+	{
+		typedef featuremask capability;
+#ifdef MSC_VER
 		__m128i val;
-
+#else
+        //union
+		//{
+		alignas(16) __m128i val;
+		//	int32_t m128_i32[4];
+		//};
+#endif
 		int4() = default;
 		int4(const int rhs)			: val(_mm_set1_epi32(rhs)) {}
+		int4(const int* rhs)		: val(_mm_load_si128((__m128i*)rhs)) {}
 
 		int4(const __m128& rhs)		: val(_mm_cvtps_epi32(rhs)) {}
 		int4(const __m128i& rhs)	: val(rhs) {}
@@ -65,6 +75,7 @@ namespace zzsystems { namespace gorynych {
 		BIN_OP_STUB(>, _int4, int)
 		BIN_OP_STUB(<, _int4, int)
 		BIN_OP_STUB(==, _int4, int)
+		BIN_OP_STUB(!=, _int4, int)
 
 		explicit inline operator bool()
 		{
@@ -115,6 +126,11 @@ namespace zzsystems { namespace gorynych {
 		BIN_BODY(_mm_cmpeq_epi32);
 	}
 
+	FEATURE_BIN_OP(!=, _int4, HAS_SSE)
+	{
+		BIN_BODY(_mm_andnot_si128);
+		//BODY(_mm_andnot_si128(_mm_cmpeq_epi32(a.val, b.val), _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128())));
+	}
 	
 	FEATURE_UN_OP(~, _int4, HAS_SSE)
 	{
@@ -165,13 +181,28 @@ namespace zzsystems { namespace gorynych {
 	{
 		return _mm_slli_epi32(a.val, sa);
 	}
-		
-	FEATURE_BIN_FUNC(vmin, _int4, HAS_SSE)
+
+	FEATURE_UN_FUNC(vabs, _int4, HAS_SSE)
+	{
+		BODY(vmax(-a, a));
+	}
+
+	FEATURE_BIN_FUNC(vmin, _int4, !HAS_SSE41)
+	{
+		BODY(vsel(a < b, a, b));
+	}
+
+	FEATURE_BIN_FUNC(vmin, _int4, HAS_SSE41)
 	{
 		BIN_BODY(_mm_min_epi32);
 	}
+
+	FEATURE_BIN_FUNC(vmax, _int4, !HAS_SSE41)
+	{
+		BODY(vsel(a > b, a, b));
+	}
 	
-	FEATURE_BIN_FUNC(vmax, _int4, HAS_SSE)
+	FEATURE_BIN_FUNC(vmax, _int4, HAS_SSE41)
 	{
 		BIN_BODY(_mm_max_epi32);
 	}

@@ -36,24 +36,48 @@ namespace zzsystems { namespace gorynych {
 
 	FEATURE
 	struct ALIGN(32) float8 {
+
+		typedef featuremask capability;
+#ifdef MSC_VER
 		__m256 val;
+#else
+		//union
+		//{
+		__m256 val;
+			//float m256_f32[8];
+		//};
+#endif
 
 		float8() = default;
 
-		float8(const int rhs)		: val(_mm256_set1_ps(static_cast<float>(rhs))) {}
-		float8(const float rhs)		: val(_mm256_set1_ps(rhs)) {}
-		float8(const double rhs)	: val(_mm256_set1_ps(static_cast<float>(rhs))) {}
+//		float8(const int rhs)		: val(_mm256_set_ps(DUP8(static_cast<float>(rhs)))) {}
+//		float8(const float rhs)		: val(_mm256_set_ps(DUP8(rhs))) {}
+//		float8(const double rhs)	: val(_mm256_set_ps(DUP8(static_cast<float>(rhs)))) {}
+//
+//		float8(const float* rhs)	: val(_mm256_load_ps(rhs)) {}
+//
+//		float8(VARGS8(uint8_t))		: val(_mm256_cvtepi32_ps(_mm256_set_epi32(VPASS8))) {}
+//		float8(VARGS8(int32_t))		: val(_mm256_cvtepi32_ps(_mm256_set_epi32(VPASS8))) {}
+//		float8(VARGS8(float))		: val(_mm256_set_ps(VPASS8)) {}
+//
+//		float8(const __m256& rhs)	: val(rhs) {}
+//		float8(const __m256i& rhs)	: val(_mm256_cvtepi32_ps(rhs)) {}
+//		float8(const __m256d& rhs)	: val(_mm256_castps128_ps256(_mm256_cvtpd_ps(rhs))) {}
 
-		float8(const float* rhs)	: val(_mm256_load_ps(rhs)) {}
+		float8(const int rhs) 		{ val = _mm256_set_ps(DUP8(static_cast<float>(rhs)));}
+		float8(const float rhs)		{ val = _mm256_set_ps(DUP8(rhs)); }
+		float8(const double rhs)	{ val = _mm256_set_ps(DUP8(static_cast<float>(rhs))); }
 
-		float8(VARGS8(uint8_t))		: val(_mm256_cvtepi32_ps(_mm256_set_epi32(VPASS8))) {}
-		float8(VARGS8(int32_t))		: val(_mm256_cvtepi32_ps(_mm256_set_epi32(VPASS8))) {}
-		float8(VARGS8(float))		: val(_mm256_set_ps(VPASS8)) {}
+		float8(const float* rhs)	{ val = _mm256_load_ps(rhs); }
 
-		float8(const __m256& rhs)	: val(rhs) {}
-		float8(const __m256i& rhs)	: val(_mm256_cvtepi32_ps(rhs)) {}
-		float8(const __m256d& rhs)	: val(_mm256_castps128_ps256(_mm256_cvtpd_ps(rhs))) {}
+		float8(VARGS8(uint8_t))		{ val = _mm256_cvtepi32_ps(_mm256_set_epi32(VPASS8)); }
+		float8(VARGS8(int32_t))		{ val = _mm256_cvtepi32_ps(_mm256_set_epi32(VPASS8)); }
+		float8(VARGS8(float))		{ val = _mm256_set_ps(VPASS8); }
 
+		float8(__m256 rhs)	{ val = rhs; }
+		float8(__m256i rhs)	{ val = _mm256_cvtepi32_ps(rhs); }
+		float8(__m256d rhs)	{ val = _mm256_castps128_ps256(_mm256_cvtpd_ps(rhs)); }
+		
 		float8(const _float8&	rhs);
 		float8(const _int8&	rhs);
 		float8(const _int4x2& rhs);
@@ -73,40 +97,51 @@ namespace zzsystems { namespace gorynych {
 		BIN_OP_STUB(> , _float8, float)
 		BIN_OP_STUB(< , _float8, float)
 		BIN_OP_STUB(== , _float8, float)
+		BIN_OP_STUB(!= , _float8, float)
 
 
 		// Return true if all bits are set to 1
 		explicit operator bool()
 		{
-			return _mm256_test_all_ones(_mm256_castps_si256(this->val)) != 0;
+			//return _mm256_test_all_ones(_mm256_castps_si256(this->val)) != 0;
+			return all_ones(*this);
 		}
 
 		// Generate value with all bits set to 1
 		static auto ones()
 		{
-			auto t = _mm256_setzero_si256();
-			return _mm256_cmpeq_epi32(t, t);
+			auto t = _mm256_setzero_ps();
+			return _mm256_cmp_ps(t, t, _CMP_EQ_OQ);
 		}
 
-		// Generate 1
-		static auto one()
-		{
-			return _mm256_srli_epi32(ones(), 31);
-		}
+//		// Generate 1
+//		static auto one()
+//		{
+//			return _mm256_srli_epi32(ones(), 31);
+//		}
+//
+//		// Generate sign bit
+//		static auto sign1all0()
+//		{
+//			return _mm256_slli_epi32(ones(), 31);
+//		}
+//
+//		// Generate ones mask with sign bit zeroed out
+//		static auto sign0all1()
+//		{
+//			return _mm256_srli_epi32(ones(), 1);
+//		}
+	};
 
-		// Generate sign bit
-		static auto sign1all0()
-		{
-			return _mm256_slli_epi32(ones(), 31);
-		}
+	FEATURE_RET(bool, HAS_AVX2) all_ones(const _float8 a)
+	{
+		BODY(_mm256_test_all_ones(_mm256_castps_si256(a.val)) != 0);
+	}
 
-		// Generate ones mask with sign bit zeroed out
-		static auto sign0all1()
-		{
-			return _mm256_srli_epi32(ones(), 1);
-		}
-	};	
-
+	FEATURE_RET(bool, !HAS_AVX2) all_ones(const _float8 a)
+	{
+		BODY(_mm256_movemask_ps(_mm256_cmp_ps(a.val, _float8::ones(), _CMP_EQ_OQ)) == 0xFFFF);
+	}
 	// Arithmetic =====================================================================================================
 	// Add
 	FEATURE_BIN_OP(+, _float8, HAS_AVX1)	
@@ -143,19 +178,29 @@ namespace zzsystems { namespace gorynych {
 	// Greater than
 	FEATURE_BIN_OP(>, _float8, HAS_AVX1)	
 	{
-		TRI_BODY_O(_mm256_cmp_ps, _CMP_GT_OQ); 
+		//TRI_BODY_O(_mm256_cmp_ps, _CMP_GT_OQ);
+		return _mm256_cmp_ps(a.val, b.val, _CMP_GT_OQ);
 	}
 
 	// Less than
 	FEATURE_BIN_OP(< , _float8, HAS_AVX1) 
 	{
-		TRI_BODY_O(_mm256_cmp_ps, _CMP_LT_OQ); 
+		//TRI_BODY_O(_mm256_cmp_ps, _CMP_LT_OQ);
+		return _mm256_cmp_ps(a.val, b.val, _CMP_LT_OQ);
 	}
 
 	// Equal
 	FEATURE_BIN_OP(==, _float8, HAS_AVX1)
 	{
-		TRI_BODY_O(_mm256_cmp_ps, _CMP_EQ_OQ); 
+		//TRI_BODY_O(_mm256_cmp_ps, _CMP_EQ_OQ);
+		return _mm256_cmp_ps(a.val, b.val, _CMP_EQ_OQ);
+	}
+
+	// Not equal
+	FEATURE_BIN_OP(!=, _float8, HAS_AVX1)
+	{
+		//TRI_BODY_O(_mm256_cmp_ps, _CMP_EQ_OQ);
+		return _mm256_cmp_ps(a.val, b.val, _CMP_NEQ_OQ);
 	}
 
 	// Bitwise ========================================================================================================
@@ -224,7 +269,8 @@ namespace zzsystems { namespace gorynych {
 	// Absolute value
 	FEATURE_UN_FUNC(vabs, _float8, HAS_AVX1)  
 	{
-		BODY(_mm256_and_ps(a.val, _mm256_castsi256_ps(_float8::sign0all1())));
+		//BODY(_mm256_and_ps(a.val, _mm256_castsi256_ps(_float8::sign0all1())));
+		BODY(vmax(a, -a));
 	}
 	
 	// Min value

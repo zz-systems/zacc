@@ -99,4 +99,110 @@ namespace zzsystems { namespace gorynych { namespace tests {
 	}
 }}}
 
+#else
+#include "../../Catch/single_include/catch.hpp"
+#include "gorynych.h"
+
+namespace zzsystems { namespace gorynych { namespace test {
+			template<typename vtype, typename stype>
+			inline void test_validate(stype expected, const vtype &val) {
+				stype tested[dim<vtype>()];
+
+				extract(val, tested);
+
+				for (size_t i = 0; i < dim<vtype>(); i++)
+				{
+					if(std::is_floating_point<stype>::value)
+					{
+						REQUIRE(expected == Approx(tested[i]));
+					}
+					else
+					{
+						REQUIRE(expected == tested[i]);
+					}
+				}
+			};
+
+			template<typename vtype, typename stype>
+			inline void btest_validate(bool expected, const vtype &val) {
+				stype tested[dim<vtype>()];
+
+				extract(val, tested);
+
+				for (size_t i = 0; i < dim<vtype>(); i++) {
+					//INFO(" expected: " << expected);
+					//INFO(" raw value is " << tested[i]);
+					//INFO(" converted value is " << (*reinterpret_cast<int *>(&tested[i]) != 0x0));
+					REQUIRE(expected == (*reinterpret_cast<stype *>(&tested[i]) != 0x0));
+				}
+			};
+
+			template<typename vtype, typename stype>
+			inline void test(stype a, stype b, std::function<stype(stype, stype)> scalar_op,
+							 std::function<vtype(vtype, vtype)> vector_op) {
+				_MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+				_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+				stype expected = scalar_op(a, b);
+				vtype val = vector_op(a, b);
+
+				test_validate(expected, val);
+			};
+
+			template<typename vtype, typename stype>
+			inline void test(std::function<stype(void)> scalar_op, std::function<vtype(void)> vector_op) {
+				_MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+				_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+				stype expected 	= scalar_op();
+				vtype val 		= vector_op();
+
+				test_validate(expected, val);
+			};
+
+			template<typename vtype, typename stype>
+			inline void test(stype a, std::function<stype(stype)> scalar_op, std::function<vtype(vtype)> vector_op) {
+				_MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+				_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+				stype expected = scalar_op(a);
+				vtype val = vector_op(a);
+
+				test_validate(expected, val);
+			};
+
+			template<typename vtype, typename stype>
+			inline void test(stype a, stype b, stype c, std::function<stype(stype, stype, stype)> scalar_op, std::function<vtype(vtype, vtype, vtype)> vector_op) {
+				_MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+				_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+				stype expected 	= scalar_op(a, b, c);
+				vtype val 		= vector_op(a, b, c);
+
+				test_validate(expected, val);
+			};
+
+			template<typename vtype, typename stype>
+			inline void btest(stype a, stype b, std::function<bool(stype, stype)> scalar_op,
+							  std::function<vtype(vtype, vtype)> vector_op) {
+				_MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+				_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+				bool expected = scalar_op(a, b);
+				vtype val = vector_op(a, b);
+
+				btest_validate<vtype, stype>(expected, val);
+			};
+
+			template<typename vtype, typename stype>
+			inline void btest(stype a, std::function<bool(stype)> scalar_op, std::function<vtype(vtype)> vector_op) {
+				_MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+				_MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+				bool expected = scalar_op(a);
+				vtype val = vector_op(a);
+
+				btest_validate<vtype, stype>(expected, val);
+			};
+		}}}
 #endif

@@ -1,0 +1,88 @@
+cmake_minimum_required(VERSION 3.5)
+
+
+set(fpu_flags)
+set(sse2_flags -msse2)
+set(sse3_flags -msse3)
+set(ssse3_flags -mssse3)
+set(sse4_flags -msse4)
+set(sse4fma_flags -mfma -msse4)
+set(avx1_flags -mfma -mavx)
+set(avx2_flags -mfma -mavx2)
+
+set(BRANCH_COMPILE_OPTS
+        fpu_flags
+        sse2_flags
+        sse3_flags
+        ssse3_flags
+        sse4_flags
+        sse4fma_flags
+        avx1_flags
+        avx2_flags)
+
+set(BRANCHES
+        fpu_branch
+        sse2_branch
+        sse3_branch
+        ssse3_branch
+        sse4_branch
+        sse4fma_branch
+        avx1_branch
+        avx2_branch)
+
+set(BRANCH_COMPILE_DEFS
+        -DCOMPILE_FPU
+        -DCOMPILE_SSE2
+        -DCOMPILE_SSE3
+        -DCOMPILE_SSSE3
+        -DCOMPILE_SSE4
+        -DCOMPILE_SSE4FMA
+        -DCOMPILE_AVX1
+        -DCOMPILE_AVX2)
+
+macro(prepare_branches)
+    message(${BRANCHES_TO_COMPILE})
+    message(${BRANCH_MODULES})
+        # compile all if not specified
+    if(NOT BRANCHES_TO_COMPILE)
+        set(BRANCHES_TO_COMPILE sse2_branch sse3_branch ssse3_branch sse4_branch sse4fma_branch avx1_branch avx2_branch)
+    endif()
+
+    list(LENGTH BRANCHES branches_count)
+    math(EXPR branches_count "${branches_count} - 1")
+
+    foreach(branch_index RANGE ${branches_count})
+        list(GET BRANCHES ${branch_index} branch)
+
+        if(${branch} IN_LIST BRANCHES_TO_COMPILE)
+            message("branch: " ${branch})
+            list(GET BRANCH_COMPILE_DEFS    ${branch_index} defs)
+            list(GET BRANCH_COMPILE_OPTS    ${branch_index} opts)
+
+            foreach(module_def IN ITEMS ${BRANCH_MODULES})
+                list(GET module_def    0 module)
+                list(GET module_def    1 source)
+
+                set(target "${branch}_${module}")
+
+                message("module: " ${module})
+                message(STATUS "target: " ${target})
+                message(STATUS "source: " ${source})
+                message(STATUS "defines: " ${defs})
+                message(STATUS "options: " ${opts})
+
+                add_library(${target} OBJECT ${source})
+
+                target_compile_definitions(${target} PUBLIC ${defs} ${BRANCH_ADDITIONAL_DEFS})
+
+                foreach(compile_flag IN LISTS ${opts})
+                    target_compile_options(${target} PUBLIC ${compile_flag})
+                endforeach(compile_flag)
+
+                list(APPEND SOURCE_FILES $<TARGET_OBJECTS:${target}>)
+            endforeach(module_def)
+        else()
+            message("nope")
+        endif()
+    endforeach(branch_index)
+endmacro(prepare_branches)

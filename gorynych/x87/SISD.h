@@ -27,16 +27,19 @@
 
 namespace zzsystems { namespace gorynych {
 
+
 	// Load/Store ===============================================================================================
 		
-	inline int32_t* extract(int32_t& src)				{ return &src; }
-	inline const int32_t* extract(const int32_t& src)	{ return &src; }
+	inline void extract(int& src, int *target) 			{ target[0] = src; }
+	inline void extract(const int& src, int* target)	{ target[0] = src; }
 
-	inline float* extract(float& src)					{ return &src; }
-	inline const float* extract(const float& src)		{ return &src; }
+	inline void extract(float& src, float* target)				{ target[0] = src; }
+	inline void extract(const float& src, float *target)		{ target[0] = src; }
 
-	inline double* extract(double& src)					{ return &src; }
-	inline const double* extract(const double& src)		{ return &src; }
+	inline void extract(double& src, double * target)			{ target[0] = src; }
+	inline void extract(const double& src, double *target)		{ target[0] = src; }
+
+
 	
 
 	inline int vgather(const int* memloc, size_t index)

@@ -27,8 +27,15 @@
 
 #include "dependencies.h"
 #include "system_info.h"
-#include "avx/avx.h"
+
+#if defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA) || defined(COMPILE_AVX1)
 #include "sse/sse.h"
+#endif
+
+#if defined(COMPILE_AVX1) || defined(COMPILE_AVX2)
+#include "avx/avx.h"
+#endif
+
 #include "x87/SISD.h"
 #include "opencl/opencl.h"
 
@@ -58,6 +65,7 @@ namespace zzsystems { namespace gorynych {
 		static constexpr const char* unit_name() { return "FPU"; }
 	};
 
+#if defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA)
 	// Dispatcher for all SSE kinds
 	FEATURE
 		struct static_dispatcher<featuremask,
@@ -68,7 +76,9 @@ namespace zzsystems { namespace gorynych {
 		typedef _float4 vreal;
 		static constexpr const char* unit_name() { return "SSE"; }
 	};
+#endif
 
+#if defined(COMPILE_AVX1)
 	// AVX1 dispatcher
 	FEATURE
 		struct static_dispatcher<featuremask,
@@ -79,7 +89,8 @@ namespace zzsystems { namespace gorynych {
 		typedef _float8 vreal;
 		static constexpr const char* unit_name() { return "AVX1"; }
 	};
-
+#endif
+#if defined(COMPILE_AVX2)
 	// AVX2 dispatcher
 	FEATURE
 		struct static_dispatcher<featuremask,
@@ -90,21 +101,13 @@ namespace zzsystems { namespace gorynych {
 		typedef _float8 vreal;
 		static constexpr const char* unit_name() { return "AVX2"; }
 	};	
-	
+#endif
 	// capability-constants - used for compile-time branch deduction. 
-	// fast float approximation is used by default. 
-	using capability_AVX2		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 | CAPABILITY_AVX2 >;
-	using capability_AVX1		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 >;
-	using capability_SSE4FMA	= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_FMA3>;
-	using capability_SSE4		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41>;
-	using capability_SSSE3		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3>;
-	using capability_SSE3		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3>;
-	using capability_SSE2		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2>;
-	using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;
+	// fast float approximation is used by default.
 
-	// single branch
-#define BRANCH(sysinfo, body, branch_name) \
-	if (sysinfo.has##branch_name()) \
+
+
+#define BRANCH(branch_name, body)\
 	{ \
 		using capability = capability_##branch_name; \
 		using vreal = static_dispatcher<capability>::vreal; \
@@ -112,30 +115,40 @@ namespace zzsystems { namespace gorynych {
 		body; \
 	}
 
+
+	// single branch
+#define CBRANCH(sysinfo, body, branch_name) \
+	if (sysinfo.has##branch_name()) \
+	{ \
+		BRANCH(branch_name, body);\
+	}
+
 	// Dynamic dispatch: Select branch to run
 #define SIMD_DISPATCH(sysinfo, body) \
 	do { \
-		BRANCH(sysinfo, body, AVX2) \
-		else BRANCH(sysinfo, body, AVX1) \
-		else BRANCH(sysinfo, body, SSE4FMA) \
-		else BRANCH(sysinfo, body, SSE4) \
-		else BRANCH(sysinfo, body, SSSE3) \
-		else BRANCH(sysinfo, body, SSE3) \
-		else BRANCH(sysinfo, body, SSE2) \
-		else BRANCH(sysinfo, body, FPU) \
+		CBRANCH(sysinfo, body, AVX2) \
+		else CBRANCH(sysinfo, body, AVX1) \
+		else CBRANCH(sysinfo, body, SSE4FMA)\
+		else CBRANCH(sysinfo, body, SSE4) \
+		else CBRANCH(sysinfo, body, SSSE3) \
+		else CBRANCH(sysinfo, body, SSE3) \
+		else CBRANCH(sysinfo, body, SSE2) \
+		else CBRANCH(sysinfo, body, FPU) \
 	} while(false)
+
 
 	// Dynamic dispatch: (Pre)build branches	
 #define SIMD_BUILD(sysinfo, body) \
 	do { \
-		BRANCH(sysinfo, body, AVX2) \
-		BRANCH(sysinfo, body, AVX1) \
-		BRANCH(sysinfo, body, SSE4FMA) \
-		BRANCH(sysinfo, body, SSE4) \
-		BRANCH(sysinfo, body, SSSE3) \
-		BRANCH(sysinfo, body, SSE3) \
-		BRANCH(sysinfo, body, SSE2) \
-		BRANCH(sysinfo, body, FPU) \
+		CBRANCH(sysinfo, body, AVX2) \
+		CBRANCH(sysinfo, body, AVX1) \
+		CBRANCH(sysinfo, body, SSE4FMA) \
+		CBRANCH(sysinfo, body, SSE4) \
+		CBRANCH(sysinfo, body, SSSE3) \
+		CBRANCH(sysinfo, body, SSE3) \
+		CBRANCH(sysinfo, body, SSE2) \
+		CBRANCH(sysinfo, body, FPU) \
 	} while(false)
+
 
 }}
