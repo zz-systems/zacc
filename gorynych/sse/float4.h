@@ -89,6 +89,12 @@ namespace zzsystems { namespace gorynych {
 			return _mm_cmpeq_ps(t, t);
 		}
 
+		static inline auto ones_i()
+		{
+			auto t = _mm_setzero_si128();
+			return _mm_cmpeq_epi32(t, t);
+		}
+
 		static inline auto one()
 		{
 			auto t = _mm_setzero_si128();
@@ -324,7 +330,7 @@ namespace zzsystems { namespace gorynych {
 	DISPATCHED_UN_FUNC(vround, _float4, !HAS_SSE41 && HAS_SSE)
 	{
 		//generate the highest value < 2		
-		_float4 vNearest2 = _mm_castsi128_ps(_mm_srli_epi32(_float4::ones(), 2));
+		_float4 vNearest2 = _mm_castsi128_ps(_mm_srli_epi32(_float4::ones_i(), 2));
 		auto aTrunc = vtrunc(a);
 
 		auto rmd = a - aTrunc;        // get remainder
