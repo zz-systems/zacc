@@ -51,3 +51,12 @@ inline bool _mm256_test_all_ones(__m256i val)
 }
 #endif
 
+
+#if defined(COMPILE_AVX2) || defined(COMPILE_AVX1)
+    #define SIMD_ALIGN alignas(32)
+#elif defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA)
+    #define SIMD_ALIGN alignas(16)
+#else
+    #define SIMD_ALIGN
+#endif
+

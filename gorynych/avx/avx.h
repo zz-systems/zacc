@@ -41,45 +41,45 @@ namespace std {
 
 namespace zzsystems { namespace gorynych {
 
-	FEATURE
+	DISPATCHED
 	struct is_vint<zzsystems::gorynych::_int8 > : std::true_type {
 	};
 
-	FEATURE
+	DISPATCHED
 	struct is_vint<zzsystems::gorynych::_int4x2 > : std::true_type {
 	};
 
-	FEATURE
+	DISPATCHED
 	struct is_vreal<zzsystems::gorynych::_float8 > : std::true_type {
 	};
 
-	FEATURE
+	DISPATCHED
 	struct scalar_type<_float8> : public __scalar_type<float>
 	{};
 
-	FEATURE
+	DISPATCHED
 	struct scalar_type<_int8> : public __scalar_type<int32_t>
 	{};
 	// Converting constructors ===================================================================================
-	FEATURE
+	DISPATCHED
 		_int8::int8(const _float8& rhs) : int8(rhs.val) { }
 
-	FEATURE
+	DISPATCHED
 		_int8::int8(const _int8& rhs) : int8(rhs.val) { }
 	//inline int8::int8(const double4& rhs) : int8(rhs.val) { }
 
-	FEATURE
+	DISPATCHED
 		_int4x2::int4x2(const _float8& rhs) : int4x2(_mm256_extractf128_ps(rhs.val, 1), _mm256_extractf128_ps(rhs.val, 0)) { }
-	FEATURE
+	DISPATCHED
 		_int4x2::int4x2(const _int4x2& rhs) : int4x2(rhs.hi, rhs.lo) { }
-	FEATURE
+	DISPATCHED
 		_int4x2::int4x2(const _int4& rhs_hi, const _int4& rhs_lo) : int4x2(rhs_hi.val, rhs_lo.val) { }
 
-	FEATURE
+	DISPATCHED
 		_float8::float8(const _float8& rhs) : float8(rhs.val) { }
-	FEATURE
+	DISPATCHED
 		_float8::float8(const _int8& rhs) : float8(rhs.val) { }
-	FEATURE
+	DISPATCHED
 		_float8::float8(const _int4x2& rhs)
 		: float8(_mm256_set_m128(_mm_cvtepi32_ps(rhs.hi.val), _mm_cvtepi32_ps(rhs.lo.val)))
 	{
@@ -91,144 +91,94 @@ namespace zzsystems { namespace gorynych {
 	inline double4::double4(const int8& rhs) : double4(rhs.val) { }
 	inline double4::double4(const double4& rhs) : double4(rhs.val) { }*/
 
-	FEATURE void extract(_int8 &src, int32_t* target)
+//	DISPATCHED void extract(_int8 &src, int32_t* target)
+//	{
+//		//return src.val.m256i_i32;
+//		__m256_store_si256(src.val, target);
+//		//for(size_t i = 0; i < dim<_int8>(); i++)
+//		//	target[i] = _mm256_extract_epi32(src.val, i);
+//	}
+
+	DISPATCHED void extract(const _int8 &src, int32_t* target)
 	{
-		//return src.val.m256i_i32;
-#ifdef MSC_VER
-		return src.val.m256_i32;
-#else
-		for(size_t i = 0; i < dim<_int8>(); i++)
-			target[i] = _mm256_extract_epi32(src.val, i);
-#endif
-	}
-	FEATURE
-		void extract(const _int8 &src, int32_t* target)
-	{
-		//return src.val.m256i_i32;
-#ifdef MSC_VER
-		return src.val.m256_i32;
-#else
-		for(size_t i = 0; i < dim<_int8>(); i++)
-			target[i] = _mm256_extract_epi32(src.val, i);
-#endif
+		__m256_store_si256(src.val, target);
 	}
 
-	FEATURE void extract(_int4x2 &src, int32_t* target)
+	DISPATCHED void extract(const _int4x2 &src, int32_t* target)
 	{
-		//return src.hi.val.m128i_i32;
-#ifdef MSC_VER
-		return src.hi.val.m128_i32;
-#else
-		for(size_t i = 0; i < dim<_int4>(); i++)
-			target[i] = _mm_extract_epi32(src.hi.val, i);
-		for(size_t i = 0; i < dim<_int4>(); i++)
-			target[i + 4] = _mm_extract_epi32(src.hi.val, i + 4);
-#endif
+		extract(src.hi, target);
+		extract(src.lo, target + 4);
 	}
 
-	FEATURE
-		void extract(const _int4x2 &src, int32_t* target)
+	DISPATCHED void extract(const _float8 &src, float *target)
 	{
-		//return src.hi.val.m128i_i32;
-#ifdef MSC_VER
-		return src.val.m128_i32;
-#else
-		for(size_t i = 0; i < dim<_int4>(); i++)
-			target[i] = _mm_extract_epi32(src.hi.val, i);
-		for(size_t i = 0; i < dim<_int4>(); i++)
-			target[i + 4] = _mm_extract_epi32(src.hi.val, i + 4);
-#endif
-	}
-
-	FEATURE void extract(_float8 &src, float* target)
-	{
-		//return src.val.m256_f32;
-#ifdef MSC_VER
-		return src.val.m256_f32;
-#else
-	_mm256_store_ps(target, src.val);
-#endif
-	}
-
-	FEATURE
-		void extract(const _float8 &src, float *target)
-	{
-		//return src.val.m256_f32;
-#ifdef MSC_VER
-		return src.val.m256_f32;
-#else
 		_mm256_store_ps(target, src.val);
-#endif
 	}
 
-	FEATURE
-		_int8 vgather(const int* memloc, _int8 index)
+	DISPATCHED	_int8 vgather(const int* memloc, _int8 index)
 	{
 		return _mm256_i32gather_epi32(memloc, index.val, sizeof(int));
 	}
 
-	FEATURE
-		_int4x2 vgather(const int* memloc, _int4x2 index)
+	DISPATCHED	_int4x2 vgather(const int* memloc, _int4x2 index)
 	{
 		return{ vgather(memloc, index.hi), vgather(memloc, index.lo) };
 	}
 
-	FEATURE
-		_float8 vgather(const float* memloc, _int4x2 index)
+	DISPATCHED	_float8 vgather(const float* memloc, _int4x2 index)
 	{
 		return _mm256_set_m128(vgather(memloc, index.hi).val, vgather(memloc, index.lo).val);
 	}
 
-	FEATURE
-		_float8 vgather(const float* memloc, _int8 index)
+	DISPATCHED _float8 vgather(const float* memloc, _int8 index)
 	{
 		return _mm256_i32gather_ps(memloc, index.val, sizeof(float));
 	}
 
 
 	// Integer SQRT =============================================================================================	
-	FEATURE_FUNC(vsqrt, _int8, _dispatcher::has_avx)
+	DISPATCHED_FUNC(vsqrt, _int8, _dispatcher::has_avx)
 		(const _int8 &a)
 	{
 		BODY(_mm256_sqrt_ps(static_cast<_float8>(a).val));
 	}
 
-	FEATURE_FUNC(vsqrt, _int4x2, _dispatcher::has_avx)
+	DISPATCHED_FUNC(vsqrt, _int4x2, _dispatcher::has_avx)
 		(const _int4x2 &a)
 	{
 		BODY(_mm256_sqrt_ps(static_cast<_float8>(a).val));
 	}
 	// Integer DIV ==============================================================================================	
 
-	FEATURE_BIN_OP(/ , _int8, _dispatcher::has_avx2)
+	DISPATCHED_BIN_OP(/ , _int8, _dispatcher::has_avx2)
 	{
 		BODY(_mm256_div_ps(static_cast<_float8>(a).val, static_cast<_float8>(b).val));
 	}	
 
-	FEATURE_BIN_OP(/ , _int4x2, _dispatcher::has_avx)
+	DISPATCHED_BIN_OP(/ , _int4x2, _dispatcher::has_avx)
 	{
 		BODY(_mm256_div_ps(static_cast<_float8>(a).val, static_cast<_float8>(b).val));
 	}
 
-	FEATURE_FUNC(vsel, _int8, _dispatcher::has_avx2)
+	DISPATCHED_FUNC(vsel, _int8, _dispatcher::has_avx2)
 		(const _float8 &a, const _int8 &b, const _int8 &c)
 	{		
 		BODY(vsel(c, b, _int8(a)));
 	}
 
-	FEATURE_FUNC(vsel, _float8, _dispatcher::has_avx2)
+	DISPATCHED_FUNC(vsel, _float8, _dispatcher::has_avx2)
 		(const _int8 &a, const _float8 &b, const _float8 &c)
 	{
 		BODY(vsel(c, b, _float8(a)));
 	}
 
-	FEATURE_FUNC(vsel, _int4x2, _dispatcher::has_avx && !_dispatcher::has_avx2)
+	DISPATCHED_FUNC(vsel, _int4x2, _dispatcher::has_avx && !_dispatcher::has_avx2)
 		(const _float8 &a, const _int4x2 &b, const _int4x2 &c)
 	{
 		BODY(vsel(c, b, _int4x2(a.val)));
 	}
 
-	FEATURE_FUNC(vsel, _float8, _dispatcher::has_avx && !_dispatcher::has_avx2)
+	DISPATCHED_FUNC(vsel, _float8, _dispatcher::has_avx && !_dispatcher::has_avx2)
 		(const _int4x2 &a, const _float8 &b, const _float8 &c)
 	{
 		BODY(vsel(c, b, _float8(a)));

@@ -102,7 +102,7 @@ namespace zzsystems {
 		ANY(TType) TRI_FUNC(vclamp, TType) { BODY(vmin(vmax(a, b), c)); }
 
 		// Clamp float32 to int32/2 range
-		SIMD_ENABLED_F UN_FUNC(clamp_int32, vreal)
+		VECTORIZED_F UN_FUNC(clamp_int32, vreal)
 		{
 			BODY(vclamp<vreal>(a, -1073741824.0, 1073741824.0));
 		}
@@ -129,7 +129,7 @@ namespace zzsystems {
 		UN_FUNC(vsqrt, int)		{ BODY(static_cast<int>(::floor(::sqrt(static_cast<double>(a))))); }
 
 
-		SIMD_ENABLED_F
+		VECTORIZED_F
 			bool is_set(vreal value)
 		{
 			return static_cast<bool>(value);

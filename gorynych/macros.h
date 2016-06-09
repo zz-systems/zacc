@@ -78,18 +78,18 @@ namespace zzsystems { namespace gorynych {
 
 	// vectorized type SFINAE stuff -------------------------------------------------------------------------------------
 
-	#define SIMD_ENABLED template<typename vreal, typename vint>
-	#define SIMD_ENABLED_F template<typename vreal>
-	#define SIMD_ENABLED_I template<typename vint>
-	#define SIMD_ENABLED_FUNC_I SIMD_ENABLED inline typename std::enabled_if<is_vint<vint>::value && is_vreal<vreal>::value, vint>
-	#define SIMD_ENABLED_FUNC_F SIMD_ENABLED inline typename std::enabled_if<is_vint<vint>::value && is_vreal<vreal>::value, vreal>
+	#define VECTORIZED template<typename vreal, typename vint>
+	#define VECTORIZED_F template<typename vreal>
+	#define VECTORIZED_I template<typename vint>
+	#define VECTORIZED_FUNC_I VECTORIZED inline typename std::enabled_if<is_vint<vint>::value && is_vreal<vreal>::value, vint>
+	#define VECTORIZED_FUNC_F VECTORIZED inline typename std::enabled_if<is_vint<vint>::value && is_vreal<vreal>::value, vreal>
 
 	// Featuremask template. Important for static branch dispatching
-	#define FEATURE template<typename featuremask>
+	#define DISPATCHED template<typename dispatch_mask>
 
 	// shortcut with return type
-	#define FEATURE_RET(TType, condition) \
-		FEATURE typename std::enable_if<condition, TType>::type 
+	#define DISPATCHED_RET(TType, condition) \
+		DISPATCHED typename std::enable_if<condition, TType>::type
 	//-------------------------------------------------------------------------------------------------------------------
 	
 	// Argument defintion, passing --------------------------------------------------------------------------------------
@@ -171,20 +171,20 @@ namespace zzsystems { namespace gorynych {
 		ANY(convertable) BIN_OP_STUB_BA(op, type, convertable)
 
 	// shortcut: operator declaration
-	#define FEATURE_OP(op, TType, condition) \
-		FEATURE_RET(TType, condition) inline operator op
+	#define DISPATCHED_OP(op, TType, condition) \
+		DISPATCHED_RET(TType, condition) inline operator op
 
 	// shortcut: unary operator declaration
-	#define FEATURE_UN_OP(op, TType, condition) \
-		FEATURE_OP(op, TType, condition) (const TType a)
+	#define DISPATCHED_UN_OP(op, TType, condition) \
+		DISPATCHED_OP(op, TType, condition) (const TType a)
 
 	// shortcut: binary operator declaration
-	#define FEATURE_BIN_OP(op, TType, condition) \
-		FEATURE_OP(op, TType, condition) (const TType a, const TType b)
+	#define DISPATCHED_BIN_OP(op, TType, condition) \
+		DISPATCHED_OP(op, TType, condition) (const TType a, const TType b)
 
 	// shortcut: shift operator declaration
-	#define FEATURE_SHIFT_OP(op, TType, condition) \
-		FEATURE_OP(op, TType, condition) (const TType a, const int sa)
+	#define DISPATCHED_SHIFT_OP(op, TType, condition) \
+		DISPATCHED_OP(op, TType, condition) (const TType a, const int sa)
 	//-------------------------------------------------------------------------------------------------------------------
 
 	// Function declarations --------------------------------------------------------------------------------------------
@@ -202,20 +202,20 @@ namespace zzsystems { namespace gorynych {
 	#define TRI_FUNC(name, type) inline type name(const type &a, const type &b, const type &c)	
 
 	// shortcut: function declaration
-	#define FEATURE_FUNC(name, TType, condition) \
-		FEATURE_RET(TType, condition) inline name
+	#define DISPATCHED_FUNC(name, TType, condition) \
+		DISPATCHED_RET(TType, condition) inline name
 
 	// shortcut: unary function declaration
-	#define FEATURE_UN_FUNC(name, TType, condition) \
-	FEATURE_RET(TType, condition) name(const TType a)
+	#define DISPATCHED_UN_FUNC(name, TType, condition) \
+	DISPATCHED_RET(TType, condition) name(const TType a)
 
 	// shortcut: binary function declaration
-	#define FEATURE_BIN_FUNC(name, TType, condition) \
-	FEATURE_RET(TType, condition) name(const TType a, const TType b)
+	#define DISPATCHED_BIN_FUNC(name, TType, condition) \
+	DISPATCHED_RET(TType, condition) name(const TType a, const TType b)
 
 	// shortcut: ternary function declaration
-	#define FEATURE_TRI_FUNC(name, TType, condition) \
-	FEATURE_RET(TType, condition) name(const TType a, const TType b, const TType c)
+	#define DISPATCHED_TRI_FUNC(name, TType, condition) \
+	DISPATCHED_RET(TType, condition) name(const TType a, const TType b, const TType c)
 
 	//-------------------------------------------------------------------------------------------------------------------
 
@@ -223,7 +223,7 @@ namespace zzsystems { namespace gorynych {
 	
 	// Information about selected branch on a per-function/operator basis
 	#if defined(ENABLE_DEBUG_FUNC_INSTANCE) //&& defined(__DEBUG)
-		#define DEBUG_FUNC_INSTANCE(name) cout << "for " << static_dispatcher<featuremask>::unit_name() << " using: " << name << endl
+		#define DEBUG_FUNC_INSTANCE(name) cout << "for " << static_dispatcher<dispatch_mask>::unit_name() << " using: " << name << endl
 	#else 
 		#define DEBUG_FUNC_INSTANCE {}
 	#endif

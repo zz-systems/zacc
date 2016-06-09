@@ -26,27 +26,19 @@
 #include "../dependencies.h"
 
 namespace zzsystems { namespace gorynych {
-	FEATURE
+	DISPATCHED
 	struct int4;
 
 	
 	//struct double2;
-#define _float4 float4<featuremask> 
-#define _int4 int4<featuremask>
+#define _float4 float4<dispatch_mask>
+#define _int4 int4<dispatch_mask>
 
-	FEATURE
-	struct ALIGN(16) float4 {
+	DISPATCHED struct alignas(16) float4 {
 
-		typedef featuremask capability;
-#ifdef MSC_VER
+		typedef dispatch_mask capability;
+
 		__m128 val;
-#else
-		//union
-		//{
-		alignas(16) __m128 val;
-		//	float m128_if32[4];
-		//};
-#endif
 
 		float4() = default;
 		
@@ -121,47 +113,47 @@ namespace zzsystems { namespace gorynych {
 
 
 
-	FEATURE_RET(bool, HAS_SSE41) all_ones(const _float4 a)
+	DISPATCHED_RET(bool, HAS_SSE41) all_ones(const _float4 a)
 	{
 		BODY(_mm_test_all_ones(_mm_castps_si128(a.val)) != 0);
 	}
 
-	FEATURE_RET(bool, !HAS_SSE41) all_ones(const _float4 a)
+	DISPATCHED_RET(bool, !HAS_SSE41) all_ones(const _float4 a)
 	{
 		BODY(_mm_movemask_ps(_mm_cmpeq_ps(a.val, _float4::ones())) == 0xFFFF);
 	}
 	// Arithmetic =====================================================================================================
 	
 	// Add
-	FEATURE_BIN_OP(+, _float4, HAS_SSE)
+	DISPATCHED_BIN_OP(+, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_add_ps);
 	}	
 	// Sub
-	FEATURE_BIN_OP(-, _float4, HAS_SSE)
+	DISPATCHED_BIN_OP(-, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_sub_ps);
 	}
 	// Mul
-	FEATURE_BIN_OP(*, _float4, HAS_SSE)
+	DISPATCHED_BIN_OP(*, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_mul_ps);
 	}
 
 	// division
-	FEATURE_BIN_OP(/, _float4, HAS_SSE && !USE_FAST_FLOAT)
+	DISPATCHED_BIN_OP(/, _float4, HAS_SSE && !USE_FAST_FLOAT)
 	{
 		{ BIN_BODY(_mm_div_ps); }	
 	}
 
 	// Fast division (lower precision!)
-	FEATURE_BIN_OP(/ , _float4, HAS_SSE && USE_FAST_FLOAT)
+	DISPATCHED_BIN_OP(/ , _float4, HAS_SSE && USE_FAST_FLOAT)
 	{
 		BODY(_mm_mul_ps(a.val, _mm_rcp_ps(b.val)));
 	}
 
 	// Negate 
-	FEATURE_UN_OP(-, _float4, HAS_SSE)
+	DISPATCHED_UN_OP(-, _float4, HAS_SSE)
 	{
 		BODY(_mm_sub_ps(_mm_setzero_ps(), a.val));
 		//BODY(_mm_xor_ps(a.val, _mm_castsi128_ps(_float4::sign1all0())));
@@ -169,95 +161,95 @@ namespace zzsystems { namespace gorynych {
 
 	// Comparison =====================================================================================================	
 	// Greater than
-	FEATURE_BIN_OP(>, _float4, HAS_SSE)
+	DISPATCHED_BIN_OP(>, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_cmpgt_ps);
 	}
 	// Less than
-	FEATURE_BIN_OP(<, _float4, HAS_SSE)
+	DISPATCHED_BIN_OP(<, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_cmplt_ps);
 	}
 	//SIMD_FEATURE(_float4::has_sse)
-	FEATURE_BIN_OP(==, _float4, HAS_SSE)
+	DISPATCHED_BIN_OP(==, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_cmpeq_ps);
 	}
 
-	FEATURE_BIN_OP(!=, _float4, HAS_SSE)
+	DISPATCHED_BIN_OP(!=, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_cmpneq_ps);
 	}
 	
 	// Bitwise ========================================================================================================
 	// Bitwise NOT
-	FEATURE_UN_OP(~, _float4, HAS_SSE)
+	DISPATCHED_UN_OP(~, _float4, HAS_SSE)
 	{		
 		BODY(_mm_xor_ps(a.val, _float4::ones()));
 	}
 	
-	FEATURE_UN_OP(!, _float4, HAS_SSE)
+	DISPATCHED_UN_OP(!, _float4, HAS_SSE)
 	{
 		BODY(~a);
 	}
 
 	// Bitwise AND
-	FEATURE_BIN_OP(&, _float4, HAS_SSE)
+	DISPATCHED_BIN_OP(&, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_and_ps);
 	}
 
 	// Bitwise OR
-	FEATURE_BIN_OP(|, _float4, HAS_SSE)
+	DISPATCHED_BIN_OP(|, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_or_ps);
 	}
 
 	// Bitwise AND
-	FEATURE_BIN_OP(&&, _float4, HAS_SSE)
+	DISPATCHED_BIN_OP(&&, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_and_ps);
 	}
 
 	// Bitwise OR
-	FEATURE_BIN_OP(|| , _float4, HAS_SSE)
+	DISPATCHED_BIN_OP(|| , _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_or_ps);
 	}
 
 	// Bitwise XOR
-	FEATURE_BIN_OP(^, _float4, HAS_SSE)
+	DISPATCHED_BIN_OP(^, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_xor_ps);
 	}
 	
 	// Special functions ==============================================================================================
 	// SSE > 4.1 Branchless select
-	FEATURE_TRI_FUNC(vsel, _float4, HAS_SSE41)
+	DISPATCHED_TRI_FUNC(vsel, _float4, HAS_SSE41)
 	{
 		TRI_BODY_R(_mm_blendv_ps);
 	}
 
 	// SSE < 4.1 branchless select
-	FEATURE_TRI_FUNC(vsel, _float4, !HAS_SSE41 && HAS_SSE)
+	DISPATCHED_TRI_FUNC(vsel, _float4, !HAS_SSE41 && HAS_SSE)
 	{
 		BODY((a /* mask */ & b) | (~a & c));
 	}
 
 	// Fused multiply-add
-	FEATURE_TRI_FUNC(vfmadd, _float4, HAS_FMA)
+	DISPATCHED_TRI_FUNC(vfmadd, _float4, HAS_FMA)
 	{
 		TRI_BODY(_mm_fmadd_ps);
 	}
 	// Fused multiply-subtract
-	FEATURE_TRI_FUNC(vfmsub, _float4, HAS_FMA)
+	DISPATCHED_TRI_FUNC(vfmsub, _float4, HAS_FMA)
 	{
 		TRI_BODY(_mm_fmsub_ps);
 	}
 
 	// Mathematical functions =========================================================================================
 	// Absolute value
-	FEATURE_UN_FUNC(vabs, _float4, HAS_SSE)
+	DISPATCHED_UN_FUNC(vabs, _float4, HAS_SSE)
 	{
 		// According to IEEE 754 standard: sign bit is the first bit => set to 0
 		//BODY(_mm_and_ps(a.val, _mm_castsi128_ps(_float4::sign0all1())));
@@ -265,25 +257,25 @@ namespace zzsystems { namespace gorynych {
 	}
 
 	// Minimum value
-	FEATURE_BIN_FUNC(vmin, _float4, HAS_SSE)
+	DISPATCHED_BIN_FUNC(vmin, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_min_ps);
 	}
 
 	// Maximum
-	FEATURE_BIN_FUNC(vmax, _float4, HAS_SSE)
+	DISPATCHED_BIN_FUNC(vmax, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_max_ps);
 	}
 
 	// Normal square root
-	FEATURE_UN_FUNC(vsqrt, _float4, HAS_SSE && !USE_FAST_FLOAT)
+	DISPATCHED_UN_FUNC(vsqrt, _float4, HAS_SSE && !USE_FAST_FLOAT)
 	{
 		UN_BODY(_mm_sqrt_ps);
 	}
 
 	// Fast square root (lower precision!)
-	FEATURE_UN_FUNC(vsqrt, _float4, HAS_SSE && USE_FAST_FLOAT)
+	DISPATCHED_UN_FUNC(vsqrt, _float4, HAS_SSE && USE_FAST_FLOAT)
 	{
 		BODY(_mm_mul_ps(a.val, _mm_rsqrt_ps(a.val)));
 	}
@@ -291,45 +283,45 @@ namespace zzsystems { namespace gorynych {
 	// Rounding =======================================================================================================
 
 	// Truncate float to *.0
-	FEATURE_UN_FUNC(vtrunc, _float4, HAS_SSE)
+	DISPATCHED_UN_FUNC(vtrunc, _float4, HAS_SSE)
 	{
 		BODY(static_cast<_float4>(static_cast<_int4>(a)));
 	}
 
 	// Floor value
-	FEATURE_UN_FUNC(vfloor, _float4, HAS_SSE41)
+	DISPATCHED_UN_FUNC(vfloor, _float4, HAS_SSE41)
 	{
 		BODY(_mm_round_ps(a.val, _MM_FROUND_FLOOR));
 	}
 
 	// Ceil value
-	FEATURE_UN_FUNC(vceil, _float4, HAS_SSE41)
+	DISPATCHED_UN_FUNC(vceil, _float4, HAS_SSE41)
 	{
 		BODY(_mm_round_ps(a.val, _MM_FROUND_CEIL));
 	}
 
 	// Round value
-	FEATURE_UN_FUNC(vround, _float4, HAS_SSE41)
+	DISPATCHED_UN_FUNC(vround, _float4, HAS_SSE41)
 	{
 		BODY(_mm_round_ps(a.val, _MM_FROUND_TO_NEAREST_INT));
 	}
 
 	// Floor value
-	FEATURE_UN_FUNC(vfloor, _float4, !HAS_SSE41 && HAS_SSE)
+	DISPATCHED_UN_FUNC(vfloor, _float4, !HAS_SSE41 && HAS_SSE)
 	{
 		auto fi = vtrunc(a);
 		return vsel(fi > a, fi - _float4(_float4::one()), fi);
 	}
 
 	// Ceil value
-	FEATURE_UN_FUNC(vceil, _float4, !HAS_SSE41 && HAS_SSE)
+	DISPATCHED_UN_FUNC(vceil, _float4, !HAS_SSE41 && HAS_SSE)
 	{
 		auto fi = vtrunc(a);
 		return vsel(fi < a, fi + _float4(_float4::one()), fi);
 	}
 
 	// Round value
-	FEATURE_UN_FUNC(vround, _float4, !HAS_SSE41 && HAS_SSE)
+	DISPATCHED_UN_FUNC(vround, _float4, !HAS_SSE41 && HAS_SSE)
 	{
 		//generate the highest value < 2		
 		_float4 vNearest2 = _mm_castsi128_ps(_mm_srli_epi32(_float4::ones(), 2));

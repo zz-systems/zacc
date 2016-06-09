@@ -60,7 +60,7 @@ namespace std
 		seed ^= hasher(v) + static_cast<int>(0x9e3779b9) + (seed << 6) + (seed >> 2);
 	}
 
-	FEATURE
+	DISPATCHED
 	struct hash<zzsystems::gorynych::_float4>
 	{
 		typedef zzsystems::gorynych::_float4 argument_type;
@@ -79,7 +79,7 @@ namespace std
 		}
 	};
 
-	FEATURE
+	DISPATCHED
 	struct hash<zzsystems::gorynych::_float8>
 	{
 		typedef zzsystems::gorynych::_float8 argument_type;

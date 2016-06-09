@@ -29,25 +29,18 @@ namespace zzsystems { namespace gorynych {
 
 	//using namespace std;
 
-	FEATURE
+	DISPATCHED
 	struct float4;
 	//struct double2;
-#define _int4 int4<featuremask>
-#define _float4 float4<featuremask>
+#define _int4 int4<dispatch_mask>
+#define _float4 float4<dispatch_mask>
 
-	FEATURE
-	struct ALIGN(16) int4
+	DISPATCHED struct alignas(16) int4
 	{
-		typedef featuremask capability;
-#ifdef MSC_VER
+		typedef dispatch_mask capability;
+
 		__m128i val;
-#else
-        //union
-		//{
-		alignas(16) __m128i val;
-		//	int32_t m128_i32[4];
-		//};
-#endif
+
 		int4() = default;
 		int4(const int rhs)			: val(_mm_set1_epi32(rhs)) {}
 		int4(const int* rhs)		: val(_mm_load_si128((__m128i*)rhs)) {}
@@ -85,22 +78,22 @@ namespace zzsystems { namespace gorynych {
 
 	
 	
-	FEATURE_BIN_OP(+, _int4, HAS_SSE)
+	DISPATCHED_BIN_OP(+, _int4, HAS_SSE)
 	{
 		BIN_BODY(_mm_add_epi32);
 	}
 
-	FEATURE_BIN_OP(-, _int4, HAS_SSE)
+	DISPATCHED_BIN_OP(-, _int4, HAS_SSE)
 	{
 		BIN_BODY(_mm_sub_epi32);
 	}
 
-	FEATURE_BIN_OP(*, _int4, HAS_SSE41)
+	DISPATCHED_BIN_OP(*, _int4, HAS_SSE41)
 	{
 		BIN_BODY(_mm_mullo_epi32);
 	}
 	
-	FEATURE_BIN_OP(*, _int4, !HAS_SSE41 && HAS_SSE)
+	DISPATCHED_BIN_OP(*, _int4, !HAS_SSE41 && HAS_SSE)
 	{
 		__m128i tmp1 = _mm_mul_epu32(a.val, b.val); /* mul 2,0*/
 		__m128i tmp2 = _mm_mul_epu32(_mm_srli_si128(a.val, 4), _mm_srli_si128(b.val, 4)); /* mul 3,1 */
@@ -110,110 +103,110 @@ namespace zzsystems { namespace gorynych {
 	// yet to implement
 	
 	
-	FEATURE_BIN_OP(>, _int4, HAS_SSE)
+	DISPATCHED_BIN_OP(>, _int4, HAS_SSE)
 	{
 		BIN_BODY(_mm_cmpgt_epi32);
 	}
 	
-	FEATURE_BIN_OP(<, _int4, HAS_SSE)
+	DISPATCHED_BIN_OP(<, _int4, HAS_SSE)
 	{
 		BIN_BODY(_mm_cmplt_epi32);
 	}
 
 	
-	FEATURE_BIN_OP(==, _int4, HAS_SSE)
+	DISPATCHED_BIN_OP(==, _int4, HAS_SSE)
 	{
 		BIN_BODY(_mm_cmpeq_epi32);
 	}
 
-	FEATURE_BIN_OP(!=, _int4, HAS_SSE)
+	DISPATCHED_BIN_OP(!=, _int4, HAS_SSE)
 	{
 		BIN_BODY(_mm_andnot_si128);
 		//BODY(_mm_andnot_si128(_mm_cmpeq_epi32(a.val, b.val), _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128())));
 	}
 	
-	FEATURE_UN_OP(~, _int4, HAS_SSE)
+	DISPATCHED_UN_OP(~, _int4, HAS_SSE)
 	{
 		BODY(_mm_xor_si128(a.val, _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128())));
 	}
-	FEATURE_UN_OP(!, _int4, HAS_SSE)
+	DISPATCHED_UN_OP(!, _int4, HAS_SSE)
 	{
 		BODY(~a);
 	}
 	
-	FEATURE_UN_OP(-, _int4, HAS_SSE)
+	DISPATCHED_UN_OP(-, _int4, HAS_SSE)
 	{
 		BODY(_mm_sub_epi32(_mm_setzero_si128(), a.val));
 	}
 
 	
-	FEATURE_BIN_OP(|, _int4, HAS_SSE)
+	DISPATCHED_BIN_OP(|, _int4, HAS_SSE)
 	{
 		BIN_BODY(_mm_or_si128);
 	}
 	
-	FEATURE_BIN_OP(&, _int4, HAS_SSE)
+	DISPATCHED_BIN_OP(&, _int4, HAS_SSE)
 	{
 		BIN_BODY(_mm_and_si128);
 	}
 
-	FEATURE_BIN_OP(|| , _int4, HAS_SSE)
+	DISPATCHED_BIN_OP(|| , _int4, HAS_SSE)
 	{
 		BIN_BODY(_mm_or_si128);
 	}
 
-	FEATURE_BIN_OP(&&, _int4, HAS_SSE)
+	DISPATCHED_BIN_OP(&&, _int4, HAS_SSE)
 	{
 		BIN_BODY(_mm_and_si128);
 	}
 
-	FEATURE_BIN_OP(^, _int4, HAS_SSE)
+	DISPATCHED_BIN_OP(^, _int4, HAS_SSE)
 	{
 		BIN_BODY(_mm_xor_si128);
 	}
 	
-	FEATURE_SHIFT_OP(>>, _int4, HAS_SSE)
+	DISPATCHED_SHIFT_OP(>>, _int4, HAS_SSE)
 	{
 		return _mm_srli_epi32		(a.val, sa);
 	}	
 	
-	FEATURE_SHIFT_OP(<<, _int4, HAS_SSE)
+	DISPATCHED_SHIFT_OP(<<, _int4, HAS_SSE)
 	{
 		return _mm_slli_epi32(a.val, sa);
 	}
 
-	FEATURE_UN_FUNC(vabs, _int4, HAS_SSE)
+	DISPATCHED_UN_FUNC(vabs, _int4, HAS_SSE)
 	{
 		BODY(vmax(-a, a));
 	}
 
-	FEATURE_BIN_FUNC(vmin, _int4, !HAS_SSE41)
+	DISPATCHED_BIN_FUNC(vmin, _int4, !HAS_SSE41)
 	{
 		BODY(vsel(a < b, a, b));
 	}
 
-	FEATURE_BIN_FUNC(vmin, _int4, HAS_SSE41)
+	DISPATCHED_BIN_FUNC(vmin, _int4, HAS_SSE41)
 	{
 		BIN_BODY(_mm_min_epi32);
 	}
 
-	FEATURE_BIN_FUNC(vmax, _int4, !HAS_SSE41)
+	DISPATCHED_BIN_FUNC(vmax, _int4, !HAS_SSE41)
 	{
 		BODY(vsel(a > b, a, b));
 	}
 	
-	FEATURE_BIN_FUNC(vmax, _int4, HAS_SSE41)
+	DISPATCHED_BIN_FUNC(vmax, _int4, HAS_SSE41)
 	{
 		BIN_BODY(_mm_max_epi32);
 	}
 	
 	// SSE 4.1 branchless select
-	FEATURE_TRI_FUNC(vsel, _int4, HAS_SSE41)
+	DISPATCHED_TRI_FUNC(vsel, _int4, HAS_SSE41)
 	{		
 		TRI_BODY_R(_mm_blendv_epi8);
 	}
 
-	FEATURE_TRI_FUNC(vsel, _int4, HAS_SSE && !HAS_SSE41)
+	DISPATCHED_TRI_FUNC(vsel, _int4, HAS_SSE && !HAS_SSE41)
 	{
 		BODY(a /*mask */ & b | ~a & c);
 	}

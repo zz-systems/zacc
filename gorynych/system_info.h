@@ -210,25 +210,25 @@ namespace zzsystems { namespace gorynych {
 	}
 
 	// Used to distinguish branch-dependant code at compile-time
-	FEATURE
+	DISPATCHED
 		struct dispatcher
 	{
-		static constexpr int feature_flags = featuremask();
+		static constexpr int feature_flags = dispatch_mask();
 
-		static constexpr bool has_sse2			= 0 != (featuremask() & CAPABILITY_SSE2);
-		static constexpr bool has_sse3			= 0 != (featuremask() & CAPABILITY_SSE3);
-		static constexpr bool has_ssse3			= 0 != (featuremask() & CAPABILITY_SSSE3);
-		static constexpr bool has_fma			= 0 != (featuremask() & CAPABILITY_FMA3) || (featuremask() & CAPABILITY_FMA4);
-		static constexpr bool has_sse41			= 0 != (featuremask() & CAPABILITY_SSE41);
-		static constexpr bool has_sse42			= 0 != (featuremask() & CAPABILITY_SSE42);
-		static constexpr bool has_avx			= 0 != (featuremask() & CAPABILITY_AVX1);
-		static constexpr bool has_avx2			= 0 != (featuremask() & CAPABILITY_AVX2);
-		static constexpr bool has_avx512		= 0 != (featuremask() & CAPABILITY_AVX512);
-		static constexpr bool use_fast_float	= 0 != (featuremask() & CAPABILITY_FASTFLOAT);
+		static constexpr bool has_sse2			= 0 != (dispatch_mask() & CAPABILITY_SSE2);
+		static constexpr bool has_sse3			= 0 != (dispatch_mask() & CAPABILITY_SSE3);
+		static constexpr bool has_ssse3			= 0 != (dispatch_mask() & CAPABILITY_SSSE3);
+		static constexpr bool has_fma			= 0 != (dispatch_mask() & CAPABILITY_FMA3) || (dispatch_mask() & CAPABILITY_FMA4);
+		static constexpr bool has_sse41			= 0 != (dispatch_mask() & CAPABILITY_SSE41);
+		static constexpr bool has_sse42			= 0 != (dispatch_mask() & CAPABILITY_SSE42);
+		static constexpr bool has_avx			= 0 != (dispatch_mask() & CAPABILITY_AVX1);
+		static constexpr bool has_avx2			= 0 != (dispatch_mask() & CAPABILITY_AVX2);
+		static constexpr bool has_avx512		= 0 != (dispatch_mask() & CAPABILITY_AVX512);
+		static constexpr bool use_fast_float	= 0 != (dispatch_mask() & CAPABILITY_FASTFLOAT);
 	};
 
 	// shortcuts
-	#define _dispatcher dispatcher<featuremask>
+	#define _dispatcher dispatcher<dispatch_mask>
 
 	#define HAS_SSE _dispatcher::has_sse2
 	#define HAS_SSE3 _dispatcher::has_sse3

@@ -43,9 +43,9 @@ namespace zzsystems { namespace gorynych {
 	using namespace std;
 
 	// "fallback" (erroneous) dispatcher
-	template<typename featuremask, typename enable = void>
+	template<typename dispatch_mask, typename enable = void>
 	struct static_dispatcher
-		//: dispatcher<featuremask>
+		//: dispatcher<dispatch_mask>
 	{
 		static_assert(!is_same<enable, void>::value, "not expected");
 
@@ -55,10 +55,10 @@ namespace zzsystems { namespace gorynych {
 	};
 
 	// x87 dispatcher
-	FEATURE
-	struct static_dispatcher<featuremask,
+	DISPATCHED
+	struct static_dispatcher<dispatch_mask,
 		typename enable_if<!HAS_SSE && !HAS_AVX1 && !HAS_AVX2>::type>
-		//: dispatcher<featuremask>
+		//: dispatcher<dispatch_mask>
 	{
 		typedef int		vint;
 		typedef float	vreal;
@@ -67,10 +67,10 @@ namespace zzsystems { namespace gorynych {
 
 #if defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA)
 	// Dispatcher for all SSE kinds
-	FEATURE
-		struct static_dispatcher<featuremask,
+	DISPATCHED
+		struct static_dispatcher<dispatch_mask,
 		typename enable_if<HAS_SSE && !HAS_AVX1 && !HAS_AVX2>::type>
-		//: dispatcher<featuremask>
+		//: dispatcher<dispatch_mask>
 	{
 		typedef _int4 vint;
 		typedef _float4 vreal;
@@ -80,10 +80,10 @@ namespace zzsystems { namespace gorynych {
 
 #if defined(COMPILE_AVX1)
 	// AVX1 dispatcher
-	FEATURE
-		struct static_dispatcher<featuremask,
+	DISPATCHED
+		struct static_dispatcher<dispatch_mask,
 		typename enable_if<HAS_AVX1 && !HAS_AVX2>::type>
-		//: dispatcher<featuremask>
+		//: dispatcher<dispatch_mask>
 	{
 		typedef _int4x2 vint;
 		typedef _float8 vreal;
@@ -92,10 +92,10 @@ namespace zzsystems { namespace gorynych {
 #endif
 #if defined(COMPILE_AVX2)
 	// AVX2 dispatcher
-	FEATURE
-		struct static_dispatcher<featuremask,
+	DISPATCHED
+		struct static_dispatcher<dispatch_mask,
 		typename enable_if<HAS_AVX1 && HAS_AVX2>::type>
-		//: dispatcher<featuremask>
+		//: dispatcher<dispatch_mask>
 	{
 		typedef _int8 vint;
 		typedef _float8 vreal;

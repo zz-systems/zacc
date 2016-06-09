@@ -106,7 +106,7 @@ namespace zzsystems { namespace gorynych { namespace tests {
 namespace zzsystems { namespace gorynych { namespace test {
 			template<typename vtype, typename stype>
 			inline void test_validate(stype expected, const vtype &val) {
-				stype tested[dim<vtype>()];
+				SIMD_ALIGN stype tested[dim<vtype>()];
 
 				extract(val, tested);
 
@@ -125,7 +125,7 @@ namespace zzsystems { namespace gorynych { namespace test {
 
 			template<typename vtype, typename stype>
 			inline void btest_validate(bool expected, const vtype &val) {
-				stype tested[dim<vtype>()];
+				SIMD_ALIGN stype tested[dim<vtype>()];
 
 				extract(val, tested);
 

@@ -1,10 +1,7 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.3.2)
 project(gorynych-test)
 
 include(../CMakeCommons)
-
-set(CMAKE_C_COMPILER "/usr/bin/clang" CACHE string "clang compiler" FORCE)
-set(CMAKE_CXX_COMPILER "/usr/bin/clang++" CACHE string "clang compiler" FORCE)
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g ")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")

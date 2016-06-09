@@ -63,7 +63,7 @@ namespace zzsystems { namespace gorynych
 
 #if defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA) || defined(COMPILE_AVX1)
 
-	FEATURE
+	DISPATCHED
 	struct ccl<_int4>
 	{
 		static inline _int4 zeros()			{ return _mm_setzero_si128();}
@@ -74,7 +74,7 @@ namespace zzsystems { namespace gorynych
 		//static inline _int4 sign0all1() 	{ return ones() >> 1; }
 	};
 
-	FEATURE
+	DISPATCHED
 	struct ccl<_float4>
 	{
 		static inline _float4 zeros()		{ return _mm_setzero_ps();}
@@ -87,7 +87,7 @@ namespace zzsystems { namespace gorynych
 #endif
 #if defined(COMPILE_AVX2)
 
-	FEATURE
+	DISPATCHED
 	struct ccl<_int8>
 	{
 		static inline _int8 zeros()			{ return _mm256_setzero_si256();}
@@ -98,7 +98,7 @@ namespace zzsystems { namespace gorynych
 		//static inline _int8 sign0all1() 	{ return ones() >> 1; }
 	};
 
-	FEATURE
+	DISPATCHED
 	struct ccl<_float8>
 	{
 		static inline _float8 zeros()		{ return _mm256_setzero_ps();}
@@ -109,7 +109,7 @@ namespace zzsystems { namespace gorynych
 		//static inline _float8 sign0all1() 	{ return _mm256_castsi256_ps(ccl<_int8>::sign0all1().val); }
 	};
 #elif defined(COMPILE_AVX1)
-	FEATURE
+	DISPATCHED
 	struct ccl<_int4x2>
 	{
 		static inline _int4x2 zeros()		{ return {_mm_setzero_si128(), _mm_setzero_si128()};}
@@ -120,7 +120,7 @@ namespace zzsystems { namespace gorynych
 		//static inline _int4x2 sign0all1() 	{ return ones() >> 1; }
 	};
 
-	FEATURE
+	DISPATCHED
 	struct ccl<_float8>
 	{
 		static inline _float8 zeros()		{ return _mm256_setzero_ps();}
