@@ -100,7 +100,7 @@ namespace zzsystems { namespace gorynych { namespace tests {
 }}}
 
 #else
-#include "../../Catch/single_include/catch.hpp"
+#include "../Catch/single_include/catch.hpp"
 #include "gorynych.h"
 
 namespace zzsystems { namespace gorynych { namespace test {

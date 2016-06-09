@@ -16,7 +16,7 @@
 
 
 #include "../gorynych/unit_test_ext.h"
-#include "../../Catch/single_include/catch.hpp"
+#include "../Catch/single_include/catch.hpp"
 #include "../gorynych/gorynych.h"
 
 namespace zzsystems
