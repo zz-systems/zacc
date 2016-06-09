@@ -101,7 +101,7 @@ namespace zzsystems { namespace gorynych {
 
 	DISPATCHED void extract(const _int8 &src, int32_t* target)
 	{
-		_mm256_store_si256(target, src.val);
+		_mm256_store_si256((__m256i*)target, src.val);
 	}
 
 	DISPATCHED void extract(const _int4x2 &src, int32_t* target)
