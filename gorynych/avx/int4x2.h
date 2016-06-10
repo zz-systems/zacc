@@ -88,52 +88,57 @@ namespace zzsystems { namespace gorynych {
 
 	DISPATCHED_BIN_OP(+, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return { a.hi + b.hi, a.lo + b.lo };
+		return { a.lo + b.lo, a.hi + b.hi };
 	}
 
 	DISPATCHED_BIN_OP(-, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return { a.hi - b.hi, a.lo - b.lo };
+		return { a.lo - b.lo, a.hi - b.hi };
 	}
 
 	DISPATCHED_BIN_OP(*, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return { a.hi * b.hi, a.lo * b.lo };
+		return { a.lo * b.lo, a.hi * b.hi };
 	}	
 
 	DISPATCHED_UN_OP(-, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return { -a.hi, -a.lo };
+		return { -a.lo, -a.hi };
 	}
 	
 	DISPATCHED_BIN_OP(>, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return{ a.hi > b.hi, a.lo > b.lo };
+		return{ a.lo > b.lo, a.hi > b.hi };
 	}
 
 	DISPATCHED_BIN_OP(<, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return{ a.hi < b.hi, a.lo < b.lo };
+		return{ a.lo < b.lo, a.hi < b.hi };
 	}
 
 	DISPATCHED_BIN_OP(==, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return{ a.hi == b.hi, a.lo == b.lo };
+		return{ a.lo == b.lo, a.hi == b.hi };
+	}
+
+	DISPATCHED_BIN_OP(!=, _int4x2, HAS_AVX1 && !HAS_AVX2)
+	{
+		return{ a.lo != b.lo, a.hi != b.hi };
 	}
 
 	DISPATCHED_UN_OP(~, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return{ ~a.hi, ~a.lo };
+		return{ ~a.lo, ~a.hi };
 	}
 
 	DISPATCHED_BIN_OP(|, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return { a.hi | b.hi, a.lo | b.lo };
+		return { a.lo | b.lo, a.hi | b.hi };
 	}
 
 	DISPATCHED_BIN_OP(&, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return { a.hi & b.hi, a.lo & b.lo };
+		return { a.lo & b.lo, a.hi & b.hi };
 	}
 
 	DISPATCHED_UN_OP(!, _int4x2, HAS_AVX1 && !HAS_AVX2)
@@ -153,37 +158,37 @@ namespace zzsystems { namespace gorynych {
 
 	DISPATCHED_BIN_OP(^, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return{ a.hi ^ b.hi, a.lo ^ b.lo };
+		return{ a.lo ^ b.lo, a.hi ^ b.hi };
 	}
 
 	DISPATCHED_SHIFT_OP(>> , _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return { a.hi >> sa, a.lo >> sa };
+		return { a.lo >> sa, a.hi >> sa };
 	}
 
 	DISPATCHED_SHIFT_OP(<< , _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return{ a.hi << sa, a.lo << sa };
+		return{ a.lo << sa, a.hi << sa };
 	}
 
 	DISPATCHED_UN_FUNC(vabs, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return { vmax(-a.hi, a.hi), vmax(-a.lo, a.lo) };
+		return { vmax(-a.lo, a.lo), vmax(-a.hi, a.hi) };
 	}
 
 	DISPATCHED_BIN_FUNC(vmin, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return{ vmin(a.hi, b.hi), vmin(a.lo, b.lo) };
+		return{ vmin(a.lo, b.lo), vmin(a.hi, b.hi) };
 	}
 
 	DISPATCHED_BIN_FUNC(vmax, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{
-		return{ vmax(a.hi, b.hi), vmax(a.lo, b.lo) };
+		return{ vmax(a.lo, b.lo), vmax(a.hi, b.hi) };
 	}
 
 	// AVX2 branchless select
 	DISPATCHED_TRI_FUNC(vsel, _int4x2, HAS_AVX1 && !HAS_AVX2)
 	{		
-		return{ vsel(a.hi, b.hi, c.hi), vsel(a.lo, b.lo, c.lo) };
+		return{ vsel(a.lo, b.lo, c.lo), vsel(a.hi, b.hi, c.hi) };
 	}
 }}

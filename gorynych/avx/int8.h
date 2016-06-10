@@ -115,7 +115,7 @@ namespace zzsystems { namespace gorynych {
 
 	DISPATCHED_BIN_OP(!=, _int8, HAS_AVX2)
 	{
-		BIN_BODY(_mm256_cmpneq_epi32_mask);
+		BODY(~_mm256_cmpeq_epi32 BIN_ARG);
 	}
 
 	DISPATCHED_UN_OP(~, _int8, HAS_AVX2)

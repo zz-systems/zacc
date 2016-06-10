@@ -82,14 +82,14 @@ namespace zzsystems { namespace gorynych {
 	using capability_SSE2		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2>;
 	using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;
 #else
-		using capability_AVX2		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 | CAPABILITY_AVX2 >;
-		using capability_AVX1		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 >;
-		using capability_SSE4FMA	= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_FMA3>;
-		using capability_SSE4		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41>;
-		using capability_SSSE3		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3>;
-		using capability_SSE3		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3>;
-		using capability_SSE2		= integral_constant<int, CAPABILITY_SSE2>;
-		using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;
+	using capability_AVX2		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 | CAPABILITY_AVX2 >;
+	using capability_AVX1		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 >;
+	using capability_SSE4FMA	= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_FMA3>;
+	using capability_SSE4		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41>;
+	using capability_SSSE3		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3>;
+	using capability_SSE3		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3>;
+	using capability_SSE2		= integral_constant<int, CAPABILITY_SSE2>;
+	using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;
 #endif
 	struct system_info
 	{

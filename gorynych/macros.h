@@ -238,8 +238,9 @@ namespace zzsystems { namespace gorynych {
 
 	// body for 2 arguments
 	#define BIN_BODY(intrin) return intrin BIN_ARG
+
 	// body for 2 arguments in reversed order
-	#define BIN_BODY_R(intrin) return intrin BIN_ARG
+	#define BIN_BODY_R(intrin) return intrin (b.val, a.val)
 
 	// body for 3 arguments
 	#define TRI_BODY(intrin) return intrin (a.val, b.val, c.val)

@@ -30,15 +30,6 @@
 #include "double4.h"
 #include "../dependencies.h"
 
-
-
-// Traits =========================================================================================================
-namespace std {
-
-}
-//template<>
-//struct std::_Is_floating_point<zzsystems::gorynych::double2>	: std::true_type {	};
-
 namespace zzsystems { namespace gorynych {
 
 	DISPATCHED
@@ -69,11 +60,11 @@ namespace zzsystems { namespace gorynych {
 	//inline int8::int8(const double4& rhs) : int8(rhs.val) { }
 
 	DISPATCHED
-		_int4x2::int4x2(const _float8& rhs) : int4x2(_mm256_extractf128_ps(rhs.val, 1), _mm256_extractf128_ps(rhs.val, 0)) { }
+		_int4x2::int4x2(const _float8& rhs) : int4x2(_mm256_extractf128_ps(rhs.val, 0), _mm256_extractf128_ps(rhs.val, 1)) { }
 	DISPATCHED
-		_int4x2::int4x2(const _int4x2& rhs) : int4x2(rhs.hi, rhs.lo) { }
+		_int4x2::int4x2(const _int4x2& rhs) : int4x2(rhs.lo, rhs.hi) { }
 	DISPATCHED
-		_int4x2::int4x2(const _int4& rhs_hi, const _int4& rhs_lo) : int4x2(rhs_hi.val, rhs_lo.val) { }
+		_int4x2::int4x2(const _int4& rhs_lo, const _int4& rhs_hi) : int4x2(rhs_lo.val, rhs_hi.val) { }
 
 	DISPATCHED
 		_float8::float8(const _float8& rhs) : float8(rhs.val) { }
@@ -81,23 +72,10 @@ namespace zzsystems { namespace gorynych {
 		_float8::float8(const _int8& rhs) : float8(rhs.val) { }
 	DISPATCHED
 		_float8::float8(const _int4x2& rhs)
-		: float8(_mm256_set_m128(_mm_cvtepi32_ps(rhs.hi.val), _mm_cvtepi32_ps(rhs.lo.val)))
+		: float8(_mm256_set_m128(_mm_cvtepi32_ps(rhs.lo.val), _mm_cvtepi32_ps(rhs.hi.val)))
 	{
-		_mm256_zeroupper();
+		//_mm256_zeroupper();
 	}
-	//inline float8::float8(const double4& rhs) : float8(rhs.val) { }
-
-	/*inline double4::double4(const float8& rhs) : double4(rhs.val) { }
-	inline double4::double4(const int8& rhs) : double4(rhs.val) { }
-	inline double4::double4(const double4& rhs) : double4(rhs.val) { }*/
-
-//	DISPATCHED void extract(_int8 &src, int32_t* target)
-//	{
-//		//return src.val.m256i_i32;
-//		__m256_store_si256(src.val, target);
-//		//for(size_t i = 0; i < dim<_int8>(); i++)
-//		//	target[i] = _mm256_extract_epi32(src.val, i);
-//	}
 
 	DISPATCHED void extract(const _int8 &src, int32_t* target)
 	{
@@ -106,8 +84,8 @@ namespace zzsystems { namespace gorynych {
 
 	DISPATCHED void extract(const _int4x2 &src, int32_t* target)
 	{
-		extract(src.hi, target);
-		extract(src.lo, target + 4);
+		extract(src.lo, target);
+		extract(src.hi, target + 4);
 	}
 
 	DISPATCHED void extract(const _float8 &src, float *target)

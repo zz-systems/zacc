@@ -32,3 +32,6 @@ prepare_branches()
 list(APPEND SOURCE_FILES catch_entry_point.cpp)
 
 add_executable(gorynych-test ${SOURCE_FILES})
+
+enable_testing()
+add_test(A gorynych-test)
