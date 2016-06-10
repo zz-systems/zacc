@@ -34,4 +34,7 @@ list(APPEND SOURCE_FILES catch_entry_point.cpp)
 add_executable(gorynych-test ${SOURCE_FILES})
 
 enable_testing()
-add_test(A gorynych-test)
+add_test(gorynych-test gorynych-test)
+
+add_custom_target(unit_test COMMAND ${CMAKE_CTEST_COMMAND}
+        DEPENDS gorynych-test)
