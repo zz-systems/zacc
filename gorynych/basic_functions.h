@@ -23,6 +23,11 @@
 //---------------------------------------------------------------------------------
 #pragma once
 
+/**
+ * @file basic_functions.h
+ *
+ * @brief Generic base functions and conventions
+ */
 
 #include "macros.h"
 #include <algorithm>
@@ -40,8 +45,10 @@ namespace std
 #endif
 }
 
-namespace zzsystems { 	
-	
+namespace zzsystems {
+
+	// Generic operators ===============================================================================================
+
 	ANY(T) ASSIGN_OP(+=, T) { return a = (a + b); }
 	ANY(T) ASSIGN_OP(-=, T) { return a = (a - b); }
 	ANY(T) ASSIGN_OP(*=, T) { return a = (a * b); }
@@ -59,85 +66,185 @@ namespace zzsystems {
 
 	namespace gorynych
 	{
-		// return the vector field count for any given (standard) type
-		// e.g sizeof(__m128i) = 128bit = 4 * 32bit => 4
-		// e.g sizeof(float)   = 32bit  = 1 * 32bit => 1
-		ANY(T)
-			constexpr size_t dim() { BODY(sizeof(T) >> 2); }
+		/// @fn dim
+		/// @brief vector dimensions
+		/// @returns the vector field count for any given (standard) type
+		/// @remark dim<int4>  => sizeof(__m128i) = 128bit = 4 * 32bit => 4
+		/// @remark dim<float> => sizeof(float)   = 32bit  = 1 * 32bit => 1
+		ANY(T) constexpr size_t dim()
+		{
+			BODY(sizeof(T) >> 2);
+		}
 
-
-
-		// branched select (if - then - else) for boolean condition		
-		ANY(TProcess)
-			inline TProcess vsel(const bool condition, const TProcess &choice1, const TProcess &choice2)
+		/// @fn vsel()
+		/// @brief branched if-then-else
+		/// @param a boolean selector mask
+		/// @param b then-branch-value
+		/// @param c else-branch-value
+		ANY(TProcess)inline TProcess vsel
+				(const bool condition, const TProcess &choice1, const TProcess &choice2)
 		{
 			return (condition ? choice1 : choice2);
 		}
 
-		//// branched select (if - then - else) for any condition
-		//ANY2(TCondition, TProcess)
-		//	inline TProcess vsel(const TCondition condition, const TProcess &choice1, const TProcess &choice2)
-		//{
-		//	return (condition ? choice1 : choice2);
-		//}
+		// Special functions ===========================================================================================
 
-		// Multiply-Add (compatible with specialized fused mul-add implementations)		
-		// [y = a * b + c]
-		ANY(TType) TRI_FUNC(vfmadd, TType) { BODY(a * b + c); }
+		/// @fn vfmadd()
+		/// @brief generic multiply-add
+		/// Multiply-Add (compatible with specialized fused mul-add implementations)
+		/// [y = a * b + c]
+		ANY(TType) TRI_FUNC(vfmadd, TType)
+		{
+			BODY(a * b + c);
+		}
 
-		// Multiply-Subtract (compatible with specialized fused mul-sub implementations) 
-		// [y = a * b - c]
-		ANY(TType) TRI_FUNC(vfmsub, TType) { BODY(a * b - c); }
+		/// @fn vfmadd()
+		/// @brief generic multiply-sub
+		/// Multiply-Subtract (compatible with specialized fused mul-sub implementations)
+		/// [y = a * b - c]
+		ANY(TType) TRI_FUNC(vfmsub, TType)
+		{
+			BODY(a * b - c);
+		}
 
-		// absolute value
-		//UN_FUNC(vabs, double)	{ BODY(std::fabs(a)); }
-		UN_FUNC(vabs, float)	{ BODY(std::abs(a)); }
-		UN_FUNC(vabs, int)		{ BODY(std::abs(a)); }
+		/// @fn is_set()
+		/// @brief generic check if value is not 0
+		VECTORIZED_F bool is_set(vreal value)
+		{
+			return static_cast<bool>(value);
+		}
 
-		// min / max
-		ANY(TType) BIN_FUNC(vmin, TType) { BODY(std::min<TType>(a, b)); }
-		ANY(TType) BIN_FUNC(vmax, TType) { BODY(std::max<TType>(a, b)); }
+		/// @fn is_set()
+		/// @brief check if value is not 0 (float)
+		template<>
+		inline bool is_set(float value)
+		{
+			return value != 0;
+		}
 
-		// Clamp: min(max(val, minval), maxval)
-		ANY(TType) TRI_FUNC(vclamp, TType) { BODY(vmin(vmax(a, b), c)); }
+		// Basic math functions ========================================================================================
 
+		/// @fn vsqrt()
+		/// @brief precise square root function (double)
+		UN_FUNC(vsqrt, double)
+		{
+			BODY(std::sqrt(a));
+		}
+
+		/// @fn vsqrt()
+		/// @brief precise square root function (int)
+		UN_FUNC(vsqrt, float)
+		{
+			BODY(std::sqrt(a));
+		}
+
+		/// @fn vsqrt()
+		/// @brief precise square root function (int)
+		/// is implemented using float sqrt and cast back
+		UN_FUNC(vsqrt, int)
+		{
+			BODY(static_cast<int>(::floor(::sqrt(static_cast<double>(a)))));
+		}
+
+		/// @fn vabs()
+		/// @brief generic absolute value (float)
+		UN_FUNC(vabs, float)
+		{
+			BODY(std::abs(a));
+		}
+
+		/// @fn vabs()
+		/// @brief generic absolute value (int)
+		UN_FUNC(vabs, int)
+		{
+			BODY(std::abs(a));
+		}
+
+		/// @fn vmin()
+		/// @brief generic minumum value
+		ANY(TType) BIN_FUNC(vmin, TType)
+		{
+			BODY(std::min<TType>(a, b));
+		}
+
+		/// @fn vmin()
+		/// @brief generic maximum value
+		ANY(TType) BIN_FUNC(vmax, TType)
+		{
+			BODY(std::max<TType>(a, b));
+		}
+
+		/// @fn vclamp()
+		/// @brief generic clamp
+		/// min(max(val, minval), maxval)
+		ANY(TType) TRI_FUNC(vclamp, TType)
+		{
+			BODY(vmin(vmax(a, b), c));
+		}
+
+		/// @fn clamp_int32()
+		/// @brief generic clamp to int 32 range
 		// Clamp float32 to int32/2 range
 		VECTORIZED_F UN_FUNC(clamp_int32, vreal)
 		{
 			BODY(vclamp<vreal>(a, -1073741824.0, 1073741824.0));
 		}
 
-		// truncate decimal part (1.5 -> 1.0)
-		UN_FUNC(vtrunc, double) { BODY(static_cast<double>(static_cast<int>(a))); }
-		UN_FUNC(vtrunc, float)	{ BODY(static_cast<float>(static_cast<int>(a))); }
+		// Rounding ====================================================================================================
 
-		// floor
-		UN_FUNC(vfloor, double) { BODY(std::floor(a)); }
-		UN_FUNC(vfloor, float)	{ BODY(std::floor(a)); }
-
-		// ceil
-		UN_FUNC(vceil, double)	{ BODY(std::ceil(a)); }
-		UN_FUNC(vceil, float)	{ BODY(std::ceil(a)); }
-
-		// round 
-		UN_FUNC(vround, double) { BODY(std::round(a)); }
-		UN_FUNC(vround, float)	{ BODY(std::round(a)); }
-
-		// square root
-		UN_FUNC(vsqrt, double)	{ BODY(std::sqrt(a)); }
-		UN_FUNC(vsqrt, float)	{ BODY(std::sqrt(a)); }
-		UN_FUNC(vsqrt, int)		{ BODY(static_cast<int>(::floor(::sqrt(static_cast<double>(a))))); }
-
-
-		VECTORIZED_F
-			bool is_set(vreal value)
+		/// @fn vtrunc()
+		/// @brief truncate value to *.0 (double)
+		UN_FUNC(vtrunc, double)
 		{
-			return static_cast<bool>(value);
+			BODY(static_cast<double>(static_cast<int>(a)));
 		}
 
-		template<>
-		inline bool is_set(float value)
+		/// @fn vtrunc()
+		/// @brief truncate value to *.0 (float)
+		UN_FUNC(vtrunc, float)
 		{
-			return value != 0;
+			BODY(static_cast<float>(static_cast<int>(a)));
+		}
+
+		/// @fn vfloor()
+		/// @brief floor value (double)
+		UN_FUNC(vfloor, double)
+		{
+			BODY(std::floor(a));
+		}
+
+		/// @fn vfloor()
+		/// @brief floor value (float)
+		UN_FUNC(vfloor, float)
+		{
+			BODY(std::floor(a));
+		}
+
+		/// @fn vceil()
+		/// @brief ceil value (double)
+		UN_FUNC(vceil, double)
+		{
+			BODY(std::ceil(a));
+		}
+
+		/// @fn vceil()
+		/// @brief ceil value (float)
+		UN_FUNC(vceil, float)
+		{
+			BODY(std::ceil(a));
+		}
+
+		/// @fn vround()
+		/// @brief round value (double)
+		UN_FUNC(vround, double)
+		{
+			BODY(std::round(a));
+		}
+
+		/// @fn vround()
+		/// @brief round value (float)
+		UN_FUNC(vround, float)
+		{
+			BODY(std::round(a));
 		}
 }}

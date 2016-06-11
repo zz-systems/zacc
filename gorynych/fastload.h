@@ -24,8 +24,14 @@
 
 #pragma once
 
-// Theoretically constant generation (up to a sane limit) instead of loading from memory is faster.
-// This is yet to be tested / benchmarked.
+/**
+ * @file fastload.h
+ *
+ * @brief constant generation
+ *
+ * Theoretically constant generation (up to a sane limit) instead of loading from memory is faster.
+ * This is yet to be tested / benchmarked.
+ */
 
 #include "dependencies.h"
 #include "dispatch.h"
@@ -34,8 +40,9 @@
 namespace zzsystems { namespace gorynych
 {	
 	
-	// Shorcut for "constant" declaration
-#define CONSTDEF(TType, name, body) static inline TType name() { return static_cast<TType>(body); }
+/// @def CONSTDEF(type, name, body)
+/// @brief shorcut: "constant" declaration
+#define CONSTDEF(type, name, body) static inline type name() { return static_cast<type>(body); }
 
 	ANY(TType)
 	struct consts

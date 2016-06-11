@@ -24,22 +24,38 @@
 
 #pragma once
 
+/**
+ * @file matrix.h
+ *
+ * @brief experimental matrix implementation
+ *
+ * Provides dimension-aware matrix support.
+ *
+ * @remark Don't use it yet. Untested.
+ */
+
 #include <array>
 
 namespace zzsystems { namespace gorynych {
 
+    /// @struct mat
+    /// @brief matrix
     template<typename T, size_t N, size_t M>
     struct alignas(alignof(T)) mat
     {
         static_assert(N * M > 0, "Wrong dimensions for a matrix");
 
+        /// data container
         std::array<T, N * M> data;
 
+        /// default constructor
         mat() = default;
 
+        /// matrix-like initializer list constructor
         mat(std::initializer_list<T> data) : data(data)
         {}
 
+        /// column initializer-list constructor
         mat(std::initializer_list<mat<T, N, 1>> data)
         {
             for(int row = 0; row < M; row++)
@@ -51,6 +67,7 @@ namespace zzsystems { namespace gorynych {
             }
         }
 
+        /// row initializer-list constructor
         mat(std::initializer_list<mat<T, 1, M>> data) : data(data)
         {
             for(int row = 0; row < M; row++)
@@ -62,23 +79,28 @@ namespace zzsystems { namespace gorynych {
             }
         }
 
+        /// array copy constructor
         mat(const std::array<T> &data) : data(data)
         {}
 
+        /// array move constructor
         mat(std::array<T>&& data)
         {
             std::move(rhs.data, data);
         }
 
+        /// memory location constructor
         mat(const T* data) : data(data)
         {}
 
+        /// matrix move constructor
         mat(mat&& rhs)
         {
             std::move(rhs.data, data);
         }
 
-        inline T operator[](int col, int row)
+        /// indexer
+        inline T &operator[](int col, int row)
         {
             return data[row * N + col];
         }
@@ -102,6 +124,11 @@ namespace zzsystems { namespace gorynych {
         }*/
     };
 
+    /// @name operations
+    /// @{
+
+    /// @brief add
+    /// @relates mat
     template<typename T, size_t N, size_t M>
     mat<T, N, M> operator+(const mat<T, N, M>& a, const mat<T, N, M>& b)
     {
@@ -118,6 +145,8 @@ namespace zzsystems { namespace gorynych {
         return result;
     };
 
+    /// @brief sub
+    /// @relates mat
     template<typename T, size_t N, size_t M>
     mat<T, N, M> operator-(const mat<T, N, M>& a, const mat<T, N, M>& b)
     {
@@ -134,6 +163,8 @@ namespace zzsystems { namespace gorynych {
         return result;
     };
 
+    /// @brief add scalar
+    /// @relates mat
     template<typename T, size_t N, size_t M>
     mat<T, N, M> operator+(const mat<T, N, M>& a, const T& b)
     {
@@ -150,6 +181,8 @@ namespace zzsystems { namespace gorynych {
         return result;
     };
 
+    /// @brief sub scalar
+    /// @relates mat
     template<typename T, size_t N, size_t M>
     mat<T, N, M> operator-(const mat<T, N, M>& a, const T& b)
     {
@@ -166,6 +199,8 @@ namespace zzsystems { namespace gorynych {
         return result;
     };
 
+    /// @brief mul scalar
+    /// @relates mat
     template<typename T, size_t N, size_t M>
     mat<T, N, M> operator*(const mat<T, N, M>& a, const T& b)
     {
@@ -182,6 +217,8 @@ namespace zzsystems { namespace gorynych {
         return result;
     };
 
+    /// @brief div scalar
+    /// @relates mat
     template<typename T, size_t N, size_t M>
     mat<T, N, M> operator/(const mat<T, N, M>& a, const T& b)
     {
@@ -198,6 +235,8 @@ namespace zzsystems { namespace gorynych {
         return result;
     };
 
+    /// @brief matrix mul
+    /// @relates mat
     template<typename T, size_t N, size_t M, size_t N2>
     mat<T, N, M> operator*(const mat<T, N, M>& a, const mat<T, M, N2>& b)
     {
@@ -219,28 +258,40 @@ namespace zzsystems { namespace gorynych {
         return result;
     };
 
+    /// @}
 
+    /// @name specializations
+    /// @{
 
+    /// 2x2 matrix specialization
     template<typename T>
     using mat2x2 = mat<T, 2, 2>;
 
+    /// 3x2 matrix specialization
     template<typename T>
     using mat3x2 = mat<T, 3, 2>;
 
+    /// 2x3 matrix specialization
     template<typename T>
     using mat2x3 = mat<T, 2, 3>;
 
+    /// 3x3 matrix specialization
     template<typename T>
     using mat3x3 = mat<T, 3, 3>;
 
 
+    /// 2x1 matrix = 2-col vector specialization
     template<typename T>
     using vec2 = mat<T, 2, 1>;
 
+    /// 3x1 matrix = 3-col vector specialization
     template<typename T>
     using vec3 = mat<T, 3, 1>;
 
+    /// 1x1 matrix = scalar specialization
     template<typename T>
     using scalar = mat<T, 1, 1>;
+
+    /// @}
 
 }}

@@ -21,141 +21,136 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //---------------------------------------------------------------------------------
+
 #pragma once
+
+/**
+ * @file sse.h
+ *
+ * @brief Additional SSE wrapper functions and types
+ */
 
 #include "../dependencies.h"
 #include "int4.h"
 #include "float4.h"
 #include "double2.h"
 
-// Traits =========================================================================================================
-namespace std {
-
-}
-//template<>
-//struct std::_Is_floating_point<zzsystems::gorynych::double2>	: std::true_type {	};
 
 namespace zzsystems { namespace gorynych {
 
-		DISPATCHED
-		struct is_vint<zzsystems::gorynych::_int4 > : std::true_type {
-		};
+	// Type traits =====================================================================================================
 
-		DISPATCHED
-		struct is_vreal<zzsystems::gorynych::_float4 > : std::true_type {
-		};
+	/**
+	 * @brief is true type when the supplied type is an int4 vector
+	 */
+	DISPATCHED struct is_vint<zzsystems::gorynych::_int4>
+			: public std::true_type
+	{};
+
+	/**
+	 * @brief is true type when the supplied type is a float4 vector
+	 */
+	DISPATCHED struct is_vreal<zzsystems::gorynych::_float4>
+			: public std::true_type
+	{};
 
 
-		DISPATCHED
-		struct scalar_type<_float4> : public __scalar_type<float>
-		{};
+	/**
+	 * @brief the underlying type for float4 vector is a float scalar
+	 */
+	DISPATCHED struct scalar_type<_float4>
+			: public __scalar_type<float>
+	{};
 
-		DISPATCHED
-		struct scalar_type<_int4> : public __scalar_type<int>
-		{};
+	/**
+	 * @brief the underlying type for int4 vector is an int scalar
+	 */
+	DISPATCHED struct scalar_type<_int4>
+			: public __scalar_type<int>
+	{};
 
-	// Converting constructors ===================================================================================
-	DISPATCHED
-	inline _int4::int4(const _float4& rhs) : int4(rhs.val) { }
-	DISPATCHED
-	inline _int4::int4(const _int4& rhs) : int4(rhs.val) { }
+	// Converting constructors =========================================================================================
+
+	/// converting constructor for float->int vector conversion
+	DISPATCHED inline _int4::int4(const _float4& rhs) noexcept
+			: int4(rhs.val) { }
+
+	/// copy constructor for int vector
+	DISPATCHED inline _int4::int4(const _int4& rhs) noexcept
+			: int4(rhs.val) { }
+
+	/// copy constructor for float vector
+	DISPATCHED inline _float4::float4(const _float4& rhs) noexcept
+			: float4(rhs.val) { }
+
+	/// converting constructor for int->float vector conversion
+	DISPATCHED inline _float4::float4(const _int4& rhs) noexcept
+			: float4(rhs.val) { }
+
+	// double support is neither fully implemented nor enabled for now
+
 	//inline int4::int4(const double2& rhs) : int4(rhs.val) { }
-	DISPATCHED
-	inline _float4::float4(const _float4& rhs) : float4(rhs.val) { }
-	DISPATCHED
-	inline _float4::float4(const _int4& rhs) : float4(rhs.val) { }
 	//inline float4::float4(const double2& rhs) : float4(rhs.val) { }
 
 	/*inline double2::double2(const float4& rhs) : double2(rhs.val) { }
 	inline double2::double2(const int4& rhs) : double2(rhs.val) { }
 	inline double2::double2(const double2& rhs) : double2(rhs.val) { }	*/
 
-//	DISPATCHED
-//	void extract(_int4 &src, int* target)
-//	{
-//		_mm_store_si128((__m128i*)target, src.val);
-//	}
+	// Memory access: extract, gather, scatter (todo) ==================================================================
 
-	DISPATCHED
-	void extract(const _int4 &src, int* target)
+	/// extract int vector values to a memory location
+	DISPATCHED void extract(const _int4 &src, int* target)
 	{
 		_mm_store_si128((__m128i*)target, src.val);
 	}
 
-//	DISPATCHED
-//	void extract(_float4 &src, float *target)
-//	{
-//		_mm_store_ps(target, src.val);
-//	}
-//
-	DISPATCHED
-	void extract(const _float4 &src, float *target)
+	/// extract float vector values to a memory location
+	DISPATCHED void extract(const _float4 &src, float *target)
 	{
 		_mm_store_ps(target, src.val);
 	}
 
-		DISPATCHED
-	_int4 vgather(const int* memloc, _int4 index)
+	/// gather int vector values from a memory location by an index vector
+	DISPATCHED _int4 vgather(const int* source, _int4 index)
 	{
-		int i[dim<_int4>()];
+		SIMD_ALIGN int i[dim<_int4>()];
+
 		extract(index, i);
+
 		return _mm_set_epi32(
-			memloc[static_cast<size_t>(i[3])], 
-			memloc[static_cast<size_t>(i[2])],
-			memloc[static_cast<size_t>(i[1])], 
-			memloc[static_cast<size_t>(i[0])]);
+				source[static_cast<size_t>(i[3])],
+				source[static_cast<size_t>(i[2])],
+				source[static_cast<size_t>(i[1])],
+				source[static_cast<size_t>(i[0])]);
 	}
 
-	DISPATCHED
-		_float4 vgather(const float* memloc, _int4 index)
+	/// gather float vector values from a memory location by an index vector
+	DISPATCHED _float4 vgather(const float* source, _int4 index)
 	{
-		int i[dim<_int4>()];
+		SIMD_ALIGN int i[dim<_int4>()];
+
 		extract(index, i);
 
 		return _mm_set_ps(
-			memloc[static_cast<size_t>(i[3])], 
-			memloc[static_cast<size_t>(i[2])], 
-			memloc[static_cast<size_t>(i[1])], 
-			memloc[static_cast<size_t>(i[0])]);
+				source[static_cast<size_t>(i[3])],
+				source[static_cast<size_t>(i[2])],
+				source[static_cast<size_t>(i[1])],
+				source[static_cast<size_t>(i[0])]);
 	}
 
-	// Integer SQRT =============================================================================================	
-	DISPATCHED_FUNC(vsqrt, _int4, HAS_SSE)
-		(const _int4 &a)
-	{
-		BODY(_mm_sqrt_ps(static_cast<_float4>(a).val));
-	}	
+	// Converting selector =============================================================================================
 
-	// Integer DIV ==============================================================================================	
-		
-	DISPATCHED_BIN_OP(/, _int4, HAS_SSE)
-	{
-		BODY(_mm_div_ps(static_cast<_float4>(a).val, static_cast<_float4>(b).val));
-	}
-
+	/// branchless if-then-else with conversion from float->int vector
 	DISPATCHED_FUNC(vsel, _int4, !HAS_SSE41 && HAS_SSE)
-		(const _float4 &a, const _int4 &b, const _int4 &c)
+		(const _float4 &mask, const _int4 &b, const _int4 &c)
 	{
-		_int4 mask(a.val);
-		return (mask & b) | (~mask & c);
+		BODY(vsel(_mm_castps_si128((mask.val), b, c)));
 	}
 
+	/// branchless if-then-else with conversion from int->float vector
 	DISPATCHED_FUNC(vsel, _float4, !HAS_SSE41 && HAS_SSE)
-		(const _int4 &a, const _float4 &b, const _float4 &c)
+		(const _int4 &mask, const _float4 &b, const _float4 &c)
 	{
-		_float4 mask = _mm_castsi128_ps(a.val);
-		return mask & b | ~mask & c;
+		BODY(vsel(_mm_castsi128_ps(mask.val), b, c));
 	}
-
-	DISPATCHED_FUNC(vsel, _int4, HAS_SSE41 && HAS_SSE)
-		(const _float4 &a, const _int4 &b, const _int4 &c)
-	{
-		BODY(_mm_blendv_epi8(c.val, b.val, _mm_castps_si128(a.val)));
-	}
-
-	DISPATCHED_FUNC(vsel, _float4, HAS_SSE41 && HAS_SSE)
-		(const _int4 &a, const _float4 &b, const _float4 &c)
-	{
-		BODY(_mm_blendv_ps(c.val, b.val, _mm_castsi128_ps(a.val)));
-	}	
 }}

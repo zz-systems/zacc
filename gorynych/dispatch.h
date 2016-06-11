@@ -23,7 +23,11 @@
 //---------------------------------------------------------------------------------
 #pragma once
 
-// static and dynamic (@ runtime) branch dispatching
+/**
+ * @file dispatch.h
+ *
+ * @brief static and dynamic (@ runtime) branch dispatching
+ */
 
 #include "dependencies.h"
 #include "system_info.h"
@@ -42,71 +46,96 @@
 namespace zzsystems { namespace gorynych {
 	using namespace std;
 
-	// "fallback" (erroneous) dispatcher
+	/**
+	 * @struct static_dispatcher
+	 * @brief "fallback" (erroneous) type dispatcher
+	 */
 	template<typename dispatch_mask, typename enable = void>
 	struct static_dispatcher
-		//: dispatcher<dispatch_mask>
 	{
 		static_assert(!is_same<enable, void>::value, "not expected");
 
-		typedef int		vint;
-		typedef float	vreal;
+		typedef int		vint;  ///< scalar int
+		typedef float	vreal; ///< scalar float
+
+		/// @brief execution unit this dispatcher targets (x87 FPU fallback)
+		/// @returns string with the unit name
 		static constexpr const char* unit_name() { return "default FPU"; }
 	};
 
-	// x87 dispatcher
-	DISPATCHED
-	struct static_dispatcher<dispatch_mask,
+	/**
+	 * @struct static_dispatcher
+	 * @brief x87 FPU type dispatcher
+	 */
+	DISPATCHED struct static_dispatcher<dispatch_mask,
 		typename enable_if<!HAS_SSE && !HAS_AVX1 && !HAS_AVX2>::type>
-		//: dispatcher<dispatch_mask>
 	{
-		typedef int		vint;
-		typedef float	vreal;
+		typedef int		vint;  ///< scalar int
+		typedef float	vreal; ///< scalar float
+
+		/// @brief execution unit this dispatcher targets (x87 FPU)
+		/// @returns string with the unit name
 		static constexpr const char* unit_name() { return "FPU"; }
 	};
 
 #if defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA)
-	// Dispatcher for all SSE kinds
-	DISPATCHED
-		struct static_dispatcher<dispatch_mask,
+
+	/**
+	 * @struct static_dispatcher
+	 * @brief SSE type dispatcher
+	 */
+	DISPATCHED struct static_dispatcher<dispatch_mask,
 		typename enable_if<HAS_SSE && !HAS_AVX1 && !HAS_AVX2>::type>
-		//: dispatcher<dispatch_mask>
 	{
-		typedef _int4 vint;
-		typedef _float4 vreal;
+		typedef _int4 vint; 	///< vector int x4
+		typedef _float4 vreal;  ///< vector float x4
+
+		/// execution unit this dispatcher targets (SSE)
+		/// @returns string with the unit name
 		static constexpr const char* unit_name() { return "SSE"; }
 	};
+
 #endif
 
 #if defined(COMPILE_AVX1)
-	// AVX1 dispatcher
-	DISPATCHED
-		struct static_dispatcher<dispatch_mask,
+	/**
+	 * @struct static_dispatcher
+	 * @brief AVX1 type dispatcher
+	 */
+	DISPATCHED struct static_dispatcher<dispatch_mask,
 		typename enable_if<HAS_AVX1 && !HAS_AVX2>::type>
-		//: dispatcher<dispatch_mask>
 	{
-		typedef _int4x2 vint;
-		typedef _float8 vreal;
+		typedef _int4x2 vint;  ///< emulated vector int x8
+		typedef _float8 vreal; ///< native vector float x8
+
+		/// execution unit this dispatcher targets (AVX1)
+		/// @returns string with the unit name
 		static constexpr const char* unit_name() { return "AVX1"; }
 	};
 #endif
 #if defined(COMPILE_AVX2)
-	// AVX2 dispatcher
-	DISPATCHED
-		struct static_dispatcher<dispatch_mask,
+	/**
+	* @struct static_dispatcher
+	* @brief AVX2 type dispatcher
+	*/
+	DISPATCHED struct static_dispatcher<dispatch_mask,
 		typename enable_if<HAS_AVX1 && HAS_AVX2>::type>
-		//: dispatcher<dispatch_mask>
 	{
-		typedef _int8 vint;
-		typedef _float8 vreal;
+		typedef _int8 vint; 	///< native vector int x8
+		typedef _float8 vreal; 	///< native vector float x8
+
+		/// execution unit this dispatcher targets (AVX2)
+		/// @returns string with the unit name
 		static constexpr const char* unit_name() { return "AVX2"; }
-	};	
+	};
 #endif
-	// capability-constants - used for compile-time branch deduction. 
-	// fast float approximation is used by default.
 
-
-
+/// @def BRANCH(branch_name, body)
+/// @brief branch template
+/// Evaluates the capabilites, defines the
+/// appropriate types for the current branch
+/// @param body expression
+/// @param branch_name branch name
 #define BRANCH(branch_name, body)\
 	{ \
 		using capability = capability_##branch_name; \
@@ -115,15 +144,22 @@ namespace zzsystems { namespace gorynych {
 		body; \
 	}
 
-
-	// single branch
+/// @def CBRANCH(sysinfo, body, branch_name)
+/// @brief conditional branch template
+/// @param sysinfo system_info object
+/// @param body expression
+/// @param branch_name branch name
 #define CBRANCH(sysinfo, body, branch_name) \
 	if (sysinfo.has##branch_name()) \
 	{ \
 		BRANCH(branch_name, body);\
 	}
 
-	// Dynamic dispatch: Select branch to run
+/// @def SIMD_DISPATCH(sysinfo, body)
+/// @brief Dynamic dispatch
+/// select one branch at runtime
+/// @param sysinfo system_info object
+/// @param body expression
 #define SIMD_DISPATCH(sysinfo, body) \
 	do { \
 		CBRANCH(sysinfo, body, AVX2) \
@@ -137,7 +173,11 @@ namespace zzsystems { namespace gorynych {
 	} while(false)
 
 
-	// Dynamic dispatch: (Pre)build branches	
+/// @def SIMD_BUILD(sysinfo, body)
+/// @brief Dynamic dispatch
+/// select muliple valid branch at runtime
+/// @param sysinfo system_info object
+/// @param body expression
 #define SIMD_BUILD(sysinfo, body) \
 	do { \
 		CBRANCH(sysinfo, body, AVX2) \
@@ -149,6 +189,5 @@ namespace zzsystems { namespace gorynych {
 		CBRANCH(sysinfo, body, SSE2) \
 		CBRANCH(sysinfo, body, FPU) \
 	} while(false)
-
 
 }}

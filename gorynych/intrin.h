@@ -24,6 +24,12 @@
 
 #pragma once
 
+/**
+ * @file intrin.h
+ *
+ * @brief some additional intrinsiic extensions
+ */
+
 #include <x86intrin.h>
 
 // memory alignment

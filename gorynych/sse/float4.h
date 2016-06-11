@@ -21,240 +21,369 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //---------------------------------------------------------------------------------
+
 #pragma once
+
+/**
+ * @file float4.h
+ *
+ * @brief SSE __m128 wrapper
+ */
 
 #include "../dependencies.h"
 
 namespace zzsystems { namespace gorynych {
-	DISPATCHED
-	struct int4;
+
+	/// forward int4
+	DISPATCHED struct int4;
 
 	
 	//struct double2;
-#define _float4 float4<dispatch_mask>
-#define _int4 int4<dispatch_mask>
 
-	DISPATCHED struct alignas(16) float4 {
-
-		typedef dispatch_mask capability;
-
+	/**
+	 * @struct float4
+	 * @brief SSE vector of 4 float values
+	 *
+	 * Provides a wrapper around the compiler-specific __m128 type
+	 *
+	 * @since version 1.0.0
+	 */
+	DISPATCHED struct alignas(16) float4
+	{
+		/// compiler-specific vector
 		__m128 val;
 
+		/// default constructor
 		float4() = default;
-		
-		float4(const int rhs)		: val(_mm_set1_ps(static_cast<float>(rhs))) {}
-		float4(const float rhs)		: val(_mm_set1_ps(rhs)) {}
-		float4(const double rhs)	: val(_mm_set1_ps(static_cast<float>(rhs))) {}
 
-		float4(const float* rhs)	: val(_mm_load_ps(rhs)) {}
+		/// constructor for a single int
+		float4(const int rhs)		noexcept : val(_mm_set1_ps(static_cast<float>(rhs))) {}
+		/// constructor for a single float
+		float4(const float rhs)		noexcept : val(_mm_set1_ps(rhs)) {}
+		/// constructor for a single double
+		float4(const double rhs)	noexcept : val(_mm_set1_ps(static_cast<float>(rhs))) {}
 
-		float4(VARGS4(uint8_t))		: val(_mm_cvtepi32_ps(_mm_set_epi32(VPASS4))) {}
-		float4(VARGS4(int32_t))		: val(_mm_cvtepi32_ps(_mm_set_epi32(VPASS4))) {}
-		float4(VARGS4(float))		: val(_mm_set_ps(VPASS4)) {}
+		/// constructor for an array
+		float4(const float* rhs)	noexcept : val(_mm_load_ps(rhs)) {}
 
-		float4(const __m128& rhs)	: val(rhs) { }
-		float4(const __m128i& rhs)	: val(_mm_cvtepi32_ps(rhs)) {}
-		float4(const __m128d& rhs)	: val(_mm_cvtpd_ps(rhs)) {}
+		/// costruct vector from 4 separate ints
+		float4(VARGS4(int))			noexcept : val(_mm_cvtepi32_ps(_mm_set_epi32(VPASS4))) {}
+		/// costruct vector from 4 separate floats
+		float4(VARGS4(float))		noexcept : val(_mm_set_ps(VPASS4)) {}
 
-		float4(const _float4& rhs);
-		float4(const _int4&	rhs);
+		/// constructor for compiler-specific float vector
+		float4(const __m128& rhs)	noexcept : val(rhs) { }
+		/// constructor for compiler-specific int vector
+		float4(const __m128i& rhs)	noexcept : val(_mm_cvtepi32_ps(rhs)) {}
+		/// constructor for compiler-specific double vector
+		float4(const __m128d& rhs)	noexcept : val(_mm_cvtpd_ps(rhs)) {}
+
+		/// copy constructor for float vector
+		float4(const _float4& rhs) noexcept;
+
+		/// converting constructor for float vector
+		float4(const _int4&	rhs) noexcept;
 		//float4(const double2&	rhs);
 
-
-		BIN_OP_STUB(+, _float4, float)
-		BIN_OP_STUB(-, _float4, float)
-		BIN_OP_STUB(*, _float4, float)
-		BIN_OP_STUB(/ , _float4, float)		
-
-		BIN_OP_STUB(&, _float4, float)
-		BIN_OP_STUB(&&, _float4, float)
-		BIN_OP_STUB(|, _float4, float)
-		BIN_OP_STUB(||, _float4, float)
-		BIN_OP_STUB(^, _float4, float)
-
-		BIN_OP_STUB(>, _float4, float)
-		BIN_OP_STUB(<, _float4, float)
-		BIN_OP_STUB(== , _float4, float)
-		BIN_OP_STUB(!= , _float4, float)
+		/// @brief define scalar<->vector operators.
+		/// @remark Don't forget to extend the macro when you add new operators
+		SCALAR_VECTOR_CVT_OP_DEFS(float, _float4)
 
 
+		/// check if ALL bits are set to 1
+		/// @ref all_ones()
 		explicit inline operator bool()
 		{
 			return all_ones(*this);
 		}
-
-		static inline auto ones()
-		{
-			auto t = _mm_setzero_ps();
-			return _mm_cmpeq_ps(t, t);
-		}
-
-		static inline auto ones_i()
-		{
-			auto t = _mm_setzero_si128();
-			return _mm_cmpeq_epi32(t, t);
-		}
-
-		static inline auto one()
-		{
-			auto t = _mm_setzero_si128();
-
-			return _mm_srli_epi32(_mm_cmpeq_epi32(t, t), 31);
-		}
-
-//		static inline auto sign1all0()
-//		{
-//			auto t = _mm_setzero_si128();
-//
-//			return _mm_slli_epi32(_mm_cmpeq_epi32(t, t), 31);
-//		}
-//
-//		static inline auto sign0all1()
-//		{
-//			auto t = _mm_setzero_si128();
-//
-//			return _mm_srli_epi32(_mm_cmpeq_epi32(t, t), 1);
-//		}
 	};
 
 
-
-	DISPATCHED_RET(bool, HAS_SSE41) all_ones(const _float4 a)
+	
+	/// @brief check if ALL bits are set to 1
+	/// @relates float4
+	/// @remark SSE4
+	DISPATCHED_RET(bool, HAS_SSE41) inline all_ones(const _float4 a)
 	{
 		BODY(_mm_test_all_ones(_mm_castps_si128(a.val)) != 0);
 	}
 
-	DISPATCHED_RET(bool, !HAS_SSE41) all_ones(const _float4 a)
-	{
-		BODY(_mm_movemask_ps(_mm_cmpeq_ps(a.val, _float4::ones())) == 0xFFFF);
-	}
-	// Arithmetic =====================================================================================================
 	
-	// Add
-	DISPATCHED_BIN_OP(+, _float4, HAS_SSE)
+	/// @brief check if ALL bits are set to 1
+	/// @relates float4
+	/// @remark SSE2
+	DISPATCHED_RET(bool, !HAS_SSE41) inline all_ones(const _float4 a)
 	{
-		BIN_BODY(_mm_add_ps);
-	}	
-	// Sub
-	DISPATCHED_BIN_OP(-, _float4, HAS_SSE)
-	{
-		BIN_BODY(_mm_sub_ps);
-	}
-	// Mul
-	DISPATCHED_BIN_OP(*, _float4, HAS_SSE)
-	{
-		BIN_BODY(_mm_mul_ps);
+		auto zero = _mm_setzero_ps();
+		auto ones = _mm_cmpeq_ps(zero, zero);
+
+		BODY(_mm_movemask_ps(_mm_cmpeq_ps(a.val, ones)) == 0xFFFF);
 	}
 
-	// division
-	DISPATCHED_BIN_OP(/, _float4, HAS_SSE && !USE_FAST_FLOAT)
-	{
-		{ BIN_BODY(_mm_div_ps); }	
-	}
+	// Arithmetic =====================================================================================================
 
-	// Fast division (lower precision!)
-	DISPATCHED_BIN_OP(/ , _float4, HAS_SSE && USE_FAST_FLOAT)
-	{
-		BODY(_mm_mul_ps(a.val, _mm_rcp_ps(b.val)));
-	}
-
-	// Negate 
+	/// @name arithmetic operators / functions
+	/// @{
+	
+	/// @brief negation operator
+	/// @relates float4
+	/// @remark SSE2
 	DISPATCHED_UN_OP(-, _float4, HAS_SSE)
 	{
 		BODY(_mm_sub_ps(_mm_setzero_ps(), a.val));
 		//BODY(_mm_xor_ps(a.val, _mm_castsi128_ps(_float4::sign1all0())));
 	}
 
-	// Comparison =====================================================================================================	
-	// Greater than
-	DISPATCHED_BIN_OP(>, _float4, HAS_SSE)
-	{
-		BIN_BODY(_mm_cmpgt_ps);
-	}
-	// Less than
-	DISPATCHED_BIN_OP(<, _float4, HAS_SSE)
-	{
-		BIN_BODY(_mm_cmplt_ps);
-	}
-	//SIMD_FEATURE(_float4::has_sse)
-	DISPATCHED_BIN_OP(==, _float4, HAS_SSE)
-	{
-		BIN_BODY(_mm_cmpeq_ps);
-	}
-
-	DISPATCHED_BIN_OP(!=, _float4, HAS_SSE)
-	{
-		BIN_BODY(_mm_cmpneq_ps);
-	}
 	
-	// Bitwise ========================================================================================================
-	// Bitwise NOT
-	DISPATCHED_UN_OP(~, _float4, HAS_SSE)
-	{		
-		BODY(_mm_xor_ps(a.val, _float4::ones()));
+	/// @brief add operator
+	/// @relates float4
+	/// @remark SSE2
+	DISPATCHED_BIN_OP(+, _float4, HAS_SSE)
+	{
+		BIN_BODY(_mm_add_ps);
 	}
+
 	
-	DISPATCHED_UN_OP(!, _float4, HAS_SSE)
+	/// @brief sub operator
+	/// @relates float4
+	/// @remark SSE2
+	DISPATCHED_BIN_OP(-, _float4, HAS_SSE)
 	{
-		BODY(~a);
+		BIN_BODY(_mm_sub_ps);
 	}
 
-	// Bitwise AND
-	DISPATCHED_BIN_OP(&, _float4, HAS_SSE)
-	{
-		BIN_BODY(_mm_and_ps);
-	}
-
-	// Bitwise OR
-	DISPATCHED_BIN_OP(|, _float4, HAS_SSE)
-	{
-		BIN_BODY(_mm_or_ps);
-	}
-
-	// Bitwise AND
-	DISPATCHED_BIN_OP(&&, _float4, HAS_SSE)
-	{
-		BIN_BODY(_mm_and_ps);
-	}
-
-	// Bitwise OR
-	DISPATCHED_BIN_OP(|| , _float4, HAS_SSE)
-	{
-		BIN_BODY(_mm_or_ps);
-	}
-
-	// Bitwise XOR
-	DISPATCHED_BIN_OP(^, _float4, HAS_SSE)
-	{
-		BIN_BODY(_mm_xor_ps);
-	}
 	
-	// Special functions ==============================================================================================
-	// SSE > 4.1 Branchless select
-	DISPATCHED_TRI_FUNC(vsel, _float4, HAS_SSE41)
+	/// @brief mul operator
+	/// @relates float4
+	/// @remark SSE2
+	DISPATCHED_BIN_OP(*, _float4, HAS_SSE)
 	{
-		TRI_BODY_R(_mm_blendv_ps);
+		BIN_BODY(_mm_mul_ps);
 	}
 
-	// SSE < 4.1 branchless select
-	DISPATCHED_TRI_FUNC(vsel, _float4, !HAS_SSE41 && HAS_SSE)
+	
+	/// @brief div operator (precise)
+	/// @relates float4
+	/// @remark SSE2
+	DISPATCHED_BIN_OP(/, _float4, HAS_SSE && !USE_FAST_FLOAT)
 	{
-		BODY((a /* mask */ & b) | (~a & c));
+		BIN_BODY(_mm_div_ps);
 	}
 
-	// Fused multiply-add
+	
+	/// @brief div operator (faster, lower precision!)
+	/// @relates float4
+	/// @remark SSE2, FAST_FLOAT
+	DISPATCHED_BIN_OP(/ , _float4, HAS_SSE && USE_FAST_FLOAT)
+	{
+		BODY(_mm_mul_ps(a.val, _mm_rcp_ps(b.val)));
+	}
+
+
+	/// @brief fused multiply add
+	/// @relates float4
+	/// @remark FMA
 	DISPATCHED_TRI_FUNC(vfmadd, _float4, HAS_FMA)
 	{
 		TRI_BODY(_mm_fmadd_ps);
 	}
-	// Fused multiply-subtract
+
+
+	/// @brief fused multiply sub
+	/// @relates float4
+	/// @remark FMA
 	DISPATCHED_TRI_FUNC(vfmsub, _float4, HAS_FMA)
 	{
 		TRI_BODY(_mm_fmsub_ps);
 	}
 
-	// Mathematical functions =========================================================================================
-	// Absolute value
+
+	/// @}
+
+	// Logical =========================================================================================================	
+
+	/// @name logical / comparison operators
+	/// @{
+
+	/// @brief Greater than operator
+	/// @relates float4
+	/// @remark SSE2
+	/// @returns boolean vector (as float4)	
+	DISPATCHED_BIN_OP(>, _float4, HAS_SSE)
+	{
+		BIN_BODY(_mm_cmpgt_ps);
+	}
+
+	
+	/// @brief Less than operator
+	/// @relates float4
+	/// @remark SSE2
+	/// @returns boolean vector (as float4)
+	DISPATCHED_BIN_OP(<, _float4, HAS_SSE)
+	{
+		BIN_BODY(_mm_cmplt_ps);
+	}
+
+	
+	/// @brief Equality operator
+	/// @relates float4
+	/// @remark SSE2
+	/// @returns boolean vector (as float4)
+	DISPATCHED_BIN_OP(==, _float4, HAS_SSE)
+	{
+		BIN_BODY(_mm_cmpeq_ps);
+	}
+
+	
+	/// @brief Non-equality operator
+	/// @relates float4
+	/// @remark SSE2
+	/// @returns boolean vector (as float4)
+	DISPATCHED_BIN_OP(!=, _float4, HAS_SSE)
+	{
+		BIN_BODY(_mm_cmpneq_ps);
+	}
+
+	
+	/// @brief branchless if-then-else
+	/// @relates float4
+	/// @param a selector mask
+	/// @param b then-branch-value
+	/// @param c else-branch-value
+	/// @remark SSE4
+	DISPATCHED_TRI_FUNC(vsel, _float4, HAS_SSE41)
+	{
+		TRI_BODY_R(_mm_blendv_ps);
+	}
+
+	
+	/// @brief branchless if-then-else
+	/// @relates float4
+	/// @param a selector mask
+	/// @param b then-branch-value
+	/// @param c else-branch-value
+	/// @remark SSE2
+	DISPATCHED_TRI_FUNC(vsel, _float4, !HAS_SSE41 && HAS_SSE)
+	{
+		BODY((a /* mask */ & b) | (~a & c));
+	}
+
+	/// @}
+
+	// Bitwise ========================================================================================================
+
+	/// @name bitwise operators
+	/// @{
+	
+	/// @brief not
+	/// @relates float4
+	/// @remark SSE2
+	DISPATCHED_UN_OP(~, _float4, HAS_SSE)
+	{
+		auto zero = _mm_setzero_ps();
+		auto ones = _mm_cmpeq_ps(zero, zero);
+
+		BODY(_mm_xor_ps(a.val, ones));
+	}
+
+	
+	/// @brief or
+	/// @relates float4
+	/// @remark SSE2
+	DISPATCHED_BIN_OP(|, _float4, HAS_SSE)
+	{
+		BIN_BODY(_mm_or_ps);
+	}
+
+	
+	/// @brief and
+	/// @relates float4
+	/// @remark SSE2
+	DISPATCHED_BIN_OP(&, _float4, HAS_SSE)
+	{
+		BIN_BODY(_mm_and_ps);
+	}
+
+	
+	/// @brief xor
+	/// @relates float4
+	/// @remark SSE2
+	DISPATCHED_BIN_OP(^, _float4, HAS_SSE)
+	{
+		BIN_BODY(_mm_xor_ps);
+	}
+
+	/// @}
+
+	// Bitwise aliases (compatibility with scalar logical op's) ========================================================
+
+	/// @name bitwise aliases
+	/// compatibility with scalar logical operatorss
+	/// @{
+
+	/// @brief not (alias)
+	/// @relates float4
+	/// used in conjuction with logical expressions to stay compatible
+	/// to standard scalar operations
+	/// @ref operator~()
+	/// @remark SSE2
+	DISPATCHED_UN_OP(!, _float4, HAS_SSE)
+	{
+		BODY(~a);
+	}
+	
+	/// @brief or (alias)
+	/// @relates float4
+	/// used in conjuction with logical expressions to stay compatible
+	/// to standard scalar operations
+	/// @ref operator|()
+	/// @remark SSE2
+	DISPATCHED_BIN_OP(|| , _float4, HAS_SSE)
+	{
+		BODY(a | b);
+	}
+
+	
+	/// @brief and (alias)
+	/// @relates float4
+	/// used in conjuction with logical expressions to stay compatible
+	/// to standard scalar operations
+	/// @ref operator&()
+	/// @remark SSE2
+	DISPATCHED_BIN_OP(&&, _float4, HAS_SSE)
+	{
+		BODY(a & b);
+	}
+
+	/// @}
+
+	// Basic math functions ============================================================================================
+
+	/// @name basic math functions
+	/// @{
+
+	/// @brief precise square root
+	/// @relates float4
+	/// @remark SSE2
+	DISPATCHED_UN_FUNC(vsqrt, _float4, HAS_SSE && !USE_FAST_FLOAT)
+	{
+		UN_BODY(_mm_sqrt_ps);
+	}
+
+	
+	/// @brief fast square root
+	/// @relates float4
+	/// @remark SSE2,
+	/// @remark FAST_FLOAT
+	DISPATCHED_UN_FUNC(vsqrt, _float4, HAS_SSE && USE_FAST_FLOAT)
+	{
+		BODY(_mm_mul_ps(a.val, _mm_rsqrt_ps(a.val)));
+	}
+
+	
+	/// @brief Absolute value
+	/// @relates float4
+	/// @remark SSE2
 	DISPATCHED_UN_FUNC(vabs, _float4, HAS_SSE)
 	{
 		// According to IEEE 754 standard: sign bit is the first bit => set to 0
@@ -262,75 +391,108 @@ namespace zzsystems { namespace gorynych {
 		BODY(vmax(a, -a));
 	}
 
-	// Minimum value
+	
+	/// @brief Minumum value
+	/// @relates float4
+	/// @remark SSE2
 	DISPATCHED_BIN_FUNC(vmin, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_min_ps);
 	}
 
-	// Maximum
+	
+	/// @brief Maximum value
+	/// @relates float4
+	/// @remark SSE2
 	DISPATCHED_BIN_FUNC(vmax, _float4, HAS_SSE)
 	{
 		BIN_BODY(_mm_max_ps);
 	}
 
-	// Normal square root
-	DISPATCHED_UN_FUNC(vsqrt, _float4, HAS_SSE && !USE_FAST_FLOAT)
-	{
-		UN_BODY(_mm_sqrt_ps);
-	}
-
-	// Fast square root (lower precision!)
-	DISPATCHED_UN_FUNC(vsqrt, _float4, HAS_SSE && USE_FAST_FLOAT)
-	{
-		BODY(_mm_mul_ps(a.val, _mm_rsqrt_ps(a.val)));
-	}
-		
+	/// @}
 	// Rounding =======================================================================================================
 
-	// Truncate float to *.0
+	/// @name rounding
+	/// @{
+	
+	/// @brief truncate value to *.0
+	/// @relates float4
+	/// @remark SSE2
 	DISPATCHED_UN_FUNC(vtrunc, _float4, HAS_SSE)
 	{
 		BODY(static_cast<_float4>(static_cast<_int4>(a)));
 	}
 
-	// Floor value
+	
+	/// @brief floor value
+	/// @relates float4
+	/// @remark SSE4
 	DISPATCHED_UN_FUNC(vfloor, _float4, HAS_SSE41)
 	{
 		BODY(_mm_round_ps(a.val, _MM_FROUND_FLOOR));
 	}
 
-	// Ceil value
+	
+	/// @brief ceil value
+	/// @relates float4
+	/// @remark SSE4
 	DISPATCHED_UN_FUNC(vceil, _float4, HAS_SSE41)
 	{
 		BODY(_mm_round_ps(a.val, _MM_FROUND_CEIL));
 	}
 
-	// Round value
+	
+	/// @brief round value
+	/// @relates float4
+	/// @remark SSE4
 	DISPATCHED_UN_FUNC(vround, _float4, HAS_SSE41)
 	{
 		BODY(_mm_round_ps(a.val, _MM_FROUND_TO_NEAREST_INT));
 	}
 
-	// Floor value
+	
+	/// @brief floor value
+	/// @relates float4
+	/// @remark SSE2
+	/// @remark SSE3
+	/// @see http://dss.stephanierct.com/DevBlog/?p=8
 	DISPATCHED_UN_FUNC(vfloor, _float4, !HAS_SSE41 && HAS_SSE)
 	{
+		auto zero = _mm_setzero_si128();
+		auto one  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
+
 		auto fi = vtrunc(a);
-		return vsel(fi > a, fi - _float4(_float4::one()), fi);
+		return vsel(fi > a, fi - _float4(one), fi);
 	}
 
-	// Ceil value
+	
+	/// @brief ceil value
+	/// @relates float4
+	/// @remark SSE2
+	/// @remark SSE3
+	/// @see http://dss.stephanierct.com/DevBlog/?p=8
 	DISPATCHED_UN_FUNC(vceil, _float4, !HAS_SSE41 && HAS_SSE)
 	{
+		auto zero = _mm_setzero_si128();
+		auto one  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
+
 		auto fi = vtrunc(a);
-		return vsel(fi < a, fi + _float4(_float4::one()), fi);
+		return vsel(fi < a, fi + _float4(one), fi);
 	}
 
-	// Round value
+	
+	/// @brief round value
+	/// @relates float4
+	/// @remark SSE2
+	/// @remark SSE3
+	/// @see http://dss.stephanierct.com/DevBlog/?p=8
 	DISPATCHED_UN_FUNC(vround, _float4, !HAS_SSE41 && HAS_SSE)
 	{
+		auto zero = _mm_setzero_si128();
+		auto ones = _mm_cmpeq_epi32(zero, zero);
+
 		//generate the highest value < 2		
-		_float4 vNearest2 = _mm_castsi128_ps(_mm_srli_epi32(_float4::ones_i(), 2));
+		_float4 vNearest2 = _mm_castsi128_ps(_mm_srli_epi32(ones, 2));
 		auto aTrunc = vtrunc(a);
 
 		auto rmd = a - aTrunc;        // get remainder
@@ -340,4 +502,6 @@ namespace zzsystems { namespace gorynych {
 
 		return aTrunc + rmd2Trunc;
 	}
+
+	/// @}
 }}

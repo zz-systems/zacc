@@ -1,14 +1,26 @@
 cmake_minimum_required(VERSION 3.3.2)
 
 
-set(fpu_flags)
-set(sse2_flags -msse2)
-set(sse3_flags -msse3)
-set(ssse3_flags -mssse3)
-set(sse4_flags -msse4)
-set(sse4fma_flags -mfma -msse4)
-set(avx1_flags -mfma -mavx)
-set(avx2_flags -mfma -mavx2)
+if(MSVC)
+    set(fpu_flags)
+    set(sse2_flags /arch:SSE2)
+    set(sse3_flags /arch:SSE3)
+    set(ssse3_flags /arch:SSSE3)
+    set(sse4_flags /arch:SSE4)
+    set(sse4fma_flags /arch:SSE4)
+    set(avx1_flags /arch:AVX)
+    set(avx2_flags /arch:AVX2)
+else()
+    set(fpu_flags)
+    set(sse2_flags -msse2)
+    set(sse3_flags -msse3)
+    set(ssse3_flags -mssse3)
+    set(sse4_flags -msse4)
+    set(sse4fma_flags -mfma -msse4)
+    set(avx1_flags -mfma -mavx)
+    set(avx2_flags -mfma -mavx2)
+endif(MSVC)
+
 
 set(BRANCH_COMPILE_OPTS
         fpu_flags
@@ -86,3 +98,15 @@ macro(prepare_branches)
         endif()
     endforeach(branch_index)
 endmacro(prepare_branches)
+
+macro(prepare_doc doc_target_name)
+    find_package(Doxygen)
+    if(DOXYGEN_FOUND)
+        configure_file(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+        add_custom_target(gorynych_doc
+                ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+                WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                COMMENT "Generating API documentation with Doxygen" VERBATIM
+                )
+    endif(DOXYGEN_FOUND)
+endmacro(prepare_doc)

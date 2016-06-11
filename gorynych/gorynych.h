@@ -23,6 +23,12 @@
 //---------------------------------------------------------------------------------
 #pragma once
 
+/**
+ * @file gorynych.h
+ *
+ * @brief main header (most important stuff referenced here)
+ *
+ */
 #include "macros.h"
 #include "util/memory.h"
 #include "util/collections.h"

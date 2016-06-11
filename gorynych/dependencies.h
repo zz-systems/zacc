@@ -23,14 +23,35 @@
 //---------------------------------------------------------------------------------
 #pragma once
 
-// Here are the dependencies for branch-specific implementations. 
-// For example:
-// -- your super duper cpu-extension-specific file -- 
-// #include "dependencies.h"
-// -- your code
+/**
+ * @file dependencies.h
+ *
+ * @brief dependencies for most submodules
+ *
+ *
+ * Here are the dependencies for branch-specific implementations.
+ * For example:
+ * -- your super duper cpu-extension-specific file --
+ * #include "dependencies.h"
+ * -- your code
+ */
+
 
 #include <type_traits>
 #include "intrin.h"
 #include "macros.h"
 #include "basic_functions.h"
 #include "system_info.h"
+
+///@{
+/// alias removing the need to write dispatch_mask
+
+#define _int4 int4<dispatch_mask>
+#define _int4x2 int4x2<dispatch_mask>
+#define _int8 int8<dispatch_mask>
+
+#define _float4 float4<dispatch_mask>
+#define _float8 float8<dispatch_mask>
+
+///@}
+
