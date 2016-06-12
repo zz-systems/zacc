@@ -2,6 +2,8 @@ version: '1.0.{build}'
 os: Visual Studio 2015
 init: []
 install: []
+platform:
+- x64
 build_script:
 - set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 - git submodule update --init --recursive
