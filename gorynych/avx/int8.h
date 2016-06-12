@@ -180,7 +180,10 @@ namespace zzsystems { namespace gorynych {
 	/// @returns boolean vector (as int8)
 	DISPATCHED_BIN_OP(!=, _int8, HAS_AVX2)
 	{
-		BODY(~_mm256_cmpeq_epi32 BIN_ARG);
+
+		BODY(_mm256_xor_si256((_mm256_cmpeq_epi32 BIN_ARG), _mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256())));
+
+		//BODY((_mm256_cmpeq_epi32 BIN_ARG));
 	}
 
 	

@@ -2,7 +2,7 @@
 // Created by szuyev on 17.05.16.
 //
 
-#include "../Catch/single_include/catch.hpp"
+//#include "../Catch/single_include/catch.hpp"
 #include "../gorynych/gorynych.h"
 #include "test_extensions.h"
 

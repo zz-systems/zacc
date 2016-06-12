@@ -30,7 +30,11 @@
  * @brief some additional intrinsiic extensions
  */
 
-#include <x86intrin.h>
+#if defined(_MSC_VER)
+	#include <intrin.h>
+#else 
+	#include <x86intrin.h>
+#endif
 
 // memory alignment
 #if defined(_MSC_VER) && _MSC_VER < 1900

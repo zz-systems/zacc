@@ -2,7 +2,7 @@
 // Created by szuyev on 17.05.16.
 //
 
-#include "../Catch/single_include/catch.hpp"
+//#include "../Catch/single_include/catch.hpp"
 #include "../gorynych/gorynych.h"
 
 #include "test_extensions.h"
@@ -65,7 +65,7 @@ namespace zzsystems { namespace gorynych { namespace  test {
                 {
                     int expected = 0xFFFF'FFFF >> sa;
                     vint calc = vint(0xFFFF'FFFF) >> sa;
-                    int tested[dim<vint>()];
+                    SIMD_ALIGN int tested[dim<vint>()];
                     extract(calc, tested);
 
                     for(int d = 0; d < dim<vint>(); d++)
@@ -81,7 +81,7 @@ namespace zzsystems { namespace gorynych { namespace  test {
                 {
                     int expected = 1 << sa;
                     vint calc = vint(1) << sa;
-                    int tested[dim<vint>()];
+					SIMD_ALIGN int tested[dim<vint>()];
                     extract(calc, tested);
 
                     for(int d = 0; d < dim<vint>(); d++)

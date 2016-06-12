@@ -1,6 +1,42 @@
 cmake_minimum_required(VERSION 3.3.2)
 
 
+set(CMAKE_VERBOSE_MAKEFILE on )
+
+if(WIN32)
+	#set(CMAKE_CXX_FLAGS_DEBUG 	${CMAKE_CXX_FLAGS_DEBUG}
+	#							/MP 
+	#							/GS 
+	#							/W3 
+	#							/Zc:wchar_t 
+	#							/ZI 
+	#							/Gm 
+	#							/Od 
+	#							/sdl 
+	#							/Zc:inline
+	#							/D "_DEBUG" 
+	#							/D "_CONSOLE" 
+	#							/D "_UNICODE" 
+	#							/D "UNICODE" 
+	#							#/D _ALLOW_RTCc_IN_STL
+	#							/errorReport:prompt 
+	#							/WX- 
+	#							/Zc:forScope 								 
+	#							/Gd 
+	#							/MDd 
+	##							/EHsc 
+	#							/nologo)
+	#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} /O2 /Oy /Ot /Ox /D 'NDEBUG' /D '_CONSOLE' /D '_UNICODE' /D 'UNICODE'")
+	
+elseif(UNIX)
+	set(CMAKE_CXX_FLAGS_DEBUG 	"${CMAKE_CXX_FLAGS_DEBUG} -g ")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
+
+	
+	set(CMAKE_CXX_FLAGS "-std=c++14 -O3 -march=x86-64")
+else()
+endif()
+
 if(MSVC)
     set(fpu_flags)
     set(sse2_flags /arch:SSE2)

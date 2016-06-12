@@ -23,53 +23,74 @@
 //---------------------------------------------------------------------------------
 
 #pragma once
-
-#include "../Catch/single_include/catch.hpp"
+#include <functional>
 #include "../gorynych/gorynych.h"
 
 namespace zzsystems { namespace gorynych { namespace test {
 
 #if defined(COMPILE_AVX2)
 
-    using capability = capability_AVX2;
-    #define TEST_PREFIX(test_name) test_name"- avx2"
+			using capability = capability_AVX2;
+#define TEST_PREFIX(test_name) test_name"- avx2"
+
+#define CATCH_BRANCH_PREFIX AVX2_TEST_
 
 #elif defined(COMPILE_AVX1)
 
-    using capability = capability_AVX1;
-    #define TEST_PREFIX(test_name) test_name" - avx1"
+			using capability = capability_AVX1;
+#define TEST_PREFIX(test_name) test_name" - avx1"
+
+#define CATCH_BRANCH_PREFIX AVX1_TEST_
 
 #elif defined(COMPILE_SSE4FMA)
 
-    using capability = capability_SSE4FMA;
-    #define TEST_PREFIX(test_name) test_name"- sse4 fma"
+			using capability = capability_SSE4FMA;
+#define TEST_PREFIX(test_name) test_name"- sse4 fma"
+
+#define CATCH_BRANCH_PREFIX SSE4_FMA_TEST_
 
 #elif defined(COMPILE_SSE4)
 
-    using capability = capability_SSE4;
-    #define TEST_PREFIX(test_name) test_name"- sse4"
+			using capability = capability_SSE4;
+#define TEST_PREFIX(test_name) test_name"- sse4"
+
+#define CATCH_BRANCH_PREFIX SSE4_TEST_
 
 #elif defined(COMPILE_SSSE3)
 
-    using capability = capability_SSSE3;
-    #define TEST_PREFIX(test_name) test_name"- ssse3"
+			using capability = capability_SSSE3;
+#define TEST_PREFIX(test_name) test_name"- ssse3"
+
+#define CATCH_BRANCH_PREFIX SSSE3_TEST_
 
 #elif defined(COMPILE_SSE3)
 
-    using capability = capability_SSE3;
-    #define TEST_PREFIX(test_name) test_name"- sse3"
+			using capability = capability_SSE3;
+#define TEST_PREFIX(test_name) test_name"- sse3"
+
+#define CATCH_BRANCH_PREFIX SSE3_TEST_
 
 #elif defined(COMPILE_SSE2)
 
-    using capability = capability_SSE2;
-    #define TEST_PREFIX(test_name) test_name"- sse2"
+			using capability = capability_SSE2;
+#define TEST_PREFIX(test_name) test_name"- sse2"
+
+#define CATCH_BRANCH_PREFIX SSE2_TEST_
 
 #else
 
-    using capability = capability_FPU;
-    #define TEST_PREFIX(test_name) test_name"- x87"
+			using capability = capability_FPU;
+#define TEST_PREFIX(test_name) test_name"- x87"
+
+#define CATCH_BRANCH_PREFIX X87_TEST_
 
 #endif
+}}}
+
+//#define CATCH_CONFIG_COUNTER
+#include "../Catch_Custom/single_include/catch.hpp"
+
+namespace zzsystems { namespace gorynych { namespace test {
 
     using vreal = static_dispatcher<capability>::vreal;
     using vint  =  static_dispatcher<capability>::vint;

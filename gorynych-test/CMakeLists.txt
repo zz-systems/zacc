@@ -3,14 +3,6 @@ project(gorynych-test)
 
 include(../CMakeCommons)
 
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g ")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
-
-#set(CMAKE_BUILD_TYPE Debug)
-set( CMAKE_VERBOSE_MAKEFILE on )
-set(CMAKE_CXX_FLAGS "-std=c++14 -O3 -march=x86-64")
-
-
 set(BRANCHES_TO_COMPILE
         sse2_branch
         sse3_branch
@@ -18,7 +10,8 @@ set(BRANCHES_TO_COMPILE
         sse4_branch
         sse4fma_branch
         avx1_branch
-        avx2_branch)
+        avx2_branch
+		)
 
 set(BRANCH_MODULES
         "float_test\;test_float.cpp"
