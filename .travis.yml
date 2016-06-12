@@ -161,4 +161,4 @@ before_script:
   - cd Build
 
 script:
-  - make -j 2 && make unit_test
+  - make -j 2 && make test_gorynych
