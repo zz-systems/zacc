@@ -1,3 +1,6 @@
 [submodule "Catch"]
 	path = Catch
 	url = https://github.com/philsquared/Catch.git
+[submodule "doc/page"]
+	path = doc/page
+	url = https://github.com/zz-systems/gorynych.git
