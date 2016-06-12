@@ -32,9 +32,8 @@
 #include "../dependencies.h"
 
 namespace zzsystems { namespace gorynych {
-	/// forward int8
+
 	DISPATCHED struct int8;
-	/// forward int4x2
 	DISPATCHED struct int4x2;
 
 	//struct double4;

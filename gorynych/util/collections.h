@@ -24,14 +24,23 @@
 
 #pragma once
 
+/**
+ * @file collections.h
+ *
+ * @brief auxiliary collections
+ */
+
 #include <map>
 #include <vector>
 #include "memory.h"
 
 namespace zzsystems { namespace gorynych {
-template<typename key, typename value, typename comparator = std::less<key>>
-using aligned_map = std::map<key, value, comparator, aligned_allocator<std::pair<const key, value>, alignof(value)>>;
 
-template<typename value>
-using aligned_vector = std::vector<value, aligned_allocator<value, alignof(value)>>;
+    /// std::map with aligned_allocator
+    template<typename key, typename value, typename comparator = std::less<key>>
+    using aligned_map = std::map<key, value, comparator, aligned_allocator<std::pair<const key, value>, alignof(value)>>;
+
+    /// std::vector with aligned allocator
+    template<typename value>
+    using aligned_vector = std::vector<value, aligned_allocator<value, alignof(value)>>;
     }}

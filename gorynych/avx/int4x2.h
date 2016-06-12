@@ -38,7 +38,6 @@
 
 namespace zzsystems { namespace gorynych {
 
-	/// forward float8
 	DISPATCHED struct float8;
 	//struct double4;
 

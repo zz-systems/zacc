@@ -34,7 +34,6 @@
 
 namespace zzsystems { namespace gorynych {
 
-	/// forward int4
 	DISPATCHED struct int4;
 
 	

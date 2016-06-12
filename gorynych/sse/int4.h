@@ -34,7 +34,6 @@
 
 namespace zzsystems { namespace gorynych {
 
-	/// forward float4
 	DISPATCHED struct float4;
 
 	/**
@@ -302,6 +301,7 @@ namespace zzsystems { namespace gorynych {
 	 * @brief right shift (logical)
 	 * @relates int4
 	 * @remark SSE
+	 * @param a value
 	 * @param sa shift amout
 	 */
 	DISPATCHED_SHIFT_OP(>>, _int4, HAS_SSE)
@@ -313,6 +313,7 @@ namespace zzsystems { namespace gorynych {
 	 * @brief left shift (logical)
 	 * @relates int4
 	 * @remark SSE
+	 * @param a value
 	 * @param sa shift amout
 	 */
 	DISPATCHED_SHIFT_OP(<<, _int4, HAS_SSE)

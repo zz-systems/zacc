@@ -36,5 +36,5 @@ add_executable(gorynych-test ${SOURCE_FILES})
 enable_testing()
 add_test(gorynych-test gorynych-test)
 
-add_custom_target(unit_test COMMAND ${CMAKE_CTEST_COMMAND}
+add_custom_target(test_gorynych COMMAND ${CMAKE_CTEST_COMMAND}
         DEPENDS gorynych-test)

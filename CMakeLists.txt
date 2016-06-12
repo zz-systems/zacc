@@ -4,5 +4,3 @@ project(gorynych)
 include(CMakeCommons)
 
 add_subdirectory(gorynych-test)
-
-prepare_doc(gorynych_doc)
