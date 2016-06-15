@@ -36,7 +36,7 @@
 
 #include <array>
 
-namespace zzsystems { namespace gorynych {
+namespace zzsystems { namespace gorynych { namespace experimental_math {
 
         template<typename T>
         using Unqualified = typename std::remove_cv<
@@ -698,4 +698,4 @@ namespace zzsystems { namespace gorynych {
         return result;
 	}
 
-}}
+}}}
