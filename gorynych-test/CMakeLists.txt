@@ -18,6 +18,7 @@ set(BRANCH_MODULES
         "int_test\;test_int.cpp"
         "fastload_int_test\;test_fastload_int.cpp"
         "fastload_float_test\;test_fastload_float.cpp"
+		"matrix_test\;test_matrix.cpp"
     )
 
 prepare_branches()

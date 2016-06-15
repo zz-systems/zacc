@@ -48,6 +48,7 @@
 #include "x87/SISD.h"
 #include "dependencies.h"
 #include "fastload.h"
+#include "math/matrix.h"
 
 #ifdef _MSC_VER
 // prevent 'decorated name length exceeded, name was truncated'

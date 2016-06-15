@@ -252,7 +252,7 @@ namespace zzsystems { namespace gorynych {
 		/** @param a vector */ \
 		/** @param b scalar */ \
 		/** @returns vector value (type) */ \
-		inline friend type operator op(const type a, const convertable b) { return a op static_cast<type>(b); }
+		inline friend type operator op(const type &a, const convertable &b) { return a op static_cast<type>(b); }
 
 	/// @def BIN_OP_STUB_BA(op, type, convertable)
 	/// @brief shortcut: Converting binary operator (A <- (A)B op A)
@@ -266,7 +266,7 @@ namespace zzsystems { namespace gorynych {
 		/** @param a scalar */ \
 		/** @param b vector */ \
 		/** @returns vector value (type) */ \
-		inline friend type operator op(const convertable a, const type &b) { return static_cast<type>(a) op b; }
+		inline friend type operator op(const convertable &a, const type &b) { return static_cast<type>(a) op b; }
 
 	/// @def BIN_OP_STUB(op, type, convertable)
 	/// @brief shortcut: Permutated pair of converting binary operators
@@ -431,13 +431,44 @@ namespace zzsystems { namespace gorynych {
 	#define TRI_BODY_O(func, opt) BODY((func TRI_ARG_OPT(opt)))
 
 	/// @}
-	// Scalar + vector operator ========================================================================================
+	// Converting operators ============================================================================================
 
-	/// @def SCALAR_VECTOR_CVT_OP_DEFS(scalar_type, vector_type)
-	/// @brief shortcut: collection of converting operators for a single vector and a single scalar
-	/// @param scalar_type scalar type
-	/// @param vector_type vector type
-	#define SCALAR_VECTOR_CVT_OP_DEFS(scalar_type, vector_type) \
+	#define DEFINE_ARITHMETIC_CVT_OPS_ANY(target_type) \
+        /** @name arithmetic converting operators */\
+		/**@{*/\
+		BIN_OP_STUB_ANY(+, target_type) \
+		BIN_OP_STUB_ANY(-, target_type) \
+		BIN_OP_STUB_ANY(*, target_type) \
+		BIN_OP_STUB_ANY(/ , target_type) \
+		/** @} */
+
+	#define DEFINE_BITWISE_CVT_OPS_ANY(target_type) \
+        /** @name arithmetic converting operators */\
+		/**@{*/\
+		BIN_OP_STUB_ANY(^, target_type) \
+		BIN_OP_STUB_ANY(|, target_type) \
+		BIN_OP_STUB_ANY(&, target_type) \
+		/** @} */
+
+	#define DEFINE_LOGIC_CVT_OPS_ANY(target_type) \
+        /** @name arithmetic converting operators */\
+		/**@{*/\
+		BIN_OP_STUB_ANY(>,  target_type) \
+		BIN_OP_STUB_ANY(>=, target_type) \
+		BIN_OP_STUB_ANY(<,  target_type) \
+		BIN_OP_STUB_ANY(<=,  target_type) \
+		BIN_OP_STUB_ANY(==, target_type) \
+		BIN_OP_STUB_ANY(!=, target_type) \
+		BIN_OP_STUB_ANY(||,  target_type) \
+		BIN_OP_STUB_ANY(&&,  target_type) \
+		/** @} */
+
+
+		/// @def SCALAR_VECTOR_CVT_OP_DEFS(scalar_type, vector_type)
+		/// @brief shortcut: collection of converting operators for a single vector and a single scalar
+		/// @param scalar_type scalar type
+		/// @param vector_type vector type
+#define SCALAR_VECTOR_CVT_OP_DEFS(scalar_type, vector_type) \
         /** @name converting operators */\
 		/**@{*/\
 		BIN_OP_STUB(+, vector_type, scalar_type) \
