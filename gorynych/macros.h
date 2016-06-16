@@ -157,7 +157,7 @@ namespace zzsystems { namespace gorynych {
 
 	/// @def VARGS4(type)
 	/// @brief shortcut: 4 (Constructor) arguments of the same type
-	#define VARGS4(type) const type& _3, const type& _2, const type& _1, const type& _0
+	#define VARGS4(type) const type& _0, const type& _1, const type& _2, const type& _3
 
 	/// @def VPASS4
 	/// @brief shortcut: Pass 4 (constructor) arguments
@@ -169,8 +169,8 @@ namespace zzsystems { namespace gorynych {
 
 	/// @def VARGS8(type)
 	/// @brief shortcut: 8 (Constructor) arguments of the same type
-	#define VARGS8(type) const type& _7, const type& _6, const type& _5, const type& _4, \
-        				 const type& _3, const type& _2, const type& _1, const type& _0
+	#define VARGS8(type) const type& _0, const type& _1, const type& _2, const type& _3, \
+        				 const type& _4, const type& _5, const type& _6, const type& _7
 
 	/// @def VPASS8
 	/// @brief shortcut: Pass 8 (constructor) arguments
