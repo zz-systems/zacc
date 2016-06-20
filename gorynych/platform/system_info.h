@@ -242,35 +242,35 @@ namespace zzsystems { namespace gorynych {
 		struct dispatcher
 	{
 		/// current capabilities
-		static constexpr int feature_flags = dispatch_mask();
+		static constexpr int feature_flags = capability();
 
 		/// sse 2 available?
-		static constexpr bool has_sse2			= 0 != (dispatch_mask() & CAPABILITY_SSE2);
+		static constexpr bool has_sse2			= 0 != (capability() & CAPABILITY_SSE2);
 		/// sse 3 available?
-		static constexpr bool has_sse3			= 0 != (dispatch_mask() & CAPABILITY_SSE3);
+		static constexpr bool has_sse3			= 0 != (capability() & CAPABILITY_SSE3);
 		/// ssse 3 available?
-		static constexpr bool has_ssse3			= 0 != (dispatch_mask() & CAPABILITY_SSSE3);
+		static constexpr bool has_ssse3			= 0 != (capability() & CAPABILITY_SSSE3);
 		/// fma available?
-		static constexpr bool has_fma			= 0 != (dispatch_mask() & CAPABILITY_FMA3) || (dispatch_mask() & CAPABILITY_FMA4);
+		static constexpr bool has_fma			= 0 != (capability() & CAPABILITY_FMA3) || (capability() & CAPABILITY_FMA4);
 		/// sse 4.1 available?
-		static constexpr bool has_sse41			= 0 != (dispatch_mask() & CAPABILITY_SSE41);
+		static constexpr bool has_sse41			= 0 != (capability() & CAPABILITY_SSE41);
 		/// sse 4.2 available?
-		static constexpr bool has_sse42			= 0 != (dispatch_mask() & CAPABILITY_SSE42);
+		static constexpr bool has_sse42			= 0 != (capability() & CAPABILITY_SSE42);
 		/// avx 1 available?
-		static constexpr bool has_avx			= 0 != (dispatch_mask() & CAPABILITY_AVX1);
+		static constexpr bool has_avx			= 0 != (capability() & CAPABILITY_AVX1);
 		/// avx 2 available?
-		static constexpr bool has_avx2			= 0 != (dispatch_mask() & CAPABILITY_AVX2);
+		static constexpr bool has_avx2			= 0 != (capability() & CAPABILITY_AVX2);
 		/// avx 512 available?
-		static constexpr bool has_avx512		= 0 != (dispatch_mask() & CAPABILITY_AVX512);
+		static constexpr bool has_avx512		= 0 != (capability() & CAPABILITY_AVX512);
 		/// fast (lower precision) float enabled?
-		static constexpr bool use_fast_float	= 0 != (dispatch_mask() & CAPABILITY_FASTFLOAT);
+		static constexpr bool use_fast_float	= 0 != (capability() & CAPABILITY_FASTFLOAT);
 	};
 
 	/// @name dispatcher shortcuts
 	/// @{
 
 	/// dispatcher alias
-	#define _dispatcher dispatcher<dispatch_mask>
+	#define _dispatcher dispatcher<capability>
 
 	/// @def HAS_SSE
 	/// @brief shortcut: check if SSE 2 is available

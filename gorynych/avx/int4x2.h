@@ -99,6 +99,7 @@ namespace zzsystems { namespace gorynych {
 		/// @remark Don't forget to extend the macro when you add new operators
 		SCALAR_VECTOR_CVT_OP_DEFS(int, _int4x2)
 
+
 		/// check if ALL bits are set to 1
 		explicit inline operator bool() const
 		{
