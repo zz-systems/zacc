@@ -49,10 +49,11 @@ namespace zzsystems {
 
 	// Generic operators ===============================================================================================
 
+
 	ANY(T) ASSIGN_OP(+=, T) { return a = (a + b); }
 	ANY(T) ASSIGN_OP(-=, T) { return a = (a - b); }
 	ANY(T) ASSIGN_OP(*=, T) { return a = (a * b); }
-	ANY(T) ASSIGN_OP(/=, T) { return a = (a / b); }	
+	ANY(T) ASSIGN_OP(/=, T) { return a = (a / b); }
 
 	ANY(T) ASSIGN_OP(&=, T) { return a = (a & b); }
 	ANY(T) ASSIGN_OP(|=, T) { return a = (a | b); }

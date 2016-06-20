@@ -124,7 +124,7 @@ namespace zzsystems { namespace gorynych {
 
 	/// @def DISPATCHED
 	/// @brief Featuremask template. Important for static branch dispatching
-	#define DISPATCHED template<typename dispatch_mask>
+	#define DISPATCHED template<typename capability>
 
 	/// @def DISPATCHED_RET
 	/// @brief shortcut with return type
@@ -157,7 +157,7 @@ namespace zzsystems { namespace gorynych {
 
 	/// @def VARGS4(type)
 	/// @brief shortcut: 4 (Constructor) arguments of the same type
-	#define VARGS4(type) const type& _3, const type& _2, const type& _1, const type& _0
+	#define VARGS4(type) const type& _0, const type& _1, const type& _2, const type& _3
 
 	/// @def VPASS4
 	/// @brief shortcut: Pass 4 (constructor) arguments
@@ -169,8 +169,8 @@ namespace zzsystems { namespace gorynych {
 
 	/// @def VARGS8(type)
 	/// @brief shortcut: 8 (Constructor) arguments of the same type
-	#define VARGS8(type) const type& _7, const type& _6, const type& _5, const type& _4, \
-        				 const type& _3, const type& _2, const type& _1, const type& _0
+	#define VARGS8(type) const type& _0, const type& _1, const type& _2, const type& _3, \
+        				 const type& _4, const type& _5, const type& _6, const type& _7
 
 	/// @def VPASS8
 	/// @brief shortcut: Pass 8 (constructor) arguments
@@ -389,7 +389,7 @@ namespace zzsystems { namespace gorynych {
 	/// @def DEBUG_FUNC_INSTANCE(name)
 	/// @brief: Information about selected branch on a per-function/operator basis
 	#if defined(ENABLE_DEBUG_FUNC_INSTANCE) //&& defined(__DEBUG)
-		#define DEBUG_FUNC_INSTANCE(name) cout << "for " << static_dispatcher<dispatch_mask>::unit_name() << " using: " << name << endl
+		#define DEBUG_FUNC_INSTANCE(name) cout << "for " << static_dispatcher<capability>::unit_name() << " using: " << name << endl
 	#else 
 		#define DEBUG_FUNC_INSTANCE {}
 	#endif
@@ -433,36 +433,40 @@ namespace zzsystems { namespace gorynych {
 	/// @}
 	// Converting operators ============================================================================================
 
-	#define DEFINE_ARITHMETIC_CVT_OPS_ANY(target_type) \
+	#define DEFINE_ARITHMETIC_CVT_OPS_ANY(target_type, accepted_type) \
         /** @name arithmetic converting operators */\
 		/**@{*/\
-		BIN_OP_STUB_ANY(+, target_type) \
-		BIN_OP_STUB_ANY(-, target_type) \
-		BIN_OP_STUB_ANY(*, target_type) \
-		BIN_OP_STUB_ANY(/ , target_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(+, target_type, accepted_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(-, target_type, accepted_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(*, target_type, accepted_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(/ , target_type, accepted_type) \
 		/** @} */
 
-	#define DEFINE_BITWISE_CVT_OPS_ANY(target_type) \
+	#define DEFINE_BITWISE_CVT_OPS_ANY(target_type, accepted_type) \
         /** @name arithmetic converting operators */\
 		/**@{*/\
-		BIN_OP_STUB_ANY(^, target_type) \
-		BIN_OP_STUB_ANY(|, target_type) \
-		BIN_OP_STUB_ANY(&, target_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(^, target_type, accepted_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(|, target_type, accepted_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(&, target_type, accepted_type) \
 		/** @} */
 
-	#define DEFINE_LOGIC_CVT_OPS_ANY(target_type) \
+	#define DEFINE_LOGIC_CVT_OPS_ANY(target_type, accepted_type) \
         /** @name arithmetic converting operators */\
 		/**@{*/\
-		BIN_OP_STUB_ANY(>,  target_type) \
-		BIN_OP_STUB_ANY(>=, target_type) \
-		BIN_OP_STUB_ANY(<,  target_type) \
-		BIN_OP_STUB_ANY(<=,  target_type) \
-		BIN_OP_STUB_ANY(==, target_type) \
-		BIN_OP_STUB_ANY(!=, target_type) \
-		BIN_OP_STUB_ANY(||,  target_type) \
-		BIN_OP_STUB_ANY(&&,  target_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(>,  target_type, accepted_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(>=, target_type, accepted_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(<,  target_type, accepted_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(<=,  target_type, accepted_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(==, target_type, accepted_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(!=, target_type, accepted_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(||,  target_type, accepted_type) \
+		ANY(accepted_type) BIN_OP_STUB_AB(&&,  target_type, accepted_type) \
 		/** @} */
 
+#define DEFINE_CVT_OPS_ANY(target_type) \
+        DEFINE_ARITHMETIC_CVT_OPS_ANY(target_type) \
+		DEFINE_BITWISE_CVT_OPS_ANY(target_type) \
+		DEFINE_LOGIC_CVT_OPS_ANY(target_type)
 
 		/// @def SCALAR_VECTOR_CVT_OP_DEFS(scalar_type, vector_type)
 		/// @brief shortcut: collection of converting operators for a single vector and a single scalar
@@ -488,5 +492,7 @@ namespace zzsystems { namespace gorynych {
 		BIN_OP_STUB(!= , vector_type, scalar_type) \
 		/**@}*/\
 
-
+/// @see https://github.com/pfultz2/Cloak/wiki/C-Preprocessor-tricks,-tips,-and-idioms
+#define CAT(a, ...) PRIMITIVE_CAT(a, __VA_ARGS__)
+#define PRIMITIVE_CAT(a, ...) a ## __VA_ARGS__
 }}

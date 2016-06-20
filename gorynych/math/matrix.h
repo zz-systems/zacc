@@ -36,27 +36,17 @@
 
 #include <array>
 
-namespace zzsystems { namespace gorynych { namespace experimental_math {
+#include "../basic_functions.h"
+#include "../avx/avx.h"
+#include "../sse/sse.h"
 
-        template<typename T>
-        using Unqualified = typename std::remove_cv<
-                typename std::remove_reference<T>::type
-        >::type;
 
-        template <typename ... Types>
-        struct template_all; // UNDEFINED
-
-        template <>
-        struct template_all<>
-                : std::true_type {};
-
-        template <typename ... Types>
-        struct template_all<std::false_type, Types...>
-                : std::false_type {};
-
-        template <typename ... Types>
-        struct template_all<std::true_type, Types...>
-                : template_all<Types...>::type {};
+//#ifdef COMPAT_OLD_LINAL
+//#define _0 get_row(0)
+//#define _1 get_row(0)
+//#define _2 get_row(0)
+//#endif
+namespace zzsystems { namespace gorynych {
 
         template< typename... CONDITIONS >
         struct all_true;
@@ -73,6 +63,27 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
             const static bool value = CONDITION::value && all_true<CONDITIONS...>::value;
         };
 
+
+            /// http://loungecpp.wikidot.com/tips-and-tricks%3aindices
+            template <std::size_t... Is>
+            struct indices {};
+            template <std::size_t N, std::size_t... Is>
+            struct build_indices: build_indices<N-1, N-1, Is...> {};
+            template <std::size_t... Is>
+            struct build_indices<0, Is...>: indices<Is...> {};
+
+            template<typename T, typename U, size_t i, size_t... Is>
+            constexpr auto array_cast_helper(
+                    const std::array<U, i> &a, indices<Is...>) -> std::array<T, i> {
+                return {{static_cast<T>(std::get<Is>(a))...}};
+            }
+
+            template<typename T, typename U, size_t i>
+            constexpr auto array_cast(
+                    const std::array<U, i> &a) -> std::array<T, i> {
+                // tag dispatch to helper with array indices
+                return array_cast_helper<T>(a, build_indices<i>());
+            }
     /// @struct mat
     /// @brief matrix
     template<typename T, size_t rows, size_t cols>
@@ -89,156 +100,158 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
 
         typedef mat<T, rows, cols> self_t;
 
+#ifdef COMPAT_OLD_LINAL
+        union {
+#endif
         /// data container
         std::array<T, rows * cols> data;
 
+#ifdef COMPAT_OLD_LINAL
+        struct { T x, y, z; };
+        };
+#endif
 
-        constexpr size_t get_rows()     const   { return rows; }
-        constexpr size_t get_cols()     const   { return cols; }
-        constexpr size_t get_length()   const   { return rows * cols; }
+        static constexpr size_t get_rows()     { return rows; }
+        static constexpr size_t get_cols()     { return cols; }
+        static constexpr size_t get_length()   { return rows * cols; }
 
-        /// default constructor
-        mat() = default;
+            /// default constructor
+            mat() = default;
 
-        // typename... Args
+            // typename... Args
 
-        template<typename... Args, restrict_args<T, Args...>* = nullptr>
-        mat(Args&&... args) noexcept
-            : data{{static_cast<T>(std::forward<Args>(args))...}}
-        {}
+            template<typename... Args, restrict_args<T, Args...>* = nullptr>
+            mat(Args&&... args) noexcept
+            : data{static_cast<T>(std::forward<Args>(args))...}
+            {}
 
-        /*template<typename... Args, restrict_args<mat<T, 1, cols>, Args...>* = nullptr>
-        mat(mat<T,1, cols>&& first, Args&&... args) noexcept
-                : mat{first, std::forward<Args>(args)...}
-        {}*/
-
-        mat(std::initializer_list<T> init_list) noexcept
-        {
-            std::copy(init_list.begin(), init_list.end(), data.begin());
-        }
-
-        mat(std::initializer_list<std::initializer_list<T>> init_list) noexcept
-        {
-            int index = 0;
-
-            for(auto row : init_list)
+            //__attribute__((optimize("unroll-loops")))
+            mat(std::initializer_list<T> init_list) noexcept
             {
-                for(auto col : row)
+                std::copy(init_list.begin(), init_list.end(), data.begin());
+            }
+
+            //__attribute__((optimize("unroll-loops")))
+            mat(std::initializer_list<std::initializer_list<T>> init_list) noexcept
+            {
+                int index = 0;
+
+                for(auto row : init_list)
                 {
-                    at(index++) = col;
+                    for(auto col : row)
+                    {
+                        at(index++) = col;
+                    }
                 }
             }
-        }
 
-//        mat(std::initializer_list<mat<T, 1, cols>> init_list)
-//        {
-//            int index = 0;
-//
-//            for(auto row : init_list)
-//            {
-//                for(auto col : row.data)
-//                {
-//                    at(index++) = col;
-//                }
-//            }
-//        }
-
-        template<typename U = T>
-        mat(std::initializer_list<mat<U, 1, cols>> init_list) noexcept
-        {
-            int index = 0;
-
-            for(auto row : init_list)
+            template<typename U = T>
+            //__attribute__((optimize("unroll-loops")))
+            mat(std::initializer_list<mat<U, cols, 1>> init_list) noexcept
             {
-                for(auto col : row.data)
+                int index = 0;
+
+                for(auto row : init_list)
                 {
-                    at(index++) = col;
+                    for(auto col : row.data)
+                    {
+                        at(index++) = col;
+                    }
                 }
             }
-        }
-
-        /// memory location constructor
-        mat(const T* data) noexcept : data(data)
-        {}
-
-        /// matrix move constructor
-        mat(const mat& rhs) noexcept
-        {
-            //std::move(rhs.data.begin(), rhs.data.end(), data.begin());
-            data = rhs.data;
-        }
-
-        template<typename U = T>
-        mat(const mat<U, rows, cols>& rhs) noexcept
-        {
-            std::copy(rhs.data.begin(), rhs.data.end(), data.begin());
-        }
-
-        /// @brief access
-        /// @{
-
-        inline T &operator()(int row, int col)
-        {
-            return at(row, col);
-        }
-
-        inline T &operator()(int i)
-        {
-            return at(i);
-        }
-
-        inline T &at(int row, int col)
-        {
-            return data[col + row * cols];
-        }
-
-        inline T &at (int i)
-        {
-            return data[i];
-        }
-
-        inline T operator()(int row, int col) const
-        {
-            return at(row, col);
-        }
-
-        inline T at(int row, int col) const
-        {
-            return data[col + row * cols];
-        }
-
-        inline T operator()(int i) const
-        {
-            return at(i);
-        }
-
-        inline T at (int i) const
-        {
-            return data[i];
-        }
 
 
-        inline mat<T, 1, cols> get_row(int row) const
-        {
-            return at(row, 0);
-        };
+            /// matrix copy constructor
+            mat(const mat& rhs) noexcept : data(rhs.data)
+            { }
 
-        inline mat<T, 1, cols> &get_row(int row)
-        {
-            return at(row, 0);
-        };
+            template<typename U = T>
+            mat(const mat<U, rows, cols>& rhs) noexcept
+            {
+                    this->data = array_cast<T>(rhs.data);
+            }
+
+            /// @brief access
+            /// @{
+
+            inline T &operator()(int row, int col)
+            {
+                return data[col + row * cols];
+            }
+
+            inline T &operator()(int i)
+            {
+                return data[i];
+            }
+
+            inline T &at(int row, int col)
+            {
+                if(col >= cols || row >= rows)
+                    throw std::out_of_range("matrix 2D index out of range");
+
+                return (*this)(row, col);
+            }
+
+            inline T &at (int i)
+            {
+                if(i > data.size())
+                    throw std::out_of_range("matrix 1D index out of range");
+
+                return data[i];
+            }
+
+            inline const T &operator()(int row, int col) const
+            {
+                return data[col + row * cols];
+            }
+
+            inline const T &at(int row, int col) const
+            {
+                if(col >= cols || row >= rows)
+                    throw std::out_of_range("matrix 2D index out of range");
+
+                return (*this)(row, col);
+            }
+
+            inline const T &operator()(int i) const
+            {
+                return data[i];
+            }
+
+            inline const T &at (int i) const
+            {
+                if(i > data.size())
+                    throw std::out_of_range("matrix 1D index out of range");
+
+                return (*this)(i);
+            }
+
+            //__attribute__((optimize("unroll-loops")))
+            inline auto get_row(int row) const
+            {
+                mat<T, cols, 1> result;
+
+                for (int i = 0; i < cols; i++)
+                    result(i) = (*this)(row, i);
+
+                return result;
+            }
 
         /// @}
 
+        //__attribute__((optimize("unroll-loops")))
         explicit operator bool() const
         {
+            //return is_set(x) && is_set(y) && is_set(z);
+
             for(int i = 0; i < get_length(); i++)
-                if(!is_set(at(i)))
+                if(!is_set(data[i]))
                     return false;
 
             return true;
         }
 
+#ifndef COMPAT_OLD_LINAL
         template<typename U = T>
         const enable_if_t<rows == 1 && cols >= 2, U> x() const { return data[0]; }
         template<typename U = T>
@@ -252,14 +265,15 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
         enable_if_t<rows == 1 && cols >= 2, U> &y() { return data[1]; }
         template<typename U = T>
         enable_if_t<rows == 1 && cols >= 3, U> &z() { return data[2]; }
-
+#endif
         template<typename U = T>
         operator typename std::enable_if<rows == 1 && cols == 1, U >::type () const
         {
             return data[0];
         }
 
-        inline mat<T, cols, rows> transpose() const
+        //__attribute__((optimize("unroll-loops")))
+        inline const mat<T, cols, rows> &transpose() const
         {
             mat<T, cols, rows> result;
 
@@ -267,14 +281,14 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
             {
                 for(int m = 0; m < cols; m++)
                 {
-                    result(m, n) = at(n, m);
+                    result(m, n) = (*this)(n, m);
                 }
             }
 
             return result;
         };
 
-        inline self_t normalize() const
+        inline const self_t &normalize() const
         {
             return *this / magnitude();
         }
@@ -284,39 +298,40 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
             return vsqrt(sqr_magnitude());
         }
 
+        //__attribute__((optimize("unroll-loops")))
         inline T sqr_magnitude() const
         {
-            T sum = at(0) * at(0);
+            T sum = data[0] * data[0];
 
             for(int i = 1; i < get_length(); i++)
-                sum = sum + at(i) * at(i);
+                sum = sum + data[i] * data[i];
 
             return sum;
         }
 
-        inline T dot(const self_t &other)
+        //__attribute__((optimize("unroll-loops")))
+        inline T dot(const self_t &other) const
         {
-            T result = at(0) * other(0);
+            T result = data[0] * other(0);
 
             for(int i = 1; i < get_length(); i++)
-                result = result + at(i) * other(i);
+                result = result + data[i] * other(i);
 
             return result;
         }
 
-        inline self_t cross(const self_t &other)
+        inline const self_t &cross(const self_t &other)
         {
-            //enable_if_t<rows * cols == 3, self_t>
             static_assert(rows * cols == 3, "cross product only for 3-D vector");
 
             return self_t
                     (
-                            at(1) * other(2) - at(2) * other(1),
-                            at(2) * other(0) - at(0) * other(2),
-                            at(0) * other(1) - at(1) * other(0)
+                            data[1] * other(2) - data[2] * other(1),
+                            data[2] * other(0) - data[0] * other(2),
+                            data[0] * other(1) - data[1] * other(0)
                     );
         };
-        //DEFINE_ARITHMETIC_CVT_OPS_ANY(self_t)
+
     };
 
     /// @}
@@ -342,7 +357,7 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
 
     /// Nx1 matrix = N-row vector
     template<typename T, size_t N>
-    using vec = mat<T, 1, N>;
+    using vec = mat<T, N, 1>;
 
     /// 2x1 matrix = 2-row vector alias
     template<typename T>
@@ -390,33 +405,34 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     {
         static constexpr const bool value = is_arithmetic<T>::value || is_vreal<T>::value || is_vint<T>::value;
     };
-        // enable_if_t<is_arithmetic<U>::value, mat<T, N, M>>
-        
-	template<typename T, typename U, size_t N, size_t M> 
+
+
+	template<typename T, typename U, size_t N, size_t M>
         inline enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator +(const mat<T, N, M> &a, const U &b) { return a + static_cast<mat<T, N, M>>(b); }
-	
+
     template<typename T, typename U, size_t N, size_t M>
         inline enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator +(const U &a, const mat<T, N, M> &b) { return static_cast<mat<T, N, M>>(a) + b; }
-	
+
     template<typename T, typename U, size_t N, size_t M>
         inline enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator -(const mat<T, N, M> &a, const U &b) { return a - static_cast<mat<T, N, M>>(b); }
-	
+
     template<typename T, typename U, size_t N, size_t M>
         inline enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator -(const U &a, const mat<T, N, M> &b) { return static_cast<mat<T, N, M>>(a) - b; }
-	
+
     template<typename T, typename U, size_t N, size_t M>
         inline enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator *(const mat<T, N, M> &a, const U &b) { return a * static_cast<mat<T, N, M>>(b); }
-	
+
     template<typename T, typename U, size_t N, size_t M>
         inline enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator *(const U &a, const mat<T, N, M> &b) { return static_cast<mat<T, N, M>>(a) * b; }
-	
+
     template<typename T, typename U, size_t N, size_t M>
         inline enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator /(const mat<T, N, M> &a, const U &b) { return a / static_cast<mat<T, N, M>>(b); }
-	
+
     template<typename T, typename U, size_t N, size_t M>
         inline enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator /(const U &a, const mat<T, N, M> &b) { return static_cast<mat<T, N, M>>(a) / b; }
 
     template<typename T, typename U, size_t N, size_t M>
+    //__attribute__((optimize("unroll-loops")))
 	    inline mat<T, N, M>	operator <(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
         mat<T, N, M> result;
@@ -428,6 +444,7 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     }
 
     template<typename T, typename U, size_t N, size_t M>
+    //__attribute__((optimize("unroll-loops")))
 	    inline mat<T, N, M>	operator <=(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
         mat<T, N, M> result;
@@ -439,7 +456,8 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     }
 
     template<typename T, typename U, size_t N, size_t M>
-	    inline mat<T, N, M>	operator >(const mat<T, N, M>& a, const mat<U, N, M>& b) 
+    //__attribute__((optimize("unroll-loops")))
+	    inline mat<T, N, M>	operator >(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
         mat<T, N, M> result;
 
@@ -450,7 +468,8 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     }
 
     template<typename T, typename U, size_t N, size_t M>
-	    inline mat<T, N, M>	operator >=(const mat<T, N, M>& a, const mat<U, N, M>& b) 
+    //__attribute__((optimize("unroll-loops")))
+	    inline mat<T, N, M>	operator >=(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
         mat<T, N, M> result;
 
@@ -461,7 +480,8 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     }
 
     template<typename T, typename U, size_t N, size_t M>
-	    inline mat<T, N, M>	operator ==(const mat<T, N, M>& a, const mat<U, N, M>& b) 
+    //__attribute__((optimize("unroll-loops")))
+	    inline mat<T, N, M>	operator ==(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
         mat<T, N, M> result;
 
@@ -472,7 +492,8 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     }
 
     template<typename T, typename U, size_t N, size_t M>
-	    inline mat<T, N, M>	operator !=(const mat<T, N, M>& a, const mat<U, N, M>& b) 
+    //__attribute__((optimize("unroll-loops")))
+	    inline mat<T, N, M>	operator !=(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
         mat<T, N, M> result;
 
@@ -484,6 +505,7 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     /// @brief add
     /// @relates mat
     template<typename T, typename U, size_t rows, size_t cols>
+    //__attribute__((optimize("unroll-loops")))
     mat<T, rows, cols> operator+(const mat<T, rows, cols>& a, const mat<U, rows, cols>& b)
     {
         mat<T, rows, cols> result;
@@ -497,6 +519,7 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     /// @brief sub
     /// @relates mat
     template<typename T, typename U, size_t rows, size_t cols>
+    //__attribute__((optimize("unroll-loops")))
     mat<T, rows, cols> operator-(const mat<T, rows, cols>& a, const mat<U, rows, cols>& b)
     {
         mat<T, rows, cols> result;
@@ -510,10 +533,12 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     /// @brief add scalar
     /// @relates mat
     template<typename T, typename U, size_t rows, size_t cols>
+    //__attribute__((optimize("unroll-loops")))
     mat<T, rows, cols> operator+(const mat<T, rows, cols>& a, const scalar<U>& b)
     {
         mat<T, rows, cols> result;
 
+        #pragma unroll
         for(int i = 0; i < rows * cols; i++)
             result(i) = a(i) + b;
 
@@ -523,10 +548,12 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     /// @brief sub scalar
     /// @relates mat
     template<typename T, size_t rows, size_t cols>
+    //__attribute__((optimize("unroll-loops")))
     mat<T, rows, cols> operator-(const mat<T, rows, cols>& a, const T& b)
     {
         mat<T, rows, cols> result;
 
+        #pragma unroll
         for(int i = 0; i < rows * cols; i++)
             result(i) = a(i) - b;
 
@@ -536,10 +563,12 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     /// @brief mul scalar
     /// @relates mat
     template<typename T, size_t rows, size_t cols>
+    //__attribute__((optimize("unroll-loops")))
     mat<T, rows, cols> operator*(const mat<T, rows, cols>& a, const T& b)
     {
         mat<T, rows, cols> result;
 
+        #pragma unroll
         for(int i = 0; i < rows * cols; i++)
             result(i) = a(i) * b;
 
@@ -549,10 +578,12 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     /// @brief div scalar
     /// @relates mat
     template<typename T, size_t rows, size_t cols>
+    //__attribute__((optimize("unroll-loops")))
     mat<T, rows, cols> operator/(const mat<T, rows, cols>& a, const T& b)
     {
         mat<T, rows, cols> result;
 
+        #pragma unroll
         for(int i = 0; i < rows * cols; i++)
             result(i) = a(i) / b;
 
@@ -563,10 +594,12 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     /// @brief scale (mul)
     /// @relates mat
     template<typename T, typename U, size_t rows>
+    //__attribute__((optimize("unroll-loops")))
     auto operator*(const vec<T, rows>& a, const vec<U, rows>& b)
     {
         vec<T, rows> result;
 
+        #pragma unroll
         for(int i = 0; i < rows; i++)
             result(i) = a(i) * b(i);
 
@@ -576,10 +609,12 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     /// @brief scale (div)
     /// @relates mat
     template<typename T, typename U, size_t rows>
+    //__attribute__((optimize("unroll-loops")))
     auto operator/(const vec<T, rows>& a, const vec<U, rows>& b)
     {
         vec<T, rows> result;
 
+        #pragma unroll
         for(int i = 0; i < rows; i++)
             result(i) = a(i) / b(i);
 
@@ -589,6 +624,7 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     /// @brief gegneric matrix mul
     /// @relates mat
     template<typename T, typename U, size_t N, size_t cols, size_t M>
+    //__attribute__((optimize("unroll-loops")))
     mat<T, N, M> operator*(const mat<T, N, cols>& a, const mat<U, cols, M>& b)
     {
         mat<T, N, M> result;
@@ -614,6 +650,7 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
     /// @brief special case: row-vector * column-vector
     /// @relates mat
     template<typename T, typename U, size_t n>
+    //__attribute__((optimize("unroll-loops")))
     scalar<T> operator*(const mat<T, 1, n>& a, const mat<U, n, 1>& b)
     {
         scalar<T> result;
@@ -624,58 +661,20 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
         return result;
     };
 
-    /// @brief special case: column-vector * row-vector
-    /// @relates mat
-//    template<typename T, typename U, size_t N, size_t M>
-//    /*enable_if<col == 1, mat<T, N, M>>*/ mat<T, N, M> operator*(const mat<T, N, 1>& a, const mat<U, 1, M>& b)
-//    {
-//        mat<T, N, M> result;
-//
-//        for(int n = 0; n < N; n++)
-//        {
-//            for(int m = 0; m < M; m++)
-//            {
-//                result(n, m) = a(n) * b(m);
-//            }
-//        }
-//
-//        return result;
-//    };
-
-    /// @brief special case: matrix * vector
-    /// @relates mat
-    template<typename T, typename U, size_t N, size_t M>
-    mat<T, 1, N> operator*(const mat<T, N, M> &a, const vec<U, N> &vec)
-    {
-        mat<T, 1, N> result;
-
-        for(int n = 0; n < N; n++)
-        {
-            T temp = a(n, 0) * vec(0);
-
-            for(int m = 1; m < M; m++)
-            {
-                temp = temp + a(n, m) * vec(m);
-            }
-
-            result(n) = temp;
-        }
-
-        return result;
-    };
-
 	template<typename T, size_t N, size_t M>
+    //__attribute__((optimize("unroll-loops")))
 	auto clamp_int32(const mat<T, N, M> &a)
 	{
         mat<T, N, M> result;
 
         for(int i = 0; i < N * M; i++)
-            result(i) = clamp_int32<T>(a(i));
+            result(i) = zzsystems::gorynych::clamp_int32<T>(a(i));
 
         return result;
 	}
 
     template<typename mask, typename data, size_t N>
+    //__attribute__((optimize("unroll-loops")))
 	inline auto vsel(const vec<mask, N> &condition, const vec<data, N> &choice1, const vec<data, N> &choice2)
 	{
         vec<data, N> result;
@@ -688,7 +687,8 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
 
 
     template<typename T, typename U, size_t N>
-    auto clamp_int32(const vec<T, N> &a)
+    //__attribute__((optimize("unroll-loops")))
+    inline auto clamp_int32(const vec<T, N> &a)
 	{
         vec<T, N> result;
 
@@ -698,4 +698,15 @@ namespace zzsystems { namespace gorynych { namespace experimental_math {
         return result;
 	}
 
-}}}
+#ifdef COMPAT_OLD_LINAL
+
+    auto dot(const auto &a, const auto &b)
+    {
+        return a.dot(b);
+    }
+
+#endif
+}}
+
+#include "matrix_specialization.h"
+

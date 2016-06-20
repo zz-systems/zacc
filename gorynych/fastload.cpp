@@ -25,7 +25,7 @@
 
 #include "fastload.h"
 #include "dependencies.h"
-#include "dispatch.h"
+#include "platform/dispatch.h"
 #include "gorynych.h"
 
 namespace zzsystems { namespace gorynych {

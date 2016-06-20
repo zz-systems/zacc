@@ -65,7 +65,7 @@ namespace zzsystems { namespace gorynych { namespace  test {
                 {
                     int expected = 0xFFFF'FFFF >> sa;
                     vint calc = vint(0xFFFF'FFFF) >> sa;
-                    SIMD_ALIGN int tested[dim<vint>()];
+                    ALIGNED int tested[dim<vint>()];
                     extract(calc, tested);
 
                     for(int d = 0; d < dim<vint>(); d++)
@@ -81,7 +81,7 @@ namespace zzsystems { namespace gorynych { namespace  test {
                 {
                     int expected = 1 << sa;
                     vint calc = vint(1) << sa;
-					SIMD_ALIGN int tested[dim<vint>()];
+					ALIGNED int tested[dim<vint>()];
                     extract(calc, tested);
 
                     for(int d = 0; d < dim<vint>(); d++)

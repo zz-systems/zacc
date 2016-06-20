@@ -99,7 +99,7 @@ namespace zzsystems { namespace gorynych { namespace test {
     using sreal = float;
     template<typename vtype, typename stype>
     inline void test_validate(stype expected, const vtype &val) {
-        SIMD_ALIGN stype tested[dim<vtype>()];
+        ALIGNED stype tested[dim<vtype>()];
 
         extract(val, tested);
 
@@ -118,7 +118,7 @@ namespace zzsystems { namespace gorynych { namespace test {
 
     template<typename vtype, typename stype>
     inline void btest_validate(bool expected, const vtype &val) {
-        SIMD_ALIGN stype tested[dim<vtype>()];
+        ALIGNED stype tested[dim<vtype>()];
 
         extract(val, tested);
 

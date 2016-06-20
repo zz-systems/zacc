@@ -23,6 +23,8 @@
 //---------------------------------------------------------------------------------
 #pragma once
 
+#define COMPAT_OLD_LINAL
+
 /**
  * @file gorynych.h
  *
@@ -32,6 +34,7 @@
 #include "macros.h"
 #include "util/memory.h"
 #include "util/collections.h"
+#include "platform/scheduler_base.h"
 
 //#if defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA)
 #include "sse/sse.h"

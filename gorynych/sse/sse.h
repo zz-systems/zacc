@@ -113,7 +113,7 @@ namespace zzsystems { namespace gorynych {
 	/// gather int vector values from a memory location by an index vector
 	DISPATCHED _int4 vgather(const int* source, _int4 index)
 	{
-		SIMD_ALIGN int i[dim<_int4>()];
+		ALIGNED int i[dim<_int4>()];
 
 		extract(index, i);
 
@@ -127,7 +127,7 @@ namespace zzsystems { namespace gorynych {
 	/// gather float vector values from a memory location by an index vector
 	DISPATCHED _float4 vgather(const float* source, _int4 index)
 	{
-		SIMD_ALIGN int i[dim<_int4>()];
+		ALIGNED int i[dim<_int4>()];
 
 		extract(index, i);
 

@@ -1,6 +1,7 @@
 //
 // Created by szuyev on 13.06.16.
 //
+#define COMPAT_OLD_LINAL
 
 #include "../gorynych/gorynych.h"
 #include "test_extensions.h"
@@ -123,30 +124,30 @@ namespace zzsystems { namespace gorynych { namespace test {
 
     TEST_CASE(TYPE_PREFIX" col-vector * row-vector", "[vector]")
     {
-        SECTION("3 elem col vector * 3 elem row vector should yield a 3x3 matrix")
+        //SECTION("3 elem col vector * 3 elem row vector should yield a 3x3 matrix")
         {
-//            mat<sint, 3, 1> m1(2, 4, 8);
-//            mat<sint, 1, 3> m2(3, 6, 9);
-//
-//            auto result = m1 * m2;
-//
-//            CHECK(result.get_rows() == 3);
-//            CHECK(result.get_cols() == 3);
-//
-//            CHECK(result(0, 0) == 6);
-//            CHECK(result(0, 1) == 12);
-//            CHECK(result(0, 2) == 18);
-//
-//            CHECK(result(1, 0) == 12);
-//            CHECK(result(1, 1) == 24);
-//            CHECK(result(1, 2) == 36);
-//
-//            CHECK(result(2, 0) == 24);
-//            CHECK(result(2, 1) == 48);
-//            CHECK(result(2, 2) == 72);
+            mat<sint, 3, 1> m1(2, 4, 8);
+            mat<sint, 1, 3> m2(3, 6, 9);
+
+            auto result = m1 * m2;
+
+            CHECK(result.get_rows() == 3);
+            CHECK(result.get_cols() == 3);
+
+            CHECK(result(0, 0) == 6);
+            CHECK(result(0, 1) == 12);
+            CHECK(result(0, 2) == 18);
+
+            CHECK(result(1, 0) == 12);
+            CHECK(result(1, 1) == 24);
+            CHECK(result(1, 2) == 36);
+
+            CHECK(result(2, 0) == 24);
+            CHECK(result(2, 1) == 48);
+            CHECK(result(2, 2) == 72);
         }
 
-        SECTION("3 elem row vector * 2 elem col vector should yield a 3x2 matrix")
+        //SECTION("3 elem row vector * 2 elem col vector should yield a 3x2 matrix")
         {
             mat<sint, 3, 1> m1(2, 4, 8);
             mat<sint, 1, 2> m2(3, 6);
@@ -252,8 +253,8 @@ namespace zzsystems { namespace gorynych { namespace test {
 
         auto result = v + vec3<sint>({ 2, 1, 0 });
 
-        CHECK(result.get_rows() == 1);
-        CHECK(result.get_cols() == 3);
+        CHECK(result.get_rows() == 3);
+        CHECK(result.get_cols() == 1);
 
         CHECK(result(0) == 2);
         CHECK(result(1) == 2);
