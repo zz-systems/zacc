@@ -41,11 +41,6 @@
 #include "../sse/sse.h"
 
 
-//#ifdef COMPAT_OLD_LINAL
-//#define _0 get_row(0)
-//#define _1 get_row(0)
-//#define _2 get_row(0)
-//#endif
 namespace zzsystems { namespace gorynych {
 
         template< typename... CONDITIONS >
@@ -697,15 +692,6 @@ namespace zzsystems { namespace gorynych {
 
         return result;
 	}
-
-#ifdef COMPAT_OLD_LINAL
-
-    auto dot(const auto &a, const auto &b)
-    {
-        return a.dot(b);
-    }
-
-#endif
 }}
 
 #include "matrix_specialization.h"
