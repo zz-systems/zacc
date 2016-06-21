@@ -29,10 +29,10 @@ if(WIN32)
 	#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} /O2 /Oy /Ot /Ox /D 'NDEBUG' /D '_CONSOLE' /D '_UNICODE' /D 'UNICODE'")
 	
 elseif(UNIX)
-	set(CMAKE_CXX_FLAGS_DEBUG 	"${CMAKE_CXX_FLAGS_DEBUG} -g ")
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
+	set(CMAKE_CXX_FLAGS_DEBUG 	"${CMAKE_CXX_FLAGS_DEBUG} -g -fsanitize=undefined -fsanitize=alignment")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 	
-	set(CMAKE_CXX_FLAGS "-std=c++14 -O3 -march=x86-64 -funroll-loops")
+	set(CMAKE_CXX_FLAGS "-std=c++14 -O3 -march=x86-64 -fPIC -fopenmp")
 else()
 endif()
 
