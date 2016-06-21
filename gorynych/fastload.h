@@ -155,32 +155,34 @@ struct cfl : ccl<type>
 #define CFL_SPECIALIZATIONS(capability) \
 	CFL_SPECIALIZATION(capability, -1) 	{ return ccl<CFL_TYPE(capability)>::ones(); } \
 	CFL_SPECIALIZATION(capability, 0) 	{ return ccl<CFL_TYPE(capability)>::zeros(); } \
-	CFL_SPECIALIZATION(capability, 1) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31; } \
-	CFL_SPECIALIZATION(capability, 2) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 1; } \
-	CFL_SPECIALIZATION(capability, 3) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30; } \
-	CFL_SPECIALIZATION(capability, 4) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 2; } \
+	/*CFL_SPECIALIZATION(capability, 1) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31; }*/ \
+	/*CFL_SPECIALIZATION(capability, 2) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 1; } */\
+	/*CFL_SPECIALIZATION(capability, 3) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30; } */\
+	/*CFL_SPECIALIZATION(capability, 4) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 2; } */\
 	/*CFL_SPECIALIZATION(capability, 5) 	{ return cfl<CFL_TYPE(capability), 1>::val() + cfl<CFL_TYPE(capability), 4>::val(); } */\
-	CFL_SPECIALIZATION(capability, 6) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30 << 1; } \
-	CFL_SPECIALIZATION(capability, 7) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 29; } \
-	CFL_SPECIALIZATION(capability, 8) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 3; } \
+	/*CFL_SPECIALIZATION(capability, 6) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30 << 1; } */\
+	/*CFL_SPECIALIZATION(capability, 7) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 29; } */\
+	/*CFL_SPECIALIZATION(capability, 8) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 3; } */\
 	/*CFL_SPECIALIZATION(capability, 9) 	{ return cfl<CFL_TYPE(capability), 8>::val() + cfl<CFL_TYPE(capability), 1>::val(); } */ \
 	/*CFL_SPECIALIZATION(capability, 10) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 3>::val(); } */ \
 	/*CFL_SPECIALIZATION(capability, 11) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 4>::val(); } */\
-	CFL_SPECIALIZATION(capability, 12) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30 << 2; } \
+	/*CFL_SPECIALIZATION(capability, 12) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30 << 2; } */\
 	/*CFL_SPECIALIZATION(capability, 13) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 6>::val(); } */\
-	CFL_SPECIALIZATION(capability, 14) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 29 << 1; } \
+	/*CFL_SPECIALIZATION(capability, 14) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 29 << 1; } */\
 	/*CFL_SPECIALIZATION(capability, 15) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 8>::val(); }*/\
+	/*CFL_SPECIALIZATION(capability, 0xFF) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 24; } */\
+	/*CFL_SPECIALIZATION(capability, 0x7FFFFFFF) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 1; }*/ \
 	template<int value> \
 	struct cfl<static_dispatcher<capability>::vreal, value> \
 	{ \
 		static inline static_dispatcher<capability>::vreal val() 	{ return cfl<static_dispatcher<capability>::vint, value>::val(); } \
 	}
 
-//#if !defined(COMPILE_FPU)
-//#define BRANCH_DEF(branch) CFL_SPECIALIZATIONS(capability_##branch);
-//	STATIC_DISPATCH_ONE_RAW()
-//#undef BRANCH_DEF
-//#endif
+#if !defined(COMPILE_FPU)
+#define BRANCH_DEF(branch) CFL_SPECIALIZATIONS(capability_##branch);
+	STATIC_DISPATCH_ONE_RAW()
+#undef BRANCH_DEF
+#endif
 
 #define FLR cfl<vreal>
 #define FLI cfl<vint>
