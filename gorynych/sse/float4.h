@@ -91,13 +91,16 @@ namespace zzsystems { namespace gorynych {
 
 		/// check if ALL bits are set to 1
 		/// @ref all_ones()
-		explicit inline operator bool()
-		{
-			return all_ones(*this);
-		}
+//		explicit inline operator bool()
+//		{
+//			return all_ones(*this);
+//		}
 	};
 
-
+	DISPATCHED_RET(bool, HAS_SSE) inline is_set(const _float4 a)
+	{
+		return all_ones(a);
+	}
 	
 	/// @brief check if ALL bits are set to 1
 	/// @relates float4

@@ -91,7 +91,7 @@ namespace zzsystems { namespace gorynych {
 	using capability_SSE2		= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2>;
 	using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;
 
-#undef FASTFLOAT_VAL
+#undef FASTFLOAT_ENABLED
 
 	/// @brief retrieves platform info
 	/// which is later used to select an appropriate execution branch

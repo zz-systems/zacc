@@ -141,16 +141,16 @@ namespace zzsystems { namespace gorynych {
 	// Converting selector =============================================================================================
 
 	/// branchless if-then-else with conversion from float->int vector
-	DISPATCHED_FUNC(vsel, _int4, !HAS_SSE41 && HAS_SSE)
+	DISPATCHED_FUNC(vsel, _int4, HAS_SSE)
 		(const _float4 &mask, const _int4 &b, const _int4 &c)
 	{
-		BODY(vsel(_mm_castps_si128((mask.val), b, c)));
+		BODY(vsel(_int4(_mm_castps_si128(mask.val)), b, c));
 	}
 
 	/// branchless if-then-else with conversion from int->float vector
-	DISPATCHED_FUNC(vsel, _float4, !HAS_SSE41 && HAS_SSE)
+	DISPATCHED_FUNC(vsel, _float4, HAS_SSE)
 		(const _int4 &mask, const _float4 &b, const _float4 &c)
 	{
-		BODY(vsel(_mm_castsi128_ps(mask.val), b, c));
+		BODY(vsel(_float4(_mm_castsi128_ps(mask.val)), b, c));
 	}
 }}

@@ -84,11 +84,16 @@ namespace zzsystems { namespace gorynych {
 
 
 		/// check if ALL bits are set to 1
-		explicit inline operator bool()
-		{
-			return _mm256_test_all_ones(this->val);
-		}
+//		explicit inline operator bool()
+//		{
+//			return _mm256_test_all_ones(this->val);
+//		}
 	};
+
+	DISPATCHED_RET(bool, HAS_AVX2) inline is_set(const _int8 a)
+	{
+		return _mm256_test_all_ones(a.val);
+	}
 
 	// Arithmetic ======================================================================================================
 

@@ -101,11 +101,16 @@ namespace zzsystems { namespace gorynych {
 
 
 		/// check if ALL bits are set to 1
-		explicit inline operator bool() const
-		{
-			return static_cast<bool>(hi) && static_cast<bool>(lo);
-		}
+//		explicit inline operator bool() const
+//		{
+//			return static_cast<bool>(hi) && static_cast<bool>(lo);
+//		}
 	};
+
+	DISPATCHED_RET(bool, HAS_AVX1 && !HAS_AVX2) inline is_set(const _int4x2 a)
+	{
+		return is_set(a.hi) && is_set(a.lo);
+	}
 
 	// Arithmetic ======================================================================================================
 

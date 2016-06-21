@@ -92,12 +92,16 @@ namespace zzsystems { namespace gorynych {
 
 		/// check if ALL bits are set to 1
 		/// @ref all_ones()
-		explicit operator bool()
-		{
-			//return _mm256_test_all_ones(_mm256_castps_si256(this->val)) != 0;
-			return all_ones(*this);
-		}
+//		explicit operator bool()
+//		{
+//			//return _mm256_test_all_ones(_mm256_castps_si256(this->val)) != 0;
+//			return all_ones(*this);
+//		}
 	};
+	DISPATCHED_RET(bool, HAS_AVX1) inline is_set(const _float8 a)
+	{
+		return all_ones(a);
+	}
 
 	/**
 	 * @brief check if ALL bits are set to 1

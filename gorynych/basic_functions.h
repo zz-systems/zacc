@@ -110,15 +110,20 @@ namespace zzsystems {
 
 		/// @fn is_set()
 		/// @brief generic check if value is not 0
-		VECTORIZED_F bool is_set(vreal value)
-		{
-			return static_cast<bool>(value);
-		}
+//		VECTORIZED_F bool is_set(vreal value)
+//		{
+//			return static_cast<bool>(value);
+//		}
 
 		/// @fn is_set()
 		/// @brief check if value is not 0 (float)
-		template<>
+//		template<>
 		inline bool is_set(float value)
+		{
+			return value != 0;
+		}
+
+		inline bool is_set(int value)
 		{
 			return value != 0;
 		}
