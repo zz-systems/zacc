@@ -92,7 +92,7 @@ namespace zzsystems { namespace gorynych {
 //		}
 	};
 
-	DISPATCHED_RET(bool, HAS_SSE) inline is_set(const _int4 a)
+	DISPATCHED_RET(bool, HAS_SSE) inline is_set(const _int4 VREF a)
 	{
 		return _mm_test_all_ones(a.val);
 	}

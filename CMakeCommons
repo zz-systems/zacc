@@ -5,6 +5,13 @@ set(CMAKE_VERBOSE_MAKEFILE on )
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 
+option(USE_CLANG "build application with clang" ON)
+
+if(USE_CLANG)
+    set (CMAKE_C_COMPILER   "/usr/bin/clang"    CACHE string "clang compiler" FORCE)
+    set (CMAKE_CXX_COMPILER "/usr/bin/clang++"  CACHE string "clang compiler" FORCE)
+endif(USE_CLANG)
+
 if(WIN32)
 	#set(CMAKE_CXX_FLAGS_DEBUG 	${CMAKE_CXX_FLAGS_DEBUG}
 	#							/MP 
@@ -37,6 +44,8 @@ elseif(UNIX)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=x86-64 -fPIC")
 else()
 endif()
+
+
 
 macro(set_openmp)
     find_package(OpenMP)

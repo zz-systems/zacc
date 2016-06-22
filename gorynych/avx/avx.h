@@ -147,7 +147,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param[in] src source vector
 	/// @param[out] target aligned storage
 	/// @remark target must be aligned
-	DISPATCHED void extract(const _int4x2 &src, int* target)
+	DISPATCHED void extract(const _int4x2 VREF src, int* target)
 	{
 		extract(src.lo, target);
 		extract(src.hi, target + 4);
@@ -157,7 +157,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param[in] src source vector
 	/// @param[out] target aligned storage
 	/// @remark target must be aligned
-	DISPATCHED void extract(const _float8 &src, float *target)
+	DISPATCHED void extract(const _float8 VREF src, float *target)
 	{
 		_mm256_store_ps(target, src.val);
 	}
@@ -167,7 +167,7 @@ namespace zzsystems { namespace gorynych {
 	/// from a memory location by an index vector
 	/// @param [in] memloc source
 	/// @param index index vector
-	DISPATCHED	_int8 vgather(const int* memloc, const _int8 &index)
+	DISPATCHED	_int8 vgather(const int* memloc, const _int8 VREF index)
 	{
 		return _mm256_i32gather_epi32(memloc, index.val, sizeof(int));
 	}
@@ -177,7 +177,7 @@ namespace zzsystems { namespace gorynych {
 	/// from a memory location by an index vector
 	/// @param [in] memloc source
 	/// @param index index vector
-	DISPATCHED	_int4x2 vgather(const int* memloc, const _int4x2 &index)
+	DISPATCHED	_int4x2 vgather(const int* memloc, const _int4x2 VREF index)
 	{
 		return{ vgather(memloc, index.hi), vgather(memloc, index.lo) };
 	}
@@ -187,7 +187,7 @@ namespace zzsystems { namespace gorynych {
 	/// from a memory location by an index vector
 	/// @param [in] memloc source
 	/// @param index index vector
-	DISPATCHED	_float8 vgather(const float* memloc, const _int4x2 &index)
+	DISPATCHED	_float8 vgather(const float* memloc, const _int4x2 VREF index)
 	{
 		return _mm256_set_m128(vgather(memloc, index.hi).val, vgather(memloc, index.lo).val);
 	}
@@ -197,7 +197,7 @@ namespace zzsystems { namespace gorynych {
 	/// from a memory location by an index vector
 	/// @param [in] memloc source
 	/// @param index index vector
-	DISPATCHED _float8 vgather(const float* memloc, const _int8 &index)
+	DISPATCHED _float8 vgather(const float* memloc, const _int8 VREF index)
 	{
 		return _mm256_i32gather_ps(memloc, index.val, sizeof(float));
 	}
@@ -215,7 +215,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param b then-branch-value
 	/// @param c else-branch-value
 	DISPATCHED_FUNC(vsel, _int8, HAS_AVX2)
-		(const _float8 &mask, const _int8 &b, const _int8 &c)
+		(const _float8 VREF mask, const _int8 VREF b, const _int8 VREF c)
 	{
 		BODY(vsel(_int8(_mm256_castps_si256(mask.val)), b, c));
 	}
@@ -226,7 +226,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param b then-branch-value
 	/// @param c else-branch-value
 	DISPATCHED_FUNC(vsel, _float8, HAS_AVX2)
-		(const _int8 &mask, const _float8 &b, const _float8 &c)
+		(const _int8 VREF mask, const _float8 VREF b, const _float8 VREF c)
 	{
 		BODY(vsel(_float8(_mm256_castsi256_ps(mask.val)), b, c));
 	}
@@ -237,7 +237,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param b then-branch-value
 	/// @param c else-branch-value
 	DISPATCHED_FUNC(vsel, _int4x2, HAS_AVX1 && !HAS_AVX2)
-		(const _float8 &mask, const _int4x2 &b, const _int4x2 &c)
+		(const _float8 VREF mask, const _int4x2 VREF  b, const _int4x2 VREF c)
 	{
 		_int4x2 a = {
 				_int4(_mm_castps_si128(_mm256_extractf128_ps(mask.val, 0))),
@@ -253,7 +253,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param b then-branch-value
 	/// @param c else-branch-value
 	DISPATCHED_FUNC(vsel, _float8, HAS_AVX1 && !HAS_AVX2)
-		(const _int4x2 &mask, const _float8 &b, const _float8 &c)
+		(const _int4x2 VREF mask, const _float8 VREF b, const _float8 VREF c)
 	{
 		auto a = _mm256_set_m128(_mm_castsi128_ps(mask.lo.val), _mm_castsi128_ps(mask.hi.val));
 		BODY(vsel(_float8(a), b, c));

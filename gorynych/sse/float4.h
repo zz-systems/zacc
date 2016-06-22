@@ -97,7 +97,7 @@ namespace zzsystems { namespace gorynych {
 //		}
 	};
 
-	DISPATCHED_RET(bool, HAS_SSE) inline is_set(const _float4 &a)
+	DISPATCHED_RET(bool, HAS_SSE) inline is_set(const _float4 VREF a)
 	{
 		return all_ones(a);
 	}
@@ -105,7 +105,7 @@ namespace zzsystems { namespace gorynych {
 	/// @brief check if ALL bits are set to 1
 	/// @relates float4
 	/// @remark SSE4
-	DISPATCHED_RET(bool, HAS_SSE41) inline all_ones(const _float4 &a)
+	DISPATCHED_RET(bool, HAS_SSE41) inline all_ones(const _float4 VREF a)
 	{
 		BODY(_mm_test_all_ones(_mm_castps_si128(a.val)) != 0);
 	}
@@ -114,7 +114,7 @@ namespace zzsystems { namespace gorynych {
 	/// @brief check if ALL bits are set to 1
 	/// @relates float4
 	/// @remark SSE2
-	DISPATCHED_RET(bool, !HAS_SSE41) inline all_ones(const _float4 &a)
+	DISPATCHED_RET(bool, !HAS_SSE41) inline all_ones(const _float4 VREF a)
 	{
 		auto zero = _mm_setzero_ps();
 		auto ones = _mm_cmpeq_ps(zero, zero);
