@@ -98,7 +98,7 @@ namespace zzsystems { namespace gorynych {
 //			return all_ones(*this);
 //		}
 	};
-	DISPATCHED_RET(bool, HAS_AVX1) inline is_set(const _float8 a)
+	DISPATCHED_RET(bool, HAS_AVX1) inline is_set(const _float8 &a)
 	{
 		return all_ones(a);
 	}
@@ -108,7 +108,7 @@ namespace zzsystems { namespace gorynych {
 	 * @relates float8
 	 * @remark AVX2
 	 */
-	DISPATCHED_RET(bool, HAS_AVX2) all_ones(const _float8 a)
+	DISPATCHED_RET(bool, HAS_AVX2) all_ones(const _float8 &a)
 	{
 		BODY(_mm256_test_all_ones(_mm256_castps_si256(a.val)) != 0);
 	}
@@ -118,7 +118,7 @@ namespace zzsystems { namespace gorynych {
 	 * @relates float8
 	 * @remark AVX1
 	 */
-	DISPATCHED_RET(bool, HAS_AVX1 && !HAS_AVX2) all_ones(const _float8 a)
+	DISPATCHED_RET(bool, HAS_AVX1 && !HAS_AVX2) all_ones(const _float8 &a)
 	{
 		auto zero = _mm256_setzero_ps();
 		auto ones = _mm256_cmp_ps(zero, zero, _CMP_EQ_OQ);

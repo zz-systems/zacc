@@ -183,9 +183,9 @@ namespace zzsystems { namespace gorynych {
 	/// @def DUP8(val)
 	/// @brief shortcut: replicates @a val 8 times
 	#define DUP8(i) DUP4(i), DUP4(i)
-
-	/// @}
-
+	
+	/// @}	
+	
 	// Operator declarations ===========================================================================================
 
 	/// @name operator declaration helpers
@@ -211,21 +211,21 @@ namespace zzsystems { namespace gorynych {
 	/// @param op operator
 	/// @param type return and argument type
 	#define UN_OP(op, type) \
-		inline type operator op(const type a)
+		inline type operator op(const type &a)
 
 	/// @def BIN_OP(op, type)
 	/// @brief shortcut: binary operator head
 	/// @param op operator
 	/// @param type return and argument type
 	#define BIN_OP(op, type) \
-		inline type operator op(const type a, const type b)
+		inline type operator op(const type &a, const type &b)
 
 	/// @def SHIFT_OP(op, type)
 	/// @brief shortcut: shift operator head
 	/// @param op operator
 	/// @param type return and argument type
 	#define SHIFT_OP(op, type) \
-		inline type operator op(const type a, const int sa)
+		inline type operator op(const type &a, const int sa)
 
 	/// @def UN_OP_STUB(op, type, convertable)
 	/// @brief shortcut: Converting unary operator
@@ -238,7 +238,7 @@ namespace zzsystems { namespace gorynych {
 		/** Used for scalar<->vector compatibility */ \
 		/** @param a scalar */ \
 		/** @returns vector value (type) */ \
-		inline friend const type operator op(const convertable a)	{ return op static_cast<type>(a); }
+		inline friend const type operator op(const convertable &a)	{ return op static_cast<type>(a); }
 
 	/// @def BIN_OP_STUB_AB(op, type, convertable)
 	/// @brief shortcut: Converting binary operator (A <- A op (A)B)
@@ -299,7 +299,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param type return and argument type
 	/// @param condition SFINAE enable_if condition
 	#define DISPATCHED_UN_OP(op, type, condition) \
-		DISPATCHED_OP(op, type, condition) (const type a)
+		DISPATCHED_OP(op, type, condition) (const type &a)
 
 	/// @def DISPATCHED_BIN_OP(op, type, condition)
 	/// @brief shortcut: Dispatched binary operator header
@@ -307,7 +307,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param type return and argument type
 	/// @param condition SFINAE enable_if condition
 	#define DISPATCHED_BIN_OP(op, type, condition) \
-		DISPATCHED_OP(op, type, condition) (const type a, const type b)
+		DISPATCHED_OP(op, type, condition) (const type &a, const type &b)
 
 	/// @def DISPATCHED_SHIFT_OP(op, type, condition)
 	/// @brief shortcut: Dispatched shift operator header
@@ -315,7 +315,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param type return and argument type
 	/// @param condition SFINAE enable_if condition
 	#define DISPATCHED_SHIFT_OP(op, type, condition) \
-		DISPATCHED_OP(op, type, condition) (const type a, const int sa)
+		DISPATCHED_OP(op, type, condition) (const type &a, const int sa)
 
 	/// @}
 
@@ -362,7 +362,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param type return and argument type
 	/// @param condition SFINAE enable_if condition
 	#define DISPATCHED_UN_FUNC(name, type, condition) \
-		DISPATCHED_RET(type, condition) name(const type a)
+		DISPATCHED_RET(type, condition) name(const type &a)
 
 	/// @def DISPATCHED_BIN_FUNC(name, type, condition)
 	/// @brief shortcut: Dispatched binary function header
@@ -370,7 +370,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param type return and argument type
 	/// @param condition SFINAE enable_if condition
 	#define DISPATCHED_BIN_FUNC(name, type, condition) \
-		DISPATCHED_RET(type, condition) name(const type a, const type b)
+		DISPATCHED_RET(type, condition) name(const type &a, const type &b)
 
 	/// @def DISPATCHED_TRI_FUNC(name, type, condition)
 	/// @brief shortcut: Dispatched ternary function header
@@ -378,7 +378,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param type return and argument type
 	/// @param condition SFINAE enable_if condition
 	#define DISPATCHED_TRI_FUNC(name, type, condition) \
-		DISPATCHED_RET(type, condition) name(const type a, const type b, const type c)
+		DISPATCHED_RET(type, condition) name(const type &a, const type &b, const type &c)
 
 	/// @}
 	// Function/Operator bodies ========================================================================================

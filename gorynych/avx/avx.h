@@ -167,7 +167,7 @@ namespace zzsystems { namespace gorynych {
 	/// from a memory location by an index vector
 	/// @param [in] memloc source
 	/// @param index index vector
-	DISPATCHED	_int8 vgather(const int* memloc, _int8 index)
+	DISPATCHED	_int8 vgather(const int* memloc, const _int8 &index)
 	{
 		return _mm256_i32gather_epi32(memloc, index.val, sizeof(int));
 	}
@@ -177,7 +177,7 @@ namespace zzsystems { namespace gorynych {
 	/// from a memory location by an index vector
 	/// @param [in] memloc source
 	/// @param index index vector
-	DISPATCHED	_int4x2 vgather(const int* memloc, _int4x2 index)
+	DISPATCHED	_int4x2 vgather(const int* memloc, const _int4x2 &index)
 	{
 		return{ vgather(memloc, index.hi), vgather(memloc, index.lo) };
 	}
@@ -187,7 +187,7 @@ namespace zzsystems { namespace gorynych {
 	/// from a memory location by an index vector
 	/// @param [in] memloc source
 	/// @param index index vector
-	DISPATCHED	_float8 vgather(const float* memloc, _int4x2 index)
+	DISPATCHED	_float8 vgather(const float* memloc, const _int4x2 &index)
 	{
 		return _mm256_set_m128(vgather(memloc, index.hi).val, vgather(memloc, index.lo).val);
 	}
@@ -197,7 +197,7 @@ namespace zzsystems { namespace gorynych {
 	/// from a memory location by an index vector
 	/// @param [in] memloc source
 	/// @param index index vector
-	DISPATCHED _float8 vgather(const float* memloc, _int8 index)
+	DISPATCHED _float8 vgather(const float* memloc, const _int8 &index)
 	{
 		return _mm256_i32gather_ps(memloc, index.val, sizeof(float));
 	}
