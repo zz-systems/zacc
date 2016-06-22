@@ -263,7 +263,7 @@ namespace zzsystems { namespace gorynych {
     {
         union
         {
-            array<vec3<T>, 2>   data;
+            array<vec3<T>, 3>   data;
             array<T, 9>         flat_data;
             struct { vec3<T> row0, row1, row2; };
         };

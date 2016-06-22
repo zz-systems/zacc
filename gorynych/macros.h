@@ -95,6 +95,12 @@ namespace zzsystems { namespace gorynych {
 	/// @brief shortcut for two-type template
 	#define ANY2(type1, type2) template<typename type1, typename type2>
 
+#ifdef COMPILE_PASS_VEC_BY_REF
+	#define VREF &
+#else
+	#define VREF
+#endif
+
 	/// @}
 
 	// vectorized type SFINAE stuff ====================================================================================
@@ -183,9 +189,9 @@ namespace zzsystems { namespace gorynych {
 	/// @def DUP8(val)
 	/// @brief shortcut: replicates @a val 8 times
 	#define DUP8(i) DUP4(i), DUP4(i)
-
-	/// @}
-
+	
+	/// @}	
+	
 	// Operator declarations ===========================================================================================
 
 	/// @name operator declaration helpers
@@ -196,7 +202,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param op operator
 	/// @param type return and argument type
 	#define ASSIGN_OP(op, type) \
-		inline type& operator op(type &a, const type &b)
+		inline type& operator op(type &a, const type VREF b)
 
 	/// @def ASSIGN_OP2(op, type1, type2)
 	/// @brief shortcut: Converting assignment operator head
@@ -204,28 +210,28 @@ namespace zzsystems { namespace gorynych {
 	/// @param type1 return and argument a type
 	/// @param type2 argument b type
 	#define ASSIGN_OP2(op, type1, type2) \
-		inline type1& operator op(type1 &a, const type2 &b)
+		inline type1& operator op(type1 &a, const type2 VREF b)
 
 	/// @def UN_OP(op, type)
 	/// @brief shortcut: unary operator head
 	/// @param op operator
 	/// @param type return and argument type
 	#define UN_OP(op, type) \
-		inline type operator op(const type a)
+		inline type operator op(const type VREF a)
 
 	/// @def BIN_OP(op, type)
 	/// @brief shortcut: binary operator head
 	/// @param op operator
 	/// @param type return and argument type
 	#define BIN_OP(op, type) \
-		inline type operator op(const type a, const type b)
+		inline type operator op(const type VREF a, const type  VREF b)
 
 	/// @def SHIFT_OP(op, type)
 	/// @brief shortcut: shift operator head
 	/// @param op operator
 	/// @param type return and argument type
 	#define SHIFT_OP(op, type) \
-		inline type operator op(const type a, const int sa)
+		inline type operator op(const type VREF a, const int sa)
 
 	/// @def UN_OP_STUB(op, type, convertable)
 	/// @brief shortcut: Converting unary operator
@@ -238,7 +244,7 @@ namespace zzsystems { namespace gorynych {
 		/** Used for scalar<->vector compatibility */ \
 		/** @param a scalar */ \
 		/** @returns vector value (type) */ \
-		inline friend const type operator op(const convertable a)	{ return op static_cast<type>(a); }
+		inline friend const type operator op(const convertable VREF a)	{ return op static_cast<type>(a); }
 
 	/// @def BIN_OP_STUB_AB(op, type, convertable)
 	/// @brief shortcut: Converting binary operator (A <- A op (A)B)
@@ -252,7 +258,7 @@ namespace zzsystems { namespace gorynych {
 		/** @param a vector */ \
 		/** @param b scalar */ \
 		/** @returns vector value (type) */ \
-		inline friend type operator op(const type &a, const convertable &b) { return a op static_cast<type>(b); }
+		inline friend type operator op(const type VREF a, const convertable VREF b) { return a op static_cast<type>(b); }
 
 	/// @def BIN_OP_STUB_BA(op, type, convertable)
 	/// @brief shortcut: Converting binary operator (A <- (A)B op A)
@@ -266,7 +272,7 @@ namespace zzsystems { namespace gorynych {
 		/** @param a scalar */ \
 		/** @param b vector */ \
 		/** @returns vector value (type) */ \
-		inline friend type operator op(const convertable &a, const type &b) { return static_cast<type>(a) op b; }
+		inline friend type operator op(const convertable VREF a, const type VREF b) { return static_cast<type>(a) op b; }
 
 	/// @def BIN_OP_STUB(op, type, convertable)
 	/// @brief shortcut: Permutated pair of converting binary operators
@@ -299,7 +305,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param type return and argument type
 	/// @param condition SFINAE enable_if condition
 	#define DISPATCHED_UN_OP(op, type, condition) \
-		DISPATCHED_OP(op, type, condition) (const type a)
+		DISPATCHED_OP(op, type, condition) (const type VREF a)
 
 	/// @def DISPATCHED_BIN_OP(op, type, condition)
 	/// @brief shortcut: Dispatched binary operator header
@@ -307,7 +313,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param type return and argument type
 	/// @param condition SFINAE enable_if condition
 	#define DISPATCHED_BIN_OP(op, type, condition) \
-		DISPATCHED_OP(op, type, condition) (const type a, const type b)
+		DISPATCHED_OP(op, type, condition) (const type VREF a, const type  VREF b)
 
 	/// @def DISPATCHED_SHIFT_OP(op, type, condition)
 	/// @brief shortcut: Dispatched shift operator header
@@ -315,7 +321,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param type return and argument type
 	/// @param condition SFINAE enable_if condition
 	#define DISPATCHED_SHIFT_OP(op, type, condition) \
-		DISPATCHED_OP(op, type, condition) (const type a, const int sa)
+		DISPATCHED_OP(op, type, condition) (const type VREF a, const int sa)
 
 	/// @}
 
@@ -334,19 +340,19 @@ namespace zzsystems { namespace gorynych {
 	/// @brief shortcut: unary function header
 	/// @param name function name
 	/// @param type return and argument type
-	#define UN_FUNC(name, type) inline type name(const type &a)
+	#define UN_FUNC(name, type) inline type name(const type VREF a)
 
 	/// @def BIN_FUNC(name, type)
 	/// @brief shortcut: binary function header
 	/// @param name function name
 	/// @param type return and argument type
-	#define BIN_FUNC(name, type) inline type name(const type &a, const type &b)
+	#define BIN_FUNC(name, type) inline type name(const type VREF a, const type VREF b)
 
 	/// @def TRI_FUNC(name, type)
 	/// @brief shortcut: ternary function header
 	/// @param name function name
 	/// @param type return and argument type
-	#define TRI_FUNC(name, type) inline type name(const type &a, const type &b, const type &c)	
+	#define TRI_FUNC(name, type) inline type name(const type VREF a, const type VREF b, const type VREF c)
 
 	/// @def DISPATCHED_FUNC(name, type, condition)
 	/// @brief shortcut: Dispatched function header (without args)
@@ -362,7 +368,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param type return and argument type
 	/// @param condition SFINAE enable_if condition
 	#define DISPATCHED_UN_FUNC(name, type, condition) \
-		DISPATCHED_RET(type, condition) name(const type a)
+		DISPATCHED_RET(type, condition) name(const type VREF a)
 
 	/// @def DISPATCHED_BIN_FUNC(name, type, condition)
 	/// @brief shortcut: Dispatched binary function header
@@ -370,7 +376,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param type return and argument type
 	/// @param condition SFINAE enable_if condition
 	#define DISPATCHED_BIN_FUNC(name, type, condition) \
-		DISPATCHED_RET(type, condition) name(const type a, const type b)
+		DISPATCHED_RET(type, condition) name(const type VREF a, const type VREF b)
 
 	/// @def DISPATCHED_TRI_FUNC(name, type, condition)
 	/// @brief shortcut: Dispatched ternary function header
@@ -378,7 +384,7 @@ namespace zzsystems { namespace gorynych {
 	/// @param type return and argument type
 	/// @param condition SFINAE enable_if condition
 	#define DISPATCHED_TRI_FUNC(name, type, condition) \
-		DISPATCHED_RET(type, condition) name(const type a, const type b, const type c)
+		DISPATCHED_RET(type, condition) name(const type VREF a, const type VREF b, const type VREF c)
 
 	/// @}
 	// Function/Operator bodies ========================================================================================

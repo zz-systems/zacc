@@ -2,6 +2,15 @@ cmake_minimum_required(VERSION 3.3.2)
 
 
 set(CMAKE_VERBOSE_MAKEFILE on )
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED on)
+
+option(USE_CLANG "build application with clang" ON)
+
+if(USE_CLANG)
+    set (CMAKE_C_COMPILER   "/usr/bin/clang"    CACHE string "clang compiler" FORCE)
+    set (CMAKE_CXX_COMPILER "/usr/bin/clang++"  CACHE string "clang compiler" FORCE)
+endif(USE_CLANG)
 
 if(WIN32)
 	#set(CMAKE_CXX_FLAGS_DEBUG 	${CMAKE_CXX_FLAGS_DEBUG}
@@ -29,12 +38,22 @@ if(WIN32)
 	#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} /O2 /Oy /Ot /Ox /D 'NDEBUG' /D '_CONSOLE' /D '_UNICODE' /D 'UNICODE'")
 	
 elseif(UNIX)
-	set(CMAKE_CXX_FLAGS_DEBUG 	"${CMAKE_CXX_FLAGS_DEBUG} -g ")
-	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
+	#set(CMAKE_CXX_FLAGS_DEBUG 	"${CMAKE_CXX_FLAGS_DEBUG} -g -fsanitize=undefined -fsanitize=alignment")
+	#set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 	
-	set(CMAKE_CXX_FLAGS "-std=c++14 -O3 -march=x86-64 -funroll-loops")
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -march=x86-64 -fPIC")
 else()
 endif()
+
+
+
+macro(set_openmp)
+    find_package(OpenMP)
+    if (OPENMP_FOUND)
+        set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+        set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    endif()
+endmacro(set_openmp)
 
 if(MSVC)
     set(fpu_flags)

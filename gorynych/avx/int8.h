@@ -90,7 +90,7 @@ namespace zzsystems { namespace gorynych {
 //		}
 	};
 
-	DISPATCHED_RET(bool, HAS_AVX2) inline is_set(const _int8 a)
+	DISPATCHED_RET(bool, HAS_AVX2) inline is_set(const _int8 VREF a)
 	{
 		return _mm256_test_all_ones(a.val);
 	}

@@ -41,11 +41,6 @@
 #include "../sse/sse.h"
 
 
-//#ifdef COMPAT_OLD_LINAL
-//#define _0 get_row(0)
-//#define _1 get_row(0)
-//#define _2 get_row(0)
-//#endif
 namespace zzsystems { namespace gorynych {
 
         template< typename... CONDITIONS >
@@ -116,10 +111,11 @@ namespace zzsystems { namespace gorynych {
         static constexpr size_t get_length()   { return rows * cols; }
 
             /// default constructor
-            mat() = default;
+            //mat() = default; <- MSVC HATES this
 
-            // typename... Args
+			mat() {}
 
+			// Unusable in MSVC. 
             template<typename... Args, restrict_args<T, Args...>* = nullptr>
             mat(Args&&... args) noexcept
             : data{static_cast<T>(std::forward<Args>(args))...}
@@ -653,10 +649,14 @@ namespace zzsystems { namespace gorynych {
     //__attribute__((optimize("unroll-loops")))
     scalar<T> operator*(const mat<T, 1, n>& a, const mat<U, n, 1>& b)
     {
-        scalar<T> result;
+        //scalar<T> result;
 
-        for(int i = 0; i < n; i++)
-            result(0) = result(0) + a(i) * b(i);
+		auto result = a(0) * b(0);
+
+		//result(0) = a(0) * b(0);
+
+        for(int i = 1; i < n; i++)
+            result = result + a(i) * b(i);
 
         return result;
     };
@@ -697,15 +697,6 @@ namespace zzsystems { namespace gorynych {
 
         return result;
 	}
-
-#ifdef COMPAT_OLD_LINAL
-
-    auto dot(const auto &a, const auto &b)
-    {
-        return a.dot(b);
-    }
-
-#endif
 }}
 
 #include "matrix_specialization.h"

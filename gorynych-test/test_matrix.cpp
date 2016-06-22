@@ -77,7 +77,7 @@ namespace zzsystems { namespace gorynych { namespace test {
 
     TEST_CASE(TYPE_PREFIX" vector sub", "[vector]")
     {
-        vec3<sint> v1(1, 2, 3), v2(6, 5, 4);
+		vec3<sint> v1({ 1, 2, 3 }), v2({ 6, 5, 4 });
 
         vec3<sint> result = v1 - v2;
 
@@ -88,7 +88,7 @@ namespace zzsystems { namespace gorynych { namespace test {
 
     TEST_CASE(TYPE_PREFIX" vector scale", "[vector]")
     {
-        vec3<sint> v1(1, 2, 3);
+		vec3<sint> v1({ 1, 2, 3 });
 
         vec3<sint> result = v1 * 2;
 
@@ -99,7 +99,7 @@ namespace zzsystems { namespace gorynych { namespace test {
 
     TEST_CASE(TYPE_PREFIX" vector reciproc scale", "[vector]")
     {
-        vec3<sint> v1(1, 2, 3);
+		vec3<sint> v1({ 1, 2, 3 });
 
         vec3<sint> result = v1 / 2;
 
@@ -110,8 +110,8 @@ namespace zzsystems { namespace gorynych { namespace test {
 
     TEST_CASE(TYPE_PREFIX" row-vector * col-vector", "[vector]")
     {
-        mat<sint, 1, 3> m1(2, 2, 2);
-        mat<sint, 3, 1> m2(2, 2, 2);
+		mat<sint, 1, 3> m1({ 2, 2, 2 });
+		mat<sint, 3, 1> m2({ 2, 2, 2 });
 
         auto result = m1 * m2;
 
@@ -119,15 +119,16 @@ namespace zzsystems { namespace gorynych { namespace test {
         CHECK(result.get_cols() == 1);
         CHECK(result(0) == 12);
 
-        CHECK(result == 12);
+		sint t = result;
+        CHECK(t == 12);
     }
 
     TEST_CASE(TYPE_PREFIX" col-vector * row-vector", "[vector]")
     {
         //SECTION("3 elem col vector * 3 elem row vector should yield a 3x3 matrix")
         {
-            mat<sint, 3, 1> m1(2, 4, 8);
-            mat<sint, 1, 3> m2(3, 6, 9);
+			mat<sint, 3, 1> m1({ 2, 4, 8 });
+			mat<sint, 1, 3> m2({ 3, 6, 9 });
 
             auto result = m1 * m2;
 
@@ -149,8 +150,8 @@ namespace zzsystems { namespace gorynych { namespace test {
 
         //SECTION("3 elem row vector * 2 elem col vector should yield a 3x2 matrix")
         {
-            mat<sint, 3, 1> m1(2, 4, 8);
-            mat<sint, 1, 2> m2(3, 6);
+			mat<sint, 3, 1> m1({ 2, 4, 8 });
+			mat<sint, 1, 2> m2({ 3, 6 });
 
             auto result = m1 * m2;
 
