@@ -35,7 +35,6 @@
 #include "float4.h"
 #include "double2.h"
 
-
 namespace zzsystems { namespace gorynych {
 
 	// Type traits =====================================================================================================
@@ -152,5 +151,13 @@ namespace zzsystems { namespace gorynych {
 		(const _int4 VREF mask, const _float4 VREF b, const _float4 VREF c)
 	{
 		BODY(vsel(_float4(_mm_castsi128_ps(mask.val)), b, c));
+	}
+
+
+	DISPATCHED_FUNC(visinf, _float4, HAS_SSE) (const _float4 VREF a)
+	{
+		auto ia = _int4(_mm_castps_si128(a.val));
+
+		BODY(ia == 0x7F800000 || ia == 0xFF800000);
 	}
 }}

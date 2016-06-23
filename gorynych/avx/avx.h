@@ -83,6 +83,7 @@ namespace zzsystems { namespace gorynych {
 			: public __scalar_type<float>
 	{};
 
+
 	/// @}
 
 	// Converting constructors =========================================================================================
@@ -260,4 +261,21 @@ namespace zzsystems { namespace gorynych {
 	}
 
 	/// @}
+
+	DISPATCHED_FUNC(visinf, _float8, HAS_AVX2) (const _float8 VREF a)
+	{
+		auto ia = _int8(_mm256_castps_si256(a.val));
+
+		BODY(ia == 0x7F800000 || ia == 0xFF800000);
+	}
+
+	DISPATCHED_FUNC(visinf, _float8, HAS_AVX1 && !HAS_AVX2) (const _float8 VREF a)
+	{
+		_int4x2 ia = {
+				_int4(_mm_castps_si128(_mm256_extractf128_ps(a.val, 0))),
+				_int4(_mm_castps_si128(_mm256_extractf128_ps(a.val, 1)))
+		};
+
+		BODY(ia == 0x7F800000 || ia == 0xFF800000);
+	}
 }}

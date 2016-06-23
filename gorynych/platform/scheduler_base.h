@@ -26,7 +26,7 @@
 
 #include "../macros.h"
 #include "dispatch.h"
-#include "../math/matrix.h"
+#include "../math/linal.h"
 
 namespace zzsystems { namespace gorynych { namespace platform {
 
@@ -37,8 +37,17 @@ namespace zzsystems { namespace gorynych { namespace platform {
 
     public:
         virtual void schedule(float *target, const vec3<float> &origin)     /*const*/ = 0;
+        virtual void schedule(int *target, const vec3<float> &origin)     /*const*/ = 0;
+
         virtual float* operator()(const vec3<float> &origin)                /*const*/ = 0;
+
+
         virtual void operator()(float *target, const vec3<float> &origin)   /*const*/
+        {
+            schedule(target, origin);
+        }
+
+        virtual void operator()(int *target, const vec3<float> &origin)   /*const*/
         {
             schedule(target, origin);
         }
@@ -117,6 +126,70 @@ namespace zzsystems { namespace gorynych { namespace platform {
             else // Fill remaining columns
             {
                 float extracted[dim<vreal>()];
+                extract(result, extracted);
+
+                for (size_t i = 0; i < remainder; i++)
+                    stride[x + i] = extracted[i];
+            }
+        }
+
+        inline void stream_result(int* stride, size_t x, const int r)
+        {
+            stride[x] = r;
+        }
+
+        inline void store_result(int* stride, size_t x, const int r)
+        {
+            stride[x] = r;
+        }
+
+        inline void stream_result(int* stride, size_t x, const _int4 &r)
+        {
+            _mm_stream_si128((__m128i*)(stride + x), r.val);
+        }
+
+        inline void store_result(int* stride, size_t x, const _int4 &r)
+        {
+            _mm_storeu_si128((__m128i*)(stride + x), r.val);
+        }
+
+        inline void stream_result(int* stride, size_t x, const _int8 &r)
+        {
+            //_mm256_stream_ps(stride + x, r.val);
+            _mm256_storeu_si256((__m256i*)(stride + x), r.val);
+        }
+
+        inline void store_result(int* stride, size_t x, const _int8 &r)
+        {
+            _mm256_storeu_si256((__m256i*)(stride + x), r.val);
+        }
+
+        inline void stream_result(int* stride, size_t x, const _int4x2 &r)
+        {
+            //_mm256_stream_ps(stride + x, r.val);
+            stream_result(stride, x, r.hi);
+            stream_result(stride + 4, x, r.lo);
+        }
+
+        inline void store_result(int* stride, size_t x, const _int4x2 &r)
+        {
+            store_result(stride, x, r.hi);
+            store_result(stride + 4, x, r.lo);
+        }
+
+        void write_result(const vec3<int> &dimensions, int *stride, size_t remainder, size_t x, const vint &result)
+        {
+            if (remainder == 0) // All rows aligned on required boundaries -> stream
+            {
+                stream_result(stride, x, result);
+            }
+            else if (x < (dimensions.x - remainder)) // Not aligned - but still in the "good" range
+            {
+                store_result(stride, x, result);
+            }
+            else // Fill remaining columns
+            {
+                int extracted[dim<vreal>()];
                 extract(result, extracted);
 
                 for (size_t i = 0; i < remainder; i++)

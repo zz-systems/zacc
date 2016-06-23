@@ -200,6 +200,15 @@ namespace zzsystems { namespace gorynych {
 		TRI_BODY(_mm256_fmadd_ps);
 	}
 
+//	/**
+//	 * @brief fused multiply add
+//	 * @relates float8
+//	 * @remark AVX1
+//	*/
+//	DISPATCHED_TRI_FUNC(vfmadd, _float8, HAS_AVX1)
+//	{
+//		BODY(_mm256_fmadd_ps(a.val, b.val, _float8(c).val));
+//	}
 	/**
 	 * @brief fused multiply sub
 	 * @relates float8

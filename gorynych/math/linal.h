@@ -699,5 +699,5 @@ namespace zzsystems { namespace gorynych {
 	}
 }}
 
-#include "matrix_specialization.h"
+#include "linal_spec.h"
 

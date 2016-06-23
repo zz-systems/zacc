@@ -46,6 +46,22 @@
 namespace zzsystems { namespace gorynych {
 	using namespace std;
 
+
+	template<typename T>
+	struct innermost_impl
+	{
+		using type = T;
+	};
+
+	template<template<typename...> class E, typename Head, typename... Tail>
+	struct innermost_impl<E<Head, Tail...>>
+	{
+		using type = typename innermost_impl<Head>::type;
+	};
+
+	template<typename T>
+	using innermost = typename innermost_impl<T>::type;
+
 	/**
 	 * @struct static_dispatcher
 	 * @brief "fallback" (erroneous) type dispatcher
@@ -77,6 +93,13 @@ namespace zzsystems { namespace gorynych {
 		/// @returns string with the unit name
 		static constexpr const char* unit_name() { return "FPU"; }
 	};
+
+	template<typename T, typename enable = void>
+	struct resolve_type
+	{
+		static_assert(!is_same<enable, void>::value, "fail");
+	};
+
 
 #if defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA)
 
@@ -129,6 +152,41 @@ namespace zzsystems { namespace gorynych {
 		static constexpr const char* unit_name() { return "AVX2"; }
 	};
 #endif
+
+
+	template<typename T>
+	struct resolve_type<T,
+        enable_if_t<(is_vreal<T>::value || is_vint<T>::value)>>
+	{
+		typedef typename static_dispatcher<innermost<T>>::vreal vreal;
+		//using vint  = typename static_dispatcher<innermost<T>>::vint;
+		typedef typename static_dispatcher<innermost<T>>::vint vint;
+
+		typedef float sreal;
+		typedef int sint;
+
+		typedef conditional_t<is_vreal<T>::value, float, int> scalar_t;
+	};
+
+//
+//	template<typename T>
+//	struct resolve_type<T, enable_if_t<is_same<T, float>::value || is_same<T, int>::value>>
+//	{
+//		typedef float vreal;
+//		typedef int vint;
+//
+//		typedef float sreal;
+//		typedef int sint;
+//	};
+
+//	template<template <typename> class vtype, typename capabilitys>
+//	struct resolve_type : public resolve_type<<innermost<vtype>::type>
+//	{
+//	};
+
+#define _vreal typename static_dispatcher<capability>::vreal
+#define _vint typename static_dispatcher<capability>::vint
+
 
 /// @def BRANCH(branch_name, body)
 /// @brief branch template

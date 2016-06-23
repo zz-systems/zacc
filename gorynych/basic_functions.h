@@ -196,6 +196,15 @@ namespace zzsystems {
 			BODY(vclamp<vreal>(a, -1073741824.0, 1073741824.0));
 		}
 
+		UN_FUNC(visinf, double)
+		{
+			BODY(a == std::numeric_limits<double>::infinity());
+		}
+
+		UN_FUNC(visinf, float)
+		{
+			BODY(a == std::numeric_limits<float>::infinity());
+		}
 		// Rounding ====================================================================================================
 
 		/// @fn vtrunc()

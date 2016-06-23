@@ -386,6 +386,85 @@ namespace zzsystems { namespace gorynych {
 	#define DISPATCHED_TRI_FUNC(name, type, condition) \
 		DISPATCHED_RET(type, condition) name(const type VREF a, const type VREF b, const type VREF c)
 
+	/// @def UN_OP_STUB(op, type, convertable)
+	/// @brief shortcut: Converting unary operator
+	/// @param op operator
+	/// @param type return and argument a type
+	/// @param convertable argument b type
+	#define UN_FUNC_STUB(func, type, convertable) \
+		/** @fn operator##op##() */ \
+		/** @brief unary op operator */ \
+		/** Used for scalar<->vector compatibility */ \
+		/** @param a scalar */ \
+		/** @returns vector value (type) */ \
+		inline friend const type func(const convertable VREF a)	{ return func(static_cast<type>(a)); }
+
+	/// @def BIN_OP_STUB_AB(op, type, convertable)
+	/// @brief shortcut: Converting binary operator (A <- A op (A)B)
+	/// @param op operator
+	/// @param type return and argument a type
+	/// @param convertable argument b type
+	#define BIN_FUNC_STUB_AB(func, type, convertable) \
+		/** @fn operator##op##() */ \
+		/** @brief binary op operator */ \
+		/** Used for scalar<->vector compatibility */ \
+		/** @param a vector */ \
+		/** @param b scalar */ \
+		/** @returns vector value (type) */ \
+		inline friend type func(const type VREF a, const convertable VREF b) { return func(a, static_cast<type>(b)); }
+
+	/// @def BIN_OP_STUB_BA(op, type, convertable)
+	/// @brief shortcut: Converting binary operator (A <- (A)B op A)
+	/// @param op operator
+	/// @param type return and argument a type
+	/// @param convertable argument b type
+	#define BIN_FUNC_STUB_BA(func, type, convertable) \
+		/** @fn operator##op##() */ \
+		/** @brief binary op operator */ \
+		/** Used for scalar<->vector compatibility */ \
+		/** @param a scalar */ \
+		/** @param b vector */ \
+		/** @returns vector value (type) */ \
+		inline friend type func (const convertable VREF a, const type VREF b) { return func(static_cast<type>(a), b); }
+
+
+		/// @def BIN_OP_STUB_AB(op, type, convertable)
+		/// @brief shortcut: Converting binary operator (A <- A op (A)B)
+		/// @param op operator
+		/// @param type return and argument a type
+		/// @param convertable argument b type
+	#define TRI_FUNC_STUB_AB(func, type, convertable) \
+		/** @fn operator##op##() */ \
+		/** @brief binary op operator */ \
+		/** Used for scalar<->vector compatibility */ \
+		/** @param a vector */ \
+		/** @param b scalar */ \
+		/** @returns vector value (type) */ \
+		inline friend type func(const type VREF a, const type VREF b, const convertable VREF c) { return func(a, b, static_cast<type>(c)); }
+
+		/// @def BIN_OP_STUB_BA(op, type, convertable)
+		/// @brief shortcut: Converting binary operator (A <- (A)B op A)
+		/// @param op operator
+		/// @param type return and argument a type
+		/// @param convertable argument b type
+	#define TRI_FUNC_STUB_BA(func, type, convertable) \
+		/** @fn operator##op##() */ \
+		/** @brief binary op operator */ \
+		/** Used for scalar<->vector compatibility */ \
+		/** @param a scalar */ \
+		/** @param b vector */ \
+		/** @returns vector value (type) */ \
+		inline friend type func (const convertable VREF a, const type VREF b) { return static_cast<type>(a) op b; }
+
+	/// @def BIN_OP_STUB(op, type, convertable)
+	/// @brief shortcut: Permutated pair of converting binary operators
+	/// @param op operator
+	/// @param type return and argument a type
+	/// @param convertable argument b type
+	#define BIN_FUNC_STUB(op, type, convertable) \
+		BIN_FUNC_STUB_AB(op, type, convertable) \
+		BIN_FUNC_STUB_BA(op, type, convertable)
+
 	/// @}
 	// Function/Operator bodies ========================================================================================
 
