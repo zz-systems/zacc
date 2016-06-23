@@ -52,7 +52,7 @@
 #include "dependencies.h"
 #include "fastload.h"
 #include "math/linal.h"
-#include "math/trigonometry.h"
+//#include "math/trigonometry.h"
 
 #ifdef _MSC_VER
 // prevent 'decorated name length exceeded, name was truncated'
