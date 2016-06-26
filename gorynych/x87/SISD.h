@@ -23,30 +23,32 @@
 //---------------------------------------------------------------------------------
 #pragma once
 
+/**
+ * @file SISD.h
+ *
+ * @brief Additional x87 wrapper functions and types
+ */
+
 #include "../dependencies.h"
 
 namespace zzsystems { namespace gorynych {
 
 
-	// Load/Store ===============================================================================================
-		
-	inline void extract(int& src, int *target) 			{ target[0] = src; }
+	// Memory access: extract, gather, scatter (todo) ==================================================================
+
+	/// extract int scalar value to a memory location
 	inline void extract(const int& src, int* target)	{ target[0] = src; }
 
-	inline void extract(float& src, float* target)				{ target[0] = src; }
+	/// extract float scalar value to a memory location
 	inline void extract(const float& src, float *target)		{ target[0] = src; }
 
-	inline void extract(double& src, double * target)			{ target[0] = src; }
-	inline void extract(const double& src, double *target)		{ target[0] = src; }
-
-
-	
-
+	/// gather int scalar value from a memory location by an index scalar
 	inline int vgather(const int* memloc, size_t index)
 	{
 		return memloc[index];
 	}
 
+	/// gather float scalar value from a memory location by an index scalar
 	inline float vgather(const float* memloc, size_t index)
 	{
 		return memloc[index];

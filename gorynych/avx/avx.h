@@ -23,6 +23,11 @@
 //---------------------------------------------------------------------------------
 #pragma once
 
+/**
+ * @file avx.h
+ *
+ * @brief Additional SSE wrapper functions and types
+ */
 
 #include "int4x2.h"
 #include "int8.h"
@@ -30,157 +35,247 @@
 #include "double4.h"
 #include "../dependencies.h"
 
-
-
-// Traits =========================================================================================================
-namespace std {
-
-}
-//template<>
-//struct std::_Is_floating_point<zzsystems::gorynych::double2>	: std::true_type {	};
-
 namespace zzsystems { namespace gorynych {
 
-	DISPATCHED
-	struct is_vint<zzsystems::gorynych::_int8 > : std::true_type {
-	};
+	// Type traits =====================================================================================================
 
-	DISPATCHED
-	struct is_vint<zzsystems::gorynych::_int4x2 > : std::true_type {
-	};
+	/// @name traits
 
-	DISPATCHED
-	struct is_vreal<zzsystems::gorynych::_float8 > : std::true_type {
-	};
-
-	DISPATCHED
-	struct scalar_type<_float8> : public __scalar_type<float>
+	/**
+	 * @brief is true type when the supplied type is an int8 vector
+	 */
+	DISPATCHED struct is_vint<zzsystems::gorynych::_int8 >
+			: public std::true_type
 	{};
 
-	DISPATCHED
-	struct scalar_type<_int8> : public __scalar_type<int32_t>
+	/**
+	 * @brief is true type when the supplied type is an int4x2 vector
+	 */
+	DISPATCHED struct is_vint<zzsystems::gorynych::_int4x2 >
+			: public std::true_type
 	{};
-	// Converting constructors ===================================================================================
-	DISPATCHED
-		_int8::int8(const _float8& rhs) : int8(rhs.val) { }
 
-	DISPATCHED
-		_int8::int8(const _int8& rhs) : int8(rhs.val) { }
+	/**
+	 * @brief is true type when the supplied type is a float8 vector
+	 */
+	DISPATCHED struct is_vreal<zzsystems::gorynych::_float8 >
+			: public std::true_type
+	{};
+
+	/**
+	 * @brief the underlying type for int8 vector is an int scalar
+	 */
+	DISPATCHED struct scalar_type<_int8>
+			: public __scalar_type<int>
+	{};
+
+	/**
+	 * @brief the underlying type for int4x2 vector is an int scalar
+	 */
+	DISPATCHED struct scalar_type<_int4x2>
+			: public __scalar_type<int>
+	{};
+
+	/**
+	* @brief the underlying type for float8 vector is a float scalar
+	*/
+	DISPATCHED struct scalar_type<_float8>
+			: public __scalar_type<float>
+	{};
+
+
+	/// @}
+
+	// Converting constructors =========================================================================================
+
+	/// @name converting constructors
+	/// @{
+
+	/// converting constructor for float->int vector conversion
+	DISPATCHED inline _int8::int8(const _float8& rhs) noexcept
+			: int8(rhs.val) { }
+
+	/// copy constructor for int vector
+	DISPATCHED inline _int8::int8(const _int8& rhs) noexcept
+			: int8(rhs.val) { }
 	//inline int8::int8(const double4& rhs) : int8(rhs.val) { }
 
-	DISPATCHED
-		_int4x2::int4x2(const _float8& rhs) : int4x2(_mm256_extractf128_ps(rhs.val, 1), _mm256_extractf128_ps(rhs.val, 0)) { }
-	DISPATCHED
-		_int4x2::int4x2(const _int4x2& rhs) : int4x2(rhs.hi, rhs.lo) { }
-	DISPATCHED
-		_int4x2::int4x2(const _int4& rhs_hi, const _int4& rhs_lo) : int4x2(rhs_hi.val, rhs_lo.val) { }
+	/// converting constructor for float->int vector conversion
+	DISPATCHED inline _int4x2::int4x2(const _float8& rhs) noexcept
+			: int4x2(rhs.val) { }
 
-	DISPATCHED
-		_float8::float8(const _float8& rhs) : float8(rhs.val) { }
-	DISPATCHED
-		_float8::float8(const _int8& rhs) : float8(rhs.val) { }
-	DISPATCHED
-		_float8::float8(const _int4x2& rhs)
-		: float8(_mm256_set_m128(_mm_cvtepi32_ps(rhs.hi.val), _mm_cvtepi32_ps(rhs.lo.val)))
+	/// copy constructor for int vector
+	DISPATCHED inline _int4x2::int4x2(const _int4x2& rhs) noexcept
+			: int4x2(rhs.lo, rhs.hi) { }
+
+	/// copy constructor for emulated int vector components
+	DISPATCHED inline _int4x2::int4x2(const _int4& lo, const _int4& hi) noexcept
+			: int4x2(lo.val, hi.val) { }
+
+	/// copy constructor for float vector
+	DISPATCHED inline _float8::float8(const _float8& rhs) noexcept
+			: float8(rhs.val) { }
+
+	/// converting constructor for int->float vector conversion
+	DISPATCHED inline _float8::float8(const _int8& rhs) noexcept
+			: float8(rhs.val) { }
+
+	/// converting constructor for int->float vector conversion
+	DISPATCHED inline _float8::float8(const _int4x2& rhs) noexcept
+		: float8(_mm256_set_m128(_mm_cvtepi32_ps(rhs.lo.val), _mm_cvtepi32_ps(rhs.hi.val)))
 	{
-		_mm256_zeroupper();
-	}
-	//inline float8::float8(const double4& rhs) : float8(rhs.val) { }
-
-	/*inline double4::double4(const float8& rhs) : double4(rhs.val) { }
-	inline double4::double4(const int8& rhs) : double4(rhs.val) { }
-	inline double4::double4(const double4& rhs) : double4(rhs.val) { }*/
-
-//	DISPATCHED void extract(_int8 &src, int32_t* target)
-//	{
-//		//return src.val.m256i_i32;
-//		__m256_store_si256(src.val, target);
-//		//for(size_t i = 0; i < dim<_int8>(); i++)
-//		//	target[i] = _mm256_extract_epi32(src.val, i);
-//	}
-
-	DISPATCHED void extract(const _int8 &src, int32_t* target)
-	{
-		__m256_store_si256(src.val, target);
+		//_mm256_zeroupper();
 	}
 
-	DISPATCHED void extract(const _int4x2 &src, int32_t* target)
+	/// @}
+
+	// Memory access: extract, gather, scatter (todo) ==================================================================
+
+	/// @name memory access
+	/// extract, gather, scatter (todo)
+	/// @{
+
+	/// @brief extract int vector values to a memory location
+	/// @param[in] src source vector
+	/// @param[out] target aligned storage
+	/// @remark target must be aligned
+	DISPATCHED void extract(const _int8 &src, int* target)
 	{
-		extract(src.hi, target);
-		extract(src.lo, target + 4);
+		_mm256_store_si256((__m256i*)target, src.val);
 	}
 
-	DISPATCHED void extract(const _float8 &src, float *target)
+	/// @brief extract int vector values to a memory location
+	/// @param[in] src source vector
+	/// @param[out] target aligned storage
+	/// @remark target must be aligned
+	DISPATCHED void extract(const _int4x2 VREF src, int* target)
+	{
+		extract(src.lo, target);
+		extract(src.hi, target + 4);
+	}
+
+	/// @brief extract float vector values to a memory location
+	/// @param[in] src source vector
+	/// @param[out] target aligned storage
+	/// @remark target must be aligned
+	DISPATCHED void extract(const _float8 VREF src, float *target)
 	{
 		_mm256_store_ps(target, src.val);
 	}
 
-	DISPATCHED	_int8 vgather(const int* memloc, _int8 index)
+	/// @brief gather float vector values
+	/// (a = b[c[i]])
+	/// from a memory location by an index vector
+	/// @param [in] memloc source
+	/// @param index index vector
+	DISPATCHED	_int8 vgather(const int* memloc, const _int8 VREF index)
 	{
 		return _mm256_i32gather_epi32(memloc, index.val, sizeof(int));
 	}
 
-	DISPATCHED	_int4x2 vgather(const int* memloc, _int4x2 index)
+	/// @brief gather float vector values
+	/// (a = b[c[i]])
+	/// from a memory location by an index vector
+	/// @param [in] memloc source
+	/// @param index index vector
+	DISPATCHED	_int4x2 vgather(const int* memloc, const _int4x2 VREF index)
 	{
 		return{ vgather(memloc, index.hi), vgather(memloc, index.lo) };
 	}
 
-	DISPATCHED	_float8 vgather(const float* memloc, _int4x2 index)
+	/// @brief gather float vector values
+	/// (a = b[c[i]])
+	/// from a memory location by an index vector
+	/// @param [in] memloc source
+	/// @param index index vector
+	DISPATCHED	_float8 vgather(const float* memloc, const _int4x2 VREF index)
 	{
 		return _mm256_set_m128(vgather(memloc, index.hi).val, vgather(memloc, index.lo).val);
 	}
 
-	DISPATCHED _float8 vgather(const float* memloc, _int8 index)
+	/// @brief gather float vector values
+	/// (a = b[c[i]])
+	/// from a memory location by an index vector
+	/// @param [in] memloc source
+	/// @param index index vector
+	DISPATCHED _float8 vgather(const float* memloc, const _int8 VREF index)
 	{
 		return _mm256_i32gather_ps(memloc, index.val, sizeof(float));
 	}
 
+	/// @}
 
-	// Integer SQRT =============================================================================================	
-	DISPATCHED_FUNC(vsqrt, _int8, _dispatcher::has_avx)
-		(const _int8 &a)
+	// Converting selector =============================================================================================
+
+	/// @name converting selectors
+	/// @{
+
+	/// @brief branchless if-then-else
+	/// with conversion from float->int vector
+	/// @param mask selector mask
+	/// @param b then-branch-value
+	/// @param c else-branch-value
+	DISPATCHED_FUNC(vsel, _int8, HAS_AVX2)
+		(const _float8 VREF mask, const _int8 VREF b, const _int8 VREF c)
 	{
-		BODY(_mm256_sqrt_ps(static_cast<_float8>(a).val));
+		BODY(vsel(_int8(_mm256_castps_si256(mask.val)), b, c));
 	}
 
-	DISPATCHED_FUNC(vsqrt, _int4x2, _dispatcher::has_avx)
-		(const _int4x2 &a)
+	/// @brief branchless if-then-else
+	/// with conversion from int->float vector
+	/// @param mask selector mask
+	/// @param b then-branch-value
+	/// @param c else-branch-value
+	DISPATCHED_FUNC(vsel, _float8, HAS_AVX2)
+		(const _int8 VREF mask, const _float8 VREF b, const _float8 VREF c)
 	{
-		BODY(_mm256_sqrt_ps(static_cast<_float8>(a).val));
-	}
-	// Integer DIV ==============================================================================================	
-
-	DISPATCHED_BIN_OP(/ , _int8, _dispatcher::has_avx2)
-	{
-		BODY(_mm256_div_ps(static_cast<_float8>(a).val, static_cast<_float8>(b).val));
-	}	
-
-	DISPATCHED_BIN_OP(/ , _int4x2, _dispatcher::has_avx)
-	{
-		BODY(_mm256_div_ps(static_cast<_float8>(a).val, static_cast<_float8>(b).val));
+		BODY(vsel(_float8(_mm256_castsi256_ps(mask.val)), b, c));
 	}
 
-	DISPATCHED_FUNC(vsel, _int8, _dispatcher::has_avx2)
-		(const _float8 &a, const _int8 &b, const _int8 &c)
-	{		
-		BODY(vsel(c, b, _int8(a)));
+	/// @brief branchless if-then-else
+	/// with conversion from float->int vector
+	/// @param mask selector mask
+	/// @param b then-branch-value
+	/// @param c else-branch-value
+	DISPATCHED_FUNC(vsel, _int4x2, HAS_AVX1 && !HAS_AVX2)
+		(const _float8 VREF mask, const _int4x2 VREF  b, const _int4x2 VREF c)
+	{
+		_int4x2 a = {
+				_int4(_mm_castps_si128(_mm256_extractf128_ps(mask.val, 0))),
+				_int4(_mm_castps_si128(_mm256_extractf128_ps(mask.val, 1)))
+		};
+
+		BODY(vsel(a, b, c));
 	}
 
-	DISPATCHED_FUNC(vsel, _float8, _dispatcher::has_avx2)
-		(const _int8 &a, const _float8 &b, const _float8 &c)
+	/// @brief branchless if-then-else
+	/// with conversion from int->float vector
+	/// @param mask selector mask
+	/// @param b then-branch-value
+	/// @param c else-branch-value
+	DISPATCHED_FUNC(vsel, _float8, HAS_AVX1 && !HAS_AVX2)
+		(const _int4x2 VREF mask, const _float8 VREF b, const _float8 VREF c)
 	{
-		BODY(vsel(c, b, _float8(a)));
+		auto a = _mm256_set_m128(_mm_castsi128_ps(mask.lo.val), _mm_castsi128_ps(mask.hi.val));
+		BODY(vsel(_float8(a), b, c));
 	}
 
-	DISPATCHED_FUNC(vsel, _int4x2, _dispatcher::has_avx && !_dispatcher::has_avx2)
-		(const _float8 &a, const _int4x2 &b, const _int4x2 &c)
+	/// @}
+
+	DISPATCHED_FUNC(visinf, _float8, HAS_AVX2) (const _float8 VREF a)
 	{
-		BODY(vsel(c, b, _int4x2(a.val)));
+		auto ia = _int8(_mm256_castps_si256(a.val));
+
+		BODY(ia == 0x7F800000 || ia == 0xFF800000);
 	}
 
-	DISPATCHED_FUNC(vsel, _float8, _dispatcher::has_avx && !_dispatcher::has_avx2)
-		(const _int4x2 &a, const _float8 &b, const _float8 &c)
+	DISPATCHED_FUNC(visinf, _float8, HAS_AVX1 && !HAS_AVX2) (const _float8 VREF a)
 	{
-		BODY(vsel(c, b, _float8(a)));
+		_int4x2 ia = {
+				_int4(_mm_castps_si128(_mm256_extractf128_ps(a.val, 0))),
+				_int4(_mm_castps_si128(_mm256_extractf128_ps(a.val, 1)))
+		};
+
+		BODY(ia == 0x7F800000 || ia == 0xFF800000);
 	}
 }}

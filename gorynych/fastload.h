@@ -24,18 +24,25 @@
 
 #pragma once
 
-// Theoretically constant generation (up to a sane limit) instead of loading from memory is faster.
-// This is yet to be tested / benchmarked.
+/**
+ * @file fastload.h
+ *
+ * @brief constant generation
+ *
+ * Theoretically constant generation (up to a sane limit) instead of loading from memory is faster.
+ * This is yet to be tested / benchmarked.
+ */
 
 #include "dependencies.h"
-#include "dispatch.h"
+#include "platform/dispatch.h"
 #include "gorynych.h"
 
 namespace zzsystems { namespace gorynych
 {	
 	
-	// Shorcut for "constant" declaration
-#define CONSTDEF(TType, name, body) static inline TType name() { return static_cast<TType>(body); }
+/// @def CONSTDEF(type, name, body)
+/// @brief shorcut: "constant" declaration
+#define CONSTDEF(type, name, body) static inline type name() { return static_cast<type>(body); }
 
 	ANY(TType)
 	struct consts
@@ -78,7 +85,7 @@ namespace zzsystems { namespace gorynych
 	struct ccl<_float4>
 	{
 		static inline _float4 zeros()		{ return _mm_setzero_ps();}
-		static inline _float4 ones() 		{ return _mm_castsi128_ps(_mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128())); }
+		static inline _float4 ones() 		{ return _mm_cmpeq_ps(_mm_setzero_ps(), _mm_setzero_ps()); }// _mm_castsi128_ps(_mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128())); }
 		//static inline _float4 min() 		{ return -(ccl<_int4>::min()); }
 		//static inline _float4 max() 		{ return (ccl<_int4>::max()); }
 		//static inline _float4 sign1all0() 	{ return _mm_castsi128_ps(ccl<_int4>::sign1all0().val);}
@@ -124,7 +131,7 @@ namespace zzsystems { namespace gorynych
 	struct ccl<_float8>
 	{
 		static inline _float8 zeros()		{ return _mm256_setzero_ps();}
-		static inline _float8 ones() 		{ return _mm256_castsi256_ps(_mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256())); }
+		static inline _float8 ones() 		{ return _mm256_cmp_ps(_mm256_setzero_ps(), _mm256_setzero_ps(), _CMP_EQ_OQ); }
 		static inline _float8 min() 		{ return -ccl<_int4x2>::min(); }
 		static inline _float8 max() 		{ return ccl<_int4x2>::max(); }
 		//static inline _float8 sign1all0() 	{ return _mm256_castsi256_ps(_mm256_set_m128i(ccl<_int4>::sign1all0().val, ccl<_int4>::zeros().val));}
@@ -148,50 +155,35 @@ struct cfl : ccl<type>
 #define CFL_SPECIALIZATIONS(capability) \
 	CFL_SPECIALIZATION(capability, -1) 	{ return ccl<CFL_TYPE(capability)>::ones(); } \
 	CFL_SPECIALIZATION(capability, 0) 	{ return ccl<CFL_TYPE(capability)>::zeros(); } \
-	CFL_SPECIALIZATION(capability, 1) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31; } \
-	CFL_SPECIALIZATION(capability, 2) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 1; } \
-	CFL_SPECIALIZATION(capability, 3) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30; } \
-	CFL_SPECIALIZATION(capability, 4) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 2; } \
-	CFL_SPECIALIZATION(capability, 5) 	{ return cfl<CFL_TYPE(capability), 1>::val() + cfl<CFL_TYPE(capability), 4>::val(); } \
-	CFL_SPECIALIZATION(capability, 6) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30 << 1; } \
-	CFL_SPECIALIZATION(capability, 7) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 29; } \
-	CFL_SPECIALIZATION(capability, 8) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 3; } \
-	CFL_SPECIALIZATION(capability, 9) 	{ return cfl<CFL_TYPE(capability), 8>::val() + cfl<CFL_TYPE(capability), 1>::val(); } \
-	CFL_SPECIALIZATION(capability, 10) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 3>::val(); } \
-	CFL_SPECIALIZATION(capability, 11) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 4>::val(); } \
-	CFL_SPECIALIZATION(capability, 12) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30 << 2; } \
-	CFL_SPECIALIZATION(capability, 13) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 6>::val(); } \
-	CFL_SPECIALIZATION(capability, 14) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 29 << 1; } \
-	CFL_SPECIALIZATION(capability, 15) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 8>::val(); }\
+	/*CFL_SPECIALIZATION(capability, 1) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31; }*/ \
+	/*CFL_SPECIALIZATION(capability, 2) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 1; } */\
+	/*CFL_SPECIALIZATION(capability, 3) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30; } */\
+	/*CFL_SPECIALIZATION(capability, 4) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 2; } */\
+	/*CFL_SPECIALIZATION(capability, 5) 	{ return cfl<CFL_TYPE(capability), 1>::val() + cfl<CFL_TYPE(capability), 4>::val(); } */\
+	/*CFL_SPECIALIZATION(capability, 6) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30 << 1; } */\
+	/*CFL_SPECIALIZATION(capability, 7) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 29; } */\
+	/*CFL_SPECIALIZATION(capability, 8) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 31 << 3; } */\
+	/*CFL_SPECIALIZATION(capability, 9) 	{ return cfl<CFL_TYPE(capability), 8>::val() + cfl<CFL_TYPE(capability), 1>::val(); } */ \
+	/*CFL_SPECIALIZATION(capability, 10) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 3>::val(); } */ \
+	/*CFL_SPECIALIZATION(capability, 11) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 4>::val(); } */\
+	/*CFL_SPECIALIZATION(capability, 12) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 30 << 2; } */\
+	/*CFL_SPECIALIZATION(capability, 13) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 6>::val(); } */\
+	/*CFL_SPECIALIZATION(capability, 14) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 29 << 1; } */\
+	/*CFL_SPECIALIZATION(capability, 15) 	{ return cfl<CFL_TYPE(capability), 7>::val() + cfl<CFL_TYPE(capability), 8>::val(); }*/\
+	/*CFL_SPECIALIZATION(capability, 0xFF) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 24; } */\
+	/*CFL_SPECIALIZATION(capability, 0x7FFFFFFF) 	{ return ccl<CFL_TYPE(capability)>::ones() >> 1; }*/ \
 	template<int value> \
 	struct cfl<static_dispatcher<capability>::vreal, value> \
 	{ \
 		static inline static_dispatcher<capability>::vreal val() 	{ return cfl<static_dispatcher<capability>::vint, value>::val(); } \
 	}
-/*
-#if defined(COMPILE_AVX2)
-		CFL_SPECIALIZATIONS(capability_AVX2);
-#elif defined(COMPILE_AVX1)
-		CFL_SPECIALIZATIONS(capability_AVX1);
-#elif defined(COMPILE_SSE4FMA)
-		CFL_SPECIALIZATIONS(capability_SSE4FMA);
-#elif defined(COMPILE_SSE4)
-        CFL_SPECIALIZATIONS(capability_SSE4);
-#elif defined(COMPILE_SSSE3)
-        CFL_SPECIALIZATIONS(capability_SSSE3);
-#elif defined(COMPILE_SSE3)
-        CFL_SPECIALIZATIONS(capability_SSE3);
-#elif defined(COMPILE_SSE2)
-        CFL_SPECIALIZATIONS(capability_SSE2);
-#else
-        CFL_SPECIALIZATIONS(capability_FPU);
 
-        //template<> float ccl<float>::sign1all0() 	{ return -0 }
-		//template<> float ccl<float>::sign0all1() 	{ int temp = 0x7FFFFFFF; return *reinterpret_cast<float*>(&temp); }
+#if !defined(COMPILE_FPU)
+#define BRANCH_DEF(branch) CFL_SPECIALIZATIONS(capability_##branch);
+	STATIC_DISPATCH_ONE_RAW()
+#undef BRANCH_DEF
 #endif
-#undef CFL_SPECIALIZATIONS
-*/
-//#endif
+
 #define FLR cfl<vreal>
 #define FLI cfl<vint>
 

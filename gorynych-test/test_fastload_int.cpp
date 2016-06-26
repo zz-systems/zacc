@@ -2,53 +2,13 @@
 // Created by szuyev on 17.05.16.
 //
 
-#include "../gorynych/unit_test_ext.h"
-#include "../../Catch/single_include/catch.hpp"
+//#include "../Catch/single_include/catch.hpp"
 #include "../gorynych/gorynych.h"
+#include "test_extensions.h"
 
-namespace zzsystems
-{
-    namespace gorynych
-    {
-        namespace  test
-        {
+namespace zzsystems { namespace gorynych { namespace  test {
 
-//#if defined(COMPILE_AVX2) || defined(COMPILE_AVX1)
-//    #define TYPE_PREFIX "int8"
-//#elif defined(COMPILE_SSE4FMA) || defined(COMPILE_SSE4) || defined(COMPILE_SSSE3) || defined(COMPILE_SSE3) || defined(COMPILE_SSE2)
-//    #define TYPE_PREFIX "int4"
-//#else
-//    #define TYPE_PREFIX "int"
-//#endif
-
-#if defined(COMPILE_AVX2)
-            using vint = int8<capability_AVX2>;
-    #define TYPE_PREFIX "fastload - int8 - avx2"
-#elif defined(COMPILE_AVX1)
-            using vint = int8<capability_AVX1>;
-    #define TYPE_PREFIX "fastload - int8 - avx1"
-#elif defined(COMPILE_SSE4FMA)
-            using vint = int4<capability_SSE4FMA>;
-    #define TYPE_PREFIX "fastload - int4 - sse4 fma"
-#elif defined(COMPILE_SSE4)
-            using vint = int4<capability_SSE4>;
-    #define TYPE_PREFIX "fastload - int4 - sse4"
-#elif defined(COMPILE_SSSE3)
-            using vint = int4<capability_SSSE3>;
-    #define TYPE_PREFIX "fastload - int4 - ssse3"
-#elif defined(COMPILE_SSE3)
-            using vint = int4<capability_SSE3>;
-    #define TYPE_PREFIX "fastload - int4 - sse3"
-#elif defined(COMPILE_SSE2)
-            using vint = int4<capability_SSE2>;
-    #define TYPE_PREFIX "fastload - int4 - sse2"
-#else
-            using vint = int;
-#define TYPE_PREFIX "fastload - int1 - x87"
-#endif
-
-            using sint = int;
-            using sinti = int;
+#define TYPE_PREFIX TEST_PREFIX("fastload int")
 
 
 //            TEST_CASE(TYPE_PREFIX" fastload min", "[fastload]")

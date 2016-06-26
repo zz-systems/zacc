@@ -2,53 +2,12 @@
 // Created by szuyev on 17.05.16.
 //
 
-#include "../gorynych/unit_test_ext.h"
-#include "../../Catch/single_include/catch.hpp"
 #include "../gorynych/gorynych.h"
+#include "test_extensions.h"
 
-namespace zzsystems
-{
-    namespace gorynych
-    {
-        namespace  test
-        {
+namespace zzsystems { namespace gorynych { namespace  test {
 
-//#if defined(COMPILE_AVX2) || defined(COMPILE_AVX1)
-//    #define TYPE_PREFIX "float8"
-//#elif defined(COMPILE_SSE4FMA) || defined(COMPILE_SSE4) || defined(COMPILE_SSSE3) || defined(COMPILE_SSE3) || defined(COMPILE_SSE2)
-//    #define TYPE_PREFIX "float4"
-//#else
-//    #define TYPE_PREFIX "float"
-//#endif
-
-#if defined(COMPILE_AVX2)
-            using vreal = float8<capability_AVX2>;
-    #define TYPE_PREFIX "float8 - avx2"
-#elif defined(COMPILE_AVX1)
-            using vreal = float8<capability_AVX1>;
-    #define TYPE_PREFIX "float8 - avx1"
-#elif defined(COMPILE_SSE4FMA)
-            using vreal = float4<capability_SSE4FMA>;
-    #define TYPE_PREFIX "float4 - sse4 fma"
-#elif defined(COMPILE_SSE4)
-            using vreal = float4<capability_SSE4>;
-    #define TYPE_PREFIX "float4 - sse4"
-#elif defined(COMPILE_SSSE3)
-            using vreal = float4<capability_SSSE3>;
-    #define TYPE_PREFIX "float4 - ssse3"
-#elif defined(COMPILE_SSE3)
-            using vreal = float4<capability_SSE3>;
-    #define TYPE_PREFIX "float4 - sse3"
-#elif defined(COMPILE_SSE2)
-            using vreal = float4<capability_SSE2>;
-    #define TYPE_PREFIX "float4 - sse2"
-#else
-            using vreal = float;
-#define TYPE_PREFIX "float1 - x87"
-#endif
-
-            using sreal = float;
-            using stesti = int;
+#define TYPE_PREFIX TEST_PREFIX("fastload float")
 
             const float _num1 = 45.56345f;
             const float _num2 = -23.00005f;
@@ -141,8 +100,6 @@ namespace zzsystems
             {
                 test<vreal, sreal>([]() { return 15; }, []() { return cfl<vreal, 15>::val(); });
             }
-
-
         }
     }
 }

@@ -23,24 +23,25 @@
 //---------------------------------------------------------------------------------
 #pragma once
 
-// Code to determine system capabilities at runtime 
+/**
+ * @file system_info.h
+ * @brief system capability detection at runtime
+ */
 
 #include <algorithm>
 #include <iostream>
 
 #ifdef _WIN32
 
-//  Windows
+/// MSVC CPUID
 #define cpuid(info, x)    __cpuidex(info, x, 0)
 
 #else
 
 //  GCC Intrinsics
 #include <cpuid.h>
+/// gcc / clang CPUID
 #define cpuid(info, x) __cpuid_count(x, 0, info[0], info[1], info[2], info[3])
-//inline void cpuid(int info[4], int InfoType){
-//	__cpuid_count(InfoType, 0, info[0], info[1], info[2], info[3]);
-//}
 
 #endif
 
@@ -48,53 +49,60 @@ using namespace std;
 
 namespace zzsystems { namespace gorynych {
 
+	/// @enum capabilities
+	/// @brief relevant system capabilities
 	enum capabilities
 	{
-		CAPABILITY_NONE		= 0,
+		CAPABILITY_NONE		= 0, 		///< usuallly fallback to x87 FPU
 
-		CAPABILITY_SSE2		= 1 << 0,
-		CAPABILITY_SSE3		= 1 << 1,
-		CAPABILITY_SSSE3	= 1 << 2,
+		CAPABILITY_SSE2		= 1 << 0, 	///< SSE 2 support
+		CAPABILITY_SSE3		= 1 << 1,	///< SSE 3 support
+		CAPABILITY_SSSE3	= 1 << 2,	///< SSSE 3 support
 		
-		CAPABILITY_SSE41	= 1 << 3,
-		CAPABILITY_SSE42	= 1 << 4,
+		CAPABILITY_SSE41	= 1 << 3,  	///< SSE 4.1 support
+		CAPABILITY_SSE42	= 1 << 4,	///< SSE 4.2 support
 		
-		CAPABILITY_FMA3		= 1 << 5,
-		CAPABILITY_FMA4		= 1 << 6,
+		CAPABILITY_FMA3		= 1 << 5,	///< FMA 3 support
+		CAPABILITY_FMA4		= 1 << 6,	///< FMA 4 support
 
-		CAPABILITY_AVX1		= 1 << 7,
-		CAPABILITY_AVX2		= 1 << 8,
-		CAPABILITY_AVX512	= 1 << 9,
+		CAPABILITY_AVX1		= 1 << 7,	///< AVX support
+		CAPABILITY_AVX2		= 1 << 8,	///< AVX 2 support
+		CAPABILITY_AVX512	= 1 << 9, 	///< AVX 512 support
 
-		CAPABILITY_FASTFLOAT = 1 << 10,
+		CAPABILITY_FASTFLOAT = 1 << 10, ///< use faster float computations ( lower precision )
 
-		CAPABILITY_OPENCL	= 1 << 11,
-		CAPABILITY_FPGA		= 1 << 12
+		CAPABILITY_OPENCL	= 1 << 11, 	///< OPENCL support
+		CAPABILITY_FPGA		= 1 << 12	///< FPGA synthesis support?
 	};
 
+
 #if defined(FASTFLOAT)
-	using capability_AVX2		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 | CAPABILITY_AVX2 >;
-	using capability_AVX1		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 >;
-	using capability_SSE4FMA	= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_FMA3>;
-	using capability_SSE4		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41>;
-	using capability_SSSE3		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3>;
-	using capability_SSE3		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2 | CAPABILITY_SSE3>;
-	using capability_SSE2		= integral_constant<int, CAPABILITY_FASTFLOAT | CAPABILITY_SSE2>;
-	using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;
+#define FASTFLOAT_ENABLED CAPABILITY_FASTFLOAT
 #else
-		using capability_AVX2		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 | CAPABILITY_AVX2 >;
-		using capability_AVX1		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 >;
-		using capability_SSE4FMA	= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_FMA3>;
-		using capability_SSE4		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41>;
-		using capability_SSSE3		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3>;
-		using capability_SSE3		= integral_constant<int, CAPABILITY_SSE2 | CAPABILITY_SSE3>;
-		using capability_SSE2		= integral_constant<int, CAPABILITY_SSE2>;
-		using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;
+#define FASTFLOAT_ENABLED 0
 #endif
+
+	using capability_AVX2		= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 | CAPABILITY_AVX2 >;
+	using capability_AVX1		= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_AVX1 >;
+	using capability_SSE4FMA	= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41 | CAPABILITY_FMA3>;
+	using capability_SSE4		= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3 | CAPABILITY_SSE41>;
+	using capability_SSSE3		= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3>;
+	using capability_SSE3		= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2 | CAPABILITY_SSE3>;
+	using capability_SSE2		= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2>;
+	using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;
+
+#undef FASTFLOAT_ENABLED
+
+	/// @brief retrieves platform info
+	/// which is later used to select an appropriate execution branch
 	struct system_info
 	{
+		/// currently set capabilities
 		int feature_flags;
 
+		/// @brief populates the flags with system capabilities
+		/// @todo : check xrstore
+		/// @todo GPU check
 		system_info()
 			: feature_flags(CAPABILITY_NONE)
 		{
@@ -135,60 +143,77 @@ namespace zzsystems { namespace gorynych {
 			//	has_avx1 = (xcrFeatureMask & 0x6) || false;
 			//}
 		}
-		
+
+		/// @brief checks if a specific flag is set
+		/// @returns true if flag is set
 		bool hasFlag(const capabilities c) const
 		{
 			return 0 != (this->feature_flags & c);
 		}
 
+		/// @brief sets or resets feature flag
+		/// @param c capability flag to change
+		/// @param enable set/reset
+		/// useful for deactivation of CPU features
+		/// @todo validation: disallow setting features not supported by the system
 		void setFlag(const capabilities c, bool enable)
 		{
 			this->feature_flags = (feature_flags & ~(c)) | ((enable ? 1 : 0) & c);
 		}
 
+		/// checks if AVX 2 (and AVX 1) are avaliable
 		bool hasAVX2() const
 		{
 			return hasFlag(CAPABILITY_AVX1) && hasFlag(CAPABILITY_AVX2);
 		}
 
+		/// checks if AVX 1 is avaliable
 		bool hasAVX1() const
 		{
 			return hasFlag(CAPABILITY_AVX1);// && !hasFlag(CAPABILITY_AVX2);
 		}
-		
+
+		/// checks if SSE 4.1 or SSE 4.1  are avaliable
 		bool hasSSE4() const
 		{
 			return hasFlag(CAPABILITY_SSE42) || hasFlag(CAPABILITY_SSE41);
 		}
 
+		/// checks if SSE 4 and FMA3/4 are avaliable
 		bool hasSSE4FMA() const
 		{
 			return hasSSE4() && (hasFlag(CAPABILITY_FMA3) || hasFlag(CAPABILITY_FMA4));
 		}
-		
+
+		/// checks if SSSE3 and SSE3 are avaliable
 		bool hasSSSE3() const
 		{
 			return hasFlag(CAPABILITY_SSSE3) && hasSSE3();
 		}
 
+		/// checks if SSE3 is avaliable
 		bool hasSSE3() const
 		{
 			return hasFlag(CAPABILITY_SSE3) && hasSSE2();
 		}
 
+		/// checks if SSE2 is avaliable
 		bool hasSSE2() const
 		{
 			return hasFlag(CAPABILITY_SSE2);
 		}
 
+		/// checks if x87 FPU is avaliable :O
 		static bool hasFPU()
 		{
 			return true;
 		}
 
+		/// pretty-prints the currently supperted features
 		friend ostream& operator<<(ostream& os, const system_info& dt);
 	};
 
+	/// pretty-prints the currently supperted features
 	inline ostream& operator<<(ostream& os, const system_info& cap)
 	{
 		os << "Has SSE2:	"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE2) << endl;
@@ -209,36 +234,84 @@ namespace zzsystems { namespace gorynych {
 		return os;
 	}
 
-	// Used to distinguish branch-dependant code at compile-time
+	/// Used to distinguish branch-dependant code at compile-time
+	/// @ref VECTORIZED
+	/// @ref DISPATCHED
+	/// @todo GPU check
 	DISPATCHED
 		struct dispatcher
 	{
-		static constexpr int feature_flags = dispatch_mask();
+		/// current capabilities
+		static constexpr int feature_flags = capability();
 
-		static constexpr bool has_sse2			= 0 != (dispatch_mask() & CAPABILITY_SSE2);
-		static constexpr bool has_sse3			= 0 != (dispatch_mask() & CAPABILITY_SSE3);
-		static constexpr bool has_ssse3			= 0 != (dispatch_mask() & CAPABILITY_SSSE3);
-		static constexpr bool has_fma			= 0 != (dispatch_mask() & CAPABILITY_FMA3) || (dispatch_mask() & CAPABILITY_FMA4);
-		static constexpr bool has_sse41			= 0 != (dispatch_mask() & CAPABILITY_SSE41);
-		static constexpr bool has_sse42			= 0 != (dispatch_mask() & CAPABILITY_SSE42);
-		static constexpr bool has_avx			= 0 != (dispatch_mask() & CAPABILITY_AVX1);
-		static constexpr bool has_avx2			= 0 != (dispatch_mask() & CAPABILITY_AVX2);
-		static constexpr bool has_avx512		= 0 != (dispatch_mask() & CAPABILITY_AVX512);
-		static constexpr bool use_fast_float	= 0 != (dispatch_mask() & CAPABILITY_FASTFLOAT);
+		/// sse 2 available?
+		static constexpr bool has_sse2			= 0 != (capability() & CAPABILITY_SSE2);
+		/// sse 3 available?
+		static constexpr bool has_sse3			= 0 != (capability() & CAPABILITY_SSE3);
+		/// ssse 3 available?
+		static constexpr bool has_ssse3			= 0 != (capability() & CAPABILITY_SSSE3);
+		/// fma available?
+		static constexpr bool has_fma			= 0 != (capability() & CAPABILITY_FMA3) || (capability() & CAPABILITY_FMA4);
+		/// sse 4.1 available?
+		static constexpr bool has_sse41			= 0 != (capability() & CAPABILITY_SSE41);
+		/// sse 4.2 available?
+		static constexpr bool has_sse42			= 0 != (capability() & CAPABILITY_SSE42);
+		/// avx 1 available?
+		static constexpr bool has_avx			= 0 != (capability() & CAPABILITY_AVX1);
+		/// avx 2 available?
+		static constexpr bool has_avx2			= 0 != (capability() & CAPABILITY_AVX2);
+		/// avx 512 available?
+		static constexpr bool has_avx512		= 0 != (capability() & CAPABILITY_AVX512);
+		/// fast (lower precision) float enabled?
+		static constexpr bool use_fast_float	= 0 != (capability() & CAPABILITY_FASTFLOAT);
 	};
 
-	// shortcuts
-	#define _dispatcher dispatcher<dispatch_mask>
+	/// @name dispatcher shortcuts
+	/// @{
 
+	/// dispatcher alias
+	#define _dispatcher dispatcher<capability>
+
+	/// @def HAS_SSE
+	/// @brief shortcut: check if SSE 2 is available
 	#define HAS_SSE _dispatcher::has_sse2
+
+	/// @def HAS_SSE3
+	/// @brief shortcut: check if SSE 3 is available
 	#define HAS_SSE3 _dispatcher::has_sse3
+
+	/// @def HAS_SSSE3
+	/// @brief shortcut: check if SSSE 3 is available
 	#define HAS_SSSE3 _dispatcher::has_ssse3
+
+	/// @def HAS_FMA
+	/// @brief shortcut: check if FMA 3/4 is available
 	#define HAS_FMA _dispatcher::has_fma
+
+	/// @def HAS_SSE41
+	/// @brief shortcut: check if SSE 4.1 is available
 	#define HAS_SSE41 _dispatcher::has_sse41
+
+	/// @def HAS_SSE42
+	/// @brief shortcut: check if SSE 4.2 is available
 	#define HAS_SSE42 _dispatcher::has_sse42
+
+	/// @def HAS_AVX1
+	/// @brief shortcut: check if AVX is available
 	#define HAS_AVX1 _dispatcher::has_avx
+
+	/// @def HAS_AVX2
+	/// @brief shortcut: check if AVX 2 is available
 	#define HAS_AVX2 _dispatcher::has_avx2
+
+	/// @def HAS_AVX512
+	/// @brief shortcut: check if AVX 512 is available
 	#define HAS_AVX512 _dispatcher::has_avx512
+
+	/// @def USE_FAST_FLOAT
+	/// @brief shortcut: check if fast float is active
 	#define USE_FAST_FLOAT _dispatcher::use_fast_float
+
+	/// @}
 
 }}

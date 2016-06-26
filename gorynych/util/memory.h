@@ -24,12 +24,17 @@
 
 #pragma once
 
+/**
+ * @file memory.h
+ * @brief utils for aligned memory
+ */
 #include <memory>
 
 namespace zzsystems { namespace gorynych {
 
-    // Origin: http://jmabille.github.io/blog/2014/12/06/aligned-memory-allocator/
 
+    /// @brief aligned allocator for std containers
+    /// @see http://jmabille.github.io/blog/2014/12/06/aligned-memory-allocator/
     template<class T, int N>
     class aligned_allocator {
 

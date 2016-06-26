@@ -24,7 +24,17 @@
 
 #pragma once
 
-#include <x86intrin.h>
+/**
+ * @file intrin.h
+ *
+ * @brief some additional intrinsiic extensions
+ */
+
+#if defined(_MSC_VER)
+	#include <intrin.h>
+#else 
+	#include <x86intrin.h>
+#endif
 
 // memory alignment
 #if defined(_MSC_VER) && _MSC_VER < 1900
@@ -53,10 +63,10 @@ inline bool _mm256_test_all_ones(__m256i val)
 
 
 #if defined(COMPILE_AVX2) || defined(COMPILE_AVX1)
-    #define SIMD_ALIGN alignas(32)
+    #define ALIGNED alignas(32)
 #elif defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA)
-    #define SIMD_ALIGN alignas(16)
+    #define ALIGNED alignas(16)
 #else
-    #define SIMD_ALIGN
+    #define ALIGNED
 #endif
 
