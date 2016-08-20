@@ -89,7 +89,7 @@ namespace zzsystems { namespace gorynych {
 	using capability_SSSE3		= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2 | CAPABILITY_SSE3 | CAPABILITY_SSSE3>;
 	using capability_SSE3		= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2 | CAPABILITY_SSE3>;
 	using capability_SSE2		= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2>;
-	using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;
+	using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;	
 
 #undef FASTFLOAT_ENABLED
 
@@ -211,6 +211,28 @@ namespace zzsystems { namespace gorynych {
 
 		/// pretty-prints the currently supperted features
 		friend ostream& operator<<(ostream& os, const system_info& dt);
+
+		static constexpr const char* getName(const capabilities c)
+		{
+			switch(c)
+			{
+				case CAPABILITY_SSE2: 	return "SSE2";
+				case CAPABILITY_SSE3: 	return "SSE3";
+				case CAPABILITY_SSSE3: 	return "SSSE3";
+				case CAPABILITY_SSE41: 	return "SSE4.1";
+				case CAPABILITY_SSE42: 	return "SSE4.2";
+				case CAPABILITY_FMA3: 	return "SSE4+FMA3";
+				case CAPABILITY_FMA4: 	return "SSE4+FMA4";
+				case CAPABILITY_AVX1: 	return "AVX1";
+				case CAPABILITY_AVX2: 	return "AVX2";
+				case CAPABILITY_AVX512: return "AVX512";
+				case CAPABILITY_OPENCL: return "OpenCL";
+				case CAPABILITY_FPGA: 	return "FPGA";
+
+				default: 
+					return "FPU";				
+			}
+		}
 	};
 
 	/// pretty-prints the currently supperted features
@@ -250,12 +272,21 @@ namespace zzsystems { namespace gorynych {
 		static constexpr bool has_sse3			= 0 != (capability() & CAPABILITY_SSE3);
 		/// ssse 3 available?
 		static constexpr bool has_ssse3			= 0 != (capability() & CAPABILITY_SSSE3);
+
+		// fma4 available?
+		static constexpr bool has_fma3			= 0 != (capability() & CAPABILITY_FMA3);
+		/// fma4 available?
+		static constexpr bool has_fma4			= 0 != (capability() & CAPABILITY_FMA4);
 		/// fma available?
-		static constexpr bool has_fma			= 0 != (capability() & CAPABILITY_FMA3) || (capability() & CAPABILITY_FMA4);
+		static constexpr bool has_fma			= has_fma3 || has_fma4;
+
 		/// sse 4.1 available?
 		static constexpr bool has_sse41			= 0 != (capability() & CAPABILITY_SSE41);
 		/// sse 4.2 available?
 		static constexpr bool has_sse42			= 0 != (capability() & CAPABILITY_SSE42);
+		/// sse 4 available?
+		static constexpr bool has_sse4			= has_sse41 || has_sse42;
+
 		/// avx 1 available?
 		static constexpr bool has_avx			= 0 != (capability() & CAPABILITY_AVX1);
 		/// avx 2 available?
@@ -284,6 +315,14 @@ namespace zzsystems { namespace gorynych {
 	/// @brief shortcut: check if SSSE 3 is available
 	#define HAS_SSSE3 _dispatcher::has_ssse3
 
+	/// @def HAS_FMA3
+	/// @brief shortcut: check if FMA 3 is available
+	#define HAS_FMA3 _dispatcher::has_fma3
+
+	/// @def HAS_FMA4
+	/// @brief shortcut: check if FMA 4 is available
+	#define HAS_FMA4 _dispatcher::has_fma4
+
 	/// @def HAS_FMA
 	/// @brief shortcut: check if FMA 3/4 is available
 	#define HAS_FMA _dispatcher::has_fma
@@ -295,6 +334,10 @@ namespace zzsystems { namespace gorynych {
 	/// @def HAS_SSE42
 	/// @brief shortcut: check if SSE 4.2 is available
 	#define HAS_SSE42 _dispatcher::has_sse42
+
+	/// @def HAS_SSE4
+	/// @brief shortcut: check if SSE 4.1/4.2 is available
+	#define HAS_SSE4 _dispatcher::has_sse4
 
 	/// @def HAS_AVX1
 	/// @brief shortcut: check if AVX is available

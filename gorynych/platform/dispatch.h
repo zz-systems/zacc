@@ -108,14 +108,31 @@ namespace zzsystems { namespace gorynych {
 	 * @brief SSE type dispatcher
 	 */
 	DISPATCHED struct static_dispatcher<capability,
-		typename enable_if<HAS_SSE && !HAS_AVX1 && !HAS_AVX2>::type>
+		enable_if_t<HAS_SSE && !HAS_AVX1 && !HAS_AVX2>>
 	{
 		typedef _int4 vint; 	///< vector int x4
 		typedef _float4 vreal;  ///< vector float x4
 
 		/// execution unit this dispatcher targets (SSE)
 		/// @returns string with the unit name
-		static constexpr const char* unit_name() { return "SSE"; }
+		static constexpr const char* unit_name() 
+		{ 
+			if(HAS_FMA3)
+				return system_info::getName(CAPABILITY_FMA3);
+			else if(HAS_FMA4)
+				return system_info::getName(CAPABILITY_FMA4);
+			else if(HAS_SSE42)
+				return system_info::getName(CAPABILITY_SSE42);
+			else if(HAS_SSE41)
+				return system_info::getName(CAPABILITY_SSE41);
+			else if(HAS_SSSE3)
+				return system_info::getName(CAPABILITY_SSSE3);
+			else if(HAS_SSE3)
+				return system_info::getName(CAPABILITY_SSE3);
+			
+
+			return system_info::getName(CAPABILITY_SSE2);
+		}
 	};
 
 #endif
