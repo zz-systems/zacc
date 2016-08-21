@@ -84,7 +84,7 @@ namespace zzsystems { namespace gorynych {
 	 * @brief x87 FPU type dispatcher
 	 */
 	DISPATCHED struct static_dispatcher<capability,
-		typename enable_if<!HAS_SSE && !HAS_AVX1 && !HAS_AVX2>::type>
+		enable_if_t<!HAS_SSE && !HAS_AVX1 && !HAS_AVX2 && !HAS_OPENCL>>
 	{
 		typedef int		vint;  ///< scalar int
 		typedef float	vreal; ///< scalar float
@@ -143,14 +143,14 @@ namespace zzsystems { namespace gorynych {
 	 * @brief AVX1 type dispatcher
 	 */
 	DISPATCHED struct static_dispatcher<capability,
-		typename enable_if<HAS_AVX1 && !HAS_AVX2>::type>
+		enable_if_t<HAS_AVX1 && !HAS_AVX2>>
 	{
 		typedef _int4x2 vint;  ///< emulated vector int x8
 		typedef _float8 vreal; ///< native vector float x8
 
 		/// execution unit this dispatcher targets (AVX1)
 		/// @returns string with the unit name
-		static constexpr const char* unit_name() { return "AVX1"; }
+		static constexpr const char* unit_name() { return system_info::getName(CAPABILITY_AVX1); }
 	};
 #endif
 #if defined(COMPILE_AVX2)
@@ -159,17 +159,33 @@ namespace zzsystems { namespace gorynych {
 	* @brief AVX2 type dispatcher
 	*/
 	DISPATCHED struct static_dispatcher<capability,
-		typename enable_if<HAS_AVX1 && HAS_AVX2>::type>
+		enable_if_t<HAS_AVX1 && HAS_AVX2>>
 	{
 		typedef _int8 vint; 	///< native vector int x8
 		typedef _float8 vreal; 	///< native vector float x8
 
 		/// execution unit this dispatcher targets (AVX2)
 		/// @returns string with the unit name
-		static constexpr const char* unit_name() { return "AVX2"; }
+		static constexpr const char* unit_name() { return system_info::getName(CAPABILITY_AVX2); }
 	};
 #endif
 
+#if defined(COMPILE_OPENCL)
+	/**
+	* @struct static_dispatcher
+	* @brief OpenCL type dispatcher
+	*/
+	DISPATCHED struct static_dispatcher<capability,
+		enable_if_t<HAS_OPENCL>>
+	{
+		typedef _int_cl vint; 		///< opencl int abstraction
+		typedef _float_cl vreal; 	///< opencl int abstraction
+
+		/// execution unit this dispatcher targets (AVX2)
+		/// @returns string with the unit name
+		static constexpr const char* unit_name() { return system_info::getName(CAPABILITY_OPENCL); }
+	};
+#endif
 
 	template<typename T>
 	struct resolve_type<T,
@@ -237,7 +253,8 @@ namespace zzsystems { namespace gorynych {
 /// @param body expression
 #define DYNAMIC_DISPATCH_ONE(sysinfo, body) \
 	do { \
-		CBRANCH(sysinfo, body, AVX2) \
+		CBRANCH(sysinfo, body, OPENCL) \
+		else CBRANCH(sysinfo, body, AVX2) \
 		else CBRANCH(sysinfo, body, AVX1) \
 		else CBRANCH(sysinfo, body, SSE4FMA)\
 		else CBRANCH(sysinfo, body, SSE4) \
@@ -255,6 +272,7 @@ namespace zzsystems { namespace gorynych {
 /// @param body expression
 #define DYNAMIC_DISPATCH_SOME(sysinfo, body) \
 	do { \
+		CBRANCH(sysinfo, body, OPENCL) \
 		CBRANCH(sysinfo, body, AVX2) \
 		CBRANCH(sysinfo, body, AVX1) \
 		CBRANCH(sysinfo, body, SSE4FMA) \
@@ -266,7 +284,9 @@ namespace zzsystems { namespace gorynych {
 	} while(false)
 
 
-#if defined(COMPILE_AVX2)
+#if defined(COMPILE_OPENCL)
+	#define STATIC_DISPATCH_ONE(body) BRANCH(OPENCL, body)
+#elif defined(COMPILE_AVX2)
 	#define STATIC_DISPATCH_ONE(body) BRANCH(AVX2, body)
 #elif defined(COMPILE_AVX1)
 	#define STATIC_DISPATCH_ONE(body) BRANCH(AVX1, body)
@@ -284,6 +304,12 @@ namespace zzsystems { namespace gorynych {
 	#define STATIC_DISPATCH_ONE(body) BRANCH(FPU, body)
 #endif
 
+
+#if defined(COMPILE_OPENCL)
+	#define STATIC_DISPATCH_OPENCL(body) body
+#else
+	#define STATIC_DISPATCH_OPENCL(body)
+#endif
 
 #if defined(COMPILE_AVX2)
 	#define STATIC_DISPATCH_AVX2(body) body
@@ -335,6 +361,7 @@ namespace zzsystems { namespace gorynych {
 
 
 #define STATIC_DISPATCH_SOME(body) \
+		STATIC_DISPATCH_OPENCL(BRANCH(OPENCL, body)) \
         STATIC_DISPATCH_AVX2(BRANCH(AVX2, body)) \
 		STATIC_DISPATCH_AVX1(BRANCH(AVX1, body)) \
 		STATIC_DISPATCH_SSE4FMA(BRANCH(SSE4FMA, body)) \
@@ -347,6 +374,7 @@ namespace zzsystems { namespace gorynych {
 
 #define BRANCH_DEF(branch)
 #define STATIC_DISPATCH_SOME_RAW() \
+		STATIC_DISPATCH_OPENCL(BRANCH_DEF(OPENCL)) \
         STATIC_DISPATCH_AVX2(BRANCH_DEF(AVX2)) \
 		STATIC_DISPATCH_AVX1(BRANCH_DEF(AVX1)) \
 		STATIC_DISPATCH_SSE4FMA(BRANCH_DEF(SSE4FMA)) \
@@ -357,7 +385,9 @@ namespace zzsystems { namespace gorynych {
 		STATIC_DISPATCH_FPU(BRANCH_DEF(FPU))
 #undef BRANCH_DEF
 
-#if defined(COMPILE_AVX2)
+#if defined(COMPILE_OPENCL)
+	#define STATIC_DISPATCH_ONE_RAW() STATIC_DISPATCH_OPENCL(BRANCH_DEF(OPENCL))
+#elif defined(COMPILE_AVX2)
 	#define STATIC_DISPATCH_ONE_RAW() STATIC_DISPATCH_AVX2(BRANCH_DEF(AVX2))
 #elif defined(COMPILE_AVX1)
 	#define STATIC_DISPATCH_ONE_RAW() STATIC_DISPATCH_AVX1(BRANCH_DEF(AVX1))

@@ -30,6 +30,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <CL/cl.hpp>
 
 #ifdef _WIN32
 
@@ -90,6 +91,7 @@ namespace zzsystems { namespace gorynych {
 	using capability_SSE3		= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2 | CAPABILITY_SSE3>;
 	using capability_SSE2		= integral_constant<int, FASTFLOAT_ENABLED | CAPABILITY_SSE2>;
 	using capability_FPU		= integral_constant<int, CAPABILITY_NONE>;	
+	using capability_OPENCL		= integral_constant<int, CAPABILITY_OPENCL>;
 
 #undef FASTFLOAT_ENABLED
 
@@ -142,6 +144,19 @@ namespace zzsystems { namespace gorynych {
 			//	unsigned long long xcrFeatureMask = _xgetbv(_XCR_XFEATURENABLED_MASK);
 			//	has_avx1 = (xcrFeatureMask & 0x6) || false;
 			//}
+
+			// OpenCL 
+			std::vector<cl::Platform> platforms;
+			cl::Platform::get(&platforms);
+
+			if(platforms.size() > 0)
+			{
+				std::vector<cl::Device> devices;
+				platforms[0].getDevices(CL_DEVICE_TYPE_GPU, &devices);
+				
+				if(devices.size() > 0)
+					feature_flags |= CAPABILITY_OPENCL;
+			}
 		}
 
 		/// @brief checks if a specific flag is set
@@ -159,6 +174,11 @@ namespace zzsystems { namespace gorynych {
 		void setFlag(const capabilities c, bool enable)
 		{
 			this->feature_flags = (feature_flags & ~(c)) | ((enable ? 1 : 0) & c);
+		}
+
+		bool hasOPENCL() const 
+		{
+			return hasFlag(CAPABILITY_OPENCL);
 		}
 
 		/// checks if AVX 2 (and AVX 1) are avaliable
@@ -212,7 +232,8 @@ namespace zzsystems { namespace gorynych {
 		/// pretty-prints the currently supperted features
 		friend ostream& operator<<(ostream& os, const system_info& dt);
 
-		static constexpr const char* getName(const capabilities c)
+		/// gets a string description for a capability
+		static const char* getName(const capabilities c)
 		{
 			switch(c)
 			{
@@ -238,21 +259,23 @@ namespace zzsystems { namespace gorynych {
 	/// pretty-prints the currently supperted features
 	inline ostream& operator<<(ostream& os, const system_info& cap)
 	{
-		os << "Has SSE2:	"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE2) << endl;
-		os << "Has SSE3:	"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE3)  << endl;
-		os << "Has SSSE3:	"	<< boolalpha << cap.hasFlag(CAPABILITY_SSSE3) << endl;
+		os << "Has SSE2:		"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE2) << endl;
+		os << "Has SSE3:		"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE3)  << endl;
+		os << "Has SSSE3:		"	<< boolalpha << cap.hasFlag(CAPABILITY_SSSE3) << endl;
 
-		os << "Has SSE4.1:	"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE41) << endl;
-		os << "Has SSE4.2:	"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE42) << endl;
+		os << "Has SSE4.1:		"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE41) << endl;
+		os << "Has SSE4.2:		"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE42) << endl;
 
-		os << "Has FMA3:	"	<< boolalpha << cap.hasFlag(CAPABILITY_FMA3) << endl;
+		os << "Has FMA3:		"	<< boolalpha << cap.hasFlag(CAPABILITY_FMA3) << endl;
+		os << "Has FMA4:		"	<< boolalpha << cap.hasFlag(CAPABILITY_FMA4) << endl;
 
 		//os << "Uses XRSTORE: "	<< cap.use_xrstore << endl;
 
-		os << "Has AVX1:	"	<< boolalpha << cap.hasFlag(CAPABILITY_AVX1) << endl;
-		os << "Has AVX2:	"	<< boolalpha << cap.hasFlag(CAPABILITY_AVX2) << endl;
-		os << "Has AVX512:	"	<< boolalpha << cap.hasFlag(CAPABILITY_AVX512) << endl;
+		os << "Has AVX1:		"	<< boolalpha << cap.hasFlag(CAPABILITY_AVX1) << endl;
+		os << "Has AVX2:		"	<< boolalpha << cap.hasFlag(CAPABILITY_AVX2) << endl;
+		os << "Has AVX512:		"	<< boolalpha << cap.hasFlag(CAPABILITY_AVX512) << endl;
 
+		os << "Has OpenCL@GPU:	" 	<< boolalpha << cap.hasFlag(CAPABILITY_OPENCL) << endl;
 		return os;
 	}
 
@@ -293,8 +316,12 @@ namespace zzsystems { namespace gorynych {
 		static constexpr bool has_avx2			= 0 != (capability() & CAPABILITY_AVX2);
 		/// avx 512 available?
 		static constexpr bool has_avx512		= 0 != (capability() & CAPABILITY_AVX512);
+
+		/// openCL available?
+		static constexpr bool has_openCL 		= 0 != (capability() & CAPABILITY_OPENCL);
+
 		/// fast (lower precision) float enabled?
-		static constexpr bool use_fast_float	= 0 != (capability() & CAPABILITY_FASTFLOAT);
+		static constexpr bool use_fast_float	= 0 != (capability() & CAPABILITY_FASTFLOAT);		
 	};
 
 	/// @name dispatcher shortcuts
@@ -350,6 +377,10 @@ namespace zzsystems { namespace gorynych {
 	/// @def HAS_AVX512
 	/// @brief shortcut: check if AVX 512 is available
 	#define HAS_AVX512 _dispatcher::has_avx512
+
+	/// @def HAS_OPENCL
+	/// @brief shortcut: check if OpenCL is available
+	#define HAS_OPENCL _dispatcher::has_openCL
 
 	/// @def USE_FAST_FLOAT
 	/// @brief shortcut: check if fast float is active

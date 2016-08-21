@@ -44,9 +44,9 @@
 #include "avx/avx.h"
 //#endif
 
-#if defined(COMPILE_OPENCL)
+//#if defined(COMPILE_OPENCL)
 #include "opencl/opencl.h"
-#endif
+//#endif
 
 #include "x87/SISD.h"
 #include "dependencies.h"

@@ -55,6 +55,14 @@ macro(set_openmp)
     endif()
 endmacro(set_openmp)
 
+macro(set_opencl)
+    find_package(OpenCL REQUIRED)
+    if (OpenCL_FOUND)
+        include_directories(${OpenCL_INCLUDE_DIRS})
+        link_directories(${OpenCL_LIBRARY})
+    endif()
+endmacro(set_opencl)
+
 if(MSVC)
     set(fpu_flags)
     #set(sse2_flags /arch:SSE2)
@@ -84,7 +92,8 @@ set(BRANCH_COMPILE_OPTS
         sse4_flags
         sse4fma_flags
         avx1_flags
-        avx2_flags)
+        avx2_flags
+        opencl_flags)
 
 set(BRANCHES
         fpu_branch
@@ -94,7 +103,8 @@ set(BRANCHES
         sse4_branch
         sse4fma_branch
         avx1_branch
-        avx2_branch)
+        avx2_branch
+        opencl_branch)
 
 set(BRANCH_COMPILE_DEFS
         -DCOMPILE_FPU
@@ -104,14 +114,15 @@ set(BRANCH_COMPILE_DEFS
         -DCOMPILE_SSE4
         -DCOMPILE_SSE4FMA
         -DCOMPILE_AVX1
-        -DCOMPILE_AVX2)
+        -DCOMPILE_AVX2
+        -DCOMPILE_OPENCL)
 
 macro(prepare_branches)
     message(${BRANCHES_TO_COMPILE})
     message(${BRANCH_MODULES})
         # compile all if not specified
     if(NOT BRANCHES_TO_COMPILE)
-        set(BRANCHES_TO_COMPILE sse2_branch sse3_branch ssse3_branch sse4_branch sse4fma_branch avx1_branch avx2_branch)
+        set(BRANCHES_TO_COMPILE sse2_branch sse3_branch ssse3_branch sse4_branch sse4fma_branch avx1_branch avx2_branch opencl_branch)
     endif()
 
     list(LENGTH BRANCHES branches_count)

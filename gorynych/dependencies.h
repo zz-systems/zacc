@@ -54,5 +54,8 @@
 #define _float4 float4<capability>
 #define _float8 float8<capability>
 
+#define _int_cl int_cl<capability>
+#define _float_cl float_cl<capability>
+
 ///@}
 
