@@ -327,7 +327,6 @@ namespace zzsystems { namespace gorynych {
                             data[0] * other(1) - data[1] * other(0)
                     );
         };
-
     };
 
     /// @}
@@ -697,6 +696,65 @@ namespace zzsystems { namespace gorynych {
 
         return result;
 	}
+    
+    template<typename T, size_t elems>
+    inline std::ostream& operator<<(std::ostream& out, const vec<T, elems> &other)
+    {
+        auto print_row = [&](auto rowi) 
+        {
+            for(auto coli = 0; coli < elems; coli++)
+                out << other(coli) << " ";
+        };
+
+        out << "[ ";
+            print_row(0);
+        out << "]";  
+
+        return out;
+    }
+
+    template<typename T, size_t rows, size_t cols>
+    inline std::ostream& operator<<(std::ostream& out, const mat<T, rows, cols> &other)
+    {
+        auto print_row = [&](auto rowi) 
+        {
+            for(auto coli = 0; coli < cols; coli++)
+                out << other(rowi, coli) << " ";
+        };
+
+
+        if(rows == 1)
+        {                
+            out << "[ ";
+            print_row(0);
+            out << "]";               
+        }
+        else
+        {
+            out << endl;
+            // TODO: Proper box chars. ncurses?
+            for(auto rowi = 0; rowi < rows; rowi++)
+            {
+                switch(rowi)
+                {
+                    case 0:         out << (unsigned char)218 << " "; break;
+                    case rows - 1: out << (unsigned char)192 << " "; break;
+                    default:        out << (unsigned char)189 << " "; break;
+                }
+                
+                print_row(rowi);
+
+                switch(rowi)
+                {
+                    case 0:         out << (unsigned char)191 << endl; break;
+                    case rows - 1:  out << (unsigned char)217 << endl; break;
+                    default:        out << (unsigned char)189 << endl; break;
+                }
+            }
+        }
+
+        return out;
+    }
 }}
 
 #include "linal_spec.h"

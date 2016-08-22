@@ -24,33 +24,20 @@
 
 #pragma once
 
-#include "../macros.h"
-#include "dispatch.h"
-#include "../math/linal.h"
+#include "scheduler_base.h"
+#include "../../macros.h"
+#include "../dispatch.h"
+#include "../../math/linal.h"
 
 namespace zzsystems { namespace gorynych { namespace platform {
 
-    DISPATCHED class ALIGNED scheduler_base
+    DISPATCHED class ALIGNED cpu_scheduler_base 
+        : public scheduler_base<capability> 
     {
         using vreal = typename static_dispatcher<capability>::vreal;
         using vint  = typename static_dispatcher<capability>::vint;
 
-    public:
-        virtual void schedule(float *target, const vec3<float> &origin)     /*const*/ = 0;
-        virtual void schedule(int *target, const vec3<float> &origin)     /*const*/ = 0;
-
-        virtual float* operator()(const vec3<float> &origin)                /*const*/ = 0;
-
-
-        virtual void operator()(float *target, const vec3<float> &origin)   /*const*/
-        {
-            schedule(target, origin);
-        }
-
-        virtual void operator()(int *target, const vec3<float> &origin)   /*const*/
-        {
-            schedule(target, origin);
-        }
+    public:      
 
     protected:
 

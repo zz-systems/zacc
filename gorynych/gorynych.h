@@ -34,7 +34,9 @@
 #include "macros.h"
 #include "util/memory.h"
 #include "util/collections.h"
-#include "platform/scheduler_base.h"
+#include "util/io.h"
+#include "platform/scheduler/cpu_scheduler_base.h"
+#include "platform/scheduler/cl_scheduler_base.h"
 
 //#if defined(COMPILE_SSE2) || defined(COMPILE_SSE3) || defined(COMPILE_SSE4) || defined(COMPILE_SSE4FMA)
 #include "sse/sse.h"

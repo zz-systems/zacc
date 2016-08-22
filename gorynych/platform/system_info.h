@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <iostream>
 #include <CL/cl.hpp>
+#include "../util/io.h"
 
 #ifdef _WIN32
 
@@ -49,7 +50,8 @@
 using namespace std;
 
 namespace zzsystems { namespace gorynych {
-
+	using namespace io;
+	
 	/// @enum capabilities
 	/// @brief relevant system capabilities
 	enum capabilities
@@ -259,23 +261,25 @@ namespace zzsystems { namespace gorynych {
 	/// pretty-prints the currently supperted features
 	inline ostream& operator<<(ostream& os, const system_info& cap)
 	{
-		os << "Has SSE2:		"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE2) << endl;
-		os << "Has SSE3:		"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE3)  << endl;
-		os << "Has SSSE3:		"	<< boolalpha << cap.hasFlag(CAPABILITY_SSSE3) << endl;
+		os << "Has SSE2:		"	<< boolcolor(cap.hasFlag(CAPABILITY_SSE2)) << endl;
+		os << "Has SSE3:		"	<< boolcolor(cap.hasFlag(CAPABILITY_SSE3))  << endl;
+		os << "Has SSSE3:		"	<< boolcolor(cap.hasFlag(CAPABILITY_SSSE3)) << endl;
 
-		os << "Has SSE4.1:		"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE41) << endl;
-		os << "Has SSE4.2:		"	<< boolalpha << cap.hasFlag(CAPABILITY_SSE42) << endl;
+		os << "Has SSE4.1:		"	<< boolcolor(cap.hasFlag(CAPABILITY_SSE41)) << endl;
+		os << "Has SSE4.2:		"	<< boolcolor(cap.hasFlag(CAPABILITY_SSE42)) << endl;
 
-		os << "Has FMA3:		"	<< boolalpha << cap.hasFlag(CAPABILITY_FMA3) << endl;
-		os << "Has FMA4:		"	<< boolalpha << cap.hasFlag(CAPABILITY_FMA4) << endl;
+		os << "Has FMA3:		"	<< boolcolor(cap.hasFlag(CAPABILITY_FMA3)) << endl;
+		os << "Has FMA4:		"	<< boolcolor(cap.hasFlag(CAPABILITY_FMA4)) << endl;
 
 		//os << "Uses XRSTORE: "	<< cap.use_xrstore << endl;
 
-		os << "Has AVX1:		"	<< boolalpha << cap.hasFlag(CAPABILITY_AVX1) << endl;
-		os << "Has AVX2:		"	<< boolalpha << cap.hasFlag(CAPABILITY_AVX2) << endl;
-		os << "Has AVX512:		"	<< boolalpha << cap.hasFlag(CAPABILITY_AVX512) << endl;
+		os << "Has AVX1:		"	<< boolcolor(cap.hasFlag(CAPABILITY_AVX1)) << endl;
+		os << "Has AVX2:		"	<< boolcolor(cap.hasFlag(CAPABILITY_AVX2)) << endl;
+		os << "Has AVX512:		"	<< boolcolor(cap.hasFlag(CAPABILITY_AVX512)) << endl;
 
-		os << "Has OpenCL@GPU:	" 	<< boolalpha << cap.hasFlag(CAPABILITY_OPENCL) << endl;
+		os << "Has OpenCL@GPU:	" 	<< boolcolor(cap.hasFlag(CAPABILITY_OPENCL)) << endl;
+		os << endl;
+
 		return os;
 	}
 
