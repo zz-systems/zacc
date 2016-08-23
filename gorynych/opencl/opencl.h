@@ -28,6 +28,7 @@
 #include "../macros.h"
 #include "float_cl.h"
 #include "int_cl.h"
+#include "builder.h"
 
 namespace zzsystems { namespace gorynych {
 
@@ -61,25 +62,38 @@ namespace zzsystems { namespace gorynych {
 	DISPATCHED struct scalar_type<_int_cl>
 			: public __scalar_type<int>
 	{};
-
+    
 	// Converting constructors =========================================================================================
 
     /// TODO
 
 	/// converting constructor for float->int vector conversion
-	DISPATCHED inline _int_cl::int_cl(const _float_cl& rhs) noexcept
-			 { }
+	DISPATCHED inline _int_cl::int_cl(const _float_cl& rhs) 
+    			 { }
 
 	/// copy constructor for int vector
-	DISPATCHED inline _int_cl::int_cl(const _int_cl& rhs) noexcept
+	DISPATCHED inline _int_cl::int_cl(const _int_cl& rhs) 
 			 { }
 
 	/// copy constructor for float vector
-	DISPATCHED inline _float_cl::float_cl(const _float_cl& rhs) noexcept
-			 { }
+	DISPATCHED inline _float_cl::float_cl(const _float_cl& rhs) 
+    { 
+        if(rhs.is_expression)
+        {
+            is_expression = false;
+            name = random_var_name();           
+        } 
+        else 
+        {
+            is_expression = false;
+            name = rhs.name;            
+        }
+
+        expression << name << " = " << var(rhs) << ";" << endl;
+    }
 
 	/// converting constructor for int->float vector conversion
-	DISPATCHED inline _float_cl::float_cl(const _int_cl& rhs) noexcept
+	DISPATCHED inline _float_cl::float_cl(const _int_cl& rhs) 
     		{ }
 
 	
@@ -133,4 +147,6 @@ namespace zzsystems { namespace gorynych {
 	{
 		return 0;
 	}
+
+   
 }}

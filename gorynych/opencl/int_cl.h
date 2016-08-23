@@ -50,17 +50,18 @@ namespace zzsystems { namespace gorynych {
 	DISPATCHED struct int_cl
 	{
 		//clstream stream;
+		string name;
 
 		/// default constructor
-		int_cl() = default;
+		int_cl() {};
 
 		/// constructor for a single int
-		int_cl(const int rhs)			noexcept {  }
+		int_cl(const int rhs)			 {  }
 		
 		/// converting constructor for float vector
-		int_cl(const _float_cl&	rhs) noexcept;
+		int_cl(const _float_cl&	rhs) ;
 		/// copy constructor for int vector
-		int_cl(const _int_cl&	rhs) noexcept;
+		int_cl(const _int_cl&	rhs) ;
 		//int_cl(const double4&	rhs);
 
 		/// @brief define scalar<->vector operators.

@@ -95,7 +95,7 @@ namespace zzsystems { namespace gorynych {
 	/// @brief shortcut for two-type template
 	#define ANY2(type1, type2) template<typename type1, typename type2>
 
-#ifdef COMPILE_PASS_VEC_BY_REF
+#if defined(COMPILE_PASS_VEC_BY_REF) || defined(OPENCL)
 	#define VREF &
 #else
 	#define VREF

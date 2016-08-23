@@ -28,7 +28,14 @@
 
 namespace zzsystems { namespace gorynych { namespace test {
 
-#if defined(COMPILE_AVX2)
+#if defined(COMPILE_OPENCL)
+
+			using capability = capability_OPENCL;
+#define TEST_PREFIX(test_name) test_name"- OpenCL"
+
+#define CATCH_BRANCH_PREFIX AVX2_TEST_
+
+#elif defined(COMPILE_AVX2)
 
 			using capability = capability_AVX2;
 #define TEST_PREFIX(test_name) test_name"- avx2"

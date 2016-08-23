@@ -23,11 +23,18 @@ set(BRANCH_MODULES
 		#"trigonometry_test\;test_trigonometry.cpp"
     )
 
-prepare_branches()
+#prepare_branches()
 
-list(APPEND SOURCE_FILES catch_entry_point.cpp)
+list(APPEND SOURCE_FILES catch_entry_point.cpp test_cl_codegen.cpp)
 
 add_executable(gorynych-test ${SOURCE_FILES})
+target_link_libraries(gorynych-test uuid)
+set_opencl()
+
+if(OpenCL_FOUND)
+	message("opencl")
+	target_link_libraries(gorynych-test  ${OpenCL_LIBRARIES})
+endif(OpenCL_FOUND)
 
 enable_testing()
 add_test(gorynych-test gorynych-test)
