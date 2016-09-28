@@ -37,8 +37,8 @@ Please keep in mind, that this release is a **Preview/Alpha Release** and feel f
 * AVX2
 
 ## Planned featuresets
-* OpenCL / GPGPU support (University project deadline: until September/October 2016)
-* Verilog / VHDL generation for hardware synthesis (Planned as a pre-bachelor's thesis, should be done in year 2017) 
+* OpenCL / GPGPU support
+* Verilog / VHDL generation for hardware synthesis
 * Extending with more datatypes
 
 ## Functionality
