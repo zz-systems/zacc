@@ -1,6 +1,13 @@
 version: '1.0.{build}'
 os: Visual Studio 2015
 
+# compiler: expands the build matrix to include multiple compilers (per os)
+platform:
+  - x64
+
+configuration:
+- Release
+
 # Only clone the top level commit; don't bother with history
 shallow_clone: true
 
@@ -14,6 +21,7 @@ environment:
 init:
 - echo init step
 - cmake --version
+- C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
 
 install: 
 - echo Installing OpenCL
