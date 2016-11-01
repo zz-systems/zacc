@@ -59,11 +59,11 @@ namespace zzsystems { namespace gorynych { namespace io {
             #if WIN32
                 switch(color_code)
                 {
-                    case FG_RED:    color_code = FOREGROUND_RED|FOREGROUND_INTENSITY; break;
-                    case FG_GREEN:  color_code = FOREGROUND_GREEN|FOREGROUND_INTENSITY; break;
-                    case FG_YELLOW: color_code = FOREGROUND_GREEN|FOREGROUND_RED|FOREGROUND_INTENSITY; break;
-                    case FG_BLUE:   color_code = FOREGROUND_BLUE|FOREGROUND_GREEN|FOREGROUND_INTENSITY; break;
-                    case FG_DEFAULT: break;
+                    case FG_RED:    this->color_code = FOREGROUND_RED|FOREGROUND_INTENSITY; break;
+                    case FG_GREEN:  this->color_code = FOREGROUND_GREEN|FOREGROUND_INTENSITY; break;
+                    case FG_YELLOW: this->color_code = FOREGROUND_GREEN|FOREGROUND_RED|FOREGROUND_INTENSITY; break;
+                    case FG_BLUE:   this->color_code = FOREGROUND_BLUE|FOREGROUND_GREEN|FOREGROUND_INTENSITY; break;
+                    case FG_DEFAULT: this->color_code = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY; break;
                     
                     case BG_RED:        /*TODO*/ break;
                     case BG_GREEN:      /*TODO*/ break;

@@ -89,11 +89,13 @@ namespace zzsystems { namespace gorynych {
         static map<string, string> _types;
     };
 
-    map<string, string> cl_builder::_replace_mapping;
-    map<string, string> cl_builder::_functions;
-    map<string, string> cl_builder::_types;
-
      #ifdef COMPILE_OPENCL
+
+        map<string, string> cl_builder::_replace_mapping;
+        map<string, string> cl_builder::_functions;
+        map<string, string> cl_builder::_types;
+
+
         #define STRINGIFY_CL_FUNC(...) #__VA_ARGS__
         #define REGISTER_CL_FUNC(ret_type, func_name, params, captures, ...) \
             cl_builder::register_function(#ret_type, #func_name, #params, captures, #__VA_ARGS__);

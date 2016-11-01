@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.3.2)
 project(gorynych-test)
 
-include(../CMakeCommons)
+include(../CMakeCommons.cmake)
 
 set(BRANCHES_TO_COMPILE
         sse2_branch

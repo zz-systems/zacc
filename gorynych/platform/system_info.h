@@ -30,7 +30,9 @@
 
 #include <algorithm>
 #include <iostream>
+#if defined(COMPILE_OPENCL)
 #include <CL/cl.hpp>
+#endif
 #include "../util/io.h"
 
 #ifdef _WIN32
@@ -148,6 +150,7 @@ namespace zzsystems { namespace gorynych {
 			//}
 
 			// OpenCL 
+			#if defined(COMPILE_OPENCL)
 			std::vector<cl::Platform> platforms;
 			cl::Platform::get(&platforms);
 
@@ -159,6 +162,7 @@ namespace zzsystems { namespace gorynych {
 				if(devices.size() > 0)
 					feature_flags |= CAPABILITY_OPENCL;
 			}
+			#endif
 		}
 
 		/// @brief checks if a specific flag is set

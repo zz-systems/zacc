@@ -115,7 +115,7 @@ namespace zzsystems { namespace gorynych {
 
 		/// execution unit this dispatcher targets (SSE)
 		/// @returns string with the unit name
-		static constexpr const char* unit_name() 
+		static const char* unit_name() 
 		{ 
 			if(HAS_FMA3)
 				return system_info::getName(CAPABILITY_FMA3);
