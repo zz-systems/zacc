@@ -24,8 +24,8 @@ init:
 - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
 
 install:
-- echo Fetching source
-- git submodule update --init --recursive 
+#- echo Fetching source
+#- git submodule update --init --recursive 
 - echo Installing OpenCL
 - ps: mkdir $env:OPENCL_ROOT
 - ps: pushd $env:OPENCL_ROOT
