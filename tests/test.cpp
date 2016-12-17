@@ -3,8 +3,8 @@
 //
 
 #include "../common/conversion/arithmetic.hpp"
-#include "../machine/scalar/scalar.hpp"
-#include "../machine/sse/sse.hpp"
+#include "../backend/scalar/scalar.hpp"
+#include "../backend/sse/sse.hpp"
 
 #include <iostream>
 

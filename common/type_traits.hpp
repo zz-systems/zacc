@@ -2,9 +2,7 @@
 // Created by Sergej Zuyev on 12/13/2016.
 //
 
-#ifndef ZACC_TYPE_TRAITS_HPP
-#define ZACC_TYPE_TRAITS_HPP
-
+#pragma once
 #include <type_traits>
 
 namespace zacc {
@@ -29,6 +27,18 @@ namespace zacc {
     template<typename one_t, typename other_t>
     using enable_if_not_same = std::enable_if_t<!std::is_same<one_t, other_t>::value, one_t>;
 
+
+    template<typename base_t, typename required_t>
+    struct requires {
+        static_assert(std::is_base_of<required_t, base_t>::value, "Required feature not implemented.");
+
+        using type = enable_if_is_base_of<required_t, base_t>;
+    };
+
+    template<typename base_t, typename required_t>
+    using requires_t = typename requires<base_t, required_t>::type;
+
+
     template<typename T>
     struct identity {
         typedef T type;
@@ -43,6 +53,9 @@ namespace zacc {
     bool is_any_set(T ref_value, T head, Args... tail) {
         return (ref_value & head != 0) || is_any_set(ref_value, tail...);
     };
-}
 
-#endif //ZACC_TYPE_TRAITS_HPP
+    template<typename E>
+    constexpr typename std::underlying_type<E>::type to_underlying(E e) {
+        return static_cast<typename std::underlying_type<E>::type>(e);
+    }
+}

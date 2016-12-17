@@ -2,8 +2,7 @@
 // Created by Sergej Zuyev on 12/12/2016.
 //
 
-#ifndef ZACC_CONVERSION_ARITHMETIC_HPP
-#define ZACC_CONVERSION_ARITHMETIC_HPP
+#pragma once
 
 #include "../compose.hpp"
 #include "../zval.hpp"
@@ -62,5 +61,3 @@ namespace zacc {
         };
     };
 }
-
-#endif //ZACC_CONVERSION_ARITHMETIC_HPP

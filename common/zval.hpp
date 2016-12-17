@@ -1,6 +1,4 @@
-#ifndef ZACC_ZVAL_HPP
-#define ZACC_ZVAL_HPP
-
+#pragma once
 #include <array>
 
 
@@ -15,6 +13,8 @@ namespace zacc {
     public:
         static const unsigned dim = _dim;
         static const int capability = _capability;
+
+        static const bool is_vector = dim > 1;
 
         using type = _type;
         using shim_type = _shim_type;
@@ -46,5 +46,3 @@ namespace zacc {
     };
 
 }
-
-#endif //ZACC_ZVAL_HPP

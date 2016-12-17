@@ -2,8 +2,7 @@
 // Created by Sergej Zuyev on 12/12/2016.
 //
 
-#ifndef ZACC_COMMON_HPP
-#define ZACC_COMMON_HPP
+#pragma once
 
 #include <string>
 
@@ -25,4 +24,3 @@ namespace zacc {
         friend std::ostream &operator<<(std::ostream &os, const T &data) { os << to_string(); }
     };
 }
-#endif //ZACC_COMMON_HPP

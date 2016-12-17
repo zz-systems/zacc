@@ -2,8 +2,7 @@
 // Created by Sergej Zuyev on 12/12/2016.
 //
 
-#ifndef ZACC_BITWISE_HPP
-#define ZACC_BITWISE_HPP
+#pragma once
 
 namespace zacc {
     template<typename T>
@@ -36,4 +35,3 @@ namespace zacc {
         T operator>>(const U shift_amount) const;
     };
 }
-#endif //ZACC_BITWISE_HPP

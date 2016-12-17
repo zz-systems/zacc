@@ -15,38 +15,38 @@ namespace zacc {
         static constexpr int flags = capability();
 
         /// sse 2 available?
-        static constexpr bool has_sse2 = 0 != (capability() & CAPABILITY_SSE2);
+        static constexpr bool has_sse2 = 0 != (capability() & capabilities::SSE2);
         /// sse 3 available?
-        static constexpr bool has_sse3 = 0 != (capability() & CAPABILITY_SSE3);
+        static constexpr bool has_sse3 = 0 != (capability() & capabilities::SSE3);
         /// ssse 3 available?
-        static constexpr bool has_ssse3 = 0 != (capability() & CAPABILITY_SSSE3);
+        static constexpr bool has_ssse3 = 0 != (capability() & capabilities::SSSE3);
 
         // fma4 available?
-        static constexpr bool has_fma3 = 0 != (capability() & CAPABILITY_FMA3);
+        static constexpr bool has_fma3 = 0 != (capability() & capabilities::FMA3);
         /// fma4 available?
-        static constexpr bool has_fma4 = 0 != (capability() & CAPABILITY_FMA4);
+        static constexpr bool has_fma4 = 0 != (capability() & capabilities::FMA4);
         /// fma available?
         static constexpr bool has_fma = has_fma3 || has_fma4;
 
         /// sse 4.1 available?
-        static constexpr bool has_sse41 = 0 != (capability() & CAPABILITY_SSE41);
+        static constexpr bool has_sse41 = 0 != (capability() & capabilities::SSE41);
         /// sse 4.2 available?
-        static constexpr bool has_sse42 = 0 != (capability() & CAPABILITY_SSE42);
+        static constexpr bool has_sse42 = 0 != (capability() & capabilities::SSE42);
         /// sse 4 available?
         static constexpr bool has_sse4 = has_sse41 || has_sse42;
 
         /// avx 1 available?
-        static constexpr bool has_avx = 0 != (capability() & CAPABILITY_AVX1);
+        static constexpr bool has_avx = 0 != (capability() & capabilities::AVX1);
         /// avx 2 available?
-        static constexpr bool has_avx2 = 0 != (capability() & CAPABILITY_AVX2);
+        static constexpr bool has_avx2 = 0 != (capability() & capabilities::AVX2);
         /// avx 512 available?
-        static constexpr bool has_avx512 = 0 != (capability() & CAPABILITY_AVX512);
+        static constexpr bool has_avx512 = 0 != (capability() & capabilities::AVX512);
 
         /// openCL available?
-        static constexpr bool has_openCL = 0 != (capability() & CAPABILITY_OPENCL);
+        static constexpr bool has_openCL = 0 != (capability() & capabilities::OPENCL);
 
         /// fast (lower precision) float enabled?
-        static constexpr bool use_fast_float = 0 != (capability() & CAPABILITY_FASTFLOAT);
+        static constexpr bool use_fast_float = 0 != (capability() & capabilities::FASTFLOAT);
     };
 
     template<typename type_t, int ...capabilities>

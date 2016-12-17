@@ -2,8 +2,8 @@
 // Created by Sergej Zuyev on 12/12/2016.
 //
 
-#ifndef ZACC_LOGIC_HPP
-#define ZACC_LOGIC_HPP
+#pragma once
+
 namespace zacc {
     template<typename T, typename U = bool>
     struct can_negate_logical : public T {
@@ -50,4 +50,3 @@ namespace zacc {
         U operator<=(const T other) const;
     };
 }
-#endif //ZACC_LOGIC_HPP

@@ -5,8 +5,7 @@
  * @brief https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Hierarchy_Generation
  */
 
-#ifndef ZACC_HIERARCHY_GEN_HPP
-#define ZACC_HIERARCHY_GEN_HPP
+#pragma once
 
 #include <utility>
 
@@ -49,5 +48,3 @@ namespace zacc {
 #define FORWARD(name) FORWARD2(name, base_t)
 
 }
-
-#endif //ZACC_HIERARCHY_GEN_HPP
