@@ -68,21 +68,19 @@ namespace zacc {
         static constexpr bool use_fast_float = 0 != (capability() & capabilities::FASTFLOAT);
     };
 
-    template<typename type_t, int ...capabilities>
+    template<typename type_t, capabilities ...c>
     struct accept_if : public std::enable_if<is_any_set(dispatcher<typename type_t::capability>::flags,
-                                                        capabilities...), type_t> {
+                                                        c...), type_t> {
     };
 
-    template<typename type_t, int ...capabilities>
+    template<typename type_t, capabilities ...c>
     struct reject_if : public std::enable_if<!is_any_set(dispatcher<typename type_t::capability>::flags,
-                                                         capabilities...), type_t> {
+                                                         c...), type_t> {
     };
 
-    template<typename type_t, int... capabilities>
-    using accept_if_t = typename accept_if<type_t, capabilities...>::type;
+    template<typename type_t, capabilities ... c>
+    using accept_if_t = typename accept_if<type_t, c...>::type;
 
-    template<typename type_t, int... capabilities>
-    using reject_if_t = typename reject_if<type_t, capabilities...>::type;
+    template<typename type_t, capabilities... c>
+    using reject_if_t = typename reject_if<type_t, c...>::type;
 }
-
-#endif //ZACC_DISPATCHER_HPP

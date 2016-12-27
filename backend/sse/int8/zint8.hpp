@@ -30,7 +30,6 @@
 #include "conditional.hpp"
 #include "common.hpp"
 #include "logical.hpp"
-#include "../common/printable.hpp"
 
 namespace zacc {
     namespace sse {
@@ -45,7 +44,8 @@ namespace zacc {
 
             __zint8(char *value) : base_t(_mm_load_si128((__m128i *) value)) {}
 
-            __zint16(char... args) : base_t(_mm_set_epi8(std::forward<char>(args)...)) {}
+            template<typename ...Args>
+            __zint8(Args... args) : base_t(_mm_set_epi8(std::forward<Args>(args)...)) {}
         };
 
         struct zint8;

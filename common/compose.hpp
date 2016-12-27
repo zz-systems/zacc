@@ -68,4 +68,20 @@ namespace zacc {
 
 #define FORWARD(name) FORWARD2(name, base_t)
 
+#define FEATURE2(provides, base_t) \
+    static const long long feature =  base_t::feature | static_cast<long long>(provides)
+
+#define FEATURE(provides) FEATURE2(provides, base_t)
+//
+//#define REQUIRE2(requirement, base_t) \
+//
+//#define __REQUIRE_OR(requirement, ...) (static_cast<long long>(requirement) | __REQUIRE_OR(__VA_ARGS__))
+//
+//#define REQUIRE(requirement, ...) \
+//    static_assert((base_t::feature & __REQUIRE_OR(requirement, __VA_ARGS__)) != 0, "Requirement not met: feature '" #requirement "' required.")
+
+
+#define REQUIRE(requirement, ...) \
+    static_assert((base_t::feature & static_cast<long long>(requirement)) != 0, "Requirement not met: feature '" #requirement "' required.")
+
 }

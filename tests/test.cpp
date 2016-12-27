@@ -38,11 +38,19 @@ int main() {
 
     float v = f.get_value();
 
-    std::cout << 10 * fv;
+    std::cout << fv;
 
-    std::cout << -((10.0f * fv + 24) * 123.0f) * 0 + 42 + f.get_value();
+    std::cout << -((fv + 24) * 123.0f) * 0 + 42 + f.get_value();
 
     std::cout << "conditional:" << fv.when(0).otherwise({1, 2, 3, 4});
+
+    std::cout << "{ ";
+
+    for (auto i : fv)
+        std::cout << i << " ";
+
+    std::cout << "}";
+
     //zacc::
     getchar();
 

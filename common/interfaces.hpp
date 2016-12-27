@@ -30,6 +30,12 @@
 
 namespace zacc {
 
+    enum class features : long long {
+        Extractable = 1 << 1,
+        Iteratable = 1 << 2,
+        Printable = 1 << 3,
+    };
+
     template<typename base_t>
     struct extractable : public base_t {
         FORWARD(extractable);
@@ -44,22 +50,39 @@ namespace zacc {
         }
 
         extracted_t
-        data() { return const_cast<extracted_t>(static_cast<const extractable *>(this)->data()); }
+        data() {
+            extracted_t result;
+
+            base_t::store(result);
+
+            return result;
+        }
     };
 
     template<typename base_t>
     struct iteratable : base_t {
+
+        FEATURE(features::Iteratable);
         FORWARD(iteratable);
 
         using iterator      = typename base_t::extracted_type::iterator;
 
-        iterator begin() { return base_t::data().begin(); }
+        iterator begin() {
+            _snapshot = base_t::data();
+            return _snapshot.begin();
+        }
 
-        iterator end() { return base_t::data().end(); }
+        iterator end() { return _snapshot.end(); }
+
+    private:
+        typename base_t::extracted_type _snapshot;
     };
 
     template<typename base_t>
     struct printable : base_t {
+        FEATURE(features::Printable);
+        REQUIRE(features::Iteratable);
+
         FORWARD(printable);
 
         std::string to_string() const {

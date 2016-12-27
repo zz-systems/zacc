@@ -39,14 +39,14 @@ namespace zacc {
 
                 template<typename base_t, typename never_compose = void>
                 struct else_policy {
-                    //accept_if<aggregate_t, CAPABILITY_SSE41, CAPABILITY_SSE42>
+                    //accept_if<aggregate_t, capabilities::SSE41, capabilities::SSE42>
                     aggregate_t
                     otherwise(const aggregate_t else_value) const {
                         return _mm256_blendv_epi8(_if_value.get_value(), else_value.get_value(),
                                                   _mm256_cmpeq_epi32(_mm256_setzero_si256(), _condition.get_value()));
                     }
 
-                    //reject_if<aggregate_t, CAPABILITY_SSE41, CAPABILITY_SSE42>
+                    //reject_if<aggregate_t, capabilities::SSE41, capabilities::SSE42>
                     //aggregate_t
                     //otherwise(const aggregate_t else_value) const
                     //{

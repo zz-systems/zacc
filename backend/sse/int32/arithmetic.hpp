@@ -85,7 +85,7 @@ namespace zacc {
                      * @return multiplication result
                      */
                     friend
-                    aggregate_t//reject_if_t <aggregate_t, CAPABILITY_SSE41, CAPABILITY_SSE42>
+                    aggregate_t//reject_if_t <aggregate_t, capabilities::SSE41, capabilities::SSE42>
                     operator*(const aggregate_t one, const aggregate_t other) {
                         /* mul 2,0*/
                         auto tmp1 = _mm_castsi128_ps(_mm_mul_epu32(one.get_value(), other.get_value()));
@@ -103,7 +103,7 @@ namespace zacc {
                      * @return multiplication result
                      */
                     //friend
-                    //aggregate_t//accept_if_t <aggregate_t, CAPABILITY_SSE41, CAPABILITY_SSE42>
+                    //aggregate_t//accept_if_t <aggregate_t, capabilities::SSE41, capabilities::SSE42>
                     //operator*(const aggregate_t one, const aggregate_t other) {
                     //    return _mm_mullo_epi32(one.get_value(), other.get_value());
                     //}
