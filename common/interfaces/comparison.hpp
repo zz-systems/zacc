@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,49 +25,51 @@
 
 #pragma once
 
+#include "../traits.hpp"
+#include "../common.hpp"
+
 namespace zacc {
-    template<typename T, typename U = bool>
-    struct can_negate_logical : public T {
-        T operator!() const;
-    };
 
-    template<typename T, typename U = bool>
-    struct can_or_logical : public T {
-        T operator||(const T other) const;
-    };
+    template<typename base_t, typename composed_t = comparison <base_t>>
+    struct comparison : public base_t {
+        FORWARD(comparison);
 
-    template<typename T, typename U = bool>
-    struct can_and_logical : public T {
-        T operator&&(const T other) const;
-    };
+        TRAIT(traits::Comparison);
 
-    template<typename T, typename U = bool>
-    struct can_compare_eq : public T {
-        U operator==(const T other) const;
-    };
+        friend composed_t operator==(const composed_t one, const composed_t other) {
+            return base_t::comparison_eq(one, other);
+        }
 
-    template<typename T, typename U = bool>
-    struct can_compare_neq : public T {
-        U operator!=(const T other) const;
-    };
+        friend composed_t operator!=(const composed_t one, const composed_t other) {
+            return base_t::comparison_neq(one, other);
+        }
 
-    template<typename T, typename U = bool>
-    struct can_compare_gt : public T {
-        U operator>(const T other) const;
-    };
+        friend composed_t operator>(const composed_t one, const composed_t other) {
+            return base_t::comparison_gt(one, other);
+        }
 
-    template<typename T, typename U = bool>
-    struct can_compare_lt : public T {
-        U operator<(const T other) const;
-    };
+        friend composed_t operator>=(const composed_t one, const composed_t other) {
+            return base_t::comparison_ge(one, other);
+        }
 
-    template<typename T, typename U = bool>
-    struct can_compare_ge : public T {
-        U operator>=(const T other) const;
-    };
+        friend composed_t operator<(const composed_t one, const composed_t other) {
+            return base_t::comparison_lt(one, other);
+        }
 
-    template<typename T, typename U = bool>
-    struct can_compare_le : public T {
-        U operator<=(const T other) const;
+        friend composed_t operator<=(const composed_t one, const composed_t other) {
+            return base_t::comparison_le(one, other);
+        }
+
+        CONVERSION(==);
+
+        CONVERSION(!=);
+
+        CONVERSION(>);
+
+        CONVERSION(>=);
+
+        CONVERSION(<);
+
+        CONVERSION(<=);
     };
 }

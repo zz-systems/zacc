@@ -50,7 +50,7 @@ namespace zacc {
 
         _type get_value() const { return _value; }
 
-        static const long feature = 0;
+        static const long traits = 0;
     protected:
         _type _value;
     };

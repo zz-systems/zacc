@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,45 +22,35 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-/**
- * @brief https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Hierarchy_Generation
- */
 
 #pragma once
 
-#include <utility>
-#include "common.hpp"
+#define FORWARD2(name, base) \
+    template<typename ...Args> \
+    name(Args... args) : base(std::forward<Args>(args)...) {}
 
-namespace zacc {
-    template<template<class> class ... policies>
-    struct compose;
+#define FORWARD(name) FORWARD2(name, base_t)
 
-    template<template<class> class head,
-            template<class> class ... tail>
-    struct compose<head, tail...> : head<compose<tail...>> {
-        template<typename... Args>
-        compose(Args &&...args) : head<compose<tail...>>(std::forward<Args>(args)...) {}
-    };
+#define TRAIT2(provides, base_t) \
+    static const long long traits =  base_t::traits | static_cast<long long>(provides)
 
-    template<>
-    struct compose<> {
-    };
-/*
+#define TRAIT(provides) TRAIT2(provides, base_t)
 
-    template<template<class> class terminator, template<class> class ... policies>
-    struct compose_incomplete;
+#define REQUIRE(requirement) \
+    static_assert((base_t::traits & static_cast<long long>(requirement)) != 0, "Requirement not met: feature '" #requirement "' required.")
 
-    template<template<class> class terminator, template<class> class head, template<class> class ... tail>
-    struct compose_incomplete<terminator, head, tail...> : head<compose_incomplete<terminator, tail...>>
-    {
-        template<typename... Args>
-        compose_incomplete(Args &&...args) : head<compose_incomplete<terminator, tail...>>(std::forward<Args>(args)...)
-        {}
-    };
+#define BASE() \
+    base_t* base() { return static_cast<base_t*>(this); }
 
-    template<>
-    template<template<class> class terminator>
-    struct compose_incomplete <terminator> :
-            terminator {};*/
 
-}
+#define CONVERSION2(op, composed_t) \
+    template<typename other_t> \
+    friend composed_t operator op(const composed_t one, const enable_if_not_same<other_t, composed_t> other) { \
+        return one op static_cast<composed_t>(other); \
+    }; \
+    template<typename other_t> \
+    friend composed_t operator + (const enable_if_not_same<other_t, composed_t> one, const composed_t other) { \
+        return static_cast<composed_t>(one) op other; \
+    }
+
+#define CONVERSION(op) CONVERSION2(op, composed_t)

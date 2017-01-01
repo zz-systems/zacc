@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,45 +22,32 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-/**
- * @brief https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Hierarchy_Generation
- */
 
 #pragma once
 
-#include <utility>
-#include "common.hpp"
+#include "../traits.hpp"
+#include "../common.hpp"
 
 namespace zacc {
-    template<template<class> class ... policies>
-    struct compose;
 
-    template<template<class> class head,
-            template<class> class ... tail>
-    struct compose<head, tail...> : head<compose<tail...>> {
-        template<typename... Args>
-        compose(Args &&...args) : head<compose<tail...>>(std::forward<Args>(args)...) {}
+    template<typename base_t, typename composed_t = logical <base_t>>
+    struct logical : public base_t {
+        FORWARD(logical);
+
+        TRAIT(traits::Logic);
+
+        friend composed_t operator!(const composed_t one) { return base_t::logical_negate(one); }
+
+        friend composed_t operator||(const composed_t one, const composed_t other) {
+            return base_t::logical_or(one, other);
+        }
+
+        friend composed_t operator&&(const composed_t one, const composed_t other) {
+            return base_t::logical_and(one, other);
+        }
+
+        CONVERSION(||);
+
+        CONVERSION(&&);
     };
-
-    template<>
-    struct compose<> {
-    };
-/*
-
-    template<template<class> class terminator, template<class> class ... policies>
-    struct compose_incomplete;
-
-    template<template<class> class terminator, template<class> class head, template<class> class ... tail>
-    struct compose_incomplete<terminator, head, tail...> : head<compose_incomplete<terminator, tail...>>
-    {
-        template<typename... Args>
-        compose_incomplete(Args &&...args) : head<compose_incomplete<terminator, tail...>>(std::forward<Args>(args)...)
-        {}
-    };
-
-    template<>
-    template<template<class> class terminator>
-    struct compose_incomplete <terminator> :
-            terminator {};*/
-
 }

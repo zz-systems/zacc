@@ -74,7 +74,7 @@ namespace zacc {
                 f32::arithmetic::div_policy,
 
                 printable,
-                iteratable,
+//                iteratable,
                 extractable,
                 f32::common::io_policy,
 

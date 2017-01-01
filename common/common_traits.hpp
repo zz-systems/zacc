@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,19 +22,13 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
+
 #pragma once
 
-#include <iterator>
-#include <sstream>
-#include "type_traits.hpp"
+#include "common.hpp"
+#include "traits.hpp"
 
 namespace zacc {
-
-    enum class features : long long {
-        Extractable = 1 << 1,
-        Iteratable = 1 << 2,
-        Printable = 1 << 3,
-    };
 
     template<typename base_t>
     struct extractable : public base_t {
@@ -62,7 +56,8 @@ namespace zacc {
     template<typename base_t>
     struct iteratable : base_t {
 
-        FEATURE(features::Iteratable);
+        TRAIT(traits::Iteratable);
+
         FORWARD(iteratable);
 
         using iterator      = typename base_t::extracted_type::iterator;
@@ -80,8 +75,8 @@ namespace zacc {
 
     template<typename base_t>
     struct printable : base_t {
-        FEATURE(features::Printable);
-        REQUIRE(features::Iteratable);
+        TRAIT(traits::Printable);
+        REQUIRE(traits::Iteratable);
 
         FORWARD(printable);
 

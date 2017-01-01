@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,23 +25,18 @@
 
 #pragma once
 
-#include <string>
-
 namespace zacc {
-    template<typename T, typename U>
-    struct can_extract : public T {
-        U extract() const;
+    enum class traits : long long {
+        Arithmetic = 1 << 0,
+        Fused_Multiplication = 1 << 1,
+        Bitwise = 1 << 2,
+        Bitwise_Shift = 1 << 3,
+        Logical = 1 << 4,
+        Comparison = 1 << 5,
+        Conditional = 1 << 6,
 
-        const U extract() { return const_cast<U>(static_cast<const can_extract *>((this)->extract())); }
-
-        void extract_to(rettype &target) const;
-    };
-
-    template<typename T>
-    struct can_print {
-    public:
-        virtual std::string to_string() const = 0;
-
-        friend std::ostream &operator<<(std::ostream &os, const T &data) { os << to_string(); }
+        Extractable = 1 << 7,
+        Iteratable = 1 << 8,
+        Printable = 1 << 9,
     };
 }
