@@ -28,9 +28,9 @@
 #include "../traits.hpp"
 #include "../common.hpp"
 
-namespace zacc {
+namespace zacc { namespace interface {
 
-    template<typename base_t, typename composed_t = bitwise <base_t>>
+    template<typename base_t, typename composed_t>
     struct bitwise : public base_t {
         FORWARD(bitwise);
 
@@ -58,7 +58,7 @@ namespace zacc {
         CONVERSION(^);
     };
 
-    template<typename base_t, typename composed_t = bitwise_shift <base_t>>
+    template<typename base_t, typename composed_t>
     struct bitwise_shift : public base_t {
         FORWARD(bitwise_shift);
 
@@ -86,4 +86,4 @@ namespace zacc {
 
         CONVERSION(>>);
     };
-}
+}}

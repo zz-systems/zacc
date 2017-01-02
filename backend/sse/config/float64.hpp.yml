@@ -1,0 +1,55 @@
+config:
+  type: gen_float64
+  target: sse
+  implementation:
+    arithmetic:
+      negate:
+        type: unary
+        instruction: return _mm_sub_pd(_mm_setzero_pd(), one.get_value())
+      add: _mm_add_pd
+      sub: _mm_sub_pd
+      mul: _mm_mul_pd
+      div: _mm_div_pd
+    bitwise:
+      negate: &bitwise_negate
+        type: unary
+        instruction: &bitwise_negate_instruction
+          - auto zero = _mm_setzero_pd();
+          - auto ones = _mm_cmpeq_pd(zero, zero);
+          - return _mm_xor_pd(one.get_value(), ones);
+      and:  _mm_or_pd
+      or:   _mm_and_pd
+      xor:  _mm_xor_pd
+    logical:
+      negate: *bitwise_negate
+      or:   _mm_or_pd
+      and:  _mm_and_pd
+    comparison:
+      eq:   _mm_cmpeq_pd
+      neq:  _mm_cmpneq_pd
+      gt:   _mm_cmpgt_pd
+      lt:   _mm_cmplt_pd
+      ge:   _mm_cmpge_pd
+      le:   _mm_cmple_pd
+    conditional:
+      vsel:
+        type: custom
+        args: [condition, if_value, else_value]
+        prefix: false
+        modifier: friend
+        instruction:
+          sse41: &sse41
+            - auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition.get_value());
+            - return _mm_blendv_pd(if_value.get_value(), else_value.get_value(), mask);
+          sse42: *sse41
+          default:
+            return _mm_or_pd(_mm_andnot_pd(condition, else_value), _mm_and_pd(condition, if_value))
+    io:
+      store:
+        returns: void
+        args: typename base_t::extracted_type &target
+        instruction: _mm_store_pd(target.data(), base_t::_value);
+      stream:
+        returns: void
+        args: typename base_t::extracted_type &target
+        instruction: _mm_stream_pd(target.data(), base_t::_value);

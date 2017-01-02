@@ -35,7 +35,7 @@ namespace zacc {
         Comparison = 1 << 5,
         Conditional = 1 << 6,
 
-        Extractable = 1 << 7,
+        IO = 1 << 7,
         Iteratable = 1 << 8,
         Printable = 1 << 9,
     };

@@ -28,13 +28,13 @@
 #include "../traits.hpp"
 #include "../common.hpp"
 
-namespace zacc {
+namespace zacc { namespace interface {
 
-    template<typename base_t, typename composed_t = logical <base_t>>
+    template<typename base_t, typename composed_t>
     struct logical : public base_t {
         FORWARD(logical);
 
-        TRAIT(traits::Logic);
+        TRAIT(traits::Logical);
 
         friend composed_t operator!(const composed_t one) { return base_t::logical_negate(one); }
 
@@ -50,4 +50,4 @@ namespace zacc {
 
         CONVERSION(&&);
     };
-}
+}}

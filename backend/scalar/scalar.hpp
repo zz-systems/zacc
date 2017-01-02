@@ -29,79 +29,52 @@
 
 #include "../../common/zval.hpp"
 #include "../../common/compose.hpp"
-#include "arithmetic.hpp"
-#include "bitwise.hpp"
-#include "logical.hpp"
-#include "common.hpp"
+#include "../../common/common_traits.hpp"
+#include "generated/float.gen.hpp"
+#include "generated/int.gen.hpp"
+
 #include "conditional.hpp"
 
 namespace zacc {
     using namespace scalar;
 
 
-    namespace {
+    //namespace {
 
         template<typename type_t, typename aggregate_t>
         using integral_type_policies = compose<
-                arithmetic_policies<aggregate_t>::template negate_policy,
-                arithmetic_policies<aggregate_t>::template add_policy,
-                arithmetic_policies<aggregate_t>::template sub_policy,
-                arithmetic_policies<aggregate_t>::template mul_policy,
-                arithmetic_policies<aggregate_t>::template div_policy,
+                printable,
+                iteratable,
+                extractable,
 
-                bitwise_policies<aggregate_t>::template negate_bitwise_policy,
-                bitwise_policies<aggregate_t>::template or_bitwise_policy,
-                bitwise_policies<aggregate_t>::template and_bitwise_policy,
-                bitwise_policies<aggregate_t>::template xor_bitwise_policy,
-                bitwise_policies<aggregate_t>::template shift_left_bitwise_policy,
-                bitwise_policies<aggregate_t>::template shift_right_bitwise_policy,
 
-                common_policies<aggregate_t>::template extract_policy,
-                common_policies<aggregate_t>::template print_policy,
+                gen_int::arithmetic<aggregate_t>::template impl,
+                gen_int::io<aggregate_t>::template impl,
+                gen_int::conditional<aggregate_t>::template impl,
+                gen_int::logical<aggregate_t>::template impl,
+                gen_int::comparison<aggregate_t>::template impl,
+                gen_int::bitwise<aggregate_t>::template impl,
 
-                logical_policies<aggregate_t>::template negate_logical_policy,
-                logical_policies<aggregate_t>::template or_logical_policy,
-                logical_policies<aggregate_t>::template and_logical_policy,
-
-                logical_policies<aggregate_t>::template compare_eq_policy,
-                logical_policies<aggregate_t>::template compare_neq_policy,
-
-                logical_policies<aggregate_t>::template compare_gt_policy,
-                logical_policies<aggregate_t>::template compare_lt_policy,
-                logical_policies<aggregate_t>::template compare_ge_policy,
-                logical_policies<aggregate_t>::template compare_le_policy,
-
-                conditional_policies<aggregate_t>::template if_policy,
-
-                converting_arithmetic<type_t>::template inject,
                 composable<zval<type_t>>::template type
         >;
 
         template<typename type_t, typename aggregate_t>
         using float_type_policies =  compose<
-                arithmetic_policies<aggregate_t>::template negate_policy,
-                arithmetic_policies<aggregate_t>::template add_policy,
-                arithmetic_policies<aggregate_t>::template sub_policy,
-                arithmetic_policies<aggregate_t>::template mul_policy,
-                arithmetic_policies<aggregate_t>::template div_policy,
+                printable,
+                iteratable,
+                extractable,
 
-                common_policies<aggregate_t>::template extract_policy,
-                common_policies<aggregate_t>::template print_policy,
 
-                logical_policies<aggregate_t>::template negate_policy,
-                logical_policies<aggregate_t>::template or_policy,
-                logical_policies<aggregate_t>::template and_policy,
-                logical_policies<aggregate_t>::template compare_eq_policy,
-                logical_policies<aggregate_t>::template compare_neq_policy,
-                logical_policies<aggregate_t>::template compare_gt_policy,
-                logical_policies<aggregate_t>::template compare_lt_policy,
-                logical_policies<aggregate_t>::template compare_ge_policy,
-                logical_policies<aggregate_t>::template compare_le_policy,
+                gen_float::arithmetic<aggregate_t>::template impl,
+                gen_float::io<aggregate_t>::template impl,
+                gen_float::conditional<aggregate_t>::template impl,
+                gen_float::logical<aggregate_t>::template impl,
+                gen_float::comparison<aggregate_t>::template impl,
+                gen_float::bitwise<aggregate_t>::template impl,
 
-                converting_arithmetic<type_t>::template inject,
                 composable<zval<type_t>>::template type
         >;
-    }
+    //}
 
 
     template<typename type_t>

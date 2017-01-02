@@ -30,11 +30,11 @@
 #include "../../common/zval.hpp"
 #include "../../common/compose.hpp"
 
-#include "float32/zfloat32.hpp"
-#include "float64/zfloat64.hpp"
-#include "int8/zint8.hpp"
-#include "int16/zint16.hpp"
-#include "int32/zint32.hpp"
+#include "zfloat32.hpp"
+//#include "zfloat64.hpp"
+//#include "zint8.hpp"
+//#include "zint16.hpp"
+//#include "zint32.hpp"
 
 namespace zacc {
     namespace sse {

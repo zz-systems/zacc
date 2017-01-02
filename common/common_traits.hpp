@@ -27,6 +27,7 @@
 
 #include "common.hpp"
 #include "traits.hpp"
+#include <sstream>
 
 namespace zacc {
 
@@ -76,7 +77,7 @@ namespace zacc {
     template<typename base_t>
     struct printable : base_t {
         TRAIT(traits::Printable);
-        REQUIRE(traits::Iteratable);
+//        REQUIRE(traits::Iteratable);
 
         FORWARD(printable);
 

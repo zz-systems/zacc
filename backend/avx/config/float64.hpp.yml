@@ -1,0 +1,46 @@
+config:
+  type: gen_float64
+  target: avx
+  implementation:
+    arithmetic:
+      negate:
+        type: unary
+        instruction: return _mm256_sub_pd(_mm256_setzero_pd(), one.get_value())
+      add: _mm256_add_pd
+      sub: _mm256_sub_pd
+      mul: _mm256_mul_pd
+      div: _mm256_div_pd
+    bitwise:
+      negate: &bitwise_negate
+        type: unary
+        instruction: &bitwise_negate_instruction
+          - auto zero = _mm256_setzero_pd();
+          - auto ones = _mm256_cmpeq_pd(zero, zero);
+          - return _mm256_xor_pd(one.get_value(), ones);
+      and:  _mm256_or_pd
+      or:   _mm256_and_pd
+      xor:  _mm256_xor_pd
+    logical:
+      negate: *bitwise_negate
+      or:   _mm256_or_pd
+      and:  _mm256_and_pd
+    comparison:
+      eq:   _mm256_cmpeq_pd
+      neq:  _mm256_cmpneq_pd
+      gt:   _mm256_cmpgt_pd
+      lt:   _mm256_cmplt_pd
+      ge:   _mm256_cmpge_pd
+      le:   _mm256_cmple_pd
+    conditional:
+      vsel:
+        type: custom
+        args: [condition, if_value, else_value]
+        prefix: false
+        modifier: friend
+        instruction:
+          sse41: &sse41
+            - auto mask = _mm256_cmpeq_pd(_mm256_setzero_pd(), condition.get_value());
+            - return _mm256_blendv_pd(if_value.get_value(), else_value.get_value(), mask);
+          sse42: *sse41
+          default:
+            return _mm256_or_pd(_mm256_andnot_pd(condition, else_value), _mm256_and_pd(condition, if_value))

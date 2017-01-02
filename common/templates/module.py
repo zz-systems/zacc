@@ -11,14 +11,14 @@ class OpType(Enum):
 
 def postprocess(config):
     clean_config = {}
-
-    for (module, module_config) in config["implementation"].items():
+    for (module, module_config) in config["config"]["implementation"].items():
         clean_config[module] = {}
 
         for (operator, operator_config) in module_config.items():
             op_args = ""
             op_type = OpType.BINARY
             op_instr = ""
+            op_returns = ""
             op_prefix = bool(1);
             op_modifier = "";
 
@@ -30,6 +30,9 @@ def postprocess(config):
 
                 if "args" in operator_config:
                     op_args = operator_config["args"]
+
+                if "returns" in operator_config:
+                    op_returns = operator_config["returns"]
 
                 if "prefix" in operator_config:
                     op_prefix = operator_config["prefix"] == "true"
@@ -43,17 +46,17 @@ def postprocess(config):
 
             name = module + "_" + operator if op_prefix else operator
             args = process_args(op_type, op_args)
-            instructions = dict(process_instructions(op_type, op_instr))
+            instructions = dict(process_instructions(op_returns, op_type, op_instr))
 
             for (branch, branch_ret_type) in process_branch(op_instr):
                 clean_config[module][operator].append({
-                    "rettype": op_modifier + branch_ret_type,
+                    "rettype": op_modifier + branch_ret_type if not op_returns else op_returns,
                     "conditional": len(instructions) > 1,
                     "name": name,
                     "args": args,
                     "instruction": instructions[branch]
                 })
-    return {"config": clean_config}
+    return {"config": clean_config, "branch": config["config"]["target"], "type": config["config"]["type"] }
 
 
 def process_branch(op_instr):
@@ -84,7 +87,7 @@ def process_args(op_type, op_args):
         if type(op_args) == list:
             return "const composed_t " + ", const composed_t ".join(op_args);
         else:
-            return args;
+            return op_args;
 
     if op_type == OpType.UNARY:
         return "const composed_t one"
@@ -92,7 +95,7 @@ def process_args(op_type, op_args):
         return "const composed_t one, const composed_t other"
 
 
-def process_instructions(op_type, op_instr):
+def process_instructions(op_returns, op_type, op_instr):
     # assume simple operations
     if type(op_instr) is str:
         if op_instr.find('(') == -1:  # simple method name without args.
@@ -101,7 +104,7 @@ def process_instructions(op_type, op_instr):
             elif op_type == OpType.BINARY:
                 op_instr += "(one.get_value(), other.get_value())"
 
-        if op_instr.find('return ') == -1:
+        if op_instr.find('return ') == -1 and op_returns.find('void') == -1:
             op_instr = "return " + op_instr
 
         if op_instr.rfind(';') == -1:
@@ -113,7 +116,7 @@ def process_instructions(op_type, op_instr):
         yield "default", op_instr
     elif type(op_instr) is dict:
         for (branch, instruction) in op_instr.items():
-            yield branch, dict(process_instructions(op_type, instruction))["default"]
+            yield branch, dict(process_instructions(op_returns, op_type, instruction))["default"]
     else:
         raise "Wrong instruction"
 

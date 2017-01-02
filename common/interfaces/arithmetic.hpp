@@ -28,12 +28,12 @@
 #include "../traits.hpp"
 #include "../common.hpp"
 
-namespace zacc {
+namespace zacc { namespace interface {
 
-    template<typename composed_t>
+    template<typename base_t, typename composed_t>
     struct fused_multiplication;
 
-    template<typename base_t, typename composed_t = arithmetic <base_t>>
+    template<typename base_t, typename composed_t>
     struct arithmetic : public base_t {
         FORWARD(arithmetic);
 
@@ -90,4 +90,4 @@ namespace zacc {
         composed_t _initial_multiplicand;
         composed_t _initial_multiplier;
     };
-}
+}}

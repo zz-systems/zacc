@@ -28,9 +28,9 @@
 #include "../traits.hpp"
 #include "../common.hpp"
 
-namespace zacc {
+namespace zacc { namespace interface {
 
-    template<typename base_t, typename composed_t = comparison <base_t>>
+    template<typename base_t, typename composed_t>
     struct comparison : public base_t {
         FORWARD(comparison);
 
@@ -72,4 +72,4 @@ namespace zacc {
 
         CONVERSION(<=);
     };
-}
+}}

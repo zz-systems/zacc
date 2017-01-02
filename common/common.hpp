@@ -49,7 +49,7 @@
         return one op static_cast<composed_t>(other); \
     }; \
     template<typename other_t> \
-    friend composed_t operator + (const enable_if_not_same<other_t, composed_t> one, const composed_t other) { \
+    friend composed_t operator op (const enable_if_not_same<other_t, composed_t> one, const composed_t other) { \
         return static_cast<composed_t>(one) op other; \
     }
 

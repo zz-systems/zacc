@@ -28,9 +28,9 @@
 #include "../traits.hpp"
 #include "../common.hpp"
 
-namespace zacc {
+namespace zacc { namespace interface {
 
-    template<typename base_t, typename composed_t = conditional <base_t>>
+    template<typename base_t, typename composed_t>
     struct conditional : public base_t {
         FORWARD(conditional);
 
@@ -43,14 +43,14 @@ namespace zacc {
             else_branch(const composed_t condition, const composed_t if_value)
                     : _condition(condition), _if_value(if_value) {}
 
-            aggregate_t _if_value;
-            aggregate_t _condition;
+            composed_t _if_value;
+            composed_t _condition;
         };
 
 
-        else_branch when(const aggregate_t condition) const {
+        else_branch when(const composed_t condition) const {
             return else_branch(condition, *this);
         }
     };
 
-}
+}}
