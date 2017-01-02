@@ -1,0 +1,46 @@
+config:
+  type: float32
+  target: sse
+  implementation:
+    arithmetic:
+      negate:
+        type: unary
+        instruction: return _mm_sub_ps(_mm_setzero_ps(), one.get_value())
+      add: _mm_add_ps
+      sub: _mm_sub_ps
+      mul: _mm_mul_ps
+      div: _mm_div_ps
+    bitwise:
+      negate: &bitwise_negate
+        type: unary
+        instruction: &bitwise_negate_instruction
+          - auto zero = _mm_setzero_ps();
+          - auto ones = _mm_cmpeq_ps(zero, zero);
+          - return _mm_xor_ps(one.get_value(), ones);
+      and:  _mm_or_ps
+      or:   _mm_and_ps
+      xor:  _mm_xor_ps
+    logical:
+      negate: *bitwise_negate
+      or:   _mm_or_ps
+      and:  _mm_and_ps
+    comparison:
+      eq:   _mm_cmpeq_ps
+      neq:  _mm_cmpneq_ps
+      gt:   _mm_cmpgt_ps
+      lt:   _mm_cmplt_ps
+      ge:   _mm_cmpge_ps
+      le:   _mm_cmple_ps
+    conditional:
+      vsel:
+        type: custom
+        args: [condition, if_value, else_value]
+        prefix: false
+        modifier: friend
+        instruction:
+          sse41: &sse41
+            - auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition.get_value());
+            - return _mm_blendv_ps(if_value.get_value(), else_value.get_value(), mask);
+          sse42: *sse41
+          default:
+            return (condition & if_value) | (~condition & else_value)

@@ -23,7 +23,6 @@
 //---------------------------------------------------------------------------------
 
 
-#include "../common/conversion/arithmetic.hpp"
 #include "../backend/scalar/scalar.hpp"
 #include "../backend/sse/sse.hpp"
 

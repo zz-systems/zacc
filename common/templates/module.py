@@ -12,9 +12,7 @@ class OpType(Enum):
 def postprocess(config):
     clean_config = {}
 
-    print("---------------------------------------------------")
-
-    for (module, module_config) in config.items():
+    for (module, module_config) in config["implementation"].items():
         clean_config[module] = {}
 
         for (operator, operator_config) in module_config.items():
@@ -55,11 +53,6 @@ def postprocess(config):
                     "args": args,
                     "instruction": instructions[branch]
                 })
-
-            print(op_instr)
-            print("===================================================")
-            print(instructions)  # clean_config[module][operator])
-            print("---------------------------------------------------")
     return {"config": clean_config}
 
 
@@ -120,7 +113,7 @@ def process_instructions(op_type, op_instr):
         yield "default", op_instr
     elif type(op_instr) is dict:
         for (branch, instruction) in op_instr.items():
-            yield branch, [dict(process_instructions(op_type, instruction))["default"][0]]
+            yield branch, dict(process_instructions(op_type, instruction))["default"]
     else:
         raise "Wrong instruction"
 
