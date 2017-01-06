@@ -34,7 +34,8 @@
 #define TRAIT2(provides, base_t) \
     static const long long traits =  base_t::traits | static_cast<long long>(provides)
 
-#define TRAIT(provides) TRAIT2(provides, base_t)
+#define TRAIT(provides) \
+    TRAIT2(provides, base_t)
 
 #define REQUIRE(requirement) \
     static_assert((base_t::traits & static_cast<long long>(requirement)) != 0, "Requirement not met: feature '" #requirement "' required.")

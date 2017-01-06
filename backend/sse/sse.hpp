@@ -30,14 +30,13 @@
 #include "../../common/zval.hpp"
 #include "../../common/compose.hpp"
 
-#include "zfloat32.hpp"
+#include "generated/float32.gen.hpp"
 //#include "zfloat64.hpp"
 //#include "zint8.hpp"
 //#include "zint16.hpp"
 //#include "zint32.hpp"
 
 namespace zacc {
-    namespace sse {
-
-    }
+    using zfloat32  = sse::zfloat32;
+    using zfloat    = sse::zfloat32;
 }

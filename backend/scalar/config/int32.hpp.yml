@@ -1,10 +1,10 @@
 type:
   type: int32
-  target: avx2
-  vector_t: &vector_t __m256i
+  branch: scalar
+  vector_t: &vector_t int
   scalar_t: &scalar_t int
-  vec_size: &vec_size 8
-  alignment: 32
+  vec_size: &vec_size 1
+  alignment: 4
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
      external:
@@ -20,17 +20,8 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
-    - args: [[*vector_t, value]]
-      init: value
-
     - args: [[*scalar_t, value]]
-      init: _mm256_set1_epi8(value)
-
-    - args: [[*scalar_t, "*value"]]
-      init: _mm256_load_si128(value)
-
-    - args: { from: *vec_size, to: 0, type: *scalar_t }
-      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi8 }
+      init: value
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     store: &io_store
@@ -38,54 +29,51 @@ modules:
       member: true
       suffix: const
       args: { raw: "typename base_t::extracted_type &target" }
-      body: _mm256_store_si128(target.data(), base_t::_value);
-    stream:
-      <<: *io_store
-      body: _mm256_stream_si128(target.data(), base_t::_value);
+      body: target.data()[0] = base_t::_value;
+    stream: *io_store
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     negate:
       args: one
-      body: _mm256_sub_epi32(_mm256_setzero_epi32(), one.get_value())
-    add: _mm256_add_epi32
-    sub: _mm256_sub_epi32
-    mul: _mm256_mullo_epi32
-    div: _mm256_div_ps(_mm256_cvtepi32_ps(one.get_value()), _mm256_cvtepi32_ps(other.get_value()));
+      body: -one.get_value();
+    add: one.get_value() + other.get_value();
+    sub: one.get_value() - other.get_value();
+    mul: one.get_value() * other.get_value();
+    div: one.get_value() / other.get_value();
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    negate: &bitwise_negate
+    negate:
       args: one
-      body:
-        - auto zero = _mm256_setzero_si128();
-        - auto ones = _mm256_cmpeq_epi32(zero, zero);
-        - return _mm256_xor_si128(one.get_value(), ones);
-    and:  _mm256_or_epi32
-    or:   _mm256_and_epi32
-    xor:  _mm256_xor_si128
-    sll:  _mm256_sll_epi32
-    srl:  _mm256_srl_epi32
+      body: ~one.get_value();
+    and:  one.get_value() & other.get_value();
+    or:   one.get_value() | other.get_value();
+    xor:  one.get_value() ^ other.get_value();
+    sll:  one.get_value() << other.get_value()
+    srl:  one.get_value() >> other.get_value()
     slli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: _mm256_slli_epi32
+      body: one.get_value() << other
     srli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: _mm256_srli_epi32
+      body: one.get_value() >> other
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate: *bitwise_negate
-    or:   _mm256_or_epi32
-    and:  _mm256_and_epi32
+    negate:
+      args: one
+      body: "!one.get_value()"
+    or:   one.get_value() || other.get_value();
+    and:  one.get_value() && other.get_value();
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    eq:   _mm256_cmpeq_epi32
-    neq:  _mm256_cmpneq_epi32
-    gt:   _mm256_cmpgt_epi32
-    lt:   _mm256_cmplt_epi32
-    ge:   _mm256_cmpge_epi32
-    le:   _mm256_cmple_epi32
+    eq:   one.get_value() == other.get_value();
+    neq:  one.get_value() != other.get_value();
+    gt:   one.get_value() > other.get_value();
+    lt:   one.get_value() < other.get_value();
+    ge:   one.get_value() >= other.get_value();
+    le:   one.get_value() <= other.get_value();
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
-    vsel:
-      args: [condition, if_value, else_value]
-      mangling: false
-      body: _mm256_blendv_epi8(if_value.get_value(), else_value.get_value(), condition.get_value());
+     vsel:
+        args: [condition, if_value, else_value]
+        mangling: false
+        body: "condition ? if_value : else_value"

@@ -37,7 +37,7 @@ namespace zacc { namespace interface {
         TRAIT(traits::Conditional);
 
         struct else_branch {
-            composed_t otherwise(const composed_t else_value) const { return base_t::conditional_otherwise(); }
+            composed_t otherwise(const composed_t else_value) const { return vsel(_condition, _if_value, else_value); }
 
         private:
             else_branch(const composed_t condition, const composed_t if_value)
@@ -45,6 +45,8 @@ namespace zacc { namespace interface {
 
             composed_t _if_value;
             composed_t _condition;
+
+            friend class conditional<base_t, composed_t>;
         };
 
 

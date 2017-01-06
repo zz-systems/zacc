@@ -33,213 +33,257 @@
 
 #include "../../../common/type_traits.hpp"
 
+#include "../../../common/interfaces/construction.hpp"
+#include "../../../common/interfaces/io.hpp"
 #include "../../../common/interfaces/arithmetic.hpp"
 #include "../../../common/interfaces/bitwise.hpp"
 #include "../../../common/interfaces/logical.hpp"
 #include "../../../common/interfaces/comparison.hpp"
 #include "../../../common/interfaces/conditional.hpp"
-#include "../../../common/interfaces/io.hpp"
 
-namespace zacc { namespace sse { namespace gen_int32 {
+namespace zacc { namespace None {
+
+    template<typename composed_t>
+    struct int16_construction
+    {
+        template<typename base_t>
+        struct __impl : base_t
+        {
+
+            __impl(__m256i value) : base_t(value) {
+            }
+
+            __impl(short value) : base_t(_mm256_set1_epi8(value)) {
+            }
+
+            __impl(short *value) : base_t(_mm256_load_si128(value)) {
+            }
+
+            __impl(short arg15, short arg14, short arg13, short arg12, short arg11, short arg10, short arg9, short arg8, short arg7, short arg6, short arg5, short arg4, short arg3, short arg2, short arg1, short arg0) : base_t(_mm256_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)) {
+            }
+
+        };
+
+        template<typename base_t>
+        using impl = interface::construction<__impl<base_t>, composed_t>;
+    };
 
 
     template<typename composed_t>
-    struct arithmetic
+    struct int16_io
     {
         template<typename base_t>
-        struct impl : interface::arithmetic<base_t, composed_t>
+        struct __impl : base_t
         {
+            FORWARD(__impl);
 
-            composed_t arithmetic_negate (const composed_t one)
-            {
+            void io_store(typename base_t::extracted_type &target) const {
+                return _mm256_store_si128(target.data(), base_t::_value);
+            }
+
+            void io_stream(typename base_t::extracted_type &target) const {
+                return _mm256_stream_si128(target.data(), base_t::_value);
+            }
+
+        };
+
+        template<typename base_t>
+        using impl = interface::io<__impl<base_t>, composed_t>;
+    };
+
+
+    template<typename composed_t>
+    struct int16_arithmetic
+    {
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            FORWARD(__impl);
+
+            friend composed_t arithmetic_negate(composed_t one) {
                 return _mm256_sub_epi32(_mm256_setzero_epi32(), one.get_value());
             }
 
-            composed_t arithmetic_add (const composed_t one, const composed_t other)
-            {
+            friend composed_t arithmetic_add(composed_t one, composed_t other) {
                 return _mm256_add_epi32(one.get_value(), other.get_value());
             }
 
-            composed_t arithmetic_sub (const composed_t one, const composed_t other)
-            {
+            friend composed_t arithmetic_sub(composed_t one, composed_t other) {
                 return _mm256_sub_epi32(one.get_value(), other.get_value());
             }
 
+            friend composed_t arithmetic_mul(composed_t one, composed_t other) {
+                return _mm256_mullo_epi16(one.get_value(), other.get_value());
+            }
+
         };
+
+        template<typename base_t>
+        using impl = interface::arithmetic<__impl<base_t>, composed_t>;
     };
 
 
     template<typename composed_t>
-    struct bitwise
+    struct int16_bitwise
     {
         template<typename base_t>
-        struct impl : interface::bitwise<base_t, composed_t>
+        struct __impl : base_t
         {
+            FORWARD(__impl);
 
-            composed_t bitwise_negate (const composed_t one)
-            {
+            friend composed_t bitwise_negate(composed_t one) {
                 auto zero = _mm256_setzero_si128();
                 auto ones = _mm256_cmpeq_epi32(zero, zero);
                 return _mm256_xor_si128(one.get_value(), ones);
             }
 
-            composed_t bitwise_and (const composed_t one, const composed_t other)
-            {
+            friend composed_t bitwise_and(composed_t one, composed_t other) {
                 return _mm256_or_epi32(one.get_value(), other.get_value());
             }
 
-            composed_t bitwise_or (const composed_t one, const composed_t other)
-            {
+            friend composed_t bitwise_or(composed_t one, composed_t other) {
                 return _mm256_and_epi32(one.get_value(), other.get_value());
             }
 
-            composed_t bitwise_xor (const composed_t one, const composed_t other)
-            {
+            friend composed_t bitwise_xor(composed_t one, composed_t other) {
                 return _mm256_xor_si128(one.get_value(), other.get_value());
             }
 
-            composed_t bitwise_sll (const composed_t one, const composed_t other)
-            {
+            friend composed_t bitwise_sll(composed_t one, composed_t other) {
                 return _mm256_sll_epi32(one.get_value(), other.get_value());
             }
 
-            composed_t bitwise_srl (const composed_t one, const composed_t other)
-            {
+            friend composed_t bitwise_srl(composed_t one, composed_t other) {
                 return _mm256_srl_epi32(one.get_value(), other.get_value());
             }
 
-            composed_t bitwise_slli (const composed_t one, const size_t other)
-            {
-                return _mm256_slli_epi32;
+            friend composed_t bitwise_slli(const composed_t one, const size_t other) {
+                return _mm256_slli_epi32(const composed_t one, const size_t other);
             }
 
-            composed_t bitwise_srli (const composed_t one, const size_t other)
-            {
-                return _mm256_srli_epi32;
+            friend composed_t bitwise_srli(const composed_t one, const size_t other) {
+                return _mm256_srli_epi32(const composed_t one, const size_t other);
             }
 
         };
+
+        template<typename base_t>
+        using impl = interface::bitwise<__impl<base_t>, composed_t>;
     };
 
 
     template<typename composed_t>
-    struct logical
+    struct int16_logical
     {
         template<typename base_t>
-        struct impl : interface::logical<base_t, composed_t>
+        struct __impl : base_t
         {
+            FORWARD(__impl);
 
-            composed_t logical_negate (const composed_t one)
-            {
+            friend composed_t logical_negate(composed_t one) {
                 auto zero = _mm256_setzero_si128();
                 auto ones = _mm256_cmpeq_epi32(zero, zero);
                 return _mm256_xor_si128(one.get_value(), ones);
             }
 
-            composed_t logical_or (const composed_t one, const composed_t other)
-            {
+            friend composed_t logical_or(composed_t one, composed_t other) {
                 return _mm256_or_epi32(one.get_value(), other.get_value());
             }
 
-            composed_t logical_and (const composed_t one, const composed_t other)
-            {
+            friend composed_t logical_and(composed_t one, composed_t other) {
                 return _mm256_and_epi32(one.get_value(), other.get_value());
             }
 
         };
+
+        template<typename base_t>
+        using impl = interface::logical<__impl<base_t>, composed_t>;
     };
 
 
     template<typename composed_t>
-    struct comparison
+    struct int16_comparison
     {
         template<typename base_t>
-        struct impl : interface::comparison<base_t, composed_t>
+        struct __impl : base_t
         {
+            FORWARD(__impl);
 
-            composed_t comparison_eq (const composed_t one, const composed_t other)
-            {
+            friend composed_t comparison_eq(composed_t one, composed_t other) {
                 return _mm256_cmpeq_epi32(one.get_value(), other.get_value());
             }
 
-            composed_t comparison_neq (const composed_t one, const composed_t other)
-            {
+            friend composed_t comparison_neq(composed_t one, composed_t other) {
                 return _mm256_cmpneq_epi32(one.get_value(), other.get_value());
             }
 
-            composed_t comparison_gt (const composed_t one, const composed_t other)
-            {
+            friend composed_t comparison_gt(composed_t one, composed_t other) {
                 return _mm256_cmpgt_epi32(one.get_value(), other.get_value());
             }
 
-            composed_t comparison_lt (const composed_t one, const composed_t other)
-            {
+            friend composed_t comparison_lt(composed_t one, composed_t other) {
                 return _mm256_cmplt_epi32(one.get_value(), other.get_value());
             }
 
-            composed_t comparison_ge (const composed_t one, const composed_t other)
-            {
+            friend composed_t comparison_ge(composed_t one, composed_t other) {
                 return _mm256_cmpge_epi32(one.get_value(), other.get_value());
             }
 
-            composed_t comparison_le (const composed_t one, const composed_t other)
-            {
+            friend composed_t comparison_le(composed_t one, composed_t other) {
                 return _mm256_cmple_epi32(one.get_value(), other.get_value());
             }
 
         };
+
+        template<typename base_t>
+        using impl = interface::comparison<__impl<base_t>, composed_t>;
     };
 
 
     template<typename composed_t>
-    struct conditional
+    struct int16_conditional
     {
         template<typename base_t>
-        struct impl : interface::conditional<base_t, composed_t>
+        struct __impl : base_t
         {
+            FORWARD(__impl);
 
-            friend std::enable_if_t<dispatcher::has_sse41 && !dispatcher::has_sse42, composed_t>
-            vsel (const composed_t condition, const composed_t if_value, const composed_t else_value)
-            {
+            friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value) {
                 auto mask = _mm256_cmpeq_epi32(_mm256_setzero_si128(), condition.get_value());
                 return _mm256_blendv_epi8(if_value.get_value(), else_value.get_value(), mask);
             }
 
-            friend std::enable_if_t<dispatcher::has_sse42 && !dispatcher::has_sse41, composed_t>
-            vsel (const composed_t condition, const composed_t if_value, const composed_t else_value)
-            {
-                auto mask = _mm256_cmpeq_epi32(_mm256_setzero_si128(), condition.get_value());
-                return _mm256_blendv_epi8(if_value.get_value(), else_value.get_value(), mask);
-            }
-
-            friend std::enable_if_t<!dispatcher::has_sse41 && !dispatcher::has_sse42, composed_t>
-            vsel (const composed_t condition, const composed_t if_value, const composed_t else_value)
-            {
-                return _mm256_or_si128(_mm256_andnot_si128(condition, else_value), _mm256_and_si128(condition, if_value));
-            }
-
         };
-    };
 
-
-    template<typename composed_t>
-    struct io
-    {
         template<typename base_t>
-        struct impl : interface::io<base_t, composed_t>
-        {
-
-            void io_store (typename base_t::extracted_type &target)
-            {
-                _mm256_store_si128(target.data(), base_t::_value);
-            }
-
-            void io_stream (typename base_t::extracted_type &target)
-            {
-                _mm256_stream_si128(target.data(), base_t::_value);
-            }
-
-        };
+        using impl = interface::conditional<__impl<base_t>, composed_t>;
     };
 
-}}}
+
+    struct __zint16
+        : public zval<__m256i, short, 16, 32>
+    {
+        FORWARD2(__zint16, zval);
+    };
+
+    struct zint16;
+
+    struct zint16 : public compose
+        <
+            printable::impl,
+            iteratable::impl,
+            int16_io<zint16>::impl,
+            int16_arithmetic<zint16>::impl,
+            int16_bitwise<zint16>::impl,
+            int16_logical<zint16>::impl,
+            int16_comparison<zint16>::impl,
+            int16_conditional<zint16>::impl,
+            int16_construction<zint16>::impl,
+
+            composable<__zint16>::template type
+        >
+    {
+        FORWARD2(zint16, compose);
+    };
+
+}}

@@ -31,41 +31,8 @@
 namespace zacc { namespace interface {
 
     template<typename base_t, typename composed_t>
-    struct io : public base_t {
-
-        typedef typename base_t::extracted_type extracted_t;
-
-
-        FORWARD(io);
-
-        TRAIT(traits::IO);
-
-        void store (extracted_t &target) const
-        {
-            base_t::io_store(target);
-        }
-
-        void stream (extracted_t &target) const
-        {
-            base_t::io_stream(target);
-        }
-
-        const extracted_t data() const {
-            extracted_t result;
-
-            store(result);
-
-            return result;
-        }
-
-        extracted_t
-        data() {
-            extracted_t result;
-
-            store(result);
-
-            return result;
-        }
+    struct construction : public base_t {
+        FORWARD(construction);
     };
 
 }}

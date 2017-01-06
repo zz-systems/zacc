@@ -36,18 +36,18 @@ namespace zacc { namespace interface {
 
         TRAIT(traits::Bitwise);
 
-        friend composed_t operator~(const composed_t one) { return base_t::bitwise_negate(one); }
+        friend composed_t operator~(const composed_t one) { return bitwise_negate(one); }
 
         friend composed_t operator|(const composed_t one, const composed_t other) {
-            return base_t::bitwise_or(one, other);
+            return bitwise_or(one, other);
         }
 
         friend composed_t operator&(const composed_t one, const composed_t other) {
-            return base_t::bitwise_and(one, other);
+            return bitwise_and(one, other);
         }
 
         friend composed_t operator^(const composed_t one, const composed_t other) {
-            return base_t::bitwise_xor(one, other);
+            return bitwise_xor(one, other);
         }
 
 
@@ -66,19 +66,19 @@ namespace zacc { namespace interface {
 
 
         friend composed_t operator<<(const composed_t one, const size_t immediate) {
-            return base_t::bitwise_shift_left_immediate(one, immediate);
+            return bitwise_shift_left_immediate(one, immediate);
         }
 
         friend composed_t operator>>(const composed_t one, const size_t immediate) {
-            return base_t::bitwise_shift_right_immediate(one, immediate);
+            return bitwise_shift_right_immediate(one, immediate);
         }
 
         friend composed_t operator<<(const composed_t one, const composed_t other) {
-            return base_t::bitwise_shift_left(one, other);
+            return bitwise_shift_left(one, other);
         }
 
         friend composed_t operator>>(const composed_t one, const composed_t other) {
-            return base_t::bitwise_shift_right(one, other);
+            return bitwise_shift_right(one, other);
         }
 
 

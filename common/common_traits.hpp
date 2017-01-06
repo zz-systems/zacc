@@ -31,73 +31,79 @@
 
 namespace zacc {
 
-    template<typename base_t>
-    struct extractable : public base_t {
-        FORWARD(extractable);
-        typedef typename base_t::extracted_type extracted_t;
+//    struct extractable {
+//        template<typename base_t>
+//        struct impl : public base_t {
+//            FORWARD(impl);
+//
+//            typedef typename base_t::extracted_type extracted_t;
+//
+//            const extracted_t data() const {
+//                extracted_t result;
+//
+//                base_t::store(result);
+//
+//                return result;
+//            }
+//
+//            extracted_t
+//            data() {
+//                extracted_t result;
+//
+//                base_t::store(result);
+//
+//                return result;
+//            }
+//        };
+//    };
 
-        const extracted_t data() const {
-            extracted_t result;
+    struct iteratable {
+        template<typename base_t>
+        struct impl : public base_t {
+            FORWARD(impl);
 
-            base_t::store(result);
+            REQUIRE(traits::IO);
+            TRAIT(traits::Iteratable);
 
-            return result;
-        }
+            using iterator      = typename base_t::extracted_type::iterator;
 
-        extracted_t
-        data() {
-            extracted_t result;
+            iterator begin() {
+                _snapshot = base_t::data();
+                return _snapshot.begin();
+            }
 
-            base_t::store(result);
+            iterator end() { return _snapshot.end(); }
 
-            return result;
-        }
+        private:
+            typename base_t::extracted_type _snapshot;
+        };
     };
 
-    template<typename base_t>
-    struct iteratable : base_t {
-
-        TRAIT(traits::Iteratable);
-
-        FORWARD(iteratable);
-
-        using iterator      = typename base_t::extracted_type::iterator;
-
-        iterator begin() {
-            _snapshot = base_t::data();
-            return _snapshot.begin();
-        }
-
-        iterator end() { return _snapshot.end(); }
-
-    private:
-        typename base_t::extracted_type _snapshot;
-    };
-
-    template<typename base_t>
-    struct printable : base_t {
-        TRAIT(traits::Printable);
+    struct printable {
+        template<typename base_t>
+        struct impl : public base_t {
+            FORWARD(impl);
+            TRAIT(traits::Printable);
 //        REQUIRE(traits::Iteratable);
 
-        FORWARD(printable);
+            std::string to_string() const {
+                std::stringstream ss;
 
-        std::string to_string() const {
-            std::stringstream ss;
+                if (base_t::is_vector)
+                    ss << "[ ";
 
-            if (base_t::is_vector)
-                ss << "[ ";
+                for (auto entry : base_t::data())
+                    ss << entry << " ";
 
-            for (auto entry : base_t::data())
-                ss << entry << " ";
+                if (base_t::is_vector)
+                    ss << "]";
 
-            if (base_t::is_vector)
-                ss << "]";
+                return ss.str();
+            }
 
-            return ss.str();
-        }
-
-        friend std::ostream &operator<<(std::ostream &os, const printable data) {
-            os << data.to_string();
-        }
+            friend std::ostream &operator<<(std::ostream &os, const impl data) {
+                os << data.to_string();
+            }
+        };
     };
 }

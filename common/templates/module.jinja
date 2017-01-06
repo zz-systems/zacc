@@ -33,33 +33,29 @@
 
 #include "../../../common/type_traits.hpp"
 
-{% for module, module_config in config.items() %}
-#include "../../../common/interfaces/{{ module }}.hpp"
+{% for module in type.get_modules() %}
+#include "../../../common/interfaces/{{ module.name }}.hpp"
 {% endfor %}
 
-namespace zacc { namespace {{ branch }} { namespace {{ type }} {
-
-    {% for module, module_config in config.items() %}
+namespace zacc { namespace {{ type.branch }} {
+    {% for module in type.get_modules() %}
 
     template<typename composed_t>
-    struct {{ module }}
+    struct {{ module.mangled_name() }}
     {
         template<typename base_t>
-        struct impl : interface::{{ module }}<base_t, composed_t>
+        struct __impl : base_t
         {
+            {% if not module in type.construction  %}
+            FORWARD(__impl);
+            {% endif  %}
 
-            {% for operator, operator_config in module_config.items() %}
-                {% for branch in operator_config %}
+            {% for func in module.functions %}
+                {% for branch in func.branches() %}
 {#            /// @brief#}
 {#            /// @remark #}
-                    {% if branch["conditional"] %}
-            {{ branch["rettype"] }}
-            {{ branch["name"] }} ({{ branch["args"] }})
-                    {% else %}
-            {{ branch["rettype"] }} {{ branch["name"] }} ({{ branch["args"] }})
-                    {% endif %}
-            {
-                    {% for instruction in branch["instruction"] %}
+            {{ branch.signature() }} {
+                    {% for instruction in branch.get_instructions() %}
                 {{ instruction }}
                     {% endfor %}
             }
@@ -67,7 +63,31 @@ namespace zacc { namespace {{ branch }} { namespace {{ type }} {
                 {% endfor %}
             {% endfor %}
         };
+
+        template<typename base_t>
+        using impl = interface::{{ module.name }}<__impl<base_t>, composed_t>;
     };
 
     {% endfor %}
-}}}
+
+    struct __z{{ type.type }}
+        : public zval<{{ type.vector_t }}, {{ type.scalar_t }}, {{ type.vec_size }}, {{ type.alignment }}>
+    {
+        FORWARD2(__z{{ type.type }}, zval);
+    };
+
+    struct z{{ type.type }};
+
+    struct z{{ type.type }} : public compose
+        <
+        {% for trait in type.get_traits() %}
+            {{ trait }}::impl,
+        {% endfor %}
+
+            composable<__z{{ type.type }}>::template type
+        >
+    {
+        FORWARD2(z{{ type.type }}, compose);
+    };
+
+}}

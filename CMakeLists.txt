@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 14)
 file(GLOB_RECURSE sources           RELATIVE ${CMAKE_SOURCE_DIR}    "*.cpp")
 file(GLOB_RECURSE templates         RELATIVE ${CMAKE_SOURCE_DIR}    "*.jinja")
 file(GLOB_RECURSE templates_impl    RELATIVE ${CMAKE_SOURCE_DIR}    "*.hpp.yml")
-
+message(templates_impl)
 # build type templates
 foreach(template_impl ${templates_impl})
     string(REGEX REPLACE ".hpp.yml" ".gen.hpp" output ${template_impl})

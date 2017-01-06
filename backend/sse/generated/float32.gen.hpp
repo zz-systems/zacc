@@ -33,188 +33,250 @@
 
 #include "../../../common/type_traits.hpp"
 
+#include "../../../common/interfaces/construction.hpp"
+#include "../../../common/interfaces/io.hpp"
 #include "../../../common/interfaces/arithmetic.hpp"
 #include "../../../common/interfaces/bitwise.hpp"
 #include "../../../common/interfaces/logical.hpp"
 #include "../../../common/interfaces/comparison.hpp"
 #include "../../../common/interfaces/conditional.hpp"
-#include "../../../common/interfaces/io.hpp"
 
-namespace zacc { namespace sse { namespace gen_float32 {
+namespace zacc { namespace sse {
+
+    template<typename composed_t>
+    struct float32_construction
+    {
+        template<typename base_t>
+        struct __impl : base_t
+        {
+
+            __impl(__m128 value) : base_t(value) {
+            }
+
+            __impl(__m128d value) : base_t(_mm_cvtpd_ps(value)) {
+            }
+
+            __impl(__m128i value) : base_t(_mm_cvtepi32_ps(value)) {
+            }
+
+            __impl(float value) : base_t(_mm_set1_ps(value)) {
+            }
+
+            __impl(float *value) : base_t(_mm_load_ps(value)) {
+            }
+
+            __impl(float arg3, float arg2, float arg1, float arg0) : base_t(_mm_set_ps(arg0, arg1, arg2, arg3)) {
+            }
+
+        };
+
+        template<typename base_t>
+        using impl = interface::construction<__impl<base_t>, composed_t>;
+    };
 
 
     template<typename composed_t>
-    struct arithmetic
+    struct float32_io
     {
         template<typename base_t>
-        struct impl : interface::arithmetic<base_t, composed_t>
+        struct __impl : base_t
         {
+            FORWARD(__impl);
 
-            composed_t arithmetic_negate (const composed_t one)
-            {
+            void io_store(typename base_t::extracted_type &target) const {
+                return _mm_store_ps(target.data(), base_t::_value);
+            }
+
+            void io_stream(typename base_t::extracted_type &target) const {
+                return _mm_stream_ps(target.data(), base_t::_value);
+            }
+
+        };
+
+        template<typename base_t>
+        using impl = interface::io<__impl<base_t>, composed_t>;
+    };
+
+
+    template<typename composed_t>
+    struct float32_arithmetic
+    {
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            FORWARD(__impl);
+
+            friend composed_t arithmetic_negate(composed_t one) {
                 return _mm_sub_ps(_mm_setzero_ps(), one.get_value());
             }
 
-            composed_t arithmetic_add (const composed_t one, const composed_t other)
-            {
+            friend composed_t arithmetic_add(composed_t one, composed_t other) {
                 return _mm_add_ps(one.get_value(), other.get_value());
             }
 
-            composed_t arithmetic_sub (const composed_t one, const composed_t other)
-            {
+            friend composed_t arithmetic_sub(composed_t one, composed_t other) {
                 return _mm_sub_ps(one.get_value(), other.get_value());
             }
 
-            composed_t arithmetic_mul (const composed_t one, const composed_t other)
-            {
+            friend composed_t arithmetic_mul(composed_t one, composed_t other) {
                 return _mm_mul_ps(one.get_value(), other.get_value());
             }
 
-            composed_t arithmetic_div (const composed_t one, const composed_t other)
-            {
+            friend composed_t arithmetic_div(composed_t one, composed_t other) {
                 return _mm_div_ps(one.get_value(), other.get_value());
             }
 
         };
+
+        template<typename base_t>
+        using impl = interface::arithmetic<__impl<base_t>, composed_t>;
     };
 
 
     template<typename composed_t>
-    struct bitwise
+    struct float32_bitwise
     {
         template<typename base_t>
-        struct impl : interface::bitwise<base_t, composed_t>
+        struct __impl : base_t
         {
+            FORWARD(__impl);
 
-            composed_t bitwise_negate (const composed_t one)
-            {
+            friend composed_t bitwise_negate(composed_t one) {
                 auto zero = _mm_setzero_ps();
                 auto ones = _mm_cmpeq_ps(zero, zero);
                 return _mm_xor_ps(one.get_value(), ones);
             }
 
-            composed_t bitwise_and (const composed_t one, const composed_t other)
-            {
+            friend composed_t bitwise_and(composed_t one, composed_t other) {
                 return _mm_or_ps(one.get_value(), other.get_value());
             }
 
-            composed_t bitwise_or (const composed_t one, const composed_t other)
-            {
+            friend composed_t bitwise_or(composed_t one, composed_t other) {
                 return _mm_and_ps(one.get_value(), other.get_value());
             }
 
-            composed_t bitwise_xor (const composed_t one, const composed_t other)
-            {
+            friend composed_t bitwise_xor(composed_t one, composed_t other) {
                 return _mm_xor_ps(one.get_value(), other.get_value());
             }
 
         };
+
+        template<typename base_t>
+        using impl = interface::bitwise<__impl<base_t>, composed_t>;
     };
 
 
     template<typename composed_t>
-    struct logical
+    struct float32_logical
     {
         template<typename base_t>
-        struct impl : interface::logical<base_t, composed_t>
+        struct __impl : base_t
         {
+            FORWARD(__impl);
 
-            composed_t logical_negate (const composed_t one)
-            {
+            friend composed_t logical_negate(composed_t one) {
                 auto zero = _mm_setzero_ps();
                 auto ones = _mm_cmpeq_ps(zero, zero);
                 return _mm_xor_ps(one.get_value(), ones);
             }
 
-            composed_t logical_or (const composed_t one, const composed_t other)
-            {
+            friend composed_t logical_or(composed_t one, composed_t other) {
                 return _mm_or_ps(one.get_value(), other.get_value());
             }
 
-            composed_t logical_and (const composed_t one, const composed_t other)
-            {
+            friend composed_t logical_and(composed_t one, composed_t other) {
                 return _mm_and_ps(one.get_value(), other.get_value());
             }
 
         };
+
+        template<typename base_t>
+        using impl = interface::logical<__impl<base_t>, composed_t>;
     };
 
 
     template<typename composed_t>
-    struct comparison
+    struct float32_comparison
     {
         template<typename base_t>
-        struct impl : interface::comparison<base_t, composed_t>
+        struct __impl : base_t
         {
+            FORWARD(__impl);
 
-            composed_t comparison_eq (const composed_t one, const composed_t other)
-            {
+            friend composed_t comparison_eq(composed_t one, composed_t other) {
                 return _mm_cmpeq_ps(one.get_value(), other.get_value());
             }
 
-            composed_t comparison_neq (const composed_t one, const composed_t other)
-            {
+            friend composed_t comparison_neq(composed_t one, composed_t other) {
                 return _mm_cmpneq_ps(one.get_value(), other.get_value());
             }
 
-            composed_t comparison_gt (const composed_t one, const composed_t other)
-            {
+            friend composed_t comparison_gt(composed_t one, composed_t other) {
                 return _mm_cmpgt_ps(one.get_value(), other.get_value());
             }
 
-            composed_t comparison_lt (const composed_t one, const composed_t other)
-            {
+            friend composed_t comparison_lt(composed_t one, composed_t other) {
                 return _mm_cmplt_ps(one.get_value(), other.get_value());
             }
 
-            composed_t comparison_ge (const composed_t one, const composed_t other)
-            {
+            friend composed_t comparison_ge(composed_t one, composed_t other) {
                 return _mm_cmpge_ps(one.get_value(), other.get_value());
             }
 
-            composed_t comparison_le (const composed_t one, const composed_t other)
-            {
+            friend composed_t comparison_le(composed_t one, composed_t other) {
                 return _mm_cmple_ps(one.get_value(), other.get_value());
             }
 
         };
+
+        template<typename base_t>
+        using impl = interface::comparison<__impl<base_t>, composed_t>;
     };
 
 
     template<typename composed_t>
-    struct conditional
+    struct float32_conditional
     {
         template<typename base_t>
-        struct impl : interface::conditional<base_t, composed_t>
+        struct __impl : base_t
         {
+            FORWARD(__impl);
 
-            friend composed_t vsel (const composed_t condition, const composed_t if_value, const composed_t else_value)
-            {
-                return _mm_or_ps(_mm_andnot_ps(condition, else_value), _mm_and_ps(condition, if_value));
+            friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value) {
+                return _mm_or_ps(_mm_andnot_ps(condition.get_value(), else_value.get_value()), _mm_and_ps(condition.get_value(), if_value.get_value()));
             }
 
         };
-    };
 
-
-    template<typename composed_t>
-    struct io
-    {
         template<typename base_t>
-        struct impl : interface::io<base_t, composed_t>
-        {
-
-            void io_store (typename base_t::extracted_type &target)
-            {
-                _mm_store_ps(target.data(), base_t::_value);
-            }
-
-            void io_stream (typename base_t::extracted_type &target)
-            {
-                _mm_stream_ps(target.data(), base_t::_value);
-            }
-
-        };
+        using impl = interface::conditional<__impl<base_t>, composed_t>;
     };
 
-}}}
+
+    struct __zfloat32
+        : public zval<__m128, float, 4, 16>
+    {
+        FORWARD2(__zfloat32, zval);
+    };
+
+    struct zfloat32;
+
+    struct zfloat32 : public compose
+        <
+            printable::impl,
+            iteratable::impl,
+            float32_io<zfloat32>::impl,
+            float32_arithmetic<zfloat32>::impl,
+            float32_bitwise<zfloat32>::impl,
+            float32_logical<zfloat32>::impl,
+            float32_comparison<zfloat32>::impl,
+            float32_conditional<zfloat32>::impl,
+            float32_construction<zfloat32>::impl,
+
+            composable<__zfloat32>::template type
+        >
+    {
+        FORWARD2(zfloat32, compose);
+    };
+
+}}

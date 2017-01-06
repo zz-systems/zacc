@@ -45,8 +45,11 @@ namespace zacc {
 
         using extracted_type = alignas(alignment) std::array<shim_type, dim>;
 
-        template<typename T>
+        template<typename T, typename enable = std::enable_if_t<!std::is_base_of<zval, T>::value, T>>
         zval(T value) : _value(value) {}
+
+        template<typename T, typename enable = std::enable_if_t<std::is_base_of<zval, T>::value, T>>
+        zval(const T& value) : _value(value.get_value()) {}
 
         _type get_value() const { return _value; }
 
@@ -54,6 +57,8 @@ namespace zacc {
     protected:
         _type _value;
     };
+
+
 
     template<typename T>
     struct composable {

@@ -39,22 +39,22 @@ namespace zacc { namespace interface {
 
         TRAIT(traits::Arithmetic);
 
-        friend composed_t operator-(const composed_t one) { return base_t::arithmetic_negate(one); }
+        friend composed_t operator-(const composed_t one) { return arithmetic_negate(one); }
 
         friend composed_t operator+(const composed_t one, const composed_t other) {
-            return base_t::arithmetic_add(one, other);
+            return arithmetic_add(one, other);
         }
 
         friend composed_t operator-(const composed_t one, const composed_t other) {
-            return base_t::arithmetic_sub(one, other);
+            return arithmetic_sub(one, other);
         }
 
         friend composed_t operator*(const composed_t one, const composed_t other) {
-            return base_t::arithmetic_mul(one, other);
+            return arithmetic_mul(one, other);
         }
 
         friend composed_t operator/(const composed_t one, const composed_t other) {
-            return base_t::arithmetic_div(one, other);
+            return arithmetic_div(one, other);
         }
 
 
@@ -74,15 +74,15 @@ namespace zacc { namespace interface {
         TRAIT(traits::Fused_Multiplication);
 
         friend composed_t operator+(const fused_multiplication one, const composed_t other) {
-            return base_t::fused_multiply_add(one._initial_multiplicand, one._initial_multiplier, other);
+            return fused_multiply_add(one._initial_multiplicand, one._initial_multiplier, other);
         }
 
         friend composed_t operator-(const fused_multiplication one, const composed_t other) {
-            return base_t::fused_multiply_sub(one._initial_multiplicand, one._initial_multiplier, other);
+            return fused_multiply_sub(one._initial_multiplicand, one._initial_multiplier, other);
         }
 
         operator composed_t() {
-            return base_t::mul(_initial_multiplicand, _initial_multiplier);
+            return mul(_initial_multiplicand, _initial_multiplier);
         }
 
     private:

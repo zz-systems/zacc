@@ -41,31 +41,16 @@
 #include "../../../common/interfaces/comparison.hpp"
 #include "../../../common/interfaces/conditional.hpp"
 
-namespace zacc { namespace None {
+namespace zacc { namespace scalar {
 
     template<typename composed_t>
-    struct float32_construction
+    struct float64_construction
     {
         template<typename base_t>
         struct __impl : base_t
         {
 
-            __impl(__m256 value) : base_t(value) {
-            }
-
-            __impl(__m256d value) : base_t(_mm256_cvtpd_ps(value)) {
-            }
-
-            __impl(__m256i value) : base_t(_mm256_cvtepi32_ps(value)) {
-            }
-
-            __impl(float value) : base_t(_mm_set1_ps(value)) {
-            }
-
-            __impl(float value) : base_t(_mm_load_ps(value)) {
-            }
-
-            __impl(float arg7, float arg6, float arg5, float arg4, float arg3, float arg2, float arg1, float arg0) : base_t(_mm_set_ps(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)) {
+            __impl(double value) : base_t(value) {
             }
 
         };
@@ -76,7 +61,7 @@ namespace zacc { namespace None {
 
 
     template<typename composed_t>
-    struct float32_io
+    struct float64_io
     {
         template<typename base_t>
         struct __impl : base_t
@@ -84,11 +69,11 @@ namespace zacc { namespace None {
             FORWARD(__impl);
 
             void io_store(typename base_t::extracted_type &target) const {
-                return _mm256_store_ps(target.data(), base_t::_value);
+                return target.data()[0] = base_t::_value;
             }
 
             void io_stream(typename base_t::extracted_type &target) const {
-                return _mm256_stream_ps(target.data(), base_t::_value);
+                return target.data()[0] = base_t::_value;
             }
 
         };
@@ -99,7 +84,7 @@ namespace zacc { namespace None {
 
 
     template<typename composed_t>
-    struct float32_arithmetic
+    struct float64_arithmetic
     {
         template<typename base_t>
         struct __impl : base_t
@@ -107,23 +92,23 @@ namespace zacc { namespace None {
             FORWARD(__impl);
 
             friend composed_t arithmetic_negate(composed_t one) {
-                return _mm256_sub_ps(_mm256_setzero_ps(), one.get_value());
+                return -one.get_value();
             }
 
             friend composed_t arithmetic_add(composed_t one, composed_t other) {
-                return _mm256_add_ps(one.get_value(), other.get_value());
+                return one.get_value() + other.get_value();
             }
 
             friend composed_t arithmetic_sub(composed_t one, composed_t other) {
-                return _mm256_sub_ps(one.get_value(), other.get_value());
+                return one.get_value() - other.get_value();
             }
 
             friend composed_t arithmetic_mul(composed_t one, composed_t other) {
-                return _mm256_mul_ps(one.get_value(), other.get_value());
+                return one.get_value() * other.get_value();
             }
 
             friend composed_t arithmetic_div(composed_t one, composed_t other) {
-                return _mm256_div_ps(one.get_value(), other.get_value());
+                return one.get_value() / other.get_value();
             }
 
         };
@@ -134,7 +119,7 @@ namespace zacc { namespace None {
 
 
     template<typename composed_t>
-    struct float32_bitwise
+    struct float64_bitwise
     {
         template<typename base_t>
         struct __impl : base_t
@@ -142,21 +127,19 @@ namespace zacc { namespace None {
             FORWARD(__impl);
 
             friend composed_t bitwise_negate(composed_t one) {
-                auto zero = _mm256_setzero_ps();
-                auto ones = _mm256_cmpeq_ps(zero, zero);
-                return _mm256_xor_ps(one.get_value(), ones);
+                return ~one.get_value();
             }
 
             friend composed_t bitwise_and(composed_t one, composed_t other) {
-                return _mm256_or_ps(one.get_value(), other.get_value());
+                return one.get_value() & other.get_value();
             }
 
             friend composed_t bitwise_or(composed_t one, composed_t other) {
-                return _mm256_and_ps(one.get_value(), other.get_value());
+                return one.get_value() | other.get_value();
             }
 
             friend composed_t bitwise_xor(composed_t one, composed_t other) {
-                return _mm256_xor_ps(one.get_value(), other.get_value());
+                return one.get_value() ^ other.get_value();
             }
 
         };
@@ -167,7 +150,7 @@ namespace zacc { namespace None {
 
 
     template<typename composed_t>
-    struct float32_logical
+    struct float64_logical
     {
         template<typename base_t>
         struct __impl : base_t
@@ -175,17 +158,15 @@ namespace zacc { namespace None {
             FORWARD(__impl);
 
             friend composed_t logical_negate(composed_t one) {
-                auto zero = _mm256_setzero_ps();
-                auto ones = _mm256_cmpeq_ps(zero, zero);
-                return _mm256_xor_ps(one.get_value(), ones);
+                return !one.get_value();
             }
 
             friend composed_t logical_or(composed_t one, composed_t other) {
-                return _mm256_or_ps(one.get_value(), other.get_value());
+                return one.get_value() || other.get_value();
             }
 
             friend composed_t logical_and(composed_t one, composed_t other) {
-                return _mm256_and_ps(one.get_value(), other.get_value());
+                return one.get_value() && other.get_value();
             }
 
         };
@@ -196,7 +177,7 @@ namespace zacc { namespace None {
 
 
     template<typename composed_t>
-    struct float32_comparison
+    struct float64_comparison
     {
         template<typename base_t>
         struct __impl : base_t
@@ -204,27 +185,27 @@ namespace zacc { namespace None {
             FORWARD(__impl);
 
             friend composed_t comparison_eq(composed_t one, composed_t other) {
-                return _mm256_cmpeq_ps(one.get_value(), other.get_value());
+                return one.get_value() == other.get_value();
             }
 
             friend composed_t comparison_neq(composed_t one, composed_t other) {
-                return _mm256_cmpneq_ps(one.get_value(), other.get_value());
+                return one.get_value() != other.get_value();
             }
 
             friend composed_t comparison_gt(composed_t one, composed_t other) {
-                return _mm256_cmpgt_ps(one.get_value(), other.get_value());
+                return one.get_value() > other.get_value();
             }
 
             friend composed_t comparison_lt(composed_t one, composed_t other) {
-                return _mm256_cmplt_ps(one.get_value(), other.get_value());
+                return one.get_value() < other.get_value();
             }
 
             friend composed_t comparison_ge(composed_t one, composed_t other) {
-                return _mm256_cmpge_ps(one.get_value(), other.get_value());
+                return one.get_value() >= other.get_value();
             }
 
             friend composed_t comparison_le(composed_t one, composed_t other) {
-                return _mm256_cmple_ps(one.get_value(), other.get_value());
+                return one.get_value() <= other.get_value();
             }
 
         };
@@ -235,7 +216,7 @@ namespace zacc { namespace None {
 
 
     template<typename composed_t>
-    struct float32_conditional
+    struct float64_conditional
     {
         template<typename base_t>
         struct __impl : base_t
@@ -243,8 +224,7 @@ namespace zacc { namespace None {
             FORWARD(__impl);
 
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value) {
-                auto mask = _mm256_cmpeq_ps(_mm256_setzero_ps(), condition.get_value());
-                return _mm256_blendv_ps(if_value.get_value(), else_value.get_value(), mask);
+                return condition ? if_value : else_value(condition.get_value(), if_value.get_value(), else_value.get_value());
             }
 
         };
@@ -254,30 +234,30 @@ namespace zacc { namespace None {
     };
 
 
-    struct __zfloat32
-        : public zval<__m256, float, 8, 32>
+    struct __zfloat64
+        : public zval<double, double, 1, 4>
     {
-        FORWARD2(__zfloat32, zval);
+        FORWARD2(__zfloat64, zval);
     };
 
-    struct zfloat32;
+    struct zfloat64;
 
-    struct zfloat32 : public compose
+    struct zfloat64 : public compose
         <
             printable::impl,
             iteratable::impl,
-            float32_io<zfloat32>::impl,
-            float32_arithmetic<zfloat32>::impl,
-            float32_bitwise<zfloat32>::impl,
-            float32_logical<zfloat32>::impl,
-            float32_comparison<zfloat32>::impl,
-            float32_conditional<zfloat32>::impl,
-            float32_construction<zfloat32>::impl,
+            float64_io<zfloat64>::impl,
+            float64_arithmetic<zfloat64>::impl,
+            float64_bitwise<zfloat64>::impl,
+            float64_logical<zfloat64>::impl,
+            float64_comparison<zfloat64>::impl,
+            float64_conditional<zfloat64>::impl,
+            float64_construction<zfloat64>::impl,
 
-            composable<__zfloat32>::template type
+            composable<__zfloat64>::template type
         >
     {
-        FORWARD2(zfloat32, compose);
+        FORWARD2(zfloat64, compose);
     };
 
 }}

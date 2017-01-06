@@ -48,16 +48,21 @@ namespace zacc {
 
             __zfloat32(float a, float b, float c, float d)
                     : zval(_mm_set_ps(d, c, b, a)) {}
+
+
+            void store(extracted_type &target) const {
+                _mm_store_pd(target.data(), _value);
+            }
         };
 
 
         struct zfloat32;
 
         struct zfloat32 : public compose<
+
                 printable,
                 iteratable,
                 extractable,
-
 
                 gen_float32::arithmetic<zfloat32>::impl,
                 gen_float32::io<zfloat32>::impl,

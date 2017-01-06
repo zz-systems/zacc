@@ -37,27 +37,27 @@ namespace zacc { namespace interface {
         TRAIT(traits::Comparison);
 
         friend composed_t operator==(const composed_t one, const composed_t other) {
-            return base_t::comparison_eq(one, other);
+            return comparison_eq(one, other);
         }
 
         friend composed_t operator!=(const composed_t one, const composed_t other) {
-            return base_t::comparison_neq(one, other);
+            return comparison_neq(one, other);
         }
 
         friend composed_t operator>(const composed_t one, const composed_t other) {
-            return base_t::comparison_gt(one, other);
+            return comparison_gt(one, other);
         }
 
         friend composed_t operator>=(const composed_t one, const composed_t other) {
-            return base_t::comparison_ge(one, other);
+            return comparison_ge(one, other);
         }
 
         friend composed_t operator<(const composed_t one, const composed_t other) {
-            return base_t::comparison_lt(one, other);
+            return comparison_lt(one, other);
         }
 
         friend composed_t operator<=(const composed_t one, const composed_t other) {
-            return base_t::comparison_le(one, other);
+            return comparison_le(one, other);
         }
 
         CONVERSION(==);
