@@ -1,12 +1,11 @@
 import yasha
-from enum import Enum
 
 class Struct:
     def __init__(self, entries):
         self.__dict__.update(entries)
 
 class Type:
-    def __init__(self, config):
+    def __init__(self, config, test_config):
         tconfig                 = config.get("type")
         self.type               = tconfig.get("type")
         self.branch             = tconfig.get("branch")
@@ -17,8 +16,11 @@ class Type:
 
         self.traits             = Struct(tconfig.get("traits"))
 
+        self.test_config        = test_config.get("modules")
+
         self.construction       = [Module.make_construction(self, config["modules"], "construction") ]
         self.modules            = { m.name:m for m in [Module.make_module(self, k, v) for (k, v) in config["modules"].items() if k != "construction" ]}
+
 
     def get_modules(self):
         return self.construction + list(self.modules.values())
@@ -30,11 +32,11 @@ class Type:
 
 class Module:
     def __init__(self, parent, name, functions):
-        self.parent     = parent
-        self.type       = parent.type
-        self.functions  = functions
-        self.name       = name
-
+        self.parent         = parent
+        self.type           = parent.type
+        self.functions      = functions
+        self.name           = name
+        self.test_config    = parent.test_config and parent.test_config.get(name)
         #print("Building module", self.name)
 
     @classmethod
@@ -53,6 +55,9 @@ class Module:
 
     def mangled_name(self):
         return "{}_{}".format(self.parent.type, self.name)
+
+    def has_tests(self):
+        return any(func.has_tests() for func in self.functions)
 
 class Func:
 
@@ -86,18 +91,24 @@ class Func:
         self.suffix     = entries.get("suffix", "const" if is_member else "")
         self.returns    = entries.get("returns", "composed_t")
 
-    def signature(self):
-        name = self.name
+        test       = parent.test_config and parent.test_config.get(self.name)
 
-        if self.mangling:
-            name = "{}_{}".format(self.parent.name, name)
+        if test and type(test) == list and len(test) == 2:
+            self.actual     = test[0].format(type = "z"+parent.parent.type)
+            self.expected   = test[1]
+            self.test = [self.actual, self.expected]
+        else:
+            self.test = None
+
+    def signature(self):
+        name = self.mangled_name()
 
         if self.name:
             return self.func_template.format(prefix     = self.prefix,
-                                            returns    = self.returns,
-                                            name       = name,
-                                            args       = self.args,
-                                            suffix     = self.suffix).strip()
+                                             returns    = self.returns,
+                                             name       = name,
+                                             args       = self.args,
+                                             suffix     = self.suffix).strip()
         elif self.inits:
             return self.cons_template_init.format(  name          = "__impl",
                                                     args          = self.args,
@@ -107,6 +118,15 @@ class Func:
             return self.cons_template.format(   name   = "__impl",
                                                 args   = self.args,
                                                 suffix = self.suffix).strip()
+
+    def mangled_name(self):
+        if self.mangling:
+            return "{}_{}".format(self.parent.name, self.name)
+
+        return self.name
+
+    def has_tests(self):
+        return self.test != None
 
     def get_instructions(self):
         return Body(self, self.body).get_instructions();
@@ -123,6 +143,7 @@ class Func:
         else:
             for (branch, body) in self.body.items():
                 yield Func.__make_branch(self, branch, body)
+
 
     def __repr__(self):
         return self.signature()
@@ -200,7 +221,7 @@ class Body:
         if len(body) == 1 and body[0].find('(') == -1:
             body[0] = "{}({})".format(body[0], self.parent.args.invocation())
         #print(self.parent.name, body)
-        if not self.parent.is_constructor() and body[-1].find("return") == -1:
+        if not self.parent.is_constructor() and body[-1].find("return") == -1 and self.parent.returns.find("void") == -1:
             body[-1] = "return " + body[-1]
 
         return [b + ';' if not b.rstrip().endswith(';') else b for b in body]
@@ -286,5 +307,8 @@ def cleanup(strings) :
 class YamlParser(yasha.YamlParser):
     def parse(self, file):
         #print(">>>Parsing template:", file.name)
+        with open("common/templates/type.test.yaml", "rb") as f:
+            test_functions = yasha.YamlParser().parse(f)
+
         variables = yasha.YamlParser.parse(self, file)
-        return { "type": Type(variables)    }
+        return { "type": Type(variables, test_functions)    }

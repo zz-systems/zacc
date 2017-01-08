@@ -27,67 +27,31 @@
 //---------------------------------------------------------------------------------
 
 #pragma once
+#include "gtest/gtest.h"
+#include "../impl/{{ type.type }}.impl.hpp"
 
-#include <intrin.h>
-#include <type_traits>
+namespace zacc { namespace {{ type.branch }} { namespace test {
 
-#include "../../../common/type_traits.hpp"
-
-{% for module in type.get_modules() %}
-#include "../../../common/interfaces/{{ module.name }}.hpp"
-{% endfor %}
-
-namespace zacc { namespace {{ type.branch }} {
     {% for module in type.get_modules() %}
-
-    template<typename composed_t>
-    struct {{ module.mangled_name() }}
+        {% if module.has_tests() %}
+// =====================================================================================================================
+        {% endif %}
+        {% for func in module.functions %}
+            {% for branch in func.branches() %}
+                {% if branch.test %}
+    TEST({{ module.mangled_name() }}, {{ branch.mangled_name() }})
     {
-        template<typename base_t>
-        struct __impl : base_t
-        {
-            {% if not module in type.construction  %}
-            FORWARD(__impl);
-            {% endif  %}
+        auto actual = {{ branch.actual }};
+        for(auto value : actual)
+            EXPECT_EQ(value, {{ branch.expected }});
+    }
 
-            {% for func in module.functions %}
-                {% for branch in func.branches() %}
-{#            /// @brief#}
-{#            /// @remark #}
-            {{ branch.signature() }} {
-                    {% for instruction in branch.get_instructions() %}
-                {{ instruction }}
-                    {% endfor %}
-            }
-
-                {% endfor %}
+                {% endif %}
             {% endfor %}
-        };
-
-        template<typename base_t>
-        using impl = interface::{{ module.name }}<__impl<base_t>, composed_t>;
-    };
-
+        {% endfor %}
+        {% if module.has_tests() %}
+// =====================================================================================================================
+        {% endif %}
     {% endfor %}
 
-    struct __z{{ type.type }}
-        : public zval<{{ type.vector_t }}, {{ type.scalar_t }}, {{ type.vec_size }}, {{ type.alignment }}>
-    {
-        FORWARD2(__z{{ type.type }}, zval);
-    };
-
-    struct z{{ type.type }};
-
-    struct z{{ type.type }} : public compose
-        <
-        {% for trait in type.get_traits() %}
-            {{ trait }}::impl,
-        {% endfor %}
-
-            composable<__z{{ type.type }}>::template type
-        >
-    {
-        FORWARD2(z{{ type.type }}, compose);
-    };
-
-}}
+}}}

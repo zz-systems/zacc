@@ -57,33 +57,4 @@ namespace zacc { namespace interface {
 
         CONVERSION(^);
     };
-
-    template<typename base_t, typename composed_t>
-    struct bitwise_shift : public base_t {
-        FORWARD(bitwise_shift);
-
-        TRAIT(traits::Bitwise_Shift);
-
-
-        friend composed_t operator<<(const composed_t one, const size_t immediate) {
-            return bitwise_shift_left_immediate(one, immediate);
-        }
-
-        friend composed_t operator>>(const composed_t one, const size_t immediate) {
-            return bitwise_shift_right_immediate(one, immediate);
-        }
-
-        friend composed_t operator<<(const composed_t one, const composed_t other) {
-            return bitwise_shift_left(one, other);
-        }
-
-        friend composed_t operator>>(const composed_t one, const composed_t other) {
-            return bitwise_shift_right(one, other);
-        }
-
-
-        CONVERSION(<<);
-
-        CONVERSION(>>);
-    };
 }}

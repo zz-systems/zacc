@@ -25,18 +25,16 @@
 
 #pragma once
 
-#include <immintrin.h>
-
-#include "../../common/zval.hpp"
-#include "../../common/compose.hpp"
-
-#include "generated/float32.gen.hpp"
-//#include "zfloat64.hpp"
-//#include "zint8.hpp"
-//#include "zint16.hpp"
-//#include "zint32.hpp"
+#include "generated/float32.impl.hpp"
+#include "generated/float64.impl.hpp"
+#include "generated/int8.impl.hpp"
+#include "generated/int16.impl.hpp"
+#include "generated/int32.impl.hpp"
 
 namespace zacc {
-    using zfloat32  = sse::zfloat32;
     using zfloat    = sse::zfloat32;
+    using zdouble   = sse::zfloat64;
+    using zbyte     = sse::zint8;
+    using zshort    = sse::zint16;
+    using zint      = sse::zint32;
 }

@@ -31,32 +31,6 @@
 
 namespace zacc {
 
-//    struct extractable {
-//        template<typename base_t>
-//        struct impl : public base_t {
-//            FORWARD(impl);
-//
-//            typedef typename base_t::extracted_type extracted_t;
-//
-//            const extracted_t data() const {
-//                extracted_t result;
-//
-//                base_t::store(result);
-//
-//                return result;
-//            }
-//
-//            extracted_t
-//            data() {
-//                extracted_t result;
-//
-//                base_t::store(result);
-//
-//                return result;
-//            }
-//        };
-//    };
-
     struct iteratable {
         template<typename base_t>
         struct impl : public base_t {
@@ -83,8 +57,9 @@ namespace zacc {
         template<typename base_t>
         struct impl : public base_t {
             FORWARD(impl);
+
+            REQUIRE(traits::Iteratable);
             TRAIT(traits::Printable);
-//        REQUIRE(traits::Iteratable);
 
             std::string to_string() const {
                 std::stringstream ss;

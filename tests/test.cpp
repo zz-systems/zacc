@@ -29,13 +29,13 @@
 #include <iostream>
 
 int main() {
-    zacc::zfloat f(10.5);
+    zacc::scalar::zfloat32 f(10.5);
 
     std::cout << f + 10.3;
 
     zacc::sse::zfloat32 fv(12, 13, 14, 15);
 
-    //float v = f.get_value();
+    float v = f.get_value();
 
     std::cout << fv;
 

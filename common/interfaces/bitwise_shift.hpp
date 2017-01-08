@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,44 +23,39 @@
 //---------------------------------------------------------------------------------
 
 
-#ifndef ZACC_CONDITIONAL_POLICIES_HPP
-#define ZACC_CONDITIONAL_POLICIES_HPP
+#pragma once
 
-namespace zacc {
-    namespace scalar {
-        template<typename aggregate_t>
-        struct conditional_policies {
-            template<typename base_t>
-            struct if_policy;
+#include "../traits.hpp"
+#include "../common.hpp"
 
-            template<typename base_t, typename never_compose = void>
-            struct else_policy {
-                aggregate_t otherwise(const aggregate_t else_value) const {
-                    return _condition
-                           ? _if_value
-                           : else_value;
-                }
+namespace zacc { namespace interface {
 
-            private:
-                else_policy(bool condition, const aggregate_t if_value)
-                        : _condition(condition), _if_value(if_value) {}
+    template<typename base_t, typename composed_t>
+    struct bitwise_shift : public base_t {
+        FORWARD(bitwise_shift);
 
-                aggregate_t _if_value;
-                bool _condition = false;
+        TRAIT(traits::Bitwise_Shift);
 
-                friend struct if_policy<base_t>;
-            };
 
-            template<typename base_t>
-            struct if_policy
-                    : public base_t {
-                FORWARD(if_policy);
+        friend composed_t operator<<(const composed_t one, const size_t immediate) {
+            return bitwise_slli(one, immediate);
+        }
 
-                else_policy<base_t> when(bool condition) {
-                    return else_policy<base_t>(condition, *this);
-                }
-            };
-        };
-    }
-}
-#endif //ZACC_CONDITIONAL_POLICIES_HPP
+        friend composed_t operator>>(const composed_t one, const size_t immediate) {
+            return bitwise_srli(one, immediate);
+        }
+
+        friend composed_t operator<<(const composed_t one, const composed_t other) {
+            return bitwise_sll(one, other);
+        }
+
+        friend composed_t operator>>(const composed_t one, const composed_t other) {
+            return bitwise_srl(one, other);
+        }
+
+
+        CONVERSION(<<);
+
+        CONVERSION(>>);
+    };
+}}
