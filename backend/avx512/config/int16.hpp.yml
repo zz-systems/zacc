@@ -1,0 +1,101 @@
+type:
+  type: int16
+  target: avx512
+  vector_t: &vector_t __m512i
+  scalar_t: &scalar_t short
+  vec_size: &vec_size 32
+  alignment: 64
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+     external:
+      - printable
+      - iteratable
+     internal:
+       - io
+       - arithmetic
+       - bitwise
+       - logical
+       - comparison
+       - conditional
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  construction:
+    - args: __m512i value
+      init: value
+
+    - args: [[*scalar_t, value]]
+      init: _mm512_set1_epi8(value)
+
+    - args: [[*scalar_t, "*value"]]
+      init: _mm512_load_si128(value)
+
+    - args: { from: *vec_size, to: 0, type: *scalar_t }
+      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm512_set_epi8 }
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    store: &io_store
+      args: { raw: "typename base_t::extracted_type &target" }
+      returns: void
+      suffix: const
+      body: _mm512_store_si512(target.data(), base_t::_value)
+    stream:
+      <<: *io_store
+      body:  _mm512_stream_si512(target.data(), base_t::_value)
+#-----------------------------------------------------------------------------------------------------------------------
+  arithmetic:
+    negate:
+      args: one
+      body: return _mm512_sub_epi32(_mm512_setzero_epi32(), one.get_value())
+    add: _mm512_add_epi32
+    sub: _mm512_sub_epi32
+    #mul:
+    #  body:
+    #    sse41: &sse41
+    #      - _mm512_mullo_epi32
+    #    sse42: *sse41
+    #    default:
+    #      - /* mul 2,0*/
+    #      - auto tmp1 = _mm512_castsi128_ps(_mm512_mul_epu32(one.get_value(), other.get_value()));
+    #      - /* mul 3,1 */
+    #      - auto tmp2 = _mm512_castsi128_ps(_mm512_mul_epu32(_mm512_srli_si128(one.get_value(), 4), _mm512_srli_si128(other.get_value(), 4)));
+    #      - return _mm512_castps_si128(_mm512_shuffle_ps(tmp1, tmp2, _MM_SHUFFLE(2, 0, 2, 0)));
+    #div: _mm512_div_ps(_mm512_cvtepi32_ps(one.get_value()), _mm512_cvtepi32_ps(other.get_value()));
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    negate: &bitwise_negate
+      args: one
+      body:
+        - auto zero = _mm512_setzero_si128();
+        - auto ones = _mm512_cmpeq_epi32(zero, zero);
+        - return _mm512_xor_si128(one.get_value(), ones);
+    and:  _mm512_or_epi32
+    or:   _mm512_and_epi32
+    xor:  _mm512_xor_si128
+    sll:  _mm512_sll_epi32
+    srl:  _mm512_srl_epi32
+    slli:
+      args: { raw: "const composed_t one, const size_t other" }
+      body: _mm512_slli_epi32
+    srli:
+      args: { raw: "const composed_t one, const size_t other" }
+      body: _mm512_srli_epi32
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    negate: *bitwise_negate
+    or:   _mm512_or_epi32
+    and:  _mm512_and_epi32
+#-----------------------------------------------------------------------------------------------------------------------
+  comparison:
+    eq:   _mm512_cmpeq_epi32
+    neq:  _mm512_cmpneq_epi32
+    gt:   _mm512_cmpgt_epi32
+    lt:   _mm512_cmplt_epi32
+    ge:   _mm512_cmpge_epi32
+    le:   _mm512_cmple_epi32
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+    vsel:
+      args: [condition, if_value, else_value]
+      mangling: false
+      body:
+        _mm512_or_si128(_mm512_andnot_si128(condition.get_value(), else_value.get_value()), _mm512_and_si128(condition.get_value(), if_value.get_value()))

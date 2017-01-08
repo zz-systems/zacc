@@ -1,0 +1,94 @@
+type:
+  type: float64
+  target: sse
+  vector_t: &vector_t __m128d
+  scalar_t: &scalar_t double
+  vec_size: &vec_size 2
+  alignment: 16
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+    external:
+    - printable
+    - iteratable
+    internal:
+    - io
+    - arithmetic
+    - bitwise
+    - logical
+    - comparison
+    - conditional
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  construction:
+    - args: __m128 value
+      init: _mm_cvtps_pd(value)
+
+    - args: __m128d value
+      init: value
+
+    - args: __m128i value
+      init: _mm_cvtepi32_pd(value)
+
+    - args: [[*scalar_t, value]]
+      init: _mm_set1_pd(value)
+
+    - args: [[*scalar_t, "*value"]]
+      init: _mm_load_pd(value)
+
+    - args: { from: *vec_size, to: 0, type: *scalar_t }
+      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_pd }
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    store: &io_store
+      args: { raw: "typename base_t::extracted_type &target" }
+      returns: void
+      suffix: const
+      body: _mm_store_pd(target.data(), base_t::_value)
+    stream:
+      <<: *io_store
+      body:  _mm_stream_pd(target.data(), base_t::_value)
+#-----------------------------------------------------------------------------------------------------------------------
+  arithmetic:
+    negate:
+      args: one
+      body: return _mm_sub_pd(_mm_setzero_pd(), one.get_value())
+    add: _mm_add_pd
+    sub: _mm_sub_pd
+    mul: _mm_mul_pd
+    div: _mm_div_pd
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    negate: &bitwise_negate
+      args: one
+      body: &bitwise_negate_body
+        - auto zero = _mm_setzero_pd();
+        - auto ones = _mm_cmpeq_pd(zero, zero);
+        - return _mm_xor_pd(one.get_value(), ones);
+    and:  _mm_or_pd
+    or:   _mm_and_pd
+    xor:  _mm_xor_pd
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    negate: *bitwise_negate
+    or:   _mm_or_pd
+    and:  _mm_and_pd
+#-----------------------------------------------------------------------------------------------------------------------
+  comparison:
+    eq:   _mm_cmpeq_pd
+    neq:  _mm_cmpneq_pd
+    gt:   _mm_cmpgt_pd
+    lt:   _mm_cmplt_pd
+    ge:   _mm_cmpge_pd
+    le:   _mm_cmple_pd
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+    vsel:
+      args: [condition, if_value, else_value]
+      mangling: false
+      body:
+        #sse41: &sse41
+        #  - auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition.get_value());
+        #  - return _mm_blendv_pd(if_value.get_value(), else_value.get_value(), mask);
+        #sse42: *sse41
+        #default:
+          return _mm_or_pd(_mm_andnot_pd(condition.get_value(), else_value.get_value()), _mm_and_pd(condition.get_value(), if_value.get_value()))

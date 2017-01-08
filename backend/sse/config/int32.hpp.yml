@@ -1,0 +1,115 @@
+type:
+  type: int32
+  branch: sse
+  vector_t: &vector_t __m128i
+  scalar_t: &scalar_t int
+  vec_size: &vec_size 4
+  alignment: 16
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+     external:
+      - printable
+      - iteratable
+     internal:
+       - io
+       - arithmetic
+       - bitwise
+       - bitwise_shift
+       - logical
+       - comparison
+       - conditional
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  construction:
+    - args: __m128 value
+      init: _mm_cvtps_epi32(value)
+
+    - args: __m128d value
+      init: _mm_cvtpd_epi32(value)
+
+    - args: __m128i value
+      init: value
+
+    - args: char value
+      init: _mm_set1_epi32(value)
+
+    - args: [[*scalar_t, "*value"]]
+      init: "_mm_load_si128((__m128i*)value)"
+
+    - args: { from: *vec_size, to: 0, type: *scalar_t }
+      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_ps }
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    store: &io_store
+      args: { raw: "typename base_t::extracted_type &target" }
+      returns: void
+      member: true
+      body: _mm_store_si128((__m128i*)target.data(), base_t::_value)
+    stream:
+      <<: *io_store
+      body:  _mm_stream_si128((__m128i*)target.data(), base_t::_value)
+#-----------------------------------------------------------------------------------------------------------------------
+  arithmetic:
+    negate:
+      args: one
+      body: return _mm_sub_epi32(_mm_setzero_si128(), one.get_value())
+    add: _mm_add_epi32
+    sub: _mm_sub_epi32
+    mul:
+      body:
+        #sse41: &mul_sse41
+          _mm_mullo_epi32
+        #sse42: *mul_sse41
+        #default:
+        #  - /* mul 2,0*/
+        #  - auto tmp1 = _mm_castsi128_ps(_mm_mul_epu32(one.get_value(), other.get_value()));
+        #  - /* mul 3,1 */
+        #  - auto tmp2 = _mm_castsi128_ps(_mm_mul_epu32(_mm_srli_si128(one.get_value(), 4), _mm_srli_si128(other.get_value(), 4)));
+        #  - return _mm_castps_si128(_mm_shuffle_ps(tmp1, tmp2, _MM_SHUFFLE(2, 0, 2, 0)));
+    div: _mm_div_ps(_mm_cvtepi32_ps(one.get_value()), _mm_cvtepi32_ps(other.get_value()));
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    negate: &bitwise_negate
+      args: one
+      body:
+        - auto zero = _mm_setzero_si128();
+        - auto ones = _mm_cmpeq_epi32(zero, zero);
+        - return _mm_xor_si128(one.get_value(), ones);
+    and:  _mm_or_si128
+    or:   _mm_and_si128
+    xor:  _mm_xor_si128
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise_shift:
+    sll:  _mm_sll_epi32
+    srl:  _mm_srl_epi32
+    slli:
+      args: { raw: "const composed_t one, const size_t other" }
+      body: _mm_slli_epi32(one.get_value(), other)
+    srli:
+      args: { raw: "const composed_t one, const size_t other" }
+      body: _mm_srli_epi32(one.get_value(), other)
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    negate: *bitwise_negate
+    or:   _mm_or_si128
+    and:  _mm_and_si128
+#-----------------------------------------------------------------------------------------------------------------------
+  comparison:
+    eq:   _mm_cmpeq_epi32
+    neq:  "!(one == other)"
+    gt:   _mm_cmpgt_epi32
+    lt:   _mm_cmplt_epi32
+    ge:   "!(one < other)"
+    le:   "!(one > other)"
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+    vsel:
+      args: [condition, if_value, else_value]
+      mangling: false
+      body:
+        #sse41: &vsel_sse41
+        #  - auto mask = _mm_cmpeq_epi32(_mm_setzero_si128(), condition.get_value());
+        #  - return _mm_blendv_epi8(if_value.get_value(), else_value.get_value(), mask);
+        #sse42: *vsel_sse41
+        #default:
+          return _mm_or_si128(_mm_andnot_si128(condition.get_value(), else_value.get_value()), _mm_and_si128(condition.get_value(), if_value.get_value()))
