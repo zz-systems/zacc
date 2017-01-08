@@ -40,8 +40,6 @@
 #include "../../../common/interfaces/construction.hpp"
 #include "../../../common/interfaces/io.hpp"
 #include "../../../common/interfaces/arithmetic.hpp"
-#include "../../../common/interfaces/bitwise.hpp"
-#include "../../../common/interfaces/logical.hpp"
 #include "../../../common/interfaces/comparison.hpp"
 #include "../../../common/interfaces/conditional.hpp"
 
@@ -123,64 +121,6 @@ namespace zacc { namespace scalar {
 
 
     template<typename composed_t>
-    struct float64_bitwise
-    {
-        template<typename base_t>
-        struct __impl : base_t
-        {
-            FORWARD(__impl);
-
-            friend composed_t bitwise_negate(composed_t one) {
-                return ~one.get_value();
-            }
-
-            friend composed_t bitwise_and(composed_t one, composed_t other) {
-                return one.get_value() & other.get_value();
-            }
-
-            friend composed_t bitwise_or(composed_t one, composed_t other) {
-                return one.get_value() | other.get_value();
-            }
-
-            friend composed_t bitwise_xor(composed_t one, composed_t other) {
-                return one.get_value() ^ other.get_value();
-            }
-
-        };
-
-        template<typename base_t>
-        using impl = interface::bitwise<__impl<base_t>, composed_t>;
-    };
-
-
-    template<typename composed_t>
-    struct float64_logical
-    {
-        template<typename base_t>
-        struct __impl : base_t
-        {
-            FORWARD(__impl);
-
-            friend composed_t logical_negate(composed_t one) {
-                return !one.get_value();
-            }
-
-            friend composed_t logical_or(composed_t one, composed_t other) {
-                return one.get_value() || other.get_value();
-            }
-
-            friend composed_t logical_and(composed_t one, composed_t other) {
-                return one.get_value() && other.get_value();
-            }
-
-        };
-
-        template<typename base_t>
-        using impl = interface::logical<__impl<base_t>, composed_t>;
-    };
-
-
-    template<typename composed_t>
     struct float64_comparison
     {
         template<typename base_t>
@@ -228,7 +168,7 @@ namespace zacc { namespace scalar {
             FORWARD(__impl);
 
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value) {
-                return condition ? if_value : else_value(condition.get_value(), if_value.get_value(), else_value.get_value());
+                return (condition.get_value() != 0 ? if_value : else_value);
             }
 
         };
@@ -252,8 +192,6 @@ namespace zacc { namespace scalar {
             iteratable::impl,
             float64_io<zfloat64>::impl,
             float64_arithmetic<zfloat64>::impl,
-            float64_bitwise<zfloat64>::impl,
-            float64_logical<zfloat64>::impl,
             float64_comparison<zfloat64>::impl,
             float64_conditional<zfloat64>::impl,
             float64_construction<zfloat64>::impl,

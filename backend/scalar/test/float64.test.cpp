@@ -26,152 +26,98 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-#pragma once
 #include "gtest/gtest.h"
 #include "../impl/float64.impl.hpp"
 
 namespace zacc { namespace scalar { namespace test {
 
 // =====================================================================================================================
-    TEST(float64_arithmetic, arithmetic_negate)
+    TEST(scalar_float64_arithmetic, arithmetic_negate)
     {
         auto actual = -zfloat64(125);
         for(auto value : actual)
-            EXPECT_EQ(value, -125);
+            EXPECT_EQ(value, (double)-125);
     }
 
-    TEST(float64_arithmetic, arithmetic_add)
+    TEST(scalar_float64_arithmetic, arithmetic_add)
     {
-        auto actual = zfloat64(124) + zfloat64(125);
+        auto actual = zfloat64(12) + zfloat64(105);
         for(auto value : actual)
-            EXPECT_EQ(value, 249);
+            EXPECT_EQ(value, (double)117);
     }
 
-    TEST(float64_arithmetic, arithmetic_sub)
+    TEST(scalar_float64_arithmetic, arithmetic_sub)
     {
         auto actual = zfloat64(124) - zfloat64(125);
         for(auto value : actual)
-            EXPECT_EQ(value, -1);
+            EXPECT_EQ(value, (double)-1);
     }
 
-    TEST(float64_arithmetic, arithmetic_mul)
+    TEST(scalar_float64_arithmetic, arithmetic_mul)
     {
-        auto actual = zfloat64(124) * zfloat64(125);
+        auto actual = zfloat64(12) * zfloat64(9);
         for(auto value : actual)
-            EXPECT_EQ(value, 15500);
+            EXPECT_EQ(value, (double)108);
     }
 
-    TEST(float64_arithmetic, arithmetic_div)
+    TEST(scalar_float64_arithmetic, arithmetic_div)
     {
         auto actual = zfloat64(124) / zfloat64(124);
         for(auto value : actual)
-            EXPECT_EQ(value, 1);
+            EXPECT_EQ(value, (double)1);
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(float64_bitwise, bitwise_negate)
-    {
-        auto actual = ~zfloat64(255);
-        for(auto value : actual)
-            EXPECT_EQ(value, -256);
-    }
-
-    TEST(float64_bitwise, bitwise_and)
-    {
-        auto actual = zfloat64(255) & zfloat64(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, 64);
-    }
-
-    TEST(float64_bitwise, bitwise_or)
-    {
-        auto actual = zfloat64(255) | zfloat64(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, 255);
-    }
-
-    TEST(float64_bitwise, bitwise_xor)
-    {
-        auto actual = zfloat64(255) ^ zfloat64(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, 191);
-    }
-
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(float64_logical, logical_negate)
-    {
-        auto actual = !zfloat64(1);
-        for(auto value : actual)
-            EXPECT_EQ(value, 0);
-    }
-
-    TEST(float64_logical, logical_or)
-    {
-        auto actual = zfloat64(0) || zfloat64(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, 8);
-    }
-
-    TEST(float64_logical, logical_and)
-    {
-        auto actual = zfloat64(0) || zfloat64(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, 0);
-    }
-
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(float64_comparison, comparison_eq)
+    TEST(scalar_float64_comparison, comparison_eq)
     {
         auto actual = zfloat64(0) == zfloat64(8);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (double)0);
     }
 
-    TEST(float64_comparison, comparison_neq)
+    TEST(scalar_float64_comparison, comparison_neq)
     {
         auto actual = zfloat64(0) != zfloat64(0);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (double)0);
     }
 
-    TEST(float64_comparison, comparison_gt)
+    TEST(scalar_float64_comparison, comparison_gt)
     {
         auto actual = zfloat64(0) > zfloat64(8);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (double)0);
     }
 
-    TEST(float64_comparison, comparison_lt)
+    TEST(scalar_float64_comparison, comparison_lt)
     {
         auto actual = zfloat64(8) < zfloat64(0);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (double)0);
     }
 
-    TEST(float64_comparison, comparison_ge)
+    TEST(scalar_float64_comparison, comparison_ge)
     {
         auto actual = zfloat64(0) >= zfloat64(0);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (double)1);
     }
 
-    TEST(float64_comparison, comparison_le)
+    TEST(scalar_float64_comparison, comparison_le)
     {
         auto actual = zfloat64(0) <= zfloat64(0);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (double)1);
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(float64_conditional, vsel)
+    TEST(scalar_float64_conditional, vsel)
     {
         auto actual = vsel(zfloat64(1 == 1), zfloat64(2), zfloat64(3));
         for(auto value : actual)
-            EXPECT_EQ(value, 2);
+            EXPECT_EQ(value, (double)2);
     }
 
 // =====================================================================================================================

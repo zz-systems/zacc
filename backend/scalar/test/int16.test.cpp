@@ -26,180 +26,158 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-#pragma once
 #include "gtest/gtest.h"
 #include "../impl/int16.impl.hpp"
 
 namespace zacc { namespace scalar { namespace test {
 
 // =====================================================================================================================
-    TEST(int16_arithmetic, arithmetic_negate)
+    TEST(scalar_int16_arithmetic, arithmetic_negate)
     {
         auto actual = -zint16(125);
         for(auto value : actual)
-            EXPECT_EQ(value, -125);
+            EXPECT_EQ(value, (short)-125);
     }
 
-    TEST(int16_arithmetic, arithmetic_add)
+    TEST(scalar_int16_arithmetic, arithmetic_add)
     {
-        auto actual = zint16(124) + zint16(125);
+        auto actual = zint16(12) + zint16(105);
         for(auto value : actual)
-            EXPECT_EQ(value, 249);
+            EXPECT_EQ(value, (short)117);
     }
 
-    TEST(int16_arithmetic, arithmetic_sub)
+    TEST(scalar_int16_arithmetic, arithmetic_sub)
     {
         auto actual = zint16(124) - zint16(125);
         for(auto value : actual)
-            EXPECT_EQ(value, -1);
+            EXPECT_EQ(value, (short)-1);
     }
 
-    TEST(int16_arithmetic, arithmetic_mul)
+    TEST(scalar_int16_arithmetic, arithmetic_mul)
     {
-        auto actual = zint16(124) * zint16(125);
+        auto actual = zint16(12) * zint16(9);
         for(auto value : actual)
-            EXPECT_EQ(value, 15500);
+            EXPECT_EQ(value, (short)108);
     }
 
-    TEST(int16_arithmetic, arithmetic_div)
+    TEST(scalar_int16_arithmetic, arithmetic_div)
     {
         auto actual = zint16(124) / zint16(124);
         for(auto value : actual)
-            EXPECT_EQ(value, 1);
+            EXPECT_EQ(value, (short)1);
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(int16_bitwise, bitwise_negate)
+    TEST(scalar_int16_bitwise, bitwise_negate)
     {
         auto actual = ~zint16(255);
         for(auto value : actual)
-            EXPECT_EQ(value, -256);
+            EXPECT_EQ(value, (short)-256);
     }
 
-    TEST(int16_bitwise, bitwise_and)
+    TEST(scalar_int16_bitwise, bitwise_and)
     {
-        auto actual = zint16(255) & zint16(64);
+        auto actual = zint16(127) & zint16(64);
         for(auto value : actual)
-            EXPECT_EQ(value, 64);
+            EXPECT_EQ(value, (short)64);
     }
 
-    TEST(int16_bitwise, bitwise_or)
+    TEST(scalar_int16_bitwise, bitwise_or)
     {
-        auto actual = zint16(255) | zint16(64);
+        auto actual = zint16(127) | zint16(64);
         for(auto value : actual)
-            EXPECT_EQ(value, 255);
+            EXPECT_EQ(value, (short)127);
     }
 
-    TEST(int16_bitwise, bitwise_xor)
+    TEST(scalar_int16_bitwise, bitwise_xor)
     {
-        auto actual = zint16(255) ^ zint16(64);
+        auto actual = zint16(127) ^ zint16(64);
         for(auto value : actual)
-            EXPECT_EQ(value, 191);
-    }
-
-    TEST(int16_bitwise, bitwise_sll)
-    {
-        auto actual = zint16(1) << zint16(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, 256);
-    }
-
-    TEST(int16_bitwise, bitwise_srl)
-    {
-        auto actual = zint16(256) >> zint16(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, 1);
-    }
-
-    TEST(int16_bitwise, bitwise_slli)
-    {
-        auto actual = zint16(1) << (8);
-        for(auto value : actual)
-            EXPECT_EQ(value, 256);
-    }
-
-    TEST(int16_bitwise, bitwise_srli)
-    {
-        auto actual = zint16(256) >> (8);
-        for(auto value : actual)
-            EXPECT_EQ(value, 1);
+            EXPECT_EQ(value, (short)63);
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(int16_logical, logical_negate)
+    TEST(scalar_int16_bitwise_shift, bitwise_shift_sll)
     {
-        auto actual = !zint16(1);
+        auto actual = zint16(1) << zint16(4);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (short)16);
     }
 
-    TEST(int16_logical, logical_or)
+    TEST(scalar_int16_bitwise_shift, bitwise_shift_srl)
     {
-        auto actual = zint16(0) || zint16(8);
+        auto actual = zint16(109) >> zint16(3);
         for(auto value : actual)
-            EXPECT_EQ(value, 8);
+            EXPECT_EQ(value, (short)13);
     }
 
-    TEST(int16_logical, logical_and)
+    TEST(scalar_int16_bitwise_shift, bitwise_shift_slli)
     {
-        auto actual = zint16(0) || zint16(8);
+        auto actual = zint16(1) << (4);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (short)16);
+    }
+
+    TEST(scalar_int16_bitwise_shift, bitwise_shift_srli)
+    {
+        auto actual = zint16(109) >> (3);
+        for(auto value : actual)
+            EXPECT_EQ(value, (short)13);
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(int16_comparison, comparison_eq)
+    TEST(scalar_int16_comparison, comparison_eq)
     {
         auto actual = zint16(0) == zint16(8);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (short)0);
     }
 
-    TEST(int16_comparison, comparison_neq)
+    TEST(scalar_int16_comparison, comparison_neq)
     {
         auto actual = zint16(0) != zint16(0);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (short)0);
     }
 
-    TEST(int16_comparison, comparison_gt)
+    TEST(scalar_int16_comparison, comparison_gt)
     {
         auto actual = zint16(0) > zint16(8);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (short)0);
     }
 
-    TEST(int16_comparison, comparison_lt)
+    TEST(scalar_int16_comparison, comparison_lt)
     {
         auto actual = zint16(8) < zint16(0);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (short)0);
     }
 
-    TEST(int16_comparison, comparison_ge)
+    TEST(scalar_int16_comparison, comparison_ge)
     {
         auto actual = zint16(0) >= zint16(0);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (short)1);
     }
 
-    TEST(int16_comparison, comparison_le)
+    TEST(scalar_int16_comparison, comparison_le)
     {
         auto actual = zint16(0) <= zint16(0);
         for(auto value : actual)
-            EXPECT_EQ(value, 0);
+            EXPECT_EQ(value, (short)1);
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(int16_conditional, vsel)
+    TEST(scalar_int16_conditional, vsel)
     {
         auto actual = vsel(zint16(1 == 1), zint16(2), zint16(3));
         for(auto value : actual)
-            EXPECT_EQ(value, 2);
+            EXPECT_EQ(value, (short)2);
     }
 
 // =====================================================================================================================

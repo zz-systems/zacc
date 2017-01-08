@@ -67,13 +67,13 @@ add_custom_target(zacc.generate.tests DEPENDS ${generated_tests})
 add_custom_target(zacc.generate.all DEPENDS zacc.generate.types zacc.generate.tests)
 
 # make test target
-file(GLOB_RECURSE tests    RELATIVE ${CMAKE_SOURCE_DIR}    "*${test.schema}")
+file(GLOB_RECURSE tests    ABSOLUTE ${CMAKE_SOURCE_DIR}    "*/scalar/*${test.schema}")
 message("${tests}")
 set_source_files_properties(${tests}
         PROPERTIES GENERATED TRUE)
 
-add_executable(zacc.tests ${CMAKE_SOURCE_DIR}/backend/sse/test/int32.test.cpp)
-#add_dependencies(zacc.tests zacc.generate.types zacc.generate.tests)
+add_executable(zacc.tests ${tests})
+add_dependencies(zacc.tests zacc.generate.types zacc.generate.tests)
 target_link_libraries(zacc.tests gtest_main)
 target_compile_options(zacc.tests PUBLIC -msse2 -msse3 -mssse3 -msse4)
 

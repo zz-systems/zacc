@@ -26,7 +26,6 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-#pragma once
 #include "gtest/gtest.h"
 #include "../impl/{{ type.type }}.impl.hpp"
 
@@ -39,11 +38,11 @@ namespace zacc { namespace {{ type.branch }} { namespace test {
         {% for func in module.functions %}
             {% for branch in func.branches() %}
                 {% if branch.test %}
-    TEST({{ module.mangled_name() }}, {{ branch.mangled_name() }})
+    TEST({{ type.branch}}_{{ module.mangled_name() }}, {{ branch.mangled_name() }})
     {
         auto actual = {{ branch.actual }};
         for(auto value : actual)
-            EXPECT_EQ(value, {{ branch.expected }});
+            EXPECT_EQ(value, ({{ type.scalar_t }}){{ branch.expected }});
     }
 
                 {% endif %}

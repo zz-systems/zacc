@@ -41,7 +41,7 @@
 #include "../../../common/interfaces/io.hpp"
 #include "../../../common/interfaces/arithmetic.hpp"
 #include "../../../common/interfaces/bitwise.hpp"
-#include "../../../common/interfaces/logical.hpp"
+#include "../../../common/interfaces/bitwise_shift.hpp"
 #include "../../../common/interfaces/comparison.hpp"
 #include "../../../common/interfaces/conditional.hpp"
 
@@ -146,22 +146,6 @@ namespace zacc { namespace scalar {
                 return one.get_value() ^ other.get_value();
             }
 
-            friend composed_t bitwise_sll(composed_t one, composed_t other) {
-                return one.get_value() << other.get_value();
-            }
-
-            friend composed_t bitwise_srl(composed_t one, composed_t other) {
-                return one.get_value() >> other.get_value();
-            }
-
-            friend composed_t bitwise_slli(const composed_t one, const size_t other) {
-                return one.get_value() << other;
-            }
-
-            friend composed_t bitwise_srli(const composed_t one, const size_t other) {
-                return one.get_value() >> other;
-            }
-
         };
 
         template<typename base_t>
@@ -170,29 +154,33 @@ namespace zacc { namespace scalar {
 
 
     template<typename composed_t>
-    struct int32_logical
+    struct int32_bitwise_shift
     {
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
-            friend composed_t logical_negate(composed_t one) {
-                return !one.get_value();
+            friend composed_t bitwise_shift_sll(composed_t one, composed_t other) {
+                return one.get_value() << other.get_value();
             }
 
-            friend composed_t logical_or(composed_t one, composed_t other) {
-                return one.get_value() || other.get_value();
+            friend composed_t bitwise_shift_srl(composed_t one, composed_t other) {
+                return one.get_value() >> other.get_value();
             }
 
-            friend composed_t logical_and(composed_t one, composed_t other) {
-                return one.get_value() && other.get_value();
+            friend composed_t bitwise_shift_slli(const composed_t one, const size_t other) {
+                return one.get_value() << other;
+            }
+
+            friend composed_t bitwise_shift_srli(const composed_t one, const size_t other) {
+                return one.get_value() >> other;
             }
 
         };
 
         template<typename base_t>
-        using impl = interface::logical<__impl<base_t>, composed_t>;
+        using impl = interface::bitwise_shift<__impl<base_t>, composed_t>;
     };
 
 
@@ -244,7 +232,7 @@ namespace zacc { namespace scalar {
             FORWARD(__impl);
 
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value) {
-                return condition ? if_value : else_value(condition.get_value(), if_value.get_value(), else_value.get_value());
+                return (condition.get_value() != 0 ? if_value : else_value);
             }
 
         };
@@ -269,7 +257,7 @@ namespace zacc { namespace scalar {
             int32_io<zint32>::impl,
             int32_arithmetic<zint32>::impl,
             int32_bitwise<zint32>::impl,
-            int32_logical<zint32>::impl,
+            int32_bitwise_shift<zint32>::impl,
             int32_comparison<zint32>::impl,
             int32_conditional<zint32>::impl,
             int32_construction<zint32>::impl,

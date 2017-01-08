@@ -38,19 +38,19 @@ namespace zacc { namespace interface {
 
 
         friend composed_t operator<<(const composed_t one, const size_t immediate) {
-            return bitwise_slli(one, immediate);
+            return bitwise_shift_slli(one, immediate);
         }
 
         friend composed_t operator>>(const composed_t one, const size_t immediate) {
-            return bitwise_srli(one, immediate);
+            return bitwise_shift_srli(one, immediate);
         }
 
         friend composed_t operator<<(const composed_t one, const composed_t other) {
-            return bitwise_sll(one, other);
+            return bitwise_shift_sll(one, other);
         }
 
         friend composed_t operator>>(const composed_t one, const composed_t other) {
-            return bitwise_srl(one, other);
+            return bitwise_shift_srl(one, other);
         }
 
 
