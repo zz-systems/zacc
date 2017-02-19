@@ -44,7 +44,7 @@
 namespace zacc {
     /// @enum capabilities
     /// @brief relevant system capabilities
-    enum class capabilities {
+    enum class capabilities : uint64_t {
         None = 0,        ///< usuallly fallback to x87 FPU
 
         SSE2 = 1 << 0,    ///< SSE 2 support

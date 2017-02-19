@@ -27,157 +27,217 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
+#include "gtest/gtest.h"
+//#include <iostream>
 #include "../impl/int16.impl.hpp"
 
 namespace zacc { namespace scalar { namespace test {
 
 // =====================================================================================================================
-    TEST(scalar_int16_arithmetic, arithmetic_negate)
+    TEST(scalar_int16_arithmetic, arithmetic_negate_default)
     {
-        auto actual = -zint16(125);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)-125);
+        auto actual = -zint16<>(125);
+        auto expected = (short) -125;
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(scalar_int16_arithmetic, arithmetic_add)
+    TEST(scalar_int16_arithmetic, arithmetic_add_default)
     {
-        auto actual = zint16(12) + zint16(105);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)117);
+        auto actual = zint16<>(12) + zint16<>(105);
+        auto expected = (short) 117;
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(scalar_int16_arithmetic, arithmetic_sub)
+    TEST(scalar_int16_arithmetic, arithmetic_sub_default)
     {
-        auto actual = zint16(124) - zint16(125);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)-1);
+        auto actual = zint16<>(124) - zint16<>(125);
+        auto expected = (short) -1;
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(scalar_int16_arithmetic, arithmetic_mul)
+    TEST(scalar_int16_arithmetic, arithmetic_mul_default)
     {
-        auto actual = zint16(12) * zint16(9);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)108);
+        auto actual = zint16<>(12) * zint16<>(9);
+        auto expected = (short) 108;
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(scalar_int16_arithmetic, arithmetic_div)
+    TEST(scalar_int16_arithmetic, arithmetic_div_default)
     {
-        auto actual = zint16(124) / zint16(124);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)1);
-    }
+        auto actual = zint16<>(124) / zint16<>(124);
+        auto expected = (short) 1;
 
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(scalar_int16_bitwise, bitwise_negate)
-    {
-        auto actual = ~zint16(255);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)-256);
-    }
-
-    TEST(scalar_int16_bitwise, bitwise_and)
-    {
-        auto actual = zint16(127) & zint16(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)64);
-    }
-
-    TEST(scalar_int16_bitwise, bitwise_or)
-    {
-        auto actual = zint16(127) | zint16(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)127);
-    }
-
-    TEST(scalar_int16_bitwise, bitwise_xor)
-    {
-        auto actual = zint16(127) ^ zint16(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)63);
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(scalar_int16_bitwise_shift, bitwise_shift_sll)
+    TEST(scalar_int16_bitwise, bitwise_negate_default)
     {
-        auto actual = zint16(1) << zint16(4);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)16);
+        auto actual = ~zint16<>(100);
+        auto expected = (short) ~100;
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(scalar_int16_bitwise_shift, bitwise_shift_srl)
+    TEST(scalar_int16_bitwise, bitwise_and_default)
     {
-        auto actual = zint16(109) >> zint16(3);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)13);
+        auto actual = zint16<>(127) & zint16<>(64);
+        auto expected = (short) (127 & 64);
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(scalar_int16_bitwise_shift, bitwise_shift_slli)
+    TEST(scalar_int16_bitwise, bitwise_or_default)
     {
-        auto actual = zint16(1) << (4);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)16);
+        auto actual = zint16<>(127) | zint16<>(64);
+        auto expected = (short) (127 | 64);
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(scalar_int16_bitwise_shift, bitwise_shift_srli)
+    TEST(scalar_int16_bitwise, bitwise_xor_default)
     {
-        auto actual = zint16(109) >> (3);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)13);
-    }
+        auto actual = zint16<>(127) ^ zint16<>(64);
+        auto expected = (short) (127 ^ 64);
 
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(scalar_int16_comparison, comparison_eq)
-    {
-        auto actual = zint16(0) == zint16(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)0);
-    }
-
-    TEST(scalar_int16_comparison, comparison_neq)
-    {
-        auto actual = zint16(0) != zint16(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)0);
-    }
-
-    TEST(scalar_int16_comparison, comparison_gt)
-    {
-        auto actual = zint16(0) > zint16(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)0);
-    }
-
-    TEST(scalar_int16_comparison, comparison_lt)
-    {
-        auto actual = zint16(8) < zint16(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)0);
-    }
-
-    TEST(scalar_int16_comparison, comparison_ge)
-    {
-        auto actual = zint16(0) >= zint16(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)1);
-    }
-
-    TEST(scalar_int16_comparison, comparison_le)
-    {
-        auto actual = zint16(0) <= zint16(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)1);
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(scalar_int16_conditional, vsel)
+    TEST(scalar_int16_bitwise_shift, bitwise_shift_slli_default)
     {
-        auto actual = vsel(zint16(1 == 1), zint16(2), zint16(3));
-        for(auto value : actual)
-            EXPECT_EQ(value, (short)2);
+        auto actual = zint16<>(1) << (4);
+        auto expected = (short) (1) << (4);
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_int16_bitwise_shift, bitwise_shift_srli_default)
+    {
+        auto actual = zint16<>(109) >> (3);
+        auto expected = (short) (109) >> (3);
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(scalar_int16_comparison, comparison_eq_default)
+    {
+        auto actual = zint16<>(0) == zint16<>(8);
+        auto expected = (short) 0;
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_int16_comparison, comparison_neq_default)
+    {
+        auto actual = zint16<>(0) != zint16<>(0);
+        auto expected = (short) 0;
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_int16_comparison, comparison_gt_default)
+    {
+        auto actual = zint16<>(0) > zint16<>(8);
+        auto expected = (short) 0;
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_int16_comparison, comparison_lt_default)
+    {
+        auto actual = zint16<>(8) < zint16<>(0);
+        auto expected = (short) 0;
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_int16_comparison, comparison_ge_default)
+    {
+        auto actual = (zint16<>(0) >= zint16<>(0)).as_bool();
+        auto expected = (short) true;
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_int16_comparison, comparison_le_default)
+    {
+        auto actual = (zint16<>(0) <= zint16<>(0)).as_bool();
+        auto expected = (short) true;
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(scalar_int16_conditional, vsel_default)
+    {
+        auto actual = vsel(zint16<>(1) == zint16<>(1), zint16<>(2), zint16<>(3));
+        auto expected = (short) 2;
+
+        for(short value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================

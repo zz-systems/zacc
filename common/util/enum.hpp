@@ -25,20 +25,10 @@
 
 #pragma once
 
-#include "../traits.hpp"
-#include "../common.hpp"
+namespace zacc { namespace util {
+    template<typename enum_t>
+    struct enum_flags
+    {
 
-namespace zacc { namespace interface {
-
-    template<typename base_t, typename composed_t>
-    struct construction : public base_t {
-        FORWARD(construction);
-
-// TODO
-//        static composed_t make_scalar(base_t::scalar_t value)
-//        {
-//            return from_scalar(value);
-//        }
     };
-
 }}

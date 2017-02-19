@@ -1,4 +1,7 @@
 import yasha
+from inspect import getmembers
+from pprint import pprint
+import copy
 
 class Struct:
     def __init__(self, entries):
@@ -26,9 +29,9 @@ class Type:
         return self.construction + list(self.modules.values())
 
     def get_traits(self):
-        return self.traits.external \
-               + [ "{}<z{}>".format(self.modules[module].mangled_name(), self.type) for module in self.traits.internal ] \
-               + [ "{}<z{}>".format(self.construction[0].mangled_name(), self.type) ]
+        return [ "{}::impl".format(module) for module in self.traits.external] \
+               + [ "{}<impl>::template impl".format(self.modules[module].mangled_name()) for module in self.traits.internal ] \
+               + [ "{}<impl>::template impl".format(self.construction[0].mangled_name()) ]
 
 class Module:
     def __init__(self, parent, name, functions):
@@ -71,30 +74,33 @@ class Func:
         if type(entries) is str:
             entries = { "body": entries }
 
-        self.args       = Args(entries.get("args", ["one", "other"]))
+        is_copy = type(entries) is Func # Prototype copy
 
-        self.body       = entries.get("body", "")
+        self.args = entries.args if is_copy else Args(entries.get("args", ["one", "other"]))
+        self.body = entries.body if is_copy else entries.get("body", "")
+
+        self.branch_name = entries.branch_name if is_copy else "default"
         self.is_branched= type(self.body) is dict
 
         assert not self.is_branched or self.default_branch in self.body, "default branch required"
 
-        self.inits      = Inits(entries.get("init", ""))
-        self.requires   = entries.get("requires", [])
-        self.parent     = parent
-        self.name       = name
+        self.inits      = entries.inits if is_copy else Inits(entries.get("init", ""))
+        self.requires   = entries.requires if is_copy else entries.get("requires", [])
+        self.parent     = entries.parent if is_copy else parent
+        self.name       = entries.name if is_copy else name
 
-        self.mangling   = entries.get("mangling", bool(1))
+        self.mangling   = entries.mangling if is_copy else entries.get("mangling", bool(1))
 
-        is_member = entries.get("member")
+        self.is_member = entries.is_member if is_copy else entries.get("member")
 
-        self.prefix     = "friend" if not is_member else ""
-        self.suffix     = entries.get("suffix", "const" if is_member else "")
-        self.returns    = entries.get("returns", "composed_t")
+        self.prefix     = entries.prefix if is_copy else "friend" if not self.is_member else ""
+        self.suffix     = entries.suffix if is_copy else entries.get("suffix", "const" if self.is_member else "")
+        self.returns    = entries.returns if is_copy else entries.get("returns", "composed_t")
 
         test       = parent.test_config and parent.test_config.get(self.name)
 
         if test and type(test) == list and len(test) == 2:
-            self.actual     = test[0].format(type = "z"+parent.parent.type)
+            self.actual     = test[0].format(type = "z"+parent.parent.type+"<>")
             self.expected   = test[1]
             self.test = [self.actual, self.expected]
         else:
@@ -161,25 +167,36 @@ class Func:
 
     @classmethod
     def __make_branch(cls, prototype, branch, body):
-        dispatch_if = "{0}dispatcher::has_{1}"
-        returns = "std::enable_if_t<{condition}, {type}>"
+
+        pp = copy.deepcopy(prototype);
+        pp.branch_name = branch;
+
+
+
+        dispatch_if = "{0}base_t::dispatcher::has_{1}"
+        returns = "std::enable_if_t<{condition}, T>"
 
         def map_requirement(requirement):
-            requirement = cleanup(requirement)
+            requirement = cleanup(requirement)[0]
             if requirement.startswith("not"):
                 requirement = requirement.replace("not", "", 1).strip()
                 return dispatch_if.format("!", requirement)
             else:
                 return dispatch_if.format("", requirement)
 
-        prototype.body      = body
-        prototype.requires  = body.get("requires", [])
+        if type(body) is dict: # specific config
+            pp.body      = body.get("body", "")
+            pp.requires  = body.get("requires", [])
+        else:
+            pp.body = body
+            pp.requires = []
 
-        condition = " && ".join([map_requirement(req) for req in prototype.requires])
+        condition = " && ".join([map_requirement(req) for req in pp.requires])
 
-        prototype.returns   = returns.format(condition, type=prototype.returns)
+        pp.prefix = "template<typename T = {type}> {prefix}".format(type=pp.returns, prefix =pp.prefix)
+        pp.returns   = returns.format(condition = condition)
 
-        return cls(prototype.parent, prototype.name, prototype)
+        return cls(prototype.parent, pp.name, pp)
 
 class Inits:
     def __init__(self, value):

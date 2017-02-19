@@ -45,213 +45,547 @@
 #include "../../../common/interfaces/comparison.hpp"
 #include "../../../common/interfaces/conditional.hpp"
 
+/**
+ * @brief int16 implementation for the None branch
+ * provides unified access to 16 'short' values
+ */
+
 namespace zacc { namespace None {
 
+    // =================================================================================================================
+    /**
+     * @name construction operations
+     */
+    ///@{
+
+    /**
+     * @brief construction
+     * @relates int16
+     * @remark None
+     */
     template<typename composed_t>
     struct int16_construction
     {
+
+        /**
+         * @brief construction basic interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         struct __impl : base_t
         {
 
+
+            /**
+             * @brief construction default branch
+             * @relates int16
+             * @remark None - default
+             */
             __impl(__m256i value) : base_t(value) {
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates int16
+             * @remark None - default
+             */
             __impl(short value) : base_t(_mm256_set1_epi8(value)) {
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates int16
+             * @remark None - default
+             */
             __impl(short *value) : base_t(_mm256_load_si128(value)) {
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates int16
+             * @remark None - default
+             */
             __impl(short arg15, short arg14, short arg13, short arg12, short arg11, short arg10, short arg9, short arg8, short arg7, short arg6, short arg5, short arg4, short arg3, short arg2, short arg1, short arg0) : base_t(_mm256_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)) {
             }
 
         };
 
+        /**
+         * @brief construction public interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         using impl = interface::construction<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name io operations
+     */
+    ///@{
+
+    /**
+     * @brief io
+     * @relates int16
+     * @remark None
+     */
     template<typename composed_t>
     struct int16_io
     {
+
+        /**
+         * @brief io basic interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
-            void io_store(typename base_t::extracted_type &target) const {
+
+            /**
+             * @brief io default branch
+             * @relates int16
+             * @remark None - default
+             */
+            void io_store(typename base_t::extracted_t &target) const {
                 _mm256_store_si128(target.data(), base_t::_value);
             }
 
-            void io_stream(typename base_t::extracted_type &target) const {
+
+            /**
+             * @brief io default branch
+             * @relates int16
+             * @remark None - default
+             */
+            void io_stream(typename base_t::extracted_t &target) const {
                 _mm256_stream_si128(target.data(), base_t::_value);
             }
 
         };
 
+        /**
+         * @brief io public interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         using impl = interface::io<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name arithmetic operations
+     */
+    ///@{
+
+    /**
+     * @brief arithmetic
+     * @relates int16
+     * @remark None
+     */
     template<typename composed_t>
     struct int16_arithmetic
     {
+
+        /**
+         * @brief arithmetic basic interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t arithmetic_negate(composed_t one) {
                 return _mm256_sub_epi32(_mm256_setzero_epi32(), one.get_value());
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t arithmetic_add(composed_t one, composed_t other) {
                 return _mm256_add_epi32(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t arithmetic_sub(composed_t one, composed_t other) {
                 return _mm256_sub_epi32(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t arithmetic_mul(composed_t one, composed_t other) {
                 return _mm256_mullo_epi16(one.get_value(), other.get_value());
             }
 
         };
 
+        /**
+         * @brief arithmetic public interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         using impl = interface::arithmetic<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name bitwise operations
+     */
+    ///@{
+
+    /**
+     * @brief bitwise
+     * @relates int16
+     * @remark None
+     */
     template<typename composed_t>
     struct int16_bitwise
     {
+
+        /**
+         * @brief bitwise basic interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t bitwise_negate(composed_t one) {
                 auto zero = _mm256_setzero_si128();
                 auto ones = _mm256_cmpeq_epi32(zero, zero);
                 return _mm256_xor_si128(one.get_value(), ones);
             }
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t bitwise_and(composed_t one, composed_t other) {
                 return _mm256_or_epi32(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t bitwise_or(composed_t one, composed_t other) {
                 return _mm256_and_epi32(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t bitwise_xor(composed_t one, composed_t other) {
                 return _mm256_xor_si128(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t bitwise_sll(composed_t one, composed_t other) {
                 return _mm256_sll_epi32(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t bitwise_srl(composed_t one, composed_t other) {
                 return _mm256_srl_epi32(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t bitwise_slli(const composed_t one, const size_t other) {
                 return _mm256_slli_epi32(const composed_t one, const size_t other);
             }
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t bitwise_srli(const composed_t one, const size_t other) {
                 return _mm256_srli_epi32(const composed_t one, const size_t other);
             }
 
         };
 
+        /**
+         * @brief bitwise public interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         using impl = interface::bitwise<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name logical operations
+     */
+    ///@{
+
+    /**
+     * @brief logical
+     * @relates int16
+     * @remark None
+     */
     template<typename composed_t>
     struct int16_logical
     {
+
+        /**
+         * @brief logical basic interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief logical default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t logical_negate(composed_t one) {
                 auto zero = _mm256_setzero_si128();
                 auto ones = _mm256_cmpeq_epi32(zero, zero);
                 return _mm256_xor_si128(one.get_value(), ones);
             }
 
+
+            /**
+             * @brief logical default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t logical_or(composed_t one, composed_t other) {
                 return _mm256_or_epi32(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief logical default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t logical_and(composed_t one, composed_t other) {
                 return _mm256_and_epi32(one.get_value(), other.get_value());
             }
 
         };
 
+        /**
+         * @brief logical public interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         using impl = interface::logical<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name comparison operations
+     */
+    ///@{
+
+    /**
+     * @brief comparison
+     * @relates int16
+     * @remark None
+     */
     template<typename composed_t>
     struct int16_comparison
     {
+
+        /**
+         * @brief comparison basic interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief comparison default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t comparison_eq(composed_t one, composed_t other) {
                 return _mm256_cmpeq_epi32(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t comparison_neq(composed_t one, composed_t other) {
                 return _mm256_cmpneq_epi32(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t comparison_gt(composed_t one, composed_t other) {
                 return _mm256_cmpgt_epi32(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t comparison_lt(composed_t one, composed_t other) {
                 return _mm256_cmplt_epi32(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t comparison_ge(composed_t one, composed_t other) {
                 return _mm256_cmpge_epi32(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t comparison_le(composed_t one, composed_t other) {
                 return _mm256_cmple_epi32(one.get_value(), other.get_value());
             }
 
         };
 
+        /**
+         * @brief comparison public interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         using impl = interface::comparison<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name conditional operations
+     */
+    ///@{
+
+    /**
+     * @brief conditional
+     * @relates int16
+     * @remark None
+     */
     template<typename composed_t>
     struct int16_conditional
     {
+
+        /**
+         * @brief conditional basic interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief conditional default branch
+             * @relates int16
+             * @remark None - default
+             */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value) {
                 auto mask = _mm256_cmpeq_epi32(_mm256_setzero_si128(), condition.get_value());
                 return _mm256_blendv_epi8(if_value.get_value(), else_value.get_value(), mask);
@@ -259,35 +593,78 @@ namespace zacc { namespace None {
 
         };
 
+        /**
+         * @brief conditional public interface implementation
+         * @relates int16
+         * @remark None
+         */
         template<typename base_t>
         using impl = interface::conditional<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
-    struct __zint16
-        : public zval<__m256i, short, 16, 32>
+
+    // Type composition ================================================================================================
+
+    /**
+     * @name int16 composition
+     */
+    ///@{
+
+    /**
+     * @brief zval parametrization using
+     * - '__m256i' as underlying vector type
+     * - 'short' as scalar type
+     * - '16' as vector size
+     * - '32' as alignment
+     * @relates int16
+     * @remark None
+     */
+    template<uint64_t capability>
+    struct __zval_int16
     {
-        FORWARD2(__zint16, zval);
+        using zval_t = zval<__m256i, short, 16, 32, capability>;
+
+        struct impl : public zval_t
+        {
+            FORWARD2(impl, zval_t);
+        };
     };
+    /**
+     * @brief zval composition
+     * @relates int16
+     * @remark None
+     */
+    template<uint64_t capability>
+    struct __zint16
+    {
+        struct impl;
 
-    struct zint16;
-
-    struct zint16 : public compose
+        using zval_t = typename __zval_int16<capability>::impl;
+        using composition_t = compose
         <
             printable::impl,
             iteratable::impl,
-            int16_io<zint16>::impl,
-            int16_arithmetic<zint16>::impl,
-            int16_bitwise<zint16>::impl,
-            int16_logical<zint16>::impl,
-            int16_comparison<zint16>::impl,
-            int16_conditional<zint16>::impl,
-            int16_construction<zint16>::impl,
+            int16_io<impl>::template impl,
+            int16_arithmetic<impl>::template impl,
+            int16_bitwise<impl>::template impl,
+            int16_logical<impl>::template impl,
+            int16_comparison<impl>::template impl,
+            int16_conditional<impl>::template impl,
+            int16_construction<impl>::template impl,
 
-            composable<__zint16>::template type
-        >
-    {
-        FORWARD2(zint16, compose);
+            composable<zval_t>::template type
+        >;
+
+        struct impl : public composition_t
+        {
+            FORWARD2(impl, composition_t);
+        };
     };
 
+    template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
+    using zint16 = typename __zint16<capability>::impl;
+
+    ///@}
 }}

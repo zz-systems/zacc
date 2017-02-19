@@ -1,6 +1,6 @@
 type:
   type: float64
-  target: sse
+  branch: sse
   vector_t: &vector_t __m128d
   scalar_t: &scalar_t double
   vec_size: &vec_size 2
@@ -10,6 +10,7 @@ type:
     external:
     - printable
     - iteratable
+    - convertable
     internal:
     - io
     - arithmetic
@@ -40,9 +41,9 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     store: &io_store
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       returns: void
-      suffix: const
+      member: true
       body: _mm_store_pd(target.data(), base_t::_value)
     stream:
       <<: *io_store
@@ -61,17 +62,23 @@ modules:
     negate: &bitwise_negate
       args: one
       body: &bitwise_negate_body
-        - auto zero = _mm_setzero_pd();
-        - auto ones = _mm_cmpeq_pd(zero, zero);
+        - __m128d junk;
+        - auto ones = _mm_cmpeq_pd(junk, junk);
         - return _mm_xor_pd(one.get_value(), ones);
     and:  _mm_or_pd
     or:   _mm_and_pd
     xor:  _mm_xor_pd
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate: *bitwise_negate
-    or:   _mm_or_pd
-    and:  _mm_and_pd
+    negate:
+      args: one
+      body: _mm_cmpeq_pd(one.get_value(), _mm_setzero_pd());
+    or:
+      body: _mm_or_pd
+      #returns: boolvec<composed_t>
+    and:
+      body: _mm_and_pd
+      #returns: boolvec<composed_t>
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
     eq:   _mm_cmpeq_pd

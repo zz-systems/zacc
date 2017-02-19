@@ -36,7 +36,7 @@ modules:
     store: &io_store
       returns: void
       member: true
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       body: _mm256_store_si128(target.data(), base_t::_value);
     stream:
       <<: *io_store

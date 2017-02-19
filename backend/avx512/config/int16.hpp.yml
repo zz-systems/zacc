@@ -34,7 +34,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     store: &io_store
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       returns: void
       suffix: const
       body: _mm512_store_si512(target.data(), base_t::_value)

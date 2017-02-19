@@ -43,7 +43,7 @@ modules:
       returns: void
       member: true
       suffix: const
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       body: _mm512_store_ps(target.data(), base_t::_value);
     stream:
       <<: *io_store

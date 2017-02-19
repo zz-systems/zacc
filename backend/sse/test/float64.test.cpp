@@ -27,150 +27,184 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
+#include "gtest/gtest.h"
+//#include <iostream>
 #include "../impl/float64.impl.hpp"
 
-namespace zacc { namespace None { namespace test {
+namespace zacc { namespace sse { namespace test {
 
 // =====================================================================================================================
-    TEST(None_float64_arithmetic, arithmetic_negate)
+    TEST(sse_float64_arithmetic, arithmetic_negate_default)
     {
-        auto actual = -zfloat64(125);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)-125);
+        auto actual = -zfloat64<>(125);
+        auto expected = (double) -125;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
-    TEST(None_float64_arithmetic, arithmetic_add)
+    TEST(sse_float64_arithmetic, arithmetic_add_default)
     {
-        auto actual = zfloat64(12) + zfloat64(105);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)117);
+        auto actual = zfloat64<>(12) + zfloat64<>(105);
+        auto expected = (double) 117;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
-    TEST(None_float64_arithmetic, arithmetic_sub)
+    TEST(sse_float64_arithmetic, arithmetic_sub_default)
     {
-        auto actual = zfloat64(124) - zfloat64(125);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)-1);
+        auto actual = zfloat64<>(124) - zfloat64<>(125);
+        auto expected = (double) -1;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
-    TEST(None_float64_arithmetic, arithmetic_mul)
+    TEST(sse_float64_arithmetic, arithmetic_mul_default)
     {
-        auto actual = zfloat64(12) * zfloat64(9);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)108);
+        auto actual = zfloat64<>(12) * zfloat64<>(9);
+        auto expected = (double) 108;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
-    TEST(None_float64_arithmetic, arithmetic_div)
+    TEST(sse_float64_arithmetic, arithmetic_div_default)
     {
-        auto actual = zfloat64(124) / zfloat64(124);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)1);
-    }
+        auto actual = zfloat64<>(124) / zfloat64<>(124);
+        auto expected = (double) 1;
 
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(None_float64_bitwise, bitwise_negate)
-    {
-        auto actual = ~zfloat64(255);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)-256);
-    }
-
-    TEST(None_float64_bitwise, bitwise_and)
-    {
-        auto actual = zfloat64(127) & zfloat64(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)64);
-    }
-
-    TEST(None_float64_bitwise, bitwise_or)
-    {
-        auto actual = zfloat64(127) | zfloat64(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)127);
-    }
-
-    TEST(None_float64_bitwise, bitwise_xor)
-    {
-        auto actual = zfloat64(127) ^ zfloat64(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)63);
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_float64_logical, logical_negate)
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(sse_float64_logical, logical_negate_default)
     {
-        auto actual = !zfloat64(1);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)0);
+        auto actual = (!zfloat64<>(1)).as_bool();
+        auto expected = (double) false;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
-    TEST(None_float64_logical, logical_or)
+    TEST(sse_float64_logical, logical_or_default)
     {
-        auto actual = zfloat64(0) || zfloat64(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)8);
+        auto actual = zfloat64<>(0) || zfloat64<>(8);
+        auto expected = (double) 8;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
-    TEST(None_float64_logical, logical_and)
+    TEST(sse_float64_logical, logical_and_default)
     {
-        auto actual = zfloat64(0) && zfloat64(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)0);
+        auto actual = zfloat64<>(0) && zfloat64<>(8);
+        auto expected = (double) 0;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_float64_comparison, comparison_eq)
+    TEST(sse_float64_comparison, comparison_eq_default)
     {
-        auto actual = zfloat64(0) == zfloat64(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)0);
+        auto actual = zfloat64<>(0) == zfloat64<>(8);
+        auto expected = (double) 0;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
-    TEST(None_float64_comparison, comparison_neq)
+    TEST(sse_float64_comparison, comparison_neq_default)
     {
-        auto actual = zfloat64(0) != zfloat64(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)0);
+        auto actual = zfloat64<>(0) != zfloat64<>(0);
+        auto expected = (double) 0;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
-    TEST(None_float64_comparison, comparison_gt)
+    TEST(sse_float64_comparison, comparison_gt_default)
     {
-        auto actual = zfloat64(0) > zfloat64(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)0);
+        auto actual = zfloat64<>(0) > zfloat64<>(8);
+        auto expected = (double) 0;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
-    TEST(None_float64_comparison, comparison_lt)
+    TEST(sse_float64_comparison, comparison_lt_default)
     {
-        auto actual = zfloat64(8) < zfloat64(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)0);
+        auto actual = zfloat64<>(8) < zfloat64<>(0);
+        auto expected = (double) 0;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
-    TEST(None_float64_comparison, comparison_ge)
+    TEST(sse_float64_comparison, comparison_ge_default)
     {
-        auto actual = zfloat64(0) >= zfloat64(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)1);
+        auto actual = (zfloat64<>(0) >= zfloat64<>(0)).as_bool();
+        auto expected = (double) true;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
-    TEST(None_float64_comparison, comparison_le)
+    TEST(sse_float64_comparison, comparison_le_default)
     {
-        auto actual = zfloat64(0) <= zfloat64(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)1);
+        auto actual = (zfloat64<>(0) <= zfloat64<>(0)).as_bool();
+        auto expected = (double) true;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_float64_conditional, vsel)
+    TEST(sse_float64_conditional, vsel_default)
     {
-        auto actual = vsel(zfloat64(1 == 1), zfloat64(2), zfloat64(3));
-        for(auto value : actual)
-            EXPECT_EQ(value, (double)2);
+        auto actual = vsel(zfloat64<>(1) == zfloat64<>(1), zfloat64<>(2), zfloat64<>(3));
+        auto expected = (double) 2;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================

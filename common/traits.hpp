@@ -38,5 +38,7 @@ namespace zacc {
         IO = 1 << 7,
         Iteratable = 1 << 8,
         Printable = 1 << 9,
+        Indexable = 1 << 10,
+        Convertable = 1 << 11,
     };
 }

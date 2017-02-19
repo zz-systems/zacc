@@ -26,6 +26,9 @@
 #pragma once
 
 #define FORWARD2(name, base) \
+    /** \
+     * @brief forwarding constructor \
+     */ \
     template<typename ...Args> \
     name(Args... args) : base(std::forward<Args>(args)...) {}
 
@@ -55,3 +58,28 @@
     }
 
 #define CONVERSION(op) CONVERSION2(op, composed_t)
+
+//
+// Array casting functionality @ Compiletime.
+// @origin: http://stackoverflow.com/a/14280396
+
+// http://loungecpp.wikidot.com/tips-and-tricks%3aindices
+template <std::size_t... Is>
+struct indices {};
+template <std::size_t N, std::size_t... Is>
+struct build_indices: build_indices<N-1, N-1, Is...> {};
+template <std::size_t... Is>
+struct build_indices<0, Is...>: indices<Is...> {};
+
+template<typename T, typename U, size_t i, size_t... Is>
+constexpr auto array_cast_helper(
+        const std::array<U, i> &a, indices<Is...>) -> std::array<T, i> {
+    return {{static_cast<T>(std::get<Is>(a))...}};
+}
+
+template<typename T, typename U, size_t i>
+constexpr auto array_cast(
+        const std::array<U, i> &a) -> std::array<T, i> {
+    // tag dispatch to helper with array indices
+    return array_cast_helper<T>(a, build_indices<i>());
+}

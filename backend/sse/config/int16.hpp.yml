@@ -1,8 +1,8 @@
 type:
   type: int16
-  target: sse
+  branch: sse
   vector_t: &vector_t __m128i
-  scalar_t: &scalar_t int
+  scalar_t: &scalar_t short
   vec_size: &vec_size 8
   alignment: 16
 #-----------------------------------------------------------------------------------------------------------------------
@@ -10,10 +10,12 @@ type:
      external:
       - printable
       - iteratable
+      - convertable
      internal:
        - io
        - arithmetic
        - bitwise
+       - bitwise_shift
        - logical
        - comparison
        - conditional
@@ -24,7 +26,7 @@ modules:
       init: value
 
     - args: short value
-      init: _mm_set1_epi8(value)
+      init: _mm_set1_epi16(value)
 
     - args: short* value
       init: _mm_load_si128((__m128i *) value)
@@ -34,20 +36,20 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     store: &io_store
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       returns: void
-      suffix: const
-      body: _mm_store_si128(target.data(), base_t::_value)
+      member: true
+      body: _mm_store_si128((__m128i*)target.data(), base_t::_value)
     stream:
       <<: *io_store
-      body:  _mm_stream_si128(target.data(), base_t::_value)
+      body:  _mm_stream_si128((__m128i*)target.data(), base_t::_value)
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     negate:
       args: one
-      body: return _mm_sub_epi32(_mm_setzero_epi32(), one.get_value())
-    add: _mm_add_epi32
-    sub: _mm_sub_epi32
+      body: return _mm_sub_epi16(_mm_setzero_si128(), one.get_value())
+    add: _mm_add_epi16
+    sub: _mm_sub_epi16
     mul: _mm_mullo_epi16
     #div: _mm_div_ps(_mm_cvtepi32_ps(one.get_value()), _mm_cvtepi32_ps(other.get_value()));
 #-----------------------------------------------------------------------------------------------------------------------
@@ -55,33 +57,44 @@ modules:
     negate: &bitwise_negate
       args: one
       body:
-        - auto zero = _mm_setzero_si128();
-        - auto ones = _mm_cmpeq_epi32(zero, zero);
+        - __m128i junk;
+        - auto ones = _mm_cmpeq_epi16(junk, junk);
         - return _mm_xor_si128(one.get_value(), ones);
-    and:  _mm_or_epi32
-    or:   _mm_and_epi32
-    xor:  _mm_xor_si128
-    sll:  _mm_sll_epi32
-    srl:  _mm_srl_epi32
+    or:   &bitwise_or
+      body: _mm_or_si128
+    and:  &bitwise_and
+      body: _mm_and_si128
+    xor:  &bitwise_xor
+      body: _mm_xor_si128
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise_shift:
+    sll:  _mm_sll_epi16
+    srl:  _mm_srl_epi16
     slli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: _mm_slli_epi32
+      body: "_mm_slli_epi16(one.get_value(), other)"
     srli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: _mm_srli_epi32
+      body: "_mm_srli_epi16(one.get_value(), other)"
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate: *bitwise_negate
-    or:   _mm_or_epi32
-    and:  _mm_and_epi32
+    negate:
+      args: one
+      body: _mm_cmpeq_epi16(one.get_value(), _mm_setzero_si128());
+    or:
+      <<: *bitwise_or
+      #returns: boolvec<composed_t>
+    and:
+      <<: *bitwise_and
+      #returns: boolvec<composed_t>
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    eq:   _mm_cmpeq_epi32
-    neq:  _mm_cmpneq_epi32
-    gt:   _mm_cmpgt_epi32
-    lt:   _mm_cmplt_epi32
-    ge:   _mm_cmpge_epi32
-    le:   _mm_cmple_epi32
+    eq:   _mm_cmpeq_epi16
+    neq:  "!(one == other)"
+    gt:   _mm_cmpgt_epi16
+    lt:   _mm_cmplt_epi16
+    ge:   "!(one < other)"
+    le:   "!(one > other)"
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
@@ -89,7 +102,7 @@ modules:
       mangling: false
       body:
         #sse41: &sse41
-        #  - auto mask = _mm_cmpeq_epi32(_mm_setzero_si128(), condition.get_value());
+        #  - auto mask = _mm_cmpeq_epi16(_mm_setzero_si128(), condition.get_value());
         #  - return _mm_blendv_epi8(if_value.get_value(), else_value.get_value(), mask);
         #sse42: *sse41
         #default:

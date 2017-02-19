@@ -40,7 +40,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     store: &io_store
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       returns: void
       member: true
       body: _mm256_store_pd(target.data(), base_t::_value)

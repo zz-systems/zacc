@@ -27,6 +27,7 @@
 
 #include "common.hpp"
 #include "traits.hpp"
+
 #include <sstream>
 
 namespace zacc {
@@ -39,7 +40,7 @@ namespace zacc {
             REQUIRE(traits::IO);
             TRAIT(traits::Iteratable);
 
-            using iterator      = typename base_t::extracted_type::iterator;
+            using iterator          = typename base_t::extracted_t::iterator;
 
             iterator begin() {
                 _snapshot = base_t::data();
@@ -49,9 +50,10 @@ namespace zacc {
             iterator end() { return _snapshot.end(); }
 
         private:
-            typename base_t::extracted_type _snapshot;
+            typename base_t::extracted_t _snapshot;
         };
     };
+
 
     struct printable {
         template<typename base_t>
@@ -78,6 +80,60 @@ namespace zacc {
 
             friend std::ostream &operator<<(std::ostream &os, const impl data) {
                 os << data.to_string();
+            }
+        };
+    };
+
+
+    struct convertable {
+        template<typename base_t>
+        struct impl : public base_t {
+            FORWARD(impl);
+
+            TRAIT(traits::Convertable);
+
+            auto as_bool()
+            {
+                return bval<impl>(*this);
+            }
+        };
+    };
+
+    struct boolvec
+    {
+        template<typename base_t>
+        struct impl : public base_t {
+            using extracted_t = std::array<bool, base_t::dim>;
+
+            FORWARD(impl);
+
+            REQUIRE(traits::IO);
+            TRAIT(traits::IO);
+
+            const extracted_t data() const {
+                alignas(base_t::alignment) typename base_t::extracted_t raw;
+                extracted_t result;
+
+                base_t::store(raw);
+
+                for (auto i = 0; i < base_t::dim; i++)
+                    result[i] = raw[i] != 0;
+
+                return result;
+            }
+
+            extracted_t
+            data() {
+                alignas(base_t::alignment) typename base_t::extracted_t raw;
+                extracted_t result;
+
+
+                base_t::store(raw);
+
+                for (auto i = 0; i < base_t::dim; i++)
+                    result[i] = raw[i] != 0;
+
+                return result;
             }
         };
     };

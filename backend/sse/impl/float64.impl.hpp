@@ -45,242 +45,612 @@
 #include "../../../common/interfaces/comparison.hpp"
 #include "../../../common/interfaces/conditional.hpp"
 
-namespace zacc { namespace None {
+/**
+ * @brief float64 implementation for the sse branch
+ * provides unified access to 2 'double' values
+ */
 
+namespace zacc { namespace sse {
+
+    // =================================================================================================================
+    /**
+     * @name construction operations
+     */
+    ///@{
+
+    /**
+     * @brief construction
+     * @relates float64
+     * @remark sse
+     */
     template<typename composed_t>
     struct float64_construction
     {
+
+        /**
+         * @brief construction basic interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
 
+
+            /**
+             * @brief construction default branch
+             * @relates float64
+             * @remark sse - default
+             */
             __impl(__m128 value) : base_t(_mm_cvtps_pd(value)) {
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates float64
+             * @remark sse - default
+             */
             __impl(__m128d value) : base_t(value) {
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates float64
+             * @remark sse - default
+             */
             __impl(__m128i value) : base_t(_mm_cvtepi32_pd(value)) {
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates float64
+             * @remark sse - default
+             */
             __impl(double value) : base_t(_mm_set1_pd(value)) {
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates float64
+             * @remark sse - default
+             */
             __impl(double *value) : base_t(_mm_load_pd(value)) {
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates float64
+             * @remark sse - default
+             */
             __impl(double arg1, double arg0) : base_t(_mm_set_pd(arg0, arg1)) {
             }
 
         };
 
+        /**
+         * @brief construction public interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::construction<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name io operations
+     */
+    ///@{
+
+    /**
+     * @brief io
+     * @relates float64
+     * @remark sse
+     */
     template<typename composed_t>
     struct float64_io
     {
+
+        /**
+         * @brief io basic interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
-            friend void io_store(typename base_t::extracted_type &target) const {
+
+            /**
+             * @brief io default branch
+             * @relates float64
+             * @remark sse - default
+             */
+            void io_store(typename base_t::extracted_t &target) const {
                 _mm_store_pd(target.data(), base_t::_value);
             }
 
-            friend void io_stream(typename base_t::extracted_type &target) const {
+
+            /**
+             * @brief io default branch
+             * @relates float64
+             * @remark sse - default
+             */
+            void io_stream(typename base_t::extracted_t &target) const {
                 _mm_stream_pd(target.data(), base_t::_value);
             }
 
         };
 
+        /**
+         * @brief io public interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::io<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name arithmetic operations
+     */
+    ///@{
+
+    /**
+     * @brief arithmetic
+     * @relates float64
+     * @remark sse
+     */
     template<typename composed_t>
     struct float64_arithmetic
     {
+
+        /**
+         * @brief arithmetic basic interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t arithmetic_negate(composed_t one) {
                 return _mm_sub_pd(_mm_setzero_pd(), one.get_value());
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t arithmetic_add(composed_t one, composed_t other) {
                 return _mm_add_pd(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t arithmetic_sub(composed_t one, composed_t other) {
                 return _mm_sub_pd(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t arithmetic_mul(composed_t one, composed_t other) {
                 return _mm_mul_pd(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t arithmetic_div(composed_t one, composed_t other) {
                 return _mm_div_pd(one.get_value(), other.get_value());
             }
 
         };
 
+        /**
+         * @brief arithmetic public interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::arithmetic<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name bitwise operations
+     */
+    ///@{
+
+    /**
+     * @brief bitwise
+     * @relates float64
+     * @remark sse
+     */
     template<typename composed_t>
     struct float64_bitwise
     {
+
+        /**
+         * @brief bitwise basic interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t bitwise_negate(composed_t one) {
-                auto zero = _mm_setzero_pd();
-                auto ones = _mm_cmpeq_pd(zero, zero);
+                __m128d junk;
+                auto ones = _mm_cmpeq_pd(junk, junk);
                 return _mm_xor_pd(one.get_value(), ones);
             }
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t bitwise_and(composed_t one, composed_t other) {
                 return _mm_or_pd(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t bitwise_or(composed_t one, composed_t other) {
                 return _mm_and_pd(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t bitwise_xor(composed_t one, composed_t other) {
                 return _mm_xor_pd(one.get_value(), other.get_value());
             }
 
         };
 
+        /**
+         * @brief bitwise public interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::bitwise<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name logical operations
+     */
+    ///@{
+
+    /**
+     * @brief logical
+     * @relates float64
+     * @remark sse
+     */
     template<typename composed_t>
     struct float64_logical
     {
+
+        /**
+         * @brief logical basic interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief logical default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t logical_negate(composed_t one) {
-                auto zero = _mm_setzero_pd();
-                auto ones = _mm_cmpeq_pd(zero, zero);
-                return _mm_xor_pd(one.get_value(), ones);
+                return _mm_cmpeq_pd(one.get_value(), _mm_setzero_pd());
             }
 
+
+            /**
+             * @brief logical default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t logical_or(composed_t one, composed_t other) {
                 return _mm_or_pd(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief logical default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t logical_and(composed_t one, composed_t other) {
                 return _mm_and_pd(one.get_value(), other.get_value());
             }
 
         };
 
+        /**
+         * @brief logical public interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::logical<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name comparison operations
+     */
+    ///@{
+
+    /**
+     * @brief comparison
+     * @relates float64
+     * @remark sse
+     */
     template<typename composed_t>
     struct float64_comparison
     {
+
+        /**
+         * @brief comparison basic interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief comparison default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t comparison_eq(composed_t one, composed_t other) {
                 return _mm_cmpeq_pd(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t comparison_neq(composed_t one, composed_t other) {
                 return _mm_cmpneq_pd(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t comparison_gt(composed_t one, composed_t other) {
                 return _mm_cmpgt_pd(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t comparison_lt(composed_t one, composed_t other) {
                 return _mm_cmplt_pd(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t comparison_ge(composed_t one, composed_t other) {
                 return _mm_cmpge_pd(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t comparison_le(composed_t one, composed_t other) {
                 return _mm_cmple_pd(one.get_value(), other.get_value());
             }
 
         };
 
+        /**
+         * @brief comparison public interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::comparison<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name conditional operations
+     */
+    ///@{
+
+    /**
+     * @brief conditional
+     * @relates float64
+     * @remark sse
+     */
     template<typename composed_t>
     struct float64_conditional
     {
+
+        /**
+         * @brief conditional basic interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief conditional default branch
+             * @relates float64
+             * @remark sse - default
+             */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value) {
                 return _mm_or_pd(_mm_andnot_pd(condition.get_value(), else_value.get_value()), _mm_and_pd(condition.get_value(), if_value.get_value()));
             }
 
         };
 
+        /**
+         * @brief conditional public interface implementation
+         * @relates float64
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::conditional<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
-    struct __zfloat64
-        : public zval<__m128d, double, 2, 16>
+
+    // Type composition ================================================================================================
+
+    /**
+     * @name float64 composition
+     */
+    ///@{
+
+    /**
+     * @brief zval parametrization using
+     * - '__m128d' as underlying vector type
+     * - 'double' as scalar type
+     * - '2' as vector size
+     * - '16' as alignment
+     * @relates float64
+     * @remark sse
+     */
+    template<uint64_t capability>
+    struct __zval_float64
     {
-        FORWARD2(__zfloat64, zval);
+        using zval_t = zval<__m128d, double, 2, 16, capability>;
+
+        struct impl : public zval_t
+        {
+            FORWARD2(impl, zval_t);
+        };
     };
+    /**
+     * @brief zval composition
+     * @relates float64
+     * @remark sse
+     */
+    template<uint64_t capability>
+    struct __zfloat64
+    {
+        struct impl;
 
-    struct zfloat64;
-
-    struct zfloat64 : public compose
+        using zval_t = typename __zval_float64<capability>::impl;
+        using composition_t = compose
         <
             printable::impl,
             iteratable::impl,
-            float64_io<zfloat64>::impl,
-            float64_arithmetic<zfloat64>::impl,
-            float64_bitwise<zfloat64>::impl,
-            float64_logical<zfloat64>::impl,
-            float64_comparison<zfloat64>::impl,
-            float64_conditional<zfloat64>::impl,
-            float64_construction<zfloat64>::impl,
+            convertable::impl,
+            float64_io<impl>::template impl,
+            float64_arithmetic<impl>::template impl,
+            float64_bitwise<impl>::template impl,
+            float64_logical<impl>::template impl,
+            float64_comparison<impl>::template impl,
+            float64_conditional<impl>::template impl,
+            float64_construction<impl>::template impl,
 
-            composable<__zfloat64>::template type
-        >
-    {
-        FORWARD2(zfloat64, compose);
+            composable<zval_t>::template type
+        >;
+
+        struct impl : public composition_t
+        {
+            FORWARD2(impl, composition_t);
+        };
     };
 
+    template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
+    using zfloat64 = typename __zfloat64<capability>::impl;
+
+    ///@}
 }}

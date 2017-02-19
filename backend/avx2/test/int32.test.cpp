@@ -27,150 +27,228 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
+#include "gtest/gtest.h"
+//#include <iostream>
 #include "../impl/int32.impl.hpp"
 
 namespace zacc { namespace None { namespace test {
 
 // =====================================================================================================================
-    TEST(None_int32_arithmetic, arithmetic_negate)
+    TEST(None_int32_arithmetic, arithmetic_negate_default)
     {
-        auto actual = -zint32(125);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)-125);
+        auto actual = -zint32<>(125);
+        auto expected = (int) -125;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(None_int32_arithmetic, arithmetic_add)
+    TEST(None_int32_arithmetic, arithmetic_add_default)
     {
-        auto actual = zint32(12) + zint32(105);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)117);
+        auto actual = zint32<>(12) + zint32<>(105);
+        auto expected = (int) 117;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(None_int32_arithmetic, arithmetic_sub)
+    TEST(None_int32_arithmetic, arithmetic_sub_default)
     {
-        auto actual = zint32(124) - zint32(125);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)-1);
+        auto actual = zint32<>(124) - zint32<>(125);
+        auto expected = (int) -1;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(None_int32_arithmetic, arithmetic_mul)
+    TEST(None_int32_arithmetic, arithmetic_mul_default)
     {
-        auto actual = zint32(12) * zint32(9);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)108);
+        auto actual = zint32<>(12) * zint32<>(9);
+        auto expected = (int) 108;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(None_int32_arithmetic, arithmetic_div)
+    TEST(None_int32_arithmetic, arithmetic_div_default)
     {
-        auto actual = zint32(124) / zint32(124);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)1);
-    }
+        auto actual = zint32<>(124) / zint32<>(124);
+        auto expected = (int) 1;
 
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(None_int32_bitwise, bitwise_negate)
-    {
-        auto actual = ~zint32(255);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)-256);
-    }
-
-    TEST(None_int32_bitwise, bitwise_and)
-    {
-        auto actual = zint32(127) & zint32(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)64);
-    }
-
-    TEST(None_int32_bitwise, bitwise_or)
-    {
-        auto actual = zint32(127) | zint32(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)127);
-    }
-
-    TEST(None_int32_bitwise, bitwise_xor)
-    {
-        auto actual = zint32(127) ^ zint32(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)63);
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_int32_logical, logical_negate)
+    TEST(None_int32_bitwise, bitwise_negate_default)
     {
-        auto actual = !zint32(1);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)0);
+        auto actual = ~zint32<>(100);
+        auto expected = (int) ~100;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(None_int32_logical, logical_or)
+    TEST(None_int32_bitwise, bitwise_and_default)
     {
-        auto actual = zint32(0) || zint32(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)8);
+        auto actual = zint32<>(127) & zint32<>(64);
+        auto expected = (int) (127 & 64);
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-    TEST(None_int32_logical, logical_and)
+    TEST(None_int32_bitwise, bitwise_or_default)
     {
-        auto actual = zint32(0) && zint32(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)0);
+        auto actual = zint32<>(127) | zint32<>(64);
+        auto expected = (int) (127 | 64);
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(None_int32_comparison, comparison_eq)
+    TEST(None_int32_bitwise, bitwise_xor_default)
     {
-        auto actual = zint32(0) == zint32(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)0);
-    }
+        auto actual = zint32<>(127) ^ zint32<>(64);
+        auto expected = (int) (127 ^ 64);
 
-    TEST(None_int32_comparison, comparison_neq)
-    {
-        auto actual = zint32(0) != zint32(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)0);
-    }
-
-    TEST(None_int32_comparison, comparison_gt)
-    {
-        auto actual = zint32(0) > zint32(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)0);
-    }
-
-    TEST(None_int32_comparison, comparison_lt)
-    {
-        auto actual = zint32(8) < zint32(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)0);
-    }
-
-    TEST(None_int32_comparison, comparison_ge)
-    {
-        auto actual = zint32(0) >= zint32(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)1);
-    }
-
-    TEST(None_int32_comparison, comparison_le)
-    {
-        auto actual = zint32(0) <= zint32(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)1);
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_int32_conditional, vsel)
+    TEST(None_int32_logical, logical_negate_default)
     {
-        auto actual = vsel(zint32(1 == 1), zint32(2), zint32(3));
-        for(auto value : actual)
-            EXPECT_EQ(value, (int)2);
+        auto actual = (!zint32<>(1)).as_bool();
+        auto expected = (int) false;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(None_int32_logical, logical_or_default)
+    {
+        auto actual = zint32<>(0) || zint32<>(8);
+        auto expected = (int) 8;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(None_int32_logical, logical_and_default)
+    {
+        auto actual = zint32<>(0) && zint32<>(8);
+        auto expected = (int) 0;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(None_int32_comparison, comparison_eq_default)
+    {
+        auto actual = zint32<>(0) == zint32<>(8);
+        auto expected = (int) 0;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(None_int32_comparison, comparison_neq_default)
+    {
+        auto actual = zint32<>(0) != zint32<>(0);
+        auto expected = (int) 0;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(None_int32_comparison, comparison_gt_default)
+    {
+        auto actual = zint32<>(0) > zint32<>(8);
+        auto expected = (int) 0;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(None_int32_comparison, comparison_lt_default)
+    {
+        auto actual = zint32<>(8) < zint32<>(0);
+        auto expected = (int) 0;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(None_int32_comparison, comparison_ge_default)
+    {
+        auto actual = (zint32<>(0) >= zint32<>(0)).as_bool();
+        auto expected = (int) true;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(None_int32_comparison, comparison_le_default)
+    {
+        auto actual = (zint32<>(0) <= zint32<>(0)).as_bool();
+        auto expected = (int) true;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(None_int32_conditional, vsel_default)
+    {
+        auto actual = vsel(zint32<>(1) == zint32<>(1), zint32<>(2), zint32<>(3));
+        auto expected = (int) 2;
+
+        for(int value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================

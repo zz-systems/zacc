@@ -27,6 +27,8 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
+#include "gtest/gtest.h"
+//#include <iostream>
 #include "../impl/{{ type.type }}.impl.hpp"
 
 namespace zacc { namespace {{ type.branch }} { namespace test {
@@ -37,12 +39,22 @@ namespace zacc { namespace {{ type.branch }} { namespace test {
         {% endif %}
         {% for func in module.functions %}
             {% for branch in func.branches() %}
-                {% if branch.test %}
-    TEST({{ type.branch}}_{{ module.mangled_name() }}, {{ branch.mangled_name() }})
+                {% if branch.test and (module.name != 'bitwise' or not type.type.startswith('float')) %}
+    TEST({{ type.branch}}_{{ module.mangled_name() }}, {{ branch.mangled_name() }}{{ "_" + branch.branch_name }})
     {
         auto actual = {{ branch.actual }};
-        for(auto value : actual)
-            EXPECT_EQ(value, ({{ type.scalar_t }}){{ branch.expected }});
+        auto expected = ({{ type.scalar_t }}) {{ branch.expected }};
+
+        for({{ type.scalar_t }} value : actual)
+        {
+        {% if type.scalar_t == 'float' %}
+            ASSERT_FLOAT_EQ(value, expected);
+        {% elif type.scalar_t == 'double' %}
+            ASSERT_DOUBLE_EQ(value, expected);
+        {% else %}
+            ASSERT_EQ(value, expected);
+        {% endif %}
+        }
     }
 
                 {% endif %}

@@ -31,10 +31,15 @@
 #include "generated/int16.impl.hpp"
 #include "generated/int32.impl.hpp"
 
-namespace zacc {
-    using zfloat    = sse::zfloat32;
-    using zdouble   = sse::zfloat64;
-    using zbyte     = sse::zint8;
-    using zshort    = sse::zint16;
-    using zint      = sse::zint32;
-}
+namespace zacc { namespace sse {
+
+    template<uint64_t capability>
+    struct types
+    {
+        using zfloat32  = zfloat32<capability>;
+        using zfloat64  = zfloat64<capability>;
+        using zint8     = zint8<capability>;
+        using zint16    = zint16<capability>;
+        using zint32    = zint32<capability>;
+    };
+}}

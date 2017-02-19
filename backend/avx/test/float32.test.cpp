@@ -27,150 +27,184 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
+#include "gtest/gtest.h"
+//#include <iostream>
 #include "../impl/float32.impl.hpp"
 
 namespace zacc { namespace None { namespace test {
 
 // =====================================================================================================================
-    TEST(None_float32_arithmetic, arithmetic_negate)
+    TEST(None_float32_arithmetic, arithmetic_negate_default)
     {
-        auto actual = -zfloat32(125);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)-125);
+        auto actual = -zfloat32<>(125);
+        auto expected = (float) -125;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
-    TEST(None_float32_arithmetic, arithmetic_add)
+    TEST(None_float32_arithmetic, arithmetic_add_default)
     {
-        auto actual = zfloat32(12) + zfloat32(105);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)117);
+        auto actual = zfloat32<>(12) + zfloat32<>(105);
+        auto expected = (float) 117;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
-    TEST(None_float32_arithmetic, arithmetic_sub)
+    TEST(None_float32_arithmetic, arithmetic_sub_default)
     {
-        auto actual = zfloat32(124) - zfloat32(125);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)-1);
+        auto actual = zfloat32<>(124) - zfloat32<>(125);
+        auto expected = (float) -1;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
-    TEST(None_float32_arithmetic, arithmetic_mul)
+    TEST(None_float32_arithmetic, arithmetic_mul_default)
     {
-        auto actual = zfloat32(12) * zfloat32(9);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)108);
+        auto actual = zfloat32<>(12) * zfloat32<>(9);
+        auto expected = (float) 108;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
-    TEST(None_float32_arithmetic, arithmetic_div)
+    TEST(None_float32_arithmetic, arithmetic_div_default)
     {
-        auto actual = zfloat32(124) / zfloat32(124);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)1);
-    }
+        auto actual = zfloat32<>(124) / zfloat32<>(124);
+        auto expected = (float) 1;
 
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(None_float32_bitwise, bitwise_negate)
-    {
-        auto actual = ~zfloat32(255);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)-256);
-    }
-
-    TEST(None_float32_bitwise, bitwise_and)
-    {
-        auto actual = zfloat32(127) & zfloat32(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)64);
-    }
-
-    TEST(None_float32_bitwise, bitwise_or)
-    {
-        auto actual = zfloat32(127) | zfloat32(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)127);
-    }
-
-    TEST(None_float32_bitwise, bitwise_xor)
-    {
-        auto actual = zfloat32(127) ^ zfloat32(64);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)63);
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_float32_logical, logical_negate)
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(None_float32_logical, logical_negate_default)
     {
-        auto actual = !zfloat32(1);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)0);
+        auto actual = (!zfloat32<>(1)).as_bool();
+        auto expected = (float) false;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
-    TEST(None_float32_logical, logical_or)
+    TEST(None_float32_logical, logical_or_default)
     {
-        auto actual = zfloat32(0) || zfloat32(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)8);
+        auto actual = zfloat32<>(0) || zfloat32<>(8);
+        auto expected = (float) 8;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
-    TEST(None_float32_logical, logical_and)
+    TEST(None_float32_logical, logical_and_default)
     {
-        auto actual = zfloat32(0) && zfloat32(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)0);
+        auto actual = zfloat32<>(0) && zfloat32<>(8);
+        auto expected = (float) 0;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_float32_comparison, comparison_eq)
+    TEST(None_float32_comparison, comparison_eq_default)
     {
-        auto actual = zfloat32(0) == zfloat32(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)0);
+        auto actual = zfloat32<>(0) == zfloat32<>(8);
+        auto expected = (float) 0;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
-    TEST(None_float32_comparison, comparison_neq)
+    TEST(None_float32_comparison, comparison_neq_default)
     {
-        auto actual = zfloat32(0) != zfloat32(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)0);
+        auto actual = zfloat32<>(0) != zfloat32<>(0);
+        auto expected = (float) 0;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
-    TEST(None_float32_comparison, comparison_gt)
+    TEST(None_float32_comparison, comparison_gt_default)
     {
-        auto actual = zfloat32(0) > zfloat32(8);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)0);
+        auto actual = zfloat32<>(0) > zfloat32<>(8);
+        auto expected = (float) 0;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
-    TEST(None_float32_comparison, comparison_lt)
+    TEST(None_float32_comparison, comparison_lt_default)
     {
-        auto actual = zfloat32(8) < zfloat32(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)0);
+        auto actual = zfloat32<>(8) < zfloat32<>(0);
+        auto expected = (float) 0;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
-    TEST(None_float32_comparison, comparison_ge)
+    TEST(None_float32_comparison, comparison_ge_default)
     {
-        auto actual = zfloat32(0) >= zfloat32(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)1);
+        auto actual = (zfloat32<>(0) >= zfloat32<>(0)).as_bool();
+        auto expected = (float) true;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
-    TEST(None_float32_comparison, comparison_le)
+    TEST(None_float32_comparison, comparison_le_default)
     {
-        auto actual = zfloat32(0) <= zfloat32(0);
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)1);
+        auto actual = (zfloat32<>(0) <= zfloat32<>(0)).as_bool();
+        auto expected = (float) true;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_float32_conditional, vsel)
+    TEST(None_float32_conditional, vsel_default)
     {
-        auto actual = vsel(zfloat32(1 == 1), zfloat32(2), zfloat32(3));
-        for(auto value : actual)
-            EXPECT_EQ(value, (float)2);
+        auto actual = vsel(zfloat32<>(1) == zfloat32<>(1), zfloat32<>(2), zfloat32<>(3));
+        auto expected = (float) 2;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
     }
 
 // =====================================================================================================================

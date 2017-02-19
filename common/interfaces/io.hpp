@@ -33,8 +33,7 @@ namespace zacc { namespace interface {
     template<typename base_t, typename composed_t>
     struct io : public base_t {
 
-        typedef typename base_t::extracted_type extracted_t;
-
+        typedef typename base_t::extracted_t extracted_t;
 
         FORWARD(io);
 
@@ -51,7 +50,7 @@ namespace zacc { namespace interface {
         }
 
         const extracted_t data() const {
-            extracted_t result;
+            alignas(base_t::alignment) extracted_t result;
 
             store(result);
 
@@ -60,7 +59,7 @@ namespace zacc { namespace interface {
 
         extracted_t
         data() {
-            extracted_t result;
+            alignas(base_t::alignment) extracted_t result;
 
             store(result);
 

@@ -67,7 +67,11 @@ add_custom_target(zacc.generate.tests DEPENDS ${generated_tests})
 add_custom_target(zacc.generate.all DEPENDS zacc.generate.types zacc.generate.tests)
 
 # make test target
-file(GLOB_RECURSE tests    ABSOLUTE ${CMAKE_SOURCE_DIR}    "*/scalar/*${test.schema}")
+file(GLOB_RECURSE scalar_tests ABSOLUTE ${CMAKE_SOURCE_DIR}    "*/scalar/*${test.schema}")
+file(GLOB_RECURSE sse_tests ABSOLUTE ${CMAKE_SOURCE_DIR}    "*/sse/*${test.schema}")
+
+set(tests ${scalar_tests} ${sse_tests})
+
 message("${tests}")
 set_source_files_properties(${tests}
         PROPERTIES GENERATED TRUE)

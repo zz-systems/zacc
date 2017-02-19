@@ -44,14 +44,14 @@ namespace zacc { namespace interface {
         friend composed_t operator>>(const composed_t one, const size_t immediate) {
             return bitwise_shift_srli(one, immediate);
         }
-
-        friend composed_t operator<<(const composed_t one, const composed_t other) {
-            return bitwise_shift_sll(one, other);
-        }
-
-        friend composed_t operator>>(const composed_t one, const composed_t other) {
-            return bitwise_shift_srl(one, other);
-        }
+// TODO: Disabled for now.
+//        friend composed_t operator<<(const composed_t one, const composed_t other) {
+//            return bitwise_shift_sll(one, other);
+//        }
+//
+//        friend composed_t operator>>(const composed_t one, const composed_t other) {
+//            return bitwise_shift_srl(one, other);
+//        }
 
 
         CONVERSION(<<);

@@ -10,6 +10,7 @@ type:
      external:
       - printable
       - iteratable
+      - convertable
      internal:
        - io
        - arithmetic
@@ -28,7 +29,7 @@ modules:
       returns: void
       member: true
       suffix: const
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       body: target.data()[0] = base_t::_value;
     stream: *io_store
 #-----------------------------------------------------------------------------------------------------------------------

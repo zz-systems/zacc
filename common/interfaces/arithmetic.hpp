@@ -74,11 +74,11 @@ namespace zacc { namespace interface {
         TRAIT(traits::Fused_Multiplication);
 
         friend composed_t operator+(const fused_multiplication one, const composed_t other) {
-            return fused_multiply_add(one._initial_multiplicand, one._initial_multiplier, other);
+            return vfmadd(one._initial_multiplicand, one._initial_multiplier, other);
         }
 
         friend composed_t operator-(const fused_multiplication one, const composed_t other) {
-            return fused_multiply_sub(one._initial_multiplicand, one._initial_multiplier, other);
+            return vfmsub(one._initial_multiplicand, one._initial_multiplier, other);
         }
 
         operator composed_t() {

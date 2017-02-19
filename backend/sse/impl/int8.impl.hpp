@@ -45,244 +45,574 @@
 #include "../../../common/interfaces/comparison.hpp"
 #include "../../../common/interfaces/conditional.hpp"
 
-namespace zacc { namespace None {
+/**
+ * @brief int8 implementation for the sse branch
+ * provides unified access to 16 'char' values
+ */
 
+namespace zacc { namespace sse {
+
+    // =================================================================================================================
+    /**
+     * @name construction operations
+     */
+    ///@{
+
+    /**
+     * @brief construction
+     * @relates int8
+     * @remark sse
+     */
     template<typename composed_t>
     struct int8_construction
     {
+
+        /**
+         * @brief construction basic interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
 
+
+            /**
+             * @brief construction default branch
+             * @relates int8
+             * @remark sse - default
+             */
             __impl(__m128i value) : base_t(value) {
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates int8
+             * @remark sse - default
+             */
             __impl(char value) : base_t(_mm_set1_epi8(value)) {
             }
 
-            __impl(char *value) : base_t(_mm_load_si128(value)) {
+
+            /**
+             * @brief construction default branch
+             * @relates int8
+             * @remark sse - default
+             */
+            __impl(char *value) : base_t(_mm_load_si128((__m128i*)value)) {
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates int8
+             * @remark sse - default
+             */
             __impl(char arg15, char arg14, char arg13, char arg12, char arg11, char arg10, char arg9, char arg8, char arg7, char arg6, char arg5, char arg4, char arg3, char arg2, char arg1, char arg0) : base_t(_mm_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)) {
             }
 
         };
 
+        /**
+         * @brief construction public interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::construction<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name io operations
+     */
+    ///@{
+
+    /**
+     * @brief io
+     * @relates int8
+     * @remark sse
+     */
     template<typename composed_t>
     struct int8_io
     {
+
+        /**
+         * @brief io basic interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
-            friend void io_store(typename base_t::extracted_type &target) const {
-                _mm_store_si128(target.data(), base_t::_value);
+
+            /**
+             * @brief io default branch
+             * @relates int8
+             * @remark sse - default
+             */
+            void io_store(typename base_t::extracted_t &target) const {
+                _mm_store_si128((__m128i*)target.data(), base_t::_value);
             }
 
-            friend void io_stream(typename base_t::extracted_type &target) const {
-                _mm_stream_si128(target.data(), base_t::_value);
+
+            /**
+             * @brief io default branch
+             * @relates int8
+             * @remark sse - default
+             */
+            void io_stream(typename base_t::extracted_t &target) const {
+                _mm_stream_si128((__m128i*)target.data(), base_t::_value);
             }
 
         };
 
+        /**
+         * @brief io public interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::io<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name arithmetic operations
+     */
+    ///@{
+
+    /**
+     * @brief arithmetic
+     * @relates int8
+     * @remark sse
+     */
     template<typename composed_t>
     struct int8_arithmetic
     {
+
+        /**
+         * @brief arithmetic basic interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t arithmetic_negate(composed_t one) {
-                return _mm_sub_epi8(_mm_setzero_epi8(), one.get_value());
+                return _mm_sub_epi8(_mm_setzero_si128(), one.get_value());
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t arithmetic_add(composed_t one, composed_t other) {
                 return _mm_add_epi8(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t arithmetic_sub(composed_t one, composed_t other) {
                 return _mm_sub_epi8(one.get_value(), other.get_value());
             }
 
         };
 
+        /**
+         * @brief arithmetic public interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::arithmetic<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name bitwise operations
+     */
+    ///@{
+
+    /**
+     * @brief bitwise
+     * @relates int8
+     * @remark sse
+     */
     template<typename composed_t>
     struct int8_bitwise
     {
+
+        /**
+         * @brief bitwise basic interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t bitwise_negate(composed_t one) {
-                auto zero = _mm_setzero_si128();
-                auto ones = _mm_cmpeq_epi8(zero, zero);
+                __m128i junk;
+                auto ones = _mm_cmpeq_epi8(junk, junk);
                 return _mm_xor_si128(one.get_value(), ones);
             }
 
-            friend composed_t bitwise_and(composed_t one, composed_t other) {
-                return _mm_or_epi8(one.get_value(), other.get_value());
-            }
 
+            /**
+             * @brief bitwise default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t bitwise_or(composed_t one, composed_t other) {
-                return _mm_and_epi8(one.get_value(), other.get_value());
+                return _mm_or_si128(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates int8
+             * @remark sse - default
+             */
+            friend composed_t bitwise_and(composed_t one, composed_t other) {
+                return _mm_and_si128(one.get_value(), other.get_value());
+            }
+
+
+            /**
+             * @brief bitwise default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t bitwise_xor(composed_t one, composed_t other) {
                 return _mm_xor_si128(one.get_value(), other.get_value());
             }
 
-            friend composed_t bitwise_sll(composed_t one, composed_t other) {
-                return _mm_sll_epi8(one.get_value(), other.get_value());
-            }
-
-            friend composed_t bitwise_srl(composed_t one, composed_t other) {
-                return _mm_srl_epi8(one.get_value(), other.get_value());
-            }
-
-            friend composed_t bitwise_slli(const composed_t one, const size_t other) {
-                return _mm_slli_epi8(const composed_t one, const size_t other);
-            }
-
-            friend composed_t bitwise_srli(const composed_t one, const size_t other) {
-                return _mm_srli_epi8(const composed_t one, const size_t other);
-            }
-
         };
 
+        /**
+         * @brief bitwise public interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::bitwise<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name logical operations
+     */
+    ///@{
+
+    /**
+     * @brief logical
+     * @relates int8
+     * @remark sse
+     */
     template<typename composed_t>
     struct int8_logical
     {
+
+        /**
+         * @brief logical basic interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief logical default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t logical_negate(composed_t one) {
-                auto zero = _mm_setzero_si128();
-                auto ones = _mm_cmpeq_epi8(zero, zero);
-                return _mm_xor_si128(one.get_value(), ones);
+                return _mm_cmpeq_epi8(one.get_value(), _mm_setzero_si128());
             }
 
+
+            /**
+             * @brief logical default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t logical_or(composed_t one, composed_t other) {
-                return _mm_or_epi8(one.get_value(), other.get_value());
+                return _mm_or_si128(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief logical default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t logical_and(composed_t one, composed_t other) {
-                return _mm_and_epi8(one.get_value(), other.get_value());
+                return _mm_and_si128(one.get_value(), other.get_value());
             }
 
         };
 
+        /**
+         * @brief logical public interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::logical<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name comparison operations
+     */
+    ///@{
+
+    /**
+     * @brief comparison
+     * @relates int8
+     * @remark sse
+     */
     template<typename composed_t>
     struct int8_comparison
     {
+
+        /**
+         * @brief comparison basic interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief comparison default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t comparison_eq(composed_t one, composed_t other) {
                 return _mm_cmpeq_epi8(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t comparison_neq(composed_t one, composed_t other) {
-                return _mm_cmpneq_epi8(one.get_value(), other.get_value());
+                return !(one == other);
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t comparison_gt(composed_t one, composed_t other) {
                 return _mm_cmpgt_epi8(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t comparison_lt(composed_t one, composed_t other) {
                 return _mm_cmplt_epi8(one.get_value(), other.get_value());
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t comparison_ge(composed_t one, composed_t other) {
-                return _mm_cmpge_epi8(one.get_value(), other.get_value());
+                return !(one < other);
             }
 
+
+            /**
+             * @brief comparison default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t comparison_le(composed_t one, composed_t other) {
-                return _mm_cmple_epi8(one.get_value(), other.get_value());
+                return !(one > other);
             }
 
         };
 
+        /**
+         * @brief comparison public interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::comparison<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
+
+    // =================================================================================================================
+    /**
+     * @name conditional operations
+     */
+    ///@{
+
+    /**
+     * @brief conditional
+     * @relates int8
+     * @remark sse
+     */
     template<typename composed_t>
     struct int8_conditional
     {
+
+        /**
+         * @brief conditional basic interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         struct __impl : base_t
         {
             FORWARD(__impl);
 
+
+            /**
+             * @brief conditional default branch
+             * @relates int8
+             * @remark sse - default
+             */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value) {
                 return _mm_or_si128(_mm_andnot_si128(condition.get_value(), else_value.get_value()), _mm_and_si128(condition.get_value(), if_value.get_value()));
             }
 
         };
 
+        /**
+         * @brief conditional public interface implementation
+         * @relates int8
+         * @remark sse
+         */
         template<typename base_t>
         using impl = interface::conditional<__impl<base_t>, composed_t>;
     };
 
+    ///@}
 
-    struct __zint8
-        : public zval<__m128i, char, 16, 16>
+
+    // Type composition ================================================================================================
+
+    /**
+     * @name int8 composition
+     */
+    ///@{
+
+    /**
+     * @brief zval parametrization using
+     * - '__m128i' as underlying vector type
+     * - 'char' as scalar type
+     * - '16' as vector size
+     * - '16' as alignment
+     * @relates int8
+     * @remark sse
+     */
+    template<uint64_t capability>
+    struct __zval_int8
     {
-        FORWARD2(__zint8, zval);
+        using zval_t = zval<__m128i, char, 16, 16, capability>;
+
+        struct impl : public zval_t
+        {
+            FORWARD2(impl, zval_t);
+        };
     };
+    /**
+     * @brief zval composition
+     * @relates int8
+     * @remark sse
+     */
+    template<uint64_t capability>
+    struct __zint8
+    {
+        struct impl;
 
-    struct zint8;
-
-    struct zint8 : public compose
+        using zval_t = typename __zval_int8<capability>::impl;
+        using composition_t = compose
         <
             printable::impl,
             iteratable::impl,
-            int8_io<zint8>::impl,
-            int8_arithmetic<zint8>::impl,
-            int8_bitwise<zint8>::impl,
-            int8_logical<zint8>::impl,
-            int8_comparison<zint8>::impl,
-            int8_conditional<zint8>::impl,
-            int8_construction<zint8>::impl,
+            convertable::impl,
+            int8_io<impl>::template impl,
+            int8_arithmetic<impl>::template impl,
+            int8_bitwise<impl>::template impl,
+            int8_logical<impl>::template impl,
+            int8_comparison<impl>::template impl,
+            int8_conditional<impl>::template impl,
+            int8_construction<impl>::template impl,
 
-            composable<__zint8>::template type
-        >
-    {
-        FORWARD2(zint8, compose);
+            composable<zval_t>::template type
+        >;
+
+        struct impl : public composition_t
+        {
+            FORWARD2(impl, composition_t);
+        };
     };
 
+    template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
+    using zint8 = typename __zint8<capability>::impl;
+
+    ///@}
 }}

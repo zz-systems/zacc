@@ -27,16 +27,37 @@
 
 #include "platform.hpp"
 #include "capability_dispatcher.hpp"
-#include "branch_dispatcher.hpp"
+
+#include "../backend/scalar/scalar.hpp"
+#include "../backend/sse/sse.hpp"
+#include "../backend/avx/avx.hpp"
+#include "../backend/avx2/avx2.hpp"
+#include "../backend/avx512/avx512.hpp"
 
 namespace zacc {
+
     template<uint64_t capability = 0>
-    struct dispatcher : public capability_dispatcher
-    {
-        using zfloat32  = branch_dispatcher<capability>::types::zfloat32;
-        using zfloat64  = branch_dispatcher<capability>::types::zfloat64;
-        using zint8     = branch_dispatcher<capability>::types::zint8;
-        using zint16    = branch_dispatcher<capability>::types::zint16;
-        using zint32    = branch_dispatcher<capability>::types::zint32;
+    struct branch_dispatcher {
+
+        static constexpr bool is_set(capabilities flag) { return capability_dispatcher<capability>::is_set(flag); }
+        using dispatcher = capability_dispatcher<capability>
+
+        template<typename branch = scalar::types>
+        using types = std::enable_if_t<!dispatcher::has_SSE && !dispatcher::has_AVX && !dispatcher::has_AVX512 && !dispatcher::has_OPENCL, branch<capability>>;
+
+        template<typename branch = sse::types>
+        using types = std::enable_if_t<dispatcher::has_SSE && !dispatcher::has_AVX, branch<capability>>;
+
+        template<typename branch = avx::types>
+        using types = std::enable_if_t<dispatcher::has_AVX && !dispatcher::has_AVX2 && !dispatcher::has_AVX512, branch<capability>>;
+
+        template<typename branch = avx2::types>
+        using types = std::enable_if_t<dispatcher::has_AVX && dispatcher::has_AVX2 && !dispatcher::has_AVX512, branch<capability>>;
+
+        template<typename branch = avx512::types>
+        using types = std::enable_if_t<dispatcher::has_AVX512 && dispatcher::has_OPENCL, branch<capability>>;
+
+        //template<typename branch = opencl::types>
+        //using types = std::enable_if_t<dispatcher::has_OPENCL, branch<capability>>;
     };
 }
