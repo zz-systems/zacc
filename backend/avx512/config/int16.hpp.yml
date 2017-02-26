@@ -1,6 +1,6 @@
 type:
   type: int16
-  target: avx512
+  branch: avx512
   vector_t: &vector_t __m512i
   scalar_t: &scalar_t short
   vec_size: &vec_size 32
@@ -10,6 +10,7 @@ type:
      external:
       - printable
       - iteratable
+      - convertable
      internal:
        - io
        - arithmetic
@@ -27,14 +28,14 @@ modules:
       init: _mm512_set1_epi8(value)
 
     - args: [[*scalar_t, "*value"]]
-      init: _mm512_load_si128(value)
+      init: _mm512_load_si512(value)
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm512_set_epi8 }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     store: &io_store
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       returns: void
       suffix: const
       body: _mm512_store_si512(target.data(), base_t::_value)

@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,65 +22,33 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
+
 #pragma once
 
 #include "platform.hpp"
-#include <type_traits>
+#include "branch_dispatcher.hpp"
 
 namespace zacc {
-    template<typename capability>
-    struct dispatcher {
-        /// current capabilities
-        static constexpr int flags = capability();
+    template<uint64_t capability = 0>
+    struct dispatcher
+    {
+        using zfloat32  = branch_dispatcher<capability>::types::zfloat32;
+        using zfloat64  = branch_dispatcher<capability>::types::zfloat64;
+        using zint8     = branch_dispatcher<capability>::types::zint8;
+        using zint16    = branch_dispatcher<capability>::types::zint16;
+        using zint32    = branch_dispatcher<capability>::types::zint32;
 
-        /// sse 2 available?
-        static constexpr bool has_sse2 = 0 != (capability() & capabilities::SSE2);
-        /// sse 3 available?
-        static constexpr bool has_sse3 = 0 != (capability() & capabilities::SSE3);
-        /// ssse 3 available?
-        static constexpr bool has_ssse3 = 0 != (capability() & capabilities::SSSE3);
-
-        // fma4 available?
-        static constexpr bool has_fma3 = 0 != (capability() & capabilities::FMA3);
-        /// fma4 available?
-        static constexpr bool has_fma4 = 0 != (capability() & capabilities::FMA4);
-        /// fma available?
-        static constexpr bool has_fma = has_fma3 || has_fma4;
-
-        /// sse 4.1 available?
-        static constexpr bool has_sse41 = 0 != (capability() & capabilities::SSE41);
-        /// sse 4.2 available?
-        static constexpr bool has_sse42 = 0 != (capability() & capabilities::SSE42);
-        /// sse 4 available?
-        static constexpr bool has_sse4 = has_sse41 || has_sse42;
-
-        /// avx 1 available?
-        static constexpr bool has_avx = 0 != (capability() & capabilities::AVX1);
-        /// avx 2 available?
-        static constexpr bool has_avx2 = 0 != (capability() & capabilities::AVX2);
-        /// avx 512 available?
-        static constexpr bool has_avx512 = 0 != (capability() & capabilities::AVX512);
-
-        /// openCL available?
-        static constexpr bool has_openCL = 0 != (capability() & capabilities::OPENCL);
-
-        /// fast (lower precision) float enabled?
-        static constexpr bool use_fast_float = 0 != (capability() & capabilities::FASTFLOAT);
+        using zfloat = zfloat32;
+        using zdouble = zfloat64;
+        using zbyte = zint8;
+        using zshort = zint16;
+        using zint = zint32;
     };
 
-    template<typename type_t, capabilities ...c>
-    struct accept_if : public std::enable_if<is_any_set(dispatcher<typename type_t::capability>::flags,
-                                                        c...), type_t> {
-    };
+#define zfloat dispatcher<capability>::zfloat
+#define zdouble dispatcher<capability>::zdouble
+#define zbyte dispatcher<capability>::zbyte
+#define zshort dispatcher<capability>::zshort
+#define zint dispatcher<capability>::zint
 
-    template<typename type_t, capabilities ...c>
-    struct reject_if : public std::enable_if<!is_any_set(dispatcher<typename type_t::capability>::flags,
-                                                         c...), type_t> {
-    };
-
-    template<typename type_t, capabilities ... c>
-    using accept_if_t = typename accept_if<type_t, c...>::type;
-
-    template<typename type_t, capabilities... c>
-    using reject_if_t = typename reject_if<type_t, c...>::type;
 }

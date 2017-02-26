@@ -1,6 +1,6 @@
 type:
   type: int8
-  target: sse
+  branch: sse
   vector_t: &vector_t __m128i
   scalar_t: &scalar_t char
   vec_size: &vec_size 16
@@ -10,10 +10,12 @@ type:
      external:
       - printable
       - iteratable
+      - convertable
      internal:
        - io
        - arithmetic
        - bitwise
+       #- bitwise_shift
        - logical
        - comparison
        - conditional
@@ -27,25 +29,25 @@ modules:
       init: _mm_set1_epi8(value)
 
     - args: [[*scalar_t, "*value"]]
-      init: _mm_load_si128(value)
+      init: _mm_load_si128((__m128i*)value)
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi8 }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     store: &io_store
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       returns: void
-      suffix: const
-      body: _mm_store_si128(target.data(), base_t::_value)
+      member: true
+      body: _mm_store_si128((__m128i*)target.data(), base_t::_value)
     stream:
       <<: *io_store
-      body:  _mm_stream_si128(target.data(), base_t::_value)
+      body:  _mm_stream_si128((__m128i*)target.data(), base_t::_value)
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     negate:
       args: one
-      body: return _mm_sub_epi8(_mm_setzero_epi8(), one.get_value())
+      body: return _mm_sub_epi8(_mm_setzero_si128(), one.get_value())
     add: _mm_add_epi8
     sub: _mm_sub_epi8
     #mul:
@@ -65,33 +67,44 @@ modules:
     negate: &bitwise_negate
       args: one
       body:
-        - auto zero = _mm_setzero_si128();
-        - auto ones = _mm_cmpeq_epi8(zero, zero);
+        - __m128i junk;
+        - auto ones = _mm_cmpeq_epi8(junk, junk);
         - return _mm_xor_si128(one.get_value(), ones);
-    and:  _mm_or_epi8
-    or:   _mm_and_epi8
-    xor:  _mm_xor_si128
-    sll:  _mm_sll_epi8
-    srl:  _mm_srl_epi8
-    slli:
-      args: { raw: "const composed_t one, const size_t other" }
-      body: _mm_slli_epi8
-    srli:
-      args: { raw: "const composed_t one, const size_t other" }
-      body: _mm_srli_epi8
+    or:   &bitwise_or
+      body: _mm_or_si128
+    and:  &bitwise_and
+      body: _mm_and_si128
+    xor:  &bitwise_xor
+      body: _mm_xor_si128
+#-----------------------------------------------------------------------------------------------------------------------
+#  bitwise_shift:
+#    sll:  _mm_sll_epi8
+#    srl:  _mm_srl_epi8
+#    slli:
+#      args: { raw: "const composed_t one, const size_t other" }
+#      body: "_mm_slli_epi8(one.get_value(), other)"
+#    srli:
+#      args: { raw: "const composed_t one, const size_t other" }
+#      body: "_mm_srli_epi8(one.get_value(), other)"
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate: *bitwise_negate
-    or:   _mm_or_epi8
-    and:  _mm_and_epi8
+    negate:
+      args: one
+      body: _mm_cmpeq_epi8(one.get_value(), _mm_setzero_si128());
+    or:
+      <<: *bitwise_or
+      #returns: boolvec<composed_t>
+    and:
+      <<: *bitwise_and
+      #returns: boolvec<composed_t>
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
     eq:   _mm_cmpeq_epi8
-    neq:  _mm_cmpneq_epi8
+    neq:  "!(one == other)"
     gt:   _mm_cmpgt_epi8
     lt:   _mm_cmplt_epi8
-    ge:   _mm_cmpge_epi8
-    le:   _mm_cmple_epi8
+    ge:   "!(one < other)"
+    le:   "!(one > other)"
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:

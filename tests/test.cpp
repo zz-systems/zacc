@@ -23,8 +23,8 @@
 //---------------------------------------------------------------------------------
 
 
-#include "../backend/scalar/scalar.hpp"
-#include "../backend/sse/sse.hpp"
+#include "../backend/scalar/types.hpp"
+#include "../backend/sse/types.hpp"
 
 #include <iostream>
 

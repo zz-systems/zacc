@@ -1,6 +1,6 @@
 type:
   type: float64
-  target: avx
+  branch: avx1
   vector_t: &vector_t __m256d
   scalar_t: &scalar_t double
   vec_size: &vec_size 4
@@ -10,6 +10,7 @@ type:
      external:
       - printable
       - iteratable
+      - convertable
      internal:
        - io
        - arithmetic
@@ -20,27 +21,27 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
-    - args: __m256 value
-      init: _mm256_cvtpd_pd(value)
+    - args: { raw: "const __m256 &value" }
+      init: _mm256_cvtps_pd(_mm256_castps256_ps128(value))
 
-    - args: __m256d value
+    - args: { raw: "const __m256d &value" }
       init: value
 
-    - args: __m256i value
-      init: _mm256_cvtepi32_pd(value)
+    - args: { raw: "const __m256i &value" }
+      init: _mm256_cvtepi32_pd(_mm256_castsi256_si128(value))
 
-    - args: double value
-      init: _mm_set1_pd(value)
+    - args: [[*scalar_t, value]]
+      init: _mm256_set1_pd(value)
 
-    - args: double value
-      init: _mm_load_pd(value)
+    - args: [[*scalar_t, "*value"]]
+      init: _mm256_load_pd(value)
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
-      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_pd }
+      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_pd }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     store: &io_store
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       returns: void
       member: true
       body: _mm256_store_pd(target.data(), base_t::_value)
@@ -51,7 +52,7 @@ modules:
   arithmetic:
     negate:
       args: one
-      body: return _mm256_sub_pd(_mm256_setzero_pd(), one.get_value())
+      body: _mm256_sub_pd(_mm256_setzero_pd(), one.get_value())
     add: _mm256_add_pd
     sub: _mm256_sub_pd
     mul: _mm256_mul_pd
@@ -61,30 +62,35 @@ modules:
     negate: &bitwise_negate
       args: one
       body: &bitwise_negate_body
-        - auto zero = _mm256_setzero_pd();
-        - auto ones = _mm256_cmpeq_pd(zero, zero);
+        - __m256d junk;
+        - auto ones = _mm256_cmp_pd(junk, junk, _CMP_EQ_OQ);
         - return _mm256_xor_pd(one.get_value(), ones);
     and:  _mm256_or_pd
     or:   _mm256_and_pd
     xor:  _mm256_xor_pd
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate: *bitwise_negate
+    negate:
+     args: one
+     body: _mm256_cmp_pd(one.get_value(), _mm256_setzero_ps(), _CMP_EQ_OQ);
     or:   _mm256_or_pd
     and:  _mm256_and_pd
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    eq:   _mm256_cmpeq_pd
-    neq:  _mm256_cmpneq_pd
-    gt:   _mm256_cmpgt_pd
-    lt:   _mm256_cmplt_pd
-    ge:   _mm256_cmpge_pd
-    le:   _mm256_cmple_pd
+    eq:   _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_EQ_OQ)
+    neq:  _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_NEQ_OQ)
+    gt:   _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_GT_OQ)
+    lt:   _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_LT_OQ)
+    ge:
+      body:
+      - auto result = _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_GE_OQ);
+      - return result;
+    le:   _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_LE_OQ)
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
       args: [condition, if_value, else_value]
       mangling: false
       body:
-        - auto mask = _mm256_cmpeq_pd(_mm256_setzero_pd(), condition.get_value());
+        - auto mask = _mm256_cmp_pd(_mm256_setzero_ps(), condition.get_value(), _CMP_EQ_OQ);
         - return _mm256_blendv_pd(if_value.get_value(), else_value.get_value(), mask);

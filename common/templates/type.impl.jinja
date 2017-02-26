@@ -28,25 +28,48 @@
 
 #pragma once
 
-#include <intrin.h>
+#include <x86intrin.h>
 #include <type_traits>
+
+#include "../../../util/type_composition.hpp"
 
 #include "../../../common/zval.hpp"
 #include "../../../common/common.hpp"
-#include "../../../common/compose.hpp"
 #include "../../../common/type_traits.hpp"
-#include "../../../common/common_traits.hpp"
+#include "../../../common/traits/common.hpp"
 
 {% for module in type.get_modules() %}
-#include "../../../common/interfaces/{{ module.name }}.hpp"
+#include "../../../common/traits/{{ module.name }}.hpp"
 {% endfor %}
+
+/**
+ * @brief {{ type.type }} implementation for the {{ type.branch }} branch
+ * provides unified access to {{ type.vec_size }} '{{ type.scalar_t }}' values
+ */
 
 namespace zacc { namespace {{ type.branch }} {
     {% for module in type.get_modules() %}
 
+    // =================================================================================================================
+    /**
+     * @name {{ module.name }} operations
+     */
+    ///@{
+
+    /**
+     * @brief {{ module.name }}
+     * @relates {{ type.type }}
+     * @remark {{ type.branch }}
+     */
     template<typename composed_t>
     struct {{ module.mangled_name() }}
     {
+
+        /**
+         * @brief {{ module.name }} basic interface implementation
+         * @relates {{ type.type }}
+         * @remark {{ type.branch }}
+         */
         template<typename base_t>
         struct __impl : base_t
         {
@@ -56,8 +79,12 @@ namespace zacc { namespace {{ type.branch }} {
 
             {% for func in module.functions %}
                 {% for branch in func.branches() %}
-{#            /// @brief#}
-{#            /// @remark #}
+
+            /**
+             * @brief {{ module.name }} {{ branch.branch_name }} branch
+             * @relates {{ type.type }}
+             * @remark {{ type.branch }} - {{ branch.branch_name }}
+             */
             {{ branch.signature() }} {
                     {% for instruction in branch.get_instructions() %}
                 {{ instruction }}
@@ -68,30 +95,73 @@ namespace zacc { namespace {{ type.branch }} {
             {% endfor %}
         };
 
+        /**
+         * @brief {{ module.name }} public interface implementation
+         * @relates {{ type.type }}
+         * @remark {{ type.branch }}
+         */
         template<typename base_t>
         using impl = interface::{{ module.name }}<__impl<base_t>, composed_t>;
     };
 
+    ///@}
+
     {% endfor %}
 
-    struct __z{{ type.type }}
-        : public zval<{{ type.vector_t }}, {{ type.scalar_t }}, {{ type.vec_size }}, {{ type.alignment }}>
+    // Type composition ================================================================================================
+
+    /**
+     * @name {{ type.type }} composition
+     */
+    ///@{
+
+    /**
+     * @brief zval parametrization using
+     * - '{{ type.vector_t }}' as underlying vector type
+     * - '{{ type.scalar_t }}' as scalar type
+     * - '{{ type.vec_size }}' as vector size
+     * - '{{ type.alignment }}' as alignment
+     * @relates {{ type.type }}
+     * @remark {{ type.branch }}
+     */
+    template<uint64_t capability>
+    struct __zval_{{ type.type }}
     {
-        FORWARD2(__z{{ type.type }}, zval);
+        using zval_t = zval<{{ type.vector_t }}, {{ type.scalar_t }}, {{ type.vec_size }}, {{ type.alignment }}, capability>;
+
+        struct impl : public zval_t
+        {
+            FORWARD2(impl, zval_t);
+        };
     };
+    /**
+     * @brief zval composition
+     * @relates {{ type.type }}
+     * @remark {{ type.branch }}
+     */
+    template<uint64_t capability>
+    struct __z{{ type.type }}
+    {
+        struct impl;
 
-    struct z{{ type.type }};
-
-    struct z{{ type.type }} : public compose
+        using zval_t = typename __zval_{{ type.type }}<capability>::impl;
+        using composition_t = compose
         <
         {% for trait in type.get_traits() %}
-            {{ trait }}::impl,
+            {{ trait }},
         {% endfor %}
 
-            composable<__z{{ type.type }}>::template type
-        >
-    {
-        FORWARD2(z{{ type.type }}, compose);
+            composable<zval_t>::template type
+        >;
+
+        struct impl : public composition_t
+        {
+            FORWARD2(impl, composition_t);
+        };
     };
 
+    template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
+    using z{{ type.type }} = typename __z{{ type.type }}<capability>::impl;
+
+    ///@}
 }}

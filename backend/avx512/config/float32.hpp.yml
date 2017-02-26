@@ -1,6 +1,6 @@
 type:
   type: float32
-  target: avx512
+  branch: avx512
   vector_t: &vector_t __m512
   scalar_t: &scalar_t float
   vec_size: &vec_size 16
@@ -10,6 +10,7 @@ type:
      external:
       - printable
       - iteratable
+      - convertable
      internal:
        - io
        - arithmetic
@@ -43,7 +44,7 @@ modules:
       returns: void
       member: true
       suffix: const
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       body: _mm512_store_ps(target.data(), base_t::_value);
     stream:
       <<: *io_store
@@ -62,8 +63,8 @@ modules:
     negate: &bitwise_negate
       args: one
       body: &bitwise_negate_body
-        - auto zero = _mm512_setzero_ps();
-        - auto ones = _mm512_cmpeq_ps(zero, zero);
+        - __m512 junk;
+        - auto ones = _mm512_cmpeq_ps(junk, junk);
         - return _mm512_xor_ps(one.get_value(), ones);
     and:  _mm512_or_ps
     or:   _mm512_and_ps

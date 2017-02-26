@@ -10,6 +10,7 @@ type:
     external:
       - printable
       - iteratable
+      - convertable
     internal:
       - io
       - arithmetic
@@ -40,7 +41,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     store: &io_store
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       returns: void
       member: true
       body: _mm_store_ps(target.data(), base_t::_value)
@@ -61,17 +62,23 @@ modules:
     negate: &bitwise_negate_prototype
       args: one
       body:
-        - auto zero = _mm_setzero_ps();
-        - auto ones = _mm_cmpeq_ps(zero, zero);
+        - __m128 junk;
+        - auto ones = _mm_cmpeq_ps(junk, junk);
         - return _mm_xor_ps(one.get_value(), ones);
     and:  _mm_or_ps
     or:   _mm_and_ps
     xor:  _mm_xor_ps
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate: *bitwise_negate_prototype
-    or:   _mm_or_ps
-    and:  _mm_and_ps
+    negate:
+      args: one
+      body: _mm_cmpeq_ps(one.get_value(), _mm_setzero_ps());
+    or:
+      body: _mm_or_ps
+      #returns: boolvec<composed_t>
+    and:
+      body: _mm_and_ps
+      #returns: boolvec<composed_t>
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
     eq:   _mm_cmpeq_ps

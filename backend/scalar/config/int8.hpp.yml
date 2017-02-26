@@ -4,17 +4,19 @@ type:
   vector_t: &vector_t char
   scalar_t: &scalar_t char
   vec_size: &vec_size 1
-  alignment: 4
+  alignment: 8
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
      external:
       - printable
       - iteratable
+      - convertable
      internal:
        - io
        - arithmetic
        - bitwise
-       - logical
+       - bitwise_shift
+       #- logical
        - comparison
        - conditional
 #-----------------------------------------------------------------------------------------------------------------------
@@ -28,7 +30,7 @@ modules:
       returns: void
       member: true
       suffix: const
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       body: target.data()[0] = base_t::_value;
     stream: *io_store
 #-----------------------------------------------------------------------------------------------------------------------
@@ -48,6 +50,8 @@ modules:
     and:  one.get_value() & other.get_value();
     or:   one.get_value() | other.get_value();
     xor:  one.get_value() ^ other.get_value();
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise_shift:
     sll:  one.get_value() << other.get_value()
     srl:  one.get_value() >> other.get_value()
     slli:
@@ -57,12 +61,12 @@ modules:
       args: { raw: "const composed_t one, const size_t other" }
       body: one.get_value() >> other
 #-----------------------------------------------------------------------------------------------------------------------
-  logical:
-    negate:
-      args: one
-      body: "!one.get_value()"
-    or:   one.get_value() || other.get_value();
-    and:  one.get_value() && other.get_value();
+#  logical:
+#    negate:
+#      args: one
+#      body: "!one.get_value()"
+#    or:   one.get_value() || other.get_value();
+#    and:  one.get_value() && other.get_value();
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
     eq:   one.get_value() == other.get_value();
@@ -76,4 +80,4 @@ modules:
      vsel:
         args: [condition, if_value, else_value]
         mangling: false
-        body: "condition ? if_value : else_value"
+        body: "(condition.get_value() != 0 ? if_value : else_value)"

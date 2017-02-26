@@ -1,6 +1,6 @@
 type:
   type: float64
-  target: avx512
+  branch: avx512
   vector_t: &vector_t __m512d
   scalar_t: &scalar_t double
   vec_size: &vec_size 8
@@ -10,6 +10,7 @@ type:
      external:
       - printable
       - iteratable
+      - convertable
      internal:
        - io
        - arithmetic
@@ -21,7 +22,7 @@ type:
 modules:
   construction:
     - args: __m512 value
-      init: _mm_cvtps_pd(value)
+      init: _mm512_cvtps_pd(value)
 
     - args: __m512d value
       init: value
@@ -43,7 +44,7 @@ modules:
       returns: void
       member: true
       suffix: const
-      args: { raw: "typename base_t::extracted_type &target" }
+      args: { raw: "typename base_t::extracted_t &target" }
       body: _mm512_store_pd(target.data(), base_t::_value);
     stream:
       <<: *io_store

@@ -26,6 +26,9 @@
 #pragma once
 
 #define FORWARD2(name, base) \
+    /** \
+     * @brief forwarding constructor \
+     */ \
     template<typename ...Args> \
     name(Args... args) : base(std::forward<Args>(args)...) {}
 

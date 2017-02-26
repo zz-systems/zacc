@@ -72,11 +72,32 @@ namespace zacc {
 
     template<typename T, typename... Args>
     bool is_any_set(T ref_value, T head, Args... tail) {
-        return (ref_value & head != 0) || is_any_set(ref_value, tail...);
+        return ((ref_value & head) != 0) || is_any_set(ref_value, tail...);
     };
 
     template<typename E>
     constexpr typename std::underlying_type<E>::type to_underlying(E e) {
         return static_cast<typename std::underlying_type<E>::type>(e);
     }
+
+
+    template<typename T>
+    struct is_float32_vec : std::false_type {
+    };
+
+    template<typename T>
+    struct is_float64_vec : std::false_type {
+    };
+
+    template<typename T>
+    struct is_int32_vec : std::false_type {
+    };
+
+    template<typename T>
+    struct is_int16_vec : std::false_type {
+    };
+
+    template<typename T>
+    struct is_int8_vec : std::false_type {
+    };
 }
