@@ -28,29 +28,30 @@
 
 #pragma once
 
-#include <intrin.h>
+#include <x86intrin.h>
 #include <type_traits>
+
+#include "../../../util/type_composition.hpp"
 
 #include "../../../common/zval.hpp"
 #include "../../../common/common.hpp"
-#include "../../../common/compose.hpp"
 #include "../../../common/type_traits.hpp"
-#include "../../../common/common_traits.hpp"
+#include "../../../common/traits/common.hpp"
 
-#include "../../../common/interfaces/construction.hpp"
-#include "../../../common/interfaces/io.hpp"
-#include "../../../common/interfaces/arithmetic.hpp"
-#include "../../../common/interfaces/bitwise.hpp"
-#include "../../../common/interfaces/logical.hpp"
-#include "../../../common/interfaces/comparison.hpp"
-#include "../../../common/interfaces/conditional.hpp"
+#include "../../../common/traits/construction.hpp"
+#include "../../../common/traits/io.hpp"
+#include "../../../common/traits/arithmetic.hpp"
+#include "../../../common/traits/bitwise.hpp"
+#include "../../../common/traits/logical.hpp"
+#include "../../../common/traits/comparison.hpp"
+#include "../../../common/traits/conditional.hpp"
 
 /**
- * @brief int8 implementation for the None branch
+ * @brief int8 implementation for the avx2 branch
  * provides unified access to 32 'char' values
  */
 
-namespace zacc { namespace None {
+namespace zacc { namespace avx2 {
 
     // =================================================================================================================
     /**
@@ -61,7 +62,7 @@ namespace zacc { namespace None {
     /**
      * @brief construction
      * @relates int8
-     * @remark None
+     * @remark avx2
      */
     template<typename composed_t>
     struct int8_construction
@@ -70,7 +71,7 @@ namespace zacc { namespace None {
         /**
          * @brief construction basic interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -80,36 +81,36 @@ namespace zacc { namespace None {
             /**
              * @brief construction default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
-            __impl(__m512i value) : base_t(value) {
+            __impl(__m256i value) : base_t(value) {
             }
 
 
             /**
              * @brief construction default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
-            __impl(char value) : base_t(_mm512_set1_epi8(value)) {
+            __impl(char value) : base_t(_mm256_set1_epi8(value)) {
             }
 
 
             /**
              * @brief construction default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
-            __impl(char *value) : base_t(_mm512_load_si128(value)) {
+            __impl(char *value) : base_t(_mm256_load_si256((__m256i*)value)) {
             }
 
 
             /**
              * @brief construction default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
-            __impl(char arg31, char arg30, char arg29, char arg28, char arg27, char arg26, char arg25, char arg24, char arg23, char arg22, char arg21, char arg20, char arg19, char arg18, char arg17, char arg16, char arg15, char arg14, char arg13, char arg12, char arg11, char arg10, char arg9, char arg8, char arg7, char arg6, char arg5, char arg4, char arg3, char arg2, char arg1, char arg0) : base_t(_mm512_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20, arg21, arg22, arg23, arg24, arg25, arg26, arg27, arg28, arg29, arg30, arg31)) {
+            __impl(char arg31, char arg30, char arg29, char arg28, char arg27, char arg26, char arg25, char arg24, char arg23, char arg22, char arg21, char arg20, char arg19, char arg18, char arg17, char arg16, char arg15, char arg14, char arg13, char arg12, char arg11, char arg10, char arg9, char arg8, char arg7, char arg6, char arg5, char arg4, char arg3, char arg2, char arg1, char arg0) : base_t(_mm256_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20, arg21, arg22, arg23, arg24, arg25, arg26, arg27, arg28, arg29, arg30, arg31)) {
             }
 
         };
@@ -117,7 +118,7 @@ namespace zacc { namespace None {
         /**
          * @brief construction public interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         using impl = interface::construction<__impl<base_t>, composed_t>;
@@ -135,7 +136,7 @@ namespace zacc { namespace None {
     /**
      * @brief io
      * @relates int8
-     * @remark None
+     * @remark avx2
      */
     template<typename composed_t>
     struct int8_io
@@ -144,7 +145,7 @@ namespace zacc { namespace None {
         /**
          * @brief io basic interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -155,20 +156,20 @@ namespace zacc { namespace None {
             /**
              * @brief io default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             void io_store(typename base_t::extracted_t &target) const {
-                _mm256_store_si128(target.data(), base_t::_value);
+                _mm256_store_si256((__m256i*)target.data(), base_t::_value);
             }
 
 
             /**
              * @brief io default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             void io_stream(typename base_t::extracted_t &target) const {
-                _mm256_stream_si128(target.data(), base_t::_value);
+                _mm256_stream_si256((__m256i*)target.data(), base_t::_value);
             }
 
         };
@@ -176,7 +177,7 @@ namespace zacc { namespace None {
         /**
          * @brief io public interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         using impl = interface::io<__impl<base_t>, composed_t>;
@@ -194,7 +195,7 @@ namespace zacc { namespace None {
     /**
      * @brief arithmetic
      * @relates int8
-     * @remark None
+     * @remark avx2
      */
     template<typename composed_t>
     struct int8_arithmetic
@@ -203,7 +204,7 @@ namespace zacc { namespace None {
         /**
          * @brief arithmetic basic interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -214,17 +215,17 @@ namespace zacc { namespace None {
             /**
              * @brief arithmetic default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t arithmetic_negate(composed_t one) {
-                return _mm256_sub_epi8(_mm256_setzero_epi8(), one.get_value());
+                return _mm256_sub_epi8(_mm256_setzero_si256(), one.get_value());
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t arithmetic_add(composed_t one, composed_t other) {
                 return _mm256_add_epi8(one.get_value(), other.get_value());
@@ -234,7 +235,7 @@ namespace zacc { namespace None {
             /**
              * @brief arithmetic default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t arithmetic_sub(composed_t one, composed_t other) {
                 return _mm256_sub_epi8(one.get_value(), other.get_value());
@@ -245,7 +246,7 @@ namespace zacc { namespace None {
         /**
          * @brief arithmetic public interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         using impl = interface::arithmetic<__impl<base_t>, composed_t>;
@@ -263,7 +264,7 @@ namespace zacc { namespace None {
     /**
      * @brief bitwise
      * @relates int8
-     * @remark None
+     * @remark avx2
      */
     template<typename composed_t>
     struct int8_bitwise
@@ -272,7 +273,7 @@ namespace zacc { namespace None {
         /**
          * @brief bitwise basic interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -283,82 +284,42 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t bitwise_negate(composed_t one) {
-                auto zero = _mm256_setzero_si128();
-                auto ones = _mm256_cmpeq_epi8(zero, zero);
-                return _mm256_xor_si128(one.get_value(), ones);
+                __m256i junk;
+                auto ones = _mm256_cmpeq_epi8(junk, junk);
+                return _mm256_xor_si256(one.get_value(), ones);
             }
 
 
             /**
              * @brief bitwise default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t bitwise_and(composed_t one, composed_t other) {
-                return _mm256_or_epi8(one.get_value(), other.get_value());
+                return _mm256_or_si256(one.get_value(), other.get_value());
             }
 
 
             /**
              * @brief bitwise default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t bitwise_or(composed_t one, composed_t other) {
-                return _mm256_and_epi8(one.get_value(), other.get_value());
+                return _mm256_and_si256(one.get_value(), other.get_value());
             }
 
 
             /**
              * @brief bitwise default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t bitwise_xor(composed_t one, composed_t other) {
-                return _mm256_xor_si128(one.get_value(), other.get_value());
-            }
-
-
-            /**
-             * @brief bitwise default branch
-             * @relates int8
-             * @remark None - default
-             */
-            friend composed_t bitwise_sll(composed_t one, composed_t other) {
-                return _mm256_sll_epi8(one.get_value(), other.get_value());
-            }
-
-
-            /**
-             * @brief bitwise default branch
-             * @relates int8
-             * @remark None - default
-             */
-            friend composed_t bitwise_srl(composed_t one, composed_t other) {
-                return _mm256_srl_epi8(one.get_value(), other.get_value());
-            }
-
-
-            /**
-             * @brief bitwise default branch
-             * @relates int8
-             * @remark None - default
-             */
-            friend composed_t bitwise_slli(const composed_t one, const size_t other) {
-                return _mm256_slli_epi8(const composed_t one, const size_t other);
-            }
-
-
-            /**
-             * @brief bitwise default branch
-             * @relates int8
-             * @remark None - default
-             */
-            friend composed_t bitwise_srli(const composed_t one, const size_t other) {
-                return _mm256_srli_epi8(const composed_t one, const size_t other);
+                return _mm256_xor_si256(one.get_value(), other.get_value());
             }
 
         };
@@ -366,7 +327,7 @@ namespace zacc { namespace None {
         /**
          * @brief bitwise public interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         using impl = interface::bitwise<__impl<base_t>, composed_t>;
@@ -384,7 +345,7 @@ namespace zacc { namespace None {
     /**
      * @brief logical
      * @relates int8
-     * @remark None
+     * @remark avx2
      */
     template<typename composed_t>
     struct int8_logical
@@ -393,7 +354,7 @@ namespace zacc { namespace None {
         /**
          * @brief logical basic interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -404,32 +365,30 @@ namespace zacc { namespace None {
             /**
              * @brief logical default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t logical_negate(composed_t one) {
-                auto zero = _mm256_setzero_si128();
-                auto ones = _mm256_cmpeq_epi8(zero, zero);
-                return _mm256_xor_si128(one.get_value(), ones);
+                return _mm256_cmpeq_epi32(one.get_value(), _mm256_setzero_si256());
             }
 
 
             /**
              * @brief logical default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t logical_or(composed_t one, composed_t other) {
-                return _mm256_or_epi8(one.get_value(), other.get_value());
+                return _mm256_or_si256(one.get_value(), other.get_value());
             }
 
 
             /**
              * @brief logical default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t logical_and(composed_t one, composed_t other) {
-                return _mm256_and_epi8(one.get_value(), other.get_value());
+                return _mm256_and_si256(one.get_value(), other.get_value());
             }
 
         };
@@ -437,7 +396,7 @@ namespace zacc { namespace None {
         /**
          * @brief logical public interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         using impl = interface::logical<__impl<base_t>, composed_t>;
@@ -455,7 +414,7 @@ namespace zacc { namespace None {
     /**
      * @brief comparison
      * @relates int8
-     * @remark None
+     * @remark avx2
      */
     template<typename composed_t>
     struct int8_comparison
@@ -464,7 +423,7 @@ namespace zacc { namespace None {
         /**
          * @brief comparison basic interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -475,7 +434,7 @@ namespace zacc { namespace None {
             /**
              * @brief comparison default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t comparison_eq(composed_t one, composed_t other) {
                 return _mm256_cmpeq_epi8(one.get_value(), other.get_value());
@@ -485,17 +444,17 @@ namespace zacc { namespace None {
             /**
              * @brief comparison default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t comparison_neq(composed_t one, composed_t other) {
-                return _mm256_cmpneq_epi8(one.get_value(), other.get_value());
+                return _mm256_xor_si256(_mm256_cmpeq_epi8(one.get_value(), other.get_value()), _mm256_setzero_si256());
             }
 
 
             /**
              * @brief comparison default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t comparison_gt(composed_t one, composed_t other) {
                 return _mm256_cmpgt_epi8(one.get_value(), other.get_value());
@@ -505,30 +464,31 @@ namespace zacc { namespace None {
             /**
              * @brief comparison default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t comparison_lt(composed_t one, composed_t other) {
-                return _mm256_cmplt_epi8(one.get_value(), other.get_value());
+                // reversed args;
+                return _mm256_cmpgt_epi8(other.get_value(), one.get_value());
             }
 
 
             /**
              * @brief comparison default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t comparison_ge(composed_t one, composed_t other) {
-                return _mm256_cmpge_epi8(one.get_value(), other.get_value());
+                return (one == other) || _mm256_cmpgt_epi8(one.get_value(), other.get_value());
             }
 
 
             /**
              * @brief comparison default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t comparison_le(composed_t one, composed_t other) {
-                return _mm256_cmple_epi8(one.get_value(), other.get_value());
+                return (one == other) || _mm256_cmpgt_epi8(one.get_value(), other.get_value());
             }
 
         };
@@ -536,7 +496,7 @@ namespace zacc { namespace None {
         /**
          * @brief comparison public interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         using impl = interface::comparison<__impl<base_t>, composed_t>;
@@ -554,7 +514,7 @@ namespace zacc { namespace None {
     /**
      * @brief conditional
      * @relates int8
-     * @remark None
+     * @remark avx2
      */
     template<typename composed_t>
     struct int8_conditional
@@ -563,7 +523,7 @@ namespace zacc { namespace None {
         /**
          * @brief conditional basic interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -574,10 +534,10 @@ namespace zacc { namespace None {
             /**
              * @brief conditional default branch
              * @relates int8
-             * @remark None - default
+             * @remark avx2 - default
              */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value) {
-                auto mask = _mm256_cmpeq_epi8(_mm256_setzero_si128(), condition.get_value());
+                auto mask = _mm256_cmpeq_epi8(_mm256_setzero_si256(), condition.get_value());
                 return _mm256_blendv_epi8(if_value.get_value(), else_value.get_value(), mask);
             }
 
@@ -586,7 +546,7 @@ namespace zacc { namespace None {
         /**
          * @brief conditional public interface implementation
          * @relates int8
-         * @remark None
+         * @remark avx2
          */
         template<typename base_t>
         using impl = interface::conditional<__impl<base_t>, composed_t>;
@@ -609,7 +569,7 @@ namespace zacc { namespace None {
      * - '32' as vector size
      * - '32' as alignment
      * @relates int8
-     * @remark None
+     * @remark avx2
      */
     template<uint64_t capability>
     struct __zval_int8
@@ -624,7 +584,7 @@ namespace zacc { namespace None {
     /**
      * @brief zval composition
      * @relates int8
-     * @remark None
+     * @remark avx2
      */
     template<uint64_t capability>
     struct __zint8
@@ -636,6 +596,7 @@ namespace zacc { namespace None {
         <
             printable::impl,
             iteratable::impl,
+            convertable::impl,
             int8_io<impl>::template impl,
             int8_arithmetic<impl>::template impl,
             int8_bitwise<impl>::template impl,

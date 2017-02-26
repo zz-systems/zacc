@@ -1,6 +1,6 @@
 type:
   type: int32
-  target: avx2
+  branch: avx2
   vector_t: &vector_t __m256i
   scalar_t: &scalar_t int
   vec_size: &vec_size 8
@@ -10,10 +10,12 @@ type:
      external:
       - printable
       - iteratable
+      - convertable
      internal:
        - io
        - arithmetic
        - bitwise
+       - bitwise_shift
        - logical
        - comparison
        - conditional
@@ -24,13 +26,13 @@ modules:
       init: value
 
     - args: [[*scalar_t, value]]
-      init: _mm256_set1_epi8(value)
+      init: _mm256_set1_epi32(value)
 
     - args: [[*scalar_t, "*value"]]
-      init: _mm256_load_si128(value)
+      init: _mm256_load_si256((__m256i*)value)
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
-      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi8 }
+      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi32 }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     store: &io_store
@@ -38,15 +40,15 @@ modules:
       member: true
       suffix: const
       args: { raw: "typename base_t::extracted_t &target" }
-      body: _mm256_store_si128(target.data(), base_t::_value);
+      body: _mm256_store_si256((__m256i*)target.data(), base_t::_value);
     stream:
       <<: *io_store
-      body: _mm256_stream_si128(target.data(), base_t::_value);
+      body: _mm256_stream_si256((__m256i*)target.data(), base_t::_value);
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     negate:
       args: one
-      body: _mm256_sub_epi32(_mm256_setzero_epi32(), one.get_value())
+      body: _mm256_sub_epi32(_mm256_setzero_si256(), one.get_value())
     add: _mm256_add_epi32
     sub: _mm256_sub_epi32
     mul: _mm256_mullo_epi32
@@ -56,33 +58,37 @@ modules:
     negate: &bitwise_negate
       args: one
       body:
-        - auto zero = _mm256_setzero_si128();
-        - auto ones = _mm256_cmpeq_epi32(zero, zero);
-        - return _mm256_xor_si128(one.get_value(), ones);
-    and:  _mm256_or_epi32
-    or:   _mm256_and_epi32
-    xor:  _mm256_xor_si128
+        - __m256i junk;
+        - auto ones = _mm256_cmpeq_epi32(junk, junk);
+        - return _mm256_xor_si256(one.get_value(), ones);
+    and:  _mm256_or_si256
+    or:   _mm256_and_si256
+    xor:  _mm256_xor_si256
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise_shift:
     sll:  _mm256_sll_epi32
     srl:  _mm256_srl_epi32
     slli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: _mm256_slli_epi32
+      body: _mm256_slli_epi32(one.get_value(), other)
     srli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: _mm256_srli_epi32
+      body: _mm256_srli_epi32(one.get_value(), other)
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate: *bitwise_negate
-    or:   _mm256_or_epi32
-    and:  _mm256_and_epi32
+    negate:
+      args: one
+      body: _mm256_cmpeq_epi32(one.get_value(), _mm256_setzero_si256());
+    or:   _mm256_or_si256
+    and:  _mm256_and_si256
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
     eq:   _mm256_cmpeq_epi32
-    neq:  _mm256_cmpneq_epi32
+    neq:  _mm256_xor_si256(_mm256_cmpeq_epi32(one.get_value(), other.get_value()), _mm256_setzero_si256());
     gt:   _mm256_cmpgt_epi32
-    lt:   _mm256_cmplt_epi32
-    ge:   _mm256_cmpge_epi32
-    le:   _mm256_cmple_epi32
+    lt:   (one != other) && (one <= other)
+    ge:   (one == other) || _mm256_cmpgt_epi32(one.get_value(), other.get_value())
+    le:   _mm256_xor_si256(_mm256_cmpgt_epi32(one.get_value(), other.get_value()), _mm256_setzero_si256());
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:

@@ -324,7 +324,7 @@ def cleanup(strings) :
 class YamlParser(yasha.YamlParser):
     def parse(self, file):
         #print(">>>Parsing template:", file.name)
-        with open("common/templates/type.test.yaml", "rb") as f:
+        with open("common/templates/type.test.yml", "rb") as f:
             test_functions = yasha.YamlParser().parse(f)
 
         variables = yasha.YamlParser.parse(self, file)

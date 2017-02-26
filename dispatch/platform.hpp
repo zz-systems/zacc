@@ -27,6 +27,7 @@
 #define ZACC_PLATFORM_HPP
 
 #include "../common/type_traits.hpp"
+#include "../util/io.hpp"
 
 #ifdef MSVCVER
 
@@ -91,7 +92,7 @@ namespace zacc {
                    : disable(capability);
         }
 
-        bool is_set(const capabilities capability) {
+        bool is_set(const capabilities capability) const {
             return 0 != (_flags & to_underlying(capability));
         }
 
@@ -128,5 +129,34 @@ namespace zacc {
     private:
         int _flags;
     };
+
+    /// pretty-prints the currently supperted features
+    inline std::ostream& operator<<(std::ostream& os, const platform& cap)
+    {
+        using namespace std;
+
+        int w = 15;
+        
+        os << left << setw(w) << "SSE2:"	        << boolcolor(cap.is_set(capabilities::SSE2)) << endl;
+        os << left << setw(w) << "SSE3:"	        << boolcolor(cap.is_set(capabilities::SSE3))  << endl;
+        os << left << setw(w) << "SSSE3:"	        << boolcolor(cap.is_set(capabilities::SSSE3)) << endl;
+
+        os << left << setw(w) << "SSE4.1:"	        << boolcolor(cap.is_set(capabilities::SSE41)) << endl;
+        os << left << setw(w) << "SSE4.2:"	        << boolcolor(cap.is_set(capabilities::SSE42)) << endl;
+
+        os << left << setw(w) << "FMA3:"	        << boolcolor(cap.is_set(capabilities::FMA3)) << endl;
+        os << left << setw(w) << "FMA4:"	        << boolcolor(cap.is_set(capabilities::FMA4)) << endl;
+
+        //os << "Uses XRSTORE: "	<< cap.use_xrstore << endl;
+
+        os << left << setw(w) << "AVX1:"	        << boolcolor(cap.is_set(capabilities::AVX1)) << endl;
+        os << left << setw(w) << "AVX2:"	        << boolcolor(cap.is_set(capabilities::AVX2)) << endl;
+        os << left << setw(w) << "AVX512:"	        << boolcolor(cap.is_set(capabilities::AVX512)) << endl;
+
+        os << left << setw(w) << "OpenCL(GPU):" 	<< boolcolor(cap.is_set(capabilities::OPENCL)) << endl;
+        os << endl;
+
+        return os;
+    }
 }
 #endif //ZACC_PLATFORM_HPP

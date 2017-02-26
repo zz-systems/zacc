@@ -25,44 +25,35 @@
 
 #pragma once
 
-#include "../traits.hpp"
-#include "../common.hpp"
+#include "common.hpp"
 
 namespace zacc { namespace interface {
 
-        template<typename base_t, typename composed_t>
-        struct math : public base_t {
-            FORWARD(math);
+    template<typename base_t, typename composed_t>
+    struct bitwise : public base_t {
+        FORWARD(bitwise);
 
-            composed_t abs() { return vabs(*this); }
-        };
+        TRAIT(traits::Bitwise);
 
-        template<typename base_t, typename composed_t>
-        struct fmath : public base_t {
-            FORWARD(fmath);
+        friend composed_t operator~(const composed_t one) { return bitwise_negate(one); }
 
-            composed_t floor() { return vfloor(*this); }
+        friend composed_t operator|(const composed_t one, const composed_t other) {
+            return bitwise_or(one, other);
+        }
 
-            composed_t ceil() { return vceil(*this); }
+        friend composed_t operator&(const composed_t one, const composed_t other) {
+            return bitwise_and(one, other);
+        }
 
-            composed_t round() { return vround(*this); }
+        friend composed_t operator^(const composed_t one, const composed_t other) {
+            return bitwise_xor(one, other);
+        }
 
-            composed_t trunc() { return vtrunc(*this); }
 
-            composed_t sqrt() { return vsqrt(*this); }
-        };
+        CONVERSION(|);
 
-        template<typename base_t, typename composed_t>
-        struct trigonometry : public base_t {
-            FORWARD(trigonometry);
+        CONVERSION(&);
 
-            composed_t sin() { return vsin(*this); }
-            composed_t cos() { return vcos(*this); }
-            composed_t tan() { return vtan(*this); }
-
-            composed_t asin() { return vasin(*this); }
-            composed_t acos() { return vacos(*this); }
-            composed_t atan() { return vatan(*this); }
-        };
-
-    }}
+        CONVERSION(^);
+    };
+}}

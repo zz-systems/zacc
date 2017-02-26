@@ -28,17 +28,18 @@
 
 #pragma once
 
-#include <intrin.h>
+#include <x86intrin.h>
 #include <type_traits>
+
+#include "../../../util/type_composition.hpp"
 
 #include "../../../common/zval.hpp"
 #include "../../../common/common.hpp"
-#include "../../../common/compose.hpp"
 #include "../../../common/type_traits.hpp"
-#include "../../../common/common_traits.hpp"
+#include "../../../common/traits/common.hpp"
 
 {% for module in type.get_modules() %}
-#include "../../../common/interfaces/{{ module.name }}.hpp"
+#include "../../../common/traits/{{ module.name }}.hpp"
 {% endfor %}
 
 /**

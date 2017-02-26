@@ -24,30 +24,37 @@
 
 
 #pragma once
+#include <array>
 
-#include "../traits.hpp"
-#include "../common.hpp"
+namespace zacc {
 
-namespace zacc { namespace interface {
+    //
+    // Array casting functionality @ Compiletime.
+    // @origin: http://stackoverflow.com/a/14280396
 
-    template<typename base_t, typename composed_t>
-    struct logical : public base_t {
-        FORWARD(logical);
+    // http://loungecpp.wikidot.com/tips-and-tricks%3aindices
+    namespace detail {
 
-        TRAIT(traits::Logical);
+        template<std::size_t... Is>
+        struct indices {
+        };
+        template<std::size_t N, std::size_t... Is>
+        struct build_indices : build_indices<N - 1, N - 1, Is...> {
+        };
+        template<std::size_t... Is>
+        struct build_indices<0, Is...> : indices<Is...> {
+        };
 
-        friend composed_t operator!(const composed_t one) { return logical_negate(one); }
-
-        friend composed_t operator||(const composed_t one, const composed_t other) {
-            return logical_or(one, other);
+        template<typename T, typename U, size_t i, size_t... Is>
+        constexpr auto array_cast_helper(
+                const std::array <U, i> &a, indices<Is...>) -> std::array <T, i> {
+            return {{static_cast<T>(std::get<Is>(a))...}};
         }
-
-        friend composed_t operator&&(const composed_t one, const composed_t other) {
-            return logical_and(one, other);
-        }
-
-        CONVERSION(||);
-
-        CONVERSION(&&);
-    };
-}}
+    }
+    template<typename T, typename U, size_t i>
+    constexpr auto array_cast(
+            const std::array<U, i> &a) -> std::array<T, i> {
+        // tag dispatch to helper with array indices
+        return detail::array_cast_helper<T>(a, detail::build_indices<i>());
+    }
+}

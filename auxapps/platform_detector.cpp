@@ -23,39 +23,13 @@
 //---------------------------------------------------------------------------------
 
 
-#pragma once
+#include "../dispatch/platform.hpp"
+#include <iostream>
 
-#include "../traits.hpp"
-#include "../common.hpp"
+int main(int argc, char** argv) {
+    zacc::platform p;
 
-namespace zacc { namespace interface {
+    std::cout << p;
 
-    template<typename base_t, typename composed_t>
-    struct bitwise_shift : public base_t {
-        FORWARD(bitwise_shift);
-
-        TRAIT(traits::Bitwise_Shift);
-
-
-        friend composed_t operator<<(const composed_t one, const size_t immediate) {
-            return bitwise_shift_slli(one, immediate);
-        }
-
-        friend composed_t operator>>(const composed_t one, const size_t immediate) {
-            return bitwise_shift_srli(one, immediate);
-        }
-// TODO: Disabled for now.
-//        friend composed_t operator<<(const composed_t one, const composed_t other) {
-//            return bitwise_shift_sll(one, other);
-//        }
-//
-//        friend composed_t operator>>(const composed_t one, const composed_t other) {
-//            return bitwise_shift_srl(one, other);
-//        }
-
-
-        CONVERSION(<<);
-
-        CONVERSION(>>);
-    };
-}}
+    return 0;
+}

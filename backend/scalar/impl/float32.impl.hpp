@@ -28,20 +28,21 @@
 
 #pragma once
 
-#include <intrin.h>
+#include <x86intrin.h>
 #include <type_traits>
+
+#include "../../../util/type_composition.hpp"
 
 #include "../../../common/zval.hpp"
 #include "../../../common/common.hpp"
-#include "../../../common/compose.hpp"
 #include "../../../common/type_traits.hpp"
-#include "../../../common/common_traits.hpp"
+#include "../../../common/traits/common.hpp"
 
-#include "../../../common/interfaces/construction.hpp"
-#include "../../../common/interfaces/io.hpp"
-#include "../../../common/interfaces/arithmetic.hpp"
-#include "../../../common/interfaces/comparison.hpp"
-#include "../../../common/interfaces/conditional.hpp"
+#include "../../../common/traits/construction.hpp"
+#include "../../../common/traits/io.hpp"
+#include "../../../common/traits/arithmetic.hpp"
+#include "../../../common/traits/comparison.hpp"
+#include "../../../common/traits/conditional.hpp"
 
 /**
  * @brief float32 implementation for the scalar branch
@@ -405,14 +406,14 @@ namespace zacc { namespace scalar {
      * - 'float' as underlying vector type
      * - 'float' as scalar type
      * - '1' as vector size
-     * - '4' as alignment
+     * - '8' as alignment
      * @relates float32
      * @remark scalar
      */
     template<uint64_t capability>
     struct __zval_float32
     {
-        using zval_t = zval<float, float, 1, 4, capability>;
+        using zval_t = zval<float, float, 1, 8, capability>;
 
         struct impl : public zval_t
         {

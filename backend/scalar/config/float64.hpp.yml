@@ -4,7 +4,7 @@ type:
   vector_t: &vector_t double
   scalar_t: &scalar_t double
   vec_size: &vec_size 1
-  alignment: 4
+  alignment: 8
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
      external:

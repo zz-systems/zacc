@@ -25,36 +25,23 @@
 
 #pragma once
 
-#include "../traits.hpp"
-#include "../common.hpp"
+/**
+ * @file collections.h
+ *
+ * @brief auxiliary collections
+ */
 
-namespace zacc { namespace interface {
-
-    template<typename base_t, typename composed_t>
-    struct bitwise : public base_t {
-        FORWARD(bitwise);
-
-        TRAIT(traits::Bitwise);
-
-        friend composed_t operator~(const composed_t one) { return bitwise_negate(one); }
-
-        friend composed_t operator|(const composed_t one, const composed_t other) {
-            return bitwise_or(one, other);
-        }
-
-        friend composed_t operator&(const composed_t one, const composed_t other) {
-            return bitwise_and(one, other);
-        }
-
-        friend composed_t operator^(const composed_t one, const composed_t other) {
-            return bitwise_xor(one, other);
-        }
+#include <map>
+#include <vector>
+#include "memory.h"
 
 
-        CONVERSION(|);
+namespace zacc {
+    /// std::map with aligned_allocator
+    template<typename key, typename value, typename comparator = std::less<key>>
+    using aligned_map = std::map<key, value, comparator, aligned_allocator<std::pair<const key, value>, alignof(value)>>;
 
-        CONVERSION(&);
-
-        CONVERSION(^);
-    };
-}}
+    /// std::vector with aligned allocator
+    template<typename value>
+    using aligned_vector = std::vector<value, aligned_allocator<value, alignof(value)>>;
+}

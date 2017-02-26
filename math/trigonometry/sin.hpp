@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,28 +25,53 @@
 
 #pragma once
 
-#include <type_traits>
-#include <immintrin.h>
+#include "common.hpp"
+#include "../../dispatch/dispatcher.hpp"
 
-namespace zacc {
-    template<typename T>
-    struct is_float32_vec : std::false_type {
-    };
-    template<>
-    struct is_float32_vec<__m512> : std::true_type {
-    };
+namespace zacc { namespace math {
 
-    template<typename T>
-    struct is_float64_vec : std::false_type {
-    };
-    template<>
-    struct is_float64_vec<__m512d> : std::true_type {
-    };
+    /**
+     * @brief  Sine function. Algorithm taken from SLEEF 2.80
+     * @tparam capability
+     * @param val
+     * @return
+     */
+    template<typename capability>
+    zfloat vsin(zfloat val)
+    {
+        zfloat q = (val * magic::M_1_PI).trunc();
+        zint iq = q;
 
-    template<typename T>
-    struct is_int_vec : std::false_type {
-    };
-    template<>
-    struct is_int_vec<__m512i> : std::true_type {
-    };
-}
+        if(use_fast_float)
+        {
+            val -= q * magic::M_PI;
+        }
+        else
+        {
+            val -= q * magic::PI4_A * 4;
+            val -= q * magic::PI4_B * 4;
+            val -= q * magic::PI4_C * 4;
+            val -= q * magic::PI4_D * 4;
+        }
+
+        zfloat s = val * val;
+
+        val = (-val)
+                .when(iq & 1)
+                .otherwise(val);
+
+        zfloat u = 2.6083159809786593541503e-06f;
+
+        u = u * s + -0.0001981069071916863322258f;
+        u = u * s + 0.00833307858556509017944336f;
+        u = u * s + -0.166666597127914428710938f;
+
+        u = s * u * val + val;
+
+        u = zfloat::quiet_NaN()
+                .when(val.is_infinite())
+                .otherwise(u);
+
+        return u;
+    }
+}}

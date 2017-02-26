@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,28 +25,45 @@
 
 #pragma once
 
-#include <type_traits>
-#include <immintrin.h>
+#include "common.hpp"
 
-namespace zacc {
-    template<typename T>
-    struct is_float32_vec : std::false_type {
-    };
-    template<>
-    struct is_float32_vec<__m256> : std::true_type {
+namespace zacc { namespace interface {
+
+    template<typename base_t, typename composed_t>
+    struct io : public base_t {
+
+        typedef typename base_t::extracted_t extracted_t;
+
+        FORWARD(io);
+
+        TRAIT(traits::IO);
+
+        void store (extracted_t &target) const
+        {
+            base_t::io_store(target);
+        }
+
+        void stream (extracted_t &target) const
+        {
+            base_t::io_stream(target);
+        }
+
+        const extracted_t data() const {
+            alignas(base_t::alignment) extracted_t result;
+
+            store(result);
+
+            return result;
+        }
+
+        extracted_t
+        data() {
+            alignas(base_t::alignment) extracted_t result;
+
+            store(result);
+
+            return result;
+        }
     };
 
-    template<typename T>
-    struct is_float64_vec : std::false_type {
-    };
-    template<>
-    struct is_float64_vec<__m256d> : std::true_type {
-    };
-
-    template<typename T>
-    struct is_int_vec : std::false_type {
-    };
-    template<>
-    struct is_int_vec<__m256i> : std::true_type {
-    };
-}
+}}

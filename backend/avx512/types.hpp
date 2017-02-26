@@ -25,19 +25,21 @@
 
 #pragma once
 
-#include <immintrin.h>
+#include "impl/float32.impl.hpp"
+#include "impl/float64.impl.hpp"
+#include "impl/int8.impl.hpp"
+#include "impl/int16.impl.hpp"
+#include "impl/int32.impl.hpp"
 
-#include "../../common/zval.hpp"
-#include "../../common/compose.hpp"
+namespace zacc { namespace avx512 {
 
-#include "float32/zfloat32.hpp"
-#include "float64/zfloat64.hpp"
-#include "int8/zint8.hpp"
-#include "int16/zint16.hpp"
-#include "int32/zint32.hpp"
-
-namespace zacc {
-    namespace avx {
-
-    }
-}
+    template<uint64_t capability>
+    struct types
+    {
+        using zfloat32  = zfloat32<capability>;
+        using zfloat64  = zfloat64<capability>;
+        using zint8     = zint8<capability>;
+        using zint16    = zint16<capability>;
+        using zint32    = zint32<capability>;
+    };
+}}

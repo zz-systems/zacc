@@ -25,8 +25,7 @@
 
 #pragma once
 
-#include "../traits.hpp"
-#include "../common.hpp"
+#include "common.hpp"
 
 namespace zacc { namespace interface {
 

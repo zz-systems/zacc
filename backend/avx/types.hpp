@@ -25,28 +25,18 @@
 
 #pragma once
 
-#include <type_traits>
-#include <immintrin.h>
+#include "impl/float32.impl.hpp"
+#include "impl/float64.impl.hpp"
+#include "impl/int8.impl.hpp"
+#include "impl/int16.impl.hpp"
+#include "impl/int32.impl.hpp"
 
-namespace zacc {
-    template<typename T>
-    struct is_float32_vec : std::false_type {
-    };
-    template<>
-    struct is_float32_vec<__m256> : std::true_type {
-    };
+namespace zacc { namespace avx {
 
-    template<typename T>
-    struct is_float64_vec : std::false_type {
+    template<uint64_t capability>
+    struct types
+    {
+        using zfloat32  = zfloat32<capability>;
+        using zfloat64  = zfloat64<capability>;
     };
-    template<>
-    struct is_float64_vec<__m256d> : std::true_type {
-    };
-
-    template<typename T>
-    struct is_int_vec : std::false_type {
-    };
-    template<>
-    struct is_int_vec<__m256i> : std::true_type {
-    };
-}
+}}

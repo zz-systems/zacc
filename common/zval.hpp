@@ -24,9 +24,10 @@
 
 #pragma once
 #include <array>
-#include "traits.hpp"
+#include "type_traits.hpp"
 #include "common.hpp"
 #include "../dispatch/capability_dispatcher.hpp"
+#include "../util/type_casts.hpp"
 
 namespace zacc {
 
@@ -36,7 +37,6 @@ namespace zacc {
     template<typename zval_t>
     struct bval;
 
-    // TODO: capability
     template<typename _vector_t, typename _scalar_t = _vector_t, size_t _dim = 1, size_t _alignment = 16, uint64_t _capability = 0xFFFF'FFFF'FFFF'FFFF>
     class zval : zval_base {
     public:
@@ -61,7 +61,7 @@ namespace zacc {
 
         zval(const bval<zval>& value) : _value(value.get_value()) {}
 
-        vector_t get_value() const { return _value; }
+        const vector_t &get_value() const { return _value; }
 
         static const long traits = 0;
     protected:
@@ -83,9 +83,15 @@ namespace zacc {
         using extracted_t = typename std::array<scalar_t, dim>;
         using iterator    = typename extracted_t::iterator;
 
+        /**
+         * @brief Converting constructor
+         * @see C++11 4.12/1: A zero value, null pointer value,
+         * or null member pointer value is converted to false; any other value is converted to true.
+         * @param value
+         */
         bval(const zval_t& value) :
                 _value(value.get_value()),
-                _extracted(array_cast<bool>((value != 0).data()))
+                _extracted(array_cast<bool>((value).data()))
         {}
 
         vector_t get_value() const { return _value; }
@@ -101,9 +107,6 @@ namespace zacc {
         iterator begin() { return _extracted.begin(); }
 
         iterator end() { return _extracted.end(); }
-
-        static const long long traits =  static_cast<long long>(traits::Iteratable) | static_cast<long long>(traits::IO);
-
     protected:
         vector_t _value;
         extracted_t _extracted;

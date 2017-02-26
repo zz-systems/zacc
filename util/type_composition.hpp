@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-// 
+//
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,23 +22,27 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
+/**
+ * @brief https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Hierarchy_Generation
+ */
 
 #pragma once
 
-#include "../traits.hpp"
-#include "../common.hpp"
+#include <utility>
+#include "../common/common.hpp"
 
-namespace zacc { namespace interface {
+namespace zacc {
+    template<template<class> class ... policies>
+    struct compose;
 
-    template<typename base_t, typename composed_t>
-    struct construction : public base_t {
-        FORWARD(construction);
-
-// TODO
-//        static composed_t make_scalar(base_t::scalar_t value)
-//        {
-//            return from_scalar(value);
-//        }
+    template<template<class> class head,
+            template<class> class ... tail>
+    struct compose<head, tail...> : head<compose<tail...>> {
+        template<typename... Args>
+        compose(Args &&...args) : head<compose<tail...>>(std::forward<Args>(args)...) {}
     };
 
-}}
+    template<>
+    struct compose<> {
+    };
+}

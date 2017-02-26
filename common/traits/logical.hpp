@@ -25,34 +25,28 @@
 
 #pragma once
 
-#include "../traits.hpp"
-#include "../common.hpp"
+#include "common.hpp"
 
 namespace zacc { namespace interface {
 
     template<typename base_t, typename composed_t>
-    struct conditional : public base_t {
-        FORWARD(conditional);
+    struct logical : public base_t {
+        FORWARD(logical);
 
-        TRAIT(traits::Conditional);
+        TRAIT(traits::Logical);
 
-        struct else_branch {
-            composed_t otherwise(const composed_t else_value) const { return vsel(_condition, _if_value, else_value); }
+        friend composed_t operator!(const composed_t one) { return logical_negate(one); }
 
-        private:
-            else_branch(const composed_t condition, const composed_t if_value)
-                    : _condition(condition), _if_value(if_value) {}
-
-            composed_t _if_value;
-            composed_t _condition;
-
-            friend class conditional<base_t, composed_t>;
-        };
-
-
-        else_branch when(const composed_t condition) const {
-            return else_branch(condition, *this);
+        friend composed_t operator||(const composed_t one, const composed_t other) {
+            return logical_or(one, other);
         }
-    };
 
+        friend composed_t operator&&(const composed_t one, const composed_t other) {
+            return logical_and(one, other);
+        }
+
+        CONVERSION(||);
+
+        CONVERSION(&&);
+    };
 }}

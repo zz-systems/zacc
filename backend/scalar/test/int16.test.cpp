@@ -27,7 +27,6 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "gtest/gtest.h"
 //#include <iostream>
 #include "../impl/int16.impl.hpp"
 

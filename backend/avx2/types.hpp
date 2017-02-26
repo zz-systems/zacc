@@ -25,19 +25,18 @@
 
 #pragma once
 
-#include "generated/float32.impl.hpp"
-#include "generated/float64.impl.hpp"
-#include "generated/int8.impl.hpp"
-#include "generated/int16.impl.hpp"
-#include "generated/int32.impl.hpp"
+#include "../avx/types.hpp"
+#include "impl/int8.impl.hpp"
+#include "impl/int16.impl.hpp"
+#include "impl/int32.impl.hpp"
 
-namespace zacc { namespace sse {
+namespace zacc { namespace avx2 {
 
     template<uint64_t capability>
     struct types
     {
-        using zfloat32  = zfloat32<capability>;
-        using zfloat64  = zfloat64<capability>;
+        using zfloat32  = avx::types<capability>::zfloat32;
+        using zfloat64  = avx::types<capability>::zfloat64;
         using zint8     = zint8<capability>;
         using zint16    = zint16<capability>;
         using zint32    = zint32<capability>;

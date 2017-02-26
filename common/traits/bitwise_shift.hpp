@@ -25,20 +25,36 @@
 
 #pragma once
 
-namespace zacc {
-    enum class traits : long long {
-        Arithmetic = 1 << 0,
-        Fused_Multiplication = 1 << 1,
-        Bitwise = 1 << 2,
-        Bitwise_Shift = 1 << 3,
-        Logical = 1 << 4,
-        Comparison = 1 << 5,
-        Conditional = 1 << 6,
+#include "common.hpp"
 
-        IO = 1 << 7,
-        Iteratable = 1 << 8,
-        Printable = 1 << 9,
-        Indexable = 1 << 10,
-        Convertable = 1 << 11,
+namespace zacc { namespace interface {
+
+    template<typename base_t, typename composed_t>
+    struct bitwise_shift : public base_t {
+        FORWARD(bitwise_shift);
+
+        TRAIT(traits::Bitwise_Shift);
+
+
+        friend composed_t operator<<(const composed_t one, const size_t immediate) {
+            return bitwise_shift_slli(one, immediate);
+        }
+
+        friend composed_t operator>>(const composed_t one, const size_t immediate) {
+            return bitwise_shift_srli(one, immediate);
+        }
+// TODO: Disabled for now.
+//        friend composed_t operator<<(const composed_t one, const composed_t other) {
+//            return bitwise_shift_sll(one, other);
+//        }
+//
+//        friend composed_t operator>>(const composed_t one, const composed_t other) {
+//            return bitwise_shift_srl(one, other);
+//        }
+
+
+        CONVERSION(<<);
+
+        CONVERSION(>>);
     };
-}
+}}

@@ -27,14 +27,13 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "gtest/gtest.h"
 //#include <iostream>
 #include "../impl/float64.impl.hpp"
 
-namespace zacc { namespace None { namespace test {
+namespace zacc { namespace avx512 { namespace test {
 
 // =====================================================================================================================
-    TEST(None_float64_arithmetic, arithmetic_negate_default)
+    TEST(avx512_float64_arithmetic, arithmetic_negate_default)
     {
         auto actual = -zfloat64<>(125);
         auto expected = (double) -125;
@@ -45,7 +44,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_float64_arithmetic, arithmetic_add_default)
+    TEST(avx512_float64_arithmetic, arithmetic_add_default)
     {
         auto actual = zfloat64<>(12) + zfloat64<>(105);
         auto expected = (double) 117;
@@ -56,7 +55,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_float64_arithmetic, arithmetic_sub_default)
+    TEST(avx512_float64_arithmetic, arithmetic_sub_default)
     {
         auto actual = zfloat64<>(124) - zfloat64<>(125);
         auto expected = (double) -1;
@@ -67,7 +66,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_float64_arithmetic, arithmetic_mul_default)
+    TEST(avx512_float64_arithmetic, arithmetic_mul_default)
     {
         auto actual = zfloat64<>(12) * zfloat64<>(9);
         auto expected = (double) 108;
@@ -78,7 +77,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_float64_arithmetic, arithmetic_div_default)
+    TEST(avx512_float64_arithmetic, arithmetic_div_default)
     {
         auto actual = zfloat64<>(124) / zfloat64<>(124);
         auto expected = (double) 1;
@@ -93,7 +92,7 @@ namespace zacc { namespace None { namespace test {
 // =====================================================================================================================
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_float64_logical, logical_negate_default)
+    TEST(avx512_float64_logical, logical_negate_default)
     {
         auto actual = (!zfloat64<>(1)).as_bool();
         auto expected = (double) false;
@@ -104,7 +103,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_float64_logical, logical_or_default)
+    TEST(avx512_float64_logical, logical_or_default)
     {
         auto actual = zfloat64<>(0) || zfloat64<>(8);
         auto expected = (double) 8;
@@ -115,7 +114,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_float64_logical, logical_and_default)
+    TEST(avx512_float64_logical, logical_and_default)
     {
         auto actual = zfloat64<>(0) && zfloat64<>(8);
         auto expected = (double) 0;
@@ -128,7 +127,7 @@ namespace zacc { namespace None { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_float64_comparison, comparison_eq_default)
+    TEST(avx512_float64_comparison, comparison_eq_default)
     {
         auto actual = zfloat64<>(0) == zfloat64<>(8);
         auto expected = (double) 0;
@@ -139,7 +138,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_float64_comparison, comparison_neq_default)
+    TEST(avx512_float64_comparison, comparison_neq_default)
     {
         auto actual = zfloat64<>(0) != zfloat64<>(0);
         auto expected = (double) 0;
@@ -150,7 +149,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_float64_comparison, comparison_gt_default)
+    TEST(avx512_float64_comparison, comparison_gt_default)
     {
         auto actual = zfloat64<>(0) > zfloat64<>(8);
         auto expected = (double) 0;
@@ -161,7 +160,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_float64_comparison, comparison_lt_default)
+    TEST(avx512_float64_comparison, comparison_lt_default)
     {
         auto actual = zfloat64<>(8) < zfloat64<>(0);
         auto expected = (double) 0;
@@ -172,7 +171,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_float64_comparison, comparison_ge_default)
+    TEST(avx512_float64_comparison, comparison_ge_default)
     {
         auto actual = (zfloat64<>(0) >= zfloat64<>(0)).as_bool();
         auto expected = (double) true;
@@ -183,7 +182,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_float64_comparison, comparison_le_default)
+    TEST(avx512_float64_comparison, comparison_le_default)
     {
         auto actual = (zfloat64<>(0) <= zfloat64<>(0)).as_bool();
         auto expected = (double) true;
@@ -196,7 +195,7 @@ namespace zacc { namespace None { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_float64_conditional, vsel_default)
+    TEST(avx512_float64_conditional, vsel_default)
     {
         auto actual = vsel(zfloat64<>(1) == zfloat64<>(1), zfloat64<>(2), zfloat64<>(3));
         auto expected = (double) 2;

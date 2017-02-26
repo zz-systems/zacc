@@ -28,29 +28,30 @@
 
 #pragma once
 
-#include <intrin.h>
+#include <x86intrin.h>
 #include <type_traits>
+
+#include "../../../util/type_composition.hpp"
 
 #include "../../../common/zval.hpp"
 #include "../../../common/common.hpp"
-#include "../../../common/compose.hpp"
 #include "../../../common/type_traits.hpp"
-#include "../../../common/common_traits.hpp"
+#include "../../../common/traits/common.hpp"
 
-#include "../../../common/interfaces/construction.hpp"
-#include "../../../common/interfaces/io.hpp"
-#include "../../../common/interfaces/arithmetic.hpp"
-#include "../../../common/interfaces/bitwise.hpp"
-#include "../../../common/interfaces/logical.hpp"
-#include "../../../common/interfaces/comparison.hpp"
-#include "../../../common/interfaces/conditional.hpp"
+#include "../../../common/traits/construction.hpp"
+#include "../../../common/traits/io.hpp"
+#include "../../../common/traits/arithmetic.hpp"
+#include "../../../common/traits/bitwise.hpp"
+#include "../../../common/traits/logical.hpp"
+#include "../../../common/traits/comparison.hpp"
+#include "../../../common/traits/conditional.hpp"
 
 /**
- * @brief float64 implementation for the None branch
+ * @brief float64 implementation for the avx1 branch
  * provides unified access to 4 'double' values
  */
 
-namespace zacc { namespace None {
+namespace zacc { namespace avx1 {
 
     // =================================================================================================================
     /**
@@ -61,7 +62,7 @@ namespace zacc { namespace None {
     /**
      * @brief construction
      * @relates float64
-     * @remark None
+     * @remark avx1
      */
     template<typename composed_t>
     struct float64_construction
@@ -70,7 +71,7 @@ namespace zacc { namespace None {
         /**
          * @brief construction basic interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         struct __impl : base_t
@@ -80,54 +81,54 @@ namespace zacc { namespace None {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
-            __impl(__m256 value) : base_t(_mm256_cvtpd_pd(value)) {
+            __impl(const __m256 &value) : base_t(_mm256_cvtps_pd(_mm256_castps256_ps128(value))) {
             }
 
 
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
-            __impl(__m256d value) : base_t(value) {
+            __impl(const __m256d &value) : base_t(value) {
             }
 
 
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
-            __impl(__m256i value) : base_t(_mm256_cvtepi32_pd(value)) {
+            __impl(const __m256i &value) : base_t(_mm256_cvtepi32_pd(_mm256_castsi256_si128(value))) {
             }
 
 
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
-            __impl(double value) : base_t(_mm_set1_pd(value)) {
+            __impl(double value) : base_t(_mm256_set1_pd(value)) {
             }
 
 
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
-            __impl(double value) : base_t(_mm_load_pd(value)) {
+            __impl(double *value) : base_t(_mm256_load_pd(value)) {
             }
 
 
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
-            __impl(double arg3, double arg2, double arg1, double arg0) : base_t(_mm_set_pd(arg0, arg1, arg2, arg3)) {
+            __impl(double arg3, double arg2, double arg1, double arg0) : base_t(_mm256_set_pd(arg0, arg1, arg2, arg3)) {
             }
 
         };
@@ -135,7 +136,7 @@ namespace zacc { namespace None {
         /**
          * @brief construction public interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         using impl = interface::construction<__impl<base_t>, composed_t>;
@@ -153,7 +154,7 @@ namespace zacc { namespace None {
     /**
      * @brief io
      * @relates float64
-     * @remark None
+     * @remark avx1
      */
     template<typename composed_t>
     struct float64_io
@@ -162,7 +163,7 @@ namespace zacc { namespace None {
         /**
          * @brief io basic interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         struct __impl : base_t
@@ -173,7 +174,7 @@ namespace zacc { namespace None {
             /**
              * @brief io default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             void io_store(typename base_t::extracted_t &target) const {
                 _mm256_store_pd(target.data(), base_t::_value);
@@ -183,7 +184,7 @@ namespace zacc { namespace None {
             /**
              * @brief io default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             void io_stream(typename base_t::extracted_t &target) const {
                 _mm256_stream_pd(target.data(), base_t::_value);
@@ -194,7 +195,7 @@ namespace zacc { namespace None {
         /**
          * @brief io public interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         using impl = interface::io<__impl<base_t>, composed_t>;
@@ -212,7 +213,7 @@ namespace zacc { namespace None {
     /**
      * @brief arithmetic
      * @relates float64
-     * @remark None
+     * @remark avx1
      */
     template<typename composed_t>
     struct float64_arithmetic
@@ -221,7 +222,7 @@ namespace zacc { namespace None {
         /**
          * @brief arithmetic basic interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         struct __impl : base_t
@@ -232,7 +233,7 @@ namespace zacc { namespace None {
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t arithmetic_negate(composed_t one) {
                 return _mm256_sub_pd(_mm256_setzero_pd(), one.get_value());
@@ -242,7 +243,7 @@ namespace zacc { namespace None {
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t arithmetic_add(composed_t one, composed_t other) {
                 return _mm256_add_pd(one.get_value(), other.get_value());
@@ -252,7 +253,7 @@ namespace zacc { namespace None {
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t arithmetic_sub(composed_t one, composed_t other) {
                 return _mm256_sub_pd(one.get_value(), other.get_value());
@@ -262,7 +263,7 @@ namespace zacc { namespace None {
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t arithmetic_mul(composed_t one, composed_t other) {
                 return _mm256_mul_pd(one.get_value(), other.get_value());
@@ -272,7 +273,7 @@ namespace zacc { namespace None {
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t arithmetic_div(composed_t one, composed_t other) {
                 return _mm256_div_pd(one.get_value(), other.get_value());
@@ -283,7 +284,7 @@ namespace zacc { namespace None {
         /**
          * @brief arithmetic public interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         using impl = interface::arithmetic<__impl<base_t>, composed_t>;
@@ -301,7 +302,7 @@ namespace zacc { namespace None {
     /**
      * @brief bitwise
      * @relates float64
-     * @remark None
+     * @remark avx1
      */
     template<typename composed_t>
     struct float64_bitwise
@@ -310,7 +311,7 @@ namespace zacc { namespace None {
         /**
          * @brief bitwise basic interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         struct __impl : base_t
@@ -321,11 +322,11 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t bitwise_negate(composed_t one) {
-                auto zero = _mm256_setzero_pd();
-                auto ones = _mm256_cmpeq_pd(zero, zero);
+                __m256d junk;
+                auto ones = _mm256_cmp_pd(junk, junk, _CMP_EQ_OQ);
                 return _mm256_xor_pd(one.get_value(), ones);
             }
 
@@ -333,7 +334,7 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t bitwise_and(composed_t one, composed_t other) {
                 return _mm256_or_pd(one.get_value(), other.get_value());
@@ -343,7 +344,7 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t bitwise_or(composed_t one, composed_t other) {
                 return _mm256_and_pd(one.get_value(), other.get_value());
@@ -353,7 +354,7 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t bitwise_xor(composed_t one, composed_t other) {
                 return _mm256_xor_pd(one.get_value(), other.get_value());
@@ -364,7 +365,7 @@ namespace zacc { namespace None {
         /**
          * @brief bitwise public interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         using impl = interface::bitwise<__impl<base_t>, composed_t>;
@@ -382,7 +383,7 @@ namespace zacc { namespace None {
     /**
      * @brief logical
      * @relates float64
-     * @remark None
+     * @remark avx1
      */
     template<typename composed_t>
     struct float64_logical
@@ -391,7 +392,7 @@ namespace zacc { namespace None {
         /**
          * @brief logical basic interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         struct __impl : base_t
@@ -402,19 +403,17 @@ namespace zacc { namespace None {
             /**
              * @brief logical default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t logical_negate(composed_t one) {
-                auto zero = _mm256_setzero_pd();
-                auto ones = _mm256_cmpeq_pd(zero, zero);
-                return _mm256_xor_pd(one.get_value(), ones);
+                return _mm256_cmp_pd(one.get_value(), _mm256_setzero_ps(), _CMP_EQ_OQ);
             }
 
 
             /**
              * @brief logical default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t logical_or(composed_t one, composed_t other) {
                 return _mm256_or_pd(one.get_value(), other.get_value());
@@ -424,7 +423,7 @@ namespace zacc { namespace None {
             /**
              * @brief logical default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t logical_and(composed_t one, composed_t other) {
                 return _mm256_and_pd(one.get_value(), other.get_value());
@@ -435,7 +434,7 @@ namespace zacc { namespace None {
         /**
          * @brief logical public interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         using impl = interface::logical<__impl<base_t>, composed_t>;
@@ -453,7 +452,7 @@ namespace zacc { namespace None {
     /**
      * @brief comparison
      * @relates float64
-     * @remark None
+     * @remark avx1
      */
     template<typename composed_t>
     struct float64_comparison
@@ -462,7 +461,7 @@ namespace zacc { namespace None {
         /**
          * @brief comparison basic interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         struct __impl : base_t
@@ -473,60 +472,61 @@ namespace zacc { namespace None {
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t comparison_eq(composed_t one, composed_t other) {
-                return _mm256_cmpeq_pd(one.get_value(), other.get_value());
+                return _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_EQ_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t comparison_neq(composed_t one, composed_t other) {
-                return _mm256_cmpneq_pd(one.get_value(), other.get_value());
+                return _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_NEQ_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t comparison_gt(composed_t one, composed_t other) {
-                return _mm256_cmpgt_pd(one.get_value(), other.get_value());
+                return _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_GT_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t comparison_lt(composed_t one, composed_t other) {
-                return _mm256_cmplt_pd(one.get_value(), other.get_value());
+                return _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_LT_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t comparison_ge(composed_t one, composed_t other) {
-                return _mm256_cmpge_pd(one.get_value(), other.get_value());
+                auto result = _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_GE_OQ);
+                return result;
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t comparison_le(composed_t one, composed_t other) {
-                return _mm256_cmple_pd(one.get_value(), other.get_value());
+                return _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_LE_OQ);
             }
 
         };
@@ -534,7 +534,7 @@ namespace zacc { namespace None {
         /**
          * @brief comparison public interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         using impl = interface::comparison<__impl<base_t>, composed_t>;
@@ -552,7 +552,7 @@ namespace zacc { namespace None {
     /**
      * @brief conditional
      * @relates float64
-     * @remark None
+     * @remark avx1
      */
     template<typename composed_t>
     struct float64_conditional
@@ -561,7 +561,7 @@ namespace zacc { namespace None {
         /**
          * @brief conditional basic interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         struct __impl : base_t
@@ -572,10 +572,10 @@ namespace zacc { namespace None {
             /**
              * @brief conditional default branch
              * @relates float64
-             * @remark None - default
+             * @remark avx1 - default
              */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value) {
-                auto mask = _mm256_cmpeq_pd(_mm256_setzero_pd(), condition.get_value());
+                auto mask = _mm256_cmp_pd(_mm256_setzero_ps(), condition.get_value(), _CMP_EQ_OQ);
                 return _mm256_blendv_pd(if_value.get_value(), else_value.get_value(), mask);
             }
 
@@ -584,7 +584,7 @@ namespace zacc { namespace None {
         /**
          * @brief conditional public interface implementation
          * @relates float64
-         * @remark None
+         * @remark avx1
          */
         template<typename base_t>
         using impl = interface::conditional<__impl<base_t>, composed_t>;
@@ -607,7 +607,7 @@ namespace zacc { namespace None {
      * - '4' as vector size
      * - '32' as alignment
      * @relates float64
-     * @remark None
+     * @remark avx1
      */
     template<uint64_t capability>
     struct __zval_float64
@@ -622,7 +622,7 @@ namespace zacc { namespace None {
     /**
      * @brief zval composition
      * @relates float64
-     * @remark None
+     * @remark avx1
      */
     template<uint64_t capability>
     struct __zfloat64
@@ -634,6 +634,7 @@ namespace zacc { namespace None {
         <
             printable::impl,
             iteratable::impl,
+            convertable::impl,
             float64_io<impl>::template impl,
             float64_arithmetic<impl>::template impl,
             float64_bitwise<impl>::template impl,

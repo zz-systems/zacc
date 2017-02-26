@@ -28,23 +28,24 @@
 
 #pragma once
 
-#include <intrin.h>
+#include <x86intrin.h>
 #include <type_traits>
+
+#include "../../../util/type_composition.hpp"
 
 #include "../../../common/zval.hpp"
 #include "../../../common/common.hpp"
-#include "../../../common/compose.hpp"
 #include "../../../common/type_traits.hpp"
-#include "../../../common/common_traits.hpp"
+#include "../../../common/traits/common.hpp"
 
-#include "../../../common/interfaces/construction.hpp"
-#include "../../../common/interfaces/io.hpp"
-#include "../../../common/interfaces/arithmetic.hpp"
-#include "../../../common/interfaces/bitwise.hpp"
-#include "../../../common/interfaces/bitwise_shift.hpp"
-#include "../../../common/interfaces/logical.hpp"
-#include "../../../common/interfaces/comparison.hpp"
-#include "../../../common/interfaces/conditional.hpp"
+#include "../../../common/traits/construction.hpp"
+#include "../../../common/traits/io.hpp"
+#include "../../../common/traits/arithmetic.hpp"
+#include "../../../common/traits/bitwise.hpp"
+#include "../../../common/traits/bitwise_shift.hpp"
+#include "../../../common/traits/logical.hpp"
+#include "../../../common/traits/comparison.hpp"
+#include "../../../common/traits/conditional.hpp"
 
 /**
  * @brief int32 implementation for the sse branch

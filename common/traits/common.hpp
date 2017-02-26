@@ -25,12 +25,26 @@
 
 #pragma once
 
-#include "common.hpp"
-#include "traits.hpp"
-
+#include "../common.hpp"
 #include <sstream>
 
 namespace zacc {
+
+    enum class traits : long long {
+        Arithmetic = 1 << 0,
+        Fused_Multiplication = 1 << 1,
+        Bitwise = 1 << 2,
+        Bitwise_Shift = 1 << 3,
+        Logical = 1 << 4,
+        Comparison = 1 << 5,
+        Conditional = 1 << 6,
+
+        IO = 1 << 7,
+        Iteratable = 1 << 8,
+        Printable = 1 << 9,
+        Indexable = 1 << 10,
+        Convertable = 1 << 11,
+    };
 
     struct iteratable {
         template<typename base_t>
@@ -95,45 +109,6 @@ namespace zacc {
             auto as_bool()
             {
                 return bval<impl>(*this);
-            }
-        };
-    };
-
-    struct boolvec
-    {
-        template<typename base_t>
-        struct impl : public base_t {
-            using extracted_t = std::array<bool, base_t::dim>;
-
-            FORWARD(impl);
-
-            REQUIRE(traits::IO);
-            TRAIT(traits::IO);
-
-            const extracted_t data() const {
-                alignas(base_t::alignment) typename base_t::extracted_t raw;
-                extracted_t result;
-
-                base_t::store(raw);
-
-                for (auto i = 0; i < base_t::dim; i++)
-                    result[i] = raw[i] != 0;
-
-                return result;
-            }
-
-            extracted_t
-            data() {
-                alignas(base_t::alignment) typename base_t::extracted_t raw;
-                extracted_t result;
-
-
-                base_t::store(raw);
-
-                for (auto i = 0; i < base_t::dim; i++)
-                    result[i] = raw[i] != 0;
-
-                return result;
             }
         };
     };

@@ -34,27 +34,32 @@ namespace zacc {
         using flag_t = std::make_unsigned_t<capabilities>;
         using self_t = capability_dispatcher;
 
+        static constexpr bool is_set(capabilities flag)
+        {
+            return 0 != (flags & static_cast<flag_t>(flag));
+        }
+
         /// current capabilities
         static constexpr flag_t flags = capability;
 
         /// sse 2 available?
-        static constexpr bool has_SSE2 = self_t::is_set(capabilities::SSE2);
+        static constexpr bool has_SSE2 = is_set(capabilities::SSE2);
         /// sse 3 available?
-        static constexpr bool has_SSE3 = self_t::is_set(capabilities::SSE3);
+        static constexpr bool has_SSE3 = is_set(capabilities::SSE3);
         /// ssse 3 available?
-        static constexpr bool has_SSSE3 = self_t::is_set(capabilities::SSSE3);
+        static constexpr bool has_SSSE3 = is_set(capabilities::SSSE3);
 
         // fma4 available?
-        static constexpr bool has_FMA3 = self_t::is_set(capabilities::FMA3);
+        static constexpr bool has_FMA3 = is_set(capabilities::FMA3);
         /// fma4 available?
-        static constexpr bool has_FMA4 = self_t::is_set(capabilities::FMA4);
+        static constexpr bool has_FMA4 = is_set(capabilities::FMA4);
         /// fma available?
         static constexpr bool has_FMA = has_FMA3 || has_FMA4;
 
         /// sse 4.1 available?
-        static constexpr bool has_SSE41 = self_t::is_set(capabilities::SSE41);
+        static constexpr bool has_SSE41 = is_set(capabilities::SSE41);
         /// sse 4.2 available?
-        static constexpr bool has_SSE42 = self_t::is_set(capabilities::SSE42);
+        static constexpr bool has_SSE42 = is_set(capabilities::SSE42);
         /// sse 4 available?
         static constexpr bool has_SSE4 = has_SSE41 || has_SSE42;
 
@@ -62,21 +67,18 @@ namespace zacc {
         static constexpr bool has_SSE = has_SSE2 || has_SSE3 || has_SSSE3 || has_SSE4;
 
         /// avx 1 available?
-        static constexpr bool has_AVX = self_t::is_set(capabilities::AVX1);
+        static constexpr bool has_AVX = is_set(capabilities::AVX1);
         /// avx 2 available?
-        static constexpr bool has_AVX2 = self_t::is_set(capabilities::AVX2);
+        static constexpr bool has_AVX2 = is_set(capabilities::AVX2);
         /// avx 512 available?
-        static constexpr bool has_AVX512 = self_t::is_set(capabilities::AVX512);
+        static constexpr bool has_AVX512 = is_set(capabilities::AVX512);
 
         /// openCL available?
-        static constexpr bool has_OPENCL = self_t::is_set(capabilities::OPENCL);
+        static constexpr bool has_OPENCL = is_set(capabilities::OPENCL);
 
         /// fast (lower precision) float enabled?
-        static constexpr bool use_fast_float = self_t::is_set(capabilities::FASTFLOAT);
-
-        static constexpr bool is_set(capabilities flag)
-        {
-            return 0 != (flags & static_cast<flag_t>(flag));
-        }
+        static constexpr bool use_fast_float = is_set(capabilities::FASTFLOAT);
     };
+
+    #define use_fast_float capability_dispatcher<capability>::use_fast_float
 }

@@ -27,14 +27,13 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "gtest/gtest.h"
 //#include <iostream>
 #include "../impl/int8.impl.hpp"
 
-namespace zacc { namespace None { namespace test {
+namespace zacc { namespace avx512 { namespace test {
 
 // =====================================================================================================================
-    TEST(None_int8_arithmetic, arithmetic_negate_default)
+    TEST(avx512_int8_arithmetic, arithmetic_negate_default)
     {
         auto actual = -zint8<>(125);
         auto expected = (char) -125;
@@ -47,7 +46,7 @@ namespace zacc { namespace None { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_int8_bitwise, bitwise_negate_default)
+    TEST(avx512_int8_bitwise, bitwise_negate_default)
     {
         auto actual = ~zint8<>(100);
         auto expected = (char) ~100;
@@ -58,7 +57,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_int8_bitwise, bitwise_and_default)
+    TEST(avx512_int8_bitwise, bitwise_and_default)
     {
         auto actual = zint8<>(127) & zint8<>(64);
         auto expected = (char) (127 & 64);
@@ -69,7 +68,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_int8_bitwise, bitwise_or_default)
+    TEST(avx512_int8_bitwise, bitwise_or_default)
     {
         auto actual = zint8<>(127) | zint8<>(64);
         auto expected = (char) (127 | 64);
@@ -80,7 +79,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_int8_bitwise, bitwise_xor_default)
+    TEST(avx512_int8_bitwise, bitwise_xor_default)
     {
         auto actual = zint8<>(127) ^ zint8<>(64);
         auto expected = (char) (127 ^ 64);
@@ -93,7 +92,7 @@ namespace zacc { namespace None { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_int8_logical, logical_negate_default)
+    TEST(avx512_int8_logical, logical_negate_default)
     {
         auto actual = (!zint8<>(1)).as_bool();
         auto expected = (char) false;
@@ -104,7 +103,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_int8_logical, logical_or_default)
+    TEST(avx512_int8_logical, logical_or_default)
     {
         auto actual = zint8<>(0) || zint8<>(8);
         auto expected = (char) 8;
@@ -115,7 +114,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_int8_logical, logical_and_default)
+    TEST(avx512_int8_logical, logical_and_default)
     {
         auto actual = zint8<>(0) && zint8<>(8);
         auto expected = (char) 0;
@@ -128,7 +127,7 @@ namespace zacc { namespace None { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_int8_comparison, comparison_eq_default)
+    TEST(avx512_int8_comparison, comparison_eq_default)
     {
         auto actual = zint8<>(0) == zint8<>(8);
         auto expected = (char) 0;
@@ -139,7 +138,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_int8_comparison, comparison_neq_default)
+    TEST(avx512_int8_comparison, comparison_neq_default)
     {
         auto actual = zint8<>(0) != zint8<>(0);
         auto expected = (char) 0;
@@ -150,7 +149,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_int8_comparison, comparison_gt_default)
+    TEST(avx512_int8_comparison, comparison_gt_default)
     {
         auto actual = zint8<>(0) > zint8<>(8);
         auto expected = (char) 0;
@@ -161,7 +160,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_int8_comparison, comparison_lt_default)
+    TEST(avx512_int8_comparison, comparison_lt_default)
     {
         auto actual = zint8<>(8) < zint8<>(0);
         auto expected = (char) 0;
@@ -172,7 +171,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_int8_comparison, comparison_ge_default)
+    TEST(avx512_int8_comparison, comparison_ge_default)
     {
         auto actual = (zint8<>(0) >= zint8<>(0)).as_bool();
         auto expected = (char) true;
@@ -183,7 +182,7 @@ namespace zacc { namespace None { namespace test {
         }
     }
 
-    TEST(None_int8_comparison, comparison_le_default)
+    TEST(avx512_int8_comparison, comparison_le_default)
     {
         auto actual = (zint8<>(0) <= zint8<>(0)).as_bool();
         auto expected = (char) true;
@@ -196,7 +195,7 @@ namespace zacc { namespace None { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(None_int8_conditional, vsel_default)
+    TEST(avx512_int8_conditional, vsel_default)
     {
         auto actual = vsel(zint8<>(1) == zint8<>(1), zint8<>(2), zint8<>(3));
         auto expected = (char) 2;

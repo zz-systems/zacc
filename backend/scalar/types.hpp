@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-// 
+//
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,51 +25,21 @@
 
 #pragma once
 
-#include "../traits.hpp"
-#include "../common.hpp"
+#include "impl/float32.impl.hpp"
+#include "impl/float64.impl.hpp"
+#include "impl/int8.impl.hpp"
+#include "impl/int16.impl.hpp"
+#include "impl/int32.impl.hpp"
 
-namespace zacc { namespace interface {
+namespace zacc { namespace scalar {
 
-    template<typename base_t, typename composed_t>
-    struct comparison : public base_t {
-        FORWARD(comparison);
-
-        TRAIT(traits::Comparison);
-
-        friend composed_t operator==(const composed_t one, const composed_t other) {
-            return comparison_eq(one, other);
-        }
-
-        friend composed_t operator!=(const composed_t one, const composed_t other) {
-            return comparison_neq(one, other);
-        }
-
-        friend composed_t operator>(const composed_t one, const composed_t other) {
-            return comparison_gt(one, other);
-        }
-
-        friend composed_t operator>=(const composed_t one, const composed_t other) {
-            return comparison_ge(one, other);
-        }
-
-        friend composed_t operator<(const composed_t one, const composed_t other) {
-            return comparison_lt(one, other);
-        }
-
-        friend composed_t operator<=(const composed_t one, const composed_t other) {
-            return comparison_le(one, other);
-        }
-
-        CONVERSION(==);
-
-        CONVERSION(!=);
-
-        CONVERSION(>);
-
-        CONVERSION(>=);
-
-        CONVERSION(<);
-
-        CONVERSION(<=);
-    };
-}}
+        template<uint64_t capability>
+        struct types
+        {
+            using zfloat32  = zfloat32<capability>;
+            using zfloat64  = zfloat64<capability>;
+            using zint8     = zint8<capability>;
+            using zint16    = zint16<capability>;
+            using zint32    = zint32<capability>;
+        };
+    }}

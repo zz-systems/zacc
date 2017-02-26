@@ -26,17 +26,29 @@
 #pragma once
 
 #include "platform.hpp"
-#include "capability_dispatcher.hpp"
 #include "branch_dispatcher.hpp"
 
 namespace zacc {
     template<uint64_t capability = 0>
-    struct dispatcher : public capability_dispatcher
+    struct dispatcher
     {
         using zfloat32  = branch_dispatcher<capability>::types::zfloat32;
         using zfloat64  = branch_dispatcher<capability>::types::zfloat64;
         using zint8     = branch_dispatcher<capability>::types::zint8;
         using zint16    = branch_dispatcher<capability>::types::zint16;
         using zint32    = branch_dispatcher<capability>::types::zint32;
+
+        using zfloat = zfloat32;
+        using zdouble = zfloat64;
+        using zbyte = zint8;
+        using zshort = zint16;
+        using zint = zint32;
     };
+
+#define zfloat dispatcher<capability>::zfloat
+#define zdouble dispatcher<capability>::zdouble
+#define zbyte dispatcher<capability>::zbyte
+#define zshort dispatcher<capability>::zshort
+#define zint dispatcher<capability>::zint
+
 }

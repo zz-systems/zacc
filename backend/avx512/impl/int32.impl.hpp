@@ -28,29 +28,30 @@
 
 #pragma once
 
-#include <intrin.h>
+#include <x86intrin.h>
 #include <type_traits>
+
+#include "../../../util/type_composition.hpp"
 
 #include "../../../common/zval.hpp"
 #include "../../../common/common.hpp"
-#include "../../../common/compose.hpp"
 #include "../../../common/type_traits.hpp"
-#include "../../../common/common_traits.hpp"
+#include "../../../common/traits/common.hpp"
 
-#include "../../../common/interfaces/construction.hpp"
-#include "../../../common/interfaces/io.hpp"
-#include "../../../common/interfaces/arithmetic.hpp"
-#include "../../../common/interfaces/bitwise.hpp"
-#include "../../../common/interfaces/logical.hpp"
-#include "../../../common/interfaces/comparison.hpp"
-#include "../../../common/interfaces/conditional.hpp"
+#include "../../../common/traits/construction.hpp"
+#include "../../../common/traits/io.hpp"
+#include "../../../common/traits/arithmetic.hpp"
+#include "../../../common/traits/bitwise.hpp"
+#include "../../../common/traits/logical.hpp"
+#include "../../../common/traits/comparison.hpp"
+#include "../../../common/traits/conditional.hpp"
 
 /**
- * @brief int32 implementation for the None branch
+ * @brief int32 implementation for the avx512 branch
  * provides unified access to 16 'int' values
  */
 
-namespace zacc { namespace None {
+namespace zacc { namespace avx512 {
 
     // =================================================================================================================
     /**
@@ -61,7 +62,7 @@ namespace zacc { namespace None {
     /**
      * @brief construction
      * @relates int32
-     * @remark None
+     * @remark avx512
      */
     template<typename composed_t>
     struct int32_construction
@@ -70,7 +71,7 @@ namespace zacc { namespace None {
         /**
          * @brief construction basic interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         struct __impl : base_t
@@ -80,7 +81,7 @@ namespace zacc { namespace None {
             /**
              * @brief construction default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             __impl(__m512i value) : base_t(value) {
             }
@@ -89,7 +90,7 @@ namespace zacc { namespace None {
             /**
              * @brief construction default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             __impl(int value) : base_t(_mm512_set1_epi8(value)) {
             }
@@ -98,16 +99,16 @@ namespace zacc { namespace None {
             /**
              * @brief construction default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
-            __impl(int *value) : base_t(_mm512_load_si128(value)) {
+            __impl(int *value) : base_t(_mm512_load_si512(value)) {
             }
 
 
             /**
              * @brief construction default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             __impl(int arg15, int arg14, int arg13, int arg12, int arg11, int arg10, int arg9, int arg8, int arg7, int arg6, int arg5, int arg4, int arg3, int arg2, int arg1, int arg0) : base_t(_mm512_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)) {
             }
@@ -117,7 +118,7 @@ namespace zacc { namespace None {
         /**
          * @brief construction public interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         using impl = interface::construction<__impl<base_t>, composed_t>;
@@ -135,7 +136,7 @@ namespace zacc { namespace None {
     /**
      * @brief io
      * @relates int32
-     * @remark None
+     * @remark avx512
      */
     template<typename composed_t>
     struct int32_io
@@ -144,7 +145,7 @@ namespace zacc { namespace None {
         /**
          * @brief io basic interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         struct __impl : base_t
@@ -155,7 +156,7 @@ namespace zacc { namespace None {
             /**
              * @brief io default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend void io_store(typename base_t::extracted_t &target) const {
                 _mm512_store_si512(target.data(), base_t::_value);
@@ -165,7 +166,7 @@ namespace zacc { namespace None {
             /**
              * @brief io default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend void io_stream(typename base_t::extracted_t &target) const {
                 _mm512_stream_si512(target.data(), base_t::_value);
@@ -176,7 +177,7 @@ namespace zacc { namespace None {
         /**
          * @brief io public interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         using impl = interface::io<__impl<base_t>, composed_t>;
@@ -194,7 +195,7 @@ namespace zacc { namespace None {
     /**
      * @brief arithmetic
      * @relates int32
-     * @remark None
+     * @remark avx512
      */
     template<typename composed_t>
     struct int32_arithmetic
@@ -203,7 +204,7 @@ namespace zacc { namespace None {
         /**
          * @brief arithmetic basic interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         struct __impl : base_t
@@ -214,7 +215,7 @@ namespace zacc { namespace None {
             /**
              * @brief arithmetic default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t arithmetic_negate(composed_t one) {
                 return _mm512_sub_epi32(_mm512_setzero_epi32(), one.get_value());
@@ -224,7 +225,7 @@ namespace zacc { namespace None {
             /**
              * @brief arithmetic default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t arithmetic_add(composed_t one, composed_t other) {
                 return _mm512_add_epi32(one.get_value(), other.get_value());
@@ -234,7 +235,7 @@ namespace zacc { namespace None {
             /**
              * @brief arithmetic default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t arithmetic_sub(composed_t one, composed_t other) {
                 return _mm512_sub_epi32(one.get_value(), other.get_value());
@@ -244,7 +245,7 @@ namespace zacc { namespace None {
             /**
              * @brief arithmetic default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t arithmetic_mul(composed_t one, composed_t other) {
                 return _mm512_mullo_epi32(one.get_value(), other.get_value());
@@ -254,7 +255,7 @@ namespace zacc { namespace None {
             /**
              * @brief arithmetic default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t arithmetic_div(composed_t one, composed_t other) {
                 return _mm512_div_ps(_mm512_cvtepi32_ps(one.get_value()), _mm512_cvtepi32_ps(other.get_value()));
@@ -265,7 +266,7 @@ namespace zacc { namespace None {
         /**
          * @brief arithmetic public interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         using impl = interface::arithmetic<__impl<base_t>, composed_t>;
@@ -283,7 +284,7 @@ namespace zacc { namespace None {
     /**
      * @brief bitwise
      * @relates int32
-     * @remark None
+     * @remark avx512
      */
     template<typename composed_t>
     struct int32_bitwise
@@ -292,7 +293,7 @@ namespace zacc { namespace None {
         /**
          * @brief bitwise basic interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         struct __impl : base_t
@@ -303,7 +304,7 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t bitwise_negate(composed_t one) {
                 auto zero = _mm512_setzero_si128();
@@ -315,7 +316,7 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t bitwise_and(composed_t one, composed_t other) {
                 return _mm512_or_epi32(one.get_value(), other.get_value());
@@ -325,7 +326,7 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t bitwise_or(composed_t one, composed_t other) {
                 return _mm512_and_epi32(one.get_value(), other.get_value());
@@ -335,7 +336,7 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t bitwise_xor(composed_t one, composed_t other) {
                 return _mm512_xor_si128(one.get_value(), other.get_value());
@@ -345,7 +346,7 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t bitwise_sll(composed_t one, composed_t other) {
                 return _mm512_sll_epi32(one.get_value(), other.get_value());
@@ -355,7 +356,7 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t bitwise_srl(composed_t one, composed_t other) {
                 return _mm512_srl_epi32(one.get_value(), other.get_value());
@@ -365,7 +366,7 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t bitwise_slli(const composed_t one, const size_t other) {
                 return _mm512_slli_epi32(const composed_t one, const size_t other);
@@ -375,7 +376,7 @@ namespace zacc { namespace None {
             /**
              * @brief bitwise default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t bitwise_srli(const composed_t one, const size_t other) {
                 return _mm512_srli_epi32(const composed_t one, const size_t other);
@@ -386,7 +387,7 @@ namespace zacc { namespace None {
         /**
          * @brief bitwise public interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         using impl = interface::bitwise<__impl<base_t>, composed_t>;
@@ -404,7 +405,7 @@ namespace zacc { namespace None {
     /**
      * @brief logical
      * @relates int32
-     * @remark None
+     * @remark avx512
      */
     template<typename composed_t>
     struct int32_logical
@@ -413,7 +414,7 @@ namespace zacc { namespace None {
         /**
          * @brief logical basic interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         struct __impl : base_t
@@ -424,7 +425,7 @@ namespace zacc { namespace None {
             /**
              * @brief logical default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t logical_negate(composed_t one) {
                 auto zero = _mm512_setzero_si128();
@@ -436,7 +437,7 @@ namespace zacc { namespace None {
             /**
              * @brief logical default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t logical_or(composed_t one, composed_t other) {
                 return _mm512_or_epi32(one.get_value(), other.get_value());
@@ -446,7 +447,7 @@ namespace zacc { namespace None {
             /**
              * @brief logical default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t logical_and(composed_t one, composed_t other) {
                 return _mm512_and_epi32(one.get_value(), other.get_value());
@@ -457,7 +458,7 @@ namespace zacc { namespace None {
         /**
          * @brief logical public interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         using impl = interface::logical<__impl<base_t>, composed_t>;
@@ -475,7 +476,7 @@ namespace zacc { namespace None {
     /**
      * @brief comparison
      * @relates int32
-     * @remark None
+     * @remark avx512
      */
     template<typename composed_t>
     struct int32_comparison
@@ -484,7 +485,7 @@ namespace zacc { namespace None {
         /**
          * @brief comparison basic interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         struct __impl : base_t
@@ -495,7 +496,7 @@ namespace zacc { namespace None {
             /**
              * @brief comparison default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t comparison_eq(composed_t one, composed_t other) {
                 return _mm512_cmpeq_epi32(one.get_value(), other.get_value());
@@ -505,7 +506,7 @@ namespace zacc { namespace None {
             /**
              * @brief comparison default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t comparison_neq(composed_t one, composed_t other) {
                 return _mm512_cmpneq_epi32(one.get_value(), other.get_value());
@@ -515,7 +516,7 @@ namespace zacc { namespace None {
             /**
              * @brief comparison default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t comparison_gt(composed_t one, composed_t other) {
                 return _mm512_cmpgt_epi32(one.get_value(), other.get_value());
@@ -525,7 +526,7 @@ namespace zacc { namespace None {
             /**
              * @brief comparison default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t comparison_lt(composed_t one, composed_t other) {
                 return _mm512_cmplt_epi32(one.get_value(), other.get_value());
@@ -535,7 +536,7 @@ namespace zacc { namespace None {
             /**
              * @brief comparison default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t comparison_ge(composed_t one, composed_t other) {
                 return _mm512_cmpge_epi32(one.get_value(), other.get_value());
@@ -545,7 +546,7 @@ namespace zacc { namespace None {
             /**
              * @brief comparison default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t comparison_le(composed_t one, composed_t other) {
                 return _mm512_cmple_epi32(one.get_value(), other.get_value());
@@ -556,7 +557,7 @@ namespace zacc { namespace None {
         /**
          * @brief comparison public interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         using impl = interface::comparison<__impl<base_t>, composed_t>;
@@ -574,7 +575,7 @@ namespace zacc { namespace None {
     /**
      * @brief conditional
      * @relates int32
-     * @remark None
+     * @remark avx512
      */
     template<typename composed_t>
     struct int32_conditional
@@ -583,7 +584,7 @@ namespace zacc { namespace None {
         /**
          * @brief conditional basic interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         struct __impl : base_t
@@ -594,7 +595,7 @@ namespace zacc { namespace None {
             /**
              * @brief conditional default branch
              * @relates int32
-             * @remark None - default
+             * @remark avx512 - default
              */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value) {
                 return _mm512_or_si128(_mm512_andnot_si128(condition.get_value(), else_value.get_value()), _mm512_and_si128(condition.get_value(), if_value.get_value()));
@@ -605,7 +606,7 @@ namespace zacc { namespace None {
         /**
          * @brief conditional public interface implementation
          * @relates int32
-         * @remark None
+         * @remark avx512
          */
         template<typename base_t>
         using impl = interface::conditional<__impl<base_t>, composed_t>;
@@ -628,7 +629,7 @@ namespace zacc { namespace None {
      * - '16' as vector size
      * - '64' as alignment
      * @relates int32
-     * @remark None
+     * @remark avx512
      */
     template<uint64_t capability>
     struct __zval_int32
@@ -643,7 +644,7 @@ namespace zacc { namespace None {
     /**
      * @brief zval composition
      * @relates int32
-     * @remark None
+     * @remark avx512
      */
     template<uint64_t capability>
     struct __zint32
@@ -655,6 +656,7 @@ namespace zacc { namespace None {
         <
             printable::impl,
             iteratable::impl,
+            convertable::impl,
             int32_io<impl>::template impl,
             int32_arithmetic<impl>::template impl,
             int32_bitwise<impl>::template impl,

@@ -25,45 +25,32 @@
 
 #pragma once
 
-#include "../traits.hpp"
-#include "../common.hpp"
+#include "common.hpp"
 
 namespace zacc { namespace interface {
 
     template<typename base_t, typename composed_t>
-    struct io : public base_t {
+    struct conditional : public base_t {
+        FORWARD(conditional);
 
-        typedef typename base_t::extracted_t extracted_t;
+        TRAIT(traits::Conditional);
 
-        FORWARD(io);
+        struct else_branch {
+            composed_t otherwise(const composed_t else_value) const { return vsel(_condition, _if_value, else_value); }
 
-        TRAIT(traits::IO);
+        private:
+            else_branch(const composed_t condition, const composed_t if_value)
+                    : _condition(condition), _if_value(if_value) {}
 
-        void store (extracted_t &target) const
-        {
-            base_t::io_store(target);
-        }
+            composed_t _if_value;
+            composed_t _condition;
 
-        void stream (extracted_t &target) const
-        {
-            base_t::io_stream(target);
-        }
+            friend class conditional<base_t, composed_t>;
+        };
 
-        const extracted_t data() const {
-            alignas(base_t::alignment) extracted_t result;
 
-            store(result);
-
-            return result;
-        }
-
-        extracted_t
-        data() {
-            alignas(base_t::alignment) extracted_t result;
-
-            store(result);
-
-            return result;
+        else_branch when(const composed_t condition) const {
+            return else_branch(condition, *this);
         }
     };
 

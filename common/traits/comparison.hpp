@@ -25,10 +25,50 @@
 
 #pragma once
 
-namespace zacc { namespace util {
-    template<typename enum_t>
-    struct enum_flags
-    {
+#include "common.hpp"
 
+namespace zacc { namespace interface {
+
+    template<typename base_t, typename composed_t>
+    struct comparison : public base_t {
+        FORWARD(comparison);
+
+        TRAIT(traits::Comparison);
+
+        friend composed_t operator==(const composed_t one, const composed_t other) {
+            return comparison_eq(one, other);
+        }
+
+        friend composed_t operator!=(const composed_t one, const composed_t other) {
+            return comparison_neq(one, other);
+        }
+
+        friend composed_t operator>(const composed_t one, const composed_t other) {
+            return comparison_gt(one, other);
+        }
+
+        friend composed_t operator>=(const composed_t one, const composed_t other) {
+            return comparison_ge(one, other);
+        }
+
+        friend composed_t operator<(const composed_t one, const composed_t other) {
+            return comparison_lt(one, other);
+        }
+
+        friend composed_t operator<=(const composed_t one, const composed_t other) {
+            return comparison_le(one, other);
+        }
+
+        CONVERSION(==);
+
+        CONVERSION(!=);
+
+        CONVERSION(>);
+
+        CONVERSION(>=);
+
+        CONVERSION(<);
+
+        CONVERSION(<=);
     };
 }}
