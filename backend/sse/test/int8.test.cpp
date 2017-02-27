@@ -27,15 +27,14 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-//#include <iostream>
-#include "../impl/int8.impl.hpp"
+#include "dispatch/dispatcher.hpp"
 
-namespace zacc { namespace sse { namespace test {
-
+//namespace zacc { namespace sse { namespace test {
+namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(sse_int8_arithmetic, arithmetic_negate_default)
     {
-        auto actual = -zint8<>(125);
+        auto actual = -zint8(125);
         auto expected = (char) -125;
 
         for(char value : actual)
@@ -46,7 +45,7 @@ namespace zacc { namespace sse { namespace test {
 
     TEST(sse_int8_arithmetic, arithmetic_add_default)
     {
-        auto actual = zint8<>(12) + zint8<>(105);
+        auto actual = zint8(12) + zint8(105);
         auto expected = (char) 117;
 
         for(char value : actual)
@@ -57,7 +56,7 @@ namespace zacc { namespace sse { namespace test {
 
     TEST(sse_int8_arithmetic, arithmetic_sub_default)
     {
-        auto actual = zint8<>(124) - zint8<>(125);
+        auto actual = zint8(124) - zint8(125);
         auto expected = (char) -1;
 
         for(char value : actual)
@@ -70,7 +69,7 @@ namespace zacc { namespace sse { namespace test {
 // =====================================================================================================================
     TEST(sse_int8_bitwise, bitwise_negate_default)
     {
-        auto actual = ~zint8<>(100);
+        auto actual = ~zint8(100);
         auto expected = (char) ~100;
 
         for(char value : actual)
@@ -81,7 +80,7 @@ namespace zacc { namespace sse { namespace test {
 
     TEST(sse_int8_bitwise, bitwise_or_default)
     {
-        auto actual = zint8<>(127) | zint8<>(64);
+        auto actual = zint8(127) | zint8(64);
         auto expected = (char) (127 | 64);
 
         for(char value : actual)
@@ -92,7 +91,7 @@ namespace zacc { namespace sse { namespace test {
 
     TEST(sse_int8_bitwise, bitwise_and_default)
     {
-        auto actual = zint8<>(127) & zint8<>(64);
+        auto actual = zint8(127) & zint8(64);
         auto expected = (char) (127 & 64);
 
         for(char value : actual)
@@ -103,7 +102,7 @@ namespace zacc { namespace sse { namespace test {
 
     TEST(sse_int8_bitwise, bitwise_xor_default)
     {
-        auto actual = zint8<>(127) ^ zint8<>(64);
+        auto actual = zint8(127) ^ zint8(64);
         auto expected = (char) (127 ^ 64);
 
         for(char value : actual)
@@ -116,7 +115,7 @@ namespace zacc { namespace sse { namespace test {
 // =====================================================================================================================
     TEST(sse_int8_logical, logical_negate_default)
     {
-        auto actual = (!zint8<>(1)).as_bool();
+        auto actual = (!zint8(1)).as_bool();
         auto expected = (char) false;
 
         for(char value : actual)
@@ -127,7 +126,7 @@ namespace zacc { namespace sse { namespace test {
 
     TEST(sse_int8_logical, logical_or_default)
     {
-        auto actual = zint8<>(0) || zint8<>(8);
+        auto actual = zint8(0) || zint8(8);
         auto expected = (char) 8;
 
         for(char value : actual)
@@ -138,7 +137,7 @@ namespace zacc { namespace sse { namespace test {
 
     TEST(sse_int8_logical, logical_and_default)
     {
-        auto actual = zint8<>(0) && zint8<>(8);
+        auto actual = zint8(0) && zint8(8);
         auto expected = (char) 0;
 
         for(char value : actual)
@@ -151,7 +150,7 @@ namespace zacc { namespace sse { namespace test {
 // =====================================================================================================================
     TEST(sse_int8_comparison, comparison_eq_default)
     {
-        auto actual = zint8<>(0) == zint8<>(8);
+        auto actual = zint8(0) == zint8(8);
         auto expected = (char) 0;
 
         for(char value : actual)
@@ -162,7 +161,7 @@ namespace zacc { namespace sse { namespace test {
 
     TEST(sse_int8_comparison, comparison_neq_default)
     {
-        auto actual = zint8<>(0) != zint8<>(0);
+        auto actual = zint8(0) != zint8(0);
         auto expected = (char) 0;
 
         for(char value : actual)
@@ -173,7 +172,7 @@ namespace zacc { namespace sse { namespace test {
 
     TEST(sse_int8_comparison, comparison_gt_default)
     {
-        auto actual = zint8<>(0) > zint8<>(8);
+        auto actual = zint8(0) > zint8(8);
         auto expected = (char) 0;
 
         for(char value : actual)
@@ -184,7 +183,7 @@ namespace zacc { namespace sse { namespace test {
 
     TEST(sse_int8_comparison, comparison_lt_default)
     {
-        auto actual = zint8<>(8) < zint8<>(0);
+        auto actual = zint8(8) < zint8(0);
         auto expected = (char) 0;
 
         for(char value : actual)
@@ -195,7 +194,7 @@ namespace zacc { namespace sse { namespace test {
 
     TEST(sse_int8_comparison, comparison_ge_default)
     {
-        auto actual = (zint8<>(0) >= zint8<>(0)).as_bool();
+        auto actual = (zint8(0) >= zint8(0)).as_bool();
         auto expected = (char) true;
 
         for(char value : actual)
@@ -206,7 +205,7 @@ namespace zacc { namespace sse { namespace test {
 
     TEST(sse_int8_comparison, comparison_le_default)
     {
-        auto actual = (zint8<>(0) <= zint8<>(0)).as_bool();
+        auto actual = (zint8(0) <= zint8(0)).as_bool();
         auto expected = (char) true;
 
         for(char value : actual)
@@ -219,7 +218,7 @@ namespace zacc { namespace sse { namespace test {
 // =====================================================================================================================
     TEST(sse_int8_conditional, vsel_default)
     {
-        auto actual = vsel(zint8<>(1) == zint8<>(1), zint8<>(2), zint8<>(3));
+        auto actual = vsel(zint8(1) == zint8(1), zint8(2), zint8(3));
         auto expected = (char) 2;
 
         for(char value : actual)
@@ -230,4 +229,4 @@ namespace zacc { namespace sse { namespace test {
 
 // =====================================================================================================================
 
-}}}
+}}

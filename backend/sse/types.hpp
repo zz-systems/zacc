@@ -25,11 +25,11 @@
 
 #pragma once
 
-#include "impl/float32.impl.hpp"
-#include "impl/float64.impl.hpp"
-#include "impl/int8.impl.hpp"
-#include "impl/int16.impl.hpp"
-#include "impl/int32.impl.hpp"
+#include "backend/sse/impl/float32.impl.hpp"
+#include "backend/sse/impl/float64.impl.hpp"
+#include "backend/sse/impl/int8.impl.hpp"
+#include "backend/sse/impl/int16.impl.hpp"
+#include "backend/sse/impl/int32.impl.hpp"
 
 namespace zacc { namespace sse {
 

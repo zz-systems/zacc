@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,24 +22,41 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
+#include "dispatcher.hpp"
 
-#pragma once
-
-#include "backend/scalar/impl/float32.impl.hpp"
-#include "backend/scalar/impl/float64.impl.hpp"
-#include "backend/scalar/impl/int8.impl.hpp"
-#include "backend/scalar/impl/int16.impl.hpp"
-#include "backend/scalar/impl/int32.impl.hpp"
-
-namespace zacc { namespace scalar {
-
-        template<uint64_t capability>
-        struct types
-        {
-            using zfloat32  = zfloat32<capability>;
-            using zfloat64  = zfloat64<capability>;
-            using zint8     = zint8<capability>;
-            using zint16    = zint16<capability>;
-            using zint32    = zint32<capability>;
-        };
-    }}
+namespace zacc {
+#ifdef ZACC_SCALAR
+    platform::get_instance().set(0);
+#endif
+#ifdef ZACC_SSE2
+    platform::get_instance()
+        .enable(capabilities::SSE2);
+#endif
+#ifdef ZACC_SSE3
+    platform::get_instance()
+        .enable(capabilities::SSE3)
+        .enable(capabilities::SSSE3);
+#endif
+#ifdef ZACC_SSE4
+    platform::get_instance()
+        .enable(capabilities::SSE41)
+        .enable(capabilities::SSE42);
+#endif
+#ifdef ZACC_SSE4FMA
+    platform::get_instance()
+        .enable(capabilities::FMA3)
+        .enable(capabilities::FMA4);
+#endif
+#ifdef ZACC_AVX
+    platform::get_instance()
+        .enable(capabilities::AVX1);
+#endif
+#ifdef ZACC_AVX2
+    platform::get_instance()
+        .enable(capabilities::AVX2);
+#endif
+#ifdef ZACC_AVX512
+    platform::get_instance()
+        .enable(capabilities::AVX512);
+#endif
+}

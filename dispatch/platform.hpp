@@ -68,11 +68,50 @@ namespace zacc {
         FPGA = 1 << 12    ///< FPGA synthesis support?
     };
 
-    struct platform {
-        platform()
-                : _flags(to_underlying(capabilities::None)) {
-            reload();
+
+    /**
+     * @brief count last zero bits
+     * @see Hacker's delight SE [Henry S. Warren Jr]
+     * @tparam T
+     * @param value
+     * @return
+     */
+    template<typename T>
+    constexpr std::enable_if_t<std::is_integral<T>::value, size_t> ntz(T value)
+    {
+        size_t n = 0;
+
+        value = ~value & (value - 1);
+
+        n = 0;
+
+        while(value != 0)
+        {
+            n++;
+            value >>= 1;
         }
+
+        return n;
+    }
+
+
+    constexpr uint64_t fill_capabilities_up_to(const capabilities capability)
+    {
+        auto value = to_underlying(capability);
+        uint64_t result = 0;
+
+        for(size_t i = 0; i < ntz(value); i++)
+        {
+            result |= 1;
+            result <<= 1;
+        }
+
+        return result;
+    }
+
+
+
+    struct platform {
 
         platform &enable(const capabilities capability) {
             _flags |= to_underlying(capability);
@@ -92,10 +131,20 @@ namespace zacc {
                    : disable(capability);
         }
 
+        platform &set(uint64_t raw_value) {
+            _flags = raw_value;
+
+            return *this;
+        }
+
         bool is_set(const capabilities capability) const {
             return 0 != (_flags & to_underlying(capability));
         }
 
+        uint64_t get_capability()
+        {
+            return _flags;
+        }
 
         platform &reload() {
             _flags = to_underlying(capabilities::None);
@@ -126,8 +175,22 @@ namespace zacc {
             return *this;
         }
 
+        static platform& get_instance()
+        {
+            static platform instance;
+
+            return instance;
+        }
+
+        platform(platform const&)        = delete;
+        void operator=(platform const&)  = delete;
     private:
-        int _flags;
+        uint64_t _flags;
+
+        platform()
+                : _flags(to_underlying(capabilities::None)) {
+            reload();
+        }
     };
 
     /// pretty-prints the currently supperted features

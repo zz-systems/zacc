@@ -30,21 +30,21 @@
 
 #include <x86intrin.h>
 #include <type_traits>
+//../../../
+#include "util/type_composition.hpp"
 
-#include "../../../util/type_composition.hpp"
+#include "common/zval.hpp"
+#include "common/common.hpp"
+#include "common/type_traits.hpp"
+#include "common/traits/common.hpp"
 
-#include "../../../common/zval.hpp"
-#include "../../../common/common.hpp"
-#include "../../../common/type_traits.hpp"
-#include "../../../common/traits/common.hpp"
-
-#include "../../../common/traits/construction.hpp"
-#include "../../../common/traits/io.hpp"
-#include "../../../common/traits/arithmetic.hpp"
-#include "../../../common/traits/bitwise.hpp"
-#include "../../../common/traits/logical.hpp"
-#include "../../../common/traits/comparison.hpp"
-#include "../../../common/traits/conditional.hpp"
+#include "common/traits/construction.hpp"
+#include "common/traits/io.hpp"
+#include "common/traits/arithmetic.hpp"
+#include "common/traits/bitwise.hpp"
+#include "common/traits/logical.hpp"
+#include "common/traits/comparison.hpp"
+#include "common/traits/conditional.hpp"
 
 /**
  * @brief int8 implementation for the sse branch

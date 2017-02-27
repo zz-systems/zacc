@@ -100,7 +100,7 @@ class Func:
         test       = parent.test_config and parent.test_config.get(self.name)
 
         if test and type(test) == list and len(test) == 2:
-            self.actual     = test[0].format(type = "z"+parent.parent.type+"<>")
+            self.actual     = test[0].format(type = "z"+parent.parent.type)#+"<>")
             self.expected   = test[1]
             self.test = [self.actual, self.expected]
         else:
