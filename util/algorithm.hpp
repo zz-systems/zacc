@@ -23,36 +23,17 @@
 //---------------------------------------------------------------------------------
 
 
-#include "dispatch/platform.hpp"
-#include "util/commands.hpp"
+#pragma once
 
-#include <iostream>
-#include <string>
-#include <functional>
-#include <numeric>
-
-using namespace zacc;
-
-int main(int argc, char** argv) {
-
-    option_parser parser(argc, argv);
-    auto platform = &platform::get_instance();
-
-    if(parser.has_option("--CMAKE_OUTPUT"))
+namespace zacc {
+    template< class InputIt, class OutputIt, class UnaryOperation, class UnaryPredicate>
+    OutputIt transform_if(InputIt first, InputIt last,
+                        OutputIt d_first, UnaryOperation unary_op, UnaryPredicate pred)
     {
-        auto c = platform->get_capabilities();
+        for (; first != last; ++first)
+            if (pred(*first))
+                *d_first++ = unary_op(*first);
 
-        std::cout << std::accumulate(std::begin(c) + 1, std::end(c),
-                         std::begin(c)->str(),
-                         [](std::string &acc, auto &part)
-                         {
-                             return acc + ";" + part.str();
-                         });
-    }
-    else
-    {
-        std::cout << *platform;
-    }
-
-    return 0;
+        return d_first;
+    };
 }

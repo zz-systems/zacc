@@ -26,8 +26,13 @@
 #ifndef ZACC_PLATFORM_HPP
 #define ZACC_PLATFORM_HPP
 
-#include "../common/type_traits.hpp"
-#include "../util/io.hpp"
+#include "common/type_traits.hpp"
+#include "util/io.hpp"
+#include "util/algorithm.hpp"
+
+#include <vector>
+#include <map>
+#include <algorithm>
 
 #ifdef MSVCVER
 
@@ -68,7 +73,6 @@ namespace zacc {
         FPGA = 1 << 12    ///< FPGA synthesis support?
     };
 
-
     /**
      * @brief count last zero bits
      * @see Hacker's delight SE [Henry S. Warren Jr]
@@ -94,7 +98,11 @@ namespace zacc {
         return n;
     }
 
-
+    /**
+     * @brief
+     * @param capability
+     * @return
+     */
     constexpr uint64_t fill_capabilities_up_to(const capabilities capability)
     {
         auto value = to_underlying(capability);
@@ -109,8 +117,54 @@ namespace zacc {
         return result;
     }
 
+    class capability
+    {
+        typedef const char* c_str_t;
+        typedef std::underlying_type_t<capabilities> raw_t;
+
+    public:
+        //constexpr capability(capabilities capability, const char* str)
+        //        : _capability(capability), _c_str(str)
+        //{}
+
+        capability(const capabilities capability, const char* str)
+                : _capability(capability), _c_str(str)
+        {}
+
+        constexpr operator const char*() const { return c_str(); };
+        constexpr operator capabilities() const { return value(); };
+        constexpr operator raw_t() const { return raw_value(); };
+
+        //operator std::string() const { return str(); }
 
 
+        constexpr raw_t raw_value() const { return static_cast<raw_t>(_capability); }
+        constexpr capabilities value() const { return _capability; }
+        constexpr const char* c_str() const { return _c_str; }
+        std::string str() const { return _c_str; }
+
+        inline constexpr uint64_t set_capabilities_until()
+        {
+            auto value = to_underlying(_capability);
+            uint64_t result = 0;
+
+            for(size_t i = 0; i < ntz(value); i++)
+            {
+                result |= 1;
+                result <<= 1;
+            }
+
+            return result;
+        }
+
+    private:
+        const capabilities _capability;
+        const char* _c_str;
+    };
+
+    /**
+     * @brief
+     */
     struct platform {
 
         platform &enable(const capabilities capability) {
@@ -146,6 +200,18 @@ namespace zacc {
             return _flags;
         }
 
+        std::vector<capability> get_capabilities()
+        {
+            std::vector<capability> result;
+
+            transform_if(_capabilities.begin(), _capabilities.end(),
+                         std::back_inserter(result),
+                         [this](auto &kv) { return kv.second; },
+                         [this](auto &kv) { return is_set(kv.first); });
+
+            return result;
+        }
+
         platform &reload() {
             _flags = to_underlying(capabilities::None);
 
@@ -175,6 +241,34 @@ namespace zacc {
             return *this;
         }
 
+        void register_capabilities()
+        {
+            register_capability(zacc::capabilities::None, "DEFAULT");
+
+            register_capability(capabilities::SSE2, "SSE2");
+            register_capability(capabilities::SSE3, "SSE3");
+            register_capability(capabilities::SSSE3, "SSSE3");
+            register_capability(capabilities::SSE41, "SSE41");
+            register_capability(capabilities::SSE42, "SSE42");
+
+            register_capability(capabilities::FMA3, "FMA3");
+            register_capability(capabilities::FMA4, "FMA4");
+
+            register_capability(capabilities::AVX1, "AVX1");
+            register_capability(capabilities::AVX2, "AVX2");
+            register_capability(capabilities::AVX512, "AVX512");
+
+            register_capability(capabilities::FASTFLOAT, "FASTFLOAT");
+
+            register_capability(capabilities::OPENCL, "OPENCL");
+            register_capability(capabilities::None, "FPGA");
+        }
+
+        void register_capability(const enum capabilities cap, const char* str)
+        {
+            _capabilities.insert(capability_map_t::value_type(cap, capability(cap, str)));
+        }
+
         static platform& get_instance()
         {
             static platform instance;
@@ -185,11 +279,16 @@ namespace zacc {
         platform(platform const&)        = delete;
         void operator=(platform const&)  = delete;
     private:
+        typedef std::map<const enum capabilities, capability> capability_map_t;
+
         uint64_t _flags;
+
+        capability_map_t _capabilities;
 
         platform()
                 : _flags(to_underlying(capabilities::None)) {
             reload();
+            register_capabilities();
         }
     };
 
@@ -199,7 +298,7 @@ namespace zacc {
         using namespace std;
 
         int w = 15;
-        
+
         os << left << setw(w) << "SSE2:"	        << boolcolor(cap.is_set(capabilities::SSE2)) << endl;
         os << left << setw(w) << "SSE3:"	        << boolcolor(cap.is_set(capabilities::SSE3))  << endl;
         os << left << setw(w) << "SSSE3:"	        << boolcolor(cap.is_set(capabilities::SSSE3)) << endl;
