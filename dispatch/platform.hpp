@@ -33,17 +33,9 @@
 #include <map>
 #include <algorithm>
 
-#ifdef MSVCVER
-
-/// MSVC CPUID
-#define cpuid(info, x)    __cpuidex(info, x, 0)
-
-#else
-//  GCC Intrinsics
-#include <cpuid.h>
-/// gcc / clang CPUID
-#define cpuid(info, x) __cpuid_count(x, 0, info[0], info[1], info[2], info[3])
-
+#if !defined(MSVCVER)
+    //  GCC Intrinsics
+    #include <cpuid.h>
 #endif
 
 namespace zacc {
@@ -300,8 +292,7 @@ namespace zacc {
         platform &reload() {
             _flags = to_underlying(capabilities::None);
 
-            int cpuInfo[4];
-            cpuid(cpuInfo, 1);
+            auto cpuInfo = cpuid(1);
 
             set(capabilities::SSE2, cpuInfo[3] & (1 << 26));
 
@@ -316,7 +307,7 @@ namespace zacc {
             set(capabilities::AVX1, cpuInfo[2] & (1 << 28)); // <- TODO: XRESTORE
 
             // Extended CPU info
-            cpuid(cpuInfo, 7);
+            cpuInfo = cpuid(7);
 
             set(capabilities::AVX2, cpuInfo[1] & (1 << 5));
             set(capabilities::AVX512, cpuInfo[1] & (1 << 16));
@@ -397,6 +388,22 @@ namespace zacc {
             }
 
             return result;
+        }
+
+        static std::array<int, 4> cpuid(int flag)
+        {
+            std::array<int, 4> regs;
+
+#ifdef MSVCVER
+            /// MSVC CPUID
+            __cpuidex(regs.data(), flag, 0)
+
+#else
+            /// gcc / clang CPUID
+            __cpuid_count(flag, 0, regs[0], regs[1], regs[2], regs[3]);
+#endif
+
+            return regs;
         }
 
         /**
