@@ -22,13 +22,12 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-
-#ifndef ZACC_PLATFORM_HPP
-#define ZACC_PLATFORM_HPP
+#pragma once
 
 #include "common/type_traits.hpp"
 #include "util/io.hpp"
 #include "util/algorithm.hpp"
+#include "util/bithacks.hpp"
 
 #include <vector>
 #include <map>
@@ -74,133 +73,200 @@ namespace zacc {
     };
 
     /**
-     * @brief count last zero bits
-     * @see Hacker's delight SE [Henry S. Warren Jr]
-     * @tparam T
-     * @param value
-     * @return
+     * @brief Provides metadata and typecasts to capabilities enum
      */
-    template<typename T>
-    constexpr std::enable_if_t<std::is_integral<T>::value, size_t> ntz(T value)
-    {
-        size_t n = 0;
-
-        value = ~value & (value - 1);
-
-        n = 0;
-
-        while(value != 0)
-        {
-            n++;
-            value >>= 1;
-        }
-
-        return n;
-    }
-
-    /**
-     * @brief
-     * @param capability
-     * @return
-     */
-    constexpr uint64_t fill_capabilities_up_to(const capabilities capability)
-    {
-        auto value = to_underlying(capability);
-        uint64_t result = 0;
-
-        for(size_t i = 0; i < ntz(value); i++)
-        {
-            result |= 1;
-            result <<= 1;
-        }
-
-        return result;
-    }
-
     class capability
     {
         typedef const char* c_str_t;
         typedef std::underlying_type_t<capabilities> raw_t;
 
     public:
-        //constexpr capability(capabilities capability, const char* str)
-        //        : _capability(capability), _c_str(str)
-        //{}
 
-        capability(const capabilities capability, const char* str)
-                : _capability(capability), _c_str(str)
+        /**
+         * @brief constructs metadata with capability and string representation
+         * @param capability capability
+         * @param str string representation
+         * @param is_set availability flag
+         */
+        capability(const capabilities capability, const char* str, bool is_set = false)
+                : _capability(capability), _c_str(str), _is_set(is_set)
         {}
 
-        constexpr operator const char*() const { return c_str(); };
-        constexpr operator capabilities() const { return value(); };
-        constexpr operator raw_t() const { return raw_value(); };
-
-        //operator std::string() const { return str(); }
-
-
-        constexpr raw_t raw_value() const { return static_cast<raw_t>(_capability); }
-        constexpr capabilities value() const { return _capability; }
-        constexpr const char* c_str() const { return _c_str; }
-        std::string str() const { return _c_str; }
-
-        inline constexpr uint64_t set_capabilities_until()
+        /**
+         * @brief set the availability flag
+         * @param is_set availability flag
+         */
+        void set(bool is_set)
         {
-            auto value = to_underlying(_capability);
-            uint64_t result = 0;
-
-            for(size_t i = 0; i < ntz(value); i++)
-            {
-                result |= 1;
-                result <<= 1;
-            }
-
-            return result;
+            _is_set = is_set;
         }
 
+        /**
+         * @brief returns capability's string representation
+         * @return C-string representation
+         */
+        constexpr const char* c_str() const { return _c_str; }
+
+        /**
+         * @brief implicit cast to capability's string representation
+         * @return C-string representation
+         */
+        constexpr operator const char*() const { return c_str(); };
+
+        /**
+         * @brief returns capability enum value
+         * @return capability enum value
+         */
+        constexpr capabilities value() const { return _capability; }
+
+        /**
+         * @brief implicit cast to capability enum value
+         * @return raw capability enum value
+         */
+        constexpr operator capabilities() const { return value(); };
+
+        /**
+         * @brief returns raw underlying value
+         * @return raw underlying value
+         */
+        constexpr raw_t raw_value() const { return static_cast<raw_t>(_capability); }
+
+        /**
+         * @brief implicit cast to raw underlying value
+         * @return raw underlying value
+         */
+        constexpr operator raw_t() const { return raw_value(); };
+
+        /**
+         * @brief implicit cast to capability's string representation
+         * @return std::string representation
+         */
+        std::string str() const { return _c_str; }
+
+        /**
+         * @brief provides bitwise-or functionality
+         * @param other other capability
+         * @return result of bitwise-or as raw underlying value
+         */
+        constexpr raw_t operator |(const capability &other) { return raw_value() | other.raw_value(); }
+
+        /**
+         * @brief provides bitwise-and functionality
+         * @param other other capability
+         * @return result of bitwise-and as raw underlying value
+         */
+        constexpr raw_t operator &(const capability &other) { return raw_value() & other.raw_value(); }
+
+        /**
+         * @brief returns true if this capability is available
+         * @return true if capability set, otherwise false
+         */
+        bool is_set() { return _is_set; }
+
+        /**
+         * @brief pretty-prints the current capability
+         * @param os target output stream
+         * @param cap capability object
+         * @return modified target output stream
+         */
+        friend inline std::ostream& operator<<(std::ostream& os, const capability& cap) {
+            using namespace std;
+
+            const int w = 15;
+
+            os << left << setw(w) << cap.c_str() << boolcolor(cap._is_set) << endl;
+
+            return os;
+        }
     private:
         const capabilities _capability;
         const char* _c_str;
+        bool _is_set;
     };
 
     /**
      * @brief
      */
     struct platform {
-
+    private:
+        typedef std::underlying_type_t<capabilities> raw_t;
+        typedef std::map<const enum capabilities, capability> capability_map_t;
+    public:
+        /**
+         * @brief Enable capability, fluent interface
+         * @param capability
+         * @return self
+         */
         platform &enable(const capabilities capability) {
+
+            set_capability_if_registered(capability, true);
+
             _flags |= to_underlying(capability);
 
             return *this;
         }
 
+        /**
+         * @brief Disable capability, fluent interface
+         * @param capability
+         * @return self
+         */
         platform &disable(const capabilities capability) {
+
+            set_capability_if_registered(capability, false);
+
             _flags &= ~to_underlying(capability);
 
             return *this;
         }
 
+        /**
+         * @brief Set capability, fluent interface
+         * @param capability
+         * @param enabled
+         * @return self
+         */
         platform &set(const capabilities capability, bool enabled) {
+
             return enabled
                    ? enable(capability)
                    : disable(capability);
         }
 
+        /**
+         * @brief Set capabilities from raw value, fluent interface
+         * @param raw_value
+         * @return self
+         */
         platform &set(uint64_t raw_value) {
             _flags = raw_value;
 
             return *this;
         }
 
+        /**
+         * @brief Checks if capability is set
+         * @param capability
+         * @return true if set, otherwise false
+         */
         bool is_set(const capabilities capability) const {
             return 0 != (_flags & to_underlying(capability));
         }
 
-        uint64_t get_capability()
+        /**
+         * @brief Get entire raw value with all capabilities
+         * @return raw value
+         */
+        raw_t get_capability()
         {
             return _flags;
         }
 
-        std::vector<capability> get_capabilities()
+        /**
+         * @brief Get enabled capability objects from raw representation
+         * @return array of capabilities for each enabled capability
+         */
+        std::vector<capability> get_enabled_capabilities()
         {
             std::vector<capability> result;
 
@@ -212,6 +278,25 @@ namespace zacc {
             return result;
         }
 
+        /**
+         * @brief Get all capability objects from raw representation
+         * @return array of capabilities for each enabled capability
+         */
+        std::vector<capability> get_capabilities() const
+        {
+            std::vector<capability> result;
+
+            transform(_capabilities.begin(), _capabilities.end(),
+                         std::back_inserter(result),
+                         [this](auto &kv) { return kv.second; });
+
+            return result;
+        }
+
+        /**
+         * @brief Resolves platform information and populates capabilities, fluent interface
+         * @return self
+         */
         platform &reload() {
             _flags = to_underlying(capabilities::None);
 
@@ -241,7 +326,11 @@ namespace zacc {
             return *this;
         }
 
-        void register_capabilities()
+        /**
+         * @brief registers main capabilitiy metadata, fluent interface
+         * @return self
+         */
+        platform& register_capabilities()
         {
             register_capability(zacc::capabilities::None, "DEFAULT");
 
@@ -262,13 +351,28 @@ namespace zacc {
 
             register_capability(capabilities::OPENCL, "OPENCL");
             register_capability(capabilities::None, "FPGA");
+
+            return *this;
         }
 
-        void register_capability(const enum capabilities cap, const char* str)
+        /**
+         * @brief registers a specified capability metadata, fluent interface
+         * @param cap capability
+         * @param str capabilitiy's string representation
+         * @return self
+         */
+        platform & register_capability(const enum capabilities cap, const char* str)
         {
-            _capabilities.insert(capability_map_t::value_type(cap, capability(cap, str)));
+            if (_capabilities.find(cap) == _capabilities.end())
+                _capabilities.insert(capability_map_t::value_type(cap, capability(cap, str, is_set(cap))));
+
+            return *this;
         }
 
+        /**
+         * @brief returns the singleton instance
+         * @return singleton instance
+         */
         static platform& get_instance()
         {
             static platform instance;
@@ -276,49 +380,73 @@ namespace zacc {
             return instance;
         }
 
+        /**
+         * @brief
+         * @param capability
+         * @return
+         */
+        static constexpr uint64_t fill_capabilities_up_to(const capabilities capability)
+        {
+            auto value = to_underlying(capability);
+            uint64_t result = 0;
+
+            for(size_t i = 0; i < ntz(value); i++)
+            {
+                result |= 1;
+                result <<= 1;
+            }
+
+            return result;
+        }
+
+        /**
+         * @brief copy constructor not available
+         */
         platform(platform const&)        = delete;
+
+        /**
+         * @brief assignment operator not available
+         */
         void operator=(platform const&)  = delete;
     private:
-        typedef std::map<const enum capabilities, capability> capability_map_t;
-
-        uint64_t _flags;
+        raw_t _flags;
 
         capability_map_t _capabilities;
 
+        /**
+         * @brief private constructor for singleton instantiation.
+         * Fetches system information and populates main capabilities
+         */
         platform()
                 : _flags(to_underlying(capabilities::None)) {
             reload();
             register_capabilities();
         }
+
+        /**
+         * @brief if the capability is registered, set the availability flag, fluent interface
+         * @param cap capability
+         * @param enabled availability flag
+         * @return self
+         */
+        platform & set_capability_if_registered(capabilities cap, bool enabled)
+        {
+            if (_capabilities.find(cap) != _capabilities.end() ) {
+                _capabilities.at(cap).set(enabled);
+            }
+
+            return *this;
+        }
     };
 
-    /// pretty-prints the currently supperted features
+    /// pretty-prints the currently supported features
     inline std::ostream& operator<<(std::ostream& os, const platform& cap)
     {
-        using namespace std;
+        for(auto capability : cap.get_capabilities())
+            os << capability;
 
-        int w = 15;
-
-        os << left << setw(w) << "SSE2:"	        << boolcolor(cap.is_set(capabilities::SSE2)) << endl;
-        os << left << setw(w) << "SSE3:"	        << boolcolor(cap.is_set(capabilities::SSE3))  << endl;
-        os << left << setw(w) << "SSSE3:"	        << boolcolor(cap.is_set(capabilities::SSSE3)) << endl;
-
-        os << left << setw(w) << "SSE4.1:"	        << boolcolor(cap.is_set(capabilities::SSE41)) << endl;
-        os << left << setw(w) << "SSE4.2:"	        << boolcolor(cap.is_set(capabilities::SSE42)) << endl;
-
-        os << left << setw(w) << "FMA3:"	        << boolcolor(cap.is_set(capabilities::FMA3)) << endl;
-        os << left << setw(w) << "FMA4:"	        << boolcolor(cap.is_set(capabilities::FMA4)) << endl;
-
-        //os << "Uses XRSTORE: "	<< cap.use_xrstore << endl;
-
-        os << left << setw(w) << "AVX1:"	        << boolcolor(cap.is_set(capabilities::AVX1)) << endl;
-        os << left << setw(w) << "AVX2:"	        << boolcolor(cap.is_set(capabilities::AVX2)) << endl;
-        os << left << setw(w) << "AVX512:"	        << boolcolor(cap.is_set(capabilities::AVX512)) << endl;
-
-        os << left << setw(w) << "OpenCL(GPU):" 	<< boolcolor(cap.is_set(capabilities::OPENCL)) << endl;
-        os << endl;
+        os << std::endl;
 
         return os;
     }
 }
-#endif //ZACC_PLATFORM_HPP

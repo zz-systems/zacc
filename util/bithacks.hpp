@@ -23,36 +23,32 @@
 //---------------------------------------------------------------------------------
 
 
-#include "dispatch/platform.hpp"
-#include "util/commands.hpp"
+#pragma once
 
-#include <iostream>
-#include <string>
-#include <functional>
-#include <numeric>
-
-using namespace zacc;
-
-int main(int argc, char** argv) {
-
-    option_parser parser(argc, argv);
-    auto platform = &platform::get_instance();
-
-    if(parser.has_option("--CMAKE_OUTPUT"))
+namespace zacc {
+    /**
+     * @brief count last zero bits
+     * @see Hacker's delight SE [Henry S. Warren Jr]
+     * @tparam T
+     * @param value
+     * @return
+     */
+    template<typename T>
+    constexpr std::enable_if_t<std::is_integral<T>::value, size_t> ntz(T value)
     {
-        auto c = platform->get_enabled_capabilities();
+        size_t n = 0;
 
-        std::cout << std::accumulate(std::begin(c) + 1, std::end(c),
-                         std::begin(c)->str(),
-                         [](std::string &acc, auto &part)
-                         {
-                             return acc + ";" + part.str();
-                         });
-    }
-    else
-    {
-        std::cout << *platform;
+        value = ~value & (value - 1);
+
+        n = 0;
+
+        while(value != 0)
+        {
+            n++;
+            value >>= 1;
+        }
+
+        return n;
     }
 
-    return 0;
 }
