@@ -36,11 +36,11 @@ using namespace zacc;
 int main(int argc, char** argv) {
 
     option_parser parser(argc, argv);
-    auto platform = &platform::get_instance();
+    auto platform = &platform::instance();
 
     if(parser.has_option("--CMAKE_OUTPUT"))
     {
-        auto c = platform->get_enabled_capabilities();
+        auto c = platform->enabled_capabilities();
 
         std::cout << std::accumulate(std::begin(c) + 1, std::end(c),
                          std::begin(c)->str(),

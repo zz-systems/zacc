@@ -40,6 +40,13 @@
 namespace zacc {
     struct cpuid
     {
+        using reg_t         = std::bitset<32>;
+        using data_entry_t  = std::array<reg_t, 4>;
+        using data_t        = std::vector<data_entry_t>;
+
+        /**
+         * @brief
+         */
         enum class vendors
         {
             UNKNOWN,
@@ -48,6 +55,9 @@ namespace zacc {
             INTEL
         };
 
+        /**
+         * @brief
+         */
         enum regs
         {
             EAX,
@@ -56,108 +66,93 @@ namespace zacc {
             EDX
         };
 
-        using reg_t = std::bitset<32>;
-        using data_entry_t = std::array<reg_t, 4>;
+        /**
+         * @brief cpuid wrapper
+         * @param flag cpuid flag
+         * @return register values
+         */
+        static std::array<int, 4> get_cpuid_raw(int function_id, int sub_function_id = 0);
 
         /**
          * @brief cpuid wrapper
          * @param flag cpuid flag
          * @return register values
          */
-        static std::array<int, 4> get_cpuid_raw(int function_id, int subfunction_id = 0)
-        {
-            std::array<int, 4> regs;
-
-#ifdef MSVCVER
-            /// MSVC CPUID
-            __cpuidex(regs.data(), function_id, subfunction_id)
-
-#else
-            /// gcc / clang CPUID
-            __cpuid_count(function_id, subfunction_id, regs[0], regs[1], regs[2], regs[3]);
-#endif
-
-            return regs;
-        }
+        static data_entry_t get_cpuid(int function_id, int sub_function_id = 0);
 
         /**
-         * @brief cpuid wrapper
-         * @param flag cpuid flag
-         * @return register values
+         * @brief
          */
-        static data_entry_t get_cpuid(int function_id, int subfunction_id = 0)
-        {
-            return array_cast<reg_t>(get_cpuid_raw(function_id, subfunction_id));
-        }
+        cpuid();
 
-        cpuid()
-        {
-            _vendor_str = "";
-            _brand_str = "";
+        /**
+         * @brief
+         * @return
+         */
+        const vendors vendor()                      const;
 
-            _vendor_str.reserve(0x20);
-            _brand_str.reserve(0x40);
+        /**
+         * @brief
+         * @return
+         */
+        const std::string &vendor_str()             const;
 
-            _vendor_mapping = {
-                { "AuthenticAMD",   vendors::AMD },
-                { "GenuineIntel",   vendors::INTEL },
+        /**
+         * @brief
+         * @return
+         */
+        const std::string &brand_str()              const;
 
-                { "KVMKVMKVM",      vendors::VIRTUAL },
-                { "Microsoft Hv",   vendors::VIRTUAL },
-                { " lrpepyh vr",    vendors::VIRTUAL },
-                { "VMwareVMware",   vendors::VIRTUAL },
-                { "XenVMMXenVMM",   vendors::VIRTUAL }
-            };
+        /**
+         * @brief
+         * @return
+         */
+        const data_t &data()                        const;
 
-            auto highestId = get_cpuid(0)[0].to_ulong();
+        /**
+         * @brief
+         * @return
+         */
+        const data_t &ext_data()                    const;
 
-            for(auto i = 0; i < highestId; i++)
-                _data.push_back(get_cpuid(i, 0));
+        /**
+         * @brief
+         * @param index
+         * @return
+         */
+        const data_entry_t &reg(size_t index)       const;
 
-            highestId = get_cpuid(0x80000000)[0].to_ulong();
-
-            for(auto i = 0x80000000; i < highestId; i++)
-                _ext_data.push_back(get_cpuid(i, 0));
-
-            append(_vendor_str, std::array<reg_t, 3>{_data[0][EBX], _data[0][EDX], _data[0][ECX]});
-
-            _vendor = _vendor_mapping[_vendor_str];
-
-            if (highestId >= 0x80000004)
-            {
-                for(auto i = 2; i <= 4; i++)
-                    append(_brand_str, _ext_data[i]);
-            }
-        }
-
-        const vendors get_vendor()                  const { return _vendor; }
-        const std::string &get_vendor_str()         const { return _vendor_str; }
-        const std::string &get_brand_str()          const { return _brand_str; }
-
-        const reg_t &get_reg(int set, int reg)      const { return _data[set][reg]; }
-        const reg_t &get_ext_reg(int set, int reg)  const { return _ext_data[set][reg]; }
+        /**
+         * @brief
+         * @param index
+         * @return
+         */
+        const data_entry_t &ext_reg(size_t index)   const;
 
     private:
 
-        void append(std::string &target, const reg_t& reg)
-        {
-            char temp[4];
+        /**
+         * @brief
+         * @param target
+         * @param reg
+         */
+        void append(std::string &target, const reg_t& reg);
 
-            *reinterpret_cast<ulong*>(temp) = reg.to_ulong();
-
-            target += temp;
-        }
-
+        /**
+         * @brief
+         * @tparam dim
+         * @param target
+         * @param data_entry
+         */
         template<size_t dim>
-        void append(std::string &target, const std::array<reg_t, dim>& data_entry)
-        {
+        void append(std::string &target, const std::array<reg_t, dim>& data_entry){
             for(auto reg : data_entry)
                 append(target, reg);
         }
 
 
-        std::vector<data_entry_t> _data;
-        std::vector<data_entry_t> _ext_data;
+        data_t _data;
+        data_t _ext_data;
 
         std::string _brand_str;
 
