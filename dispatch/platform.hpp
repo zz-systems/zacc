@@ -372,11 +372,11 @@ namespace zacc {
         }
 
         /**
-         * @brief
-         * @param capability
-         * @return
+         * @brief sets all capabilities to enabled until the given one and returns the raw value
+         * @param capability highest capability (inclusive)
+         * @return raw value
          */
-        static constexpr uint64_t fill_capabilities_up_to(const capabilities capability)
+        static constexpr raw_t fill_capabilities_up_to(const capabilities capability)
         {
             auto value = to_underlying(capability);
             uint64_t result = 0;
@@ -390,6 +390,11 @@ namespace zacc {
             return result;
         }
 
+        /**
+         * @brief cpuid wrapper
+         * @param flag cpuid flag
+         * @return register values
+         */
         static std::array<int, 4> cpuid(int flag)
         {
             std::array<int, 4> regs;
