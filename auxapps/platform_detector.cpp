@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------------
 
 
-#include "dispatch/platform.hpp"
+#include "system/platform.hpp"
 #include "util/commands.hpp"
 
 #include <iostream>

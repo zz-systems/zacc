@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "platform.hpp"
+#include "system/platform.hpp"
 #include <type_traits>
 
 #if defined(ZACC_SCALAR)
