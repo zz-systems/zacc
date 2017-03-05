@@ -1,6 +1,7 @@
 import yasha
 from inspect import getmembers
 from pprint import pprint
+#from textwrap import shorten
 import copy
 
 class Struct:
@@ -105,6 +106,11 @@ class Func:
             self.test = [self.actual, self.expected]
         else:
             self.test = None
+
+    def summarized_args(self):
+        args = self.args.declaration()
+        #return textwrap.shorten(self.args, width = 20)
+        return args[:32] + (args[32:] and '..')
 
     def signature(self):
         name = self.mangled_name()

@@ -58,3 +58,6 @@
     }
 
 #define CONVERSION(op) CONVERSION2(op, composed_t)
+
+#define STRINGIZE_DETAIL(x) #x
+#define STRINGIZE(x) STRINGIZE_DETAIL(x)

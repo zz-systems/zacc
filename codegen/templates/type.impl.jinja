@@ -86,6 +86,13 @@ namespace zacc { namespace {{ type.branch }} {
              * @remark {{ type.branch }} - {{ branch.branch_name }}
              */
             {{ branch.signature() }} {
+
+                {% if not module in type.construction  %}
+                ZTRACE(std::left << std::setw(24) << "{{type.branch}}.{{type.type}}.impl line " STRINGIZE(__LINE__) ":" << " z{{ type.type }}({{ type.scalar_t }}[{{type.vec_size}}]) " << std::left << std::setw(10) << "{{branch.branch_name}}" << "{{func.name}}");
+                {% else %}
+                ZTRACE(std::left << std::setw(24) << "{{type.branch}}.{{type.type}}.impl line " STRINGIZE(__LINE__) ":" << " z{{ type.type }}({{ type.scalar_t }}[{{type.vec_size}}]) " << std::left << std::setw(10) << "{{branch.branch_name}}" << "CONS({{func.summarized_args()}})");
+                {% endif %}
+
                     {% for instruction in branch.get_instructions() %}
                 {{ instruction }}
                     {% endfor %}

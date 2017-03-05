@@ -27,30 +27,34 @@
 
 #include <iostream>
 #include "util/io.hpp"
+#include "util/type_casts.hpp"
+#include "util/bithacks.hpp"
 
 namespace zacc {
 
     /// @enum capabilities
     /// @brief relevant system capabilities
     enum class capabilities : uint64_t {
-        SSE2 = 1 << 0,    ///< SSE 2 support
-        SSE3 = 1 << 1,    ///< SSE 3 support
-        SSSE3 = 1 << 2,    ///< SSSE 3 support
+        SSE2        = 1 << 0,    ///< SSE 2 support
+        SSE3        = 1 << 1,    ///< SSE 3 support
+        SSSE3       = 1 << 2,    ///< SSSE 3 support
 
-        SSE41 = 1 << 3,    ///< SSE 4.1 support
-        SSE42 = 1 << 4,    ///< SSE 4.2 support
+        SSE41       = 1 << 3,    ///< SSE 4.1 support
+        SSE42       = 1 << 4,    ///< SSE 4.2 support
 
-        FMA3 = 1 << 5,    ///< FMA 3 support
-        FMA4 = 1 << 6,    ///< FMA 4 support
+        FMA3        = 1 << 5,    ///< FMA 3 support
+        FMA4        = 1 << 6,    ///< FMA 4 support
 
-        AVX1 = 1 << 7,    ///< AVX support
-        AVX2 = 1 << 8,    ///< AVX 2 support
-        AVX512 = 1 << 9,    ///< AVX 512 support
+        AVX1        = 1 << 7,    ///< AVX support
+        AVX2        = 1 << 8,    ///< AVX 2 support
+        AVX512      = 1 << 9,    ///< AVX 512 support
 
-        FASTFLOAT = 1 << 10, ///< use faster float computations ( lower precision )
+        OPENCL      = 1 << 10,   ///< OPENCL support
+        FPGA        = 1 << 11,    ///< FPGA synthesis support?
 
-        OPENCL = 1 << 11,    ///< OPENCL support
-        FPGA = 1 << 12    ///< FPGA synthesis support?
+//======================================================================================================================
+        FASTFLOAT   = 1 << 30,   ///< use faster float computations ( lower precision )
+//======================================================================================================================
     };
 
     /**
@@ -158,6 +162,25 @@ namespace zacc {
             os << left << setw(w) << cap.c_str() << boolcolor(cap._is_set) << endl;
 
             return os;
+        }
+
+        /**
+        * @brief sets all capabilities to enabled until the given one and returns the raw value
+        * @param capability highest capability (inclusive)
+        * @return raw value
+        */
+        static constexpr raw_t fill_up_to(const capabilities capability)
+        {
+            auto value = to_underlying(capability);
+            uint64_t result = 0;
+
+            for(size_t i = 0; i < ntz(value); i++)
+            {
+                result |= 1;
+                result <<= 1;
+            }
+
+            return result;
         }
     private:
         const capabilities _capability;

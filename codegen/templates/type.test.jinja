@@ -31,6 +31,7 @@
 
 //namespace zacc { namespace {{ type.branch }} { namespace test {
 namespace zacc { namespace test {
+
     {% for module in type.get_modules() %}
         {% if module.has_tests() %}
 // =====================================================================================================================

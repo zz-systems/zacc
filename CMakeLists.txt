@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(zacc)
 
-set(CMAKE_VERBOSE_MAKEFILE On)
+set(CMAKE_VERBOSE_MAKEFILE Off)
 # options ==============================================================================================================
 
 option(BUILD_SCALAR_BRANCH "Build the scalar branch" ON)
@@ -11,6 +11,7 @@ option(BUILD_AVX2_BRANCH "Build the avx2 branch" ON)
 option(BUILD_AVX512_BRANCH "Build the avx512 branch" OFF)
 option(BUILD_OPENCL_BRANCH "Build the OpenCL branch" OFF)
 
+option(ENABLE_TRACE "Enable tracing (EXTREMELY SLOW!)" ON)
 
 option(BUILD_TEST "Build the tests" ON)
 option(BUILD_DOC "Build the documentation" OFF)
@@ -36,7 +37,6 @@ macro(get_branch_files files branch schema)
         message(ERROR "malformed branch definition")
     endif()
 
-    message("files: ${_files}")
     set(${files} ${_files})
 endmacro()
 
@@ -52,6 +52,10 @@ set(CMAKE_CXX_STANDARD 14)
 # 4) add 'struct __float128;' before you include any STL header
 add_definitions(-D__STRICT_ANSI__)
 
+if(ENABLE_TRACE)
+    add_definitions(-DZACC_TRACE)
+endif()
+
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 insert_kv(branch_flags  scalar         "")
@@ -63,14 +67,14 @@ insert_kv(branch_flags  avx           -mavx)
 insert_kv(branch_flags  avx2          -mavx2)
 insert_kv(branch_flags  avx512        -mavx512f -mavx512pf -mavx512er -mavx512cd -mavx512vl -mavx512bw -mavx512dq)
 
-insert_kv(branch_defs   scalar       ZACC_SCALAR)
-insert_kv(branch_defs   sse.sse2     ZACC_SSE2)
-insert_kv(branch_defs   sse.sse3     ZACC_SSE2 ZACC_SSE3)
-insert_kv(branch_defs   sse.sse4     ZACC_SSE2 ZACC_SSE3 ZACC_SSE4)
-insert_kv(branch_defs   sse.sse4fma  ZACC_SSE2 ZACC_SSE3 ZACC_SSE4 ZACC_SSE4FMA)
-insert_kv(branch_defs   avx          ZACC_AVX)
-insert_kv(branch_defs   avx2         ZACC_AVX2)
-insert_kv(branch_defs   avx512       ZACC_AVX2)
+insert_kv(branch_defs   scalar       ZACC_MAX_CAPABILITY=SCALAR ZACC_MAJOR_BRANCH=scalar)
+insert_kv(branch_defs   sse.sse2     ZACC_MAX_CAPABILITY=SSE2   ZACC_MAJOR_BRANCH=sse)
+insert_kv(branch_defs   sse.sse3     ZACC_MAX_CAPABILITY=SSSE3  ZACC_MAJOR_BRANCH=sse)
+insert_kv(branch_defs   sse.sse4     ZACC_MAX_CAPABILITY=SSE41  ZACC_MAJOR_BRANCH=sse)
+insert_kv(branch_defs   sse.sse4fma  ZACC_MAX_CAPABILITY=FMA4   ZACC_MAJOR_BRANCH=sse)
+insert_kv(branch_defs   avx          ZACC_MAX_CAPABILITY=AVX    ZACC_MAJOR_BRANCH=avx)
+insert_kv(branch_defs   avx2         ZACC_MAX_CAPABILITY=AVX2   ZACC_MAJOR_BRANCH=avx2)
+insert_kv(branch_defs   avx512       ZACC_MAX_CAPABILITY=AVX512 ZACC_MAJOR_BRANCH=avx512)
 
 # branch config ========================================================================================================
 

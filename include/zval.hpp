@@ -26,7 +26,7 @@
 #include <array>
 #include "type_traits.hpp"
 #include "common.hpp"
-#include "../dispatch/capability_dispatcher.hpp"
+#include "dispatch/capability_dispatcher.hpp"
 #include "util/type_casts.hpp"
 
 namespace zacc {

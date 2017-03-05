@@ -32,6 +32,9 @@ namespace zacc {
 
     struct dispatcher
     {
+        static const uint64_t capability = branch_dispatcher::capability;
+        using capability_t =  typename branch_dispatcher::capability_t;
+
         using zfloat32  = typename branch_dispatcher::types::zfloat32;
         using zfloat64  = typename branch_dispatcher::types::zfloat64;
         using zint8     = typename branch_dispatcher::types::zint8;

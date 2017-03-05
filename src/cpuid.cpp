@@ -23,14 +23,20 @@
 //---------------------------------------------------------------------------------
 
 #include "system/cpuid.hpp"
+#if !defined(_MSC_VER)
+//  GCC Intrinsics
+#include <cpuid.h>
+#else 
+#include <intrin.h>
+#endif
 
 namespace zacc {
     std::array<int, 4> cpuid::get_cpuid_raw(int function_id, int sub_function_id) {
         std::array<int, 4> regs;
 
-#ifdef MSVCVER
+#ifdef _MSC_VER
         // MSVC CPUID
-        __cpuidex(regs.data(), function_id, sub_function_id)
+		__cpuidex(regs.data(), function_id, sub_function_id);
 
 #else
         // gcc / clang CPUID
@@ -83,16 +89,18 @@ namespace zacc {
     }
 
     void cpuid::append(std::string &target, const cpuid::reg_t &reg) {
-        char temp[4];
+        char temp[5];
 
-        *reinterpret_cast<ulong *>(temp) = reg.to_ulong();
+        *reinterpret_cast<uint32_t *>(temp) = reg.to_ulong();
+
+		temp[4] = '\0';
 
         target += temp;
     }
 
-    const cpuid::vendors cpuid::vendor() const { return _vendor; }
+    const cpuid::vendors cpuid::vendor()	const { return _vendor; }
 
-    const std::string &cpuid::vendor_str() const { return _vendor_str; }
+    const std::string &cpuid::vendor_str()	const { return _vendor_str; }
 
     const std::string &cpuid::brand_str() const { return _brand_str; }
 

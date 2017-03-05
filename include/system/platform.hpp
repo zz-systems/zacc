@@ -43,7 +43,7 @@ namespace zacc {
     struct platform {
     private:
         using raw_t = std::underlying_type_t<capabilities>;
-        using capability_map_t = std::map<const enum capabilities, capability>;
+        using capability_map_t = std::map<const capabilities, capability>;
 
     public:
         /**
@@ -118,20 +118,13 @@ namespace zacc {
          * @param str capabilitiy's string representation
          * @return self
          */
-        platform & register_capability(const enum capabilities cap, const char* str);
+        platform & register_capability(const capabilities cap, const char* str);
 
         /**
          * @brief returns the singleton instance
          * @return singleton instance
          */
         static platform& instance();
-
-        /**
-         * @brief sets all capabilities to enabled until the given one and returns the raw value
-         * @param capability highest capability (inclusive)
-         * @return raw value
-         */
-        static constexpr raw_t fill_capabilities_up_to(const capabilities capability);
 
         /**
          * @brief copy constructor not available

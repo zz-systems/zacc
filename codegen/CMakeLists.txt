@@ -26,22 +26,12 @@ endfunction()
 
 function(find_files files schema)
     file(GLOB_RECURSE _files RELATIVE ${PROJECT_SOURCE_DIR} ${schema})
-    #file(GLOB_RECURSE _files2 RELATIVE ${CMAKE_SOURCE_DIR} ${schema})
-    #file(GLOB_RECURSE _files3 ${schema})
-    #message("files@${PROJECT_SOURCE_DIR}@${schema}: ${_files} | ${_files2} | ${_files3}")
     set(${files} ${_files} PARENT_SCOPE)
 endfunction()
 
 function(generate_file output template template_data)
-    get_filename_component(abs_template ${template} ABSOLUTE)
-    get_filename_component(abs_template_data ${template_data} ABSOLUTE)
-    get_filename_component(abs_out ${output} ABSOLUTE)
-    get_filename_component(abs_out_bin ${PROJECT_BINARY_DIR}/${output} ABSOLUTE)
-
     get_filename_component(output_dir ${output} DIRECTORY)
 
-    message("DEPENDS ${template} ${template_data} ${codegen.deps}")
-    message("OUT ${abs_out} ${abs_out_bin}")
     add_custom_command(
             OUTPUT ${PROJECT_SOURCE_DIR}/${output}
             COMMAND ${CMAKE_COMMAND} -E make_directory ${output_dir}
@@ -52,9 +42,7 @@ function(generate_file output template template_data)
             COMMENT "GEN ${template} ==> ${output}"
     )
 
-    set_source_files_properties(${output} PROPERTIES GENERATED TRUE)
-    set_source_files_properties(${CMAKE_BINARY_DIR}/${output} PROPERTIES GENERATED TRUE)
-    set_source_files_properties(${CMAKE_SOURCE_DIR}/${output} PROPERTIES GENERATED TRUE)
+    set_source_files_properties(${PROJECT_SOURCE_DIR}/${output} PROPERTIES GENERATED TRUE)
 endfunction()
 
 function (generate branch templates)
@@ -77,8 +65,6 @@ function (generate branch templates)
         list(APPEND generated_tests ${PROJECT_SOURCE_DIR}/${test_output})
     endforeach()
 
-    message("GEN TYPES: ${generated_types}")
-    message("GEN TESTS: ${generated_tests}")
     add_custom_target(zacc.generate.${branch}.types
             DEPENDS ${generated_types}
             WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
@@ -89,7 +75,7 @@ endfunction()
 
 foreach(branch ${branches})
     get_branch_files(templates ${branch} "${template.schema}")
-    MESSAGE(STATUS "II configuring '${branch}' branch with templates [${templates}]")
+
     generate(${branch} "${templates}")
 
     list(APPEND generate.types.all zacc.generate.${branch}.types)

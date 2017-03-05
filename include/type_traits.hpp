@@ -75,12 +75,6 @@ namespace zacc {
         return ((ref_value & head) != 0) || is_any_set(ref_value, tail...);
     };
 
-    template<typename E>
-    constexpr typename std::underlying_type<E>::type to_underlying(E e) {
-        return static_cast<typename std::underlying_type<E>::type>(e);
-    }
-
-
     template<typename T>
     struct is_float32_vec : std::false_type {
     };

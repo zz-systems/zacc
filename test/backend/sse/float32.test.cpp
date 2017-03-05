@@ -31,6 +31,7 @@
 
 //namespace zacc { namespace sse { namespace test {
 namespace zacc { namespace test {
+
 // =====================================================================================================================
     TEST(sse_float32_arithmetic, arithmetic_negate_default)
     {

@@ -25,11 +25,6 @@
 
 #pragma once
 
-#if !defined(MSVCVER)
-//  GCC Intrinsics
-#include <cpuid.h>
-#endif
-
 #include <bitset>
 #include <map>
 #include <vector>

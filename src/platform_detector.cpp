@@ -33,12 +33,16 @@
 
 using namespace zacc;
 
+#if defined(_MSC_VER)
+	#pragma comment(linker, "/SUBSYSTEM:CONSOLE")
+#endif
+
 int main(int argc, char** argv) {
 
     option_parser parser(argc, argv);
     auto platform = &platform::instance();
 
-    if(parser.has_option("--CMAKE_OUTPUT"))
+    if(parser.has_option("CMAKE_OUTPUT"))
     {
         auto c = platform->enabled_capabilities();
 

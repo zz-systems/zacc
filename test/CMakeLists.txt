@@ -1,8 +1,6 @@
-
 foreach(branch ${branches})
     get_branch_files(files ${branch} "${test.schema}")
 
-    message(STATUS "files: ${files}")
     add_executable("zacc.${branch}.tests" ${files})
     add_dependencies("zacc.${branch}.tests" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
 
@@ -10,7 +8,12 @@ foreach(branch ${branches})
     target_compile_options("zacc.${branch}.tests" PUBLIC ${compiler_flags_${branch}})
 
     foreach(def ${branch_defs_${branch}})
-        target_compile_definitions(zacc.${branch}.tests  PUBLIC "${def}=1")
+        target_compile_definitions(zacc.${branch}.tests  PUBLIC "${def}")
+
+        get_branch_files(inc ${branch} "types.hpp")
+        string(REPLACE "include/" "" inc ${inc})
+
+        target_compile_definitions(zacc.${branch}.tests  PUBLIC "ZACC_MAJOR_BRANCH_INC=\"${inc}\"")
     endforeach()
 
     list(APPEND test ${test})

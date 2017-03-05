@@ -135,7 +135,7 @@ namespace zacc {
         return *this;
     }
 
-    platform &platform::register_capability(const enum capabilities cap, const char *str) {
+    platform &platform::register_capability(const capabilities cap, const char *str) {
         if (_capabilities.find(cap) == _capabilities.end())
             _capabilities.insert(capability_map_t::value_type(cap, capability(cap, str, is_set(cap))));
 
@@ -146,19 +146,6 @@ namespace zacc {
         static platform instance;
 
         return instance;
-    }
-
-    constexpr platform::raw_t platform::fill_capabilities_up_to(const capabilities capability) {
-        auto value = to_underlying(capability);
-        uint64_t result = 0;
-
-        for(size_t i = 0; i < ntz(value); i++)
-        {
-            result |= 1;
-            result <<= 1;
-        }
-
-        return result;
     }
 
     platform::platform()

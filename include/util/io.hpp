@@ -26,6 +26,8 @@
 
 #include <iostream>
 #include <iomanip>
+#include <sstream>
+
 #ifdef WIN32
 #include <windows.h>
 #endif
@@ -141,4 +143,15 @@ namespace zacc {
             return out << std::boolalpha << (i.value ? green : red) << i.value << def << std::noboolalpha;
         }                 
     };
+
+#ifdef ZACC_TRACE
+    #ifdef WIN32
+        #define ZTRACE(cmd) do { std::stringstream s; s << cmd << std::endl; OutputDebugString(s.str().c_str()); } while(0)
+    #else
+        #define ZTRACE(cmd) std::clog << std::flush <<  cmd << std::endl;
+    #endif
+#else
+    #define ZTRACE(cmd)
+#endif
+
 }

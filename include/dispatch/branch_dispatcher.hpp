@@ -28,6 +28,9 @@
 #include "system/platform.hpp"
 #include <type_traits>
 
+#include ZACC_MAJOR_BRANCH_INC
+
+/*
 #if defined(ZACC_SCALAR)
     #include "backend/scalar/types.hpp"
 #elif defined(ZACC_SSE2) || defined(ZACC_SSE3) || defined(ZACC_SSE4) || defined(ZACC_SSE4FMA)
@@ -38,54 +41,16 @@
     #include "backend/avx2/types.hpp"
 #elif defined(ZACC_AVX512)
     #include "backend/avx512/types.hpp"
-#endif
+#endif*/
 
 
 namespace zacc {
-
-    using capability_AVX512		= std::integral_constant<uint64_t, fill_capabilities_up_to(capabilities::AVX512)>;
-    using capability_AVX2		= std::integral_constant<uint64_t, fill_capabilities_up_to(capabilities::AVX2) >;
-    using capability_AVX1		= std::integral_constant<uint64_t, fill_capabilities_up_to(capabilities::AVX1) >;
-    using capability_SSE4FMA	= std::integral_constant<uint64_t, fill_capabilities_up_to(capabilities::FMA4)>;
-    using capability_SSE4		= std::integral_constant<uint64_t, fill_capabilities_up_to(capabilities::SSE42)>;
-    using capability_SSSE3		= std::integral_constant<uint64_t, fill_capabilities_up_to(capabilities::SSSE3)>;
-    using capability_SSE3		= std::integral_constant<uint64_t, fill_capabilities_up_to(capabilities::SSE3)>;
-    using capability_SSE2		= std::integral_constant<uint64_t, fill_capabilities_up_to(capabilities::SSE2)>;
-    using capability_SCALAR		= std::integral_constant<uint64_t, 0>;
-    
     
     struct branch_dispatcher {
-#if defined(ZACC_SCALAR)
-        using capability = capability_SCALAR;
-        using types = scalar::types<capability::value>;
 
-#elif defined(ZACC_SSE2) // ============================================================================================
-        using capability = capability_SSE2;
-        using types = sse::types<capability::value>;
-#elif defined(ZACC_SSE3)
-        using capability = capability_SSE3;
-        using types = sse::types<capability::value>;
-#elif defined(ZACC_SSSE3)
-        using capability = capability_SSSE3;
-        using types = sse::types<capability::value>;
-#elif defined(capability_SSE4)
-        using capability = capability_SSE4;
-        using types = sse::types<capability::value>;
-#elif defined(ZACC_SSE4FMA)
-        using capability = capability_SSE4FMA;
-        using types = sse::types<capability::value>;
+        static const uint64_t capability = capability::fill_up_to(capabilities::ZACC_MAX_CAPABILITY);
+        using capability_t =  std::integral_constant<uint64_t, capability>;
 
-#elif defined(ZACC_AVX) // =============================================================================================
-        using capability = capability_AVX1;
-        using types = avx::types<capability::value>;
-#elif defined(ZACC_AVX2)
-        using capability = capability_AVX2;
-        using types = avx2::types<capability::value>;
-#elif defined(ZACC_AVX512)
-        using capability = std::integral_constant<uint64_t, capabilities::AVX512>;
-        using types = avx512::types<capability::value>;
-#else
-        static_assert(false, "invalid branch definition! Check your cmake definitions");
-#endif
+        using types = ZACC_MAJOR_BRANCH::types<capability>;
     };
 }

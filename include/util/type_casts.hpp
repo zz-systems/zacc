@@ -57,4 +57,9 @@ namespace zacc {
         // tag dispatch to helper with array indices
         return detail::array_cast_helper<T>(a, detail::build_indices<i>());
     }
+
+    template<typename E>
+    constexpr typename std::underlying_type<E>::type to_underlying(E e) {
+        return static_cast<typename std::underlying_type<E>::type>(e);
+    }
 }
