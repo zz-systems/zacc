@@ -1,6 +1,47 @@
 cmake_minimum_required(VERSION 3.6)
 project(zacc)
 
+set(CMAKE_VERBOSE_MAKEFILE On)
+# options ==============================================================================================================
+
+option(BUILD_SCALAR_BRANCH "Build the scalar branch" ON)
+option(BUILD_SSE_BRANCH "Build the sse branch" ON)
+option(BUILD_AVX_BRANCH "Build the avx branch" ON)
+option(BUILD_AVX2_BRANCH "Build the avx2 branch" ON)
+option(BUILD_AVX512_BRANCH "Build the avx512 branch" OFF)
+option(BUILD_OPENCL_BRANCH "Build the OpenCL branch" OFF)
+
+
+option(BUILD_TEST "Build the tests" ON)
+option(BUILD_DOC "Build the documentation" OFF)
+
+# util =================================================================================================================
+
+macro(insert_kv dict key)
+    set("${dict}_${key}" ${ARGN})
+endmacro()
+
+macro(get_branch_files files branch schema)
+    # sse.sse4 => [major; minor] => [sse; sse4]
+    string(REPLACE "." ";" parts ${branch})
+    list(LENGTH parts len)
+    if(${len} EQUAL 2) # majorbranch.subbranch
+        list(GET parts 0 majorbranch)
+
+        find_files(_files "*/backend/${majorbranch}/*${schema}")
+
+    elseif(${len} EQUAL 1) # majorbranch
+        find_files(_files "*/backend/${branch}/*${schema}")
+    else()
+        message(ERROR "malformed branch definition")
+    endif()
+
+    message("files: ${_files}")
+    set(${files} ${_files})
+endmacro()
+
+# compiler config ======================================================================================================
+
 set(CMAKE_CXX_STANDARD 14)
 
 # Clang doesn't support the __float128 type. Here are some workarounds:
@@ -11,60 +52,65 @@ set(CMAKE_CXX_STANDARD 14)
 # 4) add 'struct __float128;' before you include any STL header
 add_definitions(-D__STRICT_ANSI__)
 
-include_directories(
-        ${CMAKE_SOURCE_DIR}/zacc
-        ${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/include)
 
-include(cmake/util.cmake)
-include(cmake/options.cmake)
-include(cmake/globalsettings.cmake)
-include(cmake/branches.cmake)
-include(cmake/codegen.cmake)
-include(cmake/docgen.cmake)
+insert_kv(branch_flags  scalar         "")
+insert_kv(branch_flags  sse.sse2      -msse2)
+insert_kv(branch_flags  sse.sse3      -msse3 -mssse3)
+insert_kv(branch_flags  sse.sse4      -msse4.1 -msse4.2)
+insert_kv(branch_flags  sse.sse4fma   -msse4.1 -msse4.2 -mfma)
+insert_kv(branch_flags  avx           -mavx)
+insert_kv(branch_flags  avx2          -mavx2)
+insert_kv(branch_flags  avx512        -mavx512f -mavx512pf -mavx512er -mavx512cd -mavx512vl -mavx512bw -mavx512dq)
 
-include(${CMAKE_SOURCE_DIR}/tests/tests.cmake)
-include(${CMAKE_SOURCE_DIR}/auxapps/auxapps.cmake)
+insert_kv(branch_defs   scalar       ZACC_SCALAR)
+insert_kv(branch_defs   sse.sse2     ZACC_SSE2)
+insert_kv(branch_defs   sse.sse3     ZACC_SSE2 ZACC_SSE3)
+insert_kv(branch_defs   sse.sse4     ZACC_SSE2 ZACC_SSE3 ZACC_SSE4)
+insert_kv(branch_defs   sse.sse4fma  ZACC_SSE2 ZACC_SSE3 ZACC_SSE4 ZACC_SSE4FMA)
+insert_kv(branch_defs   avx          ZACC_AVX)
+insert_kv(branch_defs   avx2         ZACC_AVX2)
+insert_kv(branch_defs   avx512       ZACC_AVX2)
 
-function(add_test_target target branch files)
-    add_executable("zacc.${branch}.tests" ${files})
-    target_link_libraries("zacc.${branch}.tests" gtest_main)
+# branch config ========================================================================================================
 
-    add_dependencies("zacc.${branch}.tests" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
+if(BUILD_SCALAR_BRANCH)
+    list(APPEND branches scalar)
+endif()
 
-    target_compile_options("zacc.${branch}.tests" PUBLIC ${compiler_flags_${branch}})
+if(BUILD_SSE_BRANCH)
+    list(APPEND branches sse.sse2)
+    list(APPEND branches sse.sse3)
+    list(APPEND branches sse.sse4)
+    list(APPEND branches sse.sse4fma)
+endif()
 
-    set(${target} "zacc.${branch}.tests" PARENT_SCOPE)
-endfunction()
+if(BUILD_AVX_BRANCH)
+    list(APPEND branches avx)
+endif()
 
-foreach(branch ${branches})
-    string(REPLACE "." ";" parts ${branch})
-    list(LENGTH parts len)
-    if(${len} EQUAL 2) # majorbranch.subbranch
-        list(GET parts 0 majorbranch)
+if(BUILD_AVX2_BRANCH)
+    list(APPEND branches avx2)
+endif()
 
-        find_files(templates "*/${majorbranch}/*${template.schema}")
-        find_files(files "*/${majorbranch}/*${test.schema}")
+if(BUILD_AVX512_BRANCH)
+    list(APPEND branches avx512)
+endif()
 
-    elseif(${len} EQUAL 1) # majorbranch
-        find_files(templates "*/${branch}/*${template.schema}")
-        find_files(files "*/${branch}/*${test.schema}")
-    else()
-        message(ERROR "malformed branch definition")
-    endif()
+if(BUILD_OPENCL_BRANCH)
+    list(APPEND branches openCL)
+endif()
 
-    generate(${branch} "${templates}")
+# BUILD! ===============================================================================================================
 
-    add_test_target(test ${branch} "${files}")
+# fetch gtest
+include(test/tests.cmake)
 
-    message("branch_defs: ${branch} - ${branch_defs_${branch}}")
-    foreach(def ${branch_defs_${branch}})
-        target_compile_definitions(zacc.${branch}.tests  PUBLIC "${def}=1")
-    endforeach()
+# add codegen targets
+include(codegen/CMakeLists.txt)
 
-    list(APPEND tests ${test})
-endforeach()
+# add test targets
+include(test/CMakeLists.txt)
 
-add_custom_target(zacc.generate.types.all DEPENDS ${generate.types.all})
-add_custom_target(zacc.generate.tests.all DEPENDS ${generate.tests.all})
-add_custom_target(zacc.generate.all DEPENDS zacc.generate.types.all zacc.generate.tests.all)
-add_custom_target(zacc.tests.all DEPENDS ${tests})
+# add app targets
+include(src/CMakeLists.txt)
