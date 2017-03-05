@@ -86,7 +86,7 @@ namespace zacc { namespace sse {
              */
             __impl(__m128 value) : base_t(_mm_cvtps_epi32(value)) {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "CONS(__m128 value)");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "CONS(__m128 value)");
 
             }
 
@@ -98,7 +98,7 @@ namespace zacc { namespace sse {
              */
             __impl(__m128d value) : base_t(_mm_cvtpd_epi32(value)) {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "CONS(__m128d value)");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "CONS(__m128d value)");
 
             }
 
@@ -110,7 +110,7 @@ namespace zacc { namespace sse {
              */
             __impl(__m128i value) : base_t(value) {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "CONS(__m128i value)");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "CONS(__m128i value)");
 
             }
 
@@ -122,7 +122,7 @@ namespace zacc { namespace sse {
              */
             __impl(char value) : base_t(_mm_set1_epi32(value)) {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "CONS(char value)");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "CONS(char value)");
 
             }
 
@@ -134,7 +134,7 @@ namespace zacc { namespace sse {
              */
             __impl(int *value) : base_t(_mm_load_si128((__m128i*)value)) {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "CONS(int *value)");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "CONS(int *value)");
 
             }
 
@@ -146,7 +146,7 @@ namespace zacc { namespace sse {
              */
             __impl(int arg3, int arg2, int arg1, int arg0) : base_t(_mm_set_ps(arg0, arg1, arg2, arg3)) {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "CONS(int arg3, int arg2, int arg1, in..)");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "CONS(int arg3, int arg2, int arg1, in..)");
 
             }
 
@@ -197,7 +197,7 @@ namespace zacc { namespace sse {
              */
             void io_store(typename base_t::extracted_t &target) const noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "store");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "store");
 
                 _mm_store_si128((__m128i*)target.data(), base_t::_value);
             }
@@ -210,7 +210,7 @@ namespace zacc { namespace sse {
              */
             void io_stream(typename base_t::extracted_t &target) const noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "stream");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "stream");
 
                 _mm_stream_si128((__m128i*)target.data(), base_t::_value);
             }
@@ -262,7 +262,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t arithmetic_negate(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "negate");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "negate");
 
                 return _mm_sub_epi32(_mm_setzero_si128(), one.get_value());
             }
@@ -275,7 +275,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t arithmetic_add(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "add");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "add");
 
                 return _mm_add_epi32(one.get_value(), other.get_value());
             }
@@ -288,7 +288,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t arithmetic_sub(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "sub");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "sub");
 
                 return _mm_sub_epi32(one.get_value(), other.get_value());
             }
@@ -301,7 +301,7 @@ namespace zacc { namespace sse {
              */
             template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::has_SSE4, T> arithmetic_mul(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "sse4" << "mul");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "sse4" << "mul");
 
                 return _mm_mullo_epi32(one.get_value(), other.get_value());
             }
@@ -314,7 +314,7 @@ namespace zacc { namespace sse {
              */
             template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::has_SSE4, T> arithmetic_mul(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "mul");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "mul");
 
                 /* mul 2,0*/;
                 auto tmp1 = _mm_castsi128_ps(_mm_mul_epu32(one.get_value(), other.get_value()));
@@ -331,7 +331,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t arithmetic_div(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "div");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "div");
 
                 return _mm_div_ps(_mm_cvtepi32_ps(one.get_value()), _mm_cvtepi32_ps(other.get_value()));
             }
@@ -383,7 +383,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t bitwise_negate(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "negate");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "negate");
 
                 __m128i junk;
                 auto ones = _mm_cmpeq_epi32(junk, junk);
@@ -398,7 +398,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t bitwise_or(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "or");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "or");
 
                 return _mm_or_si128(one.get_value(), other.get_value());
             }
@@ -411,7 +411,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t bitwise_and(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "and");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "and");
 
                 return _mm_and_si128(one.get_value(), other.get_value());
             }
@@ -424,7 +424,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t bitwise_xor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "xor");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "xor");
 
                 return _mm_xor_si128(one.get_value(), other.get_value());
             }
@@ -476,7 +476,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t bitwise_shift_sll(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "sll");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "sll");
 
                 return _mm_sll_epi32(one.get_value(), other.get_value());
             }
@@ -489,7 +489,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t bitwise_shift_srl(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "srl");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "srl");
 
                 return _mm_srl_epi32(one.get_value(), other.get_value());
             }
@@ -502,7 +502,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t bitwise_shift_slli(const composed_t one, const size_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "slli");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "slli");
 
                 return _mm_slli_epi32(one.get_value(), other);
             }
@@ -515,7 +515,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t bitwise_shift_srli(const composed_t one, const size_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "srli");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "srli");
 
                 return _mm_srli_epi32(one.get_value(), other);
             }
@@ -567,7 +567,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t logical_negate(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "negate");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "negate");
 
                 return _mm_cmpeq_epi32(one.get_value(), _mm_setzero_si128());
             }
@@ -580,7 +580,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t logical_or(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "or");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "or");
 
                 return _mm_or_si128(one.get_value(), other.get_value());
             }
@@ -593,7 +593,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t logical_and(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "and");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "and");
 
                 return _mm_and_si128(one.get_value(), other.get_value());
             }
@@ -645,7 +645,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t comparison_eq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "eq");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "eq");
 
                 return _mm_cmpeq_epi32(one.get_value(), other.get_value());
             }
@@ -658,7 +658,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t comparison_neq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "neq");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "neq");
 
                 return !(one == other);
             }
@@ -671,7 +671,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t comparison_gt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "gt");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "gt");
 
                 return _mm_cmpgt_epi32(one.get_value(), other.get_value());
             }
@@ -684,7 +684,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t comparison_lt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "lt");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "lt");
 
                 return _mm_cmplt_epi32(one.get_value(), other.get_value());
             }
@@ -697,7 +697,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t comparison_ge(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "ge");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "ge");
 
                 return !(one < other);
             }
@@ -710,7 +710,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t comparison_le(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "le");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "le");
 
                 return !(one > other);
             }
@@ -762,7 +762,7 @@ namespace zacc { namespace sse {
              */
             template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::has_SSE4, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "sse4" << "vsel");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "sse4" << "vsel");
 
                 auto mask = _mm_cmpeq_epi32(_mm_setzero_si128(), condition.get_value());
                 return _mm_blendv_epi8(if_value.get_value(), else_value.get_value(), mask);
@@ -776,7 +776,7 @@ namespace zacc { namespace sse {
              */
             template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::has_SSE4, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE(std::left << std::setw(24) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "vsel");
+                ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "vsel");
 
                 return _mm_or_si128(_mm_andnot_si128(condition.get_value(), else_value.get_value()), _mm_and_si128(condition.get_value(), if_value.get_value()));
             }

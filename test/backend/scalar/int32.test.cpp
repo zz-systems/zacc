@@ -31,6 +31,7 @@
 
 //namespace zacc { namespace scalar { namespace test {
 namespace zacc { namespace test {
+
 // =====================================================================================================================
     TEST(scalar_int32_arithmetic, arithmetic_negate_default)
     {

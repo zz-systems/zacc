@@ -84,6 +84,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             __impl(__m256i value) : base_t(value) {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "CONS(__m256i value)");
+
             }
 
 
@@ -93,6 +96,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             __impl(char value) : base_t(_mm256_set1_epi8(value)) {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "CONS(char value)");
+
             }
 
 
@@ -102,6 +108,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             __impl(char *value) : base_t(_mm256_load_si256((__m256i*)value)) {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "CONS(char *value)");
+
             }
 
 
@@ -111,6 +120,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             __impl(char arg31, char arg30, char arg29, char arg28, char arg27, char arg26, char arg25, char arg24, char arg23, char arg22, char arg21, char arg20, char arg19, char arg18, char arg17, char arg16, char arg15, char arg14, char arg13, char arg12, char arg11, char arg10, char arg9, char arg8, char arg7, char arg6, char arg5, char arg4, char arg3, char arg2, char arg1, char arg0) : base_t(_mm256_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20, arg21, arg22, arg23, arg24, arg25, arg26, arg27, arg28, arg29, arg30, arg31)) {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "CONS(char arg31, char arg30, char arg..)");
+
             }
 
         };
@@ -159,6 +171,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             void io_store(typename base_t::extracted_t &target) const noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "store");
+
                 _mm256_store_si256((__m256i*)target.data(), base_t::_value);
             }
 
@@ -169,6 +184,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             void io_stream(typename base_t::extracted_t &target) const noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "stream");
+
                 _mm256_stream_si256((__m256i*)target.data(), base_t::_value);
             }
 
@@ -218,6 +236,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t arithmetic_negate(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "negate");
+
                 return _mm256_sub_epi8(_mm256_setzero_si256(), one.get_value());
             }
 
@@ -228,6 +249,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t arithmetic_add(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "add");
+
                 return _mm256_add_epi8(one.get_value(), other.get_value());
             }
 
@@ -238,6 +262,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t arithmetic_sub(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "sub");
+
                 return _mm256_sub_epi8(one.get_value(), other.get_value());
             }
 
@@ -287,6 +314,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t bitwise_negate(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "negate");
+
                 __m256i junk;
                 auto ones = _mm256_cmpeq_epi8(junk, junk);
                 return _mm256_xor_si256(one.get_value(), ones);
@@ -299,6 +329,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t bitwise_and(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "and");
+
                 return _mm256_or_si256(one.get_value(), other.get_value());
             }
 
@@ -309,6 +342,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t bitwise_or(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "or");
+
                 return _mm256_and_si256(one.get_value(), other.get_value());
             }
 
@@ -319,6 +355,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t bitwise_xor(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "xor");
+
                 return _mm256_xor_si256(one.get_value(), other.get_value());
             }
 
@@ -368,6 +407,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t logical_negate(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "negate");
+
                 return _mm256_cmpeq_epi32(one.get_value(), _mm256_setzero_si256());
             }
 
@@ -378,6 +420,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t logical_or(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "or");
+
                 return _mm256_or_si256(one.get_value(), other.get_value());
             }
 
@@ -388,6 +433,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t logical_and(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "and");
+
                 return _mm256_and_si256(one.get_value(), other.get_value());
             }
 
@@ -437,6 +485,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t comparison_eq(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "eq");
+
                 return _mm256_cmpeq_epi8(one.get_value(), other.get_value());
             }
 
@@ -447,6 +498,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t comparison_neq(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "neq");
+
                 return _mm256_xor_si256(_mm256_cmpeq_epi8(one.get_value(), other.get_value()), _mm256_setzero_si256());
             }
 
@@ -457,6 +511,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t comparison_gt(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "gt");
+
                 return _mm256_cmpgt_epi8(one.get_value(), other.get_value());
             }
 
@@ -467,6 +524,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t comparison_lt(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "lt");
+
                 // reversed args;
                 return _mm256_cmpgt_epi8(other.get_value(), one.get_value());
             }
@@ -478,6 +538,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t comparison_ge(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "ge");
+
                 return (one == other) || _mm256_cmpgt_epi8(one.get_value(), other.get_value());
             }
 
@@ -488,6 +551,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t comparison_le(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "le");
+
                 return (one == other) || _mm256_cmpgt_epi8(one.get_value(), other.get_value());
             }
 
@@ -537,6 +603,9 @@ namespace zacc { namespace avx2 {
              * @remark avx2 - default
              */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx2.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[32]) " << std::left << std::setw(10) << "default" << "vsel");
+
                 auto mask = _mm256_cmpeq_epi8(_mm256_setzero_si256(), condition.get_value());
                 return _mm256_blendv_epi8(if_value.get_value(), else_value.get_value(), mask);
             }

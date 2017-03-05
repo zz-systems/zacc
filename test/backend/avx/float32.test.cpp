@@ -31,6 +31,7 @@
 
 //namespace zacc { namespace avx1 { namespace test {
 namespace zacc { namespace test {
+
 // =====================================================================================================================
     TEST(avx1_float32_arithmetic, arithmetic_negate_default)
     {

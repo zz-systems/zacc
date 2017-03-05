@@ -84,6 +84,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             __impl(__m256 value) : base_t(value) {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "CONS(__m256 value)");
+
             }
 
 
@@ -93,6 +96,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             __impl(__m256d value) : base_t(_mm256_castps128_ps256(_mm256_cvtpd_ps(value))) {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "CONS(__m256d value)");
+
             }
 
 
@@ -102,6 +108,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             __impl(__m256i value) : base_t(_mm256_cvtepi32_ps(value)) {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "CONS(__m256i value)");
+
             }
 
 
@@ -111,6 +120,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             __impl(float value) : base_t(_mm256_set1_ps(value)) {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "CONS(float value)");
+
             }
 
 
@@ -120,6 +132,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             __impl(float *value) : base_t(_mm256_load_ps(value)) {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "CONS(float *value)");
+
             }
 
 
@@ -129,6 +144,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             __impl(float arg7, float arg6, float arg5, float arg4, float arg3, float arg2, float arg1, float arg0) : base_t(_mm256_set_ps(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)) {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "CONS(float arg7, float arg6, float ar..)");
+
             }
 
         };
@@ -177,6 +195,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             void io_store(typename base_t::extracted_t &target) const noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "store");
+
                 _mm256_store_ps(target.data(), base_t::_value);
             }
 
@@ -187,6 +208,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             void io_stream(typename base_t::extracted_t &target) const noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "stream");
+
                 _mm256_stream_ps(target.data(), base_t::_value);
             }
 
@@ -236,6 +260,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t arithmetic_negate(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "negate");
+
                 return _mm256_sub_ps(_mm256_setzero_ps(), one.get_value());
             }
 
@@ -246,6 +273,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t arithmetic_add(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "add");
+
                 return _mm256_add_ps(one.get_value(), other.get_value());
             }
 
@@ -256,6 +286,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t arithmetic_sub(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "sub");
+
                 return _mm256_sub_ps(one.get_value(), other.get_value());
             }
 
@@ -266,6 +299,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t arithmetic_mul(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "mul");
+
                 return _mm256_mul_ps(one.get_value(), other.get_value());
             }
 
@@ -276,6 +312,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t arithmetic_div(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "div");
+
                 return _mm256_div_ps(one.get_value(), other.get_value());
             }
 
@@ -325,6 +364,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t bitwise_negate(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "negate");
+
                 __m256 junk;
                 auto ones = _mm256_cmp_ps(junk, junk, _CMP_EQ_OQ);
                 return _mm256_xor_ps(one.get_value(), ones);
@@ -337,6 +379,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t bitwise_and(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "and");
+
                 return _mm256_or_ps(one.get_value(), other.get_value());
             }
 
@@ -347,6 +392,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t bitwise_or(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "or");
+
                 return _mm256_and_ps(one.get_value(), other.get_value());
             }
 
@@ -357,6 +405,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t bitwise_xor(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "xor");
+
                 return _mm256_xor_ps(one.get_value(), other.get_value());
             }
 
@@ -406,6 +457,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t logical_negate(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "negate");
+
                 return _mm256_cmp_ps(one.get_value(), _mm256_setzero_ps(), _CMP_EQ_OQ);
             }
 
@@ -416,6 +470,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t logical_or(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "or");
+
                 return _mm256_or_ps(one.get_value(), other.get_value());
             }
 
@@ -426,6 +483,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t logical_and(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "and");
+
                 return _mm256_and_ps(one.get_value(), other.get_value());
             }
 
@@ -475,6 +535,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t comparison_eq(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "eq");
+
                 return _mm256_cmp_ps(one.get_value(), other.get_value(), _CMP_EQ_OQ);
             }
 
@@ -485,6 +548,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t comparison_neq(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "neq");
+
                 return _mm256_cmp_ps(one.get_value(), other.get_value(), _CMP_NEQ_OQ);
             }
 
@@ -495,6 +561,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t comparison_gt(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "gt");
+
                 return _mm256_cmp_ps(one.get_value(), other.get_value(), _CMP_GT_OQ);
             }
 
@@ -505,6 +574,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t comparison_lt(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "lt");
+
                 return _mm256_cmp_ps(one.get_value(), other.get_value(), _CMP_LT_OQ);
             }
 
@@ -515,6 +587,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t comparison_ge(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "ge");
+
                 return _mm256_cmp_ps(one.get_value(), other.get_value(), _CMP_GE_OQ);
             }
 
@@ -525,6 +600,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t comparison_le(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "le");
+
                 return _mm256_cmp_ps(one.get_value(), other.get_value(), _CMP_LE_OQ);
             }
 
@@ -574,6 +652,9 @@ namespace zacc { namespace avx1 {
              * @remark avx1 - default
              */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx1.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[8]) " << std::left << std::setw(10) << "default" << "vsel");
+
                 auto mask = _mm256_cmp_ps(_mm256_setzero_ps(), condition.get_value(), _CMP_EQ_OQ);
                 return _mm256_blendv_ps(if_value.get_value(), else_value.get_value(), mask);
             }

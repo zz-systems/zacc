@@ -84,6 +84,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             __impl(short value) : base_t(value) {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "CONS(short value)");
+
             }
 
         };
@@ -132,6 +135,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             void io_store(typename base_t::extracted_t &target) const noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "store");
+
                 target.data()[0] = base_t::_value;
             }
 
@@ -142,6 +148,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             void io_stream(typename base_t::extracted_t &target) const noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "stream");
+
                 target.data()[0] = base_t::_value;
             }
 
@@ -191,6 +200,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t arithmetic_negate(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "negate");
+
                 return -one.get_value();
             }
 
@@ -201,6 +213,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t arithmetic_add(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "add");
+
                 return one.get_value() + other.get_value();
             }
 
@@ -211,6 +226,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t arithmetic_sub(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "sub");
+
                 return one.get_value() - other.get_value();
             }
 
@@ -221,6 +239,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t arithmetic_mul(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "mul");
+
                 return one.get_value() * other.get_value();
             }
 
@@ -231,6 +252,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t arithmetic_div(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "div");
+
                 return one.get_value() / other.get_value();
             }
 
@@ -280,6 +304,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t bitwise_negate(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "negate");
+
                 return ~one.get_value();
             }
 
@@ -290,6 +317,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t bitwise_and(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "and");
+
                 return one.get_value() & other.get_value();
             }
 
@@ -300,6 +330,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t bitwise_or(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "or");
+
                 return one.get_value() | other.get_value();
             }
 
@@ -310,6 +343,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t bitwise_xor(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "xor");
+
                 return one.get_value() ^ other.get_value();
             }
 
@@ -359,6 +395,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t bitwise_shift_sll(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "sll");
+
                 return one.get_value() << other.get_value();
             }
 
@@ -369,6 +408,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t bitwise_shift_srl(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "srl");
+
                 return one.get_value() >> other.get_value();
             }
 
@@ -379,6 +421,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t bitwise_shift_slli(const composed_t one, const size_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "slli");
+
                 return one.get_value() << other;
             }
 
@@ -389,6 +434,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t bitwise_shift_srli(const composed_t one, const size_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "srli");
+
                 return one.get_value() >> other;
             }
 
@@ -438,6 +486,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t comparison_eq(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "eq");
+
                 return one.get_value() == other.get_value();
             }
 
@@ -448,6 +499,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t comparison_neq(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "neq");
+
                 return one.get_value() != other.get_value();
             }
 
@@ -458,6 +512,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t comparison_gt(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "gt");
+
                 return one.get_value() > other.get_value();
             }
 
@@ -468,6 +525,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t comparison_lt(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "lt");
+
                 return one.get_value() < other.get_value();
             }
 
@@ -478,6 +538,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t comparison_ge(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "ge");
+
                 return one.get_value() >= other.get_value();
             }
 
@@ -488,6 +551,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t comparison_le(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "le");
+
                 return one.get_value() <= other.get_value();
             }
 
@@ -537,6 +603,9 @@ namespace zacc { namespace scalar {
              * @remark scalar - default
              */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vsel");
+
                 return (condition.get_value() != 0 ? if_value : else_value);
             }
 

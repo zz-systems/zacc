@@ -31,6 +31,7 @@
 
 //namespace zacc { namespace avx2 { namespace test {
 namespace zacc { namespace test {
+
 // =====================================================================================================================
     TEST(avx2_int16_arithmetic, arithmetic_negate_default)
     {
