@@ -27,24 +27,27 @@
 
 namespace zacc { namespace math {
     struct magic {
-        static double PI4_A = 0.78539816290140151978;
-        static double  PI4_B = 4.9604678871439933374e-10;
-        static double  PI4_C = 1.1258708853173288931e-18;
-        static double  PI4_D = 1.7607799325916000908e-27;
+        static const constexpr double  M_PI = 3.14159265358979323846;
+        static const constexpr double  M_1_PI = 0.318309886183790671538;
 
-        static double  M_4_PI = 1.273239544735162542821171882678754627704620361328125;
+        static const constexpr double  PI4_A = 0.78539816290140151978;
+        static const constexpr double  PI4_B = 4.9604678871439933374e-10;
+        static const constexpr double  PI4_C = 1.1258708853173288931e-18;
+        static const constexpr double  PI4_D = 1.7607799325916000908e-27;
 
-        static double  L2U = .69314718055966295651160180568695068359375;
-        static double  L2L = .28235290563031577122588448175013436025525412068e-12;
-        static double  R_LN2 = 1.442695040888963407359924681001892137426645954152985934135449406931;
+        static const constexpr double  M_4_PI = 1.273239544735162542821171882678754627704620361328125;
 
-        static double  PI4_Af = 0.78515625f;
-        static double  PI4_Bf = 0.00024187564849853515625f;
-        static double  PI4_Cf = 3.7747668102383613586e-08f;
-        static double  PI4_Df = 1.2816720341285448015e-12f;
+        static const constexpr double  L2U = .69314718055966295651160180568695068359375;
+        static const constexpr double  L2L = .28235290563031577122588448175013436025525412068e-12;
+        static const constexpr double  R_LN2 = 1.442695040888963407359924681001892137426645954152985934135449406931;
 
-        static double  L2Uf = 0.693145751953125f;
-        static double  L2Lf = 1.428606765330187045e-06f;
-        static double  R_LN2f = 1.442695040888963407359924681001892137426645954152985934135449406931f;
+        static const constexpr double  PI4_Af = 0.78515625f;
+        static const constexpr double  PI4_Bf = 0.00024187564849853515625f;
+        static const constexpr double  PI4_Cf = 3.7747668102383613586e-08f;
+        static const constexpr double  PI4_Df = 1.2816720341285448015e-12f;
+
+        static const constexpr double  L2Uf = 0.693145751953125f;
+        static const constexpr double  L2Lf = 1.428606765330187045e-06f;
+        static const constexpr double  R_LN2f = 1.442695040888963407359924681001892137426645954152985934135449406931f;
     };
 }}

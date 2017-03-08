@@ -31,20 +31,20 @@
 #include <x86intrin.h>
 #include <type_traits>
 
-#include "include/util/type_composition.hpp"
+#include "util/type_composition.hpp"
 
-#include "../../../common/zval.hpp"
-#include "../../../common/common.hpp"
-#include "../../../common/type_traits.hpp"
-#include "../../../common/traits/common.hpp"
+#include "zval.hpp"
+#include "common.hpp"
+#include "type_traits.hpp"
 
-#include "../../../common/traits/construction.hpp"
-#include "../../../common/traits/io.hpp"
-#include "../../../common/traits/arithmetic.hpp"
-#include "../../../common/traits/bitwise.hpp"
-#include "../../../common/traits/logical.hpp"
-#include "../../../common/traits/comparison.hpp"
-#include "../../../common/traits/conditional.hpp"
+#include "traits/common.hpp"
+#include "traits/construction.hpp"
+#include "traits/io.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/logical.hpp"
+#include "traits/comparison.hpp"
+#include "traits/conditional.hpp"
 
 /**
  * @brief int8 implementation for the avx512 branch
@@ -84,6 +84,9 @@ namespace zacc { namespace avx512 {
              * @remark avx512 - default
              */
             __impl(__m512i value) : base_t(value) {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "CONS(__m512i value)");
+
             }
 
 
@@ -93,6 +96,9 @@ namespace zacc { namespace avx512 {
              * @remark avx512 - default
              */
             __impl(char value) : base_t(_mm512_set1_epi8(value)) {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "CONS(char value)");
+
             }
 
 
@@ -102,6 +108,9 @@ namespace zacc { namespace avx512 {
              * @remark avx512 - default
              */
             __impl(char *value) : base_t(_mm512_load_si512(value)) {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "CONS(char *value)");
+
             }
 
 
@@ -111,6 +120,9 @@ namespace zacc { namespace avx512 {
              * @remark avx512 - default
              */
             __impl(char arg63, char arg62, char arg61, char arg60, char arg59, char arg58, char arg57, char arg56, char arg55, char arg54, char arg53, char arg52, char arg51, char arg50, char arg49, char arg48, char arg47, char arg46, char arg45, char arg44, char arg43, char arg42, char arg41, char arg40, char arg39, char arg38, char arg37, char arg36, char arg35, char arg34, char arg33, char arg32, char arg31, char arg30, char arg29, char arg28, char arg27, char arg26, char arg25, char arg24, char arg23, char arg22, char arg21, char arg20, char arg19, char arg18, char arg17, char arg16, char arg15, char arg14, char arg13, char arg12, char arg11, char arg10, char arg9, char arg8, char arg7, char arg6, char arg5, char arg4, char arg3, char arg2, char arg1, char arg0) : base_t(_mm512_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20, arg21, arg22, arg23, arg24, arg25, arg26, arg27, arg28, arg29, arg30, arg31, arg32, arg33, arg34, arg35, arg36, arg37, arg38, arg39, arg40, arg41, arg42, arg43, arg44, arg45, arg46, arg47, arg48, arg49, arg50, arg51, arg52, arg53, arg54, arg55, arg56, arg57, arg58, arg59, arg60, arg61, arg62, arg63)) {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "CONS(char arg63, char arg62, char arg..)");
+
             }
 
         };
@@ -158,7 +170,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend void io_store(typename base_t::extracted_t &target) const {
+            friend void io_store(typename base_t::extracted_t &target) const noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "store");
+
                 _mm512_store_si512(target.data(), base_t::_value);
             }
 
@@ -168,7 +183,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend void io_stream(typename base_t::extracted_t &target) const {
+            friend void io_stream(typename base_t::extracted_t &target) const noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "stream");
+
                 _mm512_stream_si512(target.data(), base_t::_value);
             }
 
@@ -217,7 +235,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t arithmetic_negate(composed_t one) {
+            friend composed_t arithmetic_negate(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "negate");
+
                 return _mm512_sub_epi8(_mm512_setzero_epi8(), one.get_value());
             }
 
@@ -266,7 +287,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_negate(composed_t one) {
+            friend composed_t bitwise_negate(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "negate");
+
                 auto zero = _mm512_setzero_si128();
                 auto ones = _mm512_cmpeq_epi8(zero, zero);
                 return _mm512_xor_si128(one.get_value(), ones);
@@ -278,7 +302,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_and(composed_t one, composed_t other) {
+            friend composed_t bitwise_and(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "and");
+
                 return _mm512_or_epi8(one.get_value(), other.get_value());
             }
 
@@ -288,7 +315,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_or(composed_t one, composed_t other) {
+            friend composed_t bitwise_or(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "or");
+
                 return _mm512_and_epi8(one.get_value(), other.get_value());
             }
 
@@ -298,7 +328,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_xor(composed_t one, composed_t other) {
+            friend composed_t bitwise_xor(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "xor");
+
                 return _mm512_xor_si128(one.get_value(), other.get_value());
             }
 
@@ -308,7 +341,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_sll(composed_t one, composed_t other) {
+            friend composed_t bitwise_sll(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "sll");
+
                 return _mm512_sll_epi8(one.get_value(), other.get_value());
             }
 
@@ -318,7 +354,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_srl(composed_t one, composed_t other) {
+            friend composed_t bitwise_srl(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "srl");
+
                 return _mm512_srl_epi8(one.get_value(), other.get_value());
             }
 
@@ -328,7 +367,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_slli(const composed_t one, const size_t other) {
+            friend composed_t bitwise_slli(const composed_t one, const size_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "slli");
+
                 return _mm512_slli_epi8(const composed_t one, const size_t other);
             }
 
@@ -338,7 +380,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_srli(const composed_t one, const size_t other) {
+            friend composed_t bitwise_srli(const composed_t one, const size_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "srli");
+
                 return _mm512_srli_epi8(const composed_t one, const size_t other);
             }
 
@@ -387,7 +432,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t logical_negate(composed_t one) {
+            friend composed_t logical_negate(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "negate");
+
                 auto zero = _mm512_setzero_si128();
                 auto ones = _mm512_cmpeq_epi8(zero, zero);
                 return _mm512_xor_si128(one.get_value(), ones);
@@ -399,7 +447,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t logical_or(composed_t one, composed_t other) {
+            friend composed_t logical_or(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "or");
+
                 return _mm512_or_epi8(one.get_value(), other.get_value());
             }
 
@@ -409,7 +460,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t logical_and(composed_t one, composed_t other) {
+            friend composed_t logical_and(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "and");
+
                 return _mm512_and_epi8(one.get_value(), other.get_value());
             }
 
@@ -458,7 +512,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t comparison_eq(composed_t one, composed_t other) {
+            friend composed_t comparison_eq(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "eq");
+
                 return _mm512_cmpeq_epi8(one.get_value(), other.get_value());
             }
 
@@ -468,7 +525,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t comparison_neq(composed_t one, composed_t other) {
+            friend composed_t comparison_neq(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "neq");
+
                 return _mm512_cmpneq_epi8(one.get_value(), other.get_value());
             }
 
@@ -478,7 +538,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t comparison_gt(composed_t one, composed_t other) {
+            friend composed_t comparison_gt(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "gt");
+
                 return _mm512_cmpgt_epi8(one.get_value(), other.get_value());
             }
 
@@ -488,7 +551,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t comparison_lt(composed_t one, composed_t other) {
+            friend composed_t comparison_lt(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "lt");
+
                 return _mm512_cmplt_epi8(one.get_value(), other.get_value());
             }
 
@@ -498,7 +564,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t comparison_ge(composed_t one, composed_t other) {
+            friend composed_t comparison_ge(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "ge");
+
                 return _mm512_cmpge_epi8(one.get_value(), other.get_value());
             }
 
@@ -508,7 +577,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t comparison_le(composed_t one, composed_t other) {
+            friend composed_t comparison_le(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "le");
+
                 return _mm512_cmple_epi8(one.get_value(), other.get_value());
             }
 
@@ -557,7 +629,10 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value) {
+            friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "vsel");
+
                 return _mm512_or_si128(_mm512_andnot_si128(condition.get_value(), else_value.get_value()), _mm512_and_si128(condition.get_value(), if_value.get_value()));
             }
 

@@ -26,7 +26,8 @@
 #include <array>
 #include "type_traits.hpp"
 #include "common.hpp"
-#include "dispatch/capability_dispatcher.hpp"
+
+#include "system/capabilities.hpp"
 #include "util/type_casts.hpp"
 
 namespace zacc {
@@ -48,10 +49,14 @@ namespace zacc {
 
         using vector_t = _vector_t;
         using scalar_t = _scalar_t;
-
         using extracted_t = std::array<scalar_t, dim>;
 
-        using dispatcher = capability_dispatcher<capability>;
+        // TODO
+        using mask_t = bool;
+
+        using dispatcher = capability::dispatcher<capability>;
+
+        zval() {}
 
         template<typename T, typename enable = std::enable_if_t<!std::is_base_of<zval, T>::value, T>>
         zval(T value) : _value(value) {}
@@ -60,6 +65,11 @@ namespace zacc {
         zval(const T& value) : _value(value.get_value()) {}
 
         zval(const bval<zval>& value) : _value(value.get_value()) {}
+
+        const operator vector_t() const
+        {
+            return _value;
+        }
 
         const vector_t &get_value() const { return _value; }
 

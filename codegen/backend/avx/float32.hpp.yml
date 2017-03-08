@@ -1,6 +1,6 @@
 type:
   type: float32
-  branch: avx1
+  branch: avx
   vector_t: &vector_t __m256
   scalar_t: &scalar_t float
   vec_size: &vec_size 8
@@ -13,6 +13,7 @@ type:
       - convertable
      internal:
        - io
+       - numeric
        - arithmetic
        - bitwise
        - logical
@@ -38,6 +39,8 @@ modules:
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_ps }
+#-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     store: &io_store

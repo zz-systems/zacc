@@ -35,5 +35,9 @@ namespace zacc { namespace avx {
     {
         using zfloat32  = zfloat32<capability>;
         using zfloat64  = zfloat64<capability>;
+
+        using zint8     = void; /// not implemented yet
+        using zint16    = void; /// not implemented yet
+        using zint32    = void; /// not implemented yet
     };
 }}

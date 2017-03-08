@@ -27,7 +27,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "dispatch/dispatcher.hpp"
+#include "system/dispatcher.hpp"
 
 //namespace zacc { namespace avx2 { namespace test {
 namespace zacc { namespace test {

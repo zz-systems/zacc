@@ -25,40 +25,37 @@
 
 #pragma once
 
-#include "system/platform.hpp"
-#include "branch_dispatcher.hpp"
+#include "common.hpp"
+#include <type_traits>
+#include <limits>
 
-namespace zacc {
+namespace zacc { namespace interface {
 
-    struct dispatcher
-    {
-        static const uint64_t capability = branch_dispatcher::capability;
-        using capability_t =  typename branch_dispatcher::capability_t;
 
-        using zfloat32  = typename branch_dispatcher::types::zfloat32;
-        using zfloat64  = typename branch_dispatcher::types::zfloat64;
-        using zint8     = typename branch_dispatcher::types::zint8;
-        using zint16    = typename branch_dispatcher::types::zint16;
-        using zint32    = typename branch_dispatcher::types::zint32;
+    template<typename base_t, typename composed_t>
+    struct numeric : public base_t {
+        FORWARD(numeric);
 
-        using zfloat    = zfloat32;
-        using zdouble   = zfloat64;
-        using zbyte     = zint8;
-        using zshort    = zint16;
-        using zint      = zint32;
+        TRAIT(traits::Numeric);
+
+        static composed_t quiet_NaN() noexcept {
+            return std::numeric_limits<typename base_t::scalar_t>::quiet_NaN();
+        };
+
+        composed_t is_infinite() noexcept {
+            return (*this) == infinity();
+        };
+
+        static composed_t infinity() noexcept {
+            return std::numeric_limits<typename base_t::scalar_t>::infinity();
+        };
+
+        static composed_t min() noexcept {
+            return std::numeric_limits<typename base_t::scalar_t>::min();
+        }
+
+        static composed_t max() noexcept {
+            return std::numeric_limits<typename base_t::scalar_t>::max();
+        }
     };
-
-
-using zfloat = dispatcher::zfloat;
-using zdouble = dispatcher::zdouble;
-using zbyte = dispatcher::zbyte;
-using zshort = dispatcher::zshort;
-using zint = dispatcher::zint;
-
-using zfloat32 = dispatcher::zfloat32;
-using zfloat64 = dispatcher::zfloat64;
-using zint8 = dispatcher::zint8;
-using zint16 = dispatcher::zint16;
-using zint32 = dispatcher::zint32;
-
-}
+}}

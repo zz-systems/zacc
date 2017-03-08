@@ -40,6 +40,8 @@
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
 #include "traits/io.hpp"
+#include "traits/numeric.hpp"
+#include "traits/math.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/logical.hpp"
@@ -76,6 +78,18 @@ namespace zacc { namespace sse {
         template<typename base_t>
         struct __impl : base_t
         {
+
+
+            /**
+             * @brief construction default branch
+             * @relates float32
+             * @remark sse - default
+             */
+            __impl() : base_t() {
+
+                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "CONS()");
+
+            }
 
 
             /**
@@ -223,6 +237,162 @@ namespace zacc { namespace sse {
          */
         template<typename base_t>
         using impl = interface::io<__impl<base_t>, composed_t>;
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name numeric operations
+     */
+    ///@{
+
+    /**
+     * @brief numeric
+     * @relates float32
+     * @remark sse
+     */
+    template<typename composed_t>
+    struct float32_numeric
+    {
+
+        /**
+         * @brief numeric basic interface implementation
+         * @relates float32
+         * @remark sse
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            FORWARD(__impl);
+
+        };
+
+        /**
+         * @brief numeric public interface implementation
+         * @relates float32
+         * @remark sse
+         */
+        template<typename base_t>
+        using impl = interface::numeric<__impl<base_t>, composed_t>;
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name math operations
+     */
+    ///@{
+
+    /**
+     * @brief math
+     * @relates float32
+     * @remark sse
+     */
+    template<typename composed_t>
+    struct float32_math
+    {
+
+        /**
+         * @brief math basic interface implementation
+         * @relates float32
+         * @remark sse
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            FORWARD(__impl);
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark sse - default
+             */
+            friend composed_t vabs(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vabs");
+
+                return _mm_max_ps(one.get_value(), (-one).get_value());
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark sse - default
+             */
+            friend composed_t vtrunc(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vtrunc");
+
+                return _mm_cvtepi32_ps(_mm_cvtps_epi32(one.get_value()));
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark sse - default
+             */
+            friend composed_t vfloor(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vfloor");
+
+                return _mm_floor_ps(one.get_value());
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark sse - default
+             */
+            friend composed_t vceil(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vceil");
+
+                return _mm_ceil_ps(one.get_value());
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark sse - default
+             */
+            friend composed_t vround(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vround");
+
+                return _mm_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark sse - default
+             */
+            friend composed_t vsqrt(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vsqrt");
+
+                return _mm_sqrt_ps(one.get_value());
+            }
+
+        };
+
+        /**
+         * @brief math public interface implementation
+         * @relates float32
+         * @remark sse
+         */
+        template<typename base_t>
+        using impl = interface::math<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -715,6 +885,8 @@ namespace zacc { namespace sse {
             iteratable::impl,
             convertable::impl,
             float32_io<impl>::template impl,
+            float32_math<impl>::template impl,
+            float32_numeric<impl>::template impl,
             float32_arithmetic<impl>::template impl,
             float32_bitwise<impl>::template impl,
             float32_logical<impl>::template impl,

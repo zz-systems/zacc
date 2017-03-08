@@ -56,6 +56,22 @@ namespace zacc { namespace interface {
             return arithmetic_div(one, other);
         }
 
+        friend composed_t &operator+=(composed_t &one, const composed_t other) {
+            return one = one + other;
+        }
+
+        friend composed_t &operator-=(composed_t &one, const composed_t other) {
+            return one = one - other;
+        }
+
+        friend composed_t &operator*=(composed_t &one, const composed_t other) {
+            return one = one * other;
+        }
+
+        friend composed_t &operator/=(composed_t &one, const composed_t other) {
+            return one = one / other;
+        }
+
 
         CONVERSION(+);
 

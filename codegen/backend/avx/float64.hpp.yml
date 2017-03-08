@@ -1,6 +1,6 @@
 type:
   type: float64
-  branch: avx1
+  branch: avx
   vector_t: &vector_t __m256d
   scalar_t: &scalar_t double
   vec_size: &vec_size 4

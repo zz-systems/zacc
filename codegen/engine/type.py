@@ -1,7 +1,4 @@
 import yasha
-from inspect import getmembers
-from pprint import pprint
-#from textwrap import shorten
 import copy
 
 class Struct:
@@ -41,12 +38,14 @@ class Module:
         self.functions      = functions
         self.name           = name
         self.test_config    = parent.test_config and parent.test_config.get(name)
+        self.mangling       = bool(1)
         #print("Building module", self.name)
 
     @classmethod
     def make_module(cls, parent, name, entries):
         result =  cls(parent, name, [])
-        result.functions = [Func(result, k, v) for k,v in entries.items()]
+        result.mangling  = entries.get("mangling", bool(1))
+        result.functions = [Func(result, k, v) for k,v in entries.items() if k != "mangling"]
 
         return result
 
@@ -90,7 +89,7 @@ class Func:
         self.parent     = entries.parent if is_copy else parent
         self.name       = entries.name if is_copy else name
 
-        self.mangling   = entries.mangling if is_copy else entries.get("mangling", bool(1))
+        self.mangling   = entries.mangling if is_copy else entries.get("mangling", parent.mangling)
 
         self.is_member = entries.is_member if is_copy else entries.get("member")
 

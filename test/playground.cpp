@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-// 
+//
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,34 +23,35 @@
 //---------------------------------------------------------------------------------
 
 
-#pragma once
+#include "system/dispatcher.hpp"
 
-#include "system/platform.hpp"
-#include <type_traits>
+#include <iostream>
+#include "math/trigonometry/sin.hpp"
+#include <cmath>
+using namespace zacc;
 
-#include ZACC_MAJOR_BRANCH_INC
+int main() {
 
-/*
-#if defined(ZACC_SCALAR)
-    #include "backend/scalar/types.hpp"
-#elif defined(ZACC_SSE2) || defined(ZACC_SSE3) || defined(ZACC_SSE4) || defined(ZACC_SSE4FMA)
-    #include "backend/sse/types.hpp"
-#elif defined(ZACC_AVX)
-    #include "backend/avx/types.hpp"
-#elif defined(ZACC_AVX2)
-    #include "backend/avx2/types.hpp"
-#elif defined(ZACC_AVX512)
-    #include "backend/avx512/types.hpp"
-#endif*/
+    zfloat32 fv(12, 13, 14, 15);
+
+    std::cout << fv;
+
+    std::cout << -((fv + 24) * 123.0f) * 0 + 42;
+
+    std::cout << "conditional:" << fv.when(0).otherwise({1, 2, 3, 4});
+
+    std::cout << "{ ";
+
+    for (auto i : fv)
+        std::cout << i << " ";
+
+    std::cout << "}";
 
 
-namespace zacc {
-    
-    struct branch_dispatcher {
+    for (int i = -9; i <= 9; i++)
+    {
+        std::cout << std::endl << "sin(" << std::right << std::setw(3) <<  i * 10 << "): " << std::left << std::setw(10) << sin(i * 10 / 180.0 * M_PI) << math::vsin(zdouble(i * 10 / 180.0 * M_PI)) << std::endl;
+    }
 
-        static const uint64_t capability = capability::fill_up_to(capabilities::ZACC_MAX_CAPABILITY);
-        using capability_t =  std::integral_constant<uint64_t, capability>;
-
-        using types = ZACC_MAJOR_BRANCH::types<capability>;
-    };
+    return 0;
 }

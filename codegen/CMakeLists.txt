@@ -42,6 +42,7 @@ function(generate_file output template template_data)
             COMMENT "GEN ${template} ==> ${output}"
     )
 
+    set_source_files_properties(${output} PROPERTIES GENERATED TRUE)
     set_source_files_properties(${PROJECT_SOURCE_DIR}/${output} PROPERTIES GENERATED TRUE)
 endfunction()
 

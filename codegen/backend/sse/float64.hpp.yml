@@ -13,6 +13,8 @@ type:
     - convertable
     internal:
     - io
+    - math
+    - numeric
     - arithmetic
     - bitwise
     - logical
@@ -21,6 +23,9 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
+    - args: []
+      init: ""
+
     - args: __m128 value
       init: _mm_cvtps_pd(value)
 
@@ -49,6 +54,28 @@ modules:
       <<: *io_store
       body:  _mm_stream_pd(target.data(), base_t::_value)
 #-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    mangling: false
+    vabs:
+      args: one
+      body: _mm_max_pd(one.get_value(), (-one).get_value())
+    vtrunc:
+      args: one
+      body: _mm_cvtepi32_pd(_mm_cvtps_epi32(one.get_value()))
+    vfloor:
+      args: one
+      body: _mm_floor_pd
+    vceil:
+      args: one
+      body: _mm_ceil_pd
+    vround:
+      args: one
+      body: _mm_round_pd (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+    vsqrt:
+      args: one
+      body: _mm_sqrt_pd
   arithmetic:
     negate:
       args: one

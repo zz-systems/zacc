@@ -11,10 +11,12 @@ option(BUILD_AVX2_BRANCH "Build the avx2 branch" ON)
 option(BUILD_AVX512_BRANCH "Build the avx512 branch" OFF)
 option(BUILD_OPENCL_BRANCH "Build the OpenCL branch" OFF)
 
-option(ENABLE_TRACE "Enable tracing (EXTREMELY SLOW!)" ON)
+option(ENABLE_TRACE "Enable tracing (EXTREMELY SLOW!)" OFF)
 
 option(BUILD_TEST "Build the tests" ON)
 option(BUILD_DOC "Build the documentation" OFF)
+
+option(BUILD_FAST_FLOAT "Build with relaxed IEEE754 options. Faster and less precise" Off)
 
 # util =================================================================================================================
 
@@ -56,6 +58,12 @@ if(ENABLE_TRACE)
     add_definitions(-DZACC_TRACE)
 endif()
 
+if(BUILD_FAST_FLOAT)
+    add_definitions(-DZACC_FAST_FLOAT=true)
+else()
+    add_definitions(-DZACC_FAST_FLOAT=false)
+endif()
+
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
 insert_kv(branch_flags  scalar         "")
@@ -72,7 +80,7 @@ insert_kv(branch_defs   sse.sse2     ZACC_MAX_CAPABILITY=SSE2   ZACC_MAJOR_BRANC
 insert_kv(branch_defs   sse.sse3     ZACC_MAX_CAPABILITY=SSSE3  ZACC_MAJOR_BRANCH=sse)
 insert_kv(branch_defs   sse.sse4     ZACC_MAX_CAPABILITY=SSE41  ZACC_MAJOR_BRANCH=sse)
 insert_kv(branch_defs   sse.sse4fma  ZACC_MAX_CAPABILITY=FMA4   ZACC_MAJOR_BRANCH=sse)
-insert_kv(branch_defs   avx          ZACC_MAX_CAPABILITY=AVX    ZACC_MAJOR_BRANCH=avx)
+insert_kv(branch_defs   avx          ZACC_MAX_CAPABILITY=AVX1   ZACC_MAJOR_BRANCH=avx)
 insert_kv(branch_defs   avx2         ZACC_MAX_CAPABILITY=AVX2   ZACC_MAJOR_BRANCH=avx2)
 insert_kv(branch_defs   avx512       ZACC_MAX_CAPABILITY=AVX512 ZACC_MAJOR_BRANCH=avx512)
 

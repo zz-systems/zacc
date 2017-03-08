@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,35 +23,47 @@
 //---------------------------------------------------------------------------------
 
 
-#include "../backend/scalar/types.hpp"
-#include "../backend/sse/types.hpp"
+#pragma once
 
-#include <iostream>
+#include "platform.hpp"
+#include "capabilities.hpp"
+#include ZACC_MAJOR_BRANCH_INC
 
-int main() {
-    zacc::scalar::zfloat32 f(10.5);
+namespace zacc {
 
-    std::cout << f + 10.3;
+    struct dispatcher
+    {
+        static const constexpr uint64_t capability = capability::fill_up_to(capabilities::ZACC_MAX_CAPABILITY);
+        static const constexpr bool use_fast_float = ZACC_FAST_FLOAT;
 
-    zacc::sse::zfloat32 fv(12, 13, 14, 15);
+        using capability_t =  std::integral_constant<uint64_t, capability>;
 
-    float v = f.get_value();
+        using types = ZACC_MAJOR_BRANCH::types<capability>;
 
-    std::cout << fv;
+        using zfloat32  = typename types::zfloat32;
+        using zfloat64  = typename types::zfloat64;
+        using zint8     = typename types::zint8;
+        using zint16    = typename types::zint16;
+        using zint32    = typename types::zint32;
 
-    std::cout << -((fv + 24) * 123.0f) * 0 + 42 + f.get_value();
+        using zfloat    = zfloat32;
+        using zdouble   = zfloat64;
+        using zbyte     = zint8;
+        using zshort    = zint16;
+        using zint      = zint32;
+    };
 
-    std::cout << "conditional:" << fv.when(0).otherwise({1, 2, 3, 4});
 
-    std::cout << "{ ";
+    using zfloat = dispatcher::zfloat;
+    using zdouble = dispatcher::zdouble;
+    using zbyte = dispatcher::zbyte;
+    using zshort = dispatcher::zshort;
+    using zint = dispatcher::zint;
 
-    for (auto i : fv)
-        std::cout << i << " ";
+    using zfloat32 = dispatcher::zfloat32;
+    using zfloat64 = dispatcher::zfloat64;
+    using zint8 = dispatcher::zint8;
+    using zint16 = dispatcher::zint16;
+    using zint32 = dispatcher::zint32;
 
-    std::cout << "}";
-
-    //zacc::
-    getchar();
-
-    return 0;
 }

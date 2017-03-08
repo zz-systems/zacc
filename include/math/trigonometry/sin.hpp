@@ -26,27 +26,34 @@
 #pragma once
 
 #include "common.hpp"
-#include "dispatch/dispatcher.hpp"
+#include "system/dispatcher.hpp"
 
 namespace zacc { namespace math {
 
     /**
      * @brief  Sine function. Algorithm taken from SLEEF 2.80
      * @tparam capability
-     * @param val
-     * @return
+     * @param val [-1; 1] rad
+     * @return [-1; 1]
      */
-    template<typename capability>
-    zfloat vsin(zfloat val)
+    template<typename fval_t>
+    std::enable_if_t<std::is_floating_point<typename fval_t::scalar_t>::value, fval_t> vsin(fval_t val)
     {
-        zfloat q = (val * magic::M_1_PI).trunc();
+        fval_t q = (val * magic::M_1_PI).round();
         zint iq = q;
 
-        if(use_fast_float)
+        if(dispatcher::use_fast_float)
         {
             val -= q * magic::M_PI;
         }
-        else
+        else if(std::is_same<fval_t, zfloat>::value)
+        {
+            val -= q * magic::PI4_Af * 4;
+            val -= q * magic::PI4_Bf * 4;
+            val -= q * magic::PI4_Cf * 4;
+            val -= q * magic::PI4_Df * 4;
+        }
+        else if(std::is_same<fval_t, zdouble>::value)
         {
             val -= q * magic::PI4_A * 4;
             val -= q * magic::PI4_B * 4;
@@ -54,21 +61,37 @@ namespace zacc { namespace math {
             val -= q * magic::PI4_D * 4;
         }
 
-        zfloat s = val * val;
+        fval_t s = val * val;
 
         val = (-val)
                 .when(iq & 1)
                 .otherwise(val);
 
-        zfloat u = 2.6083159809786593541503e-06f;
+        fval_t u;
 
-        u = u * s + -0.0001981069071916863322258f;
-        u = u * s + 0.00833307858556509017944336f;
-        u = u * s + -0.166666597127914428710938f;
+        if(std::is_same<fval_t, zfloat>::value)
+        {
+            u =         2.6083159809786593541503e-06f;
+            u = u * s - 0.0001981069071916863322258f;
+            u = u * s + 0.00833307858556509017944336f;
+            u = u * s - 0.166666597127914428710938f;
+        }
+        else if(std::is_same<fval_t, zdouble>::value)
+        {
+            u =       - 7.97255955009037868891952e-18;
+            u = u * s + 2.81009972710863200091251e-15;
+            u = u * s - 7.64712219118158833288484e-13;
+            u = u * s + 1.60590430605664501629054e-10;
+            u = u * s - 2.50521083763502045810755e-08;
+            u = u * s + 2.75573192239198747630416e-06;
+            u = u * s - 0.000198412698412696162806809;
+            u = u * s + 0.00833333333333332974823815;
+            u = u * s - 0.166666666666666657414808;
+        }
 
         u = s * u * val + val;
 
-        u = zfloat::quiet_NaN()
+        u = fval_t::quiet_NaN()
                 .when(val.is_infinite())
                 .otherwise(u);
 

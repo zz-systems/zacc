@@ -44,6 +44,7 @@ namespace zacc {
         Printable = 1 << 9,
         Indexable = 1 << 10,
         Convertable = 1 << 11,
+        Numeric = 1 << 12
     };
 
     struct iteratable {
@@ -94,6 +95,8 @@ namespace zacc {
 
             friend std::ostream &operator<<(std::ostream &os, const impl data) {
                 os << data.to_string();
+
+                return os;
             }
         };
     };

@@ -34,11 +34,8 @@ namespace zacc { namespace interface {
             FORWARD(math);
 
             composed_t abs() { return vabs(*this); }
-        };
 
-        template<typename base_t, typename composed_t>
-        struct fmath : public base_t {
-            FORWARD(fmath);
+            composed_t trunc() { return vtrunc(*this); }
 
             composed_t floor() { return vfloor(*this); }
 
@@ -46,9 +43,22 @@ namespace zacc { namespace interface {
 
             composed_t round() { return vround(*this); }
 
-            composed_t trunc() { return vtrunc(*this); }
-
             composed_t sqrt() { return vsqrt(*this); }
+        };
+
+        template<typename base_t, typename composed_t>
+        struct fmath : public base_t {
+            FORWARD(fmath);
+
+            //composed_t floor() { return vfloor(*this); }
+
+            //composed_t ceil() { return vceil(*this); }
+
+            //composed_t round() { return vround(*this); }
+
+
+
+            //composed_t sqrt() { return vsqrt(*this); }
         };
 
         template<typename base_t, typename composed_t>

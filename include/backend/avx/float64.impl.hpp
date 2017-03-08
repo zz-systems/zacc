@@ -47,11 +47,11 @@
 #include "traits/conditional.hpp"
 
 /**
- * @brief float64 implementation for the avx1 branch
+ * @brief float64 implementation for the avx branch
  * provides unified access to 4 'double' values
  */
 
-namespace zacc { namespace avx1 {
+namespace zacc { namespace avx {
 
     // =================================================================================================================
     /**
@@ -62,7 +62,7 @@ namespace zacc { namespace avx1 {
     /**
      * @brief construction
      * @relates float64
-     * @remark avx1
+     * @remark avx
      */
     template<typename composed_t>
     struct float64_construction
@@ -71,7 +71,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief construction basic interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         struct __impl : base_t
@@ -81,11 +81,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             __impl(const __m256 &value) : base_t(_mm256_cvtps_pd(_mm256_castps256_ps128(value))) {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "CONS(const __m256 &value)");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "CONS(const __m256 &value)");
 
             }
 
@@ -93,11 +93,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             __impl(const __m256d &value) : base_t(value) {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "CONS(const __m256d &value)");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "CONS(const __m256d &value)");
 
             }
 
@@ -105,11 +105,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             __impl(const __m256i &value) : base_t(_mm256_cvtepi32_pd(_mm256_castsi256_si128(value))) {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "CONS(const __m256i &value)");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "CONS(const __m256i &value)");
 
             }
 
@@ -117,11 +117,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             __impl(double value) : base_t(_mm256_set1_pd(value)) {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "CONS(double value)");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "CONS(double value)");
 
             }
 
@@ -129,11 +129,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             __impl(double *value) : base_t(_mm256_load_pd(value)) {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "CONS(double *value)");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "CONS(double *value)");
 
             }
 
@@ -141,11 +141,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             __impl(double arg3, double arg2, double arg1, double arg0) : base_t(_mm256_set_pd(arg0, arg1, arg2, arg3)) {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "CONS(double arg3, double arg2, double..)");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "CONS(double arg3, double arg2, double..)");
 
             }
 
@@ -154,7 +154,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief construction public interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         using impl = interface::construction<__impl<base_t>, composed_t>;
@@ -172,7 +172,7 @@ namespace zacc { namespace avx1 {
     /**
      * @brief io
      * @relates float64
-     * @remark avx1
+     * @remark avx
      */
     template<typename composed_t>
     struct float64_io
@@ -181,7 +181,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief io basic interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         struct __impl : base_t
@@ -192,11 +192,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief io default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             void io_store(typename base_t::extracted_t &target) const noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "store");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "store");
 
                 _mm256_store_pd(target.data(), base_t::_value);
             }
@@ -205,11 +205,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief io default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             void io_stream(typename base_t::extracted_t &target) const noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "stream");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "stream");
 
                 _mm256_stream_pd(target.data(), base_t::_value);
             }
@@ -219,7 +219,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief io public interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         using impl = interface::io<__impl<base_t>, composed_t>;
@@ -237,7 +237,7 @@ namespace zacc { namespace avx1 {
     /**
      * @brief arithmetic
      * @relates float64
-     * @remark avx1
+     * @remark avx
      */
     template<typename composed_t>
     struct float64_arithmetic
@@ -246,7 +246,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief arithmetic basic interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         struct __impl : base_t
@@ -257,11 +257,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t arithmetic_negate(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "negate");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "negate");
 
                 return _mm256_sub_pd(_mm256_setzero_pd(), one.get_value());
             }
@@ -270,11 +270,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t arithmetic_add(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "add");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "add");
 
                 return _mm256_add_pd(one.get_value(), other.get_value());
             }
@@ -283,11 +283,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t arithmetic_sub(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "sub");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "sub");
 
                 return _mm256_sub_pd(one.get_value(), other.get_value());
             }
@@ -296,11 +296,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t arithmetic_mul(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "mul");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "mul");
 
                 return _mm256_mul_pd(one.get_value(), other.get_value());
             }
@@ -309,11 +309,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t arithmetic_div(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "div");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "div");
 
                 return _mm256_div_pd(one.get_value(), other.get_value());
             }
@@ -323,7 +323,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief arithmetic public interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         using impl = interface::arithmetic<__impl<base_t>, composed_t>;
@@ -341,7 +341,7 @@ namespace zacc { namespace avx1 {
     /**
      * @brief bitwise
      * @relates float64
-     * @remark avx1
+     * @remark avx
      */
     template<typename composed_t>
     struct float64_bitwise
@@ -350,7 +350,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief bitwise basic interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         struct __impl : base_t
@@ -361,11 +361,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t bitwise_negate(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "negate");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "negate");
 
                 __m256d junk;
                 auto ones = _mm256_cmp_pd(junk, junk, _CMP_EQ_OQ);
@@ -376,11 +376,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t bitwise_and(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "and");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "and");
 
                 return _mm256_or_pd(one.get_value(), other.get_value());
             }
@@ -389,11 +389,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t bitwise_or(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "or");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "or");
 
                 return _mm256_and_pd(one.get_value(), other.get_value());
             }
@@ -402,11 +402,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t bitwise_xor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "xor");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "xor");
 
                 return _mm256_xor_pd(one.get_value(), other.get_value());
             }
@@ -416,7 +416,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief bitwise public interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         using impl = interface::bitwise<__impl<base_t>, composed_t>;
@@ -434,7 +434,7 @@ namespace zacc { namespace avx1 {
     /**
      * @brief logical
      * @relates float64
-     * @remark avx1
+     * @remark avx
      */
     template<typename composed_t>
     struct float64_logical
@@ -443,7 +443,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief logical basic interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         struct __impl : base_t
@@ -454,11 +454,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief logical default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t logical_negate(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "negate");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "negate");
 
                 return _mm256_cmp_pd(one.get_value(), _mm256_setzero_ps(), _CMP_EQ_OQ);
             }
@@ -467,11 +467,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief logical default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t logical_or(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "or");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "or");
 
                 return _mm256_or_pd(one.get_value(), other.get_value());
             }
@@ -480,11 +480,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief logical default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t logical_and(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "and");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "and");
 
                 return _mm256_and_pd(one.get_value(), other.get_value());
             }
@@ -494,7 +494,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief logical public interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         using impl = interface::logical<__impl<base_t>, composed_t>;
@@ -512,7 +512,7 @@ namespace zacc { namespace avx1 {
     /**
      * @brief comparison
      * @relates float64
-     * @remark avx1
+     * @remark avx
      */
     template<typename composed_t>
     struct float64_comparison
@@ -521,7 +521,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief comparison basic interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         struct __impl : base_t
@@ -532,11 +532,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t comparison_eq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "eq");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "eq");
 
                 return _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_EQ_OQ);
             }
@@ -545,11 +545,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t comparison_neq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "neq");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "neq");
 
                 return _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_NEQ_OQ);
             }
@@ -558,11 +558,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t comparison_gt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "gt");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "gt");
 
                 return _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_GT_OQ);
             }
@@ -571,11 +571,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t comparison_lt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "lt");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "lt");
 
                 return _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_LT_OQ);
             }
@@ -584,11 +584,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t comparison_ge(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "ge");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "ge");
 
                 auto result = _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_GE_OQ);
                 return result;
@@ -598,11 +598,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t comparison_le(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "le");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "le");
 
                 return _mm256_cmp_pd(one.get_value(), other.get_value(), _CMP_LE_OQ);
             }
@@ -612,7 +612,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief comparison public interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         using impl = interface::comparison<__impl<base_t>, composed_t>;
@@ -630,7 +630,7 @@ namespace zacc { namespace avx1 {
     /**
      * @brief conditional
      * @relates float64
-     * @remark avx1
+     * @remark avx
      */
     template<typename composed_t>
     struct float64_conditional
@@ -639,7 +639,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief conditional basic interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         struct __impl : base_t
@@ -650,11 +650,11 @@ namespace zacc { namespace avx1 {
             /**
              * @brief conditional default branch
              * @relates float64
-             * @remark avx1 - default
+             * @remark avx - default
              */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx1.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "vsel");
+                ZTRACE(std::left << std::setw(32) << "avx.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[4]) " << std::left << std::setw(10) << "default" << "vsel");
 
                 auto mask = _mm256_cmp_pd(_mm256_setzero_ps(), condition.get_value(), _CMP_EQ_OQ);
                 return _mm256_blendv_pd(if_value.get_value(), else_value.get_value(), mask);
@@ -665,7 +665,7 @@ namespace zacc { namespace avx1 {
         /**
          * @brief conditional public interface implementation
          * @relates float64
-         * @remark avx1
+         * @remark avx
          */
         template<typename base_t>
         using impl = interface::conditional<__impl<base_t>, composed_t>;
@@ -688,7 +688,7 @@ namespace zacc { namespace avx1 {
      * - '4' as vector size
      * - '32' as alignment
      * @relates float64
-     * @remark avx1
+     * @remark avx
      */
     template<uint64_t capability>
     struct __zval_float64
@@ -703,7 +703,7 @@ namespace zacc { namespace avx1 {
     /**
      * @brief zval composition
      * @relates float64
-     * @remark avx1
+     * @remark avx
      */
     template<uint64_t capability>
     struct __zfloat64
