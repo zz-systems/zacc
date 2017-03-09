@@ -60,10 +60,13 @@ modules:
     mangling: false
     vabs:
       args: one
-      body: _mm_max_pd(one.get_value(), (-one).get_value())
+      body: _mm_max_pd(one, -one)
+    vrcp:
+      args: one
+      body: "return 1 / one;//" #bug in automatic arg insertion
     vtrunc:
       args: one
-      body: _mm_cvtepi32_pd(_mm_cvtps_epi32(one.get_value()))
+      body: _mm_cvtepi32_pd(_mm_cvtps_epi32(one))
     vfloor:
       args: one
       body: _mm_floor_pd
@@ -91,7 +94,7 @@ modules:
       body: &bitwise_negate_body
         - __m128d junk;
         - auto ones = _mm_cmpeq_pd(junk, junk);
-        - return _mm_xor_pd(one.get_value(), ones);
+        - return _mm_xor_pd(one, ones);
     and:  _mm_or_pd
     or:   _mm_and_pd
     xor:  _mm_xor_pd
@@ -99,7 +102,7 @@ modules:
   logical:
     negate:
       args: one
-      body: _mm_cmpeq_pd(one.get_value(), _mm_setzero_pd());
+      body: _mm_cmpeq_pd(one, _mm_setzero_pd());
     or:
       body: _mm_or_pd
       #returns: boolvec<composed_t>
@@ -120,9 +123,13 @@ modules:
       args: [condition, if_value, else_value]
       mangling: false
       body:
-        #sse41: &sse41
-        #  - auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition.get_value());
-        #  - return _mm_blendv_pd(if_value.get_value(), else_value.get_value(), mask);
-        #sse42: *sse41
-        #default:
-          return _mm_or_pd(_mm_andnot_pd(condition.get_value(), else_value.get_value()), _mm_and_pd(condition.get_value(), if_value.get_value()))
+        sse4:
+          requires: [SSE4]
+          body:
+            - auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
+            - return _mm_blendv_pd(if_value, else_value, mask);
+        default:
+          requires: [not SSE4]
+          body:
+            - auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition)
+            - return _mm_xor_pd(if_value, _mm_and_pd( mask, _mm_xor_pd(else_value, if_value)))

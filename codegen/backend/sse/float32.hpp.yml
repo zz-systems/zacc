@@ -60,10 +60,13 @@ modules:
     mangling: false
     vabs:
       args: one
-      body: _mm_max_ps(one.get_value(), (-one).get_value())
+      body: _mm_max_ps(one, -one)
+    vrcp:
+      args: one
+      body: _mm_rcp_ps
     vtrunc:
       args: one
-      body: _mm_cvtepi32_ps(_mm_cvtps_epi32(one.get_value()))
+      body: _mm_cvtepi32_ps(_mm_cvtps_epi32(one))
     vfloor:
       args: one
       body: _mm_floor_ps
@@ -80,7 +83,7 @@ modules:
   arithmetic:
     negate:
       args: one
-      body: return _mm_sub_ps(_mm_setzero_ps(), one.get_value())
+      body: return _mm_sub_ps(_mm_setzero_ps(), one)
     add: _mm_add_ps
     sub: _mm_sub_ps
     mul: _mm_mul_ps
@@ -92,7 +95,7 @@ modules:
       body:
         - __m128 junk;
         - auto ones = _mm_cmpeq_ps(junk, junk);
-        - return _mm_xor_ps(one.get_value(), ones);
+        - return _mm_xor_ps(one, ones);
     and:  _mm_or_ps
     or:   _mm_and_ps
     xor:  _mm_xor_ps
@@ -100,7 +103,7 @@ modules:
   logical:
     negate:
       args: one
-      body: _mm_cmpeq_ps(one.get_value(), _mm_setzero_ps());
+      body: _mm_cmpeq_ps(one, _mm_setzero_ps());
     or:
       body: _mm_or_ps
       #returns: boolvec<composed_t>
@@ -121,10 +124,13 @@ modules:
       args: [condition, if_value, else_value]
       mangling: false
       body:
-        #sse41: &sse41
-        #  requires: [sse2, sse3, sse4]
-        #  - auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition.get_value());
-        #  - return _mm_blendv_ps(if_value.get_value(), else_value.get_value(), mask);
-        #sse42: *sse41
-        #default:
-        return _mm_or_ps(_mm_andnot_ps(condition.get_value(), else_value.get_value()), _mm_and_ps(condition.get_value(), if_value.get_value()))
+        sse4:
+          requires: [SSE4]
+          body:
+            - auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition);
+            - return _mm_blendv_ps(if_value, else_value, mask);
+        default:
+          requires: [not SSE4]
+          body:
+            - auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition)
+            - return _mm_xor_ps(if_value, _mm_and_ps( mask, _mm_xor_ps(else_value, if_value)))

@@ -195,6 +195,17 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
+    TEST(sse_float64_conditional, vsel_sse4)
+    {
+        auto actual = vsel(zfloat64(1) == zfloat64(1), zfloat64(2), zfloat64(3));
+        auto expected = (double) 2;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
+    }
+
     TEST(sse_float64_conditional, vsel_default)
     {
         auto actual = vsel(zfloat64(1) == zfloat64(1), zfloat64(2), zfloat64(3));

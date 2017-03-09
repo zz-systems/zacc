@@ -35,6 +35,8 @@ namespace zacc { namespace interface {
 
             composed_t abs() { return vabs(*this); }
 
+            composed_t rcp() { return vrcp(*this); }
+
             composed_t trunc() { return vtrunc(*this); }
 
             composed_t floor() { return vfloor(*this); }

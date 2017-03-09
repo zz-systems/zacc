@@ -282,7 +282,7 @@ class Args:
 
 class Arg:
     default_type = "composed_t"
-    default_type_invocation = ".get_value()"
+    default_type_invocation = ""#"".get_value()"
 
     def __init__(self, parent, type, name):
         self.type   = type

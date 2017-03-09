@@ -26,7 +26,7 @@
 #include "system/dispatcher.hpp"
 
 #include <iostream>
-#include "math/trigonometry/sin.hpp"
+#include "math/trigonometry/trigonometry.hpp"
 #include <cmath>
 using namespace zacc;
 
@@ -50,7 +50,17 @@ int main() {
 
     for (int i = -9; i <= 9; i++)
     {
-        std::cout << std::endl << "sin(" << std::right << std::setw(3) <<  i * 10 << "): " << std::left << std::setw(10) << sin(i * 10 / 180.0 * M_PI) << math::vsin(zdouble(i * 10 / 180.0 * M_PI)) << std::endl;
+        std::cout << std::endl << "sin(" << std::right << std::setw(3) <<  i * 10 << "): " << std::left << std::setw(10) << sin(i * 10 / 180.0 * M_PI) << math::vsin(zfloat(i * 10 / 180.0 * M_PI)) << std::endl;
+    }
+
+    for (int i = -18; i <= 18; i++)
+    {
+        std::cout << std::endl << "cos(" << std::right << std::setw(3) <<  i * 10 << "): " << std::left << std::setw(10) << cos(i * 10 / 180.0 * M_PI) << math::vcos(zfloat(i * 10 / 180.0 * M_PI)) << std::endl;
+    }
+
+    for (int i = -18; i <= 18; i++)
+    {
+        std::cout << std::endl << "tan(" << std::right << std::setw(3) <<  i * 10 << "): " << std::left << std::setw(10) << tan(i * 10 / 180.0 * M_PI) << math::vtan(zfloat(i * 10 / 180.0 * M_PI)) << std::endl;
     }
 
     return 0;

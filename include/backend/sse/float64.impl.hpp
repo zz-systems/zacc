@@ -316,7 +316,20 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "vabs");
 
-                return _mm_max_pd(one.get_value(), (-one).get_value());
+                return _mm_max_pd(one, -one);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float64
+             * @remark sse - default
+             */
+            friend composed_t vrcp(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "vrcp");
+
+                return 1 / one;//(one);
             }
 
 
@@ -329,7 +342,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "vtrunc");
 
-                return _mm_cvtepi32_pd(_mm_cvtps_epi32(one.get_value()));
+                return _mm_cvtepi32_pd(_mm_cvtps_epi32(one));
             }
 
 
@@ -342,7 +355,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "vfloor");
 
-                return _mm_floor_pd(one.get_value());
+                return _mm_floor_pd(one);
             }
 
 
@@ -355,7 +368,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "vceil");
 
-                return _mm_ceil_pd(one.get_value());
+                return _mm_ceil_pd(one);
             }
 
 
@@ -381,7 +394,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "vsqrt");
 
-                return _mm_sqrt_pd(one.get_value());
+                return _mm_sqrt_pd(one);
             }
 
         };
@@ -446,7 +459,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "add");
 
-                return _mm_add_pd(one.get_value(), other.get_value());
+                return _mm_add_pd(one, other);
             }
 
 
@@ -459,7 +472,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "sub");
 
-                return _mm_sub_pd(one.get_value(), other.get_value());
+                return _mm_sub_pd(one, other);
             }
 
 
@@ -472,7 +485,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "mul");
 
-                return _mm_mul_pd(one.get_value(), other.get_value());
+                return _mm_mul_pd(one, other);
             }
 
 
@@ -485,7 +498,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "div");
 
-                return _mm_div_pd(one.get_value(), other.get_value());
+                return _mm_div_pd(one, other);
             }
 
         };
@@ -539,7 +552,7 @@ namespace zacc { namespace sse {
 
                 __m128d junk;
                 auto ones = _mm_cmpeq_pd(junk, junk);
-                return _mm_xor_pd(one.get_value(), ones);
+                return _mm_xor_pd(one, ones);
             }
 
 
@@ -552,7 +565,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "and");
 
-                return _mm_or_pd(one.get_value(), other.get_value());
+                return _mm_or_pd(one, other);
             }
 
 
@@ -565,7 +578,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "or");
 
-                return _mm_and_pd(one.get_value(), other.get_value());
+                return _mm_and_pd(one, other);
             }
 
 
@@ -578,7 +591,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "xor");
 
-                return _mm_xor_pd(one.get_value(), other.get_value());
+                return _mm_xor_pd(one, other);
             }
 
         };
@@ -630,7 +643,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "negate");
 
-                return _mm_cmpeq_pd(one.get_value(), _mm_setzero_pd());
+                return _mm_cmpeq_pd(one, _mm_setzero_pd());
             }
 
 
@@ -643,7 +656,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "or");
 
-                return _mm_or_pd(one.get_value(), other.get_value());
+                return _mm_or_pd(one, other);
             }
 
 
@@ -656,7 +669,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "and");
 
-                return _mm_and_pd(one.get_value(), other.get_value());
+                return _mm_and_pd(one, other);
             }
 
         };
@@ -708,7 +721,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "eq");
 
-                return _mm_cmpeq_pd(one.get_value(), other.get_value());
+                return _mm_cmpeq_pd(one, other);
             }
 
 
@@ -721,7 +734,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "neq");
 
-                return _mm_cmpneq_pd(one.get_value(), other.get_value());
+                return _mm_cmpneq_pd(one, other);
             }
 
 
@@ -734,7 +747,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "gt");
 
-                return _mm_cmpgt_pd(one.get_value(), other.get_value());
+                return _mm_cmpgt_pd(one, other);
             }
 
 
@@ -747,7 +760,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "lt");
 
-                return _mm_cmplt_pd(one.get_value(), other.get_value());
+                return _mm_cmplt_pd(one, other);
             }
 
 
@@ -760,7 +773,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "ge");
 
-                return _mm_cmpge_pd(one.get_value(), other.get_value());
+                return _mm_cmpge_pd(one, other);
             }
 
 
@@ -773,7 +786,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "le");
 
-                return _mm_cmple_pd(one.get_value(), other.get_value());
+                return _mm_cmple_pd(one, other);
             }
 
         };
@@ -817,15 +830,30 @@ namespace zacc { namespace sse {
 
 
             /**
+             * @brief conditional sse4 branch
+             * @relates float64
+             * @remark sse - sse4
+             */
+            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::has_SSE4, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "sse4" << "vsel");
+
+                auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
+                return _mm_blendv_pd(if_value, else_value, mask);
+            }
+
+
+            /**
              * @brief conditional default branch
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::has_SSE4, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[2]) " << std::left << std::setw(10) << "default" << "vsel");
 
-                return _mm_or_pd(_mm_andnot_pd(condition.get_value(), else_value.get_value()), _mm_and_pd(condition.get_value(), if_value.get_value()));
+                auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
+                return _mm_xor_pd(if_value, _mm_and_pd( mask, _mm_xor_pd(else_value, if_value)));
             }
 
         };

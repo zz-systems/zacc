@@ -4,7 +4,7 @@ foreach(branch ${branches})
     add_executable(zacc.${branch}.playground WIN32 ${CMAKE_CURRENT_LIST_DIR}/playground.cpp)
     add_dependencies("zacc.${branch}.playground" "zacc.generate.${branch}.types" )
 
-    add_executable("zacc.${branch}.tests" ${files})
+    add_executable("zacc.${branch}.tests" ${files} ${CMAKE_CURRENT_LIST_DIR}/test_trigonometry.cpp)
     add_dependencies("zacc.${branch}.tests" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
 
     target_link_libraries("zacc.${branch}.tests" gtest_main)

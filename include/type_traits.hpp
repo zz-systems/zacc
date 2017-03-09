@@ -75,23 +75,19 @@ namespace zacc {
         return ((ref_value & head) != 0) || is_any_set(ref_value, tail...);
     };
 
-    template<typename T>
-    struct is_float32_vec : std::false_type {
-    };
+    template<typename val_t>
+    struct is_floating_point : std::is_floating_point<typename val_t::scalar_t>
+    {};
 
-    template<typename T>
-    struct is_float64_vec : std::false_type {
-    };
+    template<typename vreal_t>
+    struct is_float : std::is_same<typename vreal_t::scalar_t, float>
+    {};
 
-    template<typename T>
-    struct is_int32_vec : std::false_type {
-    };
+    template<typename vreal_t>
+    struct is_double : std::is_same<typename vreal_t::scalar_t, double>
+    {};
 
-    template<typename T>
-    struct is_int16_vec : std::false_type {
-    };
-
-    template<typename T>
-    struct is_int8_vec : std::false_type {
-    };
+    template<typename val_t>
+    struct is_integral : std::is_integral<typename val_t::scalar_t>
+    {};
 }

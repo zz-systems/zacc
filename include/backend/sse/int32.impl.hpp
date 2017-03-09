@@ -277,7 +277,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "add");
 
-                return _mm_add_epi32(one.get_value(), other.get_value());
+                return _mm_add_epi32(one, other);
             }
 
 
@@ -290,7 +290,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "sub");
 
-                return _mm_sub_epi32(one.get_value(), other.get_value());
+                return _mm_sub_epi32(one, other);
             }
 
 
@@ -303,7 +303,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "sse4" << "mul");
 
-                return _mm_mullo_epi32(one.get_value(), other.get_value());
+                return _mm_mullo_epi32(one, other);
             }
 
 
@@ -400,7 +400,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "or");
 
-                return _mm_or_si128(one.get_value(), other.get_value());
+                return _mm_or_si128(one, other);
             }
 
 
@@ -413,7 +413,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "and");
 
-                return _mm_and_si128(one.get_value(), other.get_value());
+                return _mm_and_si128(one, other);
             }
 
 
@@ -426,7 +426,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "xor");
 
-                return _mm_xor_si128(one.get_value(), other.get_value());
+                return _mm_xor_si128(one, other);
             }
 
         };
@@ -478,7 +478,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "sll");
 
-                return _mm_sll_epi32(one.get_value(), other.get_value());
+                return _mm_sll_epi32(one, other);
             }
 
 
@@ -491,7 +491,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "srl");
 
-                return _mm_srl_epi32(one.get_value(), other.get_value());
+                return _mm_srl_epi32(one, other);
             }
 
 
@@ -582,7 +582,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "or");
 
-                return _mm_or_si128(one.get_value(), other.get_value());
+                return _mm_or_si128(one, other);
             }
 
 
@@ -595,7 +595,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "and");
 
-                return _mm_and_si128(one.get_value(), other.get_value());
+                return _mm_and_si128(one, other);
             }
 
         };
@@ -647,7 +647,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "eq");
 
-                return _mm_cmpeq_epi32(one.get_value(), other.get_value());
+                return _mm_cmpeq_epi32(one, other);
             }
 
 
@@ -673,7 +673,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "gt");
 
-                return _mm_cmpgt_epi32(one.get_value(), other.get_value());
+                return _mm_cmpgt_epi32(one, other);
             }
 
 
@@ -686,7 +686,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE(std::left << std::setw(32) << "sse.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int[4]) " << std::left << std::setw(10) << "default" << "lt");
 
-                return _mm_cmplt_epi32(one.get_value(), other.get_value());
+                return _mm_cmplt_epi32(one, other);
             }
 
 
