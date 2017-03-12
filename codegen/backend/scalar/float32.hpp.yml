@@ -14,7 +14,6 @@ type:
      internal:
        - io
        - arithmetic
-       - fused_multiplication
        #- bitwise
        #- logical
        - comparison

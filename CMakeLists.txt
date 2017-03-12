@@ -127,3 +127,6 @@ include(test/CMakeLists.txt)
 
 # add app targets
 include(src/CMakeLists.txt)
+
+# add documentation targets
+include(doc/CMakeLists.txt)
