@@ -31,8 +31,8 @@ namespace zacc { namespace interface {
 
     /**
      * @brief provides arithmetic operator definitions
-     * @tparam base_t base type (i.e previous trait)
-     * @tparam composed_t final composed type (i.e zfloat32)
+     * @tparam base_t base type (e.g previous trait)
+     * @tparam composed_t final composed type (e.g zfloat32)
      */
     template<typename base_t, typename composed_t>
     struct arithmetic : public base_t {

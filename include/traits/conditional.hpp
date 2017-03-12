@@ -29,6 +29,11 @@
 
 namespace zacc { namespace interface {
 
+    /**
+     * @brief provides conditional functionality
+     * @tparam base_t base type (e.g previous trait)
+     * @tparam composed_t final composed type (e.g zfloat32)
+     */
     template<typename base_t, typename composed_t>
     struct conditional : public base_t {
         FORWARD(conditional);

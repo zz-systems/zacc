@@ -38,42 +38,87 @@ namespace zacc {
     template<typename zval_t>
     struct bval;
 
+    /**
+     * @brief
+     * @tparam _vector_t
+     * @tparam _scalar_t
+     * @tparam _dim
+     * @tparam _alignment
+     * @tparam _capability
+     */
     template<typename _vector_t, typename _scalar_t = _vector_t, size_t _dim = 1, size_t _alignment = 16, uint64_t _capability = 0xFFFF'FFFF'FFFF'FFFF>
-    class zval : zval_base {
-    public:
+    struct zval : zval_base {
+
+        /// vector size (1 - scalar, 4, 8, 16, ...)
         static const unsigned dim = _dim;
+
+        /// capabilities
         static const uint64_t capability = _capability;
 
+        /// scalar type? vector type?
         static const bool is_vector = dim > 1;
+
+        /// memory alignment
 		static const int alignment = _alignment;
 
+        /// traits
+        static const long traits = 0;
+
+        /// capability dispatcher. used in derived types for SFINAE capability checks.
+        using dispatcher = capability::dispatcher<capability>;
+
+        /// vector type, like __m128i for sse 4x integer vector
         using vector_t = _vector_t;
+        /// scalar type, like int for sse 4x integer vector
         using scalar_t = _scalar_t;
+        /// extracted std::array of (dim) scalar values
         using extracted_t = std::array<scalar_t, dim>;
 
         // TODO
         using mask_t = bool;
 
-        using dispatcher = capability::dispatcher<capability>;
 
+
+        /**
+         * @brief default constructor
+         */
         zval() {}
 
+        /**
+         * @brief
+         * @tparam T
+         * @tparam enable
+         * @param value
+         */
         template<typename T, typename enable = std::enable_if_t<!std::is_base_of<zval, T>::value, T>>
         zval(T value) : _value(value) {}
 
+        /**
+         * @brief
+         * @tparam T
+         * @tparam enable
+         * @param value
+         */
         template<typename T, typename enable = std::enable_if_t<std::is_base_of<zval, T>::value, T>>
         zval(const T& value) : _value(value.get_value()) {}
 
+        /**
+         * @brief
+         * @param value
+         */
         zval(const bval<zval>& value) : _value(value.get_value()) {}
 
-        const operator vector_t() const
-        {
+        /**
+         * @brief
+         * @return
+         */
+        const operator vector_t() const {
             return get_value();
         }
 
-        const vector_t &get_value() const { return _value; }
-
-        static const long traits = 0;
+        const vector_t &get_value() const {
+            return _value;
+        }
     protected:
         vector_t _value;
     };

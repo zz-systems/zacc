@@ -29,51 +29,69 @@
 
 namespace zacc { namespace interface {
 
-        template<typename base_t, typename composed_t>
-        struct math : public base_t {
-            FORWARD(math);
+    /**
+     * @brief provides basic math function definitions, fluent interface
+     * @tparam base_t base type (e.g previous trait)
+     * @tparam composed_t final composed type (e.g zfloat32)
+     */
+    template<typename base_t, typename composed_t>
+    struct math : public base_t {
+        FORWARD(math);
 
-            composed_t abs() { return vabs(*this); }
+        /**
+         * @brief absoulute value
+         * @return |value|
+         */
+        composed_t abs() const noexcept {
+            return vabs(*this);
+        }
 
-            composed_t rcp() { return vrcp(*this); }
+        /**
+         * @brief inverse value
+         * @return 1 / value
+         */
+        composed_t rcp() const noexcept {
+            return vrcp(*this);
+        }
 
-            composed_t trunc() { return vtrunc(*this); }
+        /**
+         * @brief truncated value (integer part of a floating value)
+         * @return 1.654743 -> 1.0
+         */
+        composed_t trunc() const noexcept {
+            return vtrunc(*this);
+        }
 
-            composed_t floor() { return vfloor(*this); }
+        /**
+         * @brief round down
+         * @return 1.6 -> 1.0
+         */
+        composed_t floor() const noexcept {
+            return vfloor(*this);
+        }
 
-            composed_t ceil() { return vceil(*this); }
+        /**
+         * @brief round up
+         * @return 1.4 -> 2.0
+         */
+        composed_t ceil() const noexcept {
+            return vceil(*this);
+        }
 
-            composed_t round() { return vround(*this); }
+        /**
+         * @brief round to nearest integer
+         * @return 1.6 -> 2.0; 1.4 -> 1.0
+         */
+        composed_t round() const noexcept {
+            return vround(*this);
+        }
 
-            composed_t sqrt() { return vsqrt(*this); }
-        };
-
-        template<typename base_t, typename composed_t>
-        struct fmath : public base_t {
-            FORWARD(fmath);
-
-            //composed_t floor() { return vfloor(*this); }
-
-            //composed_t ceil() { return vceil(*this); }
-
-            //composed_t round() { return vround(*this); }
-
-
-
-            //composed_t sqrt() { return vsqrt(*this); }
-        };
-
-        template<typename base_t, typename composed_t>
-        struct trigonometry : public base_t {
-            FORWARD(trigonometry);
-
-            composed_t sin() { return vsin(*this); }
-            composed_t cos() { return vcos(*this); }
-            composed_t tan() { return vtan(*this); }
-
-            composed_t asin() { return vasin(*this); }
-            composed_t acos() { return vacos(*this); }
-            composed_t atan() { return vatan(*this); }
-        };
-
-    }}
+        /**
+         * @brief square root
+         * @return sqrt(value)
+         */
+        composed_t sqrt() const noexcept {
+            return vsqrt(*this);
+        }
+    };
+}}

@@ -25,6 +25,11 @@
 
 #pragma once
 
+/**
+ * @brief shortcut to write forwarding constructors
+ * @param name current type (constructor)
+ * @param base base type (constructor)
+ */
 #define FORWARD2(name, base) \
     /** \
      * @brief forwarding constructor \
@@ -32,21 +37,38 @@
     template<typename ...Args> \
     name(Args... args) : base(std::forward<Args>(args)...) {}
 
+/**
+ * @brief shortcut to write forwarding constructors with default base name 'base_t'
+ * @param name current type (constructor)
+ */
 #define FORWARD(name) FORWARD2(name, base_t)
 
+/**
+ * @brief shortcut for trait definition. Aggregated from base traits and provided traits
+ * @param provides which trait is set
+ * @param base_t base type
+ */
 #define TRAIT2(provides, base_t) \
     static const long long traits =  base_t::traits | static_cast<long long>(provides)
 
+/**
+ * @brief shortcut for trait definition. Aggregated from base traits and provided traits. 'base_t' as default base type
+ * @param provides which trait is set
+ */
 #define TRAIT(provides) \
     TRAIT2(provides, base_t)
 
 #define REQUIRE(requirement) \
     static_assert((base_t::traits & static_cast<long long>(requirement)) != 0, "Requirement not met: feature '" #requirement "' required.")
 
-#define BASE() \
-    base_t* base() { return static_cast<base_t*>(this); }
+//#define BASE() \
+//    base_t* base() { return static_cast<base_t*>(this); }
 
-
+/**
+ * @brief provides converting binary operators, where one argument is of another type and has to be casted appropriately.
+ * @param op operator
+ * @param composed_t final composed type
+ */
 #define CONVERSION2(op, composed_t) \
     /** \
     * @brief converting op operator \
@@ -63,8 +85,18 @@
         return static_cast<composed_t>(one) op other; \
     }
 
+/**
+ * @brief provides converting binary operators, where one argument is of another type and has to be casted appropriately.
+ * 'composed_t' used as default final composed type
+ * @param op operator
+ */
 #define CONVERSION(op) CONVERSION2(op, composed_t)
 
+/**
+ * @brief provides assignment operators in form of +=, <<=, etc...
+ * @param op operator
+ * @param composed_t final composed type
+ */
 #define ASSIGNMENT2(op, composed_t) \
     /** \
     * @brief merged op - assignment operator \
@@ -73,7 +105,13 @@
         return one = one op other; \
     }
 
+/**
+ * @brief provides assignment operators in form of +=, <<=, etc...
+ * 'composed_t' used as default final composed type
+ * @param op operator
+ */
 #define ASSIGNMENT(op) ASSIGNMENT2(op, composed_t)
+
 
 #define STRINGIZE_DETAIL(x) #x
 #define STRINGIZE(x) STRINGIZE_DETAIL(x)

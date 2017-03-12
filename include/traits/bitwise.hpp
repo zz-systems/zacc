@@ -29,6 +29,11 @@
 
 namespace zacc { namespace interface {
 
+    /**
+     * @brief provides bitwise operator definitions
+     * @tparam base_t base type (e.g previous trait)
+     * @tparam composed_t final composed type (e.g zint32)
+     */
     template<typename base_t, typename composed_t>
     struct bitwise : public base_t {
         FORWARD(bitwise);

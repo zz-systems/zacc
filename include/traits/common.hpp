@@ -47,7 +47,14 @@ namespace zacc {
         Numeric = 1 << 12
     };
 
+    /**
+     * @brief provides begin(), end() iterators to attached type
+     */
     struct iteratable {
+        /**
+         * @brief iteratable trait implementation
+         * @tparam base_t base type (e.g previous trait)
+         */
         template<typename base_t>
         struct impl : public base_t {
             FORWARD(impl);
@@ -55,13 +62,20 @@ namespace zacc {
             REQUIRE(traits::IO);
             TRAIT(traits::Iteratable);
 
-            using iterator          = typename base_t::extracted_t::iterator;
+            using iterator = typename base_t::extracted_t::iterator;
 
+            /**
+             * @brief create a snapshot of current value
+             * @return snapshot's begin iterator
+             */
             iterator begin() {
                 _snapshot = base_t::data();
                 return _snapshot.begin();
             }
 
+            /**
+             * @return snapshot's end iterator
+             */
             iterator end() { return _snapshot.end(); }
 
         private:
@@ -70,7 +84,14 @@ namespace zacc {
     };
 
 
+    /**
+     * @brief provides pretty-print functionality for zacc types
+     */
     struct printable {
+        /**
+         * @brief printable trait implementation
+         * @tparam base_t base type (e.g previous trait)
+         */
         template<typename base_t>
         struct impl : public base_t {
             FORWARD(impl);
@@ -78,6 +99,10 @@ namespace zacc {
             REQUIRE(traits::Iteratable);
             TRAIT(traits::Printable);
 
+            /**
+             * @brief converts current data to string representation
+             * @return string, e.g [4, 5, 6, 7] for a 4x int vector
+             */
             std::string to_string() const {
                 std::stringstream ss;
 
@@ -93,6 +118,12 @@ namespace zacc {
                 return ss.str();
             }
 
+            /**
+             * @brief prints current value to target stream
+             * @param os target stream
+             * @param data printable trait
+             * @return target stream
+             */
             friend std::ostream &operator<<(std::ostream &os, const impl data) {
                 os << data.to_string();
 
@@ -102,7 +133,14 @@ namespace zacc {
     };
 
 
+    /**
+     * @brief provides basic conversion functionality
+     */
     struct convertable {
+        /**
+         * @brief convertable trait implementation
+         * @tparam base_t base type (e.g previous trait)
+         */
         template<typename base_t>
         struct impl : public base_t {
             FORWARD(impl);

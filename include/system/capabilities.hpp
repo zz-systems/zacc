@@ -184,11 +184,20 @@ namespace zacc {
             return result;
         }
 
+        /**
+         * @brief capability dispatcher. from aggregated integer representation one can extract specific features
+         * @tparam capability aggregated integer representation
+         */
         template<uint64_t capability = 0>
         struct dispatcher {
 
             using flag_t = std::make_unsigned_t<capabilities>;
 
+            /**
+             * @brief checks if a particular capability is set
+             * @param flag capability to check
+             * @return true if capability is set
+             */
             static constexpr bool is_set(capabilities flag)
             {
                 return 0 != (flags & static_cast<flag_t>(flag));
