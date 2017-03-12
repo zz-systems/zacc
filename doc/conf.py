@@ -1,6 +1,4 @@
-import sys
-
-import subprocess, sys
+import subprocess, sys, os
 
 def run_doxygen(folder):
     """Run the doxygen make command in the designated folder"""
