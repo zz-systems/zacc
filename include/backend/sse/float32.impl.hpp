@@ -503,13 +503,13 @@ namespace zacc { namespace sse {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic fma branch
              * @relates float32
-             * @remark sse - default
+             * @remark sse - fma
              */
-            friend composed_t vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::has_FMA, T> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vfmadd");
+                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "fma" << "vfmadd");
 
                 return _mm_fmadd_ps(multiplicand, multiplier, addendum);
             }
@@ -520,11 +520,37 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend composed_t vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::has_FMA, T> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vfmadd");
+
+                return vadd(vmul(multiplicand, multiplier), addendum);
+            }
+
+
+            /**
+             * @brief arithmetic fma branch
+             * @relates float32
+             * @remark sse - fma
+             */
+            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::has_FMA, T> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "fma" << "vfmsub");
+
+                return _mm_fmsub_ps(multiplicand, multiplier, addendum);
+            }
+
+
+            /**
+             * @brief arithmetic default branch
+             * @relates float32
+             * @remark sse - default
+             */
+            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::has_FMA, T> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
                 ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vfmsub");
 
-                return _mm_fmsub_ps(multiplicand, multiplier, addendum);
+                return vsub(vmul(multiplicand, multiplier), addendum);
             }
 
         };

@@ -18,12 +18,6 @@ foreach(branch ${branches})
     foreach(def ${branch_defs_${branch}})
         target_compile_definitions(zacc.${branch}.tests  PUBLIC "${def}")
         target_compile_definitions(zacc.${branch}.playground  PUBLIC "${def}")
-
-        get_branch_files(inc ${branch} "types.hpp")
-        string(REPLACE "include/" "" inc ${inc})
-
-        target_compile_definitions(zacc.${branch}.tests  PUBLIC "ZACC_MAJOR_BRANCH_INC=\"${inc}\"")
-        target_compile_definitions(zacc.${branch}.playground  PUBLIC "ZACC_MAJOR_BRANCH_INC=\"${inc}\"")
     endforeach()
 
     list(APPEND tests "zacc.${branch}.tests")

@@ -76,14 +76,14 @@ insert_kv(branch_flags  avx           -mavx)
 insert_kv(branch_flags  avx2          -mavx2)
 insert_kv(branch_flags  avx512        -mavx512f -mavx512pf -mavx512er -mavx512cd -mavx512vl -mavx512bw -mavx512dq)
 
-insert_kv(branch_defs   scalar       ZACC_MAX_CAPABILITY=SCALAR ZACC_MAJOR_BRANCH=scalar)
-insert_kv(branch_defs   sse.sse2     ZACC_MAX_CAPABILITY=SSE2   ZACC_MAJOR_BRANCH=sse)
-insert_kv(branch_defs   sse.sse3     ZACC_MAX_CAPABILITY=SSSE3  ZACC_MAJOR_BRANCH=sse)
-insert_kv(branch_defs   sse.sse4     ZACC_MAX_CAPABILITY=SSE41  ZACC_MAJOR_BRANCH=sse)
-insert_kv(branch_defs   sse.sse4fma  ZACC_MAX_CAPABILITY=FMA4   ZACC_MAJOR_BRANCH=sse)
-insert_kv(branch_defs   avx          ZACC_MAX_CAPABILITY=AVX1   ZACC_MAJOR_BRANCH=avx)
-insert_kv(branch_defs   avx2         ZACC_MAX_CAPABILITY=AVX2   ZACC_MAJOR_BRANCH=avx2)
-insert_kv(branch_defs   avx512       ZACC_MAX_CAPABILITY=AVX512 ZACC_MAJOR_BRANCH=avx512)
+insert_kv(branch_defs   scalar       ZACC_MAX_CAPABILITY=SCALAR ZACC_MAJOR_BRANCH=scalar    ZACC_SCALAR=1)
+insert_kv(branch_defs   sse.sse2     ZACC_MAX_CAPABILITY=SSE2   ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+insert_kv(branch_defs   sse.sse3     ZACC_MAX_CAPABILITY=SSSE3  ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+insert_kv(branch_defs   sse.sse4     ZACC_MAX_CAPABILITY=SSE41  ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+insert_kv(branch_defs   sse.sse4fma  ZACC_MAX_CAPABILITY=FMA4   ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+insert_kv(branch_defs   avx          ZACC_MAX_CAPABILITY=AVX1   ZACC_MAJOR_BRANCH=avx       ZACC_AVX=1)
+insert_kv(branch_defs   avx2         ZACC_MAX_CAPABILITY=AVX2   ZACC_MAJOR_BRANCH=avx2      ZACC_AVX2=1)
+insert_kv(branch_defs   avx512       ZACC_MAX_CAPABILITY=AVX512 ZACC_MAJOR_BRANCH=avx512    ZACC_AVX512=1)
 
 # branch config ========================================================================================================
 

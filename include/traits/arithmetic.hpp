@@ -63,6 +63,10 @@ namespace zacc { namespace interface {
             return vsub(*this, 1);
         }
 
+        /**
+         * @brief dürüm kebab
+         * @return
+         */
         composed_t operator--(int) {
             auto temp = *this;
 

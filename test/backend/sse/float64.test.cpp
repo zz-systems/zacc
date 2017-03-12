@@ -68,7 +68,7 @@ namespace zacc { namespace test {
 
     TEST(sse_float64_arithmetic, vmul_default)
     {
-        zfloat64 actual = zfloat64(12) * zfloat64(9);
+        auto actual = zfloat64(12) * zfloat64(9);
         auto expected = (double) 108;
 
         for(double value : actual)

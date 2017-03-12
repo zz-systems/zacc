@@ -89,10 +89,22 @@ modules:
     vdiv: _mm_div_ps
     vfmadd:
       args: [multiplicand, multiplier, addendum]
-      body: _mm_fmadd_ps(multiplicand, multiplier, addendum) # vadd(vmul(multiplicand, multiplier), addendum) #_mm_fmadd_ps(multiplicand, multiplier, addendum)
+      body:
+        fma:
+          requires: [FMA]
+          body: _mm_fmadd_ps(multiplicand, multiplier, addendum)
+        default:
+          requires: [not FMA]
+          body: vadd(vmul(multiplicand, multiplier), addendum)
     vfmsub:
       args: [multiplicand, multiplier, addendum]
-      body: _mm_fmsub_ps(multiplicand, multiplier, addendum) # vsub(vmul(multiplicand, multiplier), addendum) #_mm_fmsub_ps(multiplicand, multiplier, addendum)
+      body:
+        fma:
+          requires: [FMA]
+          body: _mm_fmsub_ps(multiplicand, multiplier, addendum)
+        default:
+          requires: [not FMA]
+          body: vsub(vmul(multiplicand, multiplier), addendum)
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate_prototype

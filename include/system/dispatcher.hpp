@@ -27,7 +27,19 @@
 
 #include "platform.hpp"
 #include "capabilities.hpp"
-#include ZACC_MAJOR_BRANCH_INC
+
+
+#if defined(ZACC_AVX)
+    #include "backend/avx/types.hpp"
+#elif defined(ZACC_AVX2)
+    #include "backend/avx2/types.hpp"
+#elif defined(ZACC_AVX512)
+    #include "backend/avx512/types.hpp"
+#elif defined(ZACC_SCALAR)
+    #include "backend/scalar/types.hpp"
+#elif defined(ZACC_SSE)
+    #include "backend/sse/types.hpp"
+#endif
 
 namespace zacc {
 
