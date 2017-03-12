@@ -268,6 +268,22 @@ namespace zacc { namespace sse {
                 return _mm_sub_epi8(one, other);
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int8
+             * @remark sse - default
+             */
+            friend composed_t vmul(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "sse.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[16]) " << std::left << std::setw(10) << "default" << "vmul");
+
+                /// @see http://stackoverflow.com/a/29155682/1261537;
+                auto even = _mm_mullo_epi16(one, other);
+                auto odd  = _mm_mullo_epi16(_mm_srli_epi16(one, 8),_mm_srli_epi16(other, 8));
+                return _mm_or_si128(_mm_slli_epi16(odd, 8), _mm_and_si128(even, _mm_set1_epi16(0xFF)));
+            }
+
         };
 
         /**

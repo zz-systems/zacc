@@ -48,10 +48,16 @@
 
 
 #define CONVERSION2(op, composed_t) \
+    /** \
+    * @brief converting op operator \
+    */ \
     template<typename other_t> \
     friend composed_t operator op(const composed_t one, const enable_if_not_same<other_t, composed_t> other) { \
         return one op static_cast<composed_t>(other); \
     }; \
+    /** \
+    * @brief converting op operator \
+    */ \
     template<typename other_t> \
     friend composed_t operator op (const enable_if_not_same<other_t, composed_t> one, const composed_t other) { \
         return static_cast<composed_t>(one) op other; \
@@ -60,6 +66,9 @@
 #define CONVERSION(op) CONVERSION2(op, composed_t)
 
 #define ASSIGNMENT2(op, composed_t) \
+    /** \
+    * @brief merged op - assignment operator \
+    */ \
     friend composed_t &operator op##=(composed_t &one, const composed_t other) { \
         return one = one op other; \
     }

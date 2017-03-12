@@ -29,24 +29,79 @@
 
 namespace zacc { namespace interface {
 
+    /**
+     * @brief provides arithmetic operator definitions
+     * @tparam base_t base type (i.e previous trait)
+     * @tparam composed_t final composed type (i.e zfloat32)
+     */
     template<typename base_t, typename composed_t>
     struct arithmetic : public base_t {
         FORWARD(arithmetic);
 
         TRAIT(traits::Arithmetic);
 
+        /**
+         * @brief negation operator
+         * @param one
+         * @return negated value
+         */
         friend composed_t operator-(const composed_t one) {
             return vneg(one);
         }
 
+        /**
+         * @brief addition operator
+         * @param one
+         * @param other
+         * @return one + other
+         */
         friend composed_t operator+(const composed_t one, const composed_t other) {
             return vadd(one, other);
         }
 
+        /**
+         * @brief subtration operator
+         * @param one
+         * @param other
+         * @return one - other
+         */
+        friend composed_t operator-(const composed_t one, const composed_t other) {
+            return vsub(one, other);
+        }
+
+        /**
+         * @brief multiplication operator
+         * @param one
+         * @param other
+         * @return one * other
+         */
+        friend composed_t operator*(const composed_t one, const composed_t other) {
+            return vmul(one, other);
+        }
+
+        /**
+         * @brief division operator
+         * @param one
+         * @param other
+         * @return one / other
+         */
+        friend composed_t operator/(const composed_t one, const composed_t other) {
+            return vdiv(one, other);
+        }
+
+
+        /**
+         * @brief prefix increment
+         * @return self + 1
+         */
         composed_t &operator++() {
             return vadd(*this, 1);
         }
 
+        /**
+         * @brief postfix increment
+         * @return self
+         */
         composed_t operator++(int) {
             auto temp = *this;
 
@@ -55,17 +110,17 @@ namespace zacc { namespace interface {
             return temp;
         }
 
-        friend composed_t operator-(const composed_t one, const composed_t other) {
-            return vsub(one, other);
-        }
-
+        /**
+         * @brief prefix decrement
+         * @return self - 1
+         */
         composed_t &operator--() {
             return vsub(*this, 1);
         }
 
         /**
-         * @brief dürüm kebab
-         * @return
+         * @brief postfix decrement
+         * @return self
          */
         composed_t operator--(int) {
             auto temp = *this;
@@ -73,14 +128,6 @@ namespace zacc { namespace interface {
             --(*this);
 
             return temp;
-        }
-
-        friend composed_t operator*(const composed_t one, const composed_t other) {
-            return vmul(one, other);
-        }
-
-        friend composed_t operator/(const composed_t one, const composed_t other) {
-            return vdiv(one, other);
         }
 
         CONVERSION(+);

@@ -66,6 +66,17 @@ namespace zacc { namespace test {
         }
     }
 
+    TEST(sse_int8_arithmetic, vmul_default)
+    {
+        auto actual = zint8(12) * zint8(9);
+        auto expected = (char) 108;
+
+        for(char value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
 // =====================================================================================================================
 // =====================================================================================================================
     TEST(sse_int8_bitwise, vbneg_default)
