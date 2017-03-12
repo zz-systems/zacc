@@ -1,5 +1,0 @@
-var searchData=
-[
-  ['type',['Type',['../classcodegen_1_1Type.html',1,'codegen.Type'],['../structzacc_1_1composable_1_1type.html',1,'zacc::composable&lt; base_t &gt;::type&lt; terminator &gt;']]],
-  ['types',['types',['../structzacc_1_1scalar_1_1types.html',1,'zacc::scalar::types&lt; capability &gt;'],['../structzacc_1_1avx512_1_1types.html',1,'zacc::avx512::types&lt; capability &gt;'],['../structzacc_1_1avx2_1_1types.html',1,'zacc::avx2::types&lt; capability &gt;'],['../structzacc_1_1sse_1_1types.html',1,'zacc::sse::types&lt; capability &gt;'],['../structzacc_1_1avx_1_1types.html',1,'zacc::avx::types&lt; capability &gt;']]]
-];
