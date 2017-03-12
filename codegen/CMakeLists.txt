@@ -8,7 +8,7 @@ set(test_template "codegen/templates/type.test.jinja")
 file(GLOB_RECURSE templates    RELATIVE ${CMAKE_SOURCE_DIR}    "*${template.schema}")
 
 set(codegen.cmd "C:/Python/Scripts/yasha")
-set(codegen.ext "codegen/engine/type.py")
+set(codegen.ext "codegen/engine/codegen.py")
 
 set(codegen.deps
         "${codegen.ext}"
@@ -69,6 +69,7 @@ function (generate branch templates)
     add_custom_target(zacc.generate.${branch}.types
             DEPENDS ${generated_types}
             WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+
     add_custom_target(zacc.generate.${branch}.tests
             DEPENDS ${generated_tests}
             WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})

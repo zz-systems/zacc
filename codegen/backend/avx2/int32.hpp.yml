@@ -2,6 +2,7 @@ type:
   type: int32
   branch: avx2
   vector_t: &vector_t __m256i
+  mask_t: &mask_t __m256i
   scalar_t: &scalar_t int
   vec_size: &vec_size 8
   alignment: 32
@@ -35,63 +36,61 @@ modules:
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi32 }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
-    store: &io_store
+    vstore: &io_store
       returns: void
-      member: true
-      suffix: const
-      args: { raw: "typename base_t::extracted_t &target" }
-      body: _mm256_store_si256((__m256i*)target.data(), base_t::_value);
-    stream:
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      body: _mm256_store_si256((__m256i*)target.data(), source);
+    vstream:
       <<: *io_store
-      body: _mm256_stream_si256((__m256i*)target.data(), base_t::_value);
+      body: _mm256_stream_si256((__m256i*)target.data(), source);
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
-    negate:
+    vneg:
       args: one
-      body: _mm256_sub_epi32(_mm256_setzero_si256(), one.get_value())
-    add: _mm256_add_epi32
-    sub: _mm256_sub_epi32
-    mul: _mm256_mullo_epi32
-    div: _mm256_div_ps(_mm256_cvtepi32_ps(one.get_value()), _mm256_cvtepi32_ps(other.get_value()));
+      body: _mm256_sub_epi32(_mm256_setzero_si256(), one)
+    vadd: _mm256_add_epi32
+    vsub: _mm256_sub_epi32
+    vmul: _mm256_mullo_epi32
+    vdiv: _mm256_div_ps(_mm256_cvtepi32_ps(one), _mm256_cvtepi32_ps(other));
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    negate: &bitwise_negate
+    vbneg: &bitwise_negate
       args: one
       body:
         - __m256i junk;
         - auto ones = _mm256_cmpeq_epi32(junk, junk);
-        - return _mm256_xor_si256(one.get_value(), ones);
-    and:  _mm256_or_si256
-    or:   _mm256_and_si256
-    xor:  _mm256_xor_si256
+        - return _mm256_xor_si256(one, ones);
+    vband:  _mm256_or_si256
+    vbor:   _mm256_and_si256
+    vbxor:  _mm256_xor_si256
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
-    sll:  _mm256_sll_epi32
-    srl:  _mm256_srl_epi32
-    slli:
+    vsll:  _mm256_sll_epi32
+    vsrl:  _mm256_srl_epi32
+    vslli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: _mm256_slli_epi32(one.get_value(), other)
-    srli:
+      body: _mm256_slli_epi32(one, other)
+    vsrli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: _mm256_srli_epi32(one.get_value(), other)
+      body: _mm256_srli_epi32(one, other)
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate:
+    vlneg:
       args: one
-      body: _mm256_cmpeq_epi32(one.get_value(), _mm256_setzero_si256());
-    or:   _mm256_or_si256
-    and:  _mm256_and_si256
+      body: _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
+    vlor:   _mm256_or_si256
+    vland:  _mm256_and_si256
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    eq:   _mm256_cmpeq_epi32
-    neq:  _mm256_xor_si256(_mm256_cmpeq_epi32(one.get_value(), other.get_value()), _mm256_setzero_si256());
-    gt:   _mm256_cmpgt_epi32
-    lt:   (one != other) && (one <= other)
-    ge:   (one == other) || _mm256_cmpgt_epi32(one.get_value(), other.get_value())
-    le:   _mm256_xor_si256(_mm256_cmpgt_epi32(one.get_value(), other.get_value()), _mm256_setzero_si256());
+    veq:   _mm256_cmpeq_epi32
+    vneq:  _mm256_xor_si256(_mm256_cmpeq_epi32(one, other), _mm256_setzero_si256());
+    vgt:   _mm256_cmpgt_epi32
+    vlt:   (one != other) && (one <= other)
+    vge:   (one == other) || _mm256_cmpgt_epi32(one, other)
+    vle:   _mm256_xor_si256(_mm256_cmpgt_epi32(one, other), _mm256_setzero_si256());
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
       args: [condition, if_value, else_value]
       mangling: false
-      body: _mm256_blendv_epi8(if_value.get_value(), else_value.get_value(), condition.get_value());
+      body: _mm256_blendv_epi8(if_value, else_value, condition);

@@ -33,7 +33,7 @@
 namespace zacc { namespace test {
 
 // =====================================================================================================================
-    TEST(sse_float32_arithmetic, arithmetic_negate_default)
+    TEST(sse_float32_arithmetic, vneg_default)
     {
         auto actual = -zfloat32(125);
         auto expected = (float) -125;
@@ -44,7 +44,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_float32_arithmetic, arithmetic_add_default)
+    TEST(sse_float32_arithmetic, vadd_default)
     {
         auto actual = zfloat32(12) + zfloat32(105);
         auto expected = (float) 117;
@@ -55,7 +55,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_float32_arithmetic, arithmetic_sub_default)
+    TEST(sse_float32_arithmetic, vsub_default)
     {
         auto actual = zfloat32(124) - zfloat32(125);
         auto expected = (float) -1;
@@ -66,9 +66,9 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_float32_arithmetic, arithmetic_mul_default)
+    TEST(sse_float32_arithmetic, vmul_default)
     {
-        auto actual = zfloat32(12) * zfloat32(9);
+        zfloat32 actual = zfloat32(12) * zfloat32(9);
         auto expected = (float) 108;
 
         for(float value : actual)
@@ -77,7 +77,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_float32_arithmetic, arithmetic_div_default)
+    TEST(sse_float32_arithmetic, vdiv_default)
     {
         auto actual = zfloat32(124) / zfloat32(124);
         auto expected = (float) 1;
@@ -92,7 +92,7 @@ namespace zacc { namespace test {
 // =====================================================================================================================
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_float32_logical, logical_negate_default)
+    TEST(sse_float32_logical, vlneg_default)
     {
         auto actual = (!zfloat32(1)).as_bool();
         auto expected = (float) false;
@@ -103,7 +103,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_float32_logical, logical_or_default)
+    TEST(sse_float32_logical, vlor_default)
     {
         auto actual = zfloat32(0) || zfloat32(8);
         auto expected = (float) 8;
@@ -114,7 +114,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_float32_logical, logical_and_default)
+    TEST(sse_float32_logical, vland_default)
     {
         auto actual = zfloat32(0) && zfloat32(8);
         auto expected = (float) 0;
@@ -127,7 +127,7 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_float32_comparison, comparison_eq_default)
+    TEST(sse_float32_comparison, veq_default)
     {
         auto actual = zfloat32(0) == zfloat32(8);
         auto expected = (float) 0;
@@ -138,7 +138,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_float32_comparison, comparison_neq_default)
+    TEST(sse_float32_comparison, vneq_default)
     {
         auto actual = zfloat32(0) != zfloat32(0);
         auto expected = (float) 0;
@@ -149,7 +149,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_float32_comparison, comparison_gt_default)
+    TEST(sse_float32_comparison, vgt_default)
     {
         auto actual = zfloat32(0) > zfloat32(8);
         auto expected = (float) 0;
@@ -160,7 +160,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_float32_comparison, comparison_lt_default)
+    TEST(sse_float32_comparison, vlt_default)
     {
         auto actual = zfloat32(8) < zfloat32(0);
         auto expected = (float) 0;
@@ -171,7 +171,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_float32_comparison, comparison_ge_default)
+    TEST(sse_float32_comparison, vge_default)
     {
         auto actual = (zfloat32(0) >= zfloat32(0)).as_bool();
         auto expected = (float) true;
@@ -182,7 +182,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_float32_comparison, comparison_le_default)
+    TEST(sse_float32_comparison, vle_default)
     {
         auto actual = (zfloat32(0) <= zfloat32(0)).as_bool();
         auto expected = (float) true;

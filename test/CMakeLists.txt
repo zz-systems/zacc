@@ -12,6 +12,9 @@ foreach(branch ${branches})
     target_compile_options("zacc.${branch}.tests" PUBLIC ${branch_flags_${branch}})
     target_compile_options("zacc.${branch}.playground" PUBLIC ${branch_flags_${branch}})
 
+    target_include_directories(zacc.${branch}.tests PUBLIC "${CMAKE_SOURCE_DIR}/include")
+    target_include_directories(zacc.${branch}.playground PUBLIC "${CMAKE_SOURCE_DIR}/include")
+
     foreach(def ${branch_defs_${branch}})
         target_compile_definitions(zacc.${branch}.tests  PUBLIC "${def}")
         target_compile_definitions(zacc.${branch}.playground  PUBLIC "${def}")

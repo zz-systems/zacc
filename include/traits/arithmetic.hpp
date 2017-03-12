@@ -30,79 +30,65 @@
 namespace zacc { namespace interface {
 
     template<typename base_t, typename composed_t>
-    struct fused_multiplication;
-
-    template<typename base_t, typename composed_t>
     struct arithmetic : public base_t {
         FORWARD(arithmetic);
 
         TRAIT(traits::Arithmetic);
 
-        friend composed_t operator-(const composed_t one) { return arithmetic_negate(one); }
+        friend composed_t operator-(const composed_t one) {
+            return vneg(one);
+        }
 
         friend composed_t operator+(const composed_t one, const composed_t other) {
-            return arithmetic_add(one, other);
+            return vadd(one, other);
+        }
+
+        composed_t &operator++() {
+            return vadd(*this, 1);
+        }
+
+        composed_t operator++(int) {
+            auto temp = *this;
+
+            ++(*this);
+
+            return temp;
         }
 
         friend composed_t operator-(const composed_t one, const composed_t other) {
-            return arithmetic_sub(one, other);
+            return vsub(one, other);
+        }
+
+        composed_t &operator--() {
+            return vsub(*this, 1);
+        }
+
+        composed_t operator--(int) {
+            auto temp = *this;
+
+            --(*this);
+
+            return temp;
         }
 
         friend composed_t operator*(const composed_t one, const composed_t other) {
-            return arithmetic_mul(one, other);
+            return vmul(one, other);
         }
 
         friend composed_t operator/(const composed_t one, const composed_t other) {
-            return arithmetic_div(one, other);
+            return vdiv(one, other);
         }
-
-        friend composed_t &operator+=(composed_t &one, const composed_t other) {
-            return one = one + other;
-        }
-
-        friend composed_t &operator-=(composed_t &one, const composed_t other) {
-            return one = one - other;
-        }
-
-        friend composed_t &operator*=(composed_t &one, const composed_t other) {
-            return one = one * other;
-        }
-
-        friend composed_t &operator/=(composed_t &one, const composed_t other) {
-            return one = one / other;
-        }
-
 
         CONVERSION(+);
+        ASSIGNMENT(+);
 
         CONVERSION(-);
+        ASSIGNMENT(-);
 
         CONVERSION(*);
+        ASSIGNMENT(*);
 
         CONVERSION(/);
-    };
-
-    template<typename base_t, typename composed_t>
-    struct fused_multiplication : public base_t {
-        FORWARD(fused_multiplication);
-
-        TRAIT(traits::Fused_Multiplication);
-
-        friend composed_t operator+(const fused_multiplication one, const composed_t other) {
-            return vfmadd(one._initial_multiplicand, one._initial_multiplier, other);
-        }
-
-        friend composed_t operator-(const fused_multiplication one, const composed_t other) {
-            return vfmsub(one._initial_multiplicand, one._initial_multiplier, other);
-        }
-
-        operator composed_t() {
-            return mul(_initial_multiplicand, _initial_multiplier);
-        }
-
-    private:
-
-        composed_t _initial_multiplicand;
-        composed_t _initial_multiplier;
+        ASSIGNMENT(/);
     };
 }}

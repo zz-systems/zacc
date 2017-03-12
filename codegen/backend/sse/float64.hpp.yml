@@ -2,6 +2,7 @@ type:
   type: float64
   branch: sse
   vector_t: &vector_t __m128d
+  mask_t: &mask_t __m128d
   scalar_t: &scalar_t double
   vec_size: &vec_size 2
   alignment: 16
@@ -14,12 +15,12 @@ type:
     internal:
     - io
     - math
-    - numeric
     - arithmetic
     - bitwise
     - logical
     - comparison
     - conditional
+    - numeric
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
@@ -45,25 +46,23 @@ modules:
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_pd }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
-    store: &io_store
-      args: { raw: "typename base_t::extracted_t &target" }
+    vstore: &io_store
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       returns: void
-      member: true
-      body: _mm_store_pd(target.data(), base_t::_value)
-    stream:
+      body: _mm_store_pd(target.data(), source)
+    vstream:
       <<: *io_store
-      body:  _mm_stream_pd(target.data(), base_t::_value)
+      body:  _mm_stream_pd(target.data(), source)
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
   math:
-    mangling: false
     vabs:
       args: one
       body: _mm_max_pd(one, -one)
     vrcp:
       args: one
-      body: "return 1 / one;//" #bug in automatic arg insertion
+      body: "return (1 / one);" #bug in automatic arg insertion
     vtrunc:
       args: one
       body: _mm_cvtepi32_pd(_mm_cvtps_epi32(one))
@@ -80,48 +79,53 @@ modules:
       args: one
       body: _mm_sqrt_pd
   arithmetic:
-    negate:
+    vneg:
       args: one
-      body: return _mm_sub_pd(_mm_setzero_pd(), one.get_value())
-    add: _mm_add_pd
-    sub: _mm_sub_pd
-    mul: _mm_mul_pd
-    div: _mm_div_pd
+      body: return _mm_sub_pd(_mm_setzero_pd(), one)
+    vadd: _mm_add_pd
+    vsub: _mm_sub_pd
+    vmul: _mm_mul_pd
+    vdiv: _mm_div_pd
+    vfmadd:
+      args: [multiplicand, multiplier, addendum]
+      body: vadd(vmul(multiplicand, multiplier), addendum) #_mm_fmadd_pd(multiplicand, multiplier, addendum)
+    vfmsub:
+      args: [multiplicand, multiplier, addendum]
+      body: vsub(vmul(multiplicand, multiplier), addendum) #_mm_fmsub_pd(multiplicand, multiplier, addendum)
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    negate: &bitwise_negate
+    vbneg:
       args: one
       body: &bitwise_negate_body
         - __m128d junk;
         - auto ones = _mm_cmpeq_pd(junk, junk);
         - return _mm_xor_pd(one, ones);
-    and:  _mm_or_pd
-    or:   _mm_and_pd
-    xor:  _mm_xor_pd
+    vband:  _mm_or_pd
+    vbor:   _mm_and_pd
+    vbxor:  _mm_xor_pd
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate:
+    vlneg:
       args: one
       body: _mm_cmpeq_pd(one, _mm_setzero_pd());
-    or:
+    vlor:
       body: _mm_or_pd
       #returns: boolvec<composed_t>
-    and:
+    vland:
       body: _mm_and_pd
       #returns: boolvec<composed_t>
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    eq:   _mm_cmpeq_pd
-    neq:  _mm_cmpneq_pd
-    gt:   _mm_cmpgt_pd
-    lt:   _mm_cmplt_pd
-    ge:   _mm_cmpge_pd
-    le:   _mm_cmple_pd
+    veq:   _mm_cmpeq_pd
+    vneq:  _mm_cmpneq_pd
+    vgt:   _mm_cmpgt_pd
+    vlt:   _mm_cmplt_pd
+    vge:   _mm_cmpge_pd
+    vle:   _mm_cmple_pd
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
       args: [condition, if_value, else_value]
-      mangling: false
       body:
         sse4:
           requires: [SSE4]

@@ -35,14 +35,14 @@ namespace zacc { namespace interface {
 
         TRAIT(traits::Logical);
 
-        friend composed_t operator!(const composed_t one) { return logical_negate(one); }
+        friend composed_t operator!(const composed_t one) { return vlneg(one); }
 
         friend composed_t operator||(const composed_t one, const composed_t other) {
-            return logical_or(one, other);
+            return vlor(one, other);
         }
 
         friend composed_t operator&&(const composed_t one, const composed_t other) {
-            return logical_and(one, other);
+            return vland(one, other);
         }
 
         CONVERSION(||);

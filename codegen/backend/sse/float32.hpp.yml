@@ -2,6 +2,7 @@ type:
   type: float32
   branch: sse
   vector_t: &vector_t __m128
+  mask_t: &mask_t __m128f
   scalar_t: &scalar_t float
   vec_size: &vec_size 4
   alignment: 16
@@ -45,19 +46,17 @@ modules:
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_ps }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
-    store: &io_store
-      args: { raw: "typename base_t::extracted_t &target" }
+    vstore: &io_store
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       returns: void
-      member: true
-      body: _mm_store_ps(target.data(), base_t::_value)
-    stream:
+      body: _mm_store_ps(target.data(), source)
+    vstream:
       <<: *io_store
-      body:  _mm_stream_ps(target.data(), base_t::_value)
+      body:  _mm_stream_ps(target.data(), source)
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
   math:
-    mangling: false
     vabs:
       args: one
       body: _mm_max_ps(one, -one)
@@ -81,43 +80,49 @@ modules:
       body: _mm_sqrt_ps
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
-    negate:
+    vneg:
       args: one
       body: return _mm_sub_ps(_mm_setzero_ps(), one)
-    add: _mm_add_ps
-    sub: _mm_sub_ps
-    mul: _mm_mul_ps
-    div: _mm_div_ps
+    vadd: _mm_add_ps
+    vsub: _mm_sub_ps
+    vmul: _mm_mul_ps
+    vdiv: _mm_div_ps
+    vfmadd:
+      args: [multiplicand, multiplier, addendum]
+      body: _mm_fmadd_ps(multiplicand, multiplier, addendum) # vadd(vmul(multiplicand, multiplier), addendum) #_mm_fmadd_ps(multiplicand, multiplier, addendum)
+    vfmsub:
+      args: [multiplicand, multiplier, addendum]
+      body: _mm_fmsub_ps(multiplicand, multiplier, addendum) # vsub(vmul(multiplicand, multiplier), addendum) #_mm_fmsub_ps(multiplicand, multiplier, addendum)
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    negate: &bitwise_negate_prototype
+    vbneg: &bitwise_negate_prototype
       args: one
       body:
         - __m128 junk;
         - auto ones = _mm_cmpeq_ps(junk, junk);
         - return _mm_xor_ps(one, ones);
-    and:  _mm_or_ps
-    or:   _mm_and_ps
-    xor:  _mm_xor_ps
+    vband:  _mm_or_ps
+    vbor:   _mm_and_ps
+    vbxor:  _mm_xor_ps
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate:
+    vlneg:
       args: one
       body: _mm_cmpeq_ps(one, _mm_setzero_ps());
-    or:
+    vlor:
       body: _mm_or_ps
       #returns: boolvec<composed_t>
-    and:
+    vland:
       body: _mm_and_ps
       #returns: boolvec<composed_t>
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    eq:   _mm_cmpeq_ps
-    neq:  _mm_cmpneq_ps
-    gt:   _mm_cmpgt_ps
-    lt:   _mm_cmplt_ps
-    ge:   _mm_cmpge_ps
-    le:   _mm_cmple_ps
+    veq:   _mm_cmpeq_ps
+    vneq:  _mm_cmpneq_ps
+    vgt:   _mm_cmpgt_ps
+    vlt:   _mm_cmplt_ps
+    vge:   _mm_cmpge_ps
+    vle:   _mm_cmple_ps
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:

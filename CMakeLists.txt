@@ -56,6 +56,7 @@ add_definitions(-D__STRICT_ANSI__)
 
 if(ENABLE_TRACE)
     add_definitions(-DZACC_TRACE)
+    message("Adding trace")
 endif()
 
 if(BUILD_FAST_FLOAT)

@@ -2,6 +2,7 @@ type:
   type: int16
   branch: scalar
   vector_t: &vector_t short
+  mask_t: &mask_t bool
   scalar_t: &scalar_t short
   vec_size: &vec_size 1
   alignment: 8
@@ -26,58 +27,63 @@ modules:
       init: value
 #-----------------------------------------------------------------------------------------------------------------------
   io:
-    store: &io_store
+    vstore: &io_store
       returns: void
       member: true
       suffix: const
-      args: { raw: "typename base_t::extracted_t &target" }
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       body: target.data()[0] = base_t::_value;
-    stream: *io_store
+    vstream: *io_store
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
-    negate:
+    vnegate:
       args: one
-      body: -one.get_value();
-    add: one.get_value() + other.get_value();
-    sub: one.get_value() - other.get_value();
-    mul: one.get_value() * other.get_value();
-    div: one.get_value() / other.get_value();
+      body: -one;
+    vadd: one + other;
+    vsub: one - other;
+    vmul: one * other;
+    vdiv: one / other;
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    negate:
+    vnegate:
       args: one
-      body: ~one.get_value();
-    and:  one.get_value() & other.get_value();
-    or:   one.get_value() | other.get_value();
-    xor:  one.get_value() ^ other.get_value();
+      body: ~one;
+    vand:  one & other;
+    vor:   one | other;
+    vxor:  one ^ other;
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
-    sll:  one.get_value() << other.get_value()
-    srl:  one.get_value() >> other.get_value()
-    slli:
+    vsll:  one << other
+    vsrl:  one >> other
+    vslli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: one.get_value() << other
-    srli:
+      body: one << other
+    vsrli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: one.get_value() >> other
+      body: one >> other
 #-----------------------------------------------------------------------------------------------------------------------
-#  logical:
-#    negate:
-#      args: one
-#      body: "!one.get_value()"
-#    or:   one.get_value() || other.get_value();
-#    and:  one.get_value() && other.get_value();
+  logical:
+    vnegate:
+      args: one
+      returns: *mask_t
+      body: "!one"
+    vor:
+      returns: *mask_t
+      body: one || other;
+    vand:
+      returns: *mask_t
+      body: one && other;
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    eq:   one.get_value() == other.get_value();
-    neq:  one.get_value() != other.get_value();
-    gt:   one.get_value() > other.get_value();
-    lt:   one.get_value() < other.get_value();
-    ge:   one.get_value() >= other.get_value();
-    le:   one.get_value() <= other.get_value();
+    veq:   one == other;
+    vneq:  one != other;
+    vgt:   one > other;
+    vlt:   one < other;
+    vge:   one >= other;
+    vle:   one <= other;
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
      vsel:
         args: [condition, if_value, else_value]
         mangling: false
-        body: "(condition.get_value() != 0 ? if_value : else_value)"
+        body: "(condition != 0 ? if_value : else_value)"

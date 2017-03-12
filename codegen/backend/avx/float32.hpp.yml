@@ -43,54 +43,54 @@ modules:
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
   io:
-    store: &io_store
-      args: { raw: "typename base_t::extracted_t &target" }
+    vstore: &io_store
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       returns: void
       member: true
-      body: _mm256_store_ps(target.data(), base_t::_value)
-    stream:
+      body: _mm256_store_ps(target.data(), source)
+    vstream:
       <<: *io_store
-      body: _mm256_stream_ps(target.data(), base_t::_value)
+      body: _mm256_stream_ps(target.data(), source)
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
-    negate:
+    vneg:
       args: one
-      body: return _mm256_sub_ps(_mm256_setzero_ps(), one.get_value())
-    add: _mm256_add_ps
-    sub: _mm256_sub_ps
-    mul: _mm256_mul_ps
-    div: _mm256_div_ps
+      body: return _mm256_sub_ps(_mm256_setzero_ps(), one)
+    vadd: _mm256_add_ps
+    vsub: _mm256_sub_ps
+    vmul: _mm256_mul_ps
+    vdiv: _mm256_div_ps
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    negate: &bitwise_negate
+    vneg: &bitwise_negate
       args: one
       body: &bitwise_negate_body
         - __m256 junk;
         - auto ones = _mm256_cmp_ps(junk, junk, _CMP_EQ_OQ);
-        - return _mm256_xor_ps(one.get_value(), ones);
-    and:  _mm256_or_ps
+        - return _mm256_xor_ps(one, ones);
+    vand:  _mm256_or_ps
     or:   _mm256_and_ps
     xor:  _mm256_xor_ps
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate:
+    vneg:
       args: one
-      body: _mm256_cmp_ps(one.get_value(), _mm256_setzero_ps(), _CMP_EQ_OQ);
+      body: _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ);
     or:   _mm256_or_ps
-    and:  _mm256_and_ps
+    vand:  _mm256_and_ps
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    eq:   _mm256_cmp_ps(one.get_value(), other.get_value(), _CMP_EQ_OQ)
-    neq:  _mm256_cmp_ps(one.get_value(), other.get_value(), _CMP_NEQ_OQ)
-    gt:   _mm256_cmp_ps(one.get_value(), other.get_value(), _CMP_GT_OQ)
-    lt:   _mm256_cmp_ps(one.get_value(), other.get_value(), _CMP_LT_OQ)
-    ge:   _mm256_cmp_ps(one.get_value(), other.get_value(), _CMP_GE_OQ)
-    le:   _mm256_cmp_ps(one.get_value(), other.get_value(), _CMP_LE_OQ)
+    veq:   _mm256_cmp_ps(one, other, _CMP_EQ_OQ)
+    vneq:  _mm256_cmp_ps(one, other, _CMP_NEQ_OQ)
+    vgt:   _mm256_cmp_ps(one, other, _CMP_GT_OQ)
+    vlt:   _mm256_cmp_ps(one, other, _CMP_LT_OQ)
+    vge:   _mm256_cmp_ps(one, other, _CMP_GE_OQ)
+    vle:   _mm256_cmp_ps(one, other, _CMP_LE_OQ)
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
       args: [condition, if_value, else_value]
       mangling: false
       body:
-        - auto mask = _mm256_cmp_ps(_mm256_setzero_ps(), condition.get_value(), _CMP_EQ_OQ);
-        - return _mm256_blendv_ps(if_value.get_value(), else_value.get_value(), mask);
+        - auto mask = _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ);
+        - return _mm256_blendv_ps(if_value, else_value, mask);

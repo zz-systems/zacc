@@ -35,25 +35,28 @@ namespace zacc { namespace interface {
 
         TRAIT(traits::Bitwise);
 
-        friend composed_t operator~(const composed_t one) { return bitwise_negate(one); }
+        friend composed_t operator~(const composed_t one) { return vbneg(one); }
 
         friend composed_t operator|(const composed_t one, const composed_t other) {
-            return bitwise_or(one, other);
+            return vbor(one, other);
         }
 
         friend composed_t operator&(const composed_t one, const composed_t other) {
-            return bitwise_and(one, other);
+            return vband(one, other);
         }
 
         friend composed_t operator^(const composed_t one, const composed_t other) {
-            return bitwise_xor(one, other);
+            return vbxor(one, other);
         }
 
 
         CONVERSION(|);
+        ASSIGNMENT(|);
 
         CONVERSION(&);
+        ASSIGNMENT(&);
 
         CONVERSION(^);
+        ASSIGNMENT(^);
     };
 }}

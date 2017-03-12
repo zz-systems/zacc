@@ -39,7 +39,7 @@ namespace zacc { namespace test {
         {% for func in module.functions %}
             {% for branch in func.branches() %}
                 {% if branch.test and (module.name != 'bitwise' or not type.type.startswith('float')) %}
-    TEST({{ type.branch}}_{{ module.mangled_name() }}, {{ branch.mangled_name() }}{{ "_" + branch.branch_name }})
+    TEST({{ type.branch}}_{{ module.mangled_name() }}, {{ branch.name }}_{{ branch.branch_name }})
     {
         auto actual = {{ branch.actual }};
         auto expected = ({{ type.scalar_t }}) {{ branch.expected }};

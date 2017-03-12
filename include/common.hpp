@@ -59,5 +59,12 @@
 
 #define CONVERSION(op) CONVERSION2(op, composed_t)
 
+#define ASSIGNMENT2(op, composed_t) \
+    friend composed_t &operator op##=(composed_t &one, const composed_t other) { \
+        return one = one op other; \
+    }
+
+#define ASSIGNMENT(op) ASSIGNMENT2(op, composed_t)
+
 #define STRINGIZE_DETAIL(x) #x
 #define STRINGIZE(x) STRINGIZE_DETAIL(x)

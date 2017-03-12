@@ -68,7 +68,7 @@ namespace zacc {
 
         const operator vector_t() const
         {
-            return _value;
+            return get_value();
         }
 
         const vector_t &get_value() const { return _value; }

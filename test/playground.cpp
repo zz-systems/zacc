@@ -47,8 +47,22 @@ int main() {
 
     std::cout << "}";
 
+    zfloat a = 2;
+    zfloat b = 3;
+    zfloat c = 4;
 
-    for (int i = -9; i <= 9; i++)
+    ZTRACE("fused mul*");
+    std::cout << std::endl << "fused muladd:" << vfmadd(a, b, c) << std::endl;
+    std::cout << std::endl << "fused mulsub:" << vfmsub(a, b, c) << std::endl;
+
+    ZTRACE("fused mul* via op");
+    std::cout << std::endl << "fused muladd via op:" << a * b + c << std::endl;
+    std::cout << std::endl << "fused mulsub via op:" << a * b - c << std::endl;
+
+    ZTRACE("fused mul via op");
+    std::cout << std::endl << "fused mul via op:" << static_cast<zfloat>(a * b) << std::endl;
+
+    /*for (int i = -9; i <= 9; i++)
     {
         std::cout << std::endl << "sin(" << std::right << std::setw(3) <<  i * 10 << "): " << std::left << std::setw(10) << sin(i * 10 / 180.0 * M_PI) << math::vsin(zfloat(i * 10 / 180.0 * M_PI)) << std::endl;
     }
@@ -61,7 +75,7 @@ int main() {
     for (int i = -18; i <= 18; i++)
     {
         std::cout << std::endl << "tan(" << std::right << std::setw(3) <<  i * 10 << "): " << std::left << std::setw(10) << tan(i * 10 / 180.0 * M_PI) << math::vtan(zfloat(i * 10 / 180.0 * M_PI)) << std::endl;
-    }
+    }*/
 
     return 0;
 }

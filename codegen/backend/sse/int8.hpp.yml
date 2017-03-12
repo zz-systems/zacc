@@ -2,6 +2,7 @@ type:
   type: int8
   branch: sse
   vector_t: &vector_t __m128i
+  mask_t: &mask_t __m128i
   scalar_t: &scalar_t char
   vec_size: &vec_size 16
   alignment: 16
@@ -35,76 +36,75 @@ modules:
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi8 }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
-    store: &io_store
-      args: { raw: "typename base_t::extracted_t &target" }
+    vstore: &io_store
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       returns: void
-      member: true
-      body: _mm_store_si128((__m128i*)target.data(), base_t::_value)
-    stream:
+      body: _mm_store_si128((__m128i*)target.data(), source)
+    vstream:
       <<: *io_store
-      body:  _mm_stream_si128((__m128i*)target.data(), base_t::_value)
+      body:  _mm_stream_si128((__m128i*)target.data(), source)
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
-    negate:
+    vneg:
       args: one
-      body: return _mm_sub_epi8(_mm_setzero_si128(), one.get_value())
-    add: _mm_add_epi8
-    sub: _mm_sub_epi8
-    #mul:
+      body: return _mm_sub_epi8(_mm_setzero_si128(), one)
+    vadd: _mm_add_epi8
+    vsub: _mm_sub_epi8
+    #vmul:
     #  body:
     #    sse41: &sse41
     #      - _mm_mullo_epi8
     #    sse42: *sse41
     #   default:
-    #      - /* mul 2,0*/
-    #      - auto tmp1 = _mm_castsi128_ps(_mm_mul_epu32(one.get_value(), other.get_value()));
-    #      - /* mul 3,1 */
-    #      - auto tmp2 = _mm_castsi128_ps(_mm_mul_epu32(_mm_srli_si128(one.get_value(), 4), _mm_srli_si128(other.get_value(), 4)));
+    #      - /* vmul 2,0*/
+    #      - auto tmp1 = _mm_castsi128_ps(_mm_mul_epu32(one, other));
+    #      - /* vmul 3,1 */
+    #      - auto tmp2 = _mm_castsi128_ps(_mm_mul_epu32(_mm_srli_si128(one, 4), _mm_srli_si128(other, 4)));
     #      - return _mm_castps_si128(_mm_shuffle_ps(tmp1, tmp2, _MM_SHUFFLE(2, 0, 2, 0)));
-    #div: _mm_div_ps(_mm_cvtepi32_ps(one.get_value()), _mm_cvtepi32_ps(other.get_value()));
+    #vdiv: _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    negate: &bitwise_negate
+    vbneg: &bitwise_negate
       args: one
       body:
         - __m128i junk;
         - auto ones = _mm_cmpeq_epi8(junk, junk);
-        - return _mm_xor_si128(one.get_value(), ones);
-    or:   &bitwise_or
+        - return _mm_xor_si128(one, ones);
+    vbor:   &bitwise_or
       body: _mm_or_si128
-    and:  &bitwise_and
+    vband:  &bitwise_and
       body: _mm_and_si128
-    xor:  &bitwise_xor
+    vbxor:  &bitwise_xor
       body: _mm_xor_si128
 #-----------------------------------------------------------------------------------------------------------------------
 #  bitwise_shift:
-#    sll:  _mm_sll_epi8
-#    srl:  _mm_srl_epi8
-#    slli:
+#    vsll:  _mm_sll_epi8
+#    vsrl:  _mm_srl_epi8
+#    vslli:
 #      args: { raw: "const composed_t one, const size_t other" }
-#      body: "_mm_slli_epi8(one.get_value(), other)"
-#    srli:
+#      body: "_mm_slli_epi8(one, other)"
+#    vsrli:
 #      args: { raw: "const composed_t one, const size_t other" }
-#      body: "_mm_srli_epi8(one.get_value(), other)"
+#      body: "_mm_srli_epi8(one, other)"
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate:
+    vlneg:
       args: one
-      body: _mm_cmpeq_epi8(one.get_value(), _mm_setzero_si128());
-    or:
+      body: _mm_cmpeq_epi8(one, _mm_setzero_si128());
+    vlor:
       <<: *bitwise_or
       #returns: boolvec<composed_t>
-    and:
+    vland:
       <<: *bitwise_and
       #returns: boolvec<composed_t>
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    eq:   _mm_cmpeq_epi8
-    neq:  "!(one == other)"
-    gt:   _mm_cmpgt_epi8
-    lt:   _mm_cmplt_epi8
-    ge:   "!(one < other)"
-    le:   "!(one > other)"
+    veq:   _mm_cmpeq_epi8
+    vneq:  "!(one == other)"
+    vgt:   _mm_cmpgt_epi8
+    vlt:   _mm_cmplt_epi8
+    vge:   "!(one < other)"
+    vle:   "!(one > other)"
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
@@ -112,8 +112,8 @@ modules:
       mangling: false
       body:
         #sse41: &sse41
-        #  - auto mask = _mm_cmpeq_epi8(_mm_setzero_si128(), condition.get_value());
-        #  - return _mm_blendv_epi8(if_value.get_value(), else_value.get_value(), mask);
+        #  - auto mask = _mm_cmpeq_epi8(_mm_setzero_si128(), condition);
+        #  - return _mm_blendv_epi8(if_value, else_value, mask);
         #sse42: *sse41
         #default:
-          return _mm_or_si128(_mm_andnot_si128(condition.get_value(), else_value.get_value()), _mm_and_si128(condition.get_value(), if_value.get_value()))
+          return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value))

@@ -40,52 +40,52 @@ modules:
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm512_set_pd }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
-    store: &io_store
+    vstore: &io_store
       returns: void
       member: true
       suffix: const
-      args: { raw: "typename base_t::extracted_t &target" }
-      body: _mm512_store_pd(target.data(), base_t::_value);
-    stream:
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      body: _mm512_store_pd(target.data(), source);
+    vstream:
       <<: *io_store
-      body: _mm512_stream_pd(target.data(), base_t::_value);
+      body: _mm512_stream_pd(target.data(), source);
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
-    negate:
+    vneg:
       args: one
-      body: return _mm512_sub_pd(_mm512_setzero_pd(), one.get_value())
-    add: _mm512_add_pd
-    sub: _mm512_sub_pd
-    mul: _mm512_mul_pd
-    div: _mm512_div_pd
+      body: return _mm512_sub_pd(_mm512_setzero_pd(), one)
+    vadd: _mm512_add_pd
+    vsub: _mm512_sub_pd
+    vmul: _mm512_mul_pd
+    vdiv: _mm512_div_pd
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    negate: &bitwise_negate
+    vneg: &bitwise_negate
       args: one
       body: &bitwise_negate_body
         - auto zero = _mm512_setzero_pd();
         - auto ones = _mm512_cmpeq_pd(zero, zero);
-        - return _mm512_xor_pd(one.get_value(), ones);
-    and:  _mm512_or_pd
+        - return _mm512_xor_pd(one, ones);
+    vand:  _mm512_or_pd
     or:   _mm512_and_pd
     xor:  _mm512_xor_pd
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate: *bitwise_negate
+    vneg: *bitwise_negate
     or:   _mm512_or_pd
-    and:  _mm512_and_pd
+    vand:  _mm512_and_pd
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    eq:   _mm512_cmpeq_pd
-    neq:  _mm512_cmpneq_pd
-    gt:   _mm512_cmpgt_pd
-    lt:   _mm512_cmplt_pd
-    ge:   _mm512_cmpge_pd
-    le:   _mm512_cmple_pd
+    veq:   _mm512_cmpeq_pd
+    vneq:  _mm512_cmpneq_pd
+    vgt:   _mm512_cmpgt_pd
+    vlt:   _mm512_cmplt_pd
+    vge:   _mm512_cmpge_pd
+    vle:   _mm512_cmple_pd
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
       args: [condition, if_value, else_value]
       mangling: false
       body:
-          _mm512_or_pd(_mm512_andnot_pd(condition.get_value(), else_value.get_value()), _mm512_and_pd(condition.get_value(), if_value.get_value()))
+          _mm512_or_pd(_mm512_andnot_pd(condition, else_value), _mm512_and_pd(condition, if_value))

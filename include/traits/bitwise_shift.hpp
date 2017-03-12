@@ -37,11 +37,11 @@ namespace zacc { namespace interface {
 
 
         friend composed_t operator<<(const composed_t one, const size_t immediate) {
-            return bitwise_shift_slli(one, immediate);
+            return vbslli(one, immediate);
         }
 
         friend composed_t operator>>(const composed_t one, const size_t immediate) {
-            return bitwise_shift_srli(one, immediate);
+            return vbsrli(one, immediate);
         }
 // TODO: Disabled for now.
 //        friend composed_t operator<<(const composed_t one, const composed_t other) {
@@ -54,7 +54,9 @@ namespace zacc { namespace interface {
 
 
         CONVERSION(<<);
+        ASSIGNMENT(<<);
 
         CONVERSION(>>);
+        ASSIGNMENT(>>);
     };
 }}

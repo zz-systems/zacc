@@ -33,7 +33,7 @@
 namespace zacc { namespace test {
 
 // =====================================================================================================================
-    TEST(sse_int16_arithmetic, arithmetic_negate_default)
+    TEST(sse_int16_arithmetic, vneg_default)
     {
         auto actual = -zint16(125);
         auto expected = (short) -125;
@@ -44,7 +44,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_arithmetic, arithmetic_add_default)
+    TEST(sse_int16_arithmetic, vadd_default)
     {
         auto actual = zint16(12) + zint16(105);
         auto expected = (short) 117;
@@ -55,7 +55,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_arithmetic, arithmetic_sub_default)
+    TEST(sse_int16_arithmetic, vsub_default)
     {
         auto actual = zint16(124) - zint16(125);
         auto expected = (short) -1;
@@ -66,7 +66,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_arithmetic, arithmetic_mul_default)
+    TEST(sse_int16_arithmetic, vmul_default)
     {
         auto actual = zint16(12) * zint16(9);
         auto expected = (short) 108;
@@ -79,7 +79,7 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int16_bitwise, bitwise_negate_default)
+    TEST(sse_int16_bitwise, vbneg_default)
     {
         auto actual = ~zint16(100);
         auto expected = (short) ~100;
@@ -90,7 +90,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_bitwise, bitwise_or_default)
+    TEST(sse_int16_bitwise, vbor_default)
     {
         auto actual = zint16(127) | zint16(64);
         auto expected = (short) (127 | 64);
@@ -101,7 +101,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_bitwise, bitwise_and_default)
+    TEST(sse_int16_bitwise, vband_default)
     {
         auto actual = zint16(127) & zint16(64);
         auto expected = (short) (127 & 64);
@@ -112,7 +112,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_bitwise, bitwise_xor_default)
+    TEST(sse_int16_bitwise, vbxor_default)
     {
         auto actual = zint16(127) ^ zint16(64);
         auto expected = (short) (127 ^ 64);
@@ -125,7 +125,7 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int16_bitwise_shift, bitwise_shift_slli_default)
+    TEST(sse_int16_bitwise_shift, vbslli_default)
     {
         auto actual = zint16(1) << (4);
         auto expected = (short) (1) << (4);
@@ -136,7 +136,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_bitwise_shift, bitwise_shift_srli_default)
+    TEST(sse_int16_bitwise_shift, vbsrli_default)
     {
         auto actual = zint16(109) >> (3);
         auto expected = (short) (109) >> (3);
@@ -149,7 +149,7 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int16_logical, logical_negate_default)
+    TEST(sse_int16_logical, vlneg_default)
     {
         auto actual = (!zint16(1)).as_bool();
         auto expected = (short) false;
@@ -160,7 +160,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_logical, logical_or_default)
+    TEST(sse_int16_logical, vlor_default)
     {
         auto actual = zint16(0) || zint16(8);
         auto expected = (short) 8;
@@ -171,7 +171,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_logical, logical_and_default)
+    TEST(sse_int16_logical, vland_default)
     {
         auto actual = zint16(0) && zint16(8);
         auto expected = (short) 0;
@@ -184,7 +184,7 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int16_comparison, comparison_eq_default)
+    TEST(sse_int16_comparison, veq_default)
     {
         auto actual = zint16(0) == zint16(8);
         auto expected = (short) 0;
@@ -195,7 +195,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_comparison, comparison_neq_default)
+    TEST(sse_int16_comparison, vneq_default)
     {
         auto actual = zint16(0) != zint16(0);
         auto expected = (short) 0;
@@ -206,7 +206,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_comparison, comparison_gt_default)
+    TEST(sse_int16_comparison, vgt_default)
     {
         auto actual = zint16(0) > zint16(8);
         auto expected = (short) 0;
@@ -217,7 +217,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_comparison, comparison_lt_default)
+    TEST(sse_int16_comparison, vlt_default)
     {
         auto actual = zint16(8) < zint16(0);
         auto expected = (short) 0;
@@ -228,7 +228,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_comparison, comparison_ge_default)
+    TEST(sse_int16_comparison, vge_default)
     {
         auto actual = (zint16(0) >= zint16(0)).as_bool();
         auto expected = (short) true;
@@ -239,7 +239,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int16_comparison, comparison_le_default)
+    TEST(sse_int16_comparison, vle_default)
     {
         auto actual = (zint16(0) <= zint16(0)).as_bool();
         auto expected = (short) true;

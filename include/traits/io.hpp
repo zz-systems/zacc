@@ -40,12 +40,12 @@ namespace zacc { namespace interface {
 
         void store (extracted_t &target) const
         {
-            base_t::io_store(target);
+            vstore(target, static_cast<composed_t>(base_t::_value));
         }
 
         void stream (extracted_t &target) const
         {
-            base_t::io_stream(target);
+            vstream(target, static_cast<composed_t>(base_t::_value));
         }
 
         const extracted_t data() const {

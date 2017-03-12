@@ -2,6 +2,7 @@ type:
   type: int16
   branch: sse
   vector_t: &vector_t __m128i
+  mask_t: &mask_t __m128i
   scalar_t: &scalar_t short
   vec_size: &vec_size 8
   alignment: 16
@@ -35,66 +36,65 @@ modules:
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi16 }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
-    store: &io_store
-      args: { raw: "typename base_t::extracted_t &target" }
+    vstore: &io_store
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       returns: void
-      member: true
-      body: _mm_store_si128((__m128i*)target.data(), base_t::_value)
-    stream:
+      body: _mm_store_si128((__m128i*)target.data(), source)
+    vstream:
       <<: *io_store
-      body:  _mm_stream_si128((__m128i*)target.data(), base_t::_value)
+      body:  _mm_stream_si128((__m128i*)target.data(), source)
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
-    negate:
+    vneg:
       args: one
-      body: return _mm_sub_epi16(_mm_setzero_si128(), one.get_value())
-    add: _mm_add_epi16
-    sub: _mm_sub_epi16
-    mul: _mm_mullo_epi16
-    #div: _mm_div_ps(_mm_cvtepi32_ps(one.get_value()), _mm_cvtepi32_ps(other.get_value()));
+      body: return _mm_sub_epi16(_mm_setzero_si128(), one)
+    vadd: _mm_add_epi16
+    vsub: _mm_sub_epi16
+    vmul: _mm_mullo_epi16
+    #vdiv: _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    negate: &bitwise_negate
+    vbneg: &bitwise_negate
       args: one
       body:
         - __m128i junk;
         - auto ones = _mm_cmpeq_epi16(junk, junk);
-        - return _mm_xor_si128(one.get_value(), ones);
-    or:   &bitwise_or
+        - return _mm_xor_si128(one, ones);
+    vbor:   &bitwise_or
       body: _mm_or_si128
-    and:  &bitwise_and
+    vband:  &bitwise_and
       body: _mm_and_si128
-    xor:  &bitwise_xor
+    vbxor:  &bitwise_xor
       body: _mm_xor_si128
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
-    sll:  _mm_sll_epi16
-    srl:  _mm_srl_epi16
-    slli:
+    vbsll:  _mm_sll_epi16
+    vbsrl:  _mm_srl_epi16
+    vbslli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: "_mm_slli_epi16(one.get_value(), other)"
-    srli:
+      body: "_mm_slli_epi16(one, other)"
+    vbsrli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: "_mm_srli_epi16(one.get_value(), other)"
+      body: "_mm_srli_epi16(one, other)"
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    negate:
+    vlneg:
       args: one
-      body: _mm_cmpeq_epi16(one.get_value(), _mm_setzero_si128());
-    or:
+      body: _mm_cmpeq_epi16(one, _mm_setzero_si128());
+    vlor:
       <<: *bitwise_or
       #returns: boolvec<composed_t>
-    and:
+    vland:
       <<: *bitwise_and
       #returns: boolvec<composed_t>
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    eq:   _mm_cmpeq_epi16
-    neq:  "!(one == other)"
-    gt:   _mm_cmpgt_epi16
-    lt:   _mm_cmplt_epi16
-    ge:   "!(one < other)"
-    le:   "!(one > other)"
+    veq:   _mm_cmpeq_epi16
+    vneq:  "!(one == other)"
+    vgt:   _mm_cmpgt_epi16
+    vlt:   _mm_cmplt_epi16
+    vge:   "!(one < other)"
+    vle:   "!(one > other)"
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
@@ -102,8 +102,8 @@ modules:
       mangling: false
       body:
         #sse41: &sse41
-        #  - auto mask = _mm_cmpeq_epi16(_mm_setzero_si128(), condition.get_value());
-        #  - return _mm_blendv_epi8(if_value.get_value(), else_value.get_value(), mask);
+        #  - auto mask = _mm_cmpeq_epi16(_mm_setzero_si128(), condition);
+        #  - return _mm_blendv_epi8(if_value, else_value, mask);
         #sse42: *sse41
         #default:
-          return _mm_or_si128(_mm_andnot_si128(condition.get_value(), else_value.get_value()), _mm_and_si128(condition.get_value(), if_value.get_value()))
+          return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value))

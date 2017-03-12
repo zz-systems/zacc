@@ -38,13 +38,13 @@ class Module:
         self.functions      = functions
         self.name           = name
         self.test_config    = parent.test_config and parent.test_config.get(name)
-        self.mangling       = bool(1)
+        self.mangling       = bool(0)
         #print("Building module", self.name)
 
     @classmethod
     def make_module(cls, parent, name, entries):
         result =  cls(parent, name, [])
-        result.mangling  = entries.get("mangling", bool(1))
+        result.mangling  = entries.get("mangling", bool(0))
         result.functions = [Func(result, k, v) for k,v in entries.items() if k != "mangling"]
 
         return result
