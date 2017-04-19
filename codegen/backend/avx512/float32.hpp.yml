@@ -2,6 +2,7 @@ type:
   type: float32
   branch: avx512
   vector_t: &vector_t __m512
+  mask_t: &mask_t __mmask16
   scalar_t: &scalar_t float
   vec_size: &vec_size 16
   alignment: 64
@@ -21,6 +22,9 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
+      - args: []
+        init: ""
+
       - args: __m512 value
         init: value
 

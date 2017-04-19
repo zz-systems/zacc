@@ -2,7 +2,8 @@ type:
   type: int16
   branch: avx512
   vector_t: &vector_t __m512i
-  scalar_t: &scalar_t short
+  mask_t: &mask_t __mmask32
+  scalar_t: &scalar_t int16_t
   vec_size: &vec_size 32
   alignment: 64
 #-----------------------------------------------------------------------------------------------------------------------
@@ -21,6 +22,9 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
+    - args: []
+      init: ""
+
     - args: __m512i value
       init: value
 

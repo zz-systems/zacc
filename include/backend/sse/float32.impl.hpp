@@ -30,6 +30,7 @@
 
 #include <x86intrin.h>
 #include <type_traits>
+#include <cmath>
 
 #include "util/type_composition.hpp"
 
@@ -78,6 +79,8 @@ namespace zacc { namespace sse {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
 
 
             /**
@@ -87,7 +90,7 @@ namespace zacc { namespace sse {
              */
             __impl() : base_t() {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "CONS()");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "CONS()");
 
             }
 
@@ -99,7 +102,7 @@ namespace zacc { namespace sse {
              */
             __impl(__m128 value) : base_t(value) {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "CONS(__m128 value)");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "CONS(__m128 value)");
 
             }
 
@@ -111,7 +114,7 @@ namespace zacc { namespace sse {
              */
             __impl(__m128d value) : base_t(_mm_cvtpd_ps(value)) {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "CONS(__m128d value)");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "CONS(__m128d value)");
 
             }
 
@@ -123,7 +126,7 @@ namespace zacc { namespace sse {
              */
             __impl(__m128i value) : base_t(_mm_cvtepi32_ps(value)) {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "CONS(__m128i value)");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "CONS(__m128i value)");
 
             }
 
@@ -135,7 +138,7 @@ namespace zacc { namespace sse {
              */
             __impl(float value) : base_t(_mm_set1_ps(value)) {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "CONS(float value)");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "CONS(float value)");
 
             }
 
@@ -147,7 +150,7 @@ namespace zacc { namespace sse {
              */
             __impl(float *value) : base_t(_mm_load_ps(value)) {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "CONS(float *value)");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "CONS(float *value)");
 
             }
 
@@ -159,7 +162,7 @@ namespace zacc { namespace sse {
              */
             __impl(float arg3, float arg2, float arg1, float arg0) : base_t(_mm_set_ps(arg0, arg1, arg2, arg3)) {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "CONS(float arg3, float arg2, float ar..)");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "CONS(float arg3, float arg2, float ar..)");
 
             }
 
@@ -200,6 +203,8 @@ namespace zacc { namespace sse {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -210,7 +215,7 @@ namespace zacc { namespace sse {
              */
             friend void vstore(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vstore");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vstore");
 
                 _mm_store_ps(target.data(), source);
             }
@@ -223,7 +228,7 @@ namespace zacc { namespace sse {
              */
             friend void vstream(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vstream");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vstream");
 
                 _mm_stream_ps(target.data(), source);
             }
@@ -265,6 +270,8 @@ namespace zacc { namespace sse {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
         };
@@ -304,6 +311,8 @@ namespace zacc { namespace sse {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -314,7 +323,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t vabs(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vabs");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vabs");
 
                 return _mm_max_ps(one, -one);
             }
@@ -327,7 +336,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t vrcp(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vrcp");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vrcp");
 
                 return _mm_rcp_ps(one);
             }
@@ -340,20 +349,20 @@ namespace zacc { namespace sse {
              */
             friend composed_t vtrunc(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vtrunc");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vtrunc");
 
                 return _mm_cvtepi32_ps(_mm_cvtps_epi32(one));
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math sse4 branch
              * @relates float32
-             * @remark sse - default
+             * @remark sse - sse4
              */
-            friend composed_t vfloor(composed_t one)  noexcept {
+            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vfloor(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vfloor");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "sse4", "vfloor");
 
                 return _mm_floor_ps(one);
             }
@@ -364,9 +373,25 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend composed_t vceil(composed_t one)  noexcept {
+            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vfloor(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vceil");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vfloor");
+
+                auto zero = _mm_setzero_si128();
+                auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
+                auto fi = vtrunc(one);
+                return vsel(vgt(fi, one), vsub(fi, _1), fi);
+            }
+
+
+            /**
+             * @brief math sse4 branch
+             * @relates float32
+             * @remark sse - sse4
+             */
+            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vceil(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "sse4", "vceil");
 
                 return _mm_ceil_ps(one);
             }
@@ -377,9 +402,25 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend composed_t vround(composed_t one)  noexcept {
+            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vceil(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vround");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vceil");
+
+                __m128 junk;
+                auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(junk, junk), 31);
+                auto fi = vtrunc(one);
+                return vsel(vlt(fi, one), vadd(fi, _1), fi);
+            }
+
+
+            /**
+             * @brief math sse4 branch
+             * @relates float32
+             * @remark sse - sse4
+             */
+            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vround(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "sse4", "vround");
 
                 return _mm_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
             }
@@ -390,9 +431,33 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
+            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vround(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vround");
+
+                auto zero = _mm_setzero_si128();
+                auto ones = _mm_cmpeq_epi32(zero, zero);
+                // generate the highest value < 2;
+                auto nearest = _mm_castsi128_ps(_mm_srli_epi32(ones, 2));
+                auto tr = vtrunc(one);
+                // get remainder;
+                auto rmd = one - tr;
+                // mul remainder by near 2 will yield the needed offset;
+                auto rmd2 = vmul(rmd, nearest);
+                // after being truncated of course;
+                auto rmd2tr = vtrunc(rmd2);
+                return tr + rmd2tr;
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark sse - default
+             */
             friend composed_t vsqrt(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vsqrt");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vsqrt");
 
                 return _mm_sqrt_ps(one);
             }
@@ -434,6 +499,8 @@ namespace zacc { namespace sse {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -444,7 +511,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t vneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vneg");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vneg");
 
                 return _mm_sub_ps(_mm_setzero_ps(), one);
             }
@@ -457,7 +524,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t vadd(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vadd");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vadd");
 
                 return _mm_add_ps(one, other);
             }
@@ -470,7 +537,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t vsub(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vsub");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vsub");
 
                 return _mm_sub_ps(one, other);
             }
@@ -483,7 +550,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t vmul(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vmul");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vmul");
 
                 return _mm_mul_ps(one, other);
             }
@@ -496,7 +563,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t vdiv(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vdiv");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vdiv");
 
                 return _mm_div_ps(one, other);
             }
@@ -507,9 +574,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - fma
              */
-            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::has_FMA, T> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::FMA3), T> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "fma" << "vfmadd");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "fma", "vfmadd");
 
                 return _mm_fmadd_ps(multiplicand, multiplier, addendum);
             }
@@ -520,9 +587,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::has_FMA, T> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::FMA3), T> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vfmadd");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vfmadd");
 
                 return vadd(vmul(multiplicand, multiplier), addendum);
             }
@@ -533,9 +600,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - fma
              */
-            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::has_FMA, T> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::FMA3), T> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "fma" << "vfmsub");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "fma", "vfmsub");
 
                 return _mm_fmsub_ps(multiplicand, multiplier, addendum);
             }
@@ -546,9 +613,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::has_FMA, T> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::FMA3), T> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vfmsub");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vfmsub");
 
                 return vsub(vmul(multiplicand, multiplier), addendum);
             }
@@ -590,6 +657,8 @@ namespace zacc { namespace sse {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -600,7 +669,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t vbneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vbneg");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vbneg");
 
                 __m128 junk;
                 auto ones = _mm_cmpeq_ps(junk, junk);
@@ -615,7 +684,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t vband(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vband");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vband");
 
                 return _mm_or_ps(one, other);
             }
@@ -628,7 +697,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t vbor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vbor");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vbor");
 
                 return _mm_and_ps(one, other);
             }
@@ -641,7 +710,7 @@ namespace zacc { namespace sse {
              */
             friend composed_t vbxor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vbxor");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vbxor");
 
                 return _mm_xor_ps(one, other);
             }
@@ -683,6 +752,8 @@ namespace zacc { namespace sse {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -691,9 +762,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend composed_t vlneg(composed_t one)  noexcept {
+            friend bval<composed_t, mask_t> vlneg(bval<composed_t, mask_t> one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vlneg");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vlneg");
 
                 return _mm_cmpeq_ps(one, _mm_setzero_ps());
             }
@@ -704,9 +775,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend composed_t vlor(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vlor(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vlor");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vlor");
 
                 return _mm_or_ps(one, other);
             }
@@ -717,9 +788,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend composed_t vland(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vland(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vland");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vland");
 
                 return _mm_and_ps(one, other);
             }
@@ -761,6 +832,8 @@ namespace zacc { namespace sse {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -769,9 +842,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend composed_t veq(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> veq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "veq");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "veq");
 
                 return _mm_cmpeq_ps(one, other);
             }
@@ -782,9 +855,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend composed_t vneq(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vneq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vneq");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vneq");
 
                 return _mm_cmpneq_ps(one, other);
             }
@@ -795,9 +868,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend composed_t vgt(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vgt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vgt");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vgt");
 
                 return _mm_cmpgt_ps(one, other);
             }
@@ -808,9 +881,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend composed_t vlt(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vlt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vlt");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vlt");
 
                 return _mm_cmplt_ps(one, other);
             }
@@ -821,9 +894,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend composed_t vge(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vge(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vge");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vge");
 
                 return _mm_cmpge_ps(one, other);
             }
@@ -834,9 +907,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend composed_t vle(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vle(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vle");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vle");
 
                 return _mm_cmple_ps(one, other);
             }
@@ -878,6 +951,8 @@ namespace zacc { namespace sse {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -886,9 +961,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - sse4
              */
-            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::has_SSE4, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vsel(mask_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "sse4" << "vsel");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "sse4", "vsel");
 
                 auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition);
                 return _mm_blendv_ps(if_value, else_value, mask);
@@ -900,9 +975,9 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::has_SSE4, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vsel(mask_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "sse.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[4]) " << std::left << std::setw(10) << "default" << "vsel");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vsel");
 
                 auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition);
                 return _mm_xor_ps(if_value, _mm_and_ps( mask, _mm_xor_ps(else_value, if_value)));
@@ -941,7 +1016,7 @@ namespace zacc { namespace sse {
     template<uint64_t capability>
     struct __zval_float32
     {
-        using zval_t = zval<__m128, float, 4, 16, capability>;
+        using zval_t = zval<__m128, __m128, float, 4, 16, capability>;
 
         struct impl : public zval_t
         {

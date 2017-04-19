@@ -2,6 +2,7 @@ type:
   type: float64
   branch: avx512
   vector_t: &vector_t __m512d
+  mask_t: &mask_t __mmask8
   scalar_t: &scalar_t double
   vec_size: &vec_size 8
   alignment: 64
@@ -21,6 +22,9 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
+    - args: []
+      init: ""
+
     - args: __m512 value
       init: _mm512_cvtps_pd(value)
 

@@ -35,18 +35,19 @@ namespace zacc {
     struct zval_base {
     };
 
-    template<typename zval_t>
+    template<typename zval_t, typename bval_t>
     struct bval;
 
     /**
-     * @brief
-     * @tparam _vector_t
-     * @tparam _scalar_t
-     * @tparam _dim
-     * @tparam _alignment
-     * @tparam _capability
+     * @brief base type for all zacc computation types
+     * @tparam _vector_t vector type, like __m128i for sse 4x integer vector
+     * @tparam _mask_t mask type for boolean operations
+     * @tparam _scalar_t scalar type, like int for sse 4x integer vector
+     * @tparam _dim vector size (1 - scalar, 4, 8, 16, ...)
+     * @tparam _alignment memory alignment
+     * @tparam _capability capabilities
      */
-    template<typename _vector_t, typename _scalar_t = _vector_t, size_t _dim = 1, size_t _alignment = 16, uint64_t _capability = 0xFFFF'FFFF'FFFF'FFFF>
+    template<typename _vector_t, typename _mask_t = _vector_t, typename _scalar_t = _vector_t, size_t _dim = 1, size_t _alignment = 16, uint64_t _capability = 0xFFFF'FFFF'FFFF'FFFF>
     struct zval : zval_base {
 
         /// vector size (1 - scalar, 4, 8, 16, ...)
@@ -74,9 +75,8 @@ namespace zacc {
         /// extracted std::array of (dim) scalar values
         using extracted_t = std::array<scalar_t, dim>;
 
-        // TODO
-        using mask_t = bool;
-
+        /// mask type for boolean operations
+        using mask_t = _mask_t;
 
 
         /**
@@ -85,7 +85,7 @@ namespace zacc {
         zval() {}
 
         /**
-         * @brief
+         * @brief non-zval constructor
          * @tparam T
          * @tparam enable
          * @param value
@@ -94,7 +94,7 @@ namespace zacc {
         zval(T value) : _value(value) {}
 
         /**
-         * @brief
+         * @brief zval copy constructor
          * @tparam T
          * @tparam enable
          * @param value
@@ -103,19 +103,23 @@ namespace zacc {
         zval(const T& value) : _value(value.get_value()) {}
 
         /**
-         * @brief
+         * @brief construct from mask
          * @param value
          */
-        zval(const bval<zval>& value) : _value(value.get_value()) {}
+        zval(const mask_t& value) : _value(value) {}
 
         /**
-         * @brief
-         * @return
+         * @brief cast to underlying vector type
+         * @return raw value
          */
         const operator vector_t() const {
             return get_value();
         }
 
+        /**
+         * @brief cast to underlying vector type
+         * @return raw value
+         */
         const vector_t &get_value() const {
             return _value;
         }
@@ -123,7 +127,8 @@ namespace zacc {
         vector_t _value;
     };
 
-    template<typename zval_t>
+    /// TODO: separate file, impl traits.
+    template<typename zval_t, typename bval_t>
     struct bval {
     public:
         static const unsigned dim = zval_t::dim;
@@ -145,26 +150,63 @@ namespace zacc {
          * @param value
          */
         bval(const zval_t& value) :
-                _value(value.get_value()),
-                _extracted(array_cast<bool>((value).data()))
-        {}
+                _value(value.get_value())
+        {
+            ZTRACE("bval(zval_t)");
+        }
 
-        vector_t get_value() const { return _value; }
+
+        bval(const bval_t& value) :
+                _value(value)
+        {
+            ZTRACE("bval(bval_t)");
+        }
+
+        /**
+         * @brief
+         * @return
+         */
+        const operator zval_t() const {
+            return get_value();
+        }
+
+        /**
+         * @brief
+         * @return
+         */
+        const operator bval_t() const {
+            return get_value();
+        }
+
+        const bval_t get_value() const {
+            return _value;
+        }
 
         const extracted_t data() const {
-            return _extracted;
+            return array_cast<bool>(_value.data());
         }
 
         extracted_t data() {
-            return _extracted;
+            return array_cast<bool>(_value.data());
         }
 
-        iterator begin() { return _extracted.begin(); }
+        /**
+         * @brief create a snapshot of current value
+         * @return snapshot's begin iterator
+         */
+        iterator begin() {
+            _snapshot = data();
+            return _snapshot.begin();
+        }
 
-        iterator end() { return _extracted.end(); }
+        /**
+         * @return snapshot's end iterator
+         */
+        iterator end() { return _snapshot.end(); }
+
     protected:
-        vector_t _value;
-        extracted_t _extracted;
+        zval_t _value;
+        extracted_t _snapshot;
     };
 
 
@@ -173,9 +215,8 @@ namespace zacc {
         template<typename terminator>
         struct type :
                 public base_t,
-                /*_parent>,*/
-                public terminator {
-
+                public terminator
+        {
             FORWARD(type);
         };
     };

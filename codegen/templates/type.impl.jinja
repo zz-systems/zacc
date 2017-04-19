@@ -30,6 +30,7 @@
 
 #include <x86intrin.h>
 #include <type_traits>
+#include <cmath>
 
 #include "util/type_composition.hpp"
 
@@ -73,6 +74,8 @@ namespace zacc { namespace {{ type.branch }} {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             {% if not module in type.construction  %}
             FORWARD(__impl);
             {% endif  %}
@@ -88,9 +91,9 @@ namespace zacc { namespace {{ type.branch }} {
             {{ branch.signature() }} {
 
                 {% if not module in type.construction  %}
-                ZTRACE(std::left << std::setw(32) << "{{type.branch}}.{{type.type}}.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " z{{ type.type }}({{ type.scalar_t }}[{{type.vec_size}}]) " << std::left << std::setw(10) << "{{branch.branch_name}}" << "{{func.name}}");
+                ZTRACE_BACKEND("{{type.branch}}.{{type.type}}.impl", __LINE__, "z{{ type.type }}({{ type.scalar_t }}[{{type.vec_size}}])", "{{branch.branch_name}}", "{{func.name}}");
                 {% else %}
-                ZTRACE(std::left << std::setw(32) << "{{type.branch}}.{{type.type}}.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " z{{ type.type }}({{ type.scalar_t }}[{{type.vec_size}}]) " << std::left << std::setw(10) << "{{branch.branch_name}}" << "CONS({{func.summarized_args()}})");
+                ZTRACE_BACKEND("{{type.branch}}.{{type.type}}.impl", __LINE__, "z{{ type.type }}({{ type.scalar_t }}[{{type.vec_size}}])", "{{branch.branch_name}}", "CONS({{func.summarized_args()}})");
                 {% endif %}
 
                     {% for instruction in branch.get_instructions() %}
@@ -134,7 +137,7 @@ namespace zacc { namespace {{ type.branch }} {
     template<uint64_t capability>
     struct __zval_{{ type.type }}
     {
-        using zval_t = zval<{{ type.vector_t }}, {{ type.scalar_t }}, {{ type.vec_size }}, {{ type.alignment }}, capability>;
+        using zval_t = zval<{{ type.vector_t }}, {{ type.mask_t }}, {{ type.scalar_t }}, {{ type.vec_size }}, {{ type.alignment }}, capability>;
 
         struct impl : public zval_t
         {

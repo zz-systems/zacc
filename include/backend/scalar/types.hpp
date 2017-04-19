@@ -25,21 +25,21 @@
 
 #pragma once
 
-#include "backend/scalar/float32.impl.hpp"
-#include "backend/scalar/float64.impl.hpp"
-#include "backend/scalar/int8.impl.hpp"
-#include "backend/scalar/int16.impl.hpp"
-#include "backend/scalar/int32.impl.hpp"
+#include "float32.impl.hpp"
+#include "float64.impl.hpp"
+#include "int8.impl.hpp"
+#include "int16.impl.hpp"
+#include "int32.impl.hpp"
 
 namespace zacc { namespace scalar {
 
-        template<uint64_t capability>
-        struct types
-        {
-            using zfloat32  = zfloat32<capability>;
-            using zfloat64  = zfloat64<capability>;
-            using zint8     = zint8<capability>;
-            using zint16    = zint16<capability>;
-            using zint32    = zint32<capability>;
-        };
-    }}
+    template<uint64_t capability>
+    struct types
+    {
+        using zfloat32  = zfloat32<capability>;
+        using zfloat64  = zfloat64<capability>;
+        using zint8     = zint8<capability>;
+        using zint16    = zint16<capability>;
+        using zint32    = zint32<capability>;
+    };
+}}

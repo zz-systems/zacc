@@ -3,7 +3,7 @@ type:
   branch: sse
   vector_t: &vector_t __m128i
   mask_t: &mask_t __m128i
-  scalar_t: &scalar_t char
+  scalar_t: &scalar_t uint8_t
   vec_size: &vec_size 16
   alignment: 16
 #-----------------------------------------------------------------------------------------------------------------------

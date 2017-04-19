@@ -29,7 +29,6 @@
 #include "gtest/gtest.h"
 #include "system/dispatcher.hpp"
 
-//namespace zacc { namespace sse { namespace test {
 namespace zacc { namespace test {
 
 // =====================================================================================================================

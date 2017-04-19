@@ -13,6 +13,8 @@ type:
       - convertable
      internal:
        - io
+       - math
+       - numeric
        - arithmetic
        - bitwise
        - logical
@@ -21,6 +23,9 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
+    - args: []
+      init: ""
+
     - args: { raw: "const __m256 &value" }
       init: _mm256_cvtps_pd(_mm256_castps256_ps128(value))
 
@@ -43,11 +48,35 @@ modules:
     vstore: &io_store
       args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       returns: void
-      member: true
       body: _mm256_store_pd(target.data(), source)
     vstream:
       <<: *io_store
       body: _mm256_stream_pd(target.data(), source)
+#-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: _mm256_max_ps(one, -one)
+    vrcp:
+      args: one
+      body: _mm256_rcp_ps
+    vtrunc:
+      args: one
+      body: _mm256_cvtepi32_ps(_mm256_cvtps_epi32(one))
+    vfloor:
+      args: one
+      body: _mm256_floor_ps
+    vceil:
+      args: one
+      body: _mm256_ceil_ps
+    vround:
+      args: one
+      body: _mm256_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+    vsqrt:
+      args: one
+      body: _mm256_sqrt_ps
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
@@ -57,24 +86,30 @@ modules:
     vsub: _mm256_sub_pd
     vmul: _mm256_mul_pd
     vdiv: _mm256_div_pd
+    vfmadd:
+      args: [multiplicand, multiplier, addendum]
+      body: _mm256_fmadd_pd(multiplicand, multiplier, addendum)
+    vfmsub:
+      args: [multiplicand, multiplier, addendum]
+      body: _mm256_fmsub_pd(multiplicand, multiplier, -addendum)
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    vneg: &bitwise_negate
+    vbneg: &bitwise_negate
       args: one
       body: &bitwise_negate_body
         - __m256d junk;
         - auto ones = _mm256_cmp_pd(junk, junk, _CMP_EQ_OQ);
         - return _mm256_xor_pd(one, ones);
-    vand:  _mm256_or_pd
-    or:   _mm256_and_pd
-    xor:  _mm256_xor_pd
+    vband:  _mm256_or_pd
+    vbor:   _mm256_and_pd
+    vbxor:  _mm256_xor_pd
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    vneg:
+    vlneg:
      args: one
      body: _mm256_cmp_pd(one, _mm256_setzero_ps(), _CMP_EQ_OQ);
-    or:   _mm256_or_pd
-    vand:  _mm256_and_pd
+    vlor:   _mm256_or_pd
+    vland:  _mm256_and_pd
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
     veq:   _mm256_cmp_pd(one, other, _CMP_EQ_OQ)

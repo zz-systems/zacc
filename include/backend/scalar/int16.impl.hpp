@@ -30,6 +30,7 @@
 
 #include <x86intrin.h>
 #include <type_traits>
+#include <cmath>
 
 #include "util/type_composition.hpp"
 
@@ -40,6 +41,7 @@
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
 #include "traits/io.hpp"
+#include "traits/numeric.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/bitwise_shift.hpp"
@@ -49,7 +51,7 @@
 
 /**
  * @brief int16 implementation for the scalar branch
- * provides unified access to 1 'short' values
+ * provides unified access to 1 'int16_t' values
  */
 
 namespace zacc { namespace scalar {
@@ -77,6 +79,8 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
 
 
             /**
@@ -84,9 +88,21 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            __impl(short value) : base_t(value) {
+            __impl() : base_t() {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "CONS(short value)");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "CONS()");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            __impl(int16_t value) : base_t(value) {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "CONS(int16_t value)");
 
             }
 
@@ -127,6 +143,8 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -135,11 +153,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            void vstore(typename base_t::extracted_t &target, composed_t source) const noexcept {
+            friend void vstore(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vstore");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vstore");
 
-                target.data()[0] = base_t::_value;
+                target.data()[0] = source.get_value();
             }
 
 
@@ -148,11 +166,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            void vstream(typename base_t::extracted_t &target, composed_t source) const noexcept {
+            friend void vstream(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vstream");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vstream");
 
-                target.data()[0] = base_t::_value;
+                target.data()[0] = source.get_value();
             }
 
         };
@@ -164,6 +182,47 @@ namespace zacc { namespace scalar {
          */
         template<typename base_t>
         using impl = interface::io<__impl<base_t>, composed_t>;
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name numeric operations
+     */
+    ///@{
+
+    /**
+     * @brief numeric
+     * @relates int16
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct int16_numeric
+    {
+
+        /**
+         * @brief numeric basic interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using mask_t = typename base_t::mask_t;
+
+            FORWARD(__impl);
+
+        };
+
+        /**
+         * @brief numeric public interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+        template<typename base_t>
+        using impl = interface::numeric<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -192,6 +251,8 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -200,11 +261,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vnegate(composed_t one)  noexcept {
+            friend composed_t vneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vnegate");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vneg");
 
-                return -one;(one);
+                return (-one);
             }
 
 
@@ -215,9 +276,9 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vadd(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vadd");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vadd");
 
-                return one + other;(one, other);
+                return (one + other);
             }
 
 
@@ -228,9 +289,9 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vsub(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vsub");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vsub");
 
-                return one - other;(one, other);
+                return (one - other);
             }
 
 
@@ -241,9 +302,9 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vmul(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vmul");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vmul");
 
-                return one * other;(one, other);
+                return (one * other);
             }
 
 
@@ -254,9 +315,9 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vdiv(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vdiv");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vdiv");
 
-                return one / other;(one, other);
+                return (one / other);
             }
 
         };
@@ -296,6 +357,8 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -304,11 +367,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vnegate(composed_t one)  noexcept {
+            friend composed_t vbneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vnegate");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vbneg");
 
-                return ~one;(one);
+                return (~one);
             }
 
 
@@ -317,11 +380,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vand(composed_t one, composed_t other)  noexcept {
+            friend composed_t vband(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vand");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vband");
 
-                return one & other;(one, other);
+                return (one & other);
             }
 
 
@@ -330,11 +393,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vor(composed_t one, composed_t other)  noexcept {
+            friend composed_t vbor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vor");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vbor");
 
-                return one | other;(one, other);
+                return (one | other);
             }
 
 
@@ -343,11 +406,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vxor(composed_t one, composed_t other)  noexcept {
+            friend composed_t vbxor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vxor");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vbxor");
 
-                return one ^ other;(one, other);
+                return (one ^ other);
             }
 
         };
@@ -387,6 +450,8 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -397,9 +462,9 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vsll(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vsll");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vsll");
 
-                return one << other(one, other);
+                return (one << other);
             }
 
 
@@ -410,35 +475,9 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vsrl(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vsrl");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vsrl");
 
-                return one >> other(one, other);
-            }
-
-
-            /**
-             * @brief bitwise_shift default branch
-             * @relates int16
-             * @remark scalar - default
-             */
-            friend composed_t vslli(const composed_t one, const size_t other)  noexcept {
-
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vslli");
-
-                return one << other(const composed_t one, const size_t other);
-            }
-
-
-            /**
-             * @brief bitwise_shift default branch
-             * @relates int16
-             * @remark scalar - default
-             */
-            friend composed_t vsrli(const composed_t one, const size_t other)  noexcept {
-
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vsrli");
-
-                return one >> other(const composed_t one, const size_t other);
+                return (one >> other);
             }
 
         };
@@ -478,6 +517,8 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -486,11 +527,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend bool vnegate(composed_t one)  noexcept {
+            friend mask_t vlneg(mask_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vnegate");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vlneg");
 
-                return !one(one);
+                return (!one);
             }
 
 
@@ -499,11 +540,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend bool vor(composed_t one, composed_t other)  noexcept {
+            friend mask_t vlor(mask_t one, mask_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vor");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vlor");
 
-                return one || other;(one, other);
+                return (one || other);
             }
 
 
@@ -512,11 +553,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend bool vand(composed_t one, composed_t other)  noexcept {
+            friend mask_t vland(mask_t one, mask_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vand");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vland");
 
-                return one && other;(one, other);
+                return (one && other);
             }
 
         };
@@ -556,6 +597,8 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -564,11 +607,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t veq(composed_t one, composed_t other)  noexcept {
+            friend mask_t veq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "veq");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "veq");
 
-                return one == other;(one, other);
+                return (one == other);
             }
 
 
@@ -577,11 +620,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vneq(composed_t one, composed_t other)  noexcept {
+            friend mask_t vneq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vneq");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vneq");
 
-                return one != other;(one, other);
+                return (one != other);
             }
 
 
@@ -590,11 +633,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vgt(composed_t one, composed_t other)  noexcept {
+            friend mask_t vgt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vgt");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vgt");
 
-                return one > other;(one, other);
+                return (one > other);
             }
 
 
@@ -603,11 +646,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vlt(composed_t one, composed_t other)  noexcept {
+            friend mask_t vlt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vlt");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vlt");
 
-                return one < other;(one, other);
+                return (one < other);
             }
 
 
@@ -616,11 +659,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vge(composed_t one, composed_t other)  noexcept {
+            friend mask_t vge(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vge");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vge");
 
-                return one >= other;(one, other);
+                return (one >= other);
             }
 
 
@@ -629,11 +672,11 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vle(composed_t one, composed_t other)  noexcept {
+            friend mask_t vle(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vle");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vle");
 
-                return one <= other;(one, other);
+                return (one <= other);
             }
 
         };
@@ -673,6 +716,8 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -683,9 +728,9 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(short[1]) " << std::left << std::setw(10) << "default" << "vsel");
+                ZTRACE(std::left << std::setw(32) << "scalar.int16.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint16(int16_t[1]) " << std::left << std::setw(10) << "default" << "vsel");
 
-                return (condition != 0 ? if_value : else_value);
+                return (condition.get_value() != 0 ? if_value : else_value);
             }
 
         };
@@ -711,8 +756,8 @@ namespace zacc { namespace scalar {
 
     /**
      * @brief zval parametrization using
-     * - 'short' as underlying vector type
-     * - 'short' as scalar type
+     * - 'int16_t' as underlying vector type
+     * - 'int16_t' as scalar type
      * - '1' as vector size
      * - '8' as alignment
      * @relates int16
@@ -721,7 +766,7 @@ namespace zacc { namespace scalar {
     template<uint64_t capability>
     struct __zval_int16
     {
-        using zval_t = zval<short, short, 1, 8, capability>;
+        using zval_t = zval<int16_t, bool, int16_t, 1, 8, capability>;
 
         struct impl : public zval_t
         {
@@ -745,6 +790,7 @@ namespace zacc { namespace scalar {
             iteratable::impl,
             convertable::impl,
             int16_io<impl>::template impl,
+            int16_numeric<impl>::template impl,
             int16_arithmetic<impl>::template impl,
             int16_bitwise<impl>::template impl,
             int16_bitwise_shift<impl>::template impl,

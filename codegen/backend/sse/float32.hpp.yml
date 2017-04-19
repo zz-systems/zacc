@@ -2,7 +2,7 @@ type:
   type: float32
   branch: sse
   vector_t: &vector_t __m128
-  mask_t: &mask_t __m128f
+  mask_t: &mask_t __m128
   scalar_t: &scalar_t float
   vec_size: &vec_size 4
   alignment: 16
@@ -68,13 +68,52 @@ modules:
       body: _mm_cvtepi32_ps(_mm_cvtps_epi32(one))
     vfloor:
       args: one
-      body: _mm_floor_ps
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_floor_ps
+        default:
+          requires: [not SSE41]
+          body:
+            - auto zero = _mm_setzero_si128();
+            - auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
+            - auto fi = vtrunc(one);
+            - return vsel(vgt(fi, one), vsub(fi, _1), fi);
     vceil:
       args: one
-      body: _mm_ceil_ps
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_ceil_ps
+        default:
+          requires: [not SSE41]
+          body:
+            - __m128 junk;
+            - auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(junk, junk), 31);
+            - auto fi = vtrunc(one);
+            - return vsel(vlt(fi, one), vadd(fi, _1), fi);
     vround:
       args: one
-      body: _mm_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+        default:
+          requires: [not SSE41]
+          body:
+            - auto zero = _mm_setzero_si128();
+            - auto ones = _mm_cmpeq_epi32(zero, zero);
+            - // generate the highest value < 2
+            - auto nearest = _mm_castsi128_ps(_mm_srli_epi32(ones, 2));
+            - auto tr = vtrunc(one);
+            - // get remainder
+            - auto rmd = one - tr;
+            - // mul remainder by near 2 will yield the needed offset
+            - auto rmd2 = vmul(rmd, nearest);
+            - // after being truncated of course
+            - auto rmd2tr = vtrunc(rmd2);
+            - return tr + rmd2tr;
+
     vsqrt:
       args: one
       body: _mm_sqrt_ps
@@ -91,19 +130,19 @@ modules:
       args: [multiplicand, multiplier, addendum]
       body:
         fma:
-          requires: [FMA]
+          requires: [FMA3]
           body: _mm_fmadd_ps(multiplicand, multiplier, addendum)
         default:
-          requires: [not FMA]
+          requires: [not FMA3]
           body: vadd(vmul(multiplicand, multiplier), addendum)
     vfmsub:
       args: [multiplicand, multiplier, addendum]
       body:
         fma:
-          requires: [FMA]
+          requires: [FMA3]
           body: _mm_fmsub_ps(multiplicand, multiplier, addendum)
         default:
-          requires: [not FMA]
+          requires: [not FMA3]
           body: vsub(vmul(multiplicand, multiplier), addendum)
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
@@ -138,16 +177,16 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: [condition, if_value, else_value]
+      args: ["mask_t condition", if_value, else_value]
       mangling: false
       body:
         sse4:
-          requires: [SSE4]
+          requires: [SSE41]
           body:
             - auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition);
             - return _mm_blendv_ps(if_value, else_value, mask);
         default:
-          requires: [not SSE4]
+          requires: [not SSE41]
           body:
             - auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition)
             - return _mm_xor_ps(if_value, _mm_and_ps( mask, _mm_xor_ps(else_value, if_value)))

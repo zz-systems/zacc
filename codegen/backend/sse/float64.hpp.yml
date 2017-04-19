@@ -15,6 +15,7 @@ type:
     internal:
     - io
     - math
+    - numeric
     - arithmetic
     - bitwise
     - logical
@@ -34,7 +35,7 @@ modules:
       init: value
 
     - args: __m128i value
-      init: _mm_cvtepi32_pd(value)
+      init: _mm_cvtepi32_pd(_mm_shuffle_epi32(value, _MM_SHUFFLE(0,2,0,0)))
 
     - args: [[*scalar_t, value]]
       init: _mm_set1_pd(value)
@@ -65,16 +66,54 @@ modules:
       body: "return (1 / one);" #bug in automatic arg insertion
     vtrunc:
       args: one
-      body: _mm_cvtepi32_pd(_mm_cvtps_epi32(one))
+      body: _mm_cvtepi32_pd(_mm_cvtpd_epi32(one))
     vfloor:
       args: one
-      body: _mm_floor_pd
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_floor_pd
+        default:
+          requires: [not SSE41]
+          body:
+            - auto zero = _mm_setzero_si128();
+            - auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
+            - auto fi = vtrunc(one);
+            - return vsel(vgt(fi, one), vsub(fi, _1), fi);
     vceil:
       args: one
-      body: _mm_ceil_pd
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_ceil_pd
+        default:
+          requires: [not SSE41]
+          body:
+            - __m128 junk;
+            - auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(junk, junk), 31);
+            - auto fi = vtrunc(one);
+            - return vsel(vlt(fi, one), vadd(fi, _1), fi);
     vround:
       args: one
-      body: _mm_round_pd (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_round_pd (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+        default:
+          requires: [not SSE41]
+          body:
+            - auto zero = _mm_setzero_si128();
+            - auto ones = _mm_cmpeq_epi32(zero, zero);
+            - // generate the highest value < 2
+            - auto nearest = _mm_castsi128_pd(_mm_srli_epi64(ones, 2));
+            - auto tr = vtrunc(one);
+            - // get remainder
+            - auto rmd = one - tr;
+            - // mul remainder by near 2 will yield the needed offset
+            - auto rmd2 = vmul(rmd, nearest);
+            - // after being truncated of course
+            - auto rmd2tr = vtrunc(rmd2);
+            - return tr + rmd2tr;
     vsqrt:
       args: one
       body: _mm_sqrt_pd
@@ -125,15 +164,15 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: [condition, if_value, else_value]
+      args: ["mask_t condition", if_value, else_value]
       body:
         sse4:
-          requires: [SSE4]
+          requires: [SSE41]
           body:
             - auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
             - return _mm_blendv_pd(if_value, else_value, mask);
         default:
-          requires: [not SSE4]
+          requires: [not SSE41]
           body:
             - auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition)
             - return _mm_xor_pd(if_value, _mm_and_pd( mask, _mm_xor_pd(else_value, if_value)))

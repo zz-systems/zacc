@@ -1,9 +1,9 @@
 type:
   type: int16
   branch: scalar
-  vector_t: &vector_t short
+  vector_t: &vector_t int16_t
   mask_t: &mask_t bool
-  scalar_t: &scalar_t short
+  scalar_t: &scalar_t int16_t
   vec_size: &vec_size 1
   alignment: 8
 #-----------------------------------------------------------------------------------------------------------------------
@@ -14,6 +14,7 @@ type:
       - convertable
      internal:
        - io
+       - numeric
        - arithmetic
        - bitwise
        - bitwise_shift
@@ -23,67 +24,64 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
+    - args: []
+      init: ""
+
     - args: [[*scalar_t, value]]
       init: value
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
       returns: void
-      member: true
-      suffix: const
       args: { raw: "typename base_t::extracted_t &target, composed_t source" }
-      body: target.data()[0] = base_t::_value;
+      body: target.data()[0] = source.get_value();
     vstream: *io_store
 #-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
-    vnegate:
+    vneg:
       args: one
-      body: -one;
-    vadd: one + other;
-    vsub: one - other;
-    vmul: one * other;
-    vdiv: one / other;
+      body: (-one);
+    vadd: (one + other);
+    vsub: (one - other);
+    vmul: (one * other);
+    vdiv: (one / other);
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    vnegate:
+    vbneg:
       args: one
-      body: ~one;
-    vand:  one & other;
-    vor:   one | other;
-    vxor:  one ^ other;
+      body: (~one);
+    vband:  (one & other);
+    vbor:   (one | other);
+    vbxor:  (one ^ other);
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
-    vsll:  one << other
-    vsrl:  one >> other
-    vslli:
-      args: { raw: "const composed_t one, const size_t other" }
-      body: one << other
-    vsrli:
-      args: { raw: "const composed_t one, const size_t other" }
-      body: one >> other
+    vsll:  (one << other)
+    vsrl:  (one >> other)
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    vnegate:
+    vlneg:
       args: one
       returns: *mask_t
-      body: "!one"
-    vor:
+      body: (!one)
+    vlor:
       returns: *mask_t
-      body: one || other;
-    vand:
+      body: (one || other);
+    vland:
       returns: *mask_t
-      body: one && other;
+      body: (one && other);
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    veq:   one == other;
-    vneq:  one != other;
-    vgt:   one > other;
-    vlt:   one < other;
-    vge:   one >= other;
-    vle:   one <= other;
+    veq:   (one == other);
+    vneq:  (one != other);
+    vgt:   (one > other);
+    vlt:   (one < other);
+    vge:   (one >= other);
+    vle:   (one <= other);
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
      vsel:
         args: [condition, if_value, else_value]
         mangling: false
-        body: "(condition != 0 ? if_value : else_value)"
+        body: "(condition.get_value() != 0 ? if_value : else_value)"

@@ -37,22 +37,22 @@ namespace zacc { namespace math {
      * @return [-1; 1]
      */
     template<typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value, vreal_t> vsin(vreal_t val)
+    std::enable_if_t<is_floating_point<vreal_t>::value && vreal_t::dispatcher::has_integer_types, vreal_t> vsin(vreal_t val)
     {
-        vreal_t q = (val * constants<vreal_t>::M_1_PI).floor();
+        vreal_t q = (val * constants<vreal_t>::Z_1_PI).floor();
         zint iq = q;
 
         // when performance > precision
         if(dispatcher::use_fast_float)
         {
-            val = vfmadd(q, -constants<vreal_t>::M_PI, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI, val);
         }
         else
         {
-            val = vfmadd(q, -constants<vreal_t>::PI4_A * 4, val);
-            val = vfmadd(q, -constants<vreal_t>::PI4_B * 4, val);
-            val = vfmadd(q, -constants<vreal_t>::PI4_C * 4, val);
-            val = vfmadd(q, -constants<vreal_t>::PI4_D * 4, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI4_A * 4, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI4_B * 4, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI4_C * 4, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI4_D * 4, val);
         }
 
         vreal_t s = val * val;
@@ -102,22 +102,22 @@ namespace zacc { namespace math {
      * @return [-1; 1]
      */
     template<typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value, vreal_t> vcos(vreal_t val)
+    std::enable_if_t<is_floating_point<vreal_t>::value && vreal_t::dispatcher::has_integer_types, vreal_t> vcos(vreal_t val)
     {
-        vreal_t q = 2.0 * (val * constants<vreal_t>::M_1_PI - 0.5).floor() + 1;
+        vreal_t q = 2.0 * (val * constants<vreal_t>::Z_1_PI - 0.5).floor() + 1;
         zint iq = q;
 
         // when performance > precision
         if(dispatcher::use_fast_float)
         {
-            val -= q * constants<vreal_t>::M_PI_2;
+            val -= q * constants<vreal_t>::Z_PI_2;
         }
         else
         {
-            val = vfmadd(q, -constants<vreal_t>::PI4_A * 2, val);
-            val = vfmadd(q, -constants<vreal_t>::PI4_B * 2, val);
-            val = vfmadd(q, -constants<vreal_t>::PI4_C * 2, val);
-            val = vfmadd(q, -constants<vreal_t>::PI4_D * 2, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI4_A * 2, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI4_B * 2, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI4_C * 2, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI4_D * 2, val);
         }
 
         vreal_t s = val * val;
@@ -167,22 +167,22 @@ namespace zacc { namespace math {
      * @return [-1; 1]
      */
     template <typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value, vreal_t> vtan(vreal_t val)
+    std::enable_if_t<is_floating_point<vreal_t>::value && vreal_t::dispatcher::has_integer_types, vreal_t> vtan(vreal_t val)
     {
-        vreal_t q = (val * 2 * constants<vreal_t>::M_1_PI).round();
+        vreal_t q = (val * 2 * constants<vreal_t>::Z_1_PI).round();
         zint iq = q;
 
         // when performance > precision
         if(dispatcher::use_fast_float)
         {
-            val -= q * constants<vreal_t>::M_PI_2;
+            val -= q * constants<vreal_t>::Z_PI_2;
         }
         else
         {
-            val = vfmadd(q, -constants<vreal_t>::PI4_A * 2, val);
-            val = vfmadd(q, -constants<vreal_t>::PI4_B * 2, val);
-            val = vfmadd(q, -constants<vreal_t>::PI4_C * 2, val);
-            val = vfmadd(q, -constants<vreal_t>::PI4_D * 2, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI4_A * 2, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI4_B * 2, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI4_C * 2, val);
+            val = vfmadd(q, -constants<vreal_t>::Z_PI4_D * 2, val);
         }
 
         auto x = val;
@@ -245,7 +245,7 @@ namespace zacc { namespace math {
      * @return [-1; 1]
      */
     template<typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value, vreal_t> vatan2(vreal_t y, vreal_t x)
+    std::enable_if_t<is_floating_point<vreal_t>::value && vreal_t::dispatcher::has_integer_types, vreal_t> vatan2(vreal_t y, vreal_t x)
     {
         auto q = vreal_t(2)
                 .when(x < 0)
@@ -302,7 +302,7 @@ namespace zacc { namespace math {
         }
 
         t = vfmadd(u, t * s, s);
-        t = vfmadd(q, constants<vreal_t>::M_PI_2, t);
+        t = vfmadd(q, constants<vreal_t>::Z_PI_2, t);
 
         return t;
     }

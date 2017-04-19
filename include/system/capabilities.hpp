@@ -166,10 +166,10 @@ namespace zacc {
         }
 
         /**
-        * @brief sets all capabilities to enabled until the given one and returns the raw value
-        * @param capability highest capability (inclusive)
-        * @return raw value
-        */
+         * @brief sets all capabilities to enabled until the given one and returns the raw value
+         * @param capability highest capability (inclusive)
+         * @return raw value
+         */
         static constexpr raw_t fill_up_to(const capabilities capability)
         {
             auto value = to_underlying(capability);
@@ -206,39 +206,11 @@ namespace zacc {
             /// current capabilities
             static constexpr flag_t flags = capability;
 
-            /// sse 2 available?
-            static constexpr bool has_SSE2 = is_set(capabilities::SSE2);
-            /// sse 3 available?
-            static constexpr bool has_SSE3 = is_set(capabilities::SSE3);
-            /// ssse 3 available?
-            static constexpr bool has_SSSE3 = is_set(capabilities::SSSE3);
+            /// usually all branches provide floating types
+            static constexpr bool has_floating_types = true;
 
-            // fma4 available?
-            static constexpr bool has_FMA3 = is_set(capabilities::FMA3);
-            /// fma4 available?
-            static constexpr bool has_FMA4 = is_set(capabilities::FMA4);
-            /// fma available?
-            static constexpr bool has_FMA = has_FMA3 || has_FMA4;
-
-            /// sse 4.1 available?
-            static constexpr bool has_SSE41 = is_set(capabilities::SSE41);
-            /// sse 4.2 available?
-            static constexpr bool has_SSE42 = is_set(capabilities::SSE42);
-            /// sse 4 available?
-            static constexpr bool has_SSE4 = has_SSE41 || has_SSE42;
-
-            /// generic sse available?
-            static constexpr bool has_SSE = has_SSE2 || has_SSE3 || has_SSSE3 || has_SSE4;
-
-            /// avx 1 available?
-            static constexpr bool has_AVX = is_set(capabilities::AVX1);
-            /// avx 2 available?
-            static constexpr bool has_AVX2 = is_set(capabilities::AVX2);
-            /// avx 512 available?
-            static constexpr bool has_AVX512 = is_set(capabilities::AVX512);
-
-            /// openCL available?
-            static constexpr bool has_OPENCL = is_set(capabilities::OPENCL);
+            /// AVX 1 does not provide operations on integer types
+            static constexpr bool has_integer_types = !is_set(capabilities::AVX1);
 
             /// fast (lower precision) float enabled?
             static constexpr bool use_fast_float = is_set(capabilities::FASTFLOAT);

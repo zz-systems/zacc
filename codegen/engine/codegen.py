@@ -11,6 +11,7 @@ class Type:
         self.type               = tconfig.get("type")
         self.branch             = tconfig.get("branch")
         self.vector_t           = tconfig.get("vector_t")
+        self.mask_t             = tconfig.get("mask_t", self.vector_t)
         self.scalar_t           = tconfig.get("scalar_t")
         self.vec_size           = tconfig.get("vec_size")
         self.alignment          = tconfig.get("alignment")
@@ -76,15 +77,6 @@ class Func:
 
         is_copy = type(entries) is Func # Prototype copy
 
-        self.args = entries.args if is_copy else Args(entries.get("args", ["one", "other"]))
-        self.body = entries.body if is_copy else entries.get("body", "")
-
-        self.branch_name = entries.branch_name if is_copy else "default"
-        self.is_branched= type(self.body) is dict
-
-        assert not self.is_branched or self.default_branch in self.body, "default branch required"
-
-        self.inits      = entries.inits if is_copy else Inits(entries.get("init", ""))
         self.requires   = entries.requires if is_copy else entries.get("requires", [])
         self.parent     = entries.parent if is_copy else parent
         self.name       = entries.name if is_copy else name
@@ -96,6 +88,21 @@ class Func:
         self.prefix     = entries.prefix if is_copy else "friend" if not self.is_member else ""
         self.suffix     = entries.suffix if is_copy else entries.get("suffix", "const" if self.is_member else "")
         self.returns    = entries.returns if is_copy else entries.get("returns", "composed_t")
+
+        self.body = entries.body if is_copy else entries.get("body", "")
+
+        self.branch_name = entries.branch_name if is_copy else "default"
+        self.is_branched= type(self.body) is dict
+
+        assert not self.is_branched or self.default_branch in self.body, "default branch required"
+
+        self.args = entries.args if is_copy else Args(self, entries.get("args", ["one", "other"]))
+        self.inits      = entries.inits if is_copy else Inits(self, entries.get("init", ""))
+
+
+        #override if in comparison or  logical module
+        if self.parent.name == "comparison" or self.parent.name == "logical":
+            self.returns = "bval<composed_t, mask_t>"
 
         test       = parent.test_config and parent.test_config.get(self.name)
 
@@ -178,7 +185,8 @@ class Func:
 
 
 
-        dispatch_if = "{0}base_t::dispatcher::has_{1}"
+        #dispatch_if = "{0}base_t::dispatcher::has_{1}"
+        dispatch_if = "{0}base_t::dispatcher::is_set(capabilities::{1})"
         returns = "std::enable_if_t<{condition}, T>"
 
         def map_requirement(requirement):
@@ -204,11 +212,13 @@ class Func:
         return cls(prototype.parent, pp.name, pp)
 
 class Inits:
-    def __init__(self, value):
+    def __init__(self, parent, value):
+        self.parent = parent
+
         if type(value) == list:
-            self.inits = [Init(i) for i in value]
+            self.inits = [Init(self, i) for i in value]
         else:
-            self.inits = Init(value)
+            self.inits = Init(self, value)
 
 
     def __repr__(self):
@@ -218,9 +228,11 @@ class Inits:
             return "base_t({})".format(self.inits)
 
 class Init:
-    def __init__(self, value):
+    def __init__(self, parent, value):
+        self.parent = parent
+
         if type(value) == dict:
-            args = Args(value.get("args"))
+            args = Args(self, value.get("args"))
             body = value.get("body")
 
             self.value = "{}({})".format(body, args.invocation())
@@ -252,7 +264,9 @@ class Body:
         return "\n".join(self.get_instructions())
 
 class Args:
-    def __init__(self, args):
+    def __init__(self, parent, args):
+        self.parent = parent
+
         if type(args) == dict:
             raw = args.get("raw")
             if raw:
@@ -285,10 +299,14 @@ class Arg:
     default_type_invocation = ""#"".get_value()"
 
     def __init__(self, parent, type, name):
-        self.type   = type
         self.name   = name
         self.parent = parent
+        self.type   = type
+        #override if in logical module
+        module = self.parent.parent.parent
 
+        if isinstance(module, Module) and module.name == "logical":
+            self.type = "bval<composed_t, mask_t>"
 
     def declaration(self):
         return self.type + " " + self.name if self.type else self.name
@@ -304,7 +322,8 @@ class Arg:
         if type(value) == str:
             value = value.split()
 
-        (t, n) = (value[0], value[1]) if len(value) > 1 \
+        # allow patterns like ('typename test::test', 'variable')
+        (t, n) = (" ".join(value[0:-1]), value[-1]) if len(value) > 1 \
             else (Arg.default_type, value[0])
 
         return cls(parent, t, n)

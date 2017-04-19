@@ -2,7 +2,8 @@ type:
   type: int32
   branch: sse
   vector_t: &vector_t __m128i
-  scalar_t: &scalar_t int
+  mask_t: &mask_t __m128i
+  scalar_t: &scalar_t int32_t
   vec_size: &vec_size 4
   alignment: 16
 #-----------------------------------------------------------------------------------------------------------------------
@@ -58,10 +59,10 @@ modules:
     vmul:
       body:
         sse4:
-          requires: [SSE4]
+          requires: [SSE41]
           body: _mm_mullo_epi32
         default:
-          requires: [not SSE4]
+          requires: [not SSE41]
           body:
             - /* vmul 2,0*/
             - auto tmp1 = _mm_castsi128_ps(_mm_mul_epu32(one, other));
@@ -117,10 +118,10 @@ modules:
       mangling: false
       body:
         sse4:
-          requires: [SSE4]
+          requires: [SSE41]
           body:
             - auto mask = _mm_cmpeq_epi32(_mm_setzero_si128(), condition);
             - return _mm_blendv_epi8(if_value, else_value, mask);
         default:
-          requires: [not SSE4]
+          requires: [not SSE41]
           body: return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value))

@@ -88,6 +88,7 @@ namespace zacc {
     platform &platform::reload() {
         _flags = 0;
 
+        // Generic info and features
         auto cpuInfo = _cpuid.reg(1);
 
         set(capabilities::SSE2, cpuInfo[cpuid::EDX][26]);
@@ -100,13 +101,20 @@ namespace zacc {
 
         set(capabilities::FMA3, cpuInfo[cpuid::ECX][12]);
 
+
         set(capabilities::AVX1, cpuInfo[cpuid::ECX][28]); // <- TODO: XRESTORE
 
-        // Extended CPU info
+        // Extended features
         cpuInfo = _cpuid.reg(7);
 
         set(capabilities::AVX2, cpuInfo[cpuid::EBX][5]);
         set(capabilities::AVX512, cpuInfo[cpuid::EBX][16]);
+
+
+        // Extended CPU info and features
+        cpuInfo = _cpuid.ext_reg(1);
+
+        set(capabilities::FMA4, cpuInfo[cpuid::ECX][16]);
 
         // TODO: OPENCL
 

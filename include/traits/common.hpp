@@ -149,7 +149,7 @@ namespace zacc {
 
             auto as_bool()
             {
-                return bval<impl>(*this);
+                return bval<impl, typename base_t::mask_t>(*this);
             }
         };
     };

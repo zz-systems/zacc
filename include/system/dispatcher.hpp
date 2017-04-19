@@ -49,7 +49,7 @@ namespace zacc {
     struct dispatcher
     {
         /// max capability
-        static const constexpr uint64_t capability = capability::fill_up_to(capabilities::ZACC_MAX_CAPABILITY);
+        static const constexpr uint64_t capability = ZACC_CAPABILITIES;//capability::fill_up_to(capabilities::ZACC_MAX_CAPABILITY);
 
         /// fast float enabled? used for faster and less precise computations
         static const constexpr bool use_fast_float = ZACC_FAST_FLOAT;

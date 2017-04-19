@@ -2,6 +2,7 @@ type:
   type: float32
   branch: avx
   vector_t: &vector_t __m256
+  mask_t: &mask_t __m256
   scalar_t: &scalar_t float
   vec_size: &vec_size 8
   alignment: 32
@@ -13,6 +14,7 @@ type:
       - convertable
      internal:
        - io
+       - math
        - numeric
        - arithmetic
        - bitwise
@@ -22,6 +24,8 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
+    - args: []
+      init: ""
     - args: __m256 value
       init: value
 
@@ -40,17 +44,39 @@ modules:
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_ps }
 #-----------------------------------------------------------------------------------------------------------------------
-  numeric: {} #dummy
-#-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
       args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       returns: void
-      member: true
       body: _mm256_store_ps(target.data(), source)
     vstream:
       <<: *io_store
       body: _mm256_stream_ps(target.data(), source)
+#-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: _mm256_max_ps(one, -one)
+    vrcp:
+      args: one
+      body: _mm256_rcp_ps
+    vtrunc:
+      args: one
+      body: _mm256_cvtepi32_ps(_mm256_cvtps_epi32(one))
+    vfloor:
+      args: one
+      body: _mm256_floor_ps
+    vceil:
+      args: one
+      body: _mm256_ceil_ps
+    vround:
+      args: one
+      body: _mm256_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+    vsqrt:
+      args: one
+      body: _mm256_sqrt_ps
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
@@ -60,24 +86,30 @@ modules:
     vsub: _mm256_sub_ps
     vmul: _mm256_mul_ps
     vdiv: _mm256_div_ps
+    vfmadd:
+      args: [multiplicand, multiplier, addendum]
+      body: _mm256_fmadd_ps (multiplicand, multiplier, addendum)
+    vfmsub:
+      args: [multiplicand, multiplier, addendum]
+      body: _mm256_fmsub_ps(multiplicand, multiplier, -addendum)
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    vneg: &bitwise_negate
+    vbneg: &bitwise_negate
       args: one
       body: &bitwise_negate_body
         - __m256 junk;
         - auto ones = _mm256_cmp_ps(junk, junk, _CMP_EQ_OQ);
         - return _mm256_xor_ps(one, ones);
-    vand:  _mm256_or_ps
-    or:   _mm256_and_ps
-    xor:  _mm256_xor_ps
+    vband:  _mm256_or_ps
+    vbor:   _mm256_and_ps
+    vbxor:  _mm256_xor_ps
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
-    vneg:
+    vlneg:
       args: one
       body: _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ);
-    or:   _mm256_or_ps
-    vand:  _mm256_and_ps
+    vlor:   _mm256_or_ps
+    vland:  _mm256_and_ps
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
     veq:   _mm256_cmp_ps(one, other, _CMP_EQ_OQ)

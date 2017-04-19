@@ -30,6 +30,7 @@
 
 #include <x86intrin.h>
 #include <type_traits>
+#include <cmath>
 
 #include "util/type_composition.hpp"
 
@@ -40,6 +41,8 @@
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
 #include "traits/io.hpp"
+#include "traits/numeric.hpp"
+#include "traits/math.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
@@ -74,6 +77,20 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
+
+
+            /**
+             * @brief construction default branch
+             * @relates float32
+             * @remark scalar - default
+             */
+            __impl() : base_t() {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "CONS()");
+
+            }
 
 
             /**
@@ -124,6 +141,8 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -132,11 +151,11 @@ namespace zacc { namespace scalar {
              * @relates float32
              * @remark scalar - default
              */
-            void vstore(typename base_t::extracted_t &target, composed_t source) const noexcept {
+            friend void vstore(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vstore");
 
-                target.data()[0] = base_t::_value;
+                target.data()[0] = source.get_value();
             }
 
 
@@ -145,11 +164,11 @@ namespace zacc { namespace scalar {
              * @relates float32
              * @remark scalar - default
              */
-            void vstream(typename base_t::extracted_t &target, composed_t source) const noexcept {
+            friend void vstream(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vstream");
 
-                target.data()[0] = base_t::_value;
+                target.data()[0] = source.get_value();
             }
 
         };
@@ -161,6 +180,179 @@ namespace zacc { namespace scalar {
          */
         template<typename base_t>
         using impl = interface::io<__impl<base_t>, composed_t>;
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name numeric operations
+     */
+    ///@{
+
+    /**
+     * @brief numeric
+     * @relates float32
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct float32_numeric
+    {
+
+        /**
+         * @brief numeric basic interface implementation
+         * @relates float32
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using mask_t = typename base_t::mask_t;
+
+            FORWARD(__impl);
+
+        };
+
+        /**
+         * @brief numeric public interface implementation
+         * @relates float32
+         * @remark scalar
+         */
+        template<typename base_t>
+        using impl = interface::numeric<__impl<base_t>, composed_t>;
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name math operations
+     */
+    ///@{
+
+    /**
+     * @brief math
+     * @relates float32
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct float32_math
+    {
+
+        /**
+         * @brief math basic interface implementation
+         * @relates float32
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using mask_t = typename base_t::mask_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark scalar - default
+             */
+            friend composed_t vabs(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vabs");
+
+                return std::abs(one);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark scalar - default
+             */
+            friend composed_t vrcp(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vrcp");
+
+                return (1 / one);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark scalar - default
+             */
+            friend composed_t vtrunc(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vtrunc");
+
+                return std::trunc(one);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark scalar - default
+             */
+            friend composed_t vfloor(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vfloor");
+
+                return std::floor(one);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark scalar - default
+             */
+            friend composed_t vceil(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vceil");
+
+                return std::ceil(one);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark scalar - default
+             */
+            friend composed_t vround(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vround");
+
+                return std::round(one);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float32
+             * @remark scalar - default
+             */
+            friend composed_t vsqrt(composed_t one)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vsqrt");
+
+                return std::sqrt(one);
+            }
+
+        };
+
+        /**
+         * @brief math public interface implementation
+         * @relates float32
+         * @remark scalar
+         */
+        template<typename base_t>
+        using impl = interface::math<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -189,6 +381,8 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -201,7 +395,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vneg");
 
-                return -one;(one);
+                return (-one);
             }
 
 
@@ -214,7 +408,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vadd");
 
-                return one + other;(one, other);
+                return (one + other);
             }
 
 
@@ -227,7 +421,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vsub");
 
-                return one - other;(one, other);
+                return (one - other);
             }
 
 
@@ -240,7 +434,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vmul");
 
-                return one * other;(one, other);
+                return (one * other);
             }
 
 
@@ -253,7 +447,33 @@ namespace zacc { namespace scalar {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vdiv");
 
-                return one / other;(one, other);
+                return (one / other);
+            }
+
+
+            /**
+             * @brief arithmetic default branch
+             * @relates float32
+             * @remark scalar - default
+             */
+            friend composed_t vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vfmadd");
+
+                return std::fma(multiplicand, multiplier, addendum);
+            }
+
+
+            /**
+             * @brief arithmetic default branch
+             * @relates float32
+             * @remark scalar - default
+             */
+            friend composed_t vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+
+                ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vfmsub");
+
+                return std::fma(multiplicand, multiplier, -addendum);
             }
 
         };
@@ -293,6 +513,8 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -301,11 +523,11 @@ namespace zacc { namespace scalar {
              * @relates float32
              * @remark scalar - default
              */
-            friend composed_t veq(composed_t one, composed_t other)  noexcept {
+            friend mask_t veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "veq");
 
-                return one == other;(one, other);
+                return (one == other);
             }
 
 
@@ -314,11 +536,11 @@ namespace zacc { namespace scalar {
              * @relates float32
              * @remark scalar - default
              */
-            friend composed_t vneq(composed_t one, composed_t other)  noexcept {
+            friend mask_t vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vneq");
 
-                return one != other;(one, other);
+                return (one != other);
             }
 
 
@@ -327,11 +549,11 @@ namespace zacc { namespace scalar {
              * @relates float32
              * @remark scalar - default
              */
-            friend composed_t vgt(composed_t one, composed_t other)  noexcept {
+            friend mask_t vgt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vgt");
 
-                return one > other;(one, other);
+                return (one > other);
             }
 
 
@@ -340,11 +562,11 @@ namespace zacc { namespace scalar {
              * @relates float32
              * @remark scalar - default
              */
-            friend composed_t vlt(composed_t one, composed_t other)  noexcept {
+            friend mask_t vlt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vlt");
 
-                return one < other;(one, other);
+                return (one < other);
             }
 
 
@@ -353,11 +575,11 @@ namespace zacc { namespace scalar {
              * @relates float32
              * @remark scalar - default
              */
-            friend composed_t vge(composed_t one, composed_t other)  noexcept {
+            friend mask_t vge(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vge");
 
-                return one >= other;(one, other);
+                return (one >= other);
             }
 
 
@@ -366,11 +588,11 @@ namespace zacc { namespace scalar {
              * @relates float32
              * @remark scalar - default
              */
-            friend composed_t vle(composed_t one, composed_t other)  noexcept {
+            friend mask_t vle(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vle");
 
-                return one <= other;(one, other);
+                return (one <= other);
             }
 
         };
@@ -410,6 +632,8 @@ namespace zacc { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -422,7 +646,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE(std::left << std::setw(32) << "scalar.float32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat32(float[1]) " << std::left << std::setw(10) << "default" << "vsel");
 
-                return (condition != 0 ? if_value : else_value);
+                return (condition.get_value() != 0 ? if_value : else_value);
             }
 
         };
@@ -458,7 +682,7 @@ namespace zacc { namespace scalar {
     template<uint64_t capability>
     struct __zval_float32
     {
-        using zval_t = zval<float, float, 1, 8, capability>;
+        using zval_t = zval<float, bool, float, 1, 8, capability>;
 
         struct impl : public zval_t
         {
@@ -482,6 +706,8 @@ namespace zacc { namespace scalar {
             iteratable::impl,
             convertable::impl,
             float32_io<impl>::template impl,
+            float32_math<impl>::template impl,
+            float32_numeric<impl>::template impl,
             float32_arithmetic<impl>::template impl,
             float32_comparison<impl>::template impl,
             float32_conditional<impl>::template impl,

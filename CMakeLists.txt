@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(zacc)
 
-set(CMAKE_VERBOSE_MAKEFILE Off)
+set(CMAKE_VERBOSE_MAKEFILE On)
 # options ==============================================================================================================
 
 option(BUILD_SCALAR_BRANCH "Build the scalar branch" ON)
@@ -18,6 +18,8 @@ option(BUILD_DOC "Build the documentation" OFF)
 
 option(BUILD_FAST_FLOAT "Build with relaxed IEEE754 options. Faster and less precise" Off)
 
+option(BUILD_CI_TEST "Build tests for CI environments" Off)
+
 # util =================================================================================================================
 
 macro(insert_kv dict key)
@@ -28,7 +30,7 @@ macro(get_branch_files files branch schema)
     # sse.sse4 => [major; minor] => [sse; sse4]
     string(REPLACE "." ";" parts ${branch})
     list(LENGTH parts len)
-    if(${len} EQUAL 2) # majorbranch.subbranch
+    if(${len} GREATER 1) # majorbranch.subbranch.ignored.ignored
         list(GET parts 0 majorbranch)
 
         find_files(_files "*/backend/${majorbranch}/*${schema}")
@@ -36,7 +38,7 @@ macro(get_branch_files files branch schema)
     elseif(${len} EQUAL 1) # majorbranch
         find_files(_files "*/backend/${branch}/*${schema}")
     else()
-        message(ERROR "malformed branch definition")
+        message(FATAL_ERROR "malformed branch definition")
     endif()
 
     set(${files} ${_files})
@@ -67,23 +69,33 @@ endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-insert_kv(branch_flags  scalar         "")
-insert_kv(branch_flags  sse.sse2      -msse2)
-insert_kv(branch_flags  sse.sse3      -msse3 -mssse3)
-insert_kv(branch_flags  sse.sse4      -msse4.1 -msse4.2)
-insert_kv(branch_flags  sse.sse4fma   -msse4.1 -msse4.2 -mfma)
-insert_kv(branch_flags  avx           -mavx)
-insert_kv(branch_flags  avx2          -mavx2)
+insert_kv(branch_flags  scalar              "")
+insert_kv(branch_flags  sse.sse2            -msse2)
+insert_kv(branch_flags  sse.sse3            -msse3 -mssse3)
+
+insert_kv(branch_flags  sse.sse41           -msse4.1)
+insert_kv(branch_flags  sse.sse41.fma3      -msse4.1 -mfma)
+insert_kv(branch_flags  sse.sse41.fma4      -msse4.1 -mfma4)
+
+#insert_kv(branch_flags  sse.sse42      -msse4.1 -msse4.2)
+#insert_kv(branch_flags  sse.sse42.fma3 -msse4.1 -msse4.2 -mfma)
+#insert_kv(branch_flags  sse.sse42.fma4 -msse4.1 -msse4.2 -mfma4)
+
+insert_kv(branch_flags  avx           -mavx -mfma)
+insert_kv(branch_flags  avx2          -mavx2 -mfma)
 insert_kv(branch_flags  avx512        -mavx512f -mavx512pf -mavx512er -mavx512cd -mavx512vl -mavx512bw -mavx512dq)
 
-insert_kv(branch_defs   scalar       ZACC_MAX_CAPABILITY=SCALAR ZACC_MAJOR_BRANCH=scalar    ZACC_SCALAR=1)
-insert_kv(branch_defs   sse.sse2     ZACC_MAX_CAPABILITY=SSE2   ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
-insert_kv(branch_defs   sse.sse3     ZACC_MAX_CAPABILITY=SSSE3  ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
-insert_kv(branch_defs   sse.sse4     ZACC_MAX_CAPABILITY=SSE41  ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
-insert_kv(branch_defs   sse.sse4fma  ZACC_MAX_CAPABILITY=FMA4   ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
-insert_kv(branch_defs   avx          ZACC_MAX_CAPABILITY=AVX1   ZACC_MAJOR_BRANCH=avx       ZACC_AVX=1)
-insert_kv(branch_defs   avx2         ZACC_MAX_CAPABILITY=AVX2   ZACC_MAJOR_BRANCH=avx2      ZACC_AVX2=1)
-insert_kv(branch_defs   avx512       ZACC_MAX_CAPABILITY=AVX512 ZACC_MAJOR_BRANCH=avx512    ZACC_AVX512=1)
+insert_kv(branch_defs   scalar          ZACC_CAPABILITIES=0b000000000000        ZACC_MAJOR_BRANCH=scalar    ZACC_SCALAR=1)
+insert_kv(branch_defs   sse.sse2        ZACC_CAPABILITIES=0b000000000001        ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+insert_kv(branch_defs   sse.sse3        ZACC_CAPABILITIES=0b000000000111        ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+
+insert_kv(branch_defs  sse.sse41        ZACC_CAPABILITIES=0b000000001111        ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+insert_kv(branch_defs  sse.sse41.fma3   ZACC_CAPABILITIES=0b000000101111        ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+insert_kv(branch_defs  sse.sse41.fma4   ZACC_CAPABILITIES=0b000001001111        ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+
+insert_kv(branch_defs   avx             ZACC_CAPABILITIES=0b000010101111        ZACC_MAJOR_BRANCH=avx       ZACC_AVX=1)
+insert_kv(branch_defs   avx2            ZACC_CAPABILITIES=0b000110101111        ZACC_MAJOR_BRANCH=avx2      ZACC_AVX2=1)
+insert_kv(branch_defs   avx512          ZACC_CAPABILITIES=0b001110101111        ZACC_MAJOR_BRANCH=avx512    ZACC_AVX512=1)
 
 # branch config ========================================================================================================
 
@@ -94,8 +106,9 @@ endif()
 if(BUILD_SSE_BRANCH)
     list(APPEND branches sse.sse2)
     list(APPEND branches sse.sse3)
-    list(APPEND branches sse.sse4)
-    list(APPEND branches sse.sse4fma)
+    list(APPEND branches sse.sse41)
+    list(APPEND branches sse.sse41.fma3)
+    list(APPEND branches sse.sse41.fma4)
 endif()
 
 if(BUILD_AVX_BRANCH)
@@ -114,6 +127,14 @@ if(BUILD_OPENCL_BRANCH)
     list(APPEND branches openCL)
 endif()
 
+# packages =============================================================================================================
+
+#find_package(GTest REQUIRED)
+#include_directories(
+#        ${GTEST_INCLUDE_DIRS}
+#        ${GMOCK_INCLUDE_DIRS}
+#)
+
 # BUILD! ===============================================================================================================
 
 # fetch gtest
@@ -122,11 +143,11 @@ include(test/tests.cmake)
 # add codegen targets
 include(codegen/CMakeLists.txt)
 
-# add test targets
-include(test/CMakeLists.txt)
-
 # add app targets
 include(src/CMakeLists.txt)
+
+# add test targets
+include(test/CMakeLists.txt)
 
 # add documentation targets
 include(doc/CMakeLists.txt)

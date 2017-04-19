@@ -1,3 +1,5 @@
+enable_testing()
+
 foreach(branch ${branches})
     get_branch_files(files ${branch} "${test.schema}")
 
@@ -19,6 +21,11 @@ foreach(branch ${branches})
         target_compile_definitions(zacc.${branch}.tests  PUBLIC "${def}")
         target_compile_definitions(zacc.${branch}.playground  PUBLIC "${def}")
     endforeach()
+
+        add_test(
+                NAME zacc.${branch}.tests.ci
+                COMMAND zacc.${branch}.tests
+        )
 
     list(APPEND tests "zacc.${branch}.tests")
     list(APPEND playgrounds "zacc.${branch}.playground")

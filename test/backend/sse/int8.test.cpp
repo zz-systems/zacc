@@ -29,16 +29,15 @@
 #include "gtest/gtest.h"
 #include "system/dispatcher.hpp"
 
-//namespace zacc { namespace sse { namespace test {
 namespace zacc { namespace test {
 
 // =====================================================================================================================
     TEST(sse_int8_arithmetic, vneg_default)
     {
         auto actual = -zint8(125);
-        auto expected = (char) -125;
+        auto expected = (uint8_t) -125;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -47,9 +46,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_arithmetic, vadd_default)
     {
         auto actual = zint8(12) + zint8(105);
-        auto expected = (char) 117;
+        auto expected = (uint8_t) 117;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -58,9 +57,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_arithmetic, vsub_default)
     {
         auto actual = zint8(124) - zint8(125);
-        auto expected = (char) -1;
+        auto expected = (uint8_t) -1;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -69,9 +68,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_arithmetic, vmul_default)
     {
         auto actual = zint8(12) * zint8(9);
-        auto expected = (char) 108;
+        auto expected = (uint8_t) 108;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -82,9 +81,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_bitwise, vbneg_default)
     {
         auto actual = ~zint8(100);
-        auto expected = (char) ~100;
+        auto expected = (uint8_t) ~100;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -93,9 +92,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_bitwise, vbor_default)
     {
         auto actual = zint8(127) | zint8(64);
-        auto expected = (char) (127 | 64);
+        auto expected = (uint8_t) (127 | 64);
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -104,9 +103,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_bitwise, vband_default)
     {
         auto actual = zint8(127) & zint8(64);
-        auto expected = (char) (127 & 64);
+        auto expected = (uint8_t) (127 & 64);
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -115,9 +114,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_bitwise, vbxor_default)
     {
         auto actual = zint8(127) ^ zint8(64);
-        auto expected = (char) (127 ^ 64);
+        auto expected = (uint8_t) (127 ^ 64);
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -128,9 +127,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_logical, vlneg_default)
     {
         auto actual = (!zint8(1)).as_bool();
-        auto expected = (char) false;
+        auto expected = (uint8_t) false;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -139,9 +138,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_logical, vlor_default)
     {
         auto actual = zint8(0) || zint8(8);
-        auto expected = (char) 8;
+        auto expected = (uint8_t) 8;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -150,9 +149,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_logical, vland_default)
     {
         auto actual = zint8(0) && zint8(8);
-        auto expected = (char) 0;
+        auto expected = (uint8_t) 0;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -163,9 +162,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_comparison, veq_default)
     {
         auto actual = zint8(0) == zint8(8);
-        auto expected = (char) 0;
+        auto expected = (uint8_t) 0;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -174,9 +173,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_comparison, vneq_default)
     {
         auto actual = zint8(0) != zint8(0);
-        auto expected = (char) 0;
+        auto expected = (uint8_t) 0;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -185,9 +184,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_comparison, vgt_default)
     {
         auto actual = zint8(0) > zint8(8);
-        auto expected = (char) 0;
+        auto expected = (uint8_t) 0;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -196,9 +195,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_comparison, vlt_default)
     {
         auto actual = zint8(8) < zint8(0);
-        auto expected = (char) 0;
+        auto expected = (uint8_t) 0;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -207,9 +206,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_comparison, vge_default)
     {
         auto actual = (zint8(0) >= zint8(0)).as_bool();
-        auto expected = (char) true;
+        auto expected = (uint8_t) true;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -218,9 +217,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_comparison, vle_default)
     {
         auto actual = (zint8(0) <= zint8(0)).as_bool();
-        auto expected = (char) true;
+        auto expected = (uint8_t) true;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -231,9 +230,9 @@ namespace zacc { namespace test {
     TEST(sse_int8_conditional, vsel_default)
     {
         auto actual = vsel(zint8(1) == zint8(1), zint8(2), zint8(3));
-        auto expected = (char) 2;
+        auto expected = (uint8_t) 2;
 
-        for(char value : actual)
+        for(uint8_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }

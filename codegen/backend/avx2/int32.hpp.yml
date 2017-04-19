@@ -3,7 +3,7 @@ type:
   branch: avx2
   vector_t: &vector_t __m256i
   mask_t: &mask_t __m256i
-  scalar_t: &scalar_t int
+  scalar_t: &scalar_t int32_t
   vec_size: &vec_size 8
   alignment: 32
 #-----------------------------------------------------------------------------------------------------------------------
@@ -23,6 +23,9 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
+    - args: []
+      init: ""
+
     - args: [[*vector_t, value]]
       init: value
 

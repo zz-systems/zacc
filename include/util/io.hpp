@@ -72,11 +72,7 @@ namespace zacc {
             #endif
         };
 
-        unsigned short color_code;     
-
-        // template <typename _Elem, typename _Traits>
-        // std::basic_ostream<_Elem,_Traits>& 
-        //     operator<<(std::basic_ostream<_Elem,_Traits>& s, const color& c)
+        unsigned short color_code;
         
         friend std::ostream &
             operator<<(std::ostream& s, const color& c)
@@ -111,10 +107,6 @@ namespace zacc {
         indent_t(indentation_t indentation) : indentation(indentation) {}
         indentation_t indentation;
 
-        // template <typename _Elem, typename _Traits>
-    // std::basic_ostream<_Elem,_Traits>& 
-    //     operator<<(std::basic_ostream<_Elem,_Traits>& s, const indent& i)
-
         friend std::ostream& 
             operator<<(std::ostream& s, const indent_t& i)
         {
@@ -133,10 +125,6 @@ namespace zacc {
         boolcolor(bool value) : value(value) {}
         bool value;
 
-        // template <typename _Elem, typename _Traits>
-    // std::basic_ostream<_Elem,_Traits>& 
-    //     operator<<(std::basic_ostream<_Elem,_Traits>& s, const indent& i)
-
         friend std::ostream& 
             operator<<(std::ostream& out, const boolcolor& i)
         {
@@ -153,5 +141,7 @@ namespace zacc {
 #else
     #define ZTRACE(cmd)
 #endif
+
+#define ZTRACE_BACKEND(file, line, type, branch, func) ZTRACE(std::left << std::setw(32) << file << " line " STRINGIZE(line) ":" << std::left << std::setw(24) << " " << type << " " << std::left << std::setw(10) << branch << " " << func)
 
 }

@@ -24,42 +24,20 @@
 
 
 #pragma once
-#include <array>
 
-namespace zacc {
-
-    /**
-     * Array casting functionality @ Compiletime.
-     * @origin: http://stackoverflow.com/a/14280396
-     * http://loungecpp.wikidot.com/tips-and-tricks%3aindices
-     */
-    namespace detail {
-
-        template<std::size_t... Is>
-        struct indices {
-        };
-        template<std::size_t N, std::size_t... Is>
-        struct build_indices : build_indices<N - 1, N - 1, Is...> {
-        };
-        template<std::size_t... Is>
-        struct build_indices<0, Is...> : indices<Is...> {
-        };
-
-        template<typename T, typename U, size_t i, size_t... Is>
-        constexpr auto array_cast_helper(
-                const std::array <U, i> &a, indices<Is...>) -> std::array <T, i> {
-            return {{static_cast<T>(std::get<Is>(a))...}};
+namespace zacc { namespace test {
+    struct gtest_ext
+    {
+        static bool has_capability() {
+            return false;
         }
-    }
-    template<typename T, typename U, size_t i>
-    constexpr auto array_cast(
-            const std::array<U, i> &a) -> std::array<T, i> {
-        // tag dispatch to helper with array indices
-        return detail::array_cast_helper<T>(a, detail::build_indices<i>());
-    }
+    };
+}}
 
-    template<typename E>
-    constexpr typename std::underlying_type<E>::type to_underlying(E e) {
-        return static_cast<typename std::underlying_type<E>::type>(e);
-    }
-}
+#define REQUIRES(capability) \
+    do { \
+        if(!has_capability()) {\
+            std::cout << "[  SKIPPED ] Feature " << #FEATURE_NAME << "not supported" << std::endl;\
+            return;\
+        }\
+    } while(0)
