@@ -27,14 +27,16 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
+#include "util/gtest_ext.hpp"
 #include "system/dispatcher.hpp"
 
-//namespace zacc { namespace scalar { namespace test {
 namespace zacc { namespace test {
 
 // =====================================================================================================================
     TEST(scalar_int8_arithmetic, vneg_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = -zint8(125);
         auto expected = (uint8_t) -125;
 
@@ -46,6 +48,8 @@ namespace zacc { namespace test {
 
     TEST(scalar_int8_arithmetic, vadd_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint8(12) + zint8(105);
         auto expected = (uint8_t) 117;
 
@@ -57,6 +61,8 @@ namespace zacc { namespace test {
 
     TEST(scalar_int8_arithmetic, vsub_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint8(124) - zint8(125);
         auto expected = (uint8_t) -1;
 
@@ -68,6 +74,8 @@ namespace zacc { namespace test {
 
     TEST(scalar_int8_arithmetic, vmul_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint8(12) * zint8(9);
         auto expected = (uint8_t) 108;
 
@@ -79,6 +87,8 @@ namespace zacc { namespace test {
 
     TEST(scalar_int8_arithmetic, vdiv_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint8(124) / zint8(124);
         auto expected = (uint8_t) 1;
 
@@ -92,6 +102,8 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(scalar_int8_bitwise, vbneg_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = ~zint8(100);
         auto expected = (uint8_t) ~100;
 
@@ -103,6 +115,8 @@ namespace zacc { namespace test {
 
     TEST(scalar_int8_bitwise, vband_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint8(127) & zint8(64);
         auto expected = (uint8_t) (127 & 64);
 
@@ -114,6 +128,8 @@ namespace zacc { namespace test {
 
     TEST(scalar_int8_bitwise, vbor_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint8(127) | zint8(64);
         auto expected = (uint8_t) (127 | 64);
 
@@ -125,6 +141,8 @@ namespace zacc { namespace test {
 
     TEST(scalar_int8_bitwise, vbxor_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint8(127) ^ zint8(64);
         auto expected = (uint8_t) (127 ^ 64);
 
@@ -138,6 +156,8 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(scalar_int8_comparison, veq_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint8(0) == zint8(8);
         auto expected = (uint8_t) 0;
 
@@ -149,6 +169,8 @@ namespace zacc { namespace test {
 
     TEST(scalar_int8_comparison, vneq_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint8(0) != zint8(0);
         auto expected = (uint8_t) 0;
 
@@ -160,6 +182,8 @@ namespace zacc { namespace test {
 
     TEST(scalar_int8_comparison, vgt_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint8(0) > zint8(8);
         auto expected = (uint8_t) 0;
 
@@ -171,6 +195,8 @@ namespace zacc { namespace test {
 
     TEST(scalar_int8_comparison, vlt_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint8(8) < zint8(0);
         auto expected = (uint8_t) 0;
 
@@ -182,6 +208,8 @@ namespace zacc { namespace test {
 
     TEST(scalar_int8_comparison, vge_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = (zint8(0) >= zint8(0)).as_bool();
         auto expected = (uint8_t) true;
 
@@ -193,6 +221,8 @@ namespace zacc { namespace test {
 
     TEST(scalar_int8_comparison, vle_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = (zint8(0) <= zint8(0)).as_bool();
         auto expected = (uint8_t) true;
 
@@ -206,6 +236,8 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(scalar_int8_conditional, vsel_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = vsel(zint8(1) == zint8(1), zint8(2), zint8(3));
         auto expected = (uint8_t) 2;
 

@@ -27,14 +27,16 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
+#include "util/gtest_ext.hpp"
 #include "system/dispatcher.hpp"
 
-//namespace zacc { namespace avx { namespace test {
 namespace zacc { namespace test {
 
 // =====================================================================================================================
     TEST(avx_float64_arithmetic, vneg_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = -zfloat64(125);
         auto expected = (double) -125;
 
@@ -46,6 +48,8 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_arithmetic, vadd_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zfloat64(12) + zfloat64(105);
         auto expected = (double) 117;
 
@@ -57,6 +61,8 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_arithmetic, vsub_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zfloat64(124) - zfloat64(125);
         auto expected = (double) -1;
 
@@ -68,6 +74,8 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_arithmetic, vmul_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zfloat64(12) * zfloat64(9);
         auto expected = (double) 108;
 
@@ -79,6 +87,8 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_arithmetic, vdiv_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zfloat64(124) / zfloat64(124);
         auto expected = (double) 1;
 
@@ -94,6 +104,8 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(avx_float64_logical, vlneg_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = (!zfloat64(1)).as_bool();
         auto expected = (double) false;
 
@@ -105,6 +117,8 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_logical, vlor_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zfloat64(0) || zfloat64(8);
         auto expected = (double) 8;
 
@@ -116,6 +130,8 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_logical, vland_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zfloat64(0) && zfloat64(8);
         auto expected = (double) 0;
 
@@ -129,6 +145,8 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(avx_float64_comparison, veq_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zfloat64(0) == zfloat64(8);
         auto expected = (double) 0;
 
@@ -140,6 +158,8 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_comparison, vneq_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zfloat64(0) != zfloat64(0);
         auto expected = (double) 0;
 
@@ -151,6 +171,8 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_comparison, vgt_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zfloat64(0) > zfloat64(8);
         auto expected = (double) 0;
 
@@ -162,6 +184,8 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_comparison, vlt_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zfloat64(8) < zfloat64(0);
         auto expected = (double) 0;
 
@@ -173,6 +197,8 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_comparison, vge_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = (zfloat64(0) >= zfloat64(0)).as_bool();
         auto expected = (double) true;
 
@@ -184,6 +210,8 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_comparison, vle_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = (zfloat64(0) <= zfloat64(0)).as_bool();
         auto expected = (double) true;
 
@@ -197,6 +225,8 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(avx_float64_conditional, vsel_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = vsel(zfloat64(1) == zfloat64(1), zfloat64(2), zfloat64(3));
         auto expected = (double) 2;
 

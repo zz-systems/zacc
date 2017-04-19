@@ -90,7 +90,7 @@ namespace zacc { namespace scalar {
              */
             __impl() : base_t() {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "CONS()");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "CONS()");
 
             }
 
@@ -102,7 +102,7 @@ namespace zacc { namespace scalar {
              */
             __impl(int32_t value) : base_t(value) {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "CONS(int32_t value)");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "CONS(int32_t value)");
 
             }
 
@@ -155,7 +155,7 @@ namespace zacc { namespace scalar {
              */
             friend void vstore(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vstore");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vstore");
 
                 target.data()[0] = source.get_value();
             }
@@ -168,7 +168,7 @@ namespace zacc { namespace scalar {
              */
             friend void vstream(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vstream");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vstream");
 
                 target.data()[0] = source.get_value();
             }
@@ -263,7 +263,7 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vneg");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vneg");
 
                 return (-one);
             }
@@ -276,7 +276,7 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vadd(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vadd");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vadd");
 
                 return (one + other);
             }
@@ -289,7 +289,7 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vsub(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vsub");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vsub");
 
                 return (one - other);
             }
@@ -302,7 +302,7 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vmul(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vmul");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vmul");
 
                 return (one * other);
             }
@@ -315,7 +315,7 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vdiv(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vdiv");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vdiv");
 
                 return (one / other);
             }
@@ -369,7 +369,7 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vbneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vbneg");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbneg");
 
                 return (~one);
             }
@@ -382,7 +382,7 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vband(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vband");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vband");
 
                 return (one & other);
             }
@@ -395,7 +395,7 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vbor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vbor");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbor");
 
                 return (one | other);
             }
@@ -408,7 +408,7 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vbxor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vbxor");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbxor");
 
                 return (one ^ other);
             }
@@ -462,7 +462,7 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vbsll(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vbsll");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbsll");
 
                 return (one << other);
             }
@@ -475,7 +475,7 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vbsrl(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vbsrl");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbsrl");
 
                 return (one >> other);
             }
@@ -527,9 +527,9 @@ namespace zacc { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend mask_t vlneg(mask_t one)  noexcept {
+            friend bval<composed_t, mask_t> vlneg(bval<composed_t, mask_t> one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vlneg");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vlneg");
 
                 return (!one);
             }
@@ -540,9 +540,9 @@ namespace zacc { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend mask_t vlor(mask_t one, mask_t other)  noexcept {
+            friend bval<composed_t, mask_t> vlor(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vlor");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vlor");
 
                 return (one || other);
             }
@@ -553,9 +553,9 @@ namespace zacc { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend mask_t vland(mask_t one, mask_t other)  noexcept {
+            friend bval<composed_t, mask_t> vland(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vland");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vland");
 
                 return (one && other);
             }
@@ -607,9 +607,9 @@ namespace zacc { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend mask_t veq(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> veq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "veq");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "veq");
 
                 return (one == other);
             }
@@ -620,9 +620,9 @@ namespace zacc { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend mask_t vneq(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vneq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vneq");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vneq");
 
                 return (one != other);
             }
@@ -633,9 +633,9 @@ namespace zacc { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend mask_t vgt(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vgt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vgt");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vgt");
 
                 return (one > other);
             }
@@ -646,9 +646,9 @@ namespace zacc { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend mask_t vlt(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vlt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vlt");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vlt");
 
                 return (one < other);
             }
@@ -659,9 +659,9 @@ namespace zacc { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend mask_t vge(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vge(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vge");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vge");
 
                 return (one >= other);
             }
@@ -672,9 +672,9 @@ namespace zacc { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend mask_t vle(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vle(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vle");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vle");
 
                 return (one <= other);
             }
@@ -728,7 +728,7 @@ namespace zacc { namespace scalar {
              */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "scalar.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[1]) " << std::left << std::setw(10) << "default" << "vsel");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vsel");
 
                 return (condition.get_value() != 0 ? if_value : else_value);
             }
