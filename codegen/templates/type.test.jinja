@@ -27,6 +27,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
+#include "util/gtest_ext.hpp"
 #include "system/dispatcher.hpp"
 
 namespace zacc { namespace test {
@@ -40,6 +41,8 @@ namespace zacc { namespace test {
                 {% if branch.test and (module.name != 'bitwise' or not type.type.startswith('float')) %}
     TEST({{ type.branch}}_{{ module.mangled_name() }}, {{ branch.name }}_{{ branch.branch_name }})
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = {{ branch.actual }};
         auto expected = ({{ type.scalar_t }}) {{ branch.expected }};
 

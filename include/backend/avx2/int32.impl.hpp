@@ -89,7 +89,7 @@ namespace zacc { namespace avx2 {
              */
             __impl() : base_t() {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "CONS()");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS()");
 
             }
 
@@ -101,7 +101,7 @@ namespace zacc { namespace avx2 {
              */
             __impl(__m256i value) : base_t(value) {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "CONS(__m256i value)");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(__m256i value)");
 
             }
 
@@ -113,7 +113,7 @@ namespace zacc { namespace avx2 {
              */
             __impl(int32_t value) : base_t(_mm256_set1_epi32(value)) {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "CONS(int32_t value)");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(int32_t value)");
 
             }
 
@@ -125,7 +125,7 @@ namespace zacc { namespace avx2 {
              */
             __impl(int32_t *value) : base_t(_mm256_load_si256((__m256i*)value)) {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "CONS(int32_t *value)");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(int32_t *value)");
 
             }
 
@@ -137,7 +137,7 @@ namespace zacc { namespace avx2 {
              */
             __impl(int32_t arg7, int32_t arg6, int32_t arg5, int32_t arg4, int32_t arg3, int32_t arg2, int32_t arg1, int32_t arg0) : base_t(_mm256_set_epi32(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)) {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "CONS(int32_t arg7, int32_t arg6, int3..)");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(int32_t arg7, int32_t arg6, int3..)");
 
             }
 
@@ -190,7 +190,7 @@ namespace zacc { namespace avx2 {
              */
             friend void vstore(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vstore");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vstore");
 
                 _mm256_store_si256((__m256i*)target.data(), source);
             }
@@ -203,7 +203,7 @@ namespace zacc { namespace avx2 {
              */
             friend void vstream(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vstream");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vstream");
 
                 _mm256_stream_si256((__m256i*)target.data(), source);
             }
@@ -257,7 +257,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vneg");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vneg");
 
                 return _mm256_sub_epi32(_mm256_setzero_si256(), one);
             }
@@ -270,7 +270,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vadd(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vadd");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vadd");
 
                 return _mm256_add_epi32(one, other);
             }
@@ -283,7 +283,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vsub(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vsub");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsub");
 
                 return _mm256_sub_epi32(one, other);
             }
@@ -296,7 +296,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vmul(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vmul");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vmul");
 
                 return _mm256_mullo_epi32(one, other);
             }
@@ -309,7 +309,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vdiv(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vdiv");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vdiv");
 
                 return _mm256_div_ps(_mm256_cvtepi32_ps(one), _mm256_cvtepi32_ps(other));
             }
@@ -363,7 +363,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vbneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vbneg");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbneg");
 
                 __m256i junk;
                 auto ones = _mm256_cmpeq_epi32(junk, junk);
@@ -378,7 +378,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vband(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vband");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vband");
 
                 return _mm256_or_si256(one, other);
             }
@@ -391,7 +391,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vbor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vbor");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbor");
 
                 return _mm256_and_si256(one, other);
             }
@@ -404,7 +404,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vbxor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vbxor");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbxor");
 
                 return _mm256_xor_si256(one, other);
             }
@@ -458,7 +458,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vsll(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vsll");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsll");
 
                 return _mm256_sll_epi32(one, other);
             }
@@ -471,7 +471,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vsrl(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vsrl");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsrl");
 
                 return _mm256_srl_epi32(one, other);
             }
@@ -484,7 +484,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vslli(const composed_t one, const size_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vslli");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vslli");
 
                 return _mm256_slli_epi32(one, other);
             }
@@ -497,7 +497,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vsrli(const composed_t one, const size_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vsrli");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsrli");
 
                 return _mm256_srli_epi32(one, other);
             }
@@ -549,9 +549,9 @@ namespace zacc { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend mask_t vlneg(mask_t one)  noexcept {
+            friend bval<composed_t, mask_t> vlneg(bval<composed_t, mask_t> one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vlneg");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vlneg");
 
                 return _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
             }
@@ -562,9 +562,9 @@ namespace zacc { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend mask_t vlor(mask_t one, mask_t other)  noexcept {
+            friend bval<composed_t, mask_t> vlor(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vlor");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vlor");
 
                 return _mm256_or_si256(one, other);
             }
@@ -575,9 +575,9 @@ namespace zacc { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend mask_t vland(mask_t one, mask_t other)  noexcept {
+            friend bval<composed_t, mask_t> vland(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vland");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vland");
 
                 return _mm256_and_si256(one, other);
             }
@@ -629,9 +629,9 @@ namespace zacc { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend mask_t veq(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> veq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "veq");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "veq");
 
                 return _mm256_cmpeq_epi32(one, other);
             }
@@ -642,9 +642,9 @@ namespace zacc { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend mask_t vneq(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vneq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vneq");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vneq");
 
                 return _mm256_xor_si256(_mm256_cmpeq_epi32(one, other), _mm256_setzero_si256());
             }
@@ -655,9 +655,9 @@ namespace zacc { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend mask_t vgt(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vgt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vgt");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vgt");
 
                 return _mm256_cmpgt_epi32(one, other);
             }
@@ -668,9 +668,9 @@ namespace zacc { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend mask_t vlt(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vlt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vlt");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vlt");
 
                 return (one != other) && (one <= other);
             }
@@ -681,9 +681,9 @@ namespace zacc { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend mask_t vge(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vge(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vge");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vge");
 
                 return (one == other) || _mm256_cmpgt_epi32(one, other);
             }
@@ -694,9 +694,9 @@ namespace zacc { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend mask_t vle(composed_t one, composed_t other)  noexcept {
+            friend bval<composed_t, mask_t> vle(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vle");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vle");
 
                 return _mm256_xor_si256(_mm256_cmpgt_epi32(one, other), _mm256_setzero_si256());
             }
@@ -750,7 +750,7 @@ namespace zacc { namespace avx2 {
              */
             friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx2.int32.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint32(int32_t[8]) " << std::left << std::setw(10) << "default" << "vsel");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsel");
 
                 return _mm256_blendv_epi8(if_value, else_value, condition);
             }

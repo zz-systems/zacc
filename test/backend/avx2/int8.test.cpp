@@ -33,7 +33,7 @@
 namespace zacc { namespace test {
 
 // =====================================================================================================================
-    TEST(sse_int8_arithmetic, vneg_default)
+    TEST(avx2_int8_arithmetic, vneg_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -46,7 +46,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int8_arithmetic, vadd_default)
+    TEST(avx2_int8_arithmetic, vadd_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -59,7 +59,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int8_arithmetic, vsub_default)
+    TEST(avx2_int8_arithmetic, vsub_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -72,22 +72,9 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int8_arithmetic, vmul_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint8(12) * zint8(9);
-        auto expected = (uint8_t) 108;
-
-        for(uint8_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int8_bitwise, vbneg_default)
+    TEST(avx2_int8_bitwise, vbneg_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -100,20 +87,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int8_bitwise, vbor_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint8(127) | zint8(64);
-        auto expected = (uint8_t) (127 | 64);
-
-        for(uint8_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int8_bitwise, vband_default)
+    TEST(avx2_int8_bitwise, vband_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -126,7 +100,20 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int8_bitwise, vbxor_default)
+    TEST(avx2_int8_bitwise, vbor_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        auto actual = zint8(127) | zint8(64);
+        auto expected = (uint8_t) (127 | 64);
+
+        for(uint8_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(avx2_int8_bitwise, vbxor_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -141,7 +128,7 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int8_logical, vlneg_default)
+    TEST(avx2_int8_logical, vlneg_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -154,7 +141,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int8_logical, vlor_default)
+    TEST(avx2_int8_logical, vlor_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -167,7 +154,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int8_logical, vland_default)
+    TEST(avx2_int8_logical, vland_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -182,7 +169,7 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int8_comparison, veq_default)
+    TEST(avx2_int8_comparison, veq_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -195,7 +182,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int8_comparison, vneq_default)
+    TEST(avx2_int8_comparison, vneq_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -208,7 +195,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int8_comparison, vgt_default)
+    TEST(avx2_int8_comparison, vgt_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -221,7 +208,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int8_comparison, vlt_default)
+    TEST(avx2_int8_comparison, vlt_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -234,7 +221,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int8_comparison, vge_default)
+    TEST(avx2_int8_comparison, vge_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -247,7 +234,7 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(sse_int8_comparison, vle_default)
+    TEST(avx2_int8_comparison, vle_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
@@ -262,7 +249,7 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int8_conditional, vsel_default)
+    TEST(avx2_int8_conditional, vsel_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 

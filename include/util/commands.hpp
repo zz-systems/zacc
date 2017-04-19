@@ -42,7 +42,7 @@ namespace zacc {
          * @param argc argument count
          * @param argv argument array
          */
-        option_parser(const char argc, char** argv)
+        option_parser(const int argc, char** argv)
             : _options(argv + 1, argv + argc)
         { }
 
@@ -51,7 +51,7 @@ namespace zacc {
          * @param option option name
          * @return true if the option exists, false otherwise
          */
-        bool has_option(const std::string& option)
+        bool has_option(const std::string& option) const
         {
             return std::find(_options.begin(), _options.end(), option) != _options.end();
         }
@@ -61,7 +61,7 @@ namespace zacc {
          * @param option
          * @return option value if option exists, otherwise an empty string
          */
-        const std::string& get_option(const std::string& option)
+        const std::string& get_option(const std::string& option) const
         {
             auto iter = std::find(_options.begin(), _options.end(), option);
 

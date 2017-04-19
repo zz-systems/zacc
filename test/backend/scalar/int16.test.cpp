@@ -27,113 +27,62 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "util/gtest_ext.hpp"
 #include "system/dispatcher.hpp"
 
+//namespace zacc { namespace scalar { namespace test {
 namespace zacc { namespace test {
 
 // =====================================================================================================================
-    TEST(sse_int8_arithmetic, vneg_default)
+    TEST(scalar_int16_arithmetic, vneg_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        auto actual = -zint16(125);
+        auto expected = (int16_t) -125;
 
-        auto actual = -zint8(125);
-        auto expected = (uint8_t) -125;
-
-        for(uint8_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int8_arithmetic, vadd_default)
+    TEST(scalar_int16_arithmetic, vadd_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        auto actual = zint16(12) + zint16(105);
+        auto expected = (int16_t) 117;
 
-        auto actual = zint8(12) + zint8(105);
-        auto expected = (uint8_t) 117;
-
-        for(uint8_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int8_arithmetic, vsub_default)
+    TEST(scalar_int16_arithmetic, vsub_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        auto actual = zint16(124) - zint16(125);
+        auto expected = (int16_t) -1;
 
-        auto actual = zint8(124) - zint8(125);
-        auto expected = (uint8_t) -1;
-
-        for(uint8_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int8_arithmetic, vmul_default)
+    TEST(scalar_int16_arithmetic, vmul_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        auto actual = zint16(12) * zint16(9);
+        auto expected = (int16_t) 108;
 
-        auto actual = zint8(12) * zint8(9);
-        auto expected = (uint8_t) 108;
-
-        for(uint8_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(sse_int8_bitwise, vbneg_default)
+    TEST(scalar_int16_arithmetic, vdiv_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        auto actual = zint16(124) / zint16(124);
+        auto expected = (int16_t) 1;
 
-        auto actual = ~zint8(100);
-        auto expected = (uint8_t) ~100;
-
-        for(uint8_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int8_bitwise, vbor_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint8(127) | zint8(64);
-        auto expected = (uint8_t) (127 | 64);
-
-        for(uint8_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int8_bitwise, vband_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint8(127) & zint8(64);
-        auto expected = (uint8_t) (127 & 64);
-
-        for(uint8_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int8_bitwise, vbxor_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint8(127) ^ zint8(64);
-        auto expected = (uint8_t) (127 ^ 64);
-
-        for(uint8_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -141,120 +90,45 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int8_logical, vlneg_default)
+    TEST(scalar_int16_bitwise, vbneg_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        auto actual = ~zint16(100);
+        auto expected = (int16_t) ~100;
 
-        auto actual = (!zint8(1)).as_bool();
-        auto expected = (uint8_t) false;
-
-        for(uint8_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int8_logical, vlor_default)
+    TEST(scalar_int16_bitwise, vband_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        auto actual = zint16(127) & zint16(64);
+        auto expected = (int16_t) (127 & 64);
 
-        auto actual = zint8(0) || zint8(8);
-        auto expected = (uint8_t) 8;
-
-        for(uint8_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int8_logical, vland_default)
+    TEST(scalar_int16_bitwise, vbor_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        auto actual = zint16(127) | zint16(64);
+        auto expected = (int16_t) (127 | 64);
 
-        auto actual = zint8(0) && zint8(8);
-        auto expected = (uint8_t) 0;
-
-        for(uint8_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(sse_int8_comparison, veq_default)
+    TEST(scalar_int16_bitwise, vbxor_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        auto actual = zint16(127) ^ zint16(64);
+        auto expected = (int16_t) (127 ^ 64);
 
-        auto actual = zint8(0) == zint8(8);
-        auto expected = (uint8_t) 0;
-
-        for(uint8_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int8_comparison, vneq_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint8(0) != zint8(0);
-        auto expected = (uint8_t) 0;
-
-        for(uint8_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int8_comparison, vgt_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint8(0) > zint8(8);
-        auto expected = (uint8_t) 0;
-
-        for(uint8_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int8_comparison, vlt_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint8(8) < zint8(0);
-        auto expected = (uint8_t) 0;
-
-        for(uint8_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int8_comparison, vge_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = (zint8(0) >= zint8(0)).as_bool();
-        auto expected = (uint8_t) true;
-
-        for(uint8_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int8_comparison, vle_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = (zint8(0) <= zint8(0)).as_bool();
-        auto expected = (uint8_t) true;
-
-        for(uint8_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -262,14 +136,115 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int8_conditional, vsel_default)
+    TEST(scalar_int16_logical, vlneg_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        auto actual = (!zint16(1)).as_bool();
+        auto expected = (int16_t) false;
 
-        auto actual = vsel(zint8(1) == zint8(1), zint8(2), zint8(3));
-        auto expected = (uint8_t) 2;
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
 
-        for(uint8_t value : actual)
+    TEST(scalar_int16_logical, vlor_default)
+    {
+        auto actual = zint16(0) || zint16(8);
+        auto expected = (int16_t) 8;
+
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_int16_logical, vland_default)
+    {
+        auto actual = zint16(0) && zint16(8);
+        auto expected = (int16_t) 0;
+
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(scalar_int16_comparison, veq_default)
+    {
+        auto actual = zint16(0) == zint16(8);
+        auto expected = (int16_t) 0;
+
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_int16_comparison, vneq_default)
+    {
+        auto actual = zint16(0) != zint16(0);
+        auto expected = (int16_t) 0;
+
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_int16_comparison, vgt_default)
+    {
+        auto actual = zint16(0) > zint16(8);
+        auto expected = (int16_t) 0;
+
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_int16_comparison, vlt_default)
+    {
+        auto actual = zint16(8) < zint16(0);
+        auto expected = (int16_t) 0;
+
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_int16_comparison, vge_default)
+    {
+        auto actual = (zint16(0) >= zint16(0)).as_bool();
+        auto expected = (int16_t) true;
+
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_int16_comparison, vle_default)
+    {
+        auto actual = (zint16(0) <= zint16(0)).as_bool();
+        auto expected = (int16_t) true;
+
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(scalar_int16_conditional, vsel_default)
+    {
+        auto actual = vsel(zint16(1) == zint16(1), zint16(2), zint16(3));
+        auto expected = (int16_t) 2;
+
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }

@@ -33,79 +33,53 @@
 namespace zacc { namespace test {
 
 // =====================================================================================================================
-    TEST(sse_int32_arithmetic, vneg_default)
+    TEST(avx2_int16_arithmetic, vneg_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = -zint32(125);
-        auto expected = (int32_t) -125;
+        auto actual = -zint16(125);
+        auto expected = (int16_t) -125;
 
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int32_arithmetic, vadd_default)
+    TEST(avx2_int16_arithmetic, vadd_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint32(12) + zint32(105);
-        auto expected = (int32_t) 117;
+        auto actual = zint16(12) + zint16(105);
+        auto expected = (int16_t) 117;
 
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int32_arithmetic, vsub_default)
+    TEST(avx2_int16_arithmetic, vsub_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint32(124) - zint32(125);
-        auto expected = (int32_t) -1;
+        auto actual = zint16(124) - zint16(125);
+        auto expected = (int16_t) -1;
 
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int32_arithmetic, vmul_sse4)
+    TEST(avx2_int16_arithmetic, vmul_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint32(12) * zint32(9);
-        auto expected = (int32_t) 108;
+        auto actual = zint16(12) * zint16(9);
+        auto expected = (int16_t) 108;
 
-        for(int32_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int32_arithmetic, vmul_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint32(12) * zint32(9);
-        auto expected = (int32_t) 108;
-
-        for(int32_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int32_arithmetic, vdiv_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint32(124) / zint32(124);
-        auto expected = (int32_t) 1;
-
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -113,81 +87,53 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int32_bitwise, vbneg_default)
+    TEST(avx2_int16_bitwise, vbneg_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = ~zint32(100);
-        auto expected = (int32_t) ~100;
+        auto actual = ~zint16(100);
+        auto expected = (int16_t) ~100;
 
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int32_bitwise, vbor_default)
+    TEST(avx2_int16_bitwise, vband_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint32(127) | zint32(64);
-        auto expected = (int32_t) (127 | 64);
+        auto actual = zint16(127) & zint16(64);
+        auto expected = (int16_t) (127 & 64);
 
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int32_bitwise, vband_default)
+    TEST(avx2_int16_bitwise, vbor_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint32(127) & zint32(64);
-        auto expected = (int32_t) (127 & 64);
+        auto actual = zint16(127) | zint16(64);
+        auto expected = (int16_t) (127 | 64);
 
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int32_bitwise, vbxor_default)
+    TEST(avx2_int16_bitwise, vbxor_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint32(127) ^ zint32(64);
-        auto expected = (int32_t) (127 ^ 64);
+        auto actual = zint16(127) ^ zint16(64);
+        auto expected = (int16_t) (127 ^ 64);
 
-        for(int32_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(sse_int32_bitwise_shift, vbslli_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint32(1) << (4);
-        auto expected = (int32_t) (1) << (4);
-
-        for(int32_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int32_bitwise_shift, vbsrli_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint32(109) >> (3);
-        auto expected = (int32_t) (109) >> (3);
-
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -195,40 +141,27 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int32_logical, vlneg_default)
+    TEST(avx2_int16_bitwise_shift, vbslli_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = (!zint32(1)).as_bool();
-        auto expected = (int32_t) false;
+        auto actual = zint16(1) << (4);
+        auto expected = (int16_t) (1) << (4);
 
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int32_logical, vlor_default)
+    TEST(avx2_int16_bitwise_shift, vbsrli_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint32(0) || zint32(8);
-        auto expected = (int32_t) 8;
+        auto actual = zint16(109) >> (3);
+        auto expected = (int16_t) (109) >> (3);
 
-        for(int32_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int32_logical, vland_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint32(0) && zint32(8);
-        auto expected = (int32_t) 0;
-
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -236,79 +169,40 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int32_comparison, veq_default)
+    TEST(avx2_int16_logical, vlneg_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint32(0) == zint32(8);
-        auto expected = (int32_t) 0;
+        auto actual = (!zint16(1)).as_bool();
+        auto expected = (int16_t) false;
 
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int32_comparison, vneq_default)
+    TEST(avx2_int16_logical, vlor_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint32(0) != zint32(0);
-        auto expected = (int32_t) 0;
+        auto actual = zint16(0) || zint16(8);
+        auto expected = (int16_t) 8;
 
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int32_comparison, vgt_default)
+    TEST(avx2_int16_logical, vland_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint32(0) > zint32(8);
-        auto expected = (int32_t) 0;
+        auto actual = zint16(0) && zint16(8);
+        auto expected = (int16_t) 0;
 
-        for(int32_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int32_comparison, vlt_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = zint32(8) < zint32(0);
-        auto expected = (int32_t) 0;
-
-        for(int32_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int32_comparison, vge_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = (zint32(0) >= zint32(0)).as_bool();
-        auto expected = (int32_t) true;
-
-        for(int32_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
-    TEST(sse_int32_comparison, vle_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = (zint32(0) <= zint32(0)).as_bool();
-        auto expected = (int32_t) true;
-
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
@@ -316,27 +210,94 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int32_conditional, vsel_sse4)
+    TEST(avx2_int16_comparison, veq_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = vsel(zint32(1) == zint32(1), zint32(2), zint32(3));
-        auto expected = (int32_t) 2;
+        auto actual = zint16(0) == zint16(8);
+        auto expected = (int16_t) 0;
 
-        for(int32_t value : actual)
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }
     }
 
-    TEST(sse_int32_conditional, vsel_default)
+    TEST(avx2_int16_comparison, vneq_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = vsel(zint32(1) == zint32(1), zint32(2), zint32(3));
-        auto expected = (int32_t) 2;
+        auto actual = zint16(0) != zint16(0);
+        auto expected = (int16_t) 0;
 
-        for(int32_t value : actual)
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(avx2_int16_comparison, vgt_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        auto actual = zint16(0) > zint16(8);
+        auto expected = (int16_t) 0;
+
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(avx2_int16_comparison, vlt_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        auto actual = zint16(8) < zint16(0);
+        auto expected = (int16_t) 0;
+
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(avx2_int16_comparison, vge_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        auto actual = (zint16(0) >= zint16(0)).as_bool();
+        auto expected = (int16_t) true;
+
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+    TEST(avx2_int16_comparison, vle_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        auto actual = (zint16(0) <= zint16(0)).as_bool();
+        auto expected = (int16_t) true;
+
+        for(int16_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(avx2_int16_conditional, vsel_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        auto actual = vsel(zint16(1) == zint16(1), zint16(2), zint16(3));
+        auto expected = (int16_t) 2;
+
+        for(int16_t value : actual)
         {
             ASSERT_EQ(value, expected);
         }

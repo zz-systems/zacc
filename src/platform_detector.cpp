@@ -25,11 +25,7 @@
 
 #include "system/platform.hpp"
 #include "util/commands.hpp"
-
-#include <iostream>
-#include <string>
-#include <functional>
-#include <numeric>
+#include "util/algorithm.hpp"
 
 using namespace zacc;
 
@@ -46,12 +42,7 @@ int main(int argc, char** argv) {
     {
         auto c = platform->enabled_capabilities();
 
-        std::cout << std::accumulate(std::begin(c) + 1, std::end(c),
-                         std::begin(c)->str(),
-                         [](std::string &acc, auto &part)
-                         {
-                             return acc + ";" + part.str();
-                         });
+        std::cout << join(std::begin(c), std::end(c), ";");
     }
     else
     {

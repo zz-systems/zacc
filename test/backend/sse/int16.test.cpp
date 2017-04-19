@@ -27,6 +27,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
+#include "util/gtest_ext.hpp"
 #include "system/dispatcher.hpp"
 
 namespace zacc { namespace test {
@@ -34,6 +35,8 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(sse_int16_arithmetic, vneg_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = -zint16(125);
         auto expected = (int16_t) -125;
 
@@ -45,6 +48,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_arithmetic, vadd_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(12) + zint16(105);
         auto expected = (int16_t) 117;
 
@@ -56,6 +61,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_arithmetic, vsub_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(124) - zint16(125);
         auto expected = (int16_t) -1;
 
@@ -67,6 +74,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_arithmetic, vmul_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(12) * zint16(9);
         auto expected = (int16_t) 108;
 
@@ -80,6 +89,8 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(sse_int16_bitwise, vbneg_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = ~zint16(100);
         auto expected = (int16_t) ~100;
 
@@ -91,6 +102,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_bitwise, vbor_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(127) | zint16(64);
         auto expected = (int16_t) (127 | 64);
 
@@ -102,6 +115,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_bitwise, vband_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(127) & zint16(64);
         auto expected = (int16_t) (127 & 64);
 
@@ -113,6 +128,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_bitwise, vbxor_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(127) ^ zint16(64);
         auto expected = (int16_t) (127 ^ 64);
 
@@ -126,6 +143,8 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(sse_int16_bitwise_shift, vbslli_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(1) << (4);
         auto expected = (int16_t) (1) << (4);
 
@@ -137,6 +156,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_bitwise_shift, vbsrli_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(109) >> (3);
         auto expected = (int16_t) (109) >> (3);
 
@@ -150,6 +171,8 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(sse_int16_logical, vlneg_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = (!zint16(1)).as_bool();
         auto expected = (int16_t) false;
 
@@ -161,6 +184,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_logical, vlor_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(0) || zint16(8);
         auto expected = (int16_t) 8;
 
@@ -172,6 +197,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_logical, vland_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(0) && zint16(8);
         auto expected = (int16_t) 0;
 
@@ -185,6 +212,8 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(sse_int16_comparison, veq_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(0) == zint16(8);
         auto expected = (int16_t) 0;
 
@@ -196,6 +225,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_comparison, vneq_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(0) != zint16(0);
         auto expected = (int16_t) 0;
 
@@ -207,6 +238,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_comparison, vgt_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(0) > zint16(8);
         auto expected = (int16_t) 0;
 
@@ -218,6 +251,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_comparison, vlt_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = zint16(8) < zint16(0);
         auto expected = (int16_t) 0;
 
@@ -229,6 +264,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_comparison, vge_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = (zint16(0) >= zint16(0)).as_bool();
         auto expected = (int16_t) true;
 
@@ -240,6 +277,8 @@ namespace zacc { namespace test {
 
     TEST(sse_int16_comparison, vle_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = (zint16(0) <= zint16(0)).as_bool();
         auto expected = (int16_t) true;
 
@@ -253,6 +292,8 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(sse_int16_conditional, vsel_default)
     {
+        REQUIRES(ZACC_CAPABILITIES);
+
         auto actual = vsel(zint16(1) == zint16(1), zint16(2), zint16(3));
         auto expected = (int16_t) 2;
 

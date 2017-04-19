@@ -9,7 +9,7 @@ foreach(branch ${branches})
     add_executable("zacc.${branch}.tests" ${files} ${CMAKE_CURRENT_LIST_DIR}/test_trigonometry.cpp)
     add_dependencies("zacc.${branch}.tests" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
 
-    target_link_libraries("zacc.${branch}.tests" gtest_main)
+    target_link_libraries("zacc.${branch}.tests" gtest_main zacc.system)
 
     target_compile_options("zacc.${branch}.tests" PUBLIC ${branch_flags_${branch}})
     target_compile_options("zacc.${branch}.playground" PUBLIC ${branch_flags_${branch}})

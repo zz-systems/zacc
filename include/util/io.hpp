@@ -132,12 +132,14 @@ namespace zacc {
         }                 
     };
 
+#ifdef WIN32
+    #define ZTRACE_INTERNAL(cmd) do { std::stringstream s; s << cmd << std::endl; OutputDebugString(s.str().c_str()); } while(0)
+#else
+    #define ZTRACE_INTERNAL(cmd) std::clog << std::flush <<  cmd << std::endl;
+#endif
+
 #ifdef ZACC_TRACE
-    #ifdef WIN32
-        #define ZTRACE(cmd) do { std::stringstream s; s << cmd << std::endl; OutputDebugString(s.str().c_str()); } while(0)
-    #else
-        #define ZTRACE(cmd) std::clog << std::flush <<  cmd << std::endl;
-    #endif
+    #define ZTRACE(cmd) ZTRACE_INTERNAL(cmd)
 #else
     #define ZTRACE(cmd)
 #endif

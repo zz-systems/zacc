@@ -64,7 +64,7 @@ namespace zacc {
         return _flags;
     }
 
-    std::vector<capability> platform::enabled_capabilities() {
+    std::vector<capability> platform::enabled_capabilities() const {
         std::vector<capability> result;
 
         transform_if(_capabilities.begin(), _capabilities.end(),
@@ -81,6 +81,28 @@ namespace zacc {
         transform(_capabilities.begin(), _capabilities.end(),
                   std::back_inserter(result),
                   [this](auto &kv) { return kv.second; });
+
+        return result;
+    }
+
+    std::vector<capability> platform::match_capabilities(std::initializer_list<capabilities> required) const {
+        std::vector<capability> result;
+
+        transform_if(required.begin(), required.end(),
+                     std::back_inserter(result),
+                     [this](auto &item) { return _capabilities.at(item); },
+                     [this](auto &item) { return !is_set(item); });
+
+        return result;
+    }
+
+    std::vector<capability> platform::match_capabilities(raw_t raw_value) const {
+        std::vector<capability> result;
+
+        transform_if(_capabilities.begin(), _capabilities.end(),
+                     std::back_inserter(result),
+                     [this](auto &kv) { return kv.second; },
+                     [this, raw_value](auto &kv) { return !is_set(kv.first) && (to_underlying(kv.first) & raw_value) != 0; });
 
         return result;
     }
@@ -107,7 +129,7 @@ namespace zacc {
         // Extended features
         cpuInfo = _cpuid.reg(7);
 
-        set(capabilities::AVX2, cpuInfo[cpuid::EBX][5]);
+        //set(capabilities::AVX2, cpuInfo[cpuid::EBX][5]);
         set(capabilities::AVX512, cpuInfo[cpuid::EBX][16]);
 
 

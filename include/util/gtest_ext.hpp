@@ -25,19 +25,18 @@
 
 #pragma once
 
-namespace zacc { namespace test {
-    struct gtest_ext
-    {
-        static bool has_capability() {
-            return false;
-        }
-    };
-}}
+#include "system/platform.hpp"
+#include "util/algorithm.hpp"
 
-#define REQUIRES(capability) \
+#define ZTRACE_TEST_OUTPUT(cmd) ZTRACE_INTERNAL(cmd)
+#define REQUIRES(raw) \
     do { \
-        if(!has_capability()) {\
-            std::cout << "[  SKIPPED ] Feature " << #FEATURE_NAME << "not supported" << std::endl;\
+        auto c = platform::instance().match_capabilities(raw); \
+        std::string str; \
+        \
+        if(c.size() != 0) {\
+            str = join(std::begin(c), std::end(c), ", "); \
+            ZTRACE_TEST_OUTPUT("[  SKIPPED ] Features [" << str << "] not supported");\
             return;\
         }\
     } while(0)

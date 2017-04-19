@@ -28,10 +28,12 @@
 #include "math/trigonometry/emulated_trigonometry.hpp"
 
 #include <cmath>
+#include "util/gtest_ext.hpp"
 
 namespace zacc { namespace test {
 
     TEST(float32_trigonometry, sin) {
+        REQUIRES(ZACC_CAPABILITIES);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
         for (int i = -180; i <= 180; i+= 180)
@@ -47,6 +49,7 @@ namespace zacc { namespace test {
     }
 
     TEST(float32_trigonometry, cos) {
+        REQUIRES(ZACC_CAPABILITIES);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
         for (int i = -180; i <= 180; i++)
@@ -62,6 +65,7 @@ namespace zacc { namespace test {
     }
 
     TEST(float32_trigonometry, tan) {
+        REQUIRES(ZACC_CAPABILITIES);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
         for (int i = -45; i <= 45; i++)
@@ -77,6 +81,7 @@ namespace zacc { namespace test {
     }
 
     TEST(float64_trigonometry, sin) {
+        REQUIRES(ZACC_CAPABILITIES);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
         for (int i = -180; i <= 180; i++)
@@ -92,6 +97,7 @@ namespace zacc { namespace test {
     }
 
     TEST(float64_trigonometry, cos) {
+        REQUIRES(ZACC_CAPABILITIES);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
         for (int i = -180; i <= 180; i++)
@@ -107,6 +113,7 @@ namespace zacc { namespace test {
     }
 
     TEST(float64_trigonometry, tan) {
+        REQUIRES(ZACC_CAPABILITIES);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
         for (int i = -45; i <= 45; i++)

@@ -92,13 +92,25 @@ namespace zacc {
          * @brief Get enabled capability objects from raw representation
          * @return array of capabilities for each enabled capability
          */
-        std::vector<capability> enabled_capabilities();
+        std::vector<capability> enabled_capabilities() const;
 
         /**
          * @brief Get all capability objects from raw representation
          * @return array of capabilities for each enabled capability
          */
         std::vector<capability> all_capabilities() const;
+
+        /**
+         * @brief Match runtime capabilities with requirement list
+         * @return array of missing capabilities. Empty if conditions met.
+         */
+        std::vector<capability> match_capabilities(std::initializer_list<capabilities> required) const;
+
+        /**
+         * @brief Match runtime capabilities with raw requirement list (integer reporesentation)
+         * @return array of missing capabilities. Empty if conditions met.
+         */
+        std::vector<capability> match_capabilities(raw_t required) const;
 
         /**
          * @brief Resolves platform information and populates capabilities, fluent interface

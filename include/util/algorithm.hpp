@@ -25,7 +25,23 @@
 
 #pragma once
 
+#include <numeric>
+
 namespace zacc {
+
+    /**
+     * @brief Conditionally transforms one collection to another
+     * @tparam InputIt
+     * @tparam OutputIt
+     * @tparam UnaryOperation
+     * @tparam UnaryPredicate
+     * @param first
+     * @param last
+     * @param d_first
+     * @param unary_op
+     * @param pred
+     * @return
+     */
     template< class InputIt, class OutputIt, class UnaryOperation, class UnaryPredicate>
     OutputIt transform_if(InputIt first, InputIt last,
                         OutputIt d_first, UnaryOperation unary_op, UnaryPredicate pred)
@@ -36,4 +52,23 @@ namespace zacc {
 
         return d_first;
     };
+
+    /**
+     * @brief Concatenates all the elements of a collection
+     * using the specified separator between each element.
+     * The collection value type must provide a str() method.
+     * @tparam InputIt collection iterator type
+     * @param first Begin
+     * @param last End
+     * @param separator The string to use as separator
+     * @return A string that consists of the elements in provided collection delimited by the separator string
+     */
+    template< class InputIt >
+    std::string join(InputIt first, InputIt last, const std::string& separator) {
+        return std::accumulate(first + 1, last, first->str(),
+                        [separator](std::string &acc, auto &part) {
+                            return acc + separator + part.str();
+            });
+    }
+
 }
