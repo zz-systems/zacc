@@ -70,7 +70,7 @@ namespace zacc {
         transform_if(_capabilities.begin(), _capabilities.end(),
                      std::back_inserter(result),
                      [this](auto &kv) { return kv.second; },
-                     [this](auto &kv) { return is_set(kv.first); });
+                     [this](auto &kv) { return this->is_set(kv.first); });
 
         return result;
     }
@@ -91,7 +91,7 @@ namespace zacc {
         transform_if(required.begin(), required.end(),
                      std::back_inserter(result),
                      [this](auto &item) { return _capabilities.at(item); },
-                     [this](auto &item) { return !is_set(item); });
+                     [this](auto &item) { return !this->is_set(item); });
 
         return result;
     }
@@ -102,7 +102,7 @@ namespace zacc {
         transform_if(_capabilities.begin(), _capabilities.end(),
                      std::back_inserter(result),
                      [this](auto &kv) { return kv.second; },
-                     [this, raw_value](auto &kv) { return !is_set(kv.first) && (to_underlying(kv.first) & raw_value) != 0; });
+                     [this, raw_value](auto &kv) { return !this->is_set(kv.first) && (to_underlying(kv.first) & raw_value) != 0; });
 
         return result;
     }
