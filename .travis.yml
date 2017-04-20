@@ -1,5 +1,5 @@
 language: generic
-sudo: true
+sudo: false
 dist: trusty
 
 cache:
@@ -93,7 +93,8 @@ install:
     elif [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
       sudo brew install cmake ccache
     fi
-  - pip install yasha
+  - travis_retry pip install pyopenssl ndg-httpsclient pyasn1
+  - travis_retry pip install yasha
 before_script:
   #- export CXX=${COMPILER}
   - cd ${TRAVIS_BUILD_DIR}
