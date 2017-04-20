@@ -55,10 +55,10 @@
  * @brief shortcut for trait definition. Aggregated from base traits and provided traits. 'base_t' as default base type
  * @param provides which trait is set
  */
-#define TRAIT(provides) \
+#define TRAIT(provides) //\
     TRAIT2(provides, base_t)
 
-#define REQUIRE(requirement) \
+#define REQUIRE(requirement) //\
     static_assert((base_t::traits & static_cast<long long>(requirement)) != 0, "Requirement not met: feature '" #requirement "' required.")
 
 //#define BASE() \
