@@ -1,11 +1,10 @@
-language: cpp
+language: generic
 sudo: true
 dist: trusty
 
 cache:
   ccache: true
-  directories:
-    - $HOME/.ccache
+  apt: true
 
 env:
   global:
@@ -23,59 +22,40 @@ matrix:
 
     # 1/ Linux Clang Builds
     - os: linux
-      compiler: clang
-      addons: &clang39
+      addons:
         apt:
-          sources: ['llvm-toolchain-trusty-3.9', 'ubuntu-toolchain-r-test']
-          packages: ['clang-3.9']
-      env: COMPILER='ccache clang++-3.9' BUILD_TYPE='Release'
+          sources: &sources
+            - llvm-toolchain-trusty-3.9
+            - llvm-toolchain-trusty-4.0
+            - ubuntu-toolchain-r-test
+          packages:
+            - clang-3.9
+      env: BUILD_TYPE='Release' CXX=clang++-3.9 CC=clang-3.9
 
     - os: linux
-      compiler: clang
-      addons: *clang39
-      env: COMPILER='ccache clang++-3.9' BUILD_TYPE='Debug'
-
-
-    - os: linux
-      compiler: clang
-      addons: &clang40
+      addons:
         apt:
-          sources: ['llvm-toolchain-trusty-4.0', 'ubuntu-toolchain-r-test']
-          packages: ['clang-4.0']
-      env: COMPILER='ccache clang++-4.0' BUILD_TYPE='Release'
-
-    - os: linux
-      compiler: clang
-      addons: *clang40
-      env: COMPILER='ccache clang++-4.0' BUILD_TYPE='Debug'
-
+          sources: *sources
+          packages:
+           - clang-4.0
+      env: BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
 
     # 2/ Linux GCC Builds
     - os: linux
-      compiler: gcc
       addons: &gcc5
         apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-5']
-      env: COMPILER='ccache g++-5' BUILD_TYPE='Release'
+          sources: &sources
+          packages:
+            - g++-5
+      env: BUILD_TYPE='Release' CXX=g++-5 CC=gcc-5
 
     - os: linux
-      compiler: gcc
-      addons: *gcc5
-      env: COMPILER='ccache g++-5' BUILD_TYPE='Debug'
-
-    - os: linux
-      compiler: gcc
       addons: &gcc6
         apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-6']
-      env: COMPILER='ccache g++-6' BUILD_TYPE='Release'
-
-    - os: linux
-      compiler: gcc
-      addons: *gcc6
-      env: COMPILER='ccache g++-6' BUILD_TYPE='Debug'
+          sources: &sources
+          packages:
+            - g++-6
+      env: BUILD_TYPE='Release' CXX=g++-6 CC=gcc-6
 
 
     # 3/ OSX Clang Builds
