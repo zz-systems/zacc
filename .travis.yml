@@ -107,4 +107,4 @@ script:
   - Build/zacc.sse.sse41.fma4.tests
   - Build/zacc.avx.tests
   - Build/zacc.avx2.tests
-  - ctest- Build/zacc.avx.tests
+  - ctest
