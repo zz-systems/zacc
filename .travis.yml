@@ -1,4 +1,4 @@
-language: generic
+language: cpp
 sudo: false
 dist: trusty
 
@@ -22,7 +22,7 @@ matrix:
 
     # 1/ Linux Clang Builds
     - os: linux
-      addons:
+      addons: &addons
         apt:
           sources: &sources
             - llvm-toolchain-trusty-3.9
@@ -30,31 +30,22 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - clang-3.9
+            - clang-4.0
+            - g++-5
+            - g++-6
       env: BUILD_TYPE='Release' CXX=clang++-3.9 CC=clang-3.9
 
     - os: linux
-      addons:
-        apt:
-          sources: *sources
-          packages:
-           - clang-4.0
+      addons: *addons
       env: BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
 
     # 2/ Linux GCC Builds
     - os: linux
-      addons: &gcc5
-        apt:
-          sources: &sources
-          packages:
-            - g++-5
+      addons: *addons
       env: BUILD_TYPE='Release' CXX=g++-5 CC=gcc-5
 
     - os: linux
-      addons: &gcc6
-        apt:
-          sources: &sources
-          packages:
-            - g++-6
+      addons: *addons
       env: BUILD_TYPE='Release' CXX=g++-6 CC=gcc-6
 
 
