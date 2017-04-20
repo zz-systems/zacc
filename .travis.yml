@@ -60,7 +60,6 @@ matrix:
     #  addons: *addons
     #  env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7
 
-
     # 3/ OSX Clang Builds
 #    - os: osx
 #      osx_image: xcode6.4
