@@ -47,6 +47,9 @@ endmacro()
 # compiler config ======================================================================================================
 
 set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED on)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
 # Clang doesn't support the __float128 type. Here are some workarounds:
 # https://bugs.llvm.org//show_bug.cgi?id=13530#c3

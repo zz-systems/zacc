@@ -98,6 +98,7 @@ before_script:
 
 script:
   - make -j 2 && make zacc.tests.all
+  - ls
   - zacc.system.detect
   - zacc.sse.sse2.tests
   - zacc.sse.sse2.tests
