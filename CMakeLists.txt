@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(zacc)
 
-set(CMAKE_VERBOSE_MAKEFILE Off)
+set(CMAKE_VERBOSE_MAKEFILE On)
 # options ==============================================================================================================
 
 option(BUILD_SCALAR_BRANCH "Build the scalar branch" ON)
@@ -49,15 +49,26 @@ endmacro()
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    # using Clang
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
-# Clang doesn't support the __float128 type. Here are some workarounds:
-# https://bugs.llvm.org//show_bug.cgi?id=13530#c3
-# 1) build with -D__STRICT_ANSI__
-# 2) edit bits/c++config.h (somewhere inside /usr/include/c++/4.7.0) so it doesn't define _GLIBCXX_USE_FLOAT128
-# 3) configure libstdc++ with clang instead of gcc
-# 4) add 'struct __float128;' before you include any STL header
-add_definitions(-D__STRICT_ANSI__)
+    # Clang doesn't support the __float128 type. Here are some workarounds:
+    # https://bugs.llvm.org//show_bug.cgi?id=13530#c3
+    # 1) build with -D__STRICT_ANSI__
+    # 2) edit bits/c++config.h (somewhere inside /usr/include/c++/4.7.0) so it doesn't define _GLIBCXX_USE_FLOAT128
+    # 3) configure libstdc++ with clang instead of gcc
+    # 4) add 'struct __float128;' before you include any STL header
+    add_definitions(-D__STRICT_ANSI__)
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    # using GCC
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+    # using Intel C++
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    # using Visual Studio C++
+endif()
+
+
 
 if(ENABLE_TRACE)
     add_definitions(-DZACC_TRACE)

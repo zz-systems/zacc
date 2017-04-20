@@ -107,7 +107,7 @@ modules:
   logical:
     vlneg:
      args: one
-     body: _mm256_cmp_pd(one, _mm256_setzero_ps(), _CMP_EQ_OQ);
+     body: _mm256_cmp_pd(one, _mm256_setzero_pd(), _CMP_EQ_OQ);
     vlor:   _mm256_or_pd
     vland:  _mm256_and_pd
 #-----------------------------------------------------------------------------------------------------------------------
@@ -127,5 +127,5 @@ modules:
       args: [condition, if_value, else_value]
       mangling: false
       body:
-        - auto mask = _mm256_cmp_pd(_mm256_setzero_ps(), condition, _CMP_EQ_OQ);
+        - auto mask = _mm256_cmp_pd(_mm256_setzero_pd(), condition, _CMP_EQ_OQ);
         - return _mm256_blendv_pd(if_value, else_value, mask);

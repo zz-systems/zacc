@@ -684,7 +684,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vlneg");
 
-                return _mm256_cmp_pd(one, _mm256_setzero_ps(), _CMP_EQ_OQ);
+                return _mm256_cmp_pd(one, _mm256_setzero_pd(), _CMP_EQ_OQ);
             }
 
 
@@ -884,7 +884,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vsel");
 
-                auto mask = _mm256_cmp_pd(_mm256_setzero_ps(), condition, _CMP_EQ_OQ);
+                auto mask = _mm256_cmp_pd(_mm256_setzero_pd(), condition, _CMP_EQ_OQ);
                 return _mm256_blendv_pd(if_value, else_value, mask);
             }
 

@@ -113,7 +113,7 @@ namespace zacc {
          * @return raw value
          */
         template <typename dim_t = std::integral_constant<size_t, dim>, typename enable = typename std::enable_if<(dim_t::value > 1), vector_t>::type>
-        const operator vector_t() const {
+        operator vector_t() const {
             return get_value();
         }
 
@@ -167,7 +167,7 @@ namespace zacc {
          * @brief
          * @return
          */
-        const operator zval_t() const {
+        operator zval_t() const {
             return get_value();
         }
 
@@ -175,7 +175,7 @@ namespace zacc {
          * @brief
          * @return
          */
-        const operator bval_t() const {
+        operator bval_t() const {
             return get_value();
         }
 
@@ -206,8 +206,8 @@ namespace zacc {
         iterator end() { return _snapshot.end(); }
 
     protected:
-        zval_t _value;
-        extracted_t _snapshot;
+        alignas(alignment) zval_t _value;
+        alignas(alignment) extracted_t _snapshot;
     };
 
 
