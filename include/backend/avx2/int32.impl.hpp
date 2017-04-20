@@ -99,7 +99,7 @@ namespace zacc { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            __impl(__m256 value) : base_t(_mm_cvtps_epi32) {
+            __impl(__m256 value) : base_t(_mm256_cvtps_epi32(value)) {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(__m256 value)");
 
@@ -111,7 +111,7 @@ namespace zacc { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            __impl(__m256d value) : base_t(_mm_cvtpd_epi32(value)) {
+            __impl(__m256d value) : base_t(_mm256_cvtpd_epi32(value)) {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(__m256d value)");
 
