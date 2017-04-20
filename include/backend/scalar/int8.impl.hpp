@@ -118,6 +118,18 @@ namespace zacc { namespace scalar {
 
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates int8
+             * @remark scalar - default
+             */
+            __impl(uint8_t *value) : base_t(*value) {
+
+                ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "CONS(uint8_t *value)");
+
+            }
+
         };
 
         /**

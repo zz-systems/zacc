@@ -118,6 +118,18 @@ namespace zacc { namespace scalar {
 
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            __impl(int16_t *value) : base_t(*value) {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "CONS(int16_t *value)");
+
+            }
+
         };
 
         /**

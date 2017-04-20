@@ -29,6 +29,7 @@
 #include "gtest/gtest.h"
 #include "util/gtest_ext.hpp"
 #include "system/dispatcher.hpp"
+#include <random>
 
 namespace zacc { namespace test {
 
@@ -37,11 +38,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = -zint16(125);
-        auto expected = (int16_t) -125;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (-zint16(a)).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (-a[i]);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -50,11 +65,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint16(12) + zint16(105);
-        auto expected = (int16_t) 117;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (zint16(a) + zint16(b)).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (a[i] + b[i]);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -63,11 +92,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint16(124) - zint16(125);
-        auto expected = (int16_t) -1;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (zint16(a) - zint16(b)).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (a[i] - b[i]);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -76,11 +119,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint16(12) * zint16(9);
-        auto expected = (int16_t) 108;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (zint16(a) * zint16(b)).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (a[i] * b[i]);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -89,39 +146,54 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint16(124) / zint16(124);
-        auto expected = (int16_t) 1;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (zint16(a) / zint16(b)).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (a[i] / b[i]);
+
             ASSERT_EQ(value, expected);
         }
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(scalar_int16_bitwise, vbneg_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = ~zint16(100);
-        auto expected = (int16_t) ~100;
-
-        for(int16_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
     TEST(scalar_int16_bitwise, vband_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint16(127) & zint16(64);
-        auto expected = (int16_t) (127 & 64);
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (zint16(a) & zint16(64)).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) ((a[i] & 64));
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -130,11 +202,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint16(127) | zint16(64);
-        auto expected = (int16_t) (127 | 64);
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (zint16(a) | zint16(64)).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) ((a[i] | 64));
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -143,11 +229,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint16(127) ^ zint16(64);
-        auto expected = (int16_t) (127 ^ 64);
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (zint16(a) ^ zint16(64)).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) ((a[i] ^ 64));
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -158,11 +258,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = (!zint16(1)).as_bool();
-        auto expected = (int16_t) false;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = ((!zint16(a)).as_bool()).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (false);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -171,11 +285,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = (zint16(0) || zint16(8)).as_bool();
-        auto expected = (int16_t) true;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = ((zint16(0) || zint16(a)).as_bool()).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (true);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -184,11 +312,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = (zint16(0) && zint16(8)).as_bool();
-        auto expected = (int16_t) false;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = ((zint16(0) && zint16(a)).as_bool()).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (false);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -199,11 +341,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint16(0) == zint16(8);
-        auto expected = (int16_t) 0;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (zint16(0) == zint16(a)).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (0);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -212,11 +368,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint16(0) != zint16(0);
-        auto expected = (int16_t) 0;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (zint16(a) != zint16(a)).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (0);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -225,11 +395,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint16(0) > zint16(8);
-        auto expected = (int16_t) 0;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (zint16(0) > zint16(a)).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (0);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -238,11 +422,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint16(8) < zint16(0);
-        auto expected = (int16_t) 0;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (zint16(a) < zint16(0)).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (0);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -251,11 +449,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = (zint16(0) >= zint16(0)).as_bool();
-        auto expected = (int16_t) true;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = ((zint16(b) >= zint16(b)).as_bool()).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (true);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -264,11 +476,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = (zint16(0) <= zint16(0)).as_bool();
-        auto expected = (int16_t) true;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = ((zint16(b) <= zint16(b)).as_bool()).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (true);
+
             ASSERT_EQ(value, expected);
         }
     }
@@ -279,11 +505,25 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = vsel(zint16(1) == zint16(1), zint16(2), zint16(3));
-        auto expected = (int16_t) 2;
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
 
-        for(int16_t value : actual)
+        int16_t a[1], b[1];
+        for(int i = 0; i < 1; i++)
         {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+        }
+
+        auto actual = (vsel(zint16(1) == zint16(1), zint16(2), zint16(3))).data();
+
+
+        for(int i = 0; i < 1; i++)
+        {
+            auto value = actual[i];
+            auto expected = (int16_t) (2);
+
             ASSERT_EQ(value, expected);
         }
     }

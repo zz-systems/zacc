@@ -117,6 +117,18 @@ namespace zacc { namespace scalar {
 
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates float32
+             * @remark scalar - default
+             */
+            __impl(float *value) : base_t(*value) {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "CONS(float *value)");
+
+            }
+
         };
 
         /**
