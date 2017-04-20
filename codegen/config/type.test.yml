@@ -5,10 +5,10 @@ modules:
     vadd: [ "{type}(a) + {type}(b)", "a[i] + b[i]" ]
     vsub: [ "{type}(a) - {type}(b)", "a[i] - b[i]" ]
     vmul: [ "{type}(a) * {type}(b)", "a[i] * b[i]" ]
-    vdiv: [ "{type}(a) / {type}(b)", "a[i] / b[i]" ]
+    vdiv: [ "{type}(a) / {type}(a)", "1" ]
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
-    #vbneg: [ "~{type}(a)", ~a]
+    #vbneg: [ "~{type}(a)", "~a[i]"]
     vband:  [ "{type}(a) & {type}(64)", "(a[i] & 64)" ]
     vbor:   [ "{type}(a) | {type}(64)", "(a[i] | 64)" ]
     vbxor:  [ "{type}(a) ^ {type}(64)", "(a[i] ^ 64)" ]

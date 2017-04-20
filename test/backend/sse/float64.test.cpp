@@ -157,13 +157,13 @@ namespace zacc { namespace test {
             b[i] = distribution1(generator);
         }
 
-        auto actual = (zfloat64(a) / zfloat64(b)).data();
+        auto actual = (zfloat64(a) / zfloat64(a)).data();
 
 
         for(int i = 0; i < 2; i++)
         {
             auto value = actual[i];
-            auto expected = (double) (a[i] / b[i]);
+            auto expected = (double) (1);
 
             ASSERT_DOUBLE_EQ(value, expected);
         }
