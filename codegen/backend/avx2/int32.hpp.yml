@@ -27,10 +27,10 @@ modules:
       init: ""
 
     - args: __m256 value
-      init: _mm_cvtps_epi32
+      init: _mm256_cvtps_epi32
 
     - args: __m256d value
-      init: _mm_cvtpd_epi32(value)
+      init: _mm256_cvtpd_epi32(value)
 
     - args: __m256i value
       init: value
