@@ -154,12 +154,25 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
+    TEST(scalar_int8_logical, vlneg_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        auto actual = (!zint8(1)).as_bool();
+        auto expected = (uint8_t) false;
+
+        for(uint8_t value : actual)
+        {
+            ASSERT_EQ(value, expected);
+        }
+    }
+
     TEST(scalar_int8_logical, vlor_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint8(0) || zint8(8);
-        auto expected = (uint8_t) 8;
+        auto actual = (zint8(0) || zint8(8)).as_bool();
+        auto expected = (uint8_t) true;
 
         for(uint8_t value : actual)
         {
@@ -171,8 +184,8 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zint8(0) && zint8(8);
-        auto expected = (uint8_t) 0;
+        auto actual = (zint8(0) && zint8(8)).as_bool();
+        auto expected = (uint8_t) false;
 
         for(uint8_t value : actual)
         {

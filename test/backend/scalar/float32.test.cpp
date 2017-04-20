@@ -100,12 +100,25 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
+    TEST(scalar_float32_logical, vlneg_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        auto actual = (!zfloat32(1)).as_bool();
+        auto expected = (float) false;
+
+        for(float value : actual)
+        {
+            ASSERT_FLOAT_EQ(value, expected);
+        }
+    }
+
     TEST(scalar_float32_logical, vlor_default)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zfloat32(0) || zfloat32(8);
-        auto expected = (float) 8;
+        auto actual = (zfloat32(0) || zfloat32(8)).as_bool();
+        auto expected = (float) true;
 
         for(float value : actual)
         {
@@ -117,8 +130,8 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        auto actual = zfloat32(0) && zfloat32(8);
-        auto expected = (float) 0;
+        auto actual = (zfloat32(0) && zfloat32(8)).as_bool();
+        auto expected = (float) false;
 
         for(float value : actual)
         {

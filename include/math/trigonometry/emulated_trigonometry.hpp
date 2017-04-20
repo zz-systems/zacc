@@ -42,7 +42,7 @@ namespace zacc { namespace math {
         {
             auto vv = val.data();
 
-            typename vreal_t::extracted_t raw_result;
+            alignas(vreal_t::alignment) typename vreal_t::extracted_t raw_result;
 
             for(auto i = 0; i < vreal_t::dim; i++)
             {
@@ -63,7 +63,7 @@ namespace zacc { namespace math {
         {
             auto vv = val.data();
 
-            typename vreal_t::extracted_t raw_result;
+            alignas(vreal_t::alignment) typename vreal_t::extracted_t raw_result;
 
             for(auto i = 0; i < vreal_t::dim; i++)
             {
@@ -84,7 +84,7 @@ namespace zacc { namespace math {
         {
             auto vv = val.data();
 
-            typename vreal_t::extracted_t raw_result;
+            alignas(vreal_t::alignment) typename vreal_t::extracted_t raw_result;
 
             for(auto i = 0; i < vreal_t::dim; i++)
             {
@@ -106,7 +106,7 @@ namespace zacc { namespace math {
             auto xx = x.data();
             auto yy = y.data();
 
-            typename vreal_t::extracted_t raw_result;
+            alignas(vreal_t::alignment) typename vreal_t::extracted_t raw_result;
 
             for(auto i = 0; i < vreal_t::dim; i++)
                 raw_result[i] = std::atan2(yy[i], xx[i]);
