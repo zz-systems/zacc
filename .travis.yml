@@ -30,7 +30,6 @@ matrix:
             - ubuntu-toolchain-r-test
           packages:
             - clang-3.9
-            - python3-pip
       env: BUILD_TYPE='Release' CXX=clang++-3.9 CC=clang-3.9
 
     - os: linux
@@ -39,7 +38,6 @@ matrix:
           sources: *sources
           packages:
            - clang-4.0
-           - python3-pip
       env: BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
 
     # 2/ Linux GCC Builds
@@ -49,7 +47,6 @@ matrix:
           sources: &sources
           packages:
             - g++-5
-            - python3-pip
       env: BUILD_TYPE='Release' CXX=g++-5 CC=gcc-5
 
     - os: linux
@@ -58,7 +55,6 @@ matrix:
           sources: &sources
           packages:
             - g++-6
-            - python3-pip
       env: BUILD_TYPE='Release' CXX=g++-6 CC=gcc-6
 
 
@@ -97,7 +93,7 @@ install:
     elif [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
       sudo brew install cmake ccache
     fi
-  - sudo pip3 install yasha
+  - pip install yasha
 before_script:
   #- export CXX=${COMPILER}
   - cd ${TRAVIS_BUILD_DIR}
