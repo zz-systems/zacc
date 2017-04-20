@@ -12,6 +12,8 @@ env:
     - CCACHE_COMPRESS=1
     - CCACHE_MAXSIZE=200M
     - CCACHE_CPP2=1
+git:
+  depth: 3
 
 branches:
   except:
