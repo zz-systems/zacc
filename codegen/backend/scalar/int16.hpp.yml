@@ -33,6 +33,9 @@ modules:
     - prefix: "template <typename T, typename enable = std::enable_if_t<std::is_base_of<zval_base, T>::value, T>>"
       args: "const T &value"
       init: value.get_value()
+
+    - args: [[*scalar_t, "*value"]]
+      init: "*value"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

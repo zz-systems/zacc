@@ -34,6 +34,9 @@ modules:
       args: "const T &value"
       init: value.get_value()
 
+    - args: [[*scalar_t, "*value"]]
+      init: "*value"
+
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
