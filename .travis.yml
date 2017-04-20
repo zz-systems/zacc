@@ -97,4 +97,4 @@ before_script:
   - cd Build
 
 script:
-  - make -j 2 && make zacc.tests.all && ctest
+  - make -j 2 && make zacc.tests.all && zacc.system.detect && ctest
