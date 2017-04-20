@@ -804,8 +804,8 @@ namespace zacc { namespace sse {
         };
     };
 
-    template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    using zint16 = typename __zint16<capability>::impl;
+    //template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
+    //using zint16 = typename __zint16<capability>::impl;
 
     ///@}
 }}

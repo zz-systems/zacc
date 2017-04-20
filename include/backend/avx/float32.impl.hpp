@@ -962,8 +962,8 @@ namespace zacc { namespace avx {
         };
     };
 
-    template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    using zfloat32 = typename __zfloat32<capability>::impl;
+    //template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
+    //using zfloat32 = typename __zfloat32<capability>::impl;
 
     ///@}
 }}

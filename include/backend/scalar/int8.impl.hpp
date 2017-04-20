@@ -832,8 +832,8 @@ namespace zacc { namespace scalar {
         };
     };
 
-    template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    using zint8 = typename __zint8<capability>::impl;
+    //template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
+    //using zint8 = typename __zint8<capability>::impl;
 
     ///@}
 }}

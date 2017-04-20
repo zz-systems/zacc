@@ -1033,8 +1033,8 @@ namespace zacc { namespace sse {
         };
     };
 
-    template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    using zfloat64 = typename __zfloat64<capability>::impl;
+    //template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
+    //using zfloat64 = typename __zfloat64<capability>::impl;
 
     ///@}
 }}

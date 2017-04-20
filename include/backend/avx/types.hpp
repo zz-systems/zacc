@@ -33,8 +33,8 @@ namespace zacc { namespace avx {
     template<uint64_t capability>
     struct types
     {
-        using zfloat32  = zfloat32<capability>;
-        using zfloat64  = zfloat64<capability>;
+        using zfloat32  = typename __zfloat32<capability>::impl;
+        using zfloat64  = typename __zfloat64<capability>::impl;
 
         using zint8     = uint8_t; /// not implemented yet
         using zint16    = int16_t; /// not implemented yet

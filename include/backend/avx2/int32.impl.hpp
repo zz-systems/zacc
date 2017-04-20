@@ -853,8 +853,8 @@ namespace zacc { namespace avx2 {
         };
     };
 
-    template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    using zint32 = typename __zint32<capability>::impl;
+    //template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
+    //using zint32 = typename __zint32<capability>::impl;
 
     ///@}
 }}

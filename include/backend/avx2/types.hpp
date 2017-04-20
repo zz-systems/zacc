@@ -37,8 +37,8 @@ namespace zacc { namespace avx2 {
     {
         using zfloat32  = typename avx::types<capability>::zfloat32;
         using zfloat64  = typename avx::types<capability>::zfloat64;
-        using zint8     = zint8<capability>;
-        using zint16    = zint16<capability>;
-        using zint32    = zint32<capability>;
+        using zint8     = typename __zint8<capability>::impl;
+        using zint16    = typename __zint16<capability>::impl;
+        using zint32    = typename __zint32<capability>::impl;
     };
 }}
