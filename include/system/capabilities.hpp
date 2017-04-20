@@ -74,7 +74,7 @@ namespace zacc {
          * @param str string representation
          * @param is_set availability flag
          */
-        capability(const capabilities capability, const char* str, bool is_set = false)
+        constexpr capability(const capabilities capability, const char* str, bool is_set = false)
                 : _capability(capability), _c_str(str), _is_set(is_set)
         {}
 

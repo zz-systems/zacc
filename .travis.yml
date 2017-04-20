@@ -91,7 +91,7 @@ install:
   - travis_retry pip install pyopenssl ndg-httpsclient pyasn1
   - travis_retry pip install yasha
 before_script:
-  #- export CXX=${COMPILER}
+  - export CXX=${COMPILER}
   - cd ${TRAVIS_BUILD_DIR}
   - cmake -H../zacc -BBuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
   - cd Build
