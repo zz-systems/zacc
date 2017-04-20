@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.6)
 project(zacc)
 
-set(CMAKE_VERBOSE_MAKEFILE On)
+set(CMAKE_VERBOSE_MAKEFILE Off)
 # options ==============================================================================================================
 
 option(BUILD_SCALAR_BRANCH "Build the scalar branch" ON)
