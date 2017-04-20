@@ -102,19 +102,6 @@ namespace zacc { namespace test {
 // =====================================================================================================================
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_float32_logical, vlneg_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = (!zfloat32(1)).as_bool();
-        auto expected = (float) false;
-
-        for(float value : actual)
-        {
-            ASSERT_FLOAT_EQ(value, expected);
-        }
-    }
-
     TEST(sse_float32_logical, vlor_default)
     {
         REQUIRES(ZACC_CAPABILITIES);

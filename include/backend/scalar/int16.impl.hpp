@@ -106,6 +106,18 @@ namespace zacc { namespace scalar {
 
             }
 
+
+            /**
+             * @brief construction default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            template <typename T, typename enable = std::enable_if_t<std::is_base_of<zval_base, T>::value, T>> __impl(const T &value) : base_t(value.get_value()) {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "CONS(const T &value)");
+
+            }
+
         };
 
         /**
@@ -265,7 +277,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vneg");
 
-                return (-one);
+                return (-one.get_value());
             }
 
 
@@ -278,7 +290,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vadd");
 
-                return (one + other);
+                return (one.get_value() + other.get_value());
             }
 
 
@@ -291,7 +303,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vsub");
 
-                return (one - other);
+                return (one.get_value() - other.get_value());
             }
 
 
@@ -304,7 +316,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vmul");
 
-                return (one * other);
+                return (one.get_value() * other.get_value());
             }
 
 
@@ -317,7 +329,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vdiv");
 
-                return (one / other);
+                return (one.get_value() / other.get_value());
             }
 
         };
@@ -371,7 +383,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vbneg");
 
-                return (~one);
+                return (~one.get_value());
             }
 
 
@@ -384,7 +396,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vband");
 
-                return (one & other);
+                return (one.get_value() & other.get_value());
             }
 
 
@@ -397,7 +409,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vbor");
 
-                return (one | other);
+                return (one.get_value() | other.get_value());
             }
 
 
@@ -410,7 +422,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vbxor");
 
-                return (one ^ other);
+                return (one.get_value() ^ other.get_value());
             }
 
         };
@@ -464,7 +476,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vsll");
 
-                return (one << other);
+                return (one.get_value() << other.get_value());
             }
 
 
@@ -477,7 +489,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vsrl");
 
-                return (one >> other);
+                return (one.get_value() >> other.get_value());
             }
 
         };
@@ -531,7 +543,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vlneg");
 
-                return (!one);
+                return (!one.get_value());
             }
 
 
@@ -544,7 +556,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vlor");
 
-                return (one || other);
+                return (one.get_value() || other.get_value());
             }
 
 
@@ -557,7 +569,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vland");
 
-                return (one && other);
+                return (one.get_value() && other.get_value());
             }
 
         };
@@ -611,7 +623,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "veq");
 
-                return (one == other);
+                return (one.get_value() == other.get_value());
             }
 
 
@@ -624,7 +636,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vneq");
 
-                return (one != other);
+                return (one.get_value() != other.get_value());
             }
 
 
@@ -637,7 +649,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vgt");
 
-                return (one > other);
+                return (one.get_value() > other.get_value());
             }
 
 
@@ -650,7 +662,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vlt");
 
-                return (one < other);
+                return (one.get_value() < other.get_value());
             }
 
 
@@ -663,7 +675,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vge");
 
-                return (one >= other);
+                return (one.get_value() >= other.get_value());
             }
 
 
@@ -676,7 +688,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vle");
 
-                return (one <= other);
+                return (one.get_value() <= other.get_value());
             }
 
         };
@@ -794,6 +806,7 @@ namespace zacc { namespace scalar {
             int16_arithmetic<impl>::template impl,
             int16_bitwise<impl>::template impl,
             int16_bitwise_shift<impl>::template impl,
+            int16_logical<impl>::template impl,
             int16_comparison<impl>::template impl,
             int16_conditional<impl>::template impl,
             int16_construction<impl>::template impl,

@@ -67,7 +67,7 @@ class Func:
 
     func_template       = "{prefix} {returns} {name}({args}) {suffix} noexcept"
     cons_template       = "{name}({args}) {suffix}"
-    cons_template_init  = "{name}({args}) : {initializer} {suffix}"
+    cons_template_init  = "{prefix} {name}({args}) : {initializer} {suffix}"
 
     default_branch      = "default"
 
@@ -85,7 +85,7 @@ class Func:
 
         self.is_member = entries.is_member if is_copy else entries.get("member")
 
-        self.prefix     = entries.prefix if is_copy else "friend" if not self.is_member else ""
+        self.prefix     = entries.prefix if is_copy else "friend" if not self.is_member and not self.name == "" else entries.get("prefix", "")
         self.suffix     = entries.suffix if is_copy else entries.get("suffix", "const" if self.is_member else "")
         self.returns    = entries.returns if is_copy else entries.get("returns", "composed_t")
 
@@ -128,7 +128,8 @@ class Func:
                                              args       = self.args,
                                              suffix     = self.suffix).strip()
         elif self.inits:
-            return self.cons_template_init.format(  name          = "__impl",
+            return self.cons_template_init.format(  prefix     = self.prefix,
+                                                    name          = "__impl",
                                                     args          = self.args,
                                                     initializer   = self.inits,
                                                     suffix        = self.suffix).strip()

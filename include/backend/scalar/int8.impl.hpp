@@ -45,6 +45,7 @@
 #include "traits/arithmetic.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/bitwise_shift.hpp"
+#include "traits/logical.hpp"
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
 
@@ -102,6 +103,18 @@ namespace zacc { namespace scalar {
             __impl(uint8_t value) : base_t(value) {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "CONS(uint8_t value)");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates int8
+             * @remark scalar - default
+             */
+            template <typename T, typename enable = std::enable_if_t<std::is_base_of<zval_base, T>::value, T>> __impl(const T &value) : base_t(value.get_value()) {
+
+                ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "CONS(const T &value)");
 
             }
 
@@ -264,7 +277,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vneg");
 
-                return (-one);
+                return (-one.get_value());
             }
 
 
@@ -277,7 +290,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vadd");
 
-                return (one + other);
+                return (one.get_value() + other.get_value());
             }
 
 
@@ -290,7 +303,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vsub");
 
-                return (one - other);
+                return (one.get_value() - other.get_value());
             }
 
 
@@ -303,7 +316,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vmul");
 
-                return (one * other);
+                return (one.get_value() * other.get_value());
             }
 
 
@@ -316,7 +329,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vdiv");
 
-                return (one / other);
+                return (one.get_value() / other.get_value());
             }
 
         };
@@ -370,7 +383,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vbneg");
 
-                return (~one);
+                return (~one.get_value());
             }
 
 
@@ -383,7 +396,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vband");
 
-                return (one & other);
+                return (one.get_value() & other.get_value());
             }
 
 
@@ -396,7 +409,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vbor");
 
-                return (one | other);
+                return (one.get_value() | other.get_value());
             }
 
 
@@ -409,7 +422,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vbxor");
 
-                return (one ^ other);
+                return (one.get_value() ^ other.get_value());
             }
 
         };
@@ -463,7 +476,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vbsll");
 
-                return (one << other);
+                return (one.get_value() << other.get_value());
             }
 
 
@@ -476,7 +489,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vbsrl");
 
-                return (one >> other);
+                return (one.get_value() >> other.get_value());
             }
 
         };
@@ -488,6 +501,86 @@ namespace zacc { namespace scalar {
          */
         template<typename base_t>
         using impl = interface::bitwise_shift<__impl<base_t>, composed_t>;
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name logical operations
+     */
+    ///@{
+
+    /**
+     * @brief logical
+     * @relates int8
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct int8_logical
+    {
+
+        /**
+         * @brief logical basic interface implementation
+         * @relates int8
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using mask_t = typename base_t::mask_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief logical default branch
+             * @relates int8
+             * @remark scalar - default
+             */
+            friend bval<composed_t, mask_t> vlneg(bval<composed_t, mask_t> one)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vlneg");
+
+                return (!one.get_value());
+            }
+
+
+            /**
+             * @brief logical default branch
+             * @relates int8
+             * @remark scalar - default
+             */
+            friend bval<composed_t, mask_t> vlor(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vlor");
+
+                return (one.get_value() || other.get_value());
+            }
+
+
+            /**
+             * @brief logical default branch
+             * @relates int8
+             * @remark scalar - default
+             */
+            friend bval<composed_t, mask_t> vland(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vland");
+
+                return (one.get_value() && other.get_value());
+            }
+
+        };
+
+        /**
+         * @brief logical public interface implementation
+         * @relates int8
+         * @remark scalar
+         */
+        template<typename base_t>
+        using impl = interface::logical<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -530,7 +623,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "veq");
 
-                return (one == other);
+                return (one.get_value() == other.get_value());
             }
 
 
@@ -543,7 +636,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vneq");
 
-                return (one != other);
+                return (one.get_value() != other.get_value());
             }
 
 
@@ -556,7 +649,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vgt");
 
-                return (one > other);
+                return (one.get_value() > other.get_value());
             }
 
 
@@ -569,7 +662,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vlt");
 
-                return (one < other);
+                return (one.get_value() < other.get_value());
             }
 
 
@@ -582,7 +675,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vge");
 
-                return (one >= other);
+                return (one.get_value() >= other.get_value());
             }
 
 
@@ -595,7 +688,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(uint8_t[1])", "default", "vle");
 
-                return (one <= other);
+                return (one.get_value() <= other.get_value());
             }
 
         };
@@ -685,7 +778,7 @@ namespace zacc { namespace scalar {
     template<uint64_t capability>
     struct __zval_int8
     {
-        using zval_t = zval<uint8_t, uint8_t, uint8_t, 1, 8, capability>;
+        using zval_t = zval<uint8_t, bool, uint8_t, 1, 8, capability>;
 
         struct impl : public zval_t
         {
@@ -713,6 +806,7 @@ namespace zacc { namespace scalar {
             int8_arithmetic<impl>::template impl,
             int8_bitwise<impl>::template impl,
             int8_bitwise_shift<impl>::template impl,
+            int8_logical<impl>::template impl,
             int8_comparison<impl>::template impl,
             int8_conditional<impl>::template impl,
             int8_construction<impl>::template impl,

@@ -112,6 +112,7 @@ namespace zacc {
          * @brief cast to underlying vector type
          * @return raw value
          */
+        template <typename dim_t = std::integral_constant<size_t, dim>, typename enable = typename std::enable_if<(dim_t::value > 1), vector_t>::type>
         const operator vector_t() const {
             return get_value();
         }
@@ -179,7 +180,7 @@ namespace zacc {
         }
 
         const bval_t get_value() const {
-            return _value;
+            return _value.get_value();
         }
 
         const extracted_t data() const {

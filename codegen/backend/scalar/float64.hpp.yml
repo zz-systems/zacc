@@ -18,7 +18,7 @@ type:
        - numeric
        - arithmetic
        #- bitwise
-       #- logical
+       - logical
        - comparison
        - conditional
 #-----------------------------------------------------------------------------------------------------------------------
@@ -29,6 +29,10 @@ modules:
 
     - args: [[*scalar_t, value]]
       init: value
+
+    - prefix: "template <typename T, typename enable = std::enable_if_t<std::is_base_of<zval_base, T>::value, T>>"
+      args: "const T &value"
+      init: value.get_value()
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -42,40 +46,40 @@ modules:
   math:
     vabs:
       args: one
-      body: std::abs(one)
+      body: std::abs(one.get_value())
     vrcp:
       args: one
-      body: (1 / one)
+      body: (1 / one.get_value())
     vtrunc:
       args: one
-      body: std::trunc(one)
+      body: std::trunc(one.get_value())
     vfloor:
       args: one
-      body: std::floor(one)
+      body: std::floor(one.get_value())
     vceil:
       args: one
-      body: std::ceil(one)
+      body: std::ceil(one.get_value())
     vround:
       args: one
-      body: std::round(one)
+      body: std::round(one.get_value())
     vsqrt:
       args: one
-      body: std::sqrt(one)
+      body: std::sqrt(one.get_value())
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
       args: one
-      body: -one;
-    vadd: one + other;
-    vsub: one - other;
-    vmul: one * other;
-    vdiv: one / other;
+      body: (-one.get_value());
+    vadd: (one.get_value() + other.get_value());
+    vsub: (one.get_value() - other.get_value());
+    vmul: (one.get_value() * other.get_value());
+    vdiv: (one.get_value() / other.get_value());
     vfmadd:
       args: [multiplicand, multiplier, addendum]
-      body: std::fma(multiplicand, multiplier, addendum)
+      body: std::fma(multiplicand.get_value(), multiplier.get_value(), addendum.get_value())
     vfmsub:
       args: [multiplicand, multiplier, addendum]
-      body: std::fma(multiplicand, multiplier, -addendum)
+      body: std::fma(multiplicand.get_value(), multiplier.get_value(), -addendum.get_value())
 #-----------------------------------------------------------------------------------------------------------------------
 #  bitwise:
 #    vneg:
@@ -85,20 +89,20 @@ modules:
 #    or:   one | other;
 #    xor:  one ^ other;
 #-----------------------------------------------------------------------------------------------------------------------
-#  logical:
-#    vneg:
-#      args: one
-#      body: "!one"
-#    or:   one || other;
-#    vand:  one && other;
+  logical:
+    vlneg:
+      args: one
+      body: (!one.get_value())
+    vlor:  (one.get_value() || other.get_value());
+    vland: (one.get_value() && other.get_value());
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    veq:   one == other;
-    vneq:  one != other;
-    vgt:   one > other;
-    vlt:   one < other;
-    vge:   one >= other;
-    vle:   one <= other;
+    veq:   (one.get_value() == other.get_value());
+    vneq:  (one.get_value() != other.get_value());
+    vgt:   (one.get_value() > other.get_value());
+    vlt:   (one.get_value() < other.get_value());
+    vge:   (one.get_value() >= other.get_value());
+    vle:   (one.get_value() <= other.get_value());
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:

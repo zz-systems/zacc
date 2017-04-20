@@ -154,19 +154,6 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(avx2_int32_logical, vlneg_default)
-    {
-        REQUIRES(ZACC_CAPABILITIES);
-
-        auto actual = (!zint32(1)).as_bool();
-        auto expected = (int32_t) false;
-
-        for(int32_t value : actual)
-        {
-            ASSERT_EQ(value, expected);
-        }
-    }
-
     TEST(avx2_int32_logical, vlor_default)
     {
         REQUIRES(ZACC_CAPABILITIES);

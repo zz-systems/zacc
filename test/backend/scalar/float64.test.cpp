@@ -100,6 +100,34 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
+    TEST(scalar_float64_logical, vlor_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        auto actual = zfloat64(0) || zfloat64(8);
+        auto expected = (double) 8;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
+    }
+
+    TEST(scalar_float64_logical, vland_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        auto actual = zfloat64(0) && zfloat64(8);
+        auto expected = (double) 0;
+
+        for(double value : actual)
+        {
+            ASSERT_DOUBLE_EQ(value, expected);
+        }
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
     TEST(scalar_float64_comparison, veq_default)
     {
         REQUIRES(ZACC_CAPABILITIES);

@@ -18,7 +18,7 @@ type:
        - arithmetic
        - bitwise
        - bitwise_shift
-       #- logical
+       - logical
        - comparison
        - conditional
 #-----------------------------------------------------------------------------------------------------------------------
@@ -29,6 +29,10 @@ modules:
 
     - args: [[*scalar_t, value]]
       init: value
+
+    - prefix: "template <typename T, typename enable = std::enable_if_t<std::is_base_of<zval_base, T>::value, T>>"
+      args: "const T &value"
+      init: value.get_value()
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -42,43 +46,38 @@ modules:
   arithmetic:
     vneg:
       args: one
-      body: (-one);
-    vadd: (one + other);
-    vsub: (one - other);
-    vmul: (one * other);
-    vdiv: (one / other);
+      body: (-one.get_value());
+    vadd: (one.get_value() + other.get_value());
+    vsub: (one.get_value() - other.get_value());
+    vmul: (one.get_value() * other.get_value());
+    vdiv: (one.get_value() / other.get_value());
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg:
       args: one
-      body: (~one);
-    vband:  (one & other);
-    vbor:   (one | other);
-    vbxor:  (one ^ other);
+      body: (~one.get_value());
+    vband:  (one.get_value() & other.get_value());
+    vbor:   (one.get_value() | other.get_value());
+    vbxor:  (one.get_value() ^ other.get_value());
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
-    vsll:  (one << other)
-    vsrl:  (one >> other)
+    vsll:  (one.get_value() << other.get_value())
+    vsrl:  (one.get_value() >> other.get_value())
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
     vlneg:
       args: one
-      returns: *mask_t
-      body: (!one)
-    vlor:
-      returns: *mask_t
-      body: (one || other);
-    vland:
-      returns: *mask_t
-      body: (one && other);
+      body: (!one.get_value())
+    vlor:  (one.get_value() || other.get_value());
+    vland: (one.get_value() && other.get_value());
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    veq:   (one == other);
-    vneq:  (one != other);
-    vgt:   (one > other);
-    vlt:   (one < other);
-    vge:   (one >= other);
-    vle:   (one <= other);
+    veq:   (one.get_value() == other.get_value());
+    vneq:  (one.get_value() != other.get_value());
+    vgt:   (one.get_value() > other.get_value());
+    vlt:   (one.get_value() < other.get_value());
+    vge:   (one.get_value() >= other.get_value());
+    vle:   (one.get_value() <= other.get_value());
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
      vsel:
