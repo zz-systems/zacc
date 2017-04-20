@@ -36,7 +36,7 @@ matrix:
             - clang-4.0
             - g++-5
             - g++-6
-            - g++-7
+            #- g++-7
       env: COMPILER=clang++-3.9 BUILD_TYPE='Release' CXX=clang++-3.9 CC=clang-3.9
 
     - os: linux
@@ -55,10 +55,10 @@ matrix:
       addons: *addons
       env: COMPILER=g++-6 BUILD_TYPE='Release' CXX=g++-6 CC=gcc-6
 
-    - os: linux
-      compiler: gcc
-      addons: *addons
-      env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7
+    #- os: linux
+    #  compiler: gcc
+    #  addons: *addons
+    #  env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7
 
 
     # 3/ OSX Clang Builds
