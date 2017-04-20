@@ -1,5 +1,5 @@
 language: cpp
-sudo: false
+sudo: true
 dist: trusty
 
 cache:
@@ -157,8 +157,8 @@ install:
 before_script:
   - export CXX=${COMPILER}
   - cd ${TRAVIS_BUILD_DIR}
-  - cmake -H../gorynych -BBuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+  - cmake -H../zacc -BBuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
   - cd Build
 
 script:
-  - make -j 2 && make test_gorynych
+  - make -j 2 && make zacc.tests.all && ctest
