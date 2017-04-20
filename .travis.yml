@@ -93,7 +93,7 @@ install:
     elif [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
       brew install cmake ccache
     fi
-  - sudo pip install yasha
+  - pip3 install yasha
 before_script:
   - export CXX=${COMPILER}
   - cd ${TRAVIS_BUILD_DIR}
