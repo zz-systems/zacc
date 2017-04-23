@@ -64,7 +64,7 @@ build_script:
 #- git submodule update --init --recursive
 #- cmake . -G "Visual Studio 14 2015 Win64"
 #- cmake --build . --config Release
-- nmake zacc.tests.all
+- nmake /f zacc.tests.all
 test_script:
 - ./zacc.system.detect.exe
 - ./zacc.sse.sse2.tests.exe
