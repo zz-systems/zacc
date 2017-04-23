@@ -1,12 +1,78 @@
 version: '1.0.{build}'
-os: Visual Studio 2015
-init: []
-install: []
+os: Visual Studio 2017
+
+# compiler: expands the build matrix to include multiple compilers (per os)
+platform:
+  - x64
+
+configuration:
+- Release
+
+# Only clone the top level commit; don't bother with history
+shallow_clone: true
+
+# environment: specifies additional global variables to define per row in build matrix
+environment:
+  global:
+    CLFFT_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\nmake\\release"
+    OPENCL_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\opencl"
+    OPENCL_REGISTRY: "https://www.khronos.org/registry/cl"
+    
+init:
+- echo init step
+- cmake --version
+- C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
+
+install:
+- echo Fetching source
+- git submodule update --init --recursive 
+- echo Installing OpenCL
+- ps: mkdir $env:OPENCL_ROOT
+- ps: pushd $env:OPENCL_ROOT
+- ps: $opencl_registry = $env:OPENCL_REGISTRY
+# This downloads the source to the Khronos ICD library
+- git clone --depth 1 https://github.com/KhronosGroup/OpenCL-ICD-Loader.git
+- ps: mv ./OpenCL-ICD-Loader/* .
+# This downloads all the opencl header files
+# The cmake build files expect a directory called inc
+- ps: mkdir inc/CL
+- git clone --depth 1 https://github.com/KhronosGroup/OpenCL-Headers.git inc/CL
+- ps: wget $opencl_registry/api/2.1/cl.hpp -OutFile inc/CL/cl.hpp
+# - ps: dir; if( $lastexitcode -eq 0 ){ dir include/CL } else { Write-Output boom }
+# Create the static import lib in a directory called lib, so findopencl() will find it
+- ps: mkdir lib
+- ps: pushd lib
+- cmake -G "NMake Makefiles" ..
+- nmake
+- ps: popd
+# Switch to OpenCL 1.2 headers
+- ps: pushd inc/CL
+- git fetch origin opencl12:opencl12
+- git checkout opencl12
+- ps: popd
+# Rename the inc directory to include, so FindOpencl() will find it
+- ps: ren inc include
+- ps: popd
+
+# before_build is used to run configure steps
+before_build:
+- echo before_build step
+- cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DOPENCL_ROOT=%OPENCL_ROOT% %APPVEYOR_BUILD_FOLDER%/src
 
 build_script:
-- set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-- git submodule update --init --recursive
-- cmake . -G "Visual Studio 14 2015 Win64"
-- cmake --build . --config Release
+#- set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
+#- git submodule update --init --recursive
+#- cmake . -G "Visual Studio 14 2015 Win64"
+#- cmake --build . --config Release
+- nmake zacc.tests.all
 test_script:
+- ./zacc.system.detect.exe
+- ./zacc.sse.sse2.tests.exe
+- ./zacc.sse.sse2.tests.exe
+- ./zacc.sse.sse3.tests.exe
+- ./zacc.sse.sse41.tests.exe
+- ./zacc.sse.sse41.fma3.tests.exe
+- ./zacc.sse.sse41.fma4.tests.exe
+- ./zacc.avx.tests.exe
+- ./zacc.avx2.tests.exe
 - ctest -C Release -V
