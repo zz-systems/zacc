@@ -1,9 +1,3 @@
-[submodule "Catch"]
-	path = Catch
-	url = https://github.com/philsquared/Catch.git
 [submodule "doc/page"]
 	path = doc/page
 	url = https://github.com/zz-systems/gorynych.git
-[submodule "Catch_Custom"]
-	path = Catch_Custom
-	url = https://github.com/zz-systems/Catch.git

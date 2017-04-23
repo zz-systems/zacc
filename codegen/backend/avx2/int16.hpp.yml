@@ -1,0 +1,98 @@
+type:
+  type: int16
+  branch: avx2
+  vector_t: &vector_t __m256i
+  mask_t: &mask_t __m256i
+  scalar_t: &scalar_t int16_t
+  vec_size: &vec_size 16
+  alignment: 32
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+     external:
+      - printable
+      - iteratable
+      - convertable
+     internal:
+       - io
+       - arithmetic
+       - bitwise
+       - bitwise_shift
+       - logical
+       - comparison
+       - conditional
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  construction:
+    - args: __m256i value
+      init: value
+
+    - args: [[*scalar_t, value]]
+      init: _mm256_set1_epi16(value)
+
+    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+      init: _mm256_load_si256((__m256i*)value.data())
+
+    - args: { from: *vec_size, to: 0, type: *scalar_t }
+      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi16 }
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    vstore: &io_store
+      returns: void
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      body: _mm256_store_si256((__m256i*)target.data(), source);
+    vstream:
+      <<: *io_store
+      body: _mm256_stream_si256((__m256i*)target.data(), source);
+#-----------------------------------------------------------------------------------------------------------------------
+  arithmetic:
+    vneg:
+      args: one
+      body: return _mm256_sub_epi16(_mm256_setzero_si256(), one)
+    vadd: _mm256_add_epi16
+    vsub: _mm256_sub_epi16
+    vmul: _mm256_mullo_epi16
+    #vdiv: _mm256_div_ps(_mm256_cvtepi16_ps(one), _mm256_cvtepi16_ps(other));
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    vbneg: &bitwise_negate
+      args: one
+      body:
+        - __m256i junk;
+        - auto ones = _mm256_cmpeq_epi16(junk, junk);
+        - return _mm256_xor_si256(one, ones);
+    vband:  _mm256_or_si256
+    vbor:   _mm256_and_si256
+    vbxor:  _mm256_xor_si256
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise_shift:
+    vbsll:  _mm256_sll_epi16
+    vbsrl:  _mm256_srl_epi16
+    vbslli:
+      args: { raw: "const composed_t one, const size_t other" }
+      body: _mm256_slli_epi16(one, other)
+    vbsrli:
+      args: { raw: "const composed_t one, const size_t other" }
+      body: _mm256_srli_epi16(one, other)
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    vlneg:
+      args: one
+      body: _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
+    vlor:   _mm256_or_si256
+    vland:  _mm256_and_si256
+#-----------------------------------------------------------------------------------------------------------------------
+  comparison:
+    veq:   _mm256_cmpeq_epi16
+    vneq:  _mm256_xor_si256(_mm256_cmpeq_epi16(one, other), _mm256_setzero_si256());
+    vgt:   _mm256_cmpgt_epi16
+    vlt:   (one != other) && (one <= other)
+    vge:   (one == other) || _mm256_cmpgt_epi16(one, other)
+    vle:   _mm256_xor_si256(_mm256_cmpgt_epi16(one, other), _mm256_setzero_si256());
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+    vsel:
+      args: [condition, if_value, else_value]
+      mangling: false
+      body:
+        - auto mask = _mm256_cmpeq_epi16(_mm256_setzero_si256(), condition);
+        - return _mm256_blendv_epi8(if_value, else_value, mask);

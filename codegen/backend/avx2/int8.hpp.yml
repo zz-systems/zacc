@@ -1,0 +1,113 @@
+type:
+  type: int8
+  branch: avx2
+  vector_t: &vector_t __m256i
+  mask_t: &mask_t __m256i
+  scalar_t: &scalar_t int8_t
+  vec_size: &vec_size 32
+  alignment: 32
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+     external:
+      - printable
+      - iteratable
+      - convertable
+     internal:
+       - io
+       - arithmetic
+       - bitwise
+       #- bitwise_shift
+       - logical
+       - comparison
+       - conditional
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  construction:
+    - args: __m256i value
+      init: value
+
+    - args: [[*scalar_t, value]]
+      init: _mm256_set1_epi8(value)
+
+    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+      init: _mm256_load_si256((__m256i*)value.data())
+
+    - args: { from: *vec_size, to: 0, type: *scalar_t }
+      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi8 }
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    vstore: &io_store
+      returns: void
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      body: _mm256_store_si256((__m256i*)target.data(), source);
+    vstream:
+      <<: *io_store
+      body: _mm256_stream_si256((__m256i*)target.data(), source);
+#-----------------------------------------------------------------------------------------------------------------------
+  arithmetic:
+    vneg:
+      args: one
+      body: return _mm256_sub_epi8(_mm256_setzero_si256(), one)
+    vadd: _mm256_add_epi8
+    vsub: _mm256_sub_epi8
+    #vmul:
+    #  body:
+    #    sse41: &sse41
+    #      - _mm256_mullo_epi8
+    #    sse42: *sse41
+    #   default:
+    #      - /* vmul 2,0*/
+    #      - auto tmp1 = _mm256_castsi256_ps(_mm256_mul_epu32(one, other));
+    #      - /* vmul 3,1 */
+    #      - auto tmp2 = _mm256_castsi256_ps(_mm256_mul_epu32(_mm256_srli_si256(one, 4), _mm256_srli_si256(other, 4)));
+    #      - return _mm256_castps_si256(_mm256_shuffle_ps(tmp1, tmp2, _MM_SHUFFLE(2, 0, 2, 0)));
+    #vdiv: _mm256_div_ps(_mm256_cvtepi32_ps(one), _mm256_cvtepi32_ps(other));
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    vbneg: &bitwise_negate
+      args: one
+      body:
+        - __m256i junk;
+        - auto ones = _mm256_cmpeq_epi8(junk, junk);
+        - return _mm256_xor_si256(one, ones);
+    vband:  _mm256_or_si256
+    vbor:   _mm256_and_si256
+    vbxor:  _mm256_xor_si256
+#-----------------------------------------------------------------------------------------------------------------------
+#  bitwise_shift:
+#    vsll:  _mm256_sll_epi8
+#    vsrl:  _mm256_srl_epi8
+#    vslli:
+#      args: { raw: "const composed_t one, const size_t other" }
+#      body: _mm256_slli_epi8(one, other)
+#    vsrli:
+#      args: { raw: "const composed_t one, const size_t other" }
+#      body: _mm256_srli_epi8(one, other)
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    vlneg:
+      args: one
+      body: _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
+    vlor:   _mm256_or_si256
+    vland:  _mm256_and_si256
+#-----------------------------------------------------------------------------------------------------------------------
+  comparison:
+    veq:   _mm256_cmpeq_epi8
+    vneq:  _mm256_xor_si256(_mm256_cmpeq_epi8(one, other), _mm256_setzero_si256());
+    vgt:   _mm256_cmpgt_epi8
+    vlt:
+      body:
+      - // reversed args
+      - _mm256_cmpgt_epi8(other, one)
+    vge: (one == other) || _mm256_cmpgt_epi8(one, other)
+    vle: (one == other) || _mm256_cmpgt_epi8(one, other)
+
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+    vsel:
+      args: [condition, if_value, else_value]
+      mangling: false
+
+      body:
+          - auto mask = _mm256_cmpeq_epi8(_mm256_setzero_si256(), condition);
+          - return _mm256_blendv_epi8(if_value, else_value, mask);

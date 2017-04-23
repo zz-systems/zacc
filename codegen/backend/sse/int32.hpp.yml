@@ -1,0 +1,135 @@
+type:
+  type: int32
+  branch: sse
+  vector_t: &vector_t __m128i
+  mask_t: &mask_t __m128i
+  scalar_t: &scalar_t int32_t
+  vec_size: &vec_size 4
+  alignment: 16
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+     external:
+      - printable
+      - iteratable
+      - convertable
+     internal:
+       - io
+       - arithmetic
+       - bitwise
+       - bitwise_shift
+       - logical
+       - comparison
+       - conditional
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  construction:
+    - args: __m128 value
+      init: _mm_cvtps_epi32(value)
+
+    - args: __m128d value
+      init: _mm_cvtpd_epi32(value)
+
+    - args: __m128i value
+      init: value
+
+    - args: [[*scalar_t, "value"]]
+      init: _mm_set1_epi32(value)
+
+    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+      init: _mm_load_si128((__m128i*)value.data())
+
+    - args: { from: *vec_size, to: 0, type: *scalar_t }
+      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi32 }
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    vstore: &io_store
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      returns: void
+      body: _mm_store_si128((__m128i*)target.data(), source)
+    vstream:
+      <<: *io_store
+      body:  _mm_stream_si128((__m128i*)target.data(), source)
+#-----------------------------------------------------------------------------------------------------------------------
+  arithmetic:
+    vneg:
+      args: one
+      body: return _mm_sub_epi32(_mm_setzero_si128(), one)
+    vadd: _mm_add_epi32
+    vsub: _mm_sub_epi32
+    vmul:
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_mullo_epi32
+        default:
+          requires: [not SSE41]
+          body:
+            #- /* vmul 2,0*/
+            #- auto tmp1 = _mm_castsi128_ps(_mm_mul_epu32(one, other));
+            #- /* vmul 3,1 */
+            #- auto tmp2 = _mm_castsi128_ps(_mm_mul_epu32(_mm_srli_si128(one, 4), _mm_srli_si128(other, 4)));
+            #- return _mm_castps_si128(_mm_shuffle_ps(tmp1, tmp2, _MM_SHUFFLE(2, 0, 2, 0)));
+            - __m128i tmp1 = _mm_mul_epu32(one,other); /* mul 2,0*/
+            - __m128i tmp2 = _mm_mul_epu32( _mm_srli_si128(one,4), _mm_srli_si128(other,4)); /* mul 3,1 */
+            - return _mm_unpacklo_epi32(_mm_shuffle_epi32(tmp1, _MM_SHUFFLE (0,0,2,0)), _mm_shuffle_epi32(tmp2, _MM_SHUFFLE (0,0,2,0)));
+            #- auto d0 = one.data();
+            #- auto d1 = other.data();
+            #- alignas(base_t::alignment) typename base_t::extracted_t raw_result;
+            #- for(auto i = 0; i < base_t::dim; i++) raw_result[i] = d0[i] * d1[i];
+            #- return raw_result.data();
+    vdiv: _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    vbneg: &bitwise_negate
+      args: one
+      body:
+        - __m128i junk;
+        - auto ones = _mm_cmpeq_epi32(junk, junk);
+        - return _mm_xor_si128(one, ones);
+    vbor:   &bitwise_or
+      body: _mm_or_si128
+    vband:  &bitwise_and
+      body: _mm_and_si128
+    vbxor:  &bitwise_xor
+      body: _mm_xor_si128
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise_shift:
+    vbsll:  _mm_sll_epi32
+    vbsrl:  _mm_srl_epi32
+    vbslli:
+      args: { raw: "const composed_t one, const size_t other" }
+      body: _mm_slli_epi32(one, other)
+    vbsrli:
+      args: { raw: "const composed_t one, const size_t other" }
+      body: _mm_srli_epi32(one, other)
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    vlneg:
+      args: one
+      body: _mm_cmpeq_epi32(one, _mm_setzero_si128());
+    vlor:
+      <<: *bitwise_or
+    vland:
+      <<: *bitwise_and
+#-----------------------------------------------------------------------------------------------------------------------
+  comparison:
+    veq:   _mm_cmpeq_epi32
+    vneq:  "!(one == other)"
+    vgt:   _mm_cmpgt_epi32
+    vlt:   _mm_cmplt_epi32
+    vge:   "!(one < other)"
+    vle:   "!(one > other)"
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+    vsel:
+      args: [condition, if_value, else_value]
+      mangling: false
+      body:
+        sse4:
+          requires: [SSE41]
+          body:
+            - auto mask = _mm_cmpeq_epi32(_mm_setzero_si128(), condition);
+            - return _mm_blendv_epi8(if_value, else_value, mask);
+        default:
+          requires: [not SSE41]
+          body: return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value))

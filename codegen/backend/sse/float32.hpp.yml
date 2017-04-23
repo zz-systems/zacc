@@ -1,0 +1,189 @@
+type:
+  type: float32
+  branch: sse
+  vector_t: &vector_t __m128
+  mask_t: &mask_t __m128
+  scalar_t: &scalar_t float
+  vec_size: &vec_size 4
+  alignment: 16
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+    external:
+      - printable
+      - iteratable
+      - convertable
+    internal:
+      - io
+      - math
+      - numeric
+      - arithmetic
+      - bitwise
+      - logical
+      - comparison
+      - conditional
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  construction:
+    - args: __m128 value
+      init: value
+
+    - args: __m128d value
+      init: _mm_cvtpd_ps(value)
+
+    - args: __m128i value
+      init: _mm_cvtepi32_ps(value)
+
+    - args: [[*scalar_t, value]]
+      init: _mm_set1_ps(value)
+
+    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+      init: _mm_load_ps(value.data())
+
+    - args: { from: *vec_size, to: 0, type: *scalar_t }
+      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_ps }
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    vstore: &io_store
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      returns: void
+      body: _mm_store_ps(target.data(), source)
+    vstream:
+      <<: *io_store
+      body:  _mm_stream_ps(target.data(), source)
+#-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: _mm_max_ps(one, -one)
+    vrcp:
+      args: one
+      body: _mm_rcp_ps
+    vtrunc:
+      args: one
+      body: _mm_cvtepi32_ps(_mm_cvtps_epi32(one))
+    vfloor:
+      args: one
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_floor_ps
+        default:
+          requires: [not SSE41]
+          body:
+            - __m128i junk;
+            - auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(junk, junk), 31);
+            - auto fi = vtrunc(one);
+            - return vsel(vgt(fi, one), vsub(fi, _1), fi);
+    vceil:
+      args: one
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_ceil_ps
+        default:
+          requires: [not SSE41]
+          body:
+            - __m128i junk;
+            - auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(junk, junk), 31);
+            - auto fi = vtrunc(one);
+            - return vsel(vlt(fi, one), vadd(fi, _1), fi);
+    vround:
+      args: one
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+        default:
+          requires: [not SSE41]
+          body:
+            - auto zero = _mm_setzero_si128();
+            - auto ones = _mm_cmpeq_epi32(zero, zero);
+            - // generate the highest value < 2
+            - auto nearest = _mm_castsi128_ps(_mm_srli_epi32(ones, 2));
+            - auto tr = vtrunc(one);
+            - // get remainder
+            - auto rmd = one - tr;
+            - // mul remainder by near 2 will yield the needed offset
+            - auto rmd2 = vmul(rmd, nearest);
+            - // after being truncated of course
+            - auto rmd2tr = vtrunc(rmd2);
+            - return tr + rmd2tr;
+
+    vsqrt:
+      args: one
+      body: _mm_sqrt_ps
+#-----------------------------------------------------------------------------------------------------------------------
+  arithmetic:
+    vneg:
+      args: one
+      body: return _mm_sub_ps(_mm_setzero_ps(), one)
+    vadd: _mm_add_ps
+    vsub: _mm_sub_ps
+    vmul: _mm_mul_ps
+    vdiv: _mm_div_ps
+    vfmadd:
+      args: [multiplicand, multiplier, addendum]
+      body:
+        fma:
+          requires: [FMA3]
+          body: _mm_fmadd_ps(multiplicand, multiplier, addendum)
+        default:
+          requires: [not FMA3]
+          body: vadd(vmul(multiplicand, multiplier), addendum)
+    vfmsub:
+      args: [multiplicand, multiplier, addendum]
+      body:
+        fma:
+          requires: [FMA3]
+          body: _mm_fmsub_ps(multiplicand, multiplier, addendum)
+        default:
+          requires: [not FMA3]
+          body: vsub(vmul(multiplicand, multiplier), addendum)
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    vbneg: &bitwise_negate_prototype
+      args: one
+      body:
+        - __m128 junk;
+        - auto ones = _mm_cmpeq_ps(junk, junk);
+        - return _mm_xor_ps(one, ones);
+    vband:  _mm_or_ps
+    vbor:   _mm_and_ps
+    vbxor:  _mm_xor_ps
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    vlneg:
+      args: one
+      body: _mm_cmpeq_ps(one, _mm_setzero_ps());
+    vlor:
+      body: _mm_or_ps
+      #returns: boolvec<composed_t>
+    vland:
+      body: _mm_and_ps
+      #returns: boolvec<composed_t>
+#-----------------------------------------------------------------------------------------------------------------------
+  comparison:
+    veq:   _mm_cmpeq_ps
+    vneq:  _mm_cmpneq_ps
+    vgt:   _mm_cmpgt_ps
+    vlt:   _mm_cmplt_ps
+    vge:   _mm_cmpge_ps
+    vle:   _mm_cmple_ps
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+    vsel:
+      args: ["mask_t condition", if_value, else_value]
+      mangling: false
+      body:
+        sse4:
+          requires: [SSE41]
+          body:
+            - auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition);
+            - return _mm_blendv_ps(if_value, else_value, mask);
+        default:
+          requires: [not SSE41]
+          body:
+            - auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition)
+            - return _mm_xor_ps(if_value, _mm_and_ps( mask, _mm_xor_ps(else_value, if_value)))

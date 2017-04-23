@@ -1,0 +1,112 @@
+type:
+  type: float64
+  branch: scalar
+  vector_t: &vector_t double
+  mask_t: &mask_t bool
+  scalar_t: &scalar_t double
+  vec_size: &vec_size 1
+  alignment: 8
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+     external:
+      - printable
+      - iteratable
+      - convertable
+     internal:
+       - io
+       - math
+       - numeric
+       - arithmetic
+       #- bitwise
+       - logical
+       - comparison
+       - conditional
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  construction:
+    - args: [[*scalar_t, value]]
+      init: value
+
+    - prefix: "template <typename T, typename enable = std::enable_if_t<std::is_base_of<zval_base, T>::value, T>>"
+      args: "const T &value"
+      init: value.get_value()
+
+    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+      init: "value[0]"
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    vstore: &io_store
+      returns: void
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      body: target.data()[0] = source.get_value();
+    vstream: *io_store
+#-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: std::abs(one.get_value())
+    vrcp:
+      args: one
+      body: (1 / one.get_value())
+    vtrunc:
+      args: one
+      body: std::trunc(one.get_value())
+    vfloor:
+      args: one
+      body: std::floor(one.get_value())
+    vceil:
+      args: one
+      body: std::ceil(one.get_value())
+    vround:
+      args: one
+      body: std::round(one.get_value())
+    vsqrt:
+      args: one
+      body: std::sqrt(one.get_value())
+#-----------------------------------------------------------------------------------------------------------------------
+  arithmetic:
+    vneg:
+      args: one
+      body: (-one.get_value());
+    vadd: (one.get_value() + other.get_value());
+    vsub: (one.get_value() - other.get_value());
+    vmul: (one.get_value() * other.get_value());
+    vdiv: (one.get_value() / other.get_value());
+    vfmadd:
+      args: [multiplicand, multiplier, addendum]
+      body: std::fma(multiplicand.get_value(), multiplier.get_value(), addendum.get_value())
+    vfmsub:
+      args: [multiplicand, multiplier, addendum]
+      body: std::fma(multiplicand.get_value(), multiplier.get_value(), -addendum.get_value())
+#-----------------------------------------------------------------------------------------------------------------------
+#  bitwise:
+#    vneg:
+#      args: one
+#      body: ~one;
+#    vand:  one & other;
+#    or:   one | other;
+#    xor:  one ^ other;
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    vlneg:
+      args: one
+      body: (!one.get_value())
+    vlor:  (one.get_value() || other.get_value());
+    vland: (one.get_value() && other.get_value());
+#-----------------------------------------------------------------------------------------------------------------------
+  comparison:
+    veq:   (one.get_value() == other.get_value());
+    vneq:  (one.get_value() != other.get_value());
+    vgt:   (one.get_value() > other.get_value());
+    vlt:   (one.get_value() < other.get_value());
+    vge:   (one.get_value() >= other.get_value());
+    vle:   (one.get_value() <= other.get_value());
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+    vsel:
+      args: [condition, if_value, else_value]
+      mangling: false
+      body: "(condition.get_value() != 0 ? if_value : else_value)"
+#-----------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,176 @@
+type:
+  type: float64
+  branch: sse
+  vector_t: &vector_t __m128d
+  mask_t: &mask_t __m128d
+  scalar_t: &scalar_t double
+  vec_size: &vec_size 2
+  alignment: 16
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+    external:
+    - printable
+    - iteratable
+    - convertable
+    internal:
+    - io
+    - math
+    - numeric
+    - arithmetic
+    - bitwise
+    - logical
+    - comparison
+    - conditional
+    - numeric
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  construction:
+
+    - args: __m128 value
+      init: _mm_cvtps_pd(value)
+
+    - args: __m128d value
+      init: value
+
+    - args: __m128i value
+      init: _mm_cvtepi32_pd(_mm_shuffle_epi32(value, _MM_SHUFFLE(0,2,0,0)))
+
+    - args: [[*scalar_t, value]]
+      init: _mm_set1_pd(value)
+
+    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+      init: _mm_load_pd(value.data())
+
+    - args: { from: *vec_size, to: 0, type: *scalar_t }
+      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_pd }
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    vstore: &io_store
+      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      returns: void
+      body: _mm_store_pd(target.data(), source)
+    vstream:
+      <<: *io_store
+      body:  _mm_stream_pd(target.data(), source)
+#-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: _mm_max_pd(one, -one)
+    vrcp:
+      args: one
+      body: "return (1 / one);" #bug in automatic arg insertion
+    vtrunc:
+      args: one
+      body: _mm_cvtepi32_pd(_mm_cvtpd_epi32(one))
+    vfloor:
+      args: one
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_floor_pd
+        default:
+          requires: [not SSE41]
+          body:
+            - __m128i junk;
+            - auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(junk, junk), 31);
+            - auto fi = vtrunc(one);
+            - return vsel(vgt(fi, one), vsub(fi, _1), fi);
+    vceil:
+      args: one
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_ceil_pd
+        default:
+          requires: [not SSE41]
+          body:
+            - __m128i junk;
+            - auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(junk, junk), 31);
+            - auto fi = vtrunc(one);
+            - return vsel(vlt(fi, one), vadd(fi, _1), fi);
+    vround:
+      args: one
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_round_pd (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+        default:
+          requires: [not SSE41]
+          body:
+            - auto zero = _mm_setzero_si128();
+            - auto ones = _mm_cmpeq_epi32(zero, zero);
+            - // generate the highest value < 2
+            - auto nearest = _mm_castsi128_pd(_mm_srli_epi64(ones, 2));
+            - auto tr = vtrunc(one);
+            - // get remainder
+            - auto rmd = one - tr;
+            - // mul remainder by near 2 will yield the needed offset
+            - auto rmd2 = vmul(rmd, nearest);
+            - // after being truncated of course
+            - auto rmd2tr = vtrunc(rmd2);
+            - return tr + rmd2tr;
+    vsqrt:
+      args: one
+      body: _mm_sqrt_pd
+  arithmetic:
+    vneg:
+      args: one
+      body: return _mm_sub_pd(_mm_setzero_pd(), one)
+    vadd: _mm_add_pd
+    vsub: _mm_sub_pd
+    vmul: _mm_mul_pd
+    vdiv: _mm_div_pd
+    vfmadd:
+      args: [multiplicand, multiplier, addendum]
+      body: vadd(vmul(multiplicand, multiplier), addendum) #_mm_fmadd_pd(multiplicand, multiplier, addendum)
+    vfmsub:
+      args: [multiplicand, multiplier, addendum]
+      body: vsub(vmul(multiplicand, multiplier), addendum) #_mm_fmsub_pd(multiplicand, multiplier, addendum)
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    vbneg:
+      args: one
+      body: &bitwise_negate_body
+        - __m128d junk;
+        - auto ones = _mm_cmpeq_pd(junk, junk);
+        - return _mm_xor_pd(one, ones);
+    vband:  _mm_or_pd
+    vbor:   _mm_and_pd
+    vbxor:  _mm_xor_pd
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    vlneg:
+      args: one
+      body: _mm_cmpeq_pd(one, _mm_setzero_pd());
+    vlor:
+      body: _mm_or_pd
+      #returns: boolvec<composed_t>
+    vland:
+      body: _mm_and_pd
+      #returns: boolvec<composed_t>
+#-----------------------------------------------------------------------------------------------------------------------
+  comparison:
+    veq:   _mm_cmpeq_pd
+    vneq:  _mm_cmpneq_pd
+    vgt:   _mm_cmpgt_pd
+    vlt:   _mm_cmplt_pd
+    vge:   _mm_cmpge_pd
+    vle:   _mm_cmple_pd
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+    vsel:
+      args: ["mask_t condition", if_value, else_value]
+      body:
+        sse4:
+          requires: [SSE41]
+          body:
+            - auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
+            - return _mm_blendv_pd(if_value, else_value, mask);
+        default:
+          requires: [not SSE41]
+          body:
+            - auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition)
+            - return _mm_xor_pd(if_value, _mm_and_pd( mask, _mm_xor_pd(else_value, if_value)))

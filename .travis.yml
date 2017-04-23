@@ -1,11 +1,10 @@
 language: cpp
-sudo: required
+sudo: false
 dist: trusty
 
 cache:
   ccache: true
-  directories:
-    - $HOME/.ccache
+  apt: true
 
 env:
   global:
@@ -13,133 +12,63 @@ env:
     - CCACHE_COMPRESS=1
     - CCACHE_MAXSIZE=200M
     - CCACHE_CPP2=1
+git:
+  depth: 3
 
+branches:
+  except:
+  - gh-pages
 
 matrix:
   include:
 
     # 1/ Linux Clang Builds
-#    - os: linux
-#      compiler: clang
-#      addons: &clang35
-#        apt:
-#          sources: ['llvm-toolchain-precise-3.5', 'ubuntu-toolchain-r-test']
-#          packages: ['clang-3.5']
-#      env: COMPILER='ccache clang++-3.5' BUILD_TYPE='Release'
-#
-#    - os: linux
-#      compiler: clang
-#      addons: *clang35
-#      env: COMPILER='ccache clang++-3.5' BUILD_TYPE='Debug'
-#
-#
-#    - os: linux
-#      compiler: clang
-#      addons: &clang36
-#        apt:
-#          sources: ['llvm-toolchain-precise-3.6', 'ubuntu-toolchain-r-test']
-#          packages: ['clang-3.6']
-#      env: COMPILER='ccache clang++-3.6' BUILD_TYPE='Release'
-#
-#    - os: linux
-#      compiler: clang
-#      addons: *clang36
-#      env: COMPILER='ccache clang++-3.6' BUILD_TYPE='Debug'
-#
-#
-#    - os: linux
-#      compiler: clang
-#      addons: &clang37
-#        apt:
-#          sources: ['llvm-toolchain-precise-3.7', 'ubuntu-toolchain-r-test']
-#          packages: ['clang-3.7']
-#      env: COMPILER='ccache clang++-3.7' BUILD_TYPE='Release'
-#
-#    - os: linux
-#      compiler: clang
-#      addons: *clang37
-#      env: COMPILER='ccache clang++-3.7' BUILD_TYPE='Debug'
-#
-#
-#    - os: linux
-#      compiler: clang
-#      addons: &clang38
-#        apt:
-#          sources: ['llvm-toolchain-precise', 'ubuntu-toolchain-r-test']
-#          packages: ['clang-3.8']
-#      env: COMPILER='ccache clang++-3.8' BUILD_TYPE='Release'
-#
-#    - os: linux
-#      compiler: clang
-#      addons: *clang38
-#      env: COMPILER='ccache clang++-3.8' BUILD_TYPE='Debug'
-
-
-    # 2/ Linux GCC Builds - gorynych requires at least gcc 4.9
-
     - os: linux
-      compiler: gcc
-      addons: &gcc49
+      compiler: clang
+      addons: &addons
         apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-4.9']
-      env: COMPILER='ccache g++-4.9' BUILD_TYPE='Release'
+          sources: &sources
+            - llvm-toolchain-trusty-3.9
+            - llvm-toolchain-trusty-4.0
+            - ubuntu-toolchain-r-test
+          packages:
+            - clang-3.9
+            - clang-4.0
+            - g++-5
+            - g++-6
+            #- g++-7
+      env: COMPILER=clang++-3.9 BUILD_TYPE='Release' CXX=clang++-3.9 CC=clang-3.9
+
+    - os: linux
+      compiler: clang
+      addons: *addons
+      env: COMPILER=clang++-4.0 BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
+
+    # 2/ Linux GCC Builds
+    - os: linux
+      compiler: gcc
+      addons: *addons
+      env: COMPILER=g++-5 BUILD_TYPE='Release' CXX=g++-5 CC=gcc-5
 
     - os: linux
       compiler: gcc
-      addons: *gcc49
-      env: COMPILER='ccache g++-4.9' BUILD_TYPE='Debug'
+      addons: *addons
+      env: COMPILER=g++-6 BUILD_TYPE='Release' CXX=g++-6 CC=gcc-6
 
-
-    - os: linux
-      compiler: gcc
-      addons: &gcc5
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-5']
-      env: COMPILER='ccache g++-5' BUILD_TYPE='Release'
-
-    - os: linux
-      compiler: gcc
-      addons: *gcc5
-      env: COMPILER='ccache g++-5' BUILD_TYPE='Debug'
-
-    - os: linux
-      compiler: gcc
-      addons: &gcc6
-        apt:
-          sources: ['ubuntu-toolchain-r-test']
-          packages: ['g++-6']
-      env: COMPILER='ccache g++-6' BUILD_TYPE='Release'
-
-    - os: linux
-      compiler: gcc
-      addons: *gcc6
-      env: COMPILER='ccache g++-6' BUILD_TYPE='Debug'
-
+    #- os: linux
+    #  compiler: gcc
+    #  addons: *addons
+    #  env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7
 
     # 3/ OSX Clang Builds
-#    - os: osx
-#      osx_image: xcode6.4
-#      compiler: clang
-#      env: COMPILER='ccache clang++' BUILD_TYPE='Debug'
-#
-#    - os: osx
-#      osx_image: xcode6.4
-#      compiler: clang
-#      env: COMPILER='ccache clang++' BUILD_TYPE='Release'
-
-
-# disable osx for now. Need to test & adapt on a real mac.
-#    - os: osx
-#      osx_image: xcode7
-#      compiler: clang
-#      env: COMPILER='ccache clang++' BUILD_TYPE='Debug'
-#
-#    - os: osx
-#      osx_image: xcode7
-#      compiler: clang
-#      env: COMPILER='ccache clang++' BUILD_TYPE='Release'
+    - os: osx
+      osx_image: xcode7.3
+      compiler: clang
+      env: COMPILER='clang++' BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
+    - os: osx
+      osx_image: xcode8.3
+      compiler: clang
+      env: COMPILER='clang++' BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
 
 
 install:
@@ -147,18 +76,28 @@ install:
   - mkdir -p ${DEPS_DIR} && cd ${DEPS_DIR}
   - |
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
-      CMAKE_URL="http://www.cmake.org/files/v3.5/cmake-3.5.1-Linux-x86_64.tar.gz"
+      CMAKE_URL="http://www.cmake.org/files/v3.6/cmake-3.6.0-Linux-x86_64.tar.gz"
       mkdir cmake && travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
       export PATH=${DEPS_DIR}/cmake/bin:${PATH}
-    elif [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
-      brew install cmake ccache
     fi
-
+  - travis_retry pip install pyopenssl ndg-httpsclient pyasn1
+  - travis_retry pip install yasha
 before_script:
   - export CXX=${COMPILER}
   - cd ${TRAVIS_BUILD_DIR}
-  - cmake -H../gorynych -BBuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
+  - cmake -H../zacc -BBuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
   - cd Build
 
 script:
-  - make -j 2 && make test_gorynych
+  - make -j 2 && make zacc.tests.all
+  - ls
+  - ./zacc.system.detect
+  - ./zacc.sse.sse2.tests
+  - ./zacc.sse.sse2.tests
+  - ./zacc.sse.sse3.tests
+  - ./zacc.sse.sse41.tests
+  - ./zacc.sse.sse41.fma3.tests
+  - ./zacc.sse.sse41.fma4.tests
+  - ./zacc.avx.tests
+  - ./zacc.avx2.tests
+  - ctest
