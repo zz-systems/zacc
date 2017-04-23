@@ -54,33 +54,11 @@ namespace zacc { namespace math {
         //        : data{static_cast<T>(std::forward<Args>(args))...}
         //{}
 
-        //template<typename... Args>
-        //mat(Args&&... args) noexcept
-        //        : data{static_cast<T>(std::forward<Args>(args))...}
-        //{}
-
-        template<bool...> struct bool_pack;
-        template<bool... bs>
-        using all_true = std::is_same<bool_pack<bs..., true>, bool_pack<true, bs...>>;
-
-        template<class R, class... Ts>
-        using are_all_convertible = all_true<std::is_convertible<Ts, R>::value...>;
-
-        template<typename allowed_type, typename... types >
-        using restrict_args =
-        typename std::enable_if<
-                all_true< std::is_convertible<types, allowed_type>::value... >::value, int
-        >::type;
-
-        template<typename... Args, restrict_args<T, Args...>* = nullptr>
-        mat(Args&&... args) noexcept
+        /// MEMO: NEVER use greedy Args&&... in combination with copy constructor
+        template<typename... Args, typename = std::enable_if_t<all_true<std::is_convertible<Args, T>::value...>::value>>
+        mat(Args... args) noexcept
                 : data{static_cast<T>(std::forward<Args>(args))...}
         {}
-
-        //template<typename... Args, typename = std::enable_if_t<are_all_convertible<T, Args...>::value>>
-        //mat(Args&&... args) noexcept
-        //        : data{static_cast<T>(std::forward<Args>(args))...}
-        //{}
 
         //__attribute__((optimize("unroll-loops")))
         template<typename U = T>
@@ -347,7 +325,7 @@ namespace zacc { namespace math {
     template<typename T>
     struct is_scalar
     {
-        static constexpr const bool value = std::is_floating_point<T>::value || std::is_integral<T>::value;
+        static constexpr const bool value = is_zval<T>::value || std::is_floating_point<T>::value || std::is_integral<T>::value;
     };
 
 

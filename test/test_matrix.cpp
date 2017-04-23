@@ -37,7 +37,7 @@ namespace zacc { namespace test {
     TEST(vector, load)
     {
         REQUIRES(ZACC_CAPABILITIES);
-        vec3<zint32> v({2, 3, 4});
+        vec3<zint32> v{2, 3, 4};
 
         VASSERT_EQ(v(0), 2);
         VASSERT_EQ(v(1), 3);
@@ -72,7 +72,7 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        vec3<zint32> v({2, 3, 4});
+        vec3<zint32> v{2, 3, 4};
 
         auto sqr_magnitude = v.sqr_magnitude();
 
@@ -85,7 +85,7 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        vec3<zint32> v({2, 3, 4});
+        vec3<zint32> v{2, 3, 4};
 
         //auto sqr_magnitude = v.magnitude();
 
@@ -97,7 +97,7 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        vec3<zint32> v1(1, 2, 3), v2(6, 5, 4);
+        vec3<zint32> v1{1, 2, 3}, v2{6, 5, 4};
 
         vec3<zint32> result = v1 + v2;
 
@@ -111,7 +111,7 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        vec3<zint32> v1({ 1, 2, 3 }), v2({ 6, 5, 4 });
+        vec3<zint32> v1{ 1, 2, 3 }, v2{ 6, 5, 4 };
 
         vec3<zint32> result = v1 - v2;
 
@@ -124,7 +124,7 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        vec3<zint32> v1({ 1, 2, 3 });
+        vec3<zint32> v1{ 1, 2, 3 };
 
         vec3<zint32> result = v1 * 2;
 
@@ -137,7 +137,7 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        vec3<zint32> v1({ 1, 2, 3 });
+        vec3<zint32> v1{ 1, 2, 3 };
 
         vec3<zint32> result = v1 / 2;
 
@@ -150,8 +150,8 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_CAPABILITIES);
 
-        mat<zint32, 1, 3> m1(2, 2, 2);
-        mat<zint32, 3, 1> m2(2, 2, 2);
+        mat<zint32, 1, 3> m1{2, 2, 2};
+        mat<zint32, 3, 1> m2{2, 2, 2};
 
         auto result = m1 * m2;
 
@@ -169,8 +169,8 @@ namespace zacc { namespace test {
 
         //SECTION("3 elem col vector * 3 elem row vector should yield a 3x3 matrix")
         {
-            mat<zint32, 3, 1> m1(2, 4, 8);
-            mat<zint32, 1, 3> m2(3, 6, 9);
+            mat<zint32, 3, 1> m1{2, 4, 8};
+            mat<zint32, 1, 3> m2{3, 6, 9};
 
             auto result = m1 * m2;
 
@@ -192,8 +192,8 @@ namespace zacc { namespace test {
     
         //SECTION("3 elem row vector * 2 elem col vector should yield a 3x2 matrix")
         {
-            mat<zint32, 3, 1> m1(2, 4, 8);
-            mat<zint32, 1, 2> m2(3, 6);
+            mat<zint32, 3, 1> m1{2, 4, 8};
+            mat<zint32, 1, 2> m2{3, 6};
 
             auto result = m1 * m2;
 

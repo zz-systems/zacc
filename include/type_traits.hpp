@@ -49,6 +49,10 @@ namespace zacc {
     using enable_if_not_same = std::enable_if_t<!std::is_same<one_t, other_t>::value, one_t>;
 
 
+    template<bool...> struct bool_pack;
+    template<bool... bs>
+    using all_true = std::is_same<bool_pack<bs..., true>, bool_pack<true, bs...>>;
+
     template<typename base_t, typename required_t>
     struct requires {
         static_assert(std::is_base_of<required_t, base_t>::value, "Required feature not implemented.");
