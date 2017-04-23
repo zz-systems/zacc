@@ -32,52 +32,55 @@ namespace zacc {
     template<typename base_t>
     struct runtime_dispatcher : public base_t
     {
-        void dispatch()
+        template<typename Args... args>
+        void dispatch(Args... args)
         {
             auto p = &platform::instance();
 
             if(p->is_set(capabilities::OPENCL))
             {
-
+                // not implemented yet
+                //base_t::execute<opencl::types<opencl::value>(std::forward<Args>(args)...);
             }
             else if(p->is_set(capabilities::AVX512))
             {
-
+                // not implemented yet
+                //base_t::execute<avx512::types<avx512::value>(std::forward<Args>(args)...);
             }
             else if(p->is_set(capabilities::AVX2))
             {
-
+                base_t::execute<avx::types<avx2::value>(std::forward<Args>(args)...);
             }
             else if(p->is_set(capabilities::AVX1))
             {
-
+                base_t::execute<avx::types<avx1::value>(std::forward<Args>(args)...);
             }
             else if(p->is_set(capabilities::SSE41))
             {
                 if(p->is_set(capabilities::FMA4))
                 {
-
+                    base_t::execute<sse::types<sse41fma4::value>(std::forward<Args>(args)...);
                 }
                 else if(p->is_set(capabilities::FMA3))
                 {
-
+                    base_t::execute<sse::types<sse41fma3::value>(std::forward<Args>(args)...);
                 }
                 else
                 {
-
+                    base_t::execute<sse::types<sse41::value>(std::forward<Args>(args)...);
                 }
             }
             else if(p->is_set(capabilities::SSSE3) && p->is_set(capabilities::SSE3))
             {
-
+                base_t::execute<sse::types<sse3::value>(std::forward<Args>(args)...);
             }
             else if(p->is_set(capabilities::SSE2))
             {
-
+                base_t::execute<sse::types<sse2::value>(std::forward<Args>(args)...);
             }
             else
             {
-
+                base_t::execute<scalar::types<scalar::value>(std::forward<Args>(args)...);
             }
         }
     };

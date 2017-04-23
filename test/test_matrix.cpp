@@ -80,19 +80,20 @@ namespace zacc { namespace test {
         VASSERT_EQ(sqr_magnitude, 29);
     }
     
-    
+    /*
     TEST(vector, magnitude)
     {
         REQUIRES(ZACC_CAPABILITIES);
 
         vec3<zint32> v{2, 3, 4};
 
-        //auto sqr_magnitude = v.magnitude();
+        auto sqr_magnitude = v.magnitude();
 
         /// (int) sqrt(29) = 5
-        //VASSERT_EQ(sqr_magnitude, 5);
+        VASSERT_EQ(sqr_magnitude, 5);
     }
-    
+    */
+
     TEST(vector, add)
     {
         REQUIRES(ZACC_CAPABILITIES);

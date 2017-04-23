@@ -86,10 +86,10 @@ namespace zacc { namespace math {
             return data[i];
         }
 
-        T magnitude() const
-        {
-            return vsqrt(sqr_magnitude());
-        }
+        //T magnitude() const
+        //{
+        // return vsqrt(sqr_magnitude());
+        //}
 
         T sqr_magnitude() const
         {
