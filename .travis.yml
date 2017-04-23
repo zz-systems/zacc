@@ -61,14 +61,10 @@ matrix:
     #  env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7
 
     # 3/ OSX Clang Builds
-    - os: osx
-      osx_image: xcode7.3
-      compiler: clang
-      env: COMPILER='clang++' BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
-    - os: osx
-      osx_image: xcode8.3
-      compiler: clang
-      env: COMPILER='clang++' BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
+    #- os: osx
+    #  osx_image: xcode8.3
+    #  compiler: clang
+    #  env: COMPILER='clang++' BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
 
 
 install:
