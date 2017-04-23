@@ -78,7 +78,7 @@ before_build:
 build_script:
   - mkdir build
   - cd build
-  - cmake GNinja-DCMAKE_CXX_COMPILER=clang-c -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DOPENCL_ROOT=%OPENCL_ROOT%
+  - cmake -GNinja-DCMAKE_CXX_COMPILER=clang-c -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DOPENCL_ROOT=%OPENCL_ROOT%
   - dir
 test_script:
 #- ./zacc.system.detect.exe
