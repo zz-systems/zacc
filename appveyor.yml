@@ -59,7 +59,7 @@ install:
 before_build:
 - echo before_build step
 - cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DOPENCL_ROOT=%OPENCL_ROOT% %APPVEYOR_BUILD_FOLDER%/src
-
+- dir
 build_script:
 #- set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 #- git submodule update --init --recursive
