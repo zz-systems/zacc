@@ -25,6 +25,19 @@ init:
 - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
 
 install:
+############################################################################
+# Install Ninja
+############################################################################
+- set NINJA_URL="https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-win.zip"
+- appveyor DownloadFile %NINJA_URL% -FileName ninja.zip
+- 7z x ninja.zip -oC:\projects\deps\ninja > nul
+- set PATH=C:\projects\deps\ninja;%PATH%
+- ninja --version
+############################################################################
+# Setup the path to Clang-cl
+############################################################################
+- set PATH="C:\Program Files\LLVM\bin";%PATH%
+- clang-cl -v
 - echo Fetching source
 #- git submodule update --init --recursive 
 - echo Installing OpenCL
@@ -58,15 +71,15 @@ install:
 # before_build is used to run configure steps
 before_build:
 - echo before_build step
-- cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DOPENCL_ROOT=%OPENCL_ROOT% %APPVEYOR_BUILD_FOLDER%/src
-#- dir
+- call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+- cd C:\projects\gorynych
+
+
 build_script:
-#- set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-#- git submodule update --init --recursive
-#- cmake . -G "Visual Studio 14 2015 Win64"
-#- cmake --build . --config Release
-#- nmake /f zacc.tests.all
-- nmake
+  - mkdir build
+  - cd build
+  - cmake GNinja-DCMAKE_CXX_COMPILER=clang-c -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DOPENCL_ROOT=%OPENCL_ROOT%
+  - dir
 test_script:
 #- ./zacc.system.detect.exe
 #- ./zacc.sse.sse2.tests.exe
@@ -77,4 +90,4 @@ test_script:
 #- ./zacc.sse.sse41.fma4.tests.exe
 #- ./zacc.avx.tests.exe
 #- ./zacc.avx2.tests.exe
-- ctest -C Release -V
+- ninja zacc.system.detect && ./zacc.system.detect.exe
