@@ -59,21 +59,22 @@ install:
 before_build:
 - echo before_build step
 - cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DOPENCL_ROOT=%OPENCL_ROOT% %APPVEYOR_BUILD_FOLDER%/src
-- dir
+#- dir
 build_script:
 #- set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
 #- git submodule update --init --recursive
 #- cmake . -G "Visual Studio 14 2015 Win64"
 #- cmake --build . --config Release
-- nmake /f zacc.tests.all
+#- nmake /f zacc.tests.all
+- nmake
 test_script:
-- ./zacc.system.detect.exe
-- ./zacc.sse.sse2.tests.exe
-- ./zacc.sse.sse2.tests.exe
-- ./zacc.sse.sse3.tests.exe
-- ./zacc.sse.sse41.tests.exe
-- ./zacc.sse.sse41.fma3.tests.exe
-- ./zacc.sse.sse41.fma4.tests.exe
-- ./zacc.avx.tests.exe
-- ./zacc.avx2.tests.exe
+#- ./zacc.system.detect.exe
+#- ./zacc.sse.sse2.tests.exe
+#- ./zacc.sse.sse2.tests.exe
+#- ./zacc.sse.sse3.tests.exe
+#- ./zacc.sse.sse41.tests.exe
+#- ./zacc.sse.sse41.fma3.tests.exe
+#- ./zacc.sse.sse41.fma4.tests.exe
+#- ./zacc.avx.tests.exe
+#- ./zacc.avx2.tests.exe
 - ctest -C Release -V
