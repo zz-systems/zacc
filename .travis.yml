@@ -65,7 +65,7 @@ matrix:
       osx_image: xcode7.3
       compiler: clang
       env: COMPILER='clang++' BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
-     - os: osx
+    - os: osx
       osx_image: xcode8.3
       compiler: clang
       env: COMPILER='clang++' BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
