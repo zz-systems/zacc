@@ -1,9 +1,9 @@
 type:
   type: int8
   branch: scalar
-  vector_t: &vector_t uint8_t
+  vector_t: &vector_t int8_t
   mask_t: &mask_t bool
-  scalar_t: &scalar_t uint8_t
+  scalar_t: &scalar_t int8_t
   vec_size: &vec_size 1
   alignment: 8
 #-----------------------------------------------------------------------------------------------------------------------
@@ -24,9 +24,6 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
-    - args: []
-      init: ""
-
     - args: [[*scalar_t, value]]
       init: value
 
@@ -34,8 +31,8 @@ modules:
       args: "const T &value"
       init: value.get_value()
 
-    - args: [[*scalar_t, "*value"]]
-      init: "*value"
+    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+      init: "value[0]"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

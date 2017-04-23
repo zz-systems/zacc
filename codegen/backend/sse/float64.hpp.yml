@@ -25,8 +25,6 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
-    - args: []
-      init: ""
 
     - args: __m128 value
       init: _mm_cvtps_pd(value)
@@ -40,8 +38,8 @@ modules:
     - args: [[*scalar_t, value]]
       init: _mm_set1_pd(value)
 
-    - args: [[*scalar_t, "*value"]]
-      init: _mm_load_pd(value)
+    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+      init: _mm_load_pd(value.data())
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_pd }

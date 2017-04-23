@@ -35,10 +35,11 @@ namespace zacc { namespace avx2 {
     template<uint64_t capability>
     struct types
     {
-        using zfloat32  = typename avx::types<capability>::zfloat32;
-        using zfloat64  = typename avx::types<capability>::zfloat64;
-        using zint8     = typename __zint8<capability>::impl;
-        using zint16    = typename __zint16<capability>::impl;
-        using zint32    = typename __zint32<capability>::impl;
+        using zfloat32  = ::zacc::avx::zfloat32<capability>;
+        using zfloat64  = ::zacc::avx::zfloat64<capability>;
+
+        using zint8     = ::zacc::avx2::zint8<capability>;
+        using zint16    = ::zacc::avx2::zint16<capability>;
+        using zint32    = ::zacc::avx2::zint32<capability>;
     };
 }}

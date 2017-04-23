@@ -42,23 +42,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (-a[i]);
         }
 
-        auto actual = (-zint8(a)).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (-a[i]);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((-zint8(a)), zint8(expected));
     }
 
     TEST(avx2_int8_arithmetic, vadd_default)
@@ -69,23 +62,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (a[i] + b[i]);
         }
 
-        auto actual = (zint8(a) + zint8(b)).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (a[i] + b[i]);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint8(a) + zint8(b)), zint8(expected));
     }
 
     TEST(avx2_int8_arithmetic, vsub_default)
@@ -96,23 +82,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (a[i] - b[i]);
         }
 
-        auto actual = (zint8(a) - zint8(b)).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (a[i] - b[i]);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint8(a) - zint8(b)), zint8(expected));
     }
 
 // =====================================================================================================================
@@ -125,23 +104,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) ((a[i] & 64));
         }
 
-        auto actual = (zint8(a) & zint8(64)).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) ((a[i] & 64));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint8(a) & zint8(64)), zint8(expected));
     }
 
     TEST(avx2_int8_bitwise, vbor_default)
@@ -152,23 +124,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) ((a[i] | 64));
         }
 
-        auto actual = (zint8(a) | zint8(64)).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) ((a[i] | 64));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint8(a) | zint8(64)), zint8(expected));
     }
 
     TEST(avx2_int8_bitwise, vbxor_default)
@@ -179,23 +144,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) ((a[i] ^ 64));
         }
 
-        auto actual = (zint8(a) ^ zint8(64)).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) ((a[i] ^ 64));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint8(a) ^ zint8(64)), zint8(expected));
     }
 
 // =====================================================================================================================
@@ -208,23 +166,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (false);
         }
 
-        auto actual = ((!zint8(a)).as_bool()).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (false);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((!zint8(a)).as_bool()), zint8(expected));
     }
 
     TEST(avx2_int8_logical, vlor_default)
@@ -235,23 +186,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (true);
         }
 
-        auto actual = ((zint8(0) || zint8(a)).as_bool()).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (true);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zint8(0) || zint8(a)).as_bool()), zint8(expected));
     }
 
     TEST(avx2_int8_logical, vland_default)
@@ -262,23 +206,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (false);
         }
 
-        auto actual = ((zint8(0) && zint8(a)).as_bool()).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (false);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zint8(0) && zint8(a)).as_bool()), zint8(expected));
     }
 
 // =====================================================================================================================
@@ -291,23 +228,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (0);
         }
 
-        auto actual = (zint8(0) == zint8(a)).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (0);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint8(0) == zint8(a)), zint8(expected));
     }
 
     TEST(avx2_int8_comparison, vneq_default)
@@ -318,23 +248,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (0);
         }
 
-        auto actual = (zint8(a) != zint8(a)).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (0);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint8(a) != zint8(a)), zint8(expected));
     }
 
     TEST(avx2_int8_comparison, vgt_default)
@@ -345,23 +268,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (0);
         }
 
-        auto actual = (zint8(0) > zint8(a)).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (0);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint8(0) > zint8(a)), zint8(expected));
     }
 
     TEST(avx2_int8_comparison, vlt_default)
@@ -372,23 +288,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (0);
         }
 
-        auto actual = (zint8(a) < zint8(0)).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (0);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint8(a) < zint8(0)), zint8(expected));
     }
 
     TEST(avx2_int8_comparison, vge_default)
@@ -399,23 +308,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (true);
         }
 
-        auto actual = ((zint8(b) >= zint8(b)).as_bool()).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (true);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zint8(b) >= zint8(b)).as_bool()), zint8(expected));
     }
 
     TEST(avx2_int8_comparison, vle_default)
@@ -426,23 +328,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (true);
         }
 
-        auto actual = ((zint8(b) <= zint8(b)).as_bool()).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (true);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zint8(b) <= zint8(b)).as_bool()), zint8(expected));
     }
 
 // =====================================================================================================================
@@ -455,23 +350,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        uint8_t a[32], b[32];
+        std::array<int8_t, 32> a, b, expected;
         for(int i = 0; i < 32; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) (2);
         }
 
-        auto actual = (vsel(zint8(1) == zint8(1), zint8(2), zint8(3))).data();
-
-
-        for(int i = 0; i < 32; i++)
-        {
-            auto value = actual[i];
-            auto expected = (uint8_t) (2);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((vsel(zint8(1) == zint8(1), zint8(2), zint8(3))), zint8(expected));
     }
 
 // =====================================================================================================================

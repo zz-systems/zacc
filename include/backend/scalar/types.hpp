@@ -36,10 +36,10 @@ namespace zacc { namespace scalar {
     template<uint64_t capability>
     struct types
     {
-        using zfloat32  = typename __zfloat32<capability>::impl;
-        using zfloat64  = typename __zfloat64<capability>::impl;
-        using zint8     = typename __zint8<capability>::impl;
-        using zint16    = typename __zint16<capability>::impl;
-        using zint32    = typename __zint32<capability>::impl;
+        using zfloat32  = ::zacc::scalar::zfloat32<capability>;
+        using zfloat64  = ::zacc::scalar::zfloat64<capability>;
+        using zint8     = ::zacc::scalar::zint8<capability>;
+        using zint16    = ::zacc::scalar::zint16<capability>;
+        using zint32    = ::zacc::scalar::zint32<capability>;
     };
 }}

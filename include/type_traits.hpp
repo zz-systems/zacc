@@ -75,19 +75,65 @@ namespace zacc {
         return ((ref_value & head) != 0) || is_any_set(ref_value, tail...);
     };
 
-    template<typename val_t>
-    struct is_floating_point : std::is_floating_point<typename val_t::scalar_t>
-    {};
-
-    template<typename vreal_t>
-    struct is_float : std::is_same<typename vreal_t::scalar_t, float>
-    {};
-
-    template<typename vreal_t>
-    struct is_double : std::is_same<typename vreal_t::scalar_t, double>
+    template<typename val_t, typename enable_t = void>
+    struct is_zval
+            : public std::false_type
     {};
 
     template<typename val_t>
-    struct is_integral : std::is_integral<typename val_t::scalar_t>
+    struct is_zval<val_t, std::enable_if_t<std::is_arithmetic<typename val_t::scalar_t>::value>>
+            : public std::true_type
+    {};
+
+
+    template<typename val_t, typename enable_t = void>
+    struct is_bval : public std::false_type
+    {};
+
+    template<typename val_t>
+    struct is_bval<val_t, std::enable_if_t<std::is_same<typename val_t::scalar_t, bool>::value>>
+            : public std::true_type
+    {};
+
+    template<typename val_t, typename enable_t = void>
+    struct is_floating_point
+            : public std::false_type
+    {};
+
+    template<typename val_t>
+    struct is_floating_point<val_t, std::enable_if_t<std::is_floating_point<typename val_t::scalar_t>::value>>
+            : public std::true_type
+    {};
+
+
+    template<typename val_t, typename enable_t = void>
+    struct is_float
+            : public std::false_type
+    {};
+
+    template<typename val_t>
+    struct is_float<val_t, std::enable_if_t<std::is_same<typename val_t::scalar_t, float>::value>>
+            : public std::true_type
+    {};
+
+
+    template<typename val_t, typename enable_t = void>
+    struct is_double
+            : public std::false_type
+    {};
+
+    template<typename val_t>
+    struct is_double<val_t, std::enable_if_t<std::is_same<typename val_t::scalar_t, double>::value>>
+            : public std::true_type
+    {};
+
+    template<typename val_t, typename enable_t = void>
+    struct is_integral
+            : public std::false_type
+    {};
+
+    template<typename val_t>
+    struct is_integral<val_t, std::enable_if_t<std::is_integral<typename val_t::scalar_t>::value>>
+            : public std::true_type
     {};
 }

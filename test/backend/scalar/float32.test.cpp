@@ -42,23 +42,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (-a[i]);
         }
 
-        auto actual = (-zfloat32(a)).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (-a[i]);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ((-zfloat32(a)), zfloat32(expected));
     }
 
     TEST(scalar_float32_arithmetic, vadd_default)
@@ -69,23 +62,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (a[i] + b[i]);
         }
 
-        auto actual = (zfloat32(a) + zfloat32(b)).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (a[i] + b[i]);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ((zfloat32(a) + zfloat32(b)), zfloat32(expected));
     }
 
     TEST(scalar_float32_arithmetic, vsub_default)
@@ -96,23 +82,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (a[i] - b[i]);
         }
 
-        auto actual = (zfloat32(a) - zfloat32(b)).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (a[i] - b[i]);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ((zfloat32(a) - zfloat32(b)), zfloat32(expected));
     }
 
     TEST(scalar_float32_arithmetic, vmul_default)
@@ -123,23 +102,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (a[i] * b[i]);
         }
 
-        auto actual = (zfloat32(a) * zfloat32(b)).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (a[i] * b[i]);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ((zfloat32(a) * zfloat32(b)), zfloat32(expected));
     }
 
     TEST(scalar_float32_arithmetic, vdiv_default)
@@ -150,23 +122,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (1);
         }
 
-        auto actual = (zfloat32(a) / zfloat32(a)).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (1);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ((zfloat32(a) / zfloat32(a)), zfloat32(expected));
     }
 
 // =====================================================================================================================
@@ -179,23 +144,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (false);
         }
 
-        auto actual = ((!zfloat32(a)).as_bool()).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (false);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ(((!zfloat32(a)).as_bool()), zfloat32(expected));
     }
 
     TEST(scalar_float32_logical, vlor_default)
@@ -206,23 +164,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (true);
         }
 
-        auto actual = ((zfloat32(0) || zfloat32(a)).as_bool()).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (true);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zfloat32(0) || zfloat32(a)).as_bool()), zfloat32(expected));
     }
 
     TEST(scalar_float32_logical, vland_default)
@@ -233,23 +184,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (false);
         }
 
-        auto actual = ((zfloat32(0) && zfloat32(a)).as_bool()).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (false);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zfloat32(0) && zfloat32(a)).as_bool()), zfloat32(expected));
     }
 
 // =====================================================================================================================
@@ -262,23 +206,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (0);
         }
 
-        auto actual = (zfloat32(0) == zfloat32(a)).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (0);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ((zfloat32(0) == zfloat32(a)), zfloat32(expected));
     }
 
     TEST(scalar_float32_comparison, vneq_default)
@@ -289,23 +226,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (0);
         }
 
-        auto actual = (zfloat32(a) != zfloat32(a)).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (0);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ((zfloat32(a) != zfloat32(a)), zfloat32(expected));
     }
 
     TEST(scalar_float32_comparison, vgt_default)
@@ -316,23 +246,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (0);
         }
 
-        auto actual = (zfloat32(0) > zfloat32(a)).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (0);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ((zfloat32(0) > zfloat32(a)), zfloat32(expected));
     }
 
     TEST(scalar_float32_comparison, vlt_default)
@@ -343,23 +266,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (0);
         }
 
-        auto actual = (zfloat32(a) < zfloat32(0)).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (0);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ((zfloat32(a) < zfloat32(0)), zfloat32(expected));
     }
 
     TEST(scalar_float32_comparison, vge_default)
@@ -370,23 +286,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (true);
         }
 
-        auto actual = ((zfloat32(b) >= zfloat32(b)).as_bool()).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (true);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zfloat32(b) >= zfloat32(b)).as_bool()), zfloat32(expected));
     }
 
     TEST(scalar_float32_comparison, vle_default)
@@ -397,23 +306,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (true);
         }
 
-        auto actual = ((zfloat32(b) <= zfloat32(b)).as_bool()).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (true);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zfloat32(b) <= zfloat32(b)).as_bool()), zfloat32(expected));
     }
 
 // =====================================================================================================================
@@ -426,23 +328,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        float a[1], b[1];
+        std::array<float, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (float) (2);
         }
 
-        auto actual = (vsel(zfloat32(1) == zfloat32(1), zfloat32(2), zfloat32(3))).data();
-
-
-        for(int i = 0; i < 1; i++)
-        {
-            auto value = actual[i];
-            auto expected = (float) (2);
-
-            ASSERT_FLOAT_EQ(value, expected);
-        }
+        VASSERT_EQ((vsel(zfloat32(1) == zfloat32(1), zfloat32(2), zfloat32(3))), zfloat32(expected));
     }
 
 // =====================================================================================================================

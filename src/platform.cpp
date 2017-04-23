@@ -129,7 +129,7 @@ namespace zacc {
         // Extended features
         cpuInfo = _cpuid.reg(7);
 
-        //set(capabilities::AVX2, cpuInfo[cpuid::EBX][5]);
+        set(capabilities::AVX2, cpuInfo[cpuid::EBX][5]);
         set(capabilities::AVX512, cpuInfo[cpuid::EBX][16]);
 
 

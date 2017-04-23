@@ -49,7 +49,7 @@ namespace zacc {
     struct dispatcher
     {
         /// max capability
-        static const constexpr uint64_t capability = ZACC_CAPABILITIES;//capability::fill_up_to(capabilities::ZACC_MAX_CAPABILITY);
+        static const constexpr uint64_t capability = branches::ZACC_CAPABILITIES::value;
 
         /// fast float enabled? used for faster and less precise computations
         static const constexpr bool use_fast_float = ZACC_FAST_FLOAT;
@@ -83,7 +83,6 @@ namespace zacc {
         using zint      = zint32;
     };
 
-
     /// float32 type alias
     using zfloat    = dispatcher::zfloat;
     /// float64 type alias
@@ -105,4 +104,6 @@ namespace zacc {
     using zint16    = dispatcher::zint16;
     /// int32 type
     using zint32    = dispatcher::zint32;
+
+
 }

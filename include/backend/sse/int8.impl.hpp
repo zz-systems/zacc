@@ -47,12 +47,20 @@
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
 
+
 /**
  * @brief int8 implementation for the sse branch
- * provides unified access to 16 'uint8_t' values
+ * provides unified access to 16 'int8_t' values
  */
 
 namespace zacc { namespace sse {
+
+    template<uint64_t capability>
+    struct bint8;
+
+    template<uint64_t capability>
+    struct zint8;
+
 
     // =================================================================================================================
     /**
@@ -81,6 +89,19 @@ namespace zacc { namespace sse {
 
 
 
+
+            /**
+             * @brief construction default branch
+             * @relates int8
+             * @remark sse - default
+             */
+            __impl() : base_t() {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "CONS()");
+
+            }
+
+
             /**
              * @brief construction default branch
              * @relates int8
@@ -88,7 +109,7 @@ namespace zacc { namespace sse {
              */
             __impl(__m128i value) : base_t(value) {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "CONS(__m128i value)");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "CONS(__m128i value)");
 
             }
 
@@ -98,21 +119,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            __impl(uint8_t value) : base_t(_mm_set1_epi8(value)) {
+            __impl(int8_t value) : base_t(_mm_set1_epi8(value)) {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "CONS(uint8_t value)");
-
-            }
-
-
-            /**
-             * @brief construction default branch
-             * @relates int8
-             * @remark sse - default
-             */
-            __impl(uint8_t *value) : base_t(_mm_load_si128((__m128i*)value)) {
-
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "CONS(uint8_t *value)");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "CONS(int8_t value)");
 
             }
 
@@ -122,9 +131,21 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            __impl(uint8_t arg15, uint8_t arg14, uint8_t arg13, uint8_t arg12, uint8_t arg11, uint8_t arg10, uint8_t arg9, uint8_t arg8, uint8_t arg7, uint8_t arg6, uint8_t arg5, uint8_t arg4, uint8_t arg3, uint8_t arg2, uint8_t arg1, uint8_t arg0) : base_t(_mm_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm_load_si128((__m128i*)value.data())) {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "CONS(uint8_t arg15, uint8_t arg14, ui..)");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "CONS(std::array<typename base_t::scal..)");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates int8
+             * @remark sse - default
+             */
+            __impl(int8_t arg15, int8_t arg14, int8_t arg13, int8_t arg12, int8_t arg11, int8_t arg10, int8_t arg9, int8_t arg8, int8_t arg7, int8_t arg6, int8_t arg5, int8_t arg4, int8_t arg3, int8_t arg2, int8_t arg1, int8_t arg0) : base_t(_mm_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)) {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "CONS(int8_t arg15, int8_t arg14, int8..)");
 
             }
 
@@ -177,7 +198,7 @@ namespace zacc { namespace sse {
              */
             friend void vstore(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vstore");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vstore");
 
                 _mm_store_si128((__m128i*)target.data(), source);
             }
@@ -190,7 +211,7 @@ namespace zacc { namespace sse {
              */
             friend void vstream(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vstream");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vstream");
 
                 _mm_stream_si128((__m128i*)target.data(), source);
             }
@@ -242,9 +263,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend composed_t vneg(composed_t one)  noexcept {
+            friend zint8<base_t::capability> vneg(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vneg");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vneg");
 
                 return _mm_sub_epi8(_mm_setzero_si128(), one);
             }
@@ -255,9 +276,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend composed_t vadd(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vadd(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vadd");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vadd");
 
                 return _mm_add_epi8(one, other);
             }
@@ -268,9 +289,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend composed_t vsub(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vsub(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vsub");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vsub");
 
                 return _mm_sub_epi8(one, other);
             }
@@ -281,9 +302,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend composed_t vmul(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vmul(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vmul");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vmul");
 
                 /// @see http://stackoverflow.com/a/29155682/1261537;
                 auto even = _mm_mullo_epi16(one, other);
@@ -338,9 +359,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend composed_t vbneg(composed_t one)  noexcept {
+            friend zint8<base_t::capability> vbneg(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vbneg");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vbneg");
 
                 __m128i junk;
                 auto ones = _mm_cmpeq_epi8(junk, junk);
@@ -353,9 +374,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend composed_t vbor(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vbor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vbor");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vbor");
 
                 return _mm_or_si128(one, other);
             }
@@ -366,9 +387,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend composed_t vband(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vband(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vband");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vband");
 
                 return _mm_and_si128(one, other);
             }
@@ -379,9 +400,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend composed_t vbxor(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vbxor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vbxor");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vbxor");
 
                 return _mm_xor_si128(one, other);
             }
@@ -433,9 +454,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vlneg(bval<composed_t, mask_t> one)  noexcept {
+            friend bint8<base_t::capability> vlneg(bint8<base_t::capability> one)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vlneg");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vlneg");
 
                 return _mm_cmpeq_epi8(one, _mm_setzero_si128());
             }
@@ -446,9 +467,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vlor(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+            friend bint8<base_t::capability> vlor(bint8<base_t::capability> one, bint8<base_t::capability> other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vlor");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vlor");
 
                 return _mm_or_si128(one, other);
             }
@@ -459,9 +480,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vland(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+            friend bint8<base_t::capability> vland(bint8<base_t::capability> one, bint8<base_t::capability> other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vland");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vland");
 
                 return _mm_and_si128(one, other);
             }
@@ -513,9 +534,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> veq(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "veq");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "veq");
 
                 return _mm_cmpeq_epi8(one, other);
             }
@@ -526,9 +547,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vneq(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vneq");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vneq");
 
                 return !(one == other);
             }
@@ -539,9 +560,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vgt(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vgt");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vgt");
 
                 return _mm_cmpgt_epi8(one, other);
             }
@@ -552,9 +573,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vlt(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vlt");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vlt");
 
                 return _mm_cmplt_epi8(one, other);
             }
@@ -565,9 +586,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vge(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vge");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vge");
 
                 return !(one < other);
             }
@@ -578,9 +599,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vle(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vle");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vle");
 
                 return !(one > other);
             }
@@ -632,9 +653,9 @@ namespace zacc { namespace sse {
              * @relates int8
              * @remark sse - default
              */
-            friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            friend zint8<base_t::capability> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(uint8_t[16])", "default", "vsel");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vsel");
 
                 return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value));
             }
@@ -663,7 +684,7 @@ namespace zacc { namespace sse {
     /**
      * @brief zval parametrization using
      * - '__m128i' as underlying vector type
-     * - 'uint8_t' as scalar type
+     * - 'int8_t' as scalar type
      * - '16' as vector size
      * - '16' as alignment
      * @relates int8
@@ -672,7 +693,7 @@ namespace zacc { namespace sse {
     template<uint64_t capability>
     struct __zval_int8
     {
-        using zval_t = zval<__m128i, __m128i, uint8_t, 16, 16, capability>;
+        using zval_t = zval<__m128i, __m128i, int8_t, 16, 16, capability>;
 
         struct impl : public zval_t
         {
@@ -712,8 +733,36 @@ namespace zacc { namespace sse {
         };
     };
 
-    //template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    //using zint8 = typename __zint8<capability>::impl;
+    template<uint64_t capability>
+    struct zint8 : public __zint8<capability>::impl
+    {
+        FORWARD2(zint8, __zint8<capability>::impl);
+    };
+
+    template<uint64_t capability>
+    struct __bint8
+    {
+        using bval_t = bval<typename __zint8<capability>::impl, __m128i>;
+        struct impl : public bval_t
+        {
+            FORWARD2(impl, bval_t);
+        };
+    };
+
+    template<uint64_t capability>
+    struct bint8 : public __bint8<capability>::impl
+    {
+        FORWARD2(bint8, __bint8<capability>::impl);
+    };
+
+    static_assert(is_zval<zint8<0>>::value, "is_zval for zint8 failed.");
+    static_assert(is_bval<bint8<0>>::value, "is_bval for bint8 failed.");
+
+    static_assert(!is_floating_point<zint8<0>>::value, "is_floating_point for zint8 failed.");
+    static_assert(is_integral<zint8<0>>::value, "is_integral for zint8 failed.");
+
+    static_assert(!is_float<zint8<0>>::value, "is_float for zint8 failed.");
+    static_assert(!is_double<zint8<0>>::value, "is_double for zint8 failed.");
 
     ///@}
 }}

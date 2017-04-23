@@ -24,9 +24,6 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
-    - args: []
-      init: ""
-
     - args: [[*scalar_t, value]]
       init: value
 
@@ -34,8 +31,8 @@ modules:
       args: "const T &value"
       init: value.get_value()
 
-    - args: [[*scalar_t, "*value"]]
-      init: "*value"
+    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+      init: "value[0]"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

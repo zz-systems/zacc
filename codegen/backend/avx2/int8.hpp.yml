@@ -3,7 +3,7 @@ type:
   branch: avx2
   vector_t: &vector_t __m256i
   mask_t: &mask_t __m256i
-  scalar_t: &scalar_t uint8_t
+  scalar_t: &scalar_t int8_t
   vec_size: &vec_size 32
   alignment: 32
 #-----------------------------------------------------------------------------------------------------------------------
@@ -23,17 +23,14 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
-    - args: []
-      init: ""
-
     - args: __m256i value
       init: value
 
     - args: [[*scalar_t, value]]
       init: _mm256_set1_epi8(value)
 
-    - args: [[*scalar_t, "*value"]]
-      init: _mm256_load_si256((__m256i*)value)
+    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+      init: _mm256_load_si256((__m256i*)value.data())
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi8 }

@@ -48,29 +48,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        {{ type.scalar_t }} a[{{type.vec_size}}], b[{{type.vec_size}}];
+        std::array<{{ type.scalar_t }}, {{type.vec_size}}> a, b, expected;
         for(int i = 0; i < {{type.vec_size}}; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = ({{ type.scalar_t }}) ({{ branch.expected }});
         }
 
-        auto actual = ({{ branch.actual }}).data();
-
-
-        for(int i = 0; i < {{type.vec_size}}; i++)
-        {
-            auto value = actual[i];
-            auto expected = ({{ type.scalar_t }}) ({{ branch.expected }});
-
-        {% if type.scalar_t == 'float' %}
-            ASSERT_FLOAT_EQ(value, expected);
-        {% elif type.scalar_t == 'double' %}
-            ASSERT_DOUBLE_EQ(value, expected);
-        {% else %}
-            ASSERT_EQ(value, expected);
-        {% endif %}
-        }
+        VASSERT_EQ(({{ branch.actual }}), z{{ type.type }}(expected));
     }
 
                 {% endif %}

@@ -49,12 +49,20 @@
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
 
+
 /**
  * @brief int16 implementation for the scalar branch
  * provides unified access to 1 'int16_t' values
  */
 
 namespace zacc { namespace scalar {
+
+    template<uint64_t capability>
+    struct bint16;
+
+    template<uint64_t capability>
+    struct zint16;
+
 
     // =================================================================================================================
     /**
@@ -80,6 +88,7 @@ namespace zacc { namespace scalar {
         struct __impl : base_t
         {
             using mask_t = typename base_t::mask_t;
+
 
 
 
@@ -124,9 +133,9 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            __impl(int16_t *value) : base_t(*value) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(value[0]) {
 
-                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "CONS(int16_t *value)");
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "CONS(std::array<typename base_t::scal..)");
 
             }
 
@@ -285,7 +294,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vneg(composed_t one)  noexcept {
+            friend zint16<base_t::capability> vneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vneg");
 
@@ -298,7 +307,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vadd(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vadd(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vadd");
 
@@ -311,7 +320,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vsub(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vsub(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vsub");
 
@@ -324,7 +333,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vmul(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vmul(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vmul");
 
@@ -337,7 +346,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vdiv(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vdiv(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vdiv");
 
@@ -391,7 +400,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vbneg(composed_t one)  noexcept {
+            friend zint16<base_t::capability> vbneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vbneg");
 
@@ -404,7 +413,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vband(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vband(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vband");
 
@@ -417,7 +426,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vbor(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vbor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vbor");
 
@@ -430,7 +439,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vbxor(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vbxor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vbxor");
 
@@ -484,7 +493,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vsll(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vsll(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vsll");
 
@@ -497,7 +506,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vsrl(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vsrl(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vsrl");
 
@@ -551,7 +560,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend bval<composed_t, mask_t> vlneg(bval<composed_t, mask_t> one)  noexcept {
+            friend bint16<base_t::capability> vlneg(bint16<base_t::capability> one)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vlneg");
 
@@ -564,7 +573,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend bval<composed_t, mask_t> vlor(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+            friend bint16<base_t::capability> vlor(bint16<base_t::capability> one, bint16<base_t::capability> other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vlor");
 
@@ -577,7 +586,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend bval<composed_t, mask_t> vland(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+            friend bint16<base_t::capability> vland(bint16<base_t::capability> one, bint16<base_t::capability> other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vland");
 
@@ -631,7 +640,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend bval<composed_t, mask_t> veq(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "veq");
 
@@ -644,7 +653,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend bval<composed_t, mask_t> vneq(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vneq");
 
@@ -657,7 +666,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend bval<composed_t, mask_t> vgt(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vgt");
 
@@ -670,7 +679,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend bval<composed_t, mask_t> vlt(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vlt");
 
@@ -683,7 +692,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend bval<composed_t, mask_t> vge(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vge");
 
@@ -696,7 +705,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend bval<composed_t, mask_t> vle(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vle");
 
@@ -750,7 +759,7 @@ namespace zacc { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            friend zint16<base_t::capability> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vsel");
 
@@ -832,8 +841,36 @@ namespace zacc { namespace scalar {
         };
     };
 
-    //template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    //using zint16 = typename __zint16<capability>::impl;
+    template<uint64_t capability>
+    struct zint16 : public __zint16<capability>::impl
+    {
+        FORWARD2(zint16, __zint16<capability>::impl);
+    };
+
+    template<uint64_t capability>
+    struct __bint16
+    {
+        using bval_t = bval<typename __zint16<capability>::impl, bool>;
+        struct impl : public bval_t
+        {
+            FORWARD2(impl, bval_t);
+        };
+    };
+
+    template<uint64_t capability>
+    struct bint16 : public __bint16<capability>::impl
+    {
+        FORWARD2(bint16, __bint16<capability>::impl);
+    };
+
+    static_assert(is_zval<zint16<0>>::value, "is_zval for zint16 failed.");
+    static_assert(is_bval<bint16<0>>::value, "is_bval for bint16 failed.");
+
+    static_assert(!is_floating_point<zint16<0>>::value, "is_floating_point for zint16 failed.");
+    static_assert(is_integral<zint16<0>>::value, "is_integral for zint16 failed.");
+
+    static_assert(!is_float<zint16<0>>::value, "is_float for zint16 failed.");
+    static_assert(!is_double<zint16<0>>::value, "is_double for zint16 failed.");
 
     ///@}
 }}

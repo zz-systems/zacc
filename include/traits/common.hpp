@@ -147,7 +147,7 @@ namespace zacc {
 
             TRAIT(traits::Convertable);
 
-            auto as_bool()
+            auto as_bool() const noexcept
             {
                 return bval<impl, typename base_t::mask_t>(*this);
             }

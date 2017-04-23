@@ -48,12 +48,20 @@
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
 
+
 /**
  * @brief int16 implementation for the avx2 branch
  * provides unified access to 16 'int16_t' values
  */
 
 namespace zacc { namespace avx2 {
+
+    template<uint64_t capability>
+    struct bint16;
+
+    template<uint64_t capability>
+    struct zint16;
+
 
     // =================================================================================================================
     /**
@@ -79,6 +87,7 @@ namespace zacc { namespace avx2 {
         struct __impl : base_t
         {
             using mask_t = typename base_t::mask_t;
+
 
 
 
@@ -123,9 +132,9 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            __impl(int16_t *value) : base_t(_mm256_load_si256((__m256i*)value)) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_load_si256((__m256i*)value.data())) {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "CONS(int16_t *value)");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "CONS(std::array<typename base_t::scal..)");
 
             }
 
@@ -255,7 +264,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vneg(composed_t one)  noexcept {
+            friend zint16<base_t::capability> vneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vneg");
 
@@ -268,7 +277,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vadd(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vadd(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vadd");
 
@@ -281,7 +290,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vsub(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vsub(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vsub");
 
@@ -294,7 +303,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vmul(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vmul(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vmul");
 
@@ -348,7 +357,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vbneg(composed_t one)  noexcept {
+            friend zint16<base_t::capability> vbneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbneg");
 
@@ -363,7 +372,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vband(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vband(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vband");
 
@@ -376,7 +385,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vbor(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vbor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbor");
 
@@ -389,7 +398,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vbxor(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vbxor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbxor");
 
@@ -443,7 +452,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vbsll(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vbsll(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbsll");
 
@@ -456,7 +465,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vbsrl(composed_t one, composed_t other)  noexcept {
+            friend zint16<base_t::capability> vbsrl(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbsrl");
 
@@ -469,7 +478,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vbslli(const composed_t one, const size_t other)  noexcept {
+            friend zint16<base_t::capability> vbslli(const composed_t one, const size_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbslli");
 
@@ -482,7 +491,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vbsrli(const composed_t one, const size_t other)  noexcept {
+            friend zint16<base_t::capability> vbsrli(const composed_t one, const size_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbsrli");
 
@@ -536,7 +545,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend bval<composed_t, mask_t> vlneg(bval<composed_t, mask_t> one)  noexcept {
+            friend bint16<base_t::capability> vlneg(bint16<base_t::capability> one)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vlneg");
 
@@ -549,7 +558,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend bval<composed_t, mask_t> vlor(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+            friend bint16<base_t::capability> vlor(bint16<base_t::capability> one, bint16<base_t::capability> other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vlor");
 
@@ -562,7 +571,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend bval<composed_t, mask_t> vland(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+            friend bint16<base_t::capability> vland(bint16<base_t::capability> one, bint16<base_t::capability> other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vland");
 
@@ -616,7 +625,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend bval<composed_t, mask_t> veq(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "veq");
 
@@ -629,7 +638,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend bval<composed_t, mask_t> vneq(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vneq");
 
@@ -642,7 +651,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend bval<composed_t, mask_t> vgt(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vgt");
 
@@ -655,7 +664,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend bval<composed_t, mask_t> vlt(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vlt");
 
@@ -668,7 +677,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend bval<composed_t, mask_t> vge(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vge");
 
@@ -681,7 +690,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend bval<composed_t, mask_t> vle(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vle");
 
@@ -735,7 +744,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            friend zint16<base_t::capability> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vsel");
 
@@ -817,8 +826,36 @@ namespace zacc { namespace avx2 {
         };
     };
 
-    //template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    //using zint16 = typename __zint16<capability>::impl;
+    template<uint64_t capability>
+    struct zint16 : public __zint16<capability>::impl
+    {
+        FORWARD2(zint16, __zint16<capability>::impl);
+    };
+
+    template<uint64_t capability>
+    struct __bint16
+    {
+        using bval_t = bval<typename __zint16<capability>::impl, __m256i>;
+        struct impl : public bval_t
+        {
+            FORWARD2(impl, bval_t);
+        };
+    };
+
+    template<uint64_t capability>
+    struct bint16 : public __bint16<capability>::impl
+    {
+        FORWARD2(bint16, __bint16<capability>::impl);
+    };
+
+    static_assert(is_zval<zint16<0>>::value, "is_zval for zint16 failed.");
+    static_assert(is_bval<bint16<0>>::value, "is_bval for bint16 failed.");
+
+    static_assert(!is_floating_point<zint16<0>>::value, "is_floating_point for zint16 failed.");
+    static_assert(is_integral<zint16<0>>::value, "is_integral for zint16 failed.");
+
+    static_assert(!is_float<zint16<0>>::value, "is_float for zint16 failed.");
+    static_assert(!is_double<zint16<0>>::value, "is_double for zint16 failed.");
 
     ///@}
 }}

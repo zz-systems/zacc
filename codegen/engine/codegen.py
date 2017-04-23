@@ -23,6 +23,11 @@ class Type:
         self.construction       = [Module.make_construction(self, config["modules"], "construction") ]
         self.modules            = { m.name:m for m in [Module.make_module(self, k, v) for (k, v) in config["modules"].items() if k != "construction" ]}
 
+        self.float_condition        = "" if self.scalar_t == 'float' else "!"
+        self.double_condition       = "" if self.scalar_t == 'double' else "!"
+
+        self.fp_condition           = "" if self.scalar_t == 'double' or self.scalar_t == 'float' else "!"
+        self.int_condition          = "" if self.scalar_t != 'double' and self.scalar_t != 'float' else "!"
 
     def get_modules(self):
         return self.construction + list(self.modules.values())
@@ -53,7 +58,15 @@ class Module:
     @classmethod
     def make_construction(cls, parent, modules, sector):
         result =  cls(parent, sector, [])
-        result.functions = [Func.make_constructor(result, entry) for entry in modules.get(sector, []) or []]
+
+        constructors = modules.get(sector, []) or []
+
+        #try to add default constructor
+        needs_default_cons = not [i for i,x in enumerate(constructors) if x.get('args') == '' or not x.get('args')]
+        constructors = [ {'args':'','init':''} ] + constructors if needs_default_cons else constructors
+
+        # build constructors
+        result.functions = [Func.make_constructor(result, entry) for entry in constructors]
 
         return result
 
@@ -87,7 +100,7 @@ class Func:
 
         self.prefix     = entries.prefix if is_copy else "friend" if not self.is_member and not self.name == "" else entries.get("prefix", "")
         self.suffix     = entries.suffix if is_copy else entries.get("suffix", "const" if self.is_member else "")
-        self.returns    = entries.returns if is_copy else entries.get("returns", "composed_t")
+        self.returns    = entries.returns if is_copy else entries.get("returns", "z{}<base_t::capability>".format(self.parent.parent.type))
 
         self.body = entries.body if is_copy else entries.get("body", "")
 
@@ -102,7 +115,8 @@ class Func:
 
         #override if in comparison or  logical module
         if self.parent.name == "comparison" or self.parent.name == "logical":
-            self.returns = "bval<composed_t, mask_t>"
+            #self.returns = "bval<composed_t, mask_t>"
+            self.returns = "b{}<base_t::capability>".format(self.parent.parent.type)
 
         test       = parent.test_config and parent.test_config.get(self.name)
 
@@ -306,8 +320,14 @@ class Arg:
         #override if in logical module
         module = self.parent.parent.parent
 
-        if isinstance(module, Module) and module.name == "logical":
-            self.type = "bval<composed_t, mask_t>"
+        if isinstance(module, Module):
+            #self.default_type = "z{}<base_t::capability>".format(module.parent.type)
+
+            if module.name == "logical":
+                #self.type = "bval<composed_t, mask_t>"
+                self.type = "b{}<base_t::capability>".format(module.parent.type)
+
+
 
     def declaration(self):
         return self.type + " " + self.name if self.type else self.name

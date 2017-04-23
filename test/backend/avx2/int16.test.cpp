@@ -42,23 +42,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (-a[i]);
         }
 
-        auto actual = (-zint16(a)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (-a[i]);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((-zint16(a)), zint16(expected));
     }
 
     TEST(avx2_int16_arithmetic, vadd_default)
@@ -69,23 +62,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (a[i] + b[i]);
         }
 
-        auto actual = (zint16(a) + zint16(b)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (a[i] + b[i]);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint16(a) + zint16(b)), zint16(expected));
     }
 
     TEST(avx2_int16_arithmetic, vsub_default)
@@ -96,23 +82,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (a[i] - b[i]);
         }
 
-        auto actual = (zint16(a) - zint16(b)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (a[i] - b[i]);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint16(a) - zint16(b)), zint16(expected));
     }
 
     TEST(avx2_int16_arithmetic, vmul_default)
@@ -123,23 +102,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (a[i] * b[i]);
         }
 
-        auto actual = (zint16(a) * zint16(b)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (a[i] * b[i]);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint16(a) * zint16(b)), zint16(expected));
     }
 
 // =====================================================================================================================
@@ -152,23 +124,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) ((a[i] & 64));
         }
 
-        auto actual = (zint16(a) & zint16(64)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) ((a[i] & 64));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint16(a) & zint16(64)), zint16(expected));
     }
 
     TEST(avx2_int16_bitwise, vbor_default)
@@ -179,23 +144,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) ((a[i] | 64));
         }
 
-        auto actual = (zint16(a) | zint16(64)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) ((a[i] | 64));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint16(a) | zint16(64)), zint16(expected));
     }
 
     TEST(avx2_int16_bitwise, vbxor_default)
@@ -206,23 +164,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) ((a[i] ^ 64));
         }
 
-        auto actual = (zint16(a) ^ zint16(64)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) ((a[i] ^ 64));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint16(a) ^ zint16(64)), zint16(expected));
     }
 
 // =====================================================================================================================
@@ -235,23 +186,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) ((a[i]) << (4));
         }
 
-        auto actual = (zint16(a) << (4)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) ((a[i]) << (4));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint16(a) << (4)), zint16(expected));
     }
 
     TEST(avx2_int16_bitwise_shift, vbsrli_default)
@@ -262,23 +206,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) ((a[i]) >> (3));
         }
 
-        auto actual = (zint16(a) >> (3)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) ((a[i]) >> (3));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint16(a) >> (3)), zint16(expected));
     }
 
 // =====================================================================================================================
@@ -291,23 +228,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (false);
         }
 
-        auto actual = ((!zint16(a)).as_bool()).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (false);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((!zint16(a)).as_bool()), zint16(expected));
     }
 
     TEST(avx2_int16_logical, vlor_default)
@@ -318,23 +248,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (true);
         }
 
-        auto actual = ((zint16(0) || zint16(a)).as_bool()).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (true);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zint16(0) || zint16(a)).as_bool()), zint16(expected));
     }
 
     TEST(avx2_int16_logical, vland_default)
@@ -345,23 +268,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (false);
         }
 
-        auto actual = ((zint16(0) && zint16(a)).as_bool()).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (false);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zint16(0) && zint16(a)).as_bool()), zint16(expected));
     }
 
 // =====================================================================================================================
@@ -374,23 +290,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (0);
         }
 
-        auto actual = (zint16(0) == zint16(a)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (0);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint16(0) == zint16(a)), zint16(expected));
     }
 
     TEST(avx2_int16_comparison, vneq_default)
@@ -401,23 +310,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (0);
         }
 
-        auto actual = (zint16(a) != zint16(a)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (0);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint16(a) != zint16(a)), zint16(expected));
     }
 
     TEST(avx2_int16_comparison, vgt_default)
@@ -428,23 +330,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (0);
         }
 
-        auto actual = (zint16(0) > zint16(a)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (0);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint16(0) > zint16(a)), zint16(expected));
     }
 
     TEST(avx2_int16_comparison, vlt_default)
@@ -455,23 +350,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (0);
         }
 
-        auto actual = (zint16(a) < zint16(0)).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (0);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint16(a) < zint16(0)), zint16(expected));
     }
 
     TEST(avx2_int16_comparison, vge_default)
@@ -482,23 +370,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (true);
         }
 
-        auto actual = ((zint16(b) >= zint16(b)).as_bool()).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (true);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zint16(b) >= zint16(b)).as_bool()), zint16(expected));
     }
 
     TEST(avx2_int16_comparison, vle_default)
@@ -509,23 +390,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (true);
         }
 
-        auto actual = ((zint16(b) <= zint16(b)).as_bool()).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (true);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zint16(b) <= zint16(b)).as_bool()), zint16(expected));
     }
 
 // =====================================================================================================================
@@ -538,23 +412,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int16_t a[16], b[16];
+        std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int16_t) (2);
         }
 
-        auto actual = (vsel(zint16(1) == zint16(1), zint16(2), zint16(3))).data();
-
-
-        for(int i = 0; i < 16; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int16_t) (2);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((vsel(zint16(1) == zint16(1), zint16(2), zint16(3))), zint16(expected));
     }
 
 // =====================================================================================================================

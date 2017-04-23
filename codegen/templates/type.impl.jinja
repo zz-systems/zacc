@@ -43,12 +43,26 @@
 #include "traits/{{ module.name }}.hpp"
 {% endfor %}
 
+{% if type.branch == 'avx' %}
+// emulation
+#include "backend/sse/int8.impl.hpp"
+#include "backend/sse/int16.impl.hpp"
+#include "backend/sse/int32.impl.hpp"
+{% endif %}
+
 /**
  * @brief {{ type.type }} implementation for the {{ type.branch }} branch
  * provides unified access to {{ type.vec_size }} '{{ type.scalar_t }}' values
  */
 
 namespace zacc { namespace {{ type.branch }} {
+
+    template<uint64_t capability>
+    struct b{{ type.type }};
+
+    template<uint64_t capability>
+    struct z{{ type.type }};
+
     {% for module in type.get_modules() %}
 
     // =================================================================================================================
@@ -78,6 +92,8 @@ namespace zacc { namespace {{ type.branch }} {
 
             {% if not module in type.construction  %}
             FORWARD(__impl);
+            {% else %}
+
             {% endif  %}
 
             {% for func in module.functions %}
@@ -170,8 +186,36 @@ namespace zacc { namespace {{ type.branch }} {
         };
     };
 
-    //template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    //using z{{ type.type }} = typename __z{{ type.type }}<capability>::impl;
+    template<uint64_t capability>
+    struct z{{ type.type }} : public __z{{ type.type }}<capability>::impl
+    {
+        FORWARD2(z{{ type.type }}, __z{{ type.type }}<capability>::impl);
+    };
+
+    template<uint64_t capability>
+    struct __b{{ type.type }}
+    {
+        using bval_t = bval<typename __z{{ type.type }}<capability>::impl, {{ type.mask_t }}>;
+        struct impl : public bval_t
+        {
+            FORWARD2(impl, bval_t);
+        };
+    };
+
+    template<uint64_t capability>
+    struct b{{ type.type }} : public __b{{ type.type }}<capability>::impl
+    {
+        FORWARD2(b{{ type.type }}, __b{{ type.type }}<capability>::impl);
+    };
+
+    static_assert(is_zval<z{{ type.type }}<0>>::value, "is_zval for z{{ type.type }} failed.");
+    static_assert(is_bval<b{{ type.type }}<0>>::value, "is_bval for b{{ type.type }} failed.");
+
+    static_assert({{ type.fp_condition }}is_floating_point<z{{ type.type }}<0>>::value, "is_floating_point for z{{ type.type }} failed.");
+    static_assert({{ type.int_condition }}is_integral<z{{ type.type }}<0>>::value, "is_integral for z{{ type.type }} failed.");
+
+    static_assert({{ type.float_condition }}is_float<z{{ type.type }}<0>>::value, "is_float for z{{ type.type }} failed.");
+    static_assert({{ type.double_condition }}is_double<z{{ type.type }}<0>>::value, "is_double for z{{ type.type }} failed.");
 
     ///@}
 }}

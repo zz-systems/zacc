@@ -27,17 +27,20 @@
 
 #include "backend/avx/float32.impl.hpp"
 #include "backend/avx/float64.impl.hpp"
+#include "backend/avx/int8.impl.hpp"
+#include "backend/avx/int16.impl.hpp"
+#include "backend/avx/int32.impl.hpp"
 
 namespace zacc { namespace avx {
 
     template<uint64_t capability>
     struct types
     {
-        using zfloat32  = typename __zfloat32<capability>::impl;
-        using zfloat64  = typename __zfloat64<capability>::impl;
+        using zfloat32  = ::zacc::avx::zfloat32<capability>;
+        using zfloat64  = ::zacc::avx::zfloat64<capability>;
 
-        using zint8     = uint8_t; /// not implemented yet
-        using zint16    = int16_t; /// not implemented yet
-        using zint32    = int32_t; /// not implemented yet
+        using zint8     = ::zacc::avx::zint8<capability>;
+        using zint16    = ::zacc::avx::zint16<capability>;
+        using zint32    = ::zacc::avx::zint32<capability>;
     };
 }}

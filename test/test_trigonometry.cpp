@@ -39,12 +39,9 @@ namespace zacc { namespace test {
         for (int i = -180; i <= 180; i+= 180)
         {
             auto actual     = math::vsin(zfloat(i / 180.0 * M_PI));
-            auto expected   = std::sin(i / 180.0f * M_PI);
+            zfloat expected   = std::sin(i / 180.0f * M_PI);
 
-            for(float value : actual)
-            {
-                EXPECT_NEAR(value, expected, 0.004);
-            }
+            VEXPECT_NEAR(actual, expected, 0.004);
         }
     }
 
@@ -55,12 +52,9 @@ namespace zacc { namespace test {
         for (int i = -180; i <= 180; i++)
         {
             auto actual     = math::vcos(zfloat(i / 180.0 * M_PI));
-            auto expected   = std::cos(i / 180.0f * M_PI);
+            zfloat expected   = std::cos(i / 180.0f * M_PI);
 
-            for(float value : actual)
-            {
-                EXPECT_NEAR(value, expected, 0.004);
-            }
+            VEXPECT_NEAR(actual, expected, 0.004);
         }
     }
 
@@ -71,12 +65,9 @@ namespace zacc { namespace test {
         for (int i = -45; i <= 45; i++)
         {
             auto actual     = math::vtan(zfloat(i / 180.0 * M_PI));
-            auto expected   = std::tan(i / 180.0f * M_PI);
+            zfloat expected   = std::tan(i / 180.0f * M_PI);
 
-            for(float value : actual)
-            {
-                EXPECT_NEAR(value, expected, 0.004);
-            }
+            VEXPECT_NEAR(actual, expected, 0.004);
         }
     }
 
@@ -87,12 +78,9 @@ namespace zacc { namespace test {
         for (int i = -180; i <= 180; i++)
         {
             auto actual     = math::vsin(zdouble(i / 180.0 * M_PI));
-            auto expected   = std::sin(i / 180.0 * M_PI);
+            zdouble expected   = std::sin(i / 180.0 * M_PI);
 
-            for(float value : actual)
-            {
-                EXPECT_NEAR(value, expected, 0.00000006);
-            }
+            VEXPECT_NEAR(actual, expected, 0.00000006);
         }
     }
 
@@ -103,12 +91,9 @@ namespace zacc { namespace test {
         for (int i = -180; i <= 180; i++)
         {
             auto actual     = math::vcos(zdouble(i / 180.0 * M_PI));
-            auto expected   = std::cos(i / 180.0 * M_PI);
+            zdouble expected   = std::cos(i / 180.0 * M_PI);
 
-            for(float value : actual)
-            {
-                EXPECT_NEAR(value, expected, 0.00000006);
-            }
+            VEXPECT_NEAR(actual, expected, 0.00000006);
         }
     }
 
@@ -119,12 +104,9 @@ namespace zacc { namespace test {
         for (int i = -44; i <= 44; i++)
         {
             auto actual     = math::vtan(zdouble(i / 180.0 * M_PI));
-            auto expected   = std::tan(i / 180.0 * M_PI);
+            zdouble expected   = std::tan(i / 180.0 * M_PI);
 
-            for(float value : actual)
-            {
-                EXPECT_NEAR(value, expected, 0.00000006);
-            }
+            VEXPECT_NEAR(actual, expected, 0.00000006);
         }
     }
 }}

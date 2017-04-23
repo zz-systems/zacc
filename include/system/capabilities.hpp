@@ -64,9 +64,10 @@ namespace zacc {
     class capability
     {
         typedef const char* c_str_t;
-        typedef std::underlying_type_t<capabilities> raw_t;
 
     public:
+
+        using flag_t = std::underlying_type_t<capabilities>;
 
         /**
          * @brief constructs metadata with capability and string representation
@@ -115,13 +116,13 @@ namespace zacc {
          * @brief returns raw underlying value
          * @return raw underlying value
          */
-        constexpr raw_t raw_value() const { return static_cast<raw_t>(_capability); }
+        constexpr flag_t raw_value() const { return static_cast<flag_t>(_capability); }
 
         /**
          * @brief implicit cast to raw underlying value
          * @return raw underlying value
          */
-        constexpr operator raw_t() const { return raw_value(); };
+        constexpr operator flag_t() const { return raw_value(); };
 
         /**
          * @brief implicit cast to capability's string representation
@@ -134,14 +135,14 @@ namespace zacc {
          * @param other other capability
          * @return result of bitwise-or as raw underlying value
          */
-        constexpr raw_t operator |(const capability &other) { return raw_value() | other.raw_value(); }
+        constexpr flag_t operator |(const capability &other) { return raw_value() | other.raw_value(); }
 
         /**
          * @brief provides bitwise-and functionality
          * @param other other capability
          * @return result of bitwise-and as raw underlying value
          */
-        constexpr raw_t operator &(const capability &other) { return raw_value() & other.raw_value(); }
+        constexpr flag_t operator &(const capability &other) { return raw_value() & other.raw_value(); }
 
         /**
          * @brief returns true if this capability is available
@@ -170,7 +171,7 @@ namespace zacc {
          * @param capability highest capability (inclusive)
          * @return raw value
          */
-        static constexpr raw_t fill_up_to(const capabilities capability)
+        static constexpr flag_t fill_up_to(const capabilities capability)
         {
             auto value = to_underlying(capability);
             uint64_t result = 0;
@@ -219,5 +220,36 @@ namespace zacc {
         const capabilities _capability;
         const char* _c_str;
         bool _is_set;
+    };
+
+    template <typename T, typename... TList>
+    static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, capability::flag_t>
+    make_flag(T && capability, TList &&... list) noexcept {
+        return static_cast<std::underlying_type_t<capabilities>>(capability) | make_flag(std::forward<TList>(list)...);
+    }
+
+    template <typename T>
+    static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, capability::flag_t>
+    make_flag(T capability) noexcept {
+        return static_cast<std::underlying_type_t<capabilities>>(capability);
+    }
+
+    struct branches {
+        using flag_t        = std::underlying_type_t<capabilities>;
+
+        using scalar        = std::integral_constant<flag_t, make_flag(capabilities::SCALAR)>;
+
+        using sse2          = std::integral_constant<flag_t, make_flag(capabilities::SSE2)>;
+
+        using sse3          = std::integral_constant<flag_t, sse2::value | make_flag(capabilities::SSE3)>;
+        using sse41         = std::integral_constant<flag_t, sse3::value | make_flag(capabilities::SSE41)>;
+        using sse41_fma3    = std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA3)>;
+        using sse41_fma4    = std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA4)>;
+
+        using avx1          = std::integral_constant<flag_t, make_flag(capabilities::FMA3, capabilities::AVX1)>;
+        using avx2          = std::integral_constant<flag_t, avx1::value | make_flag(capabilities::AVX2)>;
+        using avx512        = std::integral_constant<flag_t, make_flag(capabilities::AVX512)>;
+
+        using opencl        = std::integral_constant<flag_t, make_flag(capabilities::OPENCL)>;
     };
 }

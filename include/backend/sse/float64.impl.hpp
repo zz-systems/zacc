@@ -49,12 +49,20 @@
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
 
+
 /**
  * @brief float64 implementation for the sse branch
  * provides unified access to 2 'double' values
  */
 
 namespace zacc { namespace sse {
+
+    template<uint64_t capability>
+    struct bfloat64;
+
+    template<uint64_t capability>
+    struct zfloat64;
+
 
     // =================================================================================================================
     /**
@@ -80,6 +88,7 @@ namespace zacc { namespace sse {
         struct __impl : base_t
         {
             using mask_t = typename base_t::mask_t;
+
 
 
 
@@ -148,9 +157,9 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            __impl(double *value) : base_t(_mm_load_pd(value)) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm_load_pd(value.data())) {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(double *value)");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(std::array<typename base_t::scal..)");
 
             }
 
@@ -321,7 +330,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vabs(composed_t one)  noexcept {
+            friend zfloat64<base_t::capability> vabs(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vabs");
 
@@ -334,7 +343,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vrcp(composed_t one)  noexcept {
+            friend zfloat64<base_t::capability> vrcp(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vrcp");
 
@@ -347,7 +356,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vtrunc(composed_t one)  noexcept {
+            friend zfloat64<base_t::capability> vtrunc(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vtrunc");
 
@@ -360,7 +369,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - sse4
              */
-            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vfloor(composed_t one)  noexcept {
+            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vfloor(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "vfloor");
 
@@ -373,7 +382,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vfloor(composed_t one)  noexcept {
+            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vfloor(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vfloor");
 
@@ -389,7 +398,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - sse4
              */
-            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vceil(composed_t one)  noexcept {
+            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vceil(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "vceil");
 
@@ -402,7 +411,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vceil(composed_t one)  noexcept {
+            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vceil(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vceil");
 
@@ -418,7 +427,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - sse4
              */
-            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vround(composed_t one)  noexcept {
+            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vround(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "vround");
 
@@ -431,7 +440,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vround(composed_t one)  noexcept {
+            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vround(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vround");
 
@@ -455,7 +464,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vsqrt(composed_t one)  noexcept {
+            friend zfloat64<base_t::capability> vsqrt(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vsqrt");
 
@@ -509,7 +518,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vneg(composed_t one)  noexcept {
+            friend zfloat64<base_t::capability> vneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vneg");
 
@@ -522,7 +531,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vadd(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vadd(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vadd");
 
@@ -535,7 +544,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vsub(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vsub(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vsub");
 
@@ -548,7 +557,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vmul(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vmul(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vmul");
 
@@ -561,7 +570,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vdiv(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vdiv(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vdiv");
 
@@ -574,7 +583,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            friend zfloat64<base_t::capability> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vfmadd");
 
@@ -587,7 +596,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            friend zfloat64<base_t::capability> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vfmsub");
 
@@ -641,7 +650,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vbneg(composed_t one)  noexcept {
+            friend zfloat64<base_t::capability> vbneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vbneg");
 
@@ -656,7 +665,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vband(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vband(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vband");
 
@@ -669,7 +678,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vbor(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vbor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vbor");
 
@@ -682,7 +691,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend composed_t vbxor(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vbxor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vbxor");
 
@@ -736,7 +745,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vlneg(bval<composed_t, mask_t> one)  noexcept {
+            friend bfloat64<base_t::capability> vlneg(bfloat64<base_t::capability> one)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vlneg");
 
@@ -749,7 +758,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vlor(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+            friend bfloat64<base_t::capability> vlor(bfloat64<base_t::capability> one, bfloat64<base_t::capability> other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vlor");
 
@@ -762,7 +771,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vland(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+            friend bfloat64<base_t::capability> vland(bfloat64<base_t::capability> one, bfloat64<base_t::capability> other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vland");
 
@@ -816,7 +825,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> veq(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "veq");
 
@@ -829,7 +838,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vneq(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vneq");
 
@@ -842,7 +851,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vgt(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vgt");
 
@@ -855,7 +864,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vlt(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vlt");
 
@@ -868,7 +877,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vge(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vge");
 
@@ -881,7 +890,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vle(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vle");
 
@@ -935,7 +944,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - sse4
              */
-            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vsel(mask_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vsel(mask_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "vsel");
 
@@ -949,7 +958,7 @@ namespace zacc { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vsel(mask_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vsel(mask_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vsel");
 
@@ -1033,8 +1042,36 @@ namespace zacc { namespace sse {
         };
     };
 
-    //template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    //using zfloat64 = typename __zfloat64<capability>::impl;
+    template<uint64_t capability>
+    struct zfloat64 : public __zfloat64<capability>::impl
+    {
+        FORWARD2(zfloat64, __zfloat64<capability>::impl);
+    };
+
+    template<uint64_t capability>
+    struct __bfloat64
+    {
+        using bval_t = bval<typename __zfloat64<capability>::impl, __m128d>;
+        struct impl : public bval_t
+        {
+            FORWARD2(impl, bval_t);
+        };
+    };
+
+    template<uint64_t capability>
+    struct bfloat64 : public __bfloat64<capability>::impl
+    {
+        FORWARD2(bfloat64, __bfloat64<capability>::impl);
+    };
+
+    static_assert(is_zval<zfloat64<0>>::value, "is_zval for zfloat64 failed.");
+    static_assert(is_bval<bfloat64<0>>::value, "is_bval for bfloat64 failed.");
+
+    static_assert(is_floating_point<zfloat64<0>>::value, "is_floating_point for zfloat64 failed.");
+    static_assert(!is_integral<zfloat64<0>>::value, "is_integral for zfloat64 failed.");
+
+    static_assert(!is_float<zfloat64<0>>::value, "is_float for zfloat64 failed.");
+    static_assert(is_double<zfloat64<0>>::value, "is_double for zfloat64 failed.");
 
     ///@}
 }}

@@ -48,12 +48,20 @@
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
 
+
 /**
  * @brief int32 implementation for the sse branch
  * provides unified access to 4 'int32_t' values
  */
 
 namespace zacc { namespace sse {
+
+    template<uint64_t capability>
+    struct bint32;
+
+    template<uint64_t capability>
+    struct zint32;
+
 
     // =================================================================================================================
     /**
@@ -80,6 +88,19 @@ namespace zacc { namespace sse {
         {
             using mask_t = typename base_t::mask_t;
 
+
+
+
+            /**
+             * @brief construction default branch
+             * @relates int32
+             * @remark sse - default
+             */
+            __impl() : base_t() {
+
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS()");
+
+            }
 
 
             /**
@@ -135,9 +156,9 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            __impl(int32_t *value) : base_t(_mm_load_si128((__m128i*)value)) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm_load_si128((__m128i*)value.data())) {
 
-                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS(int32_t *value)");
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS(std::array<typename base_t::scal..)");
 
             }
 
@@ -147,7 +168,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            __impl(int32_t arg3, int32_t arg2, int32_t arg1, int32_t arg0) : base_t(_mm_set_ps(arg0, arg1, arg2, arg3)) {
+            __impl(int32_t arg3, int32_t arg2, int32_t arg1, int32_t arg0) : base_t(_mm_set_epi32(arg0, arg1, arg2, arg3)) {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS(int32_t arg3, int32_t arg2, int3..)");
 
@@ -267,7 +288,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend composed_t vneg(composed_t one)  noexcept {
+            friend zint32<base_t::capability> vneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vneg");
 
@@ -280,7 +301,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend composed_t vadd(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vadd(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vadd");
 
@@ -293,7 +314,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend composed_t vsub(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vsub(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vsub");
 
@@ -306,7 +327,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - sse4
              */
-            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vmul(composed_t one, composed_t other)  noexcept {
+            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vmul(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "sse4", "vmul");
 
@@ -319,7 +340,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vmul(composed_t one, composed_t other)  noexcept {
+            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vmul(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vmul");
 
@@ -334,7 +355,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend composed_t vdiv(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vdiv(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vdiv");
 
@@ -388,7 +409,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend composed_t vbneg(composed_t one)  noexcept {
+            friend zint32<base_t::capability> vbneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vbneg");
 
@@ -403,7 +424,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend composed_t vbor(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vbor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vbor");
 
@@ -416,7 +437,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend composed_t vband(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vband(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vband");
 
@@ -429,7 +450,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend composed_t vbxor(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vbxor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vbxor");
 
@@ -483,7 +504,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend composed_t vbsll(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vbsll(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vbsll");
 
@@ -496,7 +517,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend composed_t vbsrl(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vbsrl(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vbsrl");
 
@@ -509,7 +530,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend composed_t vbslli(const composed_t one, const size_t other)  noexcept {
+            friend zint32<base_t::capability> vbslli(const composed_t one, const size_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vbslli");
 
@@ -522,7 +543,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend composed_t vbsrli(const composed_t one, const size_t other)  noexcept {
+            friend zint32<base_t::capability> vbsrli(const composed_t one, const size_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vbsrli");
 
@@ -576,7 +597,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vlneg(bval<composed_t, mask_t> one)  noexcept {
+            friend bint32<base_t::capability> vlneg(bint32<base_t::capability> one)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vlneg");
 
@@ -589,7 +610,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vlor(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+            friend bint32<base_t::capability> vlor(bint32<base_t::capability> one, bint32<base_t::capability> other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vlor");
 
@@ -602,7 +623,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vland(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+            friend bint32<base_t::capability> vland(bint32<base_t::capability> one, bint32<base_t::capability> other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vland");
 
@@ -656,7 +677,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> veq(composed_t one, composed_t other)  noexcept {
+            friend bint32<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "veq");
 
@@ -669,7 +690,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vneq(composed_t one, composed_t other)  noexcept {
+            friend bint32<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vneq");
 
@@ -682,7 +703,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vgt(composed_t one, composed_t other)  noexcept {
+            friend bint32<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vgt");
 
@@ -695,7 +716,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vlt(composed_t one, composed_t other)  noexcept {
+            friend bint32<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vlt");
 
@@ -708,7 +729,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vge(composed_t one, composed_t other)  noexcept {
+            friend bint32<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vge");
 
@@ -721,7 +742,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bval<composed_t, mask_t> vle(composed_t one, composed_t other)  noexcept {
+            friend bint32<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vle");
 
@@ -775,7 +796,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - sse4
              */
-            template<typename T = composed_t> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "sse4", "vsel");
 
@@ -789,7 +810,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            template<typename T = composed_t> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vsel");
 
@@ -870,8 +891,36 @@ namespace zacc { namespace sse {
         };
     };
 
-    //template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    //using zint32 = typename __zint32<capability>::impl;
+    template<uint64_t capability>
+    struct zint32 : public __zint32<capability>::impl
+    {
+        FORWARD2(zint32, __zint32<capability>::impl);
+    };
+
+    template<uint64_t capability>
+    struct __bint32
+    {
+        using bval_t = bval<typename __zint32<capability>::impl, __m128i>;
+        struct impl : public bval_t
+        {
+            FORWARD2(impl, bval_t);
+        };
+    };
+
+    template<uint64_t capability>
+    struct bint32 : public __bint32<capability>::impl
+    {
+        FORWARD2(bint32, __bint32<capability>::impl);
+    };
+
+    static_assert(is_zval<zint32<0>>::value, "is_zval for zint32 failed.");
+    static_assert(is_bval<bint32<0>>::value, "is_bval for bint32 failed.");
+
+    static_assert(!is_floating_point<zint32<0>>::value, "is_floating_point for zint32 failed.");
+    static_assert(is_integral<zint32<0>>::value, "is_integral for zint32 failed.");
+
+    static_assert(!is_float<zint32<0>>::value, "is_float for zint32 failed.");
+    static_assert(!is_double<zint32<0>>::value, "is_double for zint32 failed.");
 
     ///@}
 }}

@@ -49,12 +49,24 @@
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
 
+// emulation
+#include "backend/sse/int8.impl.hpp"
+#include "backend/sse/int16.impl.hpp"
+#include "backend/sse/int32.impl.hpp"
+
 /**
  * @brief float32 implementation for the avx branch
  * provides unified access to 8 'float' values
  */
 
 namespace zacc { namespace avx {
+
+    template<uint64_t capability>
+    struct bfloat32;
+
+    template<uint64_t capability>
+    struct zfloat32;
+
 
     // =================================================================================================================
     /**
@@ -80,6 +92,7 @@ namespace zacc { namespace avx {
         struct __impl : base_t
         {
             using mask_t = typename base_t::mask_t;
+
 
 
 
@@ -148,9 +161,21 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            __impl(float *value) : base_t(_mm256_load_ps(value)) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_load_ps(value.data())) {
 
-                ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "CONS(float *value)");
+                ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "CONS(std::array<typename base_t::scal..)");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates float32
+             * @remark avx - default
+             */
+            __impl(std::array<sse::zint32<base_t::capability>, 2> value) : base_t(_mm256_set_m128(_mm_cvtepi32_ps(value.get_value()[1]), _mm_cvtepi32_ps(value.get_value()[0]))) {
+
+                ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "CONS(std::array<sse::zint32<base_t::c..)");
 
             }
 
@@ -321,7 +346,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vabs(composed_t one)  noexcept {
+            friend zfloat32<base_t::capability> vabs(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vabs");
 
@@ -334,7 +359,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vrcp(composed_t one)  noexcept {
+            friend zfloat32<base_t::capability> vrcp(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vrcp");
 
@@ -347,7 +372,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vtrunc(composed_t one)  noexcept {
+            friend zfloat32<base_t::capability> vtrunc(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vtrunc");
 
@@ -360,7 +385,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vfloor(composed_t one)  noexcept {
+            friend zfloat32<base_t::capability> vfloor(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vfloor");
 
@@ -373,7 +398,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vceil(composed_t one)  noexcept {
+            friend zfloat32<base_t::capability> vceil(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vceil");
 
@@ -386,7 +411,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vround(composed_t one)  noexcept {
+            friend zfloat32<base_t::capability> vround(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vround");
 
@@ -399,7 +424,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vsqrt(composed_t one)  noexcept {
+            friend zfloat32<base_t::capability> vsqrt(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vsqrt");
 
@@ -453,7 +478,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vneg(composed_t one)  noexcept {
+            friend zfloat32<base_t::capability> vneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vneg");
 
@@ -466,7 +491,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vadd(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::capability> vadd(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vadd");
 
@@ -479,7 +504,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vsub(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::capability> vsub(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vsub");
 
@@ -492,7 +517,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vmul(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::capability> vmul(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vmul");
 
@@ -505,7 +530,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vdiv(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::capability> vdiv(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vdiv");
 
@@ -518,7 +543,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            friend zfloat32<base_t::capability> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vfmadd");
 
@@ -531,7 +556,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            friend zfloat32<base_t::capability> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vfmsub");
 
@@ -585,7 +610,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vbneg(composed_t one)  noexcept {
+            friend zfloat32<base_t::capability> vbneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vbneg");
 
@@ -600,7 +625,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vband(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::capability> vband(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vband");
 
@@ -613,7 +638,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vbor(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::capability> vbor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vbor");
 
@@ -626,7 +651,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vbxor(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::capability> vbxor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vbxor");
 
@@ -680,7 +705,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend bval<composed_t, mask_t> vlneg(bval<composed_t, mask_t> one)  noexcept {
+            friend bfloat32<base_t::capability> vlneg(bfloat32<base_t::capability> one)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vlneg");
 
@@ -693,7 +718,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend bval<composed_t, mask_t> vlor(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+            friend bfloat32<base_t::capability> vlor(bfloat32<base_t::capability> one, bfloat32<base_t::capability> other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vlor");
 
@@ -706,7 +731,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend bval<composed_t, mask_t> vland(bval<composed_t, mask_t> one, bval<composed_t, mask_t> other)  noexcept {
+            friend bfloat32<base_t::capability> vland(bfloat32<base_t::capability> one, bfloat32<base_t::capability> other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vland");
 
@@ -760,7 +785,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend bval<composed_t, mask_t> veq(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "veq");
 
@@ -773,7 +798,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend bval<composed_t, mask_t> vneq(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vneq");
 
@@ -786,7 +811,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend bval<composed_t, mask_t> vgt(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vgt");
 
@@ -799,7 +824,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend bval<composed_t, mask_t> vlt(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vlt");
 
@@ -812,7 +837,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend bval<composed_t, mask_t> vge(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vge");
 
@@ -825,7 +850,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend bval<composed_t, mask_t> vle(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vle");
 
@@ -879,7 +904,7 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            friend zfloat32<base_t::capability> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vsel");
 
@@ -962,8 +987,36 @@ namespace zacc { namespace avx {
         };
     };
 
-    //template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    //using zfloat32 = typename __zfloat32<capability>::impl;
+    template<uint64_t capability>
+    struct zfloat32 : public __zfloat32<capability>::impl
+    {
+        FORWARD2(zfloat32, __zfloat32<capability>::impl);
+    };
+
+    template<uint64_t capability>
+    struct __bfloat32
+    {
+        using bval_t = bval<typename __zfloat32<capability>::impl, __m256>;
+        struct impl : public bval_t
+        {
+            FORWARD2(impl, bval_t);
+        };
+    };
+
+    template<uint64_t capability>
+    struct bfloat32 : public __bfloat32<capability>::impl
+    {
+        FORWARD2(bfloat32, __bfloat32<capability>::impl);
+    };
+
+    static_assert(is_zval<zfloat32<0>>::value, "is_zval for zfloat32 failed.");
+    static_assert(is_bval<bfloat32<0>>::value, "is_bval for bfloat32 failed.");
+
+    static_assert(is_floating_point<zfloat32<0>>::value, "is_floating_point for zfloat32 failed.");
+    static_assert(!is_integral<zfloat32<0>>::value, "is_integral for zfloat32 failed.");
+
+    static_assert(is_float<zfloat32<0>>::value, "is_float for zfloat32 failed.");
+    static_assert(!is_double<zfloat32<0>>::value, "is_double for zfloat32 failed.");
 
     ///@}
 }}

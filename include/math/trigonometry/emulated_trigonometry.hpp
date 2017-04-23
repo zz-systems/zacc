@@ -26,7 +26,7 @@
 #pragma once
 
 #include <cmath>
-#include "common.hpp"
+#include "math/common.hpp"
 #include "system/dispatcher.hpp"
 
 namespace zacc { namespace math {
@@ -49,7 +49,7 @@ namespace zacc { namespace math {
                 raw_result[i] = std::sin(vv[i]);
             }
 
-            return raw_result.data();
+            return raw_result;
         }
 
         /**
@@ -70,7 +70,7 @@ namespace zacc { namespace math {
                 raw_result[i] = std::cos(vv[i]);
             }
 
-            return raw_result.data();
+            return raw_result;
         }
 
         /**
@@ -91,7 +91,7 @@ namespace zacc { namespace math {
                 raw_result[i] = std::tan(vv[i]);
             }
 
-            return raw_result.data();
+            return raw_result;
         }
 
         /**
@@ -111,6 +111,6 @@ namespace zacc { namespace math {
             for(auto i = 0; i < vreal_t::dim; i++)
                 raw_result[i] = std::atan2(yy[i], xx[i]);
 
-            return raw_result.data();
+            return raw_result;
         }
     }}

@@ -205,6 +205,37 @@ namespace zacc {
          */
         iterator end() { return _snapshot.end(); }
 
+        /**
+         * @brief converts current data to string representation
+         * @return string, e.g [4, 5, 6, 7] for a 4x int vector
+         */
+        std::string to_string() const {
+            std::stringstream ss;
+
+            if (is_vector)
+                ss << "[ ";
+
+            for (auto entry : data())
+                ss << entry << " ";
+
+            if (is_vector)
+                ss << "]";
+
+            return ss.str();
+        }
+
+        /**
+         * @brief prints current value to target stream
+         * @param os target stream
+         * @param data printable trait
+         * @return target stream
+         */
+        friend std::ostream &operator<<(std::ostream &os, const bval data) {
+            os << data.to_string();
+
+            return os;
+        }
+
     protected:
         alignas(alignment) zval_t _value;
         alignas(alignment) extracted_t _snapshot;

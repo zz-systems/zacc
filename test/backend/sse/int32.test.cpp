@@ -42,23 +42,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (-a[i]);
         }
 
-        auto actual = (-zint32(a)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (-a[i]);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((-zint32(a)), zint32(expected));
     }
 
     TEST(sse_int32_arithmetic, vadd_default)
@@ -69,23 +62,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (a[i] + b[i]);
         }
 
-        auto actual = (zint32(a) + zint32(b)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (a[i] + b[i]);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(a) + zint32(b)), zint32(expected));
     }
 
     TEST(sse_int32_arithmetic, vsub_default)
@@ -96,23 +82,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (a[i] - b[i]);
         }
 
-        auto actual = (zint32(a) - zint32(b)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (a[i] - b[i]);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(a) - zint32(b)), zint32(expected));
     }
 
     TEST(sse_int32_arithmetic, vmul_sse4)
@@ -123,23 +102,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (a[i] * b[i]);
         }
 
-        auto actual = (zint32(a) * zint32(b)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (a[i] * b[i]);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(a) * zint32(b)), zint32(expected));
     }
 
     TEST(sse_int32_arithmetic, vmul_default)
@@ -150,23 +122,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (a[i] * b[i]);
         }
 
-        auto actual = (zint32(a) * zint32(b)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (a[i] * b[i]);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(a) * zint32(b)), zint32(expected));
     }
 
     TEST(sse_int32_arithmetic, vdiv_default)
@@ -177,23 +142,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (1);
         }
 
-        auto actual = (zint32(a) / zint32(a)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (1);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(a) / zint32(a)), zint32(expected));
     }
 
 // =====================================================================================================================
@@ -206,23 +164,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) ((a[i] | 64));
         }
 
-        auto actual = (zint32(a) | zint32(64)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) ((a[i] | 64));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(a) | zint32(64)), zint32(expected));
     }
 
     TEST(sse_int32_bitwise, vband_default)
@@ -233,23 +184,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) ((a[i] & 64));
         }
 
-        auto actual = (zint32(a) & zint32(64)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) ((a[i] & 64));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(a) & zint32(64)), zint32(expected));
     }
 
     TEST(sse_int32_bitwise, vbxor_default)
@@ -260,23 +204,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) ((a[i] ^ 64));
         }
 
-        auto actual = (zint32(a) ^ zint32(64)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) ((a[i] ^ 64));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(a) ^ zint32(64)), zint32(expected));
     }
 
 // =====================================================================================================================
@@ -289,23 +226,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) ((a[i]) << (4));
         }
 
-        auto actual = (zint32(a) << (4)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) ((a[i]) << (4));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(a) << (4)), zint32(expected));
     }
 
     TEST(sse_int32_bitwise_shift, vbsrli_default)
@@ -316,23 +246,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) ((a[i]) >> (3));
         }
 
-        auto actual = (zint32(a) >> (3)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) ((a[i]) >> (3));
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(a) >> (3)), zint32(expected));
     }
 
 // =====================================================================================================================
@@ -345,23 +268,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (false);
         }
 
-        auto actual = ((!zint32(a)).as_bool()).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (false);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((!zint32(a)).as_bool()), zint32(expected));
     }
 
     TEST(sse_int32_logical, vlor_default)
@@ -372,23 +288,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (true);
         }
 
-        auto actual = ((zint32(0) || zint32(a)).as_bool()).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (true);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zint32(0) || zint32(a)).as_bool()), zint32(expected));
     }
 
     TEST(sse_int32_logical, vland_default)
@@ -399,23 +308,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (false);
         }
 
-        auto actual = ((zint32(0) && zint32(a)).as_bool()).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (false);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zint32(0) && zint32(a)).as_bool()), zint32(expected));
     }
 
 // =====================================================================================================================
@@ -428,23 +330,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (0);
         }
 
-        auto actual = (zint32(0) == zint32(a)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (0);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(0) == zint32(a)), zint32(expected));
     }
 
     TEST(sse_int32_comparison, vneq_default)
@@ -455,23 +350,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (0);
         }
 
-        auto actual = (zint32(a) != zint32(a)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (0);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(a) != zint32(a)), zint32(expected));
     }
 
     TEST(sse_int32_comparison, vgt_default)
@@ -482,23 +370,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (0);
         }
 
-        auto actual = (zint32(0) > zint32(a)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (0);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(0) > zint32(a)), zint32(expected));
     }
 
     TEST(sse_int32_comparison, vlt_default)
@@ -509,23 +390,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (0);
         }
 
-        auto actual = (zint32(a) < zint32(0)).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (0);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((zint32(a) < zint32(0)), zint32(expected));
     }
 
     TEST(sse_int32_comparison, vge_default)
@@ -536,23 +410,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (true);
         }
 
-        auto actual = ((zint32(b) >= zint32(b)).as_bool()).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (true);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zint32(b) >= zint32(b)).as_bool()), zint32(expected));
     }
 
     TEST(sse_int32_comparison, vle_default)
@@ -563,23 +430,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (true);
         }
 
-        auto actual = ((zint32(b) <= zint32(b)).as_bool()).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (true);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ(((zint32(b) <= zint32(b)).as_bool()), zint32(expected));
     }
 
 // =====================================================================================================================
@@ -592,23 +452,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (2);
         }
 
-        auto actual = (vsel(zint32(1) == zint32(1), zint32(2), zint32(3))).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (2);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((vsel(zint32(1) == zint32(1), zint32(2), zint32(3))), zint32(expected));
     }
 
     TEST(sse_int32_conditional, vsel_default)
@@ -619,23 +472,16 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        int32_t a[4], b[4];
+        std::array<int32_t, 4> a, b, expected;
         for(int i = 0; i < 4; i++)
         {
             a[i] = distribution2(generator);
             b[i] = distribution1(generator);
+
+            expected[i] = (int32_t) (2);
         }
 
-        auto actual = (vsel(zint32(1) == zint32(1), zint32(2), zint32(3))).data();
-
-
-        for(int i = 0; i < 4; i++)
-        {
-            auto value = actual[i];
-            auto expected = (int32_t) (2);
-
-            ASSERT_EQ(value, expected);
-        }
+        VASSERT_EQ((vsel(zint32(1) == zint32(1), zint32(2), zint32(3))), zint32(expected));
     }
 
 // =====================================================================================================================

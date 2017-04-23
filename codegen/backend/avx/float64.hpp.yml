@@ -23,9 +23,6 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
-    - args: []
-      init: ""
-
     - args: { raw: "const __m256 &value" }
       init: _mm256_cvtps_pd(_mm256_castps256_ps128(value))
 
@@ -38,8 +35,11 @@ modules:
     - args: [[*scalar_t, value]]
       init: _mm256_set1_pd(value)
 
-    - args: [[*scalar_t, "*value"]]
-      init: _mm256_load_pd(value)
+    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+      init: _mm256_load_pd(value.data())
+
+    - args: "std::array<sse::zint32<base_t::capability>, 2> value"
+      init: _mm256_set_m128(_mm_cvtepi32_pd(value.get_value()[1]), _mm_cvtepi32_pd(value.get_value()[0]))
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_pd }

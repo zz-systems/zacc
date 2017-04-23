@@ -62,6 +62,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_definitions(-D__STRICT_ANSI__)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     # using GCC
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-ignored-attributes")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
     # using Intel C++
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
@@ -99,17 +100,17 @@ insert_kv(branch_flags  avx           -mavx -mfma)
 insert_kv(branch_flags  avx2          -mavx2 -mfma)
 insert_kv(branch_flags  avx512        -mavx512f -mavx512pf -mavx512er -mavx512cd -mavx512vl -mavx512bw -mavx512dq)
 
-insert_kv(branch_defs   scalar          ZACC_CAPABILITIES=0b000000000000        ZACC_MAJOR_BRANCH=scalar    ZACC_SCALAR=1)
-insert_kv(branch_defs   sse.sse2        ZACC_CAPABILITIES=0b000000000001        ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
-insert_kv(branch_defs   sse.sse3        ZACC_CAPABILITIES=0b000000000111        ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+insert_kv(branch_defs   scalar          ZACC_CAPABILITIES=scalar        ZACC_MAJOR_BRANCH=scalar    ZACC_SCALAR=1)
+insert_kv(branch_defs   sse.sse2        ZACC_CAPABILITIES=sse2          ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+insert_kv(branch_defs   sse.sse3        ZACC_CAPABILITIES=sse3          ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
 
-insert_kv(branch_defs  sse.sse41        ZACC_CAPABILITIES=0b000000001111        ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
-insert_kv(branch_defs  sse.sse41.fma3   ZACC_CAPABILITIES=0b000000101111        ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
-insert_kv(branch_defs  sse.sse41.fma4   ZACC_CAPABILITIES=0b000001001111        ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+insert_kv(branch_defs  sse.sse41        ZACC_CAPABILITIES=sse41         ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+insert_kv(branch_defs  sse.sse41.fma3   ZACC_CAPABILITIES=sse41_fma4    ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
+insert_kv(branch_defs  sse.sse41.fma4   ZACC_CAPABILITIES=sse41_fma4    ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)
 
-insert_kv(branch_defs   avx             ZACC_CAPABILITIES=0b000010101111        ZACC_MAJOR_BRANCH=avx       ZACC_AVX=1)
-insert_kv(branch_defs   avx2            ZACC_CAPABILITIES=0b000110101111        ZACC_MAJOR_BRANCH=avx2      ZACC_AVX2=1)
-insert_kv(branch_defs   avx512          ZACC_CAPABILITIES=0b001110101111        ZACC_MAJOR_BRANCH=avx512    ZACC_AVX512=1)
+insert_kv(branch_defs   avx             ZACC_CAPABILITIES=avx1          ZACC_MAJOR_BRANCH=avx       ZACC_AVX=1)
+insert_kv(branch_defs   avx2            ZACC_CAPABILITIES=avx2          ZACC_MAJOR_BRANCH=avx2      ZACC_AVX2=1)
+insert_kv(branch_defs   avx512          ZACC_CAPABILITIES=avx512        ZACC_MAJOR_BRANCH=avx512    ZACC_AVX512=1)
 
 # branch config ========================================================================================================
 

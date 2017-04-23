@@ -37,6 +37,7 @@
     template<typename ...Args> \
     name(Args... args) : base(std::forward<Args>(args)...) {}
 
+
 /**
  * @brief shortcut to write forwarding constructors with default base name 'base_t'
  * @param name current type (constructor)

@@ -3,7 +3,7 @@ type:
   branch: avx512
   vector_t: &vector_t __m512i
   mask_t: &mask_t __mmask64
-  scalar_t: &scalar_t uint8_t
+  scalar_t: &scalar_t int8_t
   vec_size: &vec_size 64
   alignment: 64
 #-----------------------------------------------------------------------------------------------------------------------
@@ -22,17 +22,14 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
-    - args: []
-      init: ""
-
     - args: __m512i value
       init: value
 
     - args: [[*scalar_t, value]]
       init: _mm512_set1_epi8(value)
 
-    - args: [[*scalar_t, "*value"]]
-      init: _mm512_load_si512(value)
+    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+      init: _mm512_load_si512(value.data())
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm512_set_epi8 }

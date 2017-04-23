@@ -47,13 +47,14 @@ namespace zacc {
 
         template<typename T, typename U, size_t i, size_t... Is>
         constexpr auto array_cast_helper(
-                const std::array <U, i> &a, indices<Is...>) -> std::array <T, i> {
+                const std::array <U, i> &a, indices<Is...>) noexcept -> std::array <T, i>  {
             return {{static_cast<T>(std::get<Is>(a))...}};
         }
     }
+
     template<typename T, typename U, size_t i>
     constexpr auto array_cast(
-            const std::array<U, i> &a) -> std::array<T, i> {
+            const std::array<U, i> &a) noexcept -> std::array<T, i>  {
         // tag dispatch to helper with array indices
         return detail::array_cast_helper<T>(a, detail::build_indices<i>());
     }
