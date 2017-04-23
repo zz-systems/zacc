@@ -25,7 +25,7 @@ init:
 
 install:
 - echo Fetching source
-- git submodule update --init --recursive 
+#- git submodule update --init --recursive 
 - echo Installing OpenCL
 - ps: mkdir $env:OPENCL_ROOT
 - ps: pushd $env:OPENCL_ROOT
