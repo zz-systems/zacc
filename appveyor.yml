@@ -77,8 +77,10 @@ before_build:
 
 build_script:
   - mkdir build
+  - cmake -H. -G Ninja -Bbuild -DCMAKE_C_FLAGS=TRUE -DCMAKE_CXX_FLAGS=TRUE -DCMAKE_C_COMPILER="C:/Program Files/LLVM/bin/clang.exe" -DCMAKE_CXX_COMPILER="C:/Program Files/LLVM/bin/clang.exe" -DCMAKE_LINKER="C:/Program Files/LLVM/bin/lld-link.exe"
   - cd build
-  - cmake -G"Visual Studio 14 2015" -T"LLVM-vs2014" .. -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DOPENCL_ROOT=%OPENCL_ROOT%
+  #- cmake -G"Visual Studio 14 2015" -T"LLVM-vs2014" .. -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DOPENCL_ROOT=%OPENCL_ROOT%
+  
   - cmake --build .
   - dir
 test_script:
