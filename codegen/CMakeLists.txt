@@ -7,7 +7,7 @@ set(test_template "codegen/templates/type.test.jinja")
 
 file(GLOB_RECURSE templates    RELATIVE ${CMAKE_SOURCE_DIR}    "*${template.schema}")
 
-set(codegen.cmd "${PYTHON_BIN}\\python.exe yasha")
+set(codegen.cmd "${PYTHON_BIN}\\python.exe ${PYTHON_BIN}\\Scripts\\yasha")
 set(codegen.ext "codegen/engine/codegen.py")
 
 set(codegen.deps
