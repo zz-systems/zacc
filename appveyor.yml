@@ -85,7 +85,7 @@ build_script:
   - cd build
   - cmake -G"Visual Studio 14 2015" -T"LLVM-vs2014" .. -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DOPENCL_ROOT=%OPENCL_ROOT% -DPYTHON_BIN=%PYTHON%
   
-  - cmake --build .
+  - cmake --build . --target zacc.system.detect
   - dir
 test_script:
 #- ./zacc.system.detect.exe
