@@ -85,9 +85,12 @@ build_script:
   - cd build
   - cmake -G"Visual Studio 14 2015" -T"LLVM-vs2014" .. -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DOPENCL_ROOT=%OPENCL_ROOT% -DPYTHON_BIN=%PYTHON%
   
-  - cmake --build . --target zacc.system.detect
-  - dir
+  - cmake --build . --config Release --target zacc.system.detect
+  - cmake --build . --config Release --target zacc.tests.all
+  
 test_script:
+- cd Release
+- dir
 #- ./zacc.system.detect.exe
 #- ./zacc.sse.sse2.tests.exe
 #- ./zacc.sse.sse2.tests.exe
@@ -97,4 +100,4 @@ test_script:
 #- ./zacc.sse.sse41.fma4.tests.exe
 #- ./zacc.avx.tests.exe
 #- ./zacc.avx2.tests.exe
-- ninja zacc.system.detect && ./zacc.system.detect.exe
+- ./zacc.system.detect.exe
