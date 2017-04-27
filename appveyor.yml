@@ -79,6 +79,7 @@ build_script:
   - mkdir build
   - cd build
   - cmake -H.. -G"Visual Studio 14 2015" -T"LLVM-vs2014" .. -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DOPENCL_ROOT=%OPENCL_ROOT%
+  - cmake --build
   - dir
 test_script:
 #- ./zacc.system.detect.exe
