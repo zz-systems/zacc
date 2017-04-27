@@ -100,4 +100,4 @@ test_script:
 #- ./zacc.sse.sse41.fma4.tests.exe
 #- ./zacc.avx.tests.exe
 #- ./zacc.avx2.tests.exe
-- ./zacc.system.detect.exe
+- zacc.system.detect.exe
