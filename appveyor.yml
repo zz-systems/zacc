@@ -17,13 +17,13 @@ environment:
     CLFFT_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\nmake\\release"
     OPENCL_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\opencl"
     OPENCL_REGISTRY: "https://www.khronos.org/registry/cl"
-    
+    PYTHON: "C:\\Python36"
 init:
 - echo init step
 - cmake --version
 #- C:\"Program Files (x86)"\"Microsoft Visual Studio"\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat %PLATFORM%
 - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
-
+# setup python 
 install:
 ############################################################################
 # Install yasha
