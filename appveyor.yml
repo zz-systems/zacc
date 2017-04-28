@@ -14,18 +14,21 @@ shallow_clone: true
 # environment: specifies additional global variables to define per row in build matrix
 environment:
   global:
-    CLFFT_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\nmake\\release"
-    OPENCL_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\opencl"
-    OPENCL_REGISTRY: "https://www.khronos.org/registry/cl"    
+        CLFFT_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\nmake\\release"
+        OPENCL_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\opencl"
+        OPENCL_REGISTRY: "https://www.khronos.org/registry/cl"    
+    
   matrix:
-  - PYTHON: "C:/Python36"
-    BUILD_ENV: "Ninja"
-    BUILD_DIR: "build"
-    PYTHON_VERSION: "3.6"
+    -   VCVARSALL: C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
+        PYTHON: "C:/Python36/"
+        BUILD_ENV: "Ninja"
+        BUILD_DIR: "build"
+        PYTHON_VERSION: "3.6"
       
 init:
 #- C:\"Program Files (x86)"\"Microsoft Visual Studio"\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat %PLATFORM%
-- C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
+#- C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
+- %VCVARSALL%
 
 install:
 # Install yasha
