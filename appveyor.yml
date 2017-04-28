@@ -85,8 +85,7 @@ build_script:
   
 test_script:
 - zacc.system.detect.exe
-- ps: gci -Filter zacc.tests.*.exe | foreach { ".\$($_.Name) --gtest_output=xml:$($_.Name).xm
-l" } | iex
+- ps: gci -Filter zacc.tests.*.exe | foreach { ".\$($_.Name) --gtest_output=xml:$($_.Name).xml" } | iex
 
 after_test:
 - ps: 
