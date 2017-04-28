@@ -17,8 +17,13 @@ environment:
     CLFFT_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\nmake\\release"
     OPENCL_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\opencl"
     OPENCL_REGISTRY: "https://www.khronos.org/registry/cl"
-    PYTHON: "C:\\Python36"
     
+matrix:
+    - PYTHON: "C:/Python36"
+      BUILD_ENV: "Ninja"
+      BUILD_DIR: "build"
+      PYTHON_VERSION: "3.6"
+      
 init:
 - cmake --version
 - python --version
@@ -30,7 +35,7 @@ install:
 ############################################################################
 # Install yasha
 ############################################################################
-- "%PYTHON%\\python.exe -m pip install yasha"
+- "%PYTHON%/python.exe -m pip install yasha"
 ############################################################################
 # Install Ninja
 ############################################################################
@@ -82,9 +87,8 @@ before_build:
 
 
 build_script:
-  - mkdir build  
-  - cd build  
-  - cmake .. -GNinja  
+  - mkdir %BUILD_DIR% && cd %BUILD_DIR%
+  - cmake .. -G%BUILD_ENV% -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"
   - cmake --build . --config %CONFIGURATION% --target zacc.system.detect
   - cmake --build . --config %CONFIGURATION% --target zacc.tests.all
   
