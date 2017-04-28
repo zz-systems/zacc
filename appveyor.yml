@@ -28,7 +28,6 @@ environment:
 init:
 #- C:\"Program Files (x86)"\"Microsoft Visual Studio"\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat %PLATFORM%
 #- C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
-- cmd %VCVARSALL%
 
 install:
 # Install yasha
@@ -75,7 +74,7 @@ install:
 # before_build is used to run configure steps
 before_build:
 - echo before_build step
-- call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+- call %VCVARSALL%
 - set PATH=c:\Program Files\LLVM\msbuild-bin\;%PATH%
 - set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
 - cd C:\projects\gorynych
