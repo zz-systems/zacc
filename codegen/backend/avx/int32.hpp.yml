@@ -25,23 +25,23 @@ type:
 modules:
   construction:
     - args: __m256 value
-      #init: "{ sse::zint32<base_t::capability>(_mm256_extractf128_ps(rhs, 1)), sse::zint32<base_t::capability>(_mm256_extractf128_ps(rhs, 0)) }"
-      init: "std::array<sse::zint32<base_t::capability>, 2>{_mm256_extractf128_ps(value, 1), _mm256_extractf128_ps(value, 0) }"
+      #init: "{ sse::zint32<base_t::capability>(_mm256_extractf128_ps(rhs, 1)), sse::zint32<base_t::capability>(_mm256_extractf128_ps(rhs, 0)) })"
+      init: "std::array<sse::zint32<base_t::capability>, 2> ({_mm256_extractf128_ps(value, 1), _mm256_extractf128_ps(value, 0) })"
     - args: __m256d value
-      #init: "{ sse::zint32<base_t::capability>(_mm256_extractf128_pd(rhs, 1)), sse::zint32<base_t::capability>(_mm256_extractf128_pd(rhs, 0)) }"
-      init: "std::array<sse::zint32<base_t::capability>, 2>{_mm256_extractf128_pd(value, 1), _mm256_extractf128_pd(value, 0) }"
+      #init: "{ sse::zint32<base_t::capability>(_mm256_extractf128_pd(rhs, 1)), sse::zint32<base_t::capability>(_mm256_extractf128_pd(rhs, 0)) })"
+      init: "std::array<sse::zint32<base_t::capability>, 2> ({_mm256_extractf128_pd(value, 1), _mm256_extractf128_pd(value, 0) })"
 
     - args: "std::array<sse::zint32<base_t::capability>, 2> value"
       init: value
 
     - args: "sse::zint32<base_t::capability> hi, sse::zint32<base_t::capability> lo"
-      init: "std::array<sse::zint32<base_t::capability>, 2>{ hi, lo }"
+      init: "std::array<sse::zint32<base_t::capability>, 2> ({ hi, lo })"
 
     - args: [[*scalar_t, "value"]]
-      init: "std::array<sse::zint32<base_t::capability>, 2>{ _mm_set1_epi32(value), _mm_set1_epi32(value) }"
+      init: "std::array<sse::zint32<base_t::capability>, 2> ({ _mm_set1_epi32(value), _mm_set1_epi32(value) })"
 
     - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
-      init: "std::array<sse::zint32<base_t::capability>, 2>{ _mm_load_si128((__m128i*)value.data()), _mm_load_si128((__m128i*)(value.data() + 4)) }"
+      init: "std::array<sse::zint32<base_t::capability>, 2> ({ _mm_loadu_si128((__m128i*)value.data()), _mm_loadu_si128((__m128i*)(value.data() + 4)) })"
 
     #- args: { from: *vec_size, to: 0, type: *scalar_t }
     #  init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_ps }
@@ -62,50 +62,50 @@ modules:
   arithmetic:
     vneg:
       args: one
-      body: return zint32<base_t::capability> { -one.get_value()[1], -one.get_value()[0] };
-    vadd: return zint32<base_t::capability> { one.get_value()[1] + other.get_value()[1], one.get_value()[0] + other.get_value()[0] };
-    vsub: return zint32<base_t::capability> { one.get_value()[1] - other.get_value()[1], one.get_value()[0] - other.get_value()[0] };
-    vmul: return zint32<base_t::capability> { one.get_value()[1] * other.get_value()[1], one.get_value()[0] * other.get_value()[0] };
-    vdiv: return zint32<base_t::capability> { one.get_value()[1] / other.get_value()[1], one.get_value()[0] / other.get_value()[0] };
+      body: return zint32<base_t::capability> ({ -one.get_value()[1], -one.get_value()[0] });
+    vadd: return zint32<base_t::capability> ({ one.get_value()[1] + other.get_value()[1], one.get_value()[0] + other.get_value()[0] });
+    vsub: return zint32<base_t::capability> ({ one.get_value()[1] - other.get_value()[1], one.get_value()[0] - other.get_value()[0] });
+    vmul: return zint32<base_t::capability> ({ one.get_value()[1] * other.get_value()[1], one.get_value()[0] * other.get_value()[0] });
+    vdiv: return zint32<base_t::capability> ({ one.get_value()[1] / other.get_value()[1], one.get_value()[0] / other.get_value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate
       args: one
-      body: return zint32<base_t::capability> { ~one.get_value()[1], ~one.get_value()[1] };
+      body: return zint32<base_t::capability> ({ ~one.get_value()[1], ~one.get_value()[1] });
     vbor:   &bitwise_or
-      body: return zint32<base_t::capability> { one.get_value()[1] | other.get_value()[1], one.get_value()[0] | other.get_value()[0] };
+      body: return zint32<base_t::capability> ({ one.get_value()[1] | other.get_value()[1], one.get_value()[0] | other.get_value()[0] });
     vband:  &bitwise_and
-      body: return zint32<base_t::capability> { one.get_value()[1] & other.get_value()[1], one.get_value()[0] & other.get_value()[0] };
+      body: return zint32<base_t::capability> ({ one.get_value()[1] & other.get_value()[1], one.get_value()[0] & other.get_value()[0] });
     vbxor:  &bitwise_xor
-      body: return zint32<base_t::capability> { one.get_value()[1] ^ other.get_value()[1], one.get_value()[0] ^ other.get_value()[0] };
+      body: return zint32<base_t::capability> ({ one.get_value()[1] ^ other.get_value()[1], one.get_value()[0] ^ other.get_value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
-    vbsll:  return zint32<base_t::capability> { one.get_value()[1] << other.get_value()[1], one.get_value()[0] << other.get_value()[0] };
-    vbsrl:  return zint32<base_t::capability> { one.get_value()[1] >> other.get_value()[1], one.get_value()[0] >> other.get_value()[0] };
+    vbsll:  return zint32<base_t::capability> ({ one.get_value()[1] << other.get_value()[1], one.get_value()[0] << other.get_value()[0] });
+    vbsrl:  return zint32<base_t::capability> ({ one.get_value()[1] >> other.get_value()[1], one.get_value()[0] >> other.get_value()[0] });
     vbslli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: return zint32<base_t::capability> { one.get_value()[1] << other, one.get_value()[0] << other };
+      body: return zint32<base_t::capability> ({ one.get_value()[1] << other, one.get_value()[0] << other });
     vbsrli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: return zint32<base_t::capability> { one.get_value()[1] >> other, one.get_value()[0] >> other };
+      body: return zint32<base_t::capability> ({ one.get_value()[1] >> other, one.get_value()[0] >> other });
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
     vlneg:
       args: one
-      body: return zint32<base_t::capability> { !one.get_value()[1], !one.get_value()[1] };
-    vlor:   return zint32<base_t::capability> { one.get_value()[1] || other.get_value()[1], one.get_value()[0] || other.get_value()[0] };
-    vland:  return zint32<base_t::capability> { one.get_value()[1] && other.get_value()[1], one.get_value()[0] && other.get_value()[0] };
+      body: return zint32<base_t::capability> ({ !one.get_value()[1], !one.get_value()[1] });
+    vlor:   return zint32<base_t::capability> ({ one.get_value()[1] || other.get_value()[1], one.get_value()[0] || other.get_value()[0] });
+    vland:  return zint32<base_t::capability> ({ one.get_value()[1] && other.get_value()[1], one.get_value()[0] && other.get_value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    veq:   return zint32<base_t::capability> { one.get_value()[1] == other.get_value()[1], one.get_value()[0] == other.get_value()[0] };
-    vneq:  return zint32<base_t::capability> { one.get_value()[1] != other.get_value()[1], one.get_value()[0] != other.get_value()[0] };
-    vgt:   return zint32<base_t::capability> { one.get_value()[1] > other.get_value()[1], one.get_value()[0] > other.get_value()[0] };
-    vlt:   return zint32<base_t::capability> { one.get_value()[1] < other.get_value()[1], one.get_value()[0] < other.get_value()[0] };
-    vge:   return zint32<base_t::capability> { one.get_value()[1] >= other.get_value()[1], one.get_value()[0] >= other.get_value()[0] };
-    vle:   return zint32<base_t::capability> { one.get_value()[1] <= other.get_value()[1], one.get_value()[0] <= other.get_value()[0] };
+    veq:   return zint32<base_t::capability> ({ one.get_value()[1] == other.get_value()[1], one.get_value()[0] == other.get_value()[0] });
+    vneq:  return zint32<base_t::capability> ({ one.get_value()[1] != other.get_value()[1], one.get_value()[0] != other.get_value()[0] });
+    vgt:   return zint32<base_t::capability> ({ one.get_value()[1] > other.get_value()[1], one.get_value()[0] > other.get_value()[0] });
+    vlt:   return zint32<base_t::capability> ({ one.get_value()[1] < other.get_value()[1], one.get_value()[0] < other.get_value()[0] });
+    vge:   return zint32<base_t::capability> ({ one.get_value()[1] >= other.get_value()[1], one.get_value()[0] >= other.get_value()[0] });
+    vle:   return zint32<base_t::capability> ({ one.get_value()[1] <= other.get_value()[1], one.get_value()[0] <= other.get_value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
       args: [condition, if_value, else_value]
       mangling: false
-      body: return zint32<base_t::capability> { vsel(condition.get_value()[1], if_value.get_value()[1], else_value.get_value()[1]), vsel(condition.get_value()[0], if_value.get_value()[0], else_value.get_value()[0]) };
+      body: return zint32<base_t::capability> ({ vsel(condition.get_value()[1], if_value.get_value()[1], else_value.get_value()[1]), vsel(condition.get_value()[0], if_value.get_value()[0], else_value.get_value()[0]) });

@@ -44,15 +44,28 @@ macro(get_branch_files files branch schema)
     set(${files} ${_files})
 endmacro()
 
+macro(clang_cl_passthtrough_flags)
+endmacro()
+
 # compiler config ======================================================================================================
 
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_STANDARD_REQUIRED on)
-
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    # using Clang
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
 
+	if(MSVC)
+		message("Using clang-cl")
+		set(CLANG_CL 1)
+		
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -std=c++14 -Xclang -Wno-missing-braces -Xclang -Wmissing-field-initializers")#	-Xclang -fsanitize=alignment")
+		
+		add_definitions(-DNOMINMAX -D_USE_MATH_DEFINES)		
+	else()
+		message("Using clang")
+			
+		set(CMAKE_CXX_STANDARD 14)
+		set(CMAKE_CXX_STANDARD_REQUIRED on)
+		set(CMAKE_CXX_EXTENSIONS OFF)
+	endif()
+	
     # Clang doesn't support the __float128 type. Here are some workarounds:
     # https://bugs.llvm.org//show_bug.cgi?id=13530#c3
     # 1) build with -D__STRICT_ANSI__
@@ -60,16 +73,20 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     # 3) configure libstdc++ with clang instead of gcc
     # 4) add 'struct __float128;' before you include any STL header
     add_definitions(-D__STRICT_ANSI__)
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+	
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+	message("Using GCC")
     # using GCC
+	
+	# GCC fails to retain attributes while passing as template arg. hide warnings
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-ignored-attributes")
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
-    # using Intel C++
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+	message("Using Intel C++")
+    
+elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+	message("Using Visual Studio C++")
     # using Visual Studio C++
 endif()
-
-
 
 if(ENABLE_TRACE)
     add_definitions(-DZACC_TRACE)
@@ -143,6 +160,18 @@ if(BUILD_OPENCL_BRANCH)
 endif()
 
 # packages =============================================================================================================
+
+# look for python
+find_package(PythonInterp 3.6 REQUIRED)
+
+if(PYTHONINTERP_FOUND)
+	get_filename_component(PYTHON_DIR ${PYTHON_EXECUTABLE} DIRECTORY CACHE)
+else()
+	message(FATAL_ERROR "Python not found")
+endif()
+
+#install yasha
+execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install yasha)
 
 #find_package(GTest REQUIRED)
 #include_directories(

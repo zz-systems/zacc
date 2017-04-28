@@ -29,7 +29,7 @@
 #include <type_traits>
 #include <limits>
 
-namespace zacc { namespace interface {
+namespace zacc { namespace traits {
 
     /**
      * @brief provides numeric value definitions, fluent interface
@@ -39,8 +39,6 @@ namespace zacc { namespace interface {
     template<typename base_t, typename composed_t>
     struct numeric : public base_t {
         FORWARD(numeric);
-
-        TRAIT(traits::Numeric);
 
         /**
          * @brief NaN value

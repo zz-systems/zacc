@@ -157,7 +157,7 @@ namespace zacc { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = interface::construction<__impl<base_t>, composed_t>;
+        using impl = traits::construction<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -224,7 +224,7 @@ namespace zacc { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = interface::io<__impl<base_t>, composed_t>;
+        using impl = traits::io<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -304,7 +304,7 @@ namespace zacc { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = interface::arithmetic<__impl<base_t>, composed_t>;
+        using impl = traits::arithmetic<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -399,7 +399,7 @@ namespace zacc { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = interface::bitwise<__impl<base_t>, composed_t>;
+        using impl = traits::bitwise<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -479,7 +479,7 @@ namespace zacc { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = interface::logical<__impl<base_t>, composed_t>;
+        using impl = traits::logical<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -599,7 +599,7 @@ namespace zacc { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = interface::comparison<__impl<base_t>, composed_t>;
+        using impl = traits::comparison<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -654,7 +654,7 @@ namespace zacc { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = interface::conditional<__impl<base_t>, composed_t>;
+        using impl = traits::conditional<__impl<base_t>, composed_t>;
     };
 
     ///@}

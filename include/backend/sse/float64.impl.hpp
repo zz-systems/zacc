@@ -183,7 +183,7 @@ namespace zacc { namespace sse {
          * @remark sse
          */
         template<typename base_t>
-        using impl = interface::construction<__impl<base_t>, composed_t>;
+        using impl = traits::construction<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -250,7 +250,7 @@ namespace zacc { namespace sse {
          * @remark sse
          */
         template<typename base_t>
-        using impl = interface::io<__impl<base_t>, composed_t>;
+        using impl = traits::io<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -291,7 +291,7 @@ namespace zacc { namespace sse {
          * @remark sse
          */
         template<typename base_t>
-        using impl = interface::numeric<__impl<base_t>, composed_t>;
+        using impl = traits::numeric<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -479,7 +479,7 @@ namespace zacc { namespace sse {
          * @remark sse
          */
         template<typename base_t>
-        using impl = interface::math<__impl<base_t>, composed_t>;
+        using impl = traits::math<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -611,7 +611,7 @@ namespace zacc { namespace sse {
          * @remark sse
          */
         template<typename base_t>
-        using impl = interface::arithmetic<__impl<base_t>, composed_t>;
+        using impl = traits::arithmetic<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -706,7 +706,7 @@ namespace zacc { namespace sse {
          * @remark sse
          */
         template<typename base_t>
-        using impl = interface::bitwise<__impl<base_t>, composed_t>;
+        using impl = traits::bitwise<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -786,7 +786,7 @@ namespace zacc { namespace sse {
          * @remark sse
          */
         template<typename base_t>
-        using impl = interface::logical<__impl<base_t>, composed_t>;
+        using impl = traits::logical<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -905,7 +905,7 @@ namespace zacc { namespace sse {
          * @remark sse
          */
         template<typename base_t>
-        using impl = interface::comparison<__impl<base_t>, composed_t>;
+        using impl = traits::comparison<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -974,7 +974,7 @@ namespace zacc { namespace sse {
          * @remark sse
          */
         template<typename base_t>
-        using impl = interface::conditional<__impl<base_t>, composed_t>;
+        using impl = traits::conditional<__impl<base_t>, composed_t>;
     };
 
     ///@}

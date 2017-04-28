@@ -27,7 +27,7 @@
 
 #include "common.hpp"
 
-namespace zacc { namespace interface {
+namespace zacc { namespace traits {
 
     /**
      * @brief provides bitwise operator definitions
@@ -37,8 +37,6 @@ namespace zacc { namespace interface {
     template<typename base_t, typename composed_t>
     struct bitwise : public base_t {
         FORWARD(bitwise);
-
-        TRAIT(traits::Bitwise);
 
         friend composed_t operator~(const composed_t one) { return vbneg(one); }
 

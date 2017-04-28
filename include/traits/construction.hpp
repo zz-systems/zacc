@@ -27,7 +27,7 @@
 
 #include "common.hpp"
 
-namespace zacc { namespace interface {
+namespace zacc { namespace traits {
 
     /**
      * @brief provides constructor definitions

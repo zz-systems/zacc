@@ -27,7 +27,7 @@
 
 #include "common.hpp"
 
-namespace zacc { namespace interface {
+namespace zacc { namespace traits {
 
     /**
      * @brief provides bitwise shift operator definitions
@@ -37,9 +37,6 @@ namespace zacc { namespace interface {
     template<typename base_t, typename composed_t>
     struct bitwise_shift : public base_t {
         FORWARD(bitwise_shift);
-
-        TRAIT(traits::Bitwise_Shift);
-
 
         friend composed_t operator<<(const composed_t one, const size_t immediate) {
             return vbslli(one, immediate);

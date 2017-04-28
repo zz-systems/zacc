@@ -123,7 +123,7 @@ namespace zacc { namespace avx {
              * @relates int8
              * @remark avx - default
              */
-            __impl(sse::zint8<base_t::capability> hi, sse::zint8<base_t::capability> lo) : base_t(std::array<sse::zint8<base_t::capability>, 2>{ hi, lo }) {
+            __impl(sse::zint8<base_t::capability> hi, sse::zint8<base_t::capability> lo) : base_t(std::array<sse::zint8<base_t::capability>, 2>({ hi, lo })) {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "CONS(sse::zint8<base_t::capability> h..)");
 
@@ -135,7 +135,7 @@ namespace zacc { namespace avx {
              * @relates int8
              * @remark avx - default
              */
-            __impl(int8_t value) : base_t(std::array<sse::zint8<base_t::capability>, 2>{ _mm_set1_epi8(value), _mm_set1_epi8(value) }) {
+            __impl(int8_t value) : base_t(std::array<sse::zint8<base_t::capability>, 2>({ _mm_set1_epi8(value), _mm_set1_epi8(value) })) {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "CONS(int8_t value)");
 
@@ -147,7 +147,7 @@ namespace zacc { namespace avx {
              * @relates int8
              * @remark avx - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(std::array<sse::zint8<base_t::capability>, 2>{ _mm_load_si128((__m128i*)value.data()), _mm_load_si128((__m128i*)(value.data() + 4)) }) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(std::array<sse::zint8<base_t::capability>, 2>({ _mm_loadu_si128((__m128i*)value.data()), _mm_loadu_si128((__m128i*)(value.data() + 4)) })) {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "CONS(std::array<typename base_t::scal..)");
 
@@ -161,7 +161,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::construction<__impl<base_t>, composed_t>;
+        using impl = traits::construction<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -230,7 +230,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::io<__impl<base_t>, composed_t>;
+        using impl = traits::io<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -273,7 +273,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vneg");
 
-                return zint8<base_t::capability> { -one.get_value()[1], -one.get_value()[0] };
+                return zint8<base_t::capability> ({ -one.get_value()[1], -one.get_value()[0] });
             }
 
 
@@ -286,7 +286,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vadd");
 
-                return zint8<base_t::capability> { one.get_value()[1] + other.get_value()[1], one.get_value()[0] + other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] + other.get_value()[1], one.get_value()[0] + other.get_value()[0] });
             }
 
 
@@ -299,7 +299,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vsub");
 
-                return zint8<base_t::capability> { one.get_value()[1] - other.get_value()[1], one.get_value()[0] - other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] - other.get_value()[1], one.get_value()[0] - other.get_value()[0] });
             }
 
 
@@ -312,7 +312,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vmul");
 
-                return zint8<base_t::capability> { one.get_value()[1] * other.get_value()[1], one.get_value()[0] * other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] * other.get_value()[1], one.get_value()[0] * other.get_value()[0] });
             }
 
         };
@@ -323,7 +323,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::arithmetic<__impl<base_t>, composed_t>;
+        using impl = traits::arithmetic<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -366,7 +366,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vbneg");
 
-                return zint8<base_t::capability> { ~one.get_value()[1], ~one.get_value()[1] };
+                return zint8<base_t::capability> ({ ~one.get_value()[1], ~one.get_value()[1] });
             }
 
 
@@ -379,7 +379,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vbor");
 
-                return zint8<base_t::capability> { one.get_value()[1] | other.get_value()[1], one.get_value()[0] | other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] | other.get_value()[1], one.get_value()[0] | other.get_value()[0] });
             }
 
 
@@ -392,7 +392,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vband");
 
-                return zint8<base_t::capability> { one.get_value()[1] & other.get_value()[1], one.get_value()[0] & other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] & other.get_value()[1], one.get_value()[0] & other.get_value()[0] });
             }
 
 
@@ -405,7 +405,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vbxor");
 
-                return zint8<base_t::capability> { one.get_value()[1] ^ other.get_value()[1], one.get_value()[0] ^ other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] ^ other.get_value()[1], one.get_value()[0] ^ other.get_value()[0] });
             }
 
         };
@@ -416,7 +416,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::bitwise<__impl<base_t>, composed_t>;
+        using impl = traits::bitwise<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -459,7 +459,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vlneg");
 
-                return zint8<base_t::capability> { !one.get_value()[1], !one.get_value()[1] };
+                return zint8<base_t::capability> ({ !one.get_value()[1], !one.get_value()[1] });
             }
 
 
@@ -472,7 +472,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vlor");
 
-                return zint8<base_t::capability> { one.get_value()[1] || other.get_value()[1], one.get_value()[0] || other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] || other.get_value()[1], one.get_value()[0] || other.get_value()[0] });
             }
 
 
@@ -485,7 +485,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vland");
 
-                return zint8<base_t::capability> { one.get_value()[1] && other.get_value()[1], one.get_value()[0] && other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] && other.get_value()[1], one.get_value()[0] && other.get_value()[0] });
             }
 
         };
@@ -496,7 +496,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::logical<__impl<base_t>, composed_t>;
+        using impl = traits::logical<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -539,7 +539,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "veq");
 
-                return zint8<base_t::capability> { one.get_value()[1] == other.get_value()[1], one.get_value()[0] == other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] == other.get_value()[1], one.get_value()[0] == other.get_value()[0] });
             }
 
 
@@ -552,7 +552,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vneq");
 
-                return zint8<base_t::capability> { one.get_value()[1] != other.get_value()[1], one.get_value()[0] != other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] != other.get_value()[1], one.get_value()[0] != other.get_value()[0] });
             }
 
 
@@ -565,7 +565,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vgt");
 
-                return zint8<base_t::capability> { one.get_value()[1] > other.get_value()[1], one.get_value()[0] > other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] > other.get_value()[1], one.get_value()[0] > other.get_value()[0] });
             }
 
 
@@ -578,7 +578,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vlt");
 
-                return zint8<base_t::capability> { one.get_value()[1] < other.get_value()[1], one.get_value()[0] < other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] < other.get_value()[1], one.get_value()[0] < other.get_value()[0] });
             }
 
 
@@ -591,7 +591,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vge");
 
-                return zint8<base_t::capability> { one.get_value()[1] >= other.get_value()[1], one.get_value()[0] >= other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] >= other.get_value()[1], one.get_value()[0] >= other.get_value()[0] });
             }
 
 
@@ -604,7 +604,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vle");
 
-                return zint8<base_t::capability> { one.get_value()[1] <= other.get_value()[1], one.get_value()[0] <= other.get_value()[0] };
+                return zint8<base_t::capability> ({ one.get_value()[1] <= other.get_value()[1], one.get_value()[0] <= other.get_value()[0] });
             }
 
         };
@@ -615,7 +615,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::comparison<__impl<base_t>, composed_t>;
+        using impl = traits::comparison<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -658,7 +658,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vsel");
 
-                return zint8<base_t::capability> { vsel(condition.get_value()[1], if_value.get_value()[1], else_value.get_value()[1]), vsel(condition.get_value()[0], if_value.get_value()[0], else_value.get_value()[0]) };
+                return zint8<base_t::capability> ({ vsel(condition.get_value()[1], if_value.get_value()[1], else_value.get_value()[1]), vsel(condition.get_value()[0], if_value.get_value()[0], else_value.get_value()[0]) });
             }
 
         };
@@ -669,7 +669,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::conditional<__impl<base_t>, composed_t>;
+        using impl = traits::conditional<__impl<base_t>, composed_t>;
     };
 
     ///@}

@@ -30,22 +30,22 @@
 
 namespace zacc {
 
-    enum class traits : long long {
-        Arithmetic = 1 << 0,
-        Fused_Multiplication = 1 << 1,
-        Bitwise = 1 << 2,
-        Bitwise_Shift = 1 << 3,
-        Logical = 1 << 4,
-        Comparison = 1 << 5,
-        Conditional = 1 << 6,
-
-        IO = 1 << 7,
-        Iteratable = 1 << 8,
-        Printable = 1 << 9,
-        Indexable = 1 << 10,
-        Convertable = 1 << 11,
-        Numeric = 1 << 12
-    };
+//    enum class traits : long long {
+//        Arithmetic = 1 << 0,
+//        Fused_Multiplication = 1 << 1,
+//        Bitwise = 1 << 2,
+//        Bitwise_Shift = 1 << 3,
+//        Logical = 1 << 4,
+//        Comparison = 1 << 5,
+//        Conditional = 1 << 6,
+//
+//        IO = 1 << 7,
+//        Iteratable = 1 << 8,
+//        Printable = 1 << 9,
+//        Indexable = 1 << 10,
+//        Convertable = 1 << 11,
+//        Numeric = 1 << 12
+//    };
 
     /**
      * @brief provides begin(), end() iterators to attached type
@@ -58,9 +58,6 @@ namespace zacc {
         template<typename base_t>
         struct impl : public base_t {
             FORWARD(impl);
-
-            REQUIRE(traits::IO);
-            TRAIT(traits::Iteratable);
 
             using iterator = typename base_t::extracted_t::iterator;
 
@@ -95,9 +92,6 @@ namespace zacc {
         template<typename base_t>
         struct impl : public base_t {
             FORWARD(impl);
-
-            REQUIRE(traits::Iteratable);
-            TRAIT(traits::Printable);
 
             /**
              * @brief converts current data to string representation
@@ -144,8 +138,6 @@ namespace zacc {
         template<typename base_t>
         struct impl : public base_t {
             FORWARD(impl);
-
-            TRAIT(traits::Convertable);
 
             auto as_bool() const noexcept
             {

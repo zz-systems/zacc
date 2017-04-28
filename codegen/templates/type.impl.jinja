@@ -127,7 +127,7 @@ namespace zacc { namespace {{ type.branch }} {
          * @remark {{ type.branch }}
          */
         template<typename base_t>
-        using impl = interface::{{ module.name }}<__impl<base_t>, composed_t>;
+        using impl = traits::{{ module.name }}<__impl<base_t>, composed_t>;
     };
 
     ///@}

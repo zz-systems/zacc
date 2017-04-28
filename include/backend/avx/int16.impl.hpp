@@ -124,7 +124,7 @@ namespace zacc { namespace avx {
              * @relates int16
              * @remark avx - default
              */
-            __impl(sse::zint16<base_t::capability> hi, sse::zint16<base_t::capability> lo) : base_t(std::array<sse::zint16<base_t::capability>, 2>{ hi, lo }) {
+            __impl(sse::zint16<base_t::capability> hi, sse::zint16<base_t::capability> lo) : base_t(std::array<sse::zint16<base_t::capability>, 2> ({ hi, lo })) {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "CONS(sse::zint16<base_t::capability> ..)");
 
@@ -136,7 +136,7 @@ namespace zacc { namespace avx {
              * @relates int16
              * @remark avx - default
              */
-            __impl(int16_t value) : base_t(std::array<sse::zint16<base_t::capability>, 2>{ _mm_set1_epi16(value), _mm_set1_epi16(value) }) {
+            __impl(int16_t value) : base_t(std::array<sse::zint16<base_t::capability>, 2> ({ _mm_set1_epi16(value), _mm_set1_epi16(value) })) {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "CONS(int16_t value)");
 
@@ -148,7 +148,7 @@ namespace zacc { namespace avx {
              * @relates int16
              * @remark avx - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(std::array<sse::zint16<base_t::capability>, 2>{ _mm_load_si128((__m128i*)value.data()), _mm_load_si128((__m128i*)(value.data() + 4)) }) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(std::array<sse::zint16<base_t::capability>, 2> ({ _mm_loadu_si128((__m128i*)value.data()), _mm_loadu_si128((__m128i*)(value.data() + 4)) })) {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "CONS(std::array<typename base_t::scal..)");
 
@@ -162,7 +162,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::construction<__impl<base_t>, composed_t>;
+        using impl = traits::construction<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -231,7 +231,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::io<__impl<base_t>, composed_t>;
+        using impl = traits::io<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -274,7 +274,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vneg");
 
-                return zint16<base_t::capability> { -one.get_value()[1], -one.get_value()[0] };
+                return zint16<base_t::capability> ({ -one.get_value()[1], -one.get_value()[0] });
             }
 
 
@@ -287,7 +287,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vadd");
 
-                return zint16<base_t::capability> { one.get_value()[1] + other.get_value()[1], one.get_value()[0] + other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] + other.get_value()[1], one.get_value()[0] + other.get_value()[0] });
             }
 
 
@@ -300,7 +300,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vsub");
 
-                return zint16<base_t::capability> { one.get_value()[1] - other.get_value()[1], one.get_value()[0] - other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] - other.get_value()[1], one.get_value()[0] - other.get_value()[0] });
             }
 
 
@@ -313,7 +313,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vmul");
 
-                return zint16<base_t::capability> { one.get_value()[1] * other.get_value()[1], one.get_value()[0] * other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] * other.get_value()[1], one.get_value()[0] * other.get_value()[0] });
             }
 
         };
@@ -324,7 +324,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::arithmetic<__impl<base_t>, composed_t>;
+        using impl = traits::arithmetic<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -367,7 +367,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbneg");
 
-                return zint16<base_t::capability> { ~one.get_value()[1], ~one.get_value()[1] };
+                return zint16<base_t::capability> ({ ~one.get_value()[1], ~one.get_value()[1] });
             }
 
 
@@ -380,7 +380,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbor");
 
-                return zint16<base_t::capability> { one.get_value()[1] | other.get_value()[1], one.get_value()[0] | other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] | other.get_value()[1], one.get_value()[0] | other.get_value()[0] });
             }
 
 
@@ -393,7 +393,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vband");
 
-                return zint16<base_t::capability> { one.get_value()[1] & other.get_value()[1], one.get_value()[0] & other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] & other.get_value()[1], one.get_value()[0] & other.get_value()[0] });
             }
 
 
@@ -406,7 +406,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbxor");
 
-                return zint16<base_t::capability> { one.get_value()[1] ^ other.get_value()[1], one.get_value()[0] ^ other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] ^ other.get_value()[1], one.get_value()[0] ^ other.get_value()[0] });
             }
 
         };
@@ -417,7 +417,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::bitwise<__impl<base_t>, composed_t>;
+        using impl = traits::bitwise<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -460,7 +460,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbsll");
 
-                return zint16<base_t::capability> { one.get_value()[1] << other.get_value()[1], one.get_value()[0] << other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] << other.get_value()[1], one.get_value()[0] << other.get_value()[0] });
             }
 
 
@@ -473,7 +473,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbsrl");
 
-                return zint16<base_t::capability> { one.get_value()[1] >> other.get_value()[1], one.get_value()[0] >> other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] >> other.get_value()[1], one.get_value()[0] >> other.get_value()[0] });
             }
 
 
@@ -486,7 +486,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbslli");
 
-                return zint16<base_t::capability> { one.get_value()[1] << other, one.get_value()[0] << other };
+                return zint16<base_t::capability> ({ one.get_value()[1] << other, one.get_value()[0] << other });
             }
 
 
@@ -499,7 +499,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbsrli");
 
-                return zint16<base_t::capability> { one.get_value()[1] >> other, one.get_value()[0] >> other };
+                return zint16<base_t::capability> ({ one.get_value()[1] >> other, one.get_value()[0] >> other });
             }
 
         };
@@ -510,7 +510,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::bitwise_shift<__impl<base_t>, composed_t>;
+        using impl = traits::bitwise_shift<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -553,7 +553,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vlneg");
 
-                return zint16<base_t::capability> { !one.get_value()[1], !one.get_value()[1] };
+                return zint16<base_t::capability> ({ !one.get_value()[1], !one.get_value()[1] });
             }
 
 
@@ -566,7 +566,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vlor");
 
-                return zint16<base_t::capability> { one.get_value()[1] || other.get_value()[1], one.get_value()[0] || other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] || other.get_value()[1], one.get_value()[0] || other.get_value()[0] });
             }
 
 
@@ -579,7 +579,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vland");
 
-                return zint16<base_t::capability> { one.get_value()[1] && other.get_value()[1], one.get_value()[0] && other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] && other.get_value()[1], one.get_value()[0] && other.get_value()[0] });
             }
 
         };
@@ -590,7 +590,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::logical<__impl<base_t>, composed_t>;
+        using impl = traits::logical<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -633,7 +633,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "veq");
 
-                return zint16<base_t::capability> { one.get_value()[1] == other.get_value()[1], one.get_value()[0] == other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] == other.get_value()[1], one.get_value()[0] == other.get_value()[0] });
             }
 
 
@@ -646,7 +646,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vneq");
 
-                return zint16<base_t::capability> { one.get_value()[1] != other.get_value()[1], one.get_value()[0] != other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] != other.get_value()[1], one.get_value()[0] != other.get_value()[0] });
             }
 
 
@@ -659,7 +659,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vgt");
 
-                return zint16<base_t::capability> { one.get_value()[1] > other.get_value()[1], one.get_value()[0] > other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] > other.get_value()[1], one.get_value()[0] > other.get_value()[0] });
             }
 
 
@@ -672,7 +672,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vlt");
 
-                return zint16<base_t::capability> { one.get_value()[1] < other.get_value()[1], one.get_value()[0] < other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] < other.get_value()[1], one.get_value()[0] < other.get_value()[0] });
             }
 
 
@@ -685,7 +685,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vge");
 
-                return zint16<base_t::capability> { one.get_value()[1] >= other.get_value()[1], one.get_value()[0] >= other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] >= other.get_value()[1], one.get_value()[0] >= other.get_value()[0] });
             }
 
 
@@ -698,7 +698,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vle");
 
-                return zint16<base_t::capability> { one.get_value()[1] <= other.get_value()[1], one.get_value()[0] <= other.get_value()[0] };
+                return zint16<base_t::capability> ({ one.get_value()[1] <= other.get_value()[1], one.get_value()[0] <= other.get_value()[0] });
             }
 
         };
@@ -709,7 +709,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::comparison<__impl<base_t>, composed_t>;
+        using impl = traits::comparison<__impl<base_t>, composed_t>;
     };
 
     ///@}
@@ -752,7 +752,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vsel");
 
-                return zint16<base_t::capability> { vsel(condition.get_value()[1], if_value.get_value()[1], else_value.get_value()[1]), vsel(condition.get_value()[0], if_value.get_value()[0], else_value.get_value()[0]) };
+                return zint16<base_t::capability> ({ vsel(condition.get_value()[1], if_value.get_value()[1], else_value.get_value()[1]), vsel(condition.get_value()[0], if_value.get_value()[0], else_value.get_value()[0]) });
             }
 
         };
@@ -763,7 +763,7 @@ namespace zacc { namespace avx {
          * @remark avx
          */
         template<typename base_t>
-        using impl = interface::conditional<__impl<base_t>, composed_t>;
+        using impl = traits::conditional<__impl<base_t>, composed_t>;
     };
 
     ///@}

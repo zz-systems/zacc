@@ -27,7 +27,7 @@
 
 #include "common.hpp"
 
-namespace zacc { namespace interface {
+namespace zacc { namespace traits {
 
     /**
      * @brief provides vector load/store definitions
@@ -40,8 +40,6 @@ namespace zacc { namespace interface {
         typedef typename base_t::extracted_t extracted_t;
 
         FORWARD(io);
-
-        TRAIT(traits::IO);
 
         void store (extracted_t &target) const
         {

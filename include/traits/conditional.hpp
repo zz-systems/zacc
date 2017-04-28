@@ -27,7 +27,7 @@
 
 #include "common.hpp"
 
-namespace zacc { namespace interface {
+namespace zacc { namespace traits {
 
     /**
      * @brief provides conditional functionality
@@ -38,19 +38,17 @@ namespace zacc { namespace interface {
     struct conditional : public base_t {
         FORWARD(conditional);
 
-        TRAIT(traits::Conditional);
-
         struct else_branch {
             composed_t otherwise(const composed_t else_value) const { return vsel(_condition, _if_value, else_value); }
 
         private:
             else_branch(const composed_t condition, const composed_t if_value)
-                    : _condition(condition), _if_value(if_value) {}
+                    : _if_value(if_value), _condition(condition) {}
 
             composed_t _if_value;
             composed_t _condition;
 
-            friend class conditional<base_t, composed_t>;
+            friend struct conditional<base_t, composed_t>;
         };
 
 

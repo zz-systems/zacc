@@ -27,7 +27,7 @@
 
 #include "common.hpp"
 
-namespace zacc { namespace interface {
+namespace zacc { namespace traits {
 
     /**
      * @brief provides logical comparison operator definitions
@@ -37,8 +37,6 @@ namespace zacc { namespace interface {
     template<typename base_t, typename composed_t>
     struct comparison : public base_t {
         FORWARD(comparison);
-
-        TRAIT(traits::Comparison);
 
         friend composed_t operator==(const composed_t one, const composed_t other) {
             return veq(one, other);

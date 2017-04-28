@@ -27,7 +27,7 @@
 
 #include "common.hpp"
 
-namespace zacc { namespace interface {
+namespace zacc { namespace traits {
 
     /**
      * @brief provides arithmetic operator definitions
@@ -37,8 +37,6 @@ namespace zacc { namespace interface {
     template<typename base_t, typename composed_t>
     struct arithmetic : public base_t {
         FORWARD(arithmetic);
-
-        TRAIT(traits::Arithmetic);
 
         /**
          * @brief negation operator
