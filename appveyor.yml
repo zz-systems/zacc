@@ -85,11 +85,11 @@ build_script:
   
 test_script:
 - zacc.system.detect.exe
-- zacc.tests.sse.sse2.exe
-- zacc.tests.sse.sse2.exe
-- zacc.tests.sse.sse3.exe
-- zacc.tests.sse.sse41.exe
-- zacc.tests.sse.sse41.fma3.exe
-- zacc.tests.sse.sse41.fma4.exe
-- zacc.tests.avx.exe
-- zacc.tests.avx2.exe
+- ps: gci -Filter zacc.tests.*.exe | foreach { ".\$($_.Name) --gtest_output=xml:$($_.Name).xm
+l" } | iex
+
+after_test:
+- ps: 
+    - $ci_url = "https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)"
+    - $wc = New-Object 'System.Net.WebClient'
+    - gci -Filter zacc.tests.*.xml | foreach { $wc.UploadFile($ci_url, (Resolve-Path ".\$($_.Name)")) }

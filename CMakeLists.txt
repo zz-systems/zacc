@@ -76,16 +76,25 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 	
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
 	message("Using GCC")
-    # using GCC
+    
+	set(CMAKE_CXX_STANDARD 14)
+	set(CMAKE_CXX_STANDARD_REQUIRED on)
+	set(CMAKE_CXX_EXTENSIONS OFF)
 	
 	# GCC fails to retain attributes while passing as template arg. hide warnings
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-ignored-attributes")
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "Intel")
 	message("Using Intel C++")
     
+	set(CMAKE_CXX_STANDARD 14)
+	set(CMAKE_CXX_STANDARD_REQUIRED on)
+	set(CMAKE_CXX_EXTENSIONS OFF)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
 	message("Using Visual Studio C++")
-    # using Visual Studio C++
+    
+	set(CMAKE_CXX_STANDARD 14)
+	set(CMAKE_CXX_STANDARD_REQUIRED on)
+	set(CMAKE_CXX_EXTENSIONS OFF)
 endif()
 
 if(ENABLE_TRACE)
