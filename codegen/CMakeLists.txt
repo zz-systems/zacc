@@ -7,7 +7,7 @@ set(test_template "codegen/templates/type.test.jinja")
 
 file(GLOB_RECURSE templates    RELATIVE ${CMAKE_SOURCE_DIR}    "*${template.schema}")
 
-set(codegen.cmd "${PYTHON_DIR}/Scripts/yasha")
+set(codegen.cmd "${PYTHON_DIR}/Scripts/yasha.exe")
 # fallback to PATH
 if(EXISTS "${codegen.cmd}")
 else()
