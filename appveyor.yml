@@ -26,27 +26,22 @@ environment:
       
 init:
 - cmake --version
-- python --version
-
+- "%PYTHON%"/python.exe --version
 #- C:\"Program Files (x86)"\"Microsoft Visual Studio"\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat %PLATFORM%
 - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
-# setup python 
+
 install:
-############################################################################
 # Install yasha
-############################################################################
 - "%PYTHON%/python.exe -m pip install yasha"
-############################################################################
+
 # Install Ninja
-############################################################################
 - set NINJA_URL="https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-win.zip"
 - appveyor DownloadFile %NINJA_URL% -FileName ninja.zip
 - 7z x ninja.zip -oC:\projects\deps\ninja > nul
 - set PATH=C:\projects\deps\ninja;%PATH%
 - ninja --version
-############################################################################
+
 # Install OpenCL
-############################################################################
 #- echo Fetching source
 #- git submodule update --init --recursive 
 #- echo Installing OpenCL
@@ -88,7 +83,7 @@ before_build:
 
 build_script:
   - mkdir %BUILD_DIR% && cd %BUILD_DIR%
-  - cmake .. -G%BUILD_ENV% -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"
+  - cmake .. -G%BUILD_ENV% -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe
   - cmake --build . --config %CONFIGURATION% --target zacc.system.detect
   - cmake --build . --config %CONFIGURATION% --target zacc.tests.all
   
