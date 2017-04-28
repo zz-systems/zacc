@@ -76,6 +76,8 @@ install:
 before_build:
 - echo before_build step
 - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" amd64
+- set PATH=c:\Program Files\LLVM\msbuild-bin\;%PATH%
+- set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
 - cd C:\projects\gorynych
 
 
