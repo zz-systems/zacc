@@ -88,12 +88,12 @@ script:
   - make -j 2 && make zacc.tests.all
   - ls
   - ./zacc.system.detect
-  - ./zacc.sse.sse2.tests
-  - ./zacc.sse.sse2.tests
-  - ./zacc.sse.sse3.tests
-  - ./zacc.sse.sse41.tests
-  - ./zacc.sse.sse41.fma3.tests
-  - ./zacc.sse.sse41.fma4.tests
-  - ./zacc.avx.tests
-  - ./zacc.avx2.tests
+  - ./zacc.tests.sse.sse2
+  - ./zacc.tests.sse.sse2
+  - ./zacc.tests.sse.sse3
+  - ./zacc.tests.sse.sse41
+  - ./zacc.tests.sse.sse41.fma3
+  - ./zacc.tests.sse.sse41.fma4
+  - ./zacc.tests.avx
+  - ./zacc.tests.avx2
   - ctest
