@@ -16,8 +16,7 @@ environment:
   global:
     CLFFT_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\nmake\\release"
     OPENCL_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\opencl"
-    OPENCL_REGISTRY: "https://www.khronos.org/registry/cl"
-    
+    OPENCL_REGISTRY: "https://www.khronos.org/registry/cl"    
   matrix:
   - PYTHON: "C:/Python36"
     BUILD_ENV: "Ninja"
