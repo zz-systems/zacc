@@ -162,7 +162,7 @@ endif()
 # packages =============================================================================================================
 
 # look for python
-find_package(PythonInterp 3.6 REQUIRED)
+find_package(PythonInterp 3.3 REQUIRED)
 
 if(PYTHONINTERP_FOUND)
 	get_filename_component(PYTHON_DIR ${PYTHON_EXECUTABLE} DIRECTORY CACHE)
