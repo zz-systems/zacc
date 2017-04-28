@@ -88,7 +88,7 @@ test_script:
 - ps: gci -Filter zacc.tests.*.exe | foreach { ".\$($_.Name) --gtest_output=xml:$($_.Name).xml" } | iex
 
 after_test:
-- ps: 
-    - $ci_url = "https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)"
-    - $wc = New-Object 'System.Net.WebClient'
-    - gci -Filter zacc.tests.*.xml | foreach { $wc.UploadFile($ci_url, (Resolve-Path ".\$($_.Name)")) }
+- ps: >-
+    $ci_url = "https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)"
+    $wc = New-Object 'System.Net.WebClient'
+    gci -Filter zacc.tests.*.xml | foreach { $wc.UploadFile($ci_url, (Resolve-Path ".\$($_.Name)")) }
