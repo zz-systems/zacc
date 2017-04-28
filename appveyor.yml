@@ -25,9 +25,6 @@ environment:
         BUILD_DIR: "build"
         PYTHON_VERSION: "3.6"
       
-init:
-#- C:\"Program Files (x86)"\"Microsoft Visual Studio"\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat %PLATFORM%
-#- C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
 
 install:
 # Install yasha

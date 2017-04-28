@@ -170,9 +170,6 @@ else()
 	message(FATAL_ERROR "Python not found")
 endif()
 
-#install yasha
-execute_process(COMMAND ${PYTHON_EXECUTABLE} -m pip install yasha)
-
 #find_package(GTest REQUIRED)
 #include_directories(
 #        ${GTEST_INCLUDE_DIRS}
