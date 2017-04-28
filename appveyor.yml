@@ -18,11 +18,11 @@ environment:
     OPENCL_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\opencl"
     OPENCL_REGISTRY: "https://www.khronos.org/registry/cl"
     
-matrix:
-    - PYTHON: "C:/Python36"
-      BUILD_ENV: "Ninja"
-      BUILD_DIR: "build"
-      PYTHON_VERSION: "3.6"
+  matrix:
+  - PYTHON: "C:/Python36"
+    BUILD_ENV: "Ninja"
+    BUILD_DIR: "build"
+    PYTHON_VERSION: "3.6"
       
 init:
 - cmake --version
