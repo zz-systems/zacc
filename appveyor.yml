@@ -26,7 +26,7 @@ environment:
       
 init:
 - cmake --version
-- "%PYTHON%"/python.exe --version
+- "%PYTHON%/python.exe" --version
 #- C:\"Program Files (x86)"\"Microsoft Visual Studio"\2017\Enterprise\VC\Auxiliary\Build\vcvarsall.bat %PLATFORM%
 - C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
 
