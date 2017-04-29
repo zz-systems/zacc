@@ -1,4 +1,4 @@
-configure_file(test/fetch_gtests.cmake ${CMAKE_BINARY_DIR}/googletest-download/CMakeLists.txt)
+configure_file(test/fetch_gtests.cmake ${CMAKE_CURRENT_BINARY_DIR}/googletest-download/CMakeLists.txt)
 
 execute_process(COMMAND ${CMAKE_COMMAND} . 
         RESULT_VARIABLE result
