@@ -31,6 +31,28 @@
 
 namespace zacc { namespace math {
 
+    const constexpr double  Z_PI = 3.14159265358979323846;
+    const constexpr double  Z_PI_2 = Z_PI / 2;
+
+    const constexpr double  Z_1_PI = 0.318309886183790671538;
+    const constexpr double  Z_4_PI = 1.273239544735162542821171882678754627704620361328125;
+
+    const constexpr double  Z_PI4_A_D = 0.78539816290140151978;
+    const constexpr double  Z_PI4_B_D = 4.9604678871439933374e-10;
+    const constexpr double  Z_PI4_C_D = 1.1258708853173288931e-18;
+    const constexpr double  Z_PI4_D_D = 1.7607799325916000908e-27;
+
+    const constexpr float  Z_PI4_A_F = 0.78515625f;
+    const constexpr float  Z_PI4_B_F = 0.00024187564849853515625f;
+    const constexpr float  Z_PI4_C_F = 3.7747668102383613586e-08f;
+    const constexpr float  Z_PI4_D_F = 1.2816720341285448015e-12f;
+
+    const constexpr double  Z_L2U = .69314718055966295651160180568695068359375;
+    const constexpr double  Z_L2L = .28235290563031577122588448175013436025525412068e-12;
+    const constexpr double  Z_R_LN2 = 1.442695040888963407359924681001892137426645954152985934135449406931;
+
+    const constexpr double  Z_SQRT_3 = 1.73205080756887729353;
+
     /**
      * @brief  Sine function. Algorithm taken from SLEEF 2.80 and vecmathlib
      * @tparam type [zfloat, zdouble]
@@ -40,20 +62,27 @@ namespace zacc { namespace math {
     template<typename vreal_t>
     std::enable_if_t<is_floating_point<vreal_t>::value && vreal_t::dispatcher::has_integer_types, vreal_t> vsin(vreal_t val)
     {
-        vreal_t q = (val * constants<vreal_t>::Z_1_PI).floor();
+        vreal_t q = (val * Z_1_PI).floor();
         zint iq = q;
 
         // when performance > precision
         if(dispatcher::use_fast_float)
         {
-            val = vfmadd(q, -constants<vreal_t>::Z_PI, val);
+            val = vfmadd(q, Z_PI, val);
         }
-        else
+        else if(is_float<vreal_t>::value)
         {
-            val = vfmadd(q, -constants<vreal_t>::Z_PI4_A * 4, val);
-            val = vfmadd(q, -constants<vreal_t>::Z_PI4_B * 4, val);
-            val = vfmadd(q, -constants<vreal_t>::Z_PI4_C * 4, val);
-            val = vfmadd(q, -constants<vreal_t>::Z_PI4_D * 4, val);
+            val = vfmadd(q, -Z_PI4_A_F * 4, val);
+            val = vfmadd(q, -Z_PI4_B_F * 4, val);
+            val = vfmadd(q, -Z_PI4_C_F * 4, val);
+            val = vfmadd(q, -Z_PI4_D_F * 4, val);
+        }
+        else if(is_double<vreal_t>::value)
+        {
+            val = vfmadd(q, -Z_PI4_A_D * 4, val);
+            val = vfmadd(q, -Z_PI4_B_D * 4, val);
+            val = vfmadd(q, -Z_PI4_C_D * 4, val);
+            val = vfmadd(q, -Z_PI4_D_D * 4, val);
         }
 
         vreal_t s = val * val;
@@ -105,20 +134,27 @@ namespace zacc { namespace math {
     template<typename vreal_t>
     std::enable_if_t<is_floating_point<vreal_t>::value && vreal_t::dispatcher::has_integer_types, vreal_t> vcos(vreal_t val)
     {
-        vreal_t q = 2.0 * (val * constants<vreal_t>::Z_1_PI - 0.5).floor() + 1;
+        vreal_t q = 2.0 * (val * Z_1_PI - 0.5).floor() + 1;
         zint iq = q;
 
         // when performance > precision
         if(dispatcher::use_fast_float)
         {
-            val -= q * constants<vreal_t>::Z_PI_2;
+            val -= q * Z_PI_2;
         }
-        else
+        else if(is_float<vreal_t>::value)
         {
-            val = vfmadd(q, -constants<vreal_t>::Z_PI4_A * 2, val);
-            val = vfmadd(q, -constants<vreal_t>::Z_PI4_B * 2, val);
-            val = vfmadd(q, -constants<vreal_t>::Z_PI4_C * 2, val);
-            val = vfmadd(q, -constants<vreal_t>::Z_PI4_D * 2, val);
+            val = vfmadd(q, -Z_PI4_A_F * 2, val);
+            val = vfmadd(q, -Z_PI4_B_F * 2, val);
+            val = vfmadd(q, -Z_PI4_C_F * 2, val);
+            val = vfmadd(q, -Z_PI4_D_F * 2, val);
+        }
+        else if(is_double<vreal_t>::value)
+        {
+            val = vfmadd(q, -Z_PI4_A_D * 2, val);
+            val = vfmadd(q, -Z_PI4_B_D * 2, val);
+            val = vfmadd(q, -Z_PI4_C_D * 2, val);
+            val = vfmadd(q, -Z_PI4_D_D * 2, val);
         }
 
         vreal_t s = val * val;
@@ -170,20 +206,27 @@ namespace zacc { namespace math {
     template <typename vreal_t>
     std::enable_if_t<is_floating_point<vreal_t>::value && vreal_t::dispatcher::has_integer_types, vreal_t> vtan(vreal_t val)
     {
-        vreal_t q = (val * 2 * constants<vreal_t>::Z_1_PI).round();
+        vreal_t q = (val * 2 * Z_1_PI).round();
         zint iq = q;
 
         // when performance > precision
         if(dispatcher::use_fast_float)
         {
-            val -= q * constants<vreal_t>::Z_PI_2;
+            val -= q * Z_PI_2;
         }
-        else
+        else if(is_float<vreal_t>::value)
         {
-            val = vfmadd(q, -constants<vreal_t>::Z_PI4_A * 2, val);
-            val = vfmadd(q, -constants<vreal_t>::Z_PI4_B * 2, val);
-            val = vfmadd(q, -constants<vreal_t>::Z_PI4_C * 2, val);
-            val = vfmadd(q, -constants<vreal_t>::Z_PI4_D * 2, val);
+            val = vfmadd(q, -Z_PI4_A_F * 2, val);
+            val = vfmadd(q, -Z_PI4_B_F * 2, val);
+            val = vfmadd(q, -Z_PI4_C_F * 2, val);
+            val = vfmadd(q, -Z_PI4_D_F * 2, val);
+        }
+        else if(is_double<vreal_t>::value)
+        {
+            val = vfmadd(q, -Z_PI4_A_D * 4, val);
+            val = vfmadd(q, -Z_PI4_B_D * 2, val);
+            val = vfmadd(q, -Z_PI4_C_D * 2, val);
+            val = vfmadd(q, -Z_PI4_D_D * 2, val);
         }
 
         auto x = val;
@@ -303,7 +346,7 @@ namespace zacc { namespace math {
         }
 
         t = vfmadd(u, t * s, s);
-        t = vfmadd(q, constants<vreal_t>::Z_PI_2, t);
+        t = vfmadd(q, Z_PI_2, t);
 
         return t;
     }
