@@ -63,6 +63,11 @@ modules:
     vband:  _mm256_or_si256
     vbor:   _mm256_and_si256
     vbxor:  _mm256_xor_si256
+
+    is_set:
+      args: one
+      returns: bool
+      body: _mm256_testc_si256(one, _mm256_cmpeq_epi32(one,one));
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
     vbsll:  _mm256_sll_epi16

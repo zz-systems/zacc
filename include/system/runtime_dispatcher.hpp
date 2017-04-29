@@ -25,63 +25,185 @@
 
 #pragma once
 
+#include "util/algorithm.hpp"
 #include "platform.hpp"
+#include "backend/all.hpp"
+#include "system/capabilities.hpp"
 
 namespace zacc {
 
     template<typename base_t>
     struct runtime_dispatcher : public base_t
     {
-        template<typename Args... args>
-        void dispatch(Args... args)
+        FORWARD(runtime_dispatcher);
+
+        template<typename ...Args>
+        void dispatch_some(Args&&... args)
+        {
+            dispatch(false, std::forward<Args>(args)...);
+        }
+
+        template<typename ...Args>
+        void dispatch_one(Args&&... args)
+        {
+            dispatch(true, std::forward<Args>(args)...);
+        }
+
+        template<typename ...Args>
+        void operator()(bool select_one, Args&&... args)
+        {
+            dispatch(select_one, std::forward<Args>(args)...);
+        }
+
+        template<typename ...Args>
+        void dispatch(bool select_one, Args&&... args)
         {
             auto p = &platform::instance();
 
+            _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+#if defined(ZACC_OPENCL)
             if(p->is_set(capabilities::OPENCL))
             {
                 // not implemented yet
-                //base_t::execute<opencl::types<opencl::value>(std::forward<Args>(args)...);
+                //base_t::dispatch_impl<opencl::types<branches::opencl>>(std::forward<Args>(args)...);
             }
-            else if(p->is_set(capabilities::AVX512))
+#endif
+
+#if defined(ZACC_AVX512)
+            if(p->is_set(capabilities::AVX512))
             {
                 // not implemented yet
-                //base_t::execute<avx512::types<avx512::value>(std::forward<Args>(args)...);
+                //base_t::dispatch_impl<avx512::types<branches::avx512>>(std::forward<Args>(args)...);
             }
-            else if(p->is_set(capabilities::AVX2))
+#endif
+
+#if defined(ZACC_AVX2)
+            if(p->is_set(capabilities::AVX2))
             {
-                base_t::execute<avx::types<avx2::value>(std::forward<Args>(args)...);
+                log_branch<avx2::types<branches::avx2>>();
+                base_t::template dispatch_impl<avx2::types<branches::avx2>>(std::forward<Args>(args)...);
+
+                if(select_one)
+                    return;
             }
-            else if(p->is_set(capabilities::AVX1))
+#endif
+
+#if defined(ZACC_AVX)
+            if(p->is_set(capabilities::AVX1))
             {
-                base_t::execute<avx::types<avx1::value>(std::forward<Args>(args)...);
+                log_branch<avx::types<branches::avx1>>();
+                base_t::template dispatch_impl<avx::types<branches::avx1>>(std::forward<Args>(args)...);
+
+                if(select_one)
+                    return;
             }
-            else if(p->is_set(capabilities::SSE41))
+#endif
+
+#if defined(ZACC_SSE)
+            if(p->is_set(capabilities::SSE41))
             {
                 if(p->is_set(capabilities::FMA4))
                 {
-                    base_t::execute<sse::types<sse41fma4::value>(std::forward<Args>(args)...);
+                    log_branch<sse::types<branches::sse41_fma4>>();
+                    base_t::template dispatch_impl<sse::types<branches::sse41_fma4>>(std::forward<Args>(args)...);
+
+                    if(select_one)
+                        return;
                 }
-                else if(p->is_set(capabilities::FMA3))
+
+                if(p->is_set(capabilities::FMA3))
                 {
-                    base_t::execute<sse::types<sse41fma3::value>(std::forward<Args>(args)...);
+                    log_branch<sse::types<branches::sse41_fma3>>();
+                    base_t::template dispatch_impl<sse::types<branches::sse41_fma3>>(std::forward<Args>(args)...);
+
+                    if(select_one)
+                        return;
                 }
-                else
-                {
-                    base_t::execute<sse::types<sse41::value>(std::forward<Args>(args)...);
-                }
+
+                // no fma
+                log_branch<sse::types<branches::sse41>>();
+                base_t::template dispatch_impl<sse::types<branches::sse41>>(std::forward<Args>(args)...);
+
+                if(select_one)
+                    return;
             }
-            else if(p->is_set(capabilities::SSSE3) && p->is_set(capabilities::SSE3))
+
+            if(p->is_set(capabilities::SSSE3) && p->is_set(capabilities::SSE3))
             {
-                base_t::execute<sse::types<sse3::value>(std::forward<Args>(args)...);
+                log_branch<sse::types<branches::sse3>>();
+                base_t::template dispatch_impl<sse::types<branches::sse3>>(std::forward<Args>(args)...);
+
+                if(select_one)
+                    return;
             }
-            else if(p->is_set(capabilities::SSE2))
+
+            if(p->is_set(capabilities::SSE2))
             {
-                base_t::execute<sse::types<sse2::value>(std::forward<Args>(args)...);
+                log_branch<sse::types<branches::sse2>>();
+                base_t::template dispatch_impl<sse::types<branches::sse2>>(std::forward<Args>(args)...);
+
+                if(select_one)
+                    return;
             }
-            else
-            {
-                base_t::execute<scalar::types<scalar::value>(std::forward<Args>(args)...);
-            }
+#endif
+
+#if defined(ZACC_SCALAR)
+            // scalar
+            log_branch<scalar::types<branches::scalar>>();
+            base_t::template dispatch_impl<scalar::types<branches::scalar>>(std::forward<Args>(args)...);
+#endif
+        }
+
+        template<typename ...Args>
+        void dispatch_all(Args&&... args)
+        {
+            _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+#if defined(ZACC_OPENCL)
+            // opencl - not implemented yet
+            //base_t::dispatch_impl<zacc::opencl::types<branches::opencl>>(std::forward<Args>(args)...);
+#endif
+#if defined(ZACC_AVX512)
+            // avx512 - not implemented yet
+            //base_t::dispatch_impl<zacc::avx512::types<branches::avx512>>(std::forward<Args>(args)...);
+#endif
+#if defined(ZACC_AVX2)
+            // avx2
+            base_t::template dispatch_impl<avx2::types<branches::avx2>>(std::forward<Args>(args)...);
+#endif
+#if defined(ZACC_AVX)
+            // avx1
+            base_t::template dispatch_impl<avx::types<branches::avx1>>(std::forward<Args>(args)...);
+#endif
+#if defined(ZACC_SSE)
+            // sse41 - fma4
+            base_t::template dispatch_impl<sse::types<branches::sse41_fma4>>(std::forward<Args>(args)...);
+            // sse41 - fma3
+            base_t::template dispatch_impl<sse::types<branches::sse41_fma3>>(std::forward<Args>(args)...);
+            // sse41 - no fma
+            base_t::template dispatch_impl<sse::types<branches::sse41>>(std::forward<Args>(args)...);
+
+            // sse3
+            base_t::template dispatch_impl<sse::types<branches::sse3>>(std::forward<Args>(args)...);
+            // sse2
+            base_t::template dispatch_impl<sse::types<branches::sse2>>(std::forward<Args>(args)...);
+#endif
+
+#if defined(ZACC_SCALAR)
+            // scalar
+            base_t::template dispatch_impl<scalar::types<branches::scalar>>(std::forward<Args>(args)...);
+#endif
+        }
+
+    private:
+        DISPATCHED void log_branch() const
+        {
+            std::cout << "Dispatching: " << dispatcher::major_branch_name()
+                      << " [" << join(platform::instance().make_capabilities(dispatcher::capability::value), ", ") << "]"
+                      << std::endl;
         }
     };
 

@@ -25,7 +25,6 @@
 
 #pragma once
 #include <array>
-#include "system/dispatcher.hpp"
 
 namespace zacc { namespace math {
     /// special vec 3 impl
@@ -86,10 +85,10 @@ namespace zacc { namespace math {
             return data[i];
         }
 
-        //T magnitude() const
-        //{
-        // return vsqrt(sqr_magnitude());
-        //}
+        T magnitude() const
+        {
+            return vsqrt(sqr_magnitude());
+        }
 
         T sqr_magnitude() const
         {

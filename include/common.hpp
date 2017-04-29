@@ -25,6 +25,33 @@
 
 #pragma once
 
+#include <x86intrin.h>
+
+
+#if defined(__clang__)
+#elif defined(__GNUC__) || defined(__GNUG__)
+inline __m256 _mm256_set_m128(__m128 hi, __m128 lo)
+{
+    return _mm256_insertf128_ps(_mm256_castps128_ps256(hi),(lo),1);
+}
+#elif defined(_MSC_VER)
+#endif
+
+#ifdef _MSC_VER
+#else
+    inline bool _mm256_test_all_ones(__m256 val)
+    {
+        auto ival = _mm256_castps_si256(val);
+        return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
+    }
+
+    inline bool _mm256_test_all_ones(__m256i val)
+    {
+        return _mm256_testc_si256(val, _mm256_cmpeq_epi32(val,val));
+    }
+#endif
+
+
 /**
  * @brief shortcut to write forwarding constructors
  * @param name current type (constructor)
@@ -35,7 +62,7 @@
      * @brief forwarding constructor \
      */ \
     template<typename ...Args> \
-    name(Args... args) : base(std::forward<Args>(args)...) {}
+    name(Args&&... args) : base(std::forward<Args>(args)...) {}
 
 
 /**

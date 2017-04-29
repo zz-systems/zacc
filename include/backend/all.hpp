@@ -22,36 +22,20 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-
 #pragma once
 
-#include "backend/avx512/float32.impl.hpp"
-#include "backend/avx512/float64.impl.hpp"
-#include "backend/avx512/int8.impl.hpp"
-#include "backend/avx512/int16.impl.hpp"
-#include "backend/avx512/int32.impl.hpp"
-
-namespace zacc { namespace avx512 {
-
-    template<typename _capability>
-    struct types
-    {
-        using capability = _capability;
-
-        using zfloat32  = ::zacc::avx512::zfloat32<capability::value>;
-        using zfloat64  = ::zacc::avx512::zfloat64<capability::value>;
-        using zint8     = ::zacc::avx512::zint8<capability::value>;
-        using zint16    = ::zacc::avx512::zint16<capability::value>;
-        using zint32    = ::zacc::avx512::zint32<capability::value>;
-
-        using bfloat32  = ::zacc::avx512::bfloat32<capability::value>;
-        using bfloat64  = ::zacc::avx512::bfloat64<capability::value>;
-        using bint8     = ::zacc::avx512::bint8<capability::value>;
-        using bint16    = ::zacc::avx512::bint16<capability::value>;
-        using bint32    = ::zacc::avx512::bint32<capability::value>;
-
-        static constexpr const size_t alignment = zint32::alignment;
-
-        static const std::string major_branch_name() { return "AVX512"; }
-    };
-}}
+#if defined(ZACC_AVX)
+    #include "backend/avx/types.hpp"
+#endif
+#if defined(ZACC_AVX2)
+    #include "backend/avx2/types.hpp"
+#endif
+#if defined(ZACC_AVX512)
+    #include "backend/avx512/types.hpp"
+#endif
+#if defined(ZACC_SCALAR)
+    #include "backend/scalar/types.hpp"
+#endif
+#if defined(ZACC_SSE)
+    #include "backend/sse/types.hpp"
+#endif

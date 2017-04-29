@@ -41,6 +41,8 @@
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
 #include "traits/io.hpp"
+#include "traits/numeric.hpp"
+#include "traits/math.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/bitwise_shift.hpp"
@@ -48,6 +50,10 @@
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
 
+// emulation
+#include "backend/sse/int8.impl.hpp"
+#include "backend/sse/int16.impl.hpp"
+#include "backend/sse/int32.impl.hpp"
 
 /**
  * @brief int32 implementation for the sse branch
@@ -87,7 +93,6 @@ namespace zacc { namespace sse {
         struct __impl : base_t
         {
             using mask_t = typename base_t::mask_t;
-
 
 
 
@@ -181,8 +186,13 @@ namespace zacc { namespace sse {
          * @relates int32
          * @remark sse
          */
+
+
         template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, composed_t>;
+        //using impl = traits::construction<__impl<base_t>, zint32<base_t::capability>>;
+
+        using impl = traits::construction<__impl<base_t>, zint32<base_t::capability>>;
+
     };
 
     ///@}
@@ -241,6 +251,20 @@ namespace zacc { namespace sse {
                 _mm_stream_si128((__m128i*)target.data(), source);
             }
 
+
+            /**
+             * @brief io default branch
+             * @relates int32
+             * @remark sse - default
+             */
+            template<typename T> friend zint32<base_t::capability> vgather(T* source, zint32<base_t::capability> index)  noexcept {
+
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vgather");
+
+                auto i = index.data();
+                return _mm_set_epi32(source[i[3]], source[i[2]], source[i[1]], source[i[0]]);
+            }
+
         };
 
         /**
@@ -248,8 +272,196 @@ namespace zacc { namespace sse {
          * @relates int32
          * @remark sse
          */
+
+
         template<typename base_t>
-        using impl = traits::io<__impl<base_t>, composed_t>;
+        //using impl = traits::io<__impl<base_t>, zint32<base_t::capability>>;
+
+        using impl = traits::io<__impl<base_t>, zint32<base_t::capability>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name numeric operations
+     */
+    ///@{
+
+    /**
+     * @brief numeric
+     * @relates int32
+     * @remark sse
+     */
+    template<typename composed_t>
+    struct int32_numeric
+    {
+
+        /**
+         * @brief numeric basic interface implementation
+         * @relates int32
+         * @remark sse
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using mask_t = typename base_t::mask_t;
+
+            FORWARD(__impl);
+
+        };
+
+        /**
+         * @brief numeric public interface implementation
+         * @relates int32
+         * @remark sse
+         */
+
+
+        template<typename base_t>
+        //using impl = traits::numeric<__impl<base_t>, zint32<base_t::capability>>;
+
+        using impl = traits::numeric<__impl<base_t>, zint32<base_t::capability>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name math operations
+     */
+    ///@{
+
+    /**
+     * @brief math
+     * @relates int32
+     * @remark sse
+     */
+    template<typename composed_t>
+    struct int32_math
+    {
+
+        /**
+         * @brief math basic interface implementation
+         * @relates int32
+         * @remark sse
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using mask_t = typename base_t::mask_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief math sse4 branch
+             * @relates int32
+             * @remark sse - sse4
+             */
+            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vabs(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "sse4", "vabs");
+
+                return _mm_abs_epi32(one);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int32
+             * @remark sse - default
+             */
+            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vabs(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vabs");
+
+                return vmax(one, -one);
+            }
+
+
+            /**
+             * @brief math sse4 branch
+             * @relates int32
+             * @remark sse - sse4
+             */
+            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vmin(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "sse4", "vmin");
+
+                return _mm_min_epi32(one, other);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int32
+             * @remark sse - default
+             */
+            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vmin(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vmin");
+
+                return vsel(one < other, one, other);
+            }
+
+
+            /**
+             * @brief math sse4 branch
+             * @relates int32
+             * @remark sse - sse4
+             */
+            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vmax(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "sse4", "vmax");
+
+                return _mm_max_epi32(one, other);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int32
+             * @remark sse - default
+             */
+            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vmax(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vmax");
+
+                return vsel(one < other, one, other);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int32
+             * @remark sse - default
+             */
+            friend zint32<base_t::capability> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
+
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vclamp");
+
+                return vmin(to, vmax(from, self));
+            }
+
+        };
+
+        /**
+         * @brief math public interface implementation
+         * @relates int32
+         * @remark sse
+         */
+
+
+        template<typename base_t>
+        //using impl = traits::math<__impl<base_t>, zint32<base_t::capability>>;
+
+        using impl = traits::math<__impl<base_t>, zint32<base_t::capability>>;
+
     };
 
     ///@}
@@ -369,8 +581,13 @@ namespace zacc { namespace sse {
          * @relates int32
          * @remark sse
          */
+
+
         template<typename base_t>
-        using impl = traits::arithmetic<__impl<base_t>, composed_t>;
+        //using impl = traits::arithmetic<__impl<base_t>, zint32<base_t::capability>>;
+
+        using impl = traits::arithmetic<__impl<base_t>, zint32<base_t::capability>>;
+
     };
 
     ///@}
@@ -457,6 +674,34 @@ namespace zacc { namespace sse {
                 return _mm_xor_si128(one, other);
             }
 
+
+            /**
+             * @brief bitwise sse4 branch
+             * @relates int32
+             * @remark sse - sse4
+             */
+            template<typename T = bool> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> is_set(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "sse4", "is_set");
+
+                return _mm_test_all_ones(one) != 0;
+            }
+
+
+            /**
+             * @brief bitwise default branch
+             * @relates int32
+             * @remark sse - default
+             */
+            template<typename T = bool> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> is_set(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "is_set");
+
+                __m128i junk;
+                auto ones = _mm_cmpeq_epi32(junk, junk);
+                return _mm_movemask_epi8(_mm_cmpeq_epi32(one, ones)) == 0xFFFF;
+            }
+
         };
 
         /**
@@ -464,8 +709,13 @@ namespace zacc { namespace sse {
          * @relates int32
          * @remark sse
          */
+
+
         template<typename base_t>
-        using impl = traits::bitwise<__impl<base_t>, composed_t>;
+        //using impl = traits::bitwise<__impl<base_t>, zint32<base_t::capability>>;
+
+        using impl = traits::bitwise<__impl<base_t>, zint32<base_t::capability>>;
+
     };
 
     ///@}
@@ -557,8 +807,13 @@ namespace zacc { namespace sse {
          * @relates int32
          * @remark sse
          */
+
+
         template<typename base_t>
-        using impl = traits::bitwise_shift<__impl<base_t>, composed_t>;
+        //using impl = traits::bitwise_shift<__impl<base_t>, zint32<base_t::capability>>;
+
+        using impl = traits::bitwise_shift<__impl<base_t>, zint32<base_t::capability>>;
+
     };
 
     ///@}
@@ -597,7 +852,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bint32<base_t::capability> vlneg(bint32<base_t::capability> one)  noexcept {
+            friend zint32<base_t::capability> vlneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vlneg");
 
@@ -610,7 +865,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bint32<base_t::capability> vlor(bint32<base_t::capability> one, bint32<base_t::capability> other)  noexcept {
+            friend zint32<base_t::capability> vlor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vlor");
 
@@ -623,7 +878,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bint32<base_t::capability> vland(bint32<base_t::capability> one, bint32<base_t::capability> other)  noexcept {
+            friend zint32<base_t::capability> vland(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vland");
 
@@ -637,8 +892,13 @@ namespace zacc { namespace sse {
          * @relates int32
          * @remark sse
          */
+
+
         template<typename base_t>
-        using impl = traits::logical<__impl<base_t>, composed_t>;
+        //using impl = traits::logical<__impl<base_t>, bint32<base_t::capability>>;
+
+        using impl = traits::logical<__impl<base_t>, zint32<base_t::capability>>;
+
     };
 
     ///@}
@@ -677,7 +937,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bint32<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "veq");
 
@@ -690,7 +950,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bint32<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vneq");
 
@@ -703,7 +963,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bint32<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vgt");
 
@@ -716,7 +976,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bint32<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vlt");
 
@@ -729,7 +989,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bint32<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vge");
 
@@ -742,7 +1002,7 @@ namespace zacc { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend bint32<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vle");
 
@@ -756,8 +1016,13 @@ namespace zacc { namespace sse {
          * @relates int32
          * @remark sse
          */
+
+
         template<typename base_t>
-        using impl = traits::comparison<__impl<base_t>, composed_t>;
+        //using impl = traits::comparison<__impl<base_t>, zint32<base_t::capability>>;
+
+        using impl = traits::comparison<__impl<base_t>, zint32<base_t::capability>>;
+
     };
 
     ///@}
@@ -824,8 +1089,13 @@ namespace zacc { namespace sse {
          * @relates int32
          * @remark sse
          */
+
+
         template<typename base_t>
-        using impl = traits::conditional<__impl<base_t>, composed_t>;
+        //using impl = traits::conditional<__impl<base_t>, zint32<base_t::capability>>;
+
+        using impl = traits::conditional<__impl<base_t>, zint32<base_t::capability>>;
+
     };
 
     ///@}
@@ -838,79 +1108,84 @@ namespace zacc { namespace sse {
      */
     ///@{
 
-    /**
-     * @brief zval parametrization using
-     * - '__m128i' as underlying vector type
-     * - 'int32_t' as scalar type
-     * - '4' as vector size
-     * - '16' as alignment
-     * @relates int32
-     * @remark sse
-     */
-    template<uint64_t capability>
-    struct __zval_int32
-    {
-        using zval_t = zval<__m128i, __m128i, int32_t, 4, 16, capability>;
+    //namespace composition {
 
-        struct impl : public zval_t
+        /**
+         * @brief zval parametrization using
+         * - '__m128i' as underlying vector type
+         * - 'int32_t' as scalar type
+         * - '4' as vector size
+         * - '16' as alignment
+         * @relates int32
+         * @remark sse
+         */
+        template<uint64_t capability>
+        struct __zval_int32
         {
-            FORWARD2(impl, zval_t);
+            using zval_t = zval<__m128i, __m128i, int32_t, 4, 16, capability>;
+
+            struct impl : public zval_t
+            {
+                FORWARD2(impl, zval_t);
+            };
         };
-    };
-    /**
-     * @brief zval composition
-     * @relates int32
-     * @remark sse
-     */
-    template<uint64_t capability>
-    struct __zint32
-    {
-        struct impl;
-
-        using zval_t = typename __zval_int32<capability>::impl;
-        using composition_t = compose
-        <
-            printable::impl,
-            iteratable::impl,
-            convertable::impl,
-            int32_io<impl>::template impl,
-            int32_arithmetic<impl>::template impl,
-            int32_bitwise<impl>::template impl,
-            int32_bitwise_shift<impl>::template impl,
-            int32_logical<impl>::template impl,
-            int32_comparison<impl>::template impl,
-            int32_conditional<impl>::template impl,
-            int32_construction<impl>::template impl,
-
-            composable<zval_t>::template type
-        >;
-
-        struct impl : public composition_t
+        /**
+         * @brief zval composition
+         * @relates int32
+         * @remark sse
+         */
+        template<uint64_t capability>
+        struct __zint32
         {
-            FORWARD2(impl, composition_t);
+            struct impl;
+
+            using zval_t = typename __zval_int32<capability>::impl;
+            using composition_t = compose
+            <
+                printable::impl,
+                iteratable::impl,
+                convertable::impl,
+                int32_io<impl>::template impl,
+                int32_math<impl>::template impl,
+                int32_numeric<impl>::template impl,
+                int32_arithmetic<impl>::template impl,
+                int32_bitwise<impl>::template impl,
+                int32_bitwise_shift<impl>::template impl,
+                int32_logical<impl>::template impl,
+                int32_comparison<impl>::template impl,
+                int32_conditional<impl>::template impl,
+                int32_construction<impl>::template impl,
+
+                composable<zval_t>::template type
+            >;
+
+            struct impl : public composition_t
+            {
+                FORWARD2(impl, composition_t);
+            };
         };
-    };
 
-    template<uint64_t capability>
-    struct zint32 : public __zint32<capability>::impl
-    {
-        FORWARD2(zint32, __zint32<capability>::impl);
-    };
-
-    template<uint64_t capability>
-    struct __bint32
-    {
-        using bval_t = bval<typename __zint32<capability>::impl, __m128i>;
-        struct impl : public bval_t
+        template<uint64_t capability>
+        struct __bint32
         {
-            FORWARD2(impl, bval_t);
+            using bval_t = bval<typename __zint32<capability>::impl, __m128i>;
+            struct impl : public bval_t
+            {
+                FORWARD2(impl, bval_t);
+            };
         };
+    //}
+
+    template<uint64_t capability>
+    struct zint32 : public /*composition::*/__zint32<capability>::impl
+    {
+        FORWARD2(zint32, /*composition::*/__zint32<capability>::impl);
     };
 
     template<uint64_t capability>
-    struct bint32 : public __bint32<capability>::impl
+    struct bint32 : public /*composition::*/__bint32<capability>::impl
     {
-        FORWARD2(bint32, __bint32<capability>::impl);
+        FORWARD2(bint32, /*composition::*/__bint32<capability>::impl);
     };
 
     static_assert(is_zval<zint32<0>>::value, "is_zval for zint32 failed.");

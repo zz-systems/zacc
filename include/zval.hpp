@@ -78,6 +78,7 @@ namespace zacc {
         /// mask type for boolean operations
         using mask_t = _mask_t;
 
+        //using bval_t = bval;
 
         /**
          * @brief default constructor
@@ -90,7 +91,7 @@ namespace zacc {
          * @tparam enable
          * @param value
          */
-        template<typename T, typename enable = std::enable_if_t<!std::is_base_of<zval, T>::value, T>>
+        template<typename T, typename enable = std::enable_if_t<!is_zval<T>::value && !is_bval<T>::value>>
         zval(T value) : _value(value) {}
 
         /**
@@ -99,14 +100,14 @@ namespace zacc {
          * @tparam enable
          * @param value
          */
-        template<typename T, typename enable = std::enable_if_t<std::is_base_of<zval, T>::value, T>>
-        zval(const T& value) : _value(value.get_value()) {}
+        //template<typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>
+        zval(const zval& value) : _value(value.get_value()) {}
 
         /**
          * @brief construct from mask
          * @param value
          */
-        zval(const mask_t& value) : _value(value) {}
+        zval(const mask_t value) : _value(value) {}
 
         /**
          * @brief cast to underlying vector type
@@ -252,4 +253,8 @@ namespace zacc {
             FORWARD(type);
         };
     };
+
+    template<typename T>
+    constexpr size_t dim() { return T::dim; }
+
 }

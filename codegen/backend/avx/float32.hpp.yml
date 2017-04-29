@@ -40,7 +40,7 @@ modules:
       init: _mm256_load_ps(value.data())
 
     - args: "std::array<sse::zint32<base_t::capability>, 2> value"
-      init: _mm256_set_m128(_mm_cvtepi32_ps(value.get_value()[1]), _mm_cvtepi32_ps(value.get_value()[0]))
+      init: _mm256_set_m128(_mm_cvtepi32_ps(value[1]), _mm_cvtepi32_ps(value[0]))
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_ps }
@@ -53,6 +53,18 @@ modules:
     vstream:
       <<: *io_store
       body: _mm256_stream_ps(target.data(), source)
+
+    vgather:
+      args: { raw: "T* source, U index" }
+      prefix: "template<typename T, typename U = zint32<base_t::capability>> friend"
+      returns: "std::enable_if_t<std::is_same<typename U::vector_t, __m256i>::value, composed_t>"
+      body: _mm256_i32gather_ps(source, index, 4)
+
+    vgather:
+      args: { raw: "T* source, U index" }
+      prefix: "template<typename T, typename U = zint32<base_t::capability>> friend"
+      returns: "std::enable_if_t<std::is_same<typename U::vector_t, std::array<sse::zint32<base_t::capability>, 2>>::value, composed_t>"
+      body:  _mm256_set_m128(vgather(source, index.get_value()[1]), vgather(source, index.get_value()[0]))
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -60,6 +72,14 @@ modules:
     vabs:
       args: one
       body: _mm256_max_ps(one, -one)
+
+    vmin: _mm256_min_ps
+    vmax: _mm256_max_ps
+
+    vclamp:
+     args: [self, from, to]
+     body: vmin(to, vmax(from, self))
+
     vrcp:
       args: one
       body: _mm256_rcp_ps
@@ -104,6 +124,22 @@ modules:
     vband:  _mm256_or_ps
     vbor:   _mm256_and_ps
     vbxor:  _mm256_xor_ps
+
+    is_set:
+      args: one
+      returns: bool
+      body:
+        avx2:
+          requires: [AVX2]
+          body:
+            - auto ival =  _mm256_castps_si256(one);
+            - return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
+        default:
+          requires: [not AVX2]
+          body:
+            - auto hi = _mm_castps_si128(_mm256_extractf128_ps(one, 1));
+            - auto lo = _mm_castps_si128(_mm256_extractf128_ps(one, 0));
+            - return _mm_test_all_ones(hi) != 0 && _mm_test_all_ones(lo) != 0;
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
     vlneg:

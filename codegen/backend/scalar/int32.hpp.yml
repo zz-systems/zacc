@@ -14,6 +14,7 @@ type:
       - convertable
      internal:
        - io
+       - math
        - numeric
        - arithmetic
        - bitwise
@@ -27,7 +28,7 @@ modules:
     - args: [[*scalar_t, value]]
       init: value
 
-    - prefix: "template <typename T, typename enable = std::enable_if_t<std::is_base_of<zval_base, T>::value, T>>"
+    - prefix: "template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>"
       args: "const T &value"
       init: value.get_value()
 
@@ -40,8 +41,25 @@ modules:
       args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       body: target.data()[0] = source.get_value();
     vstream: *io_store
+    vgather:
+      args: { raw: "T* source, zint32<base_t::capability> index" }
+      prefix: "template<typename T> friend"
+      #returns: "std::enable_if_t<is_integral<T>::value && T::dim == 1, composed_t>"
+      body: return source[index.get_value()]
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: std::abs(one)
+
+    vmin: std::min(one.get_value(), other.get_value())
+    vmax: std::max(one.get_value(), other.get_value())
+
+    vclamp:
+      args: [self, from, to]
+      body: vmin(to, vmax(from, self))
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
@@ -59,10 +77,22 @@ modules:
     vband:  (one.get_value() & other.get_value());
     vbor:   (one.get_value() | other.get_value());
     vbxor:  (one.get_value() ^ other.get_value());
+
+    is_set:
+      args: one
+      returns: bool
+      body: one.get_value() != 0
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
     vbsll:  (one.get_value() << other.get_value())
     vbsrl:  (one.get_value() >> other.get_value())
+
+    vbslli:
+      args: { raw: "const composed_t one, const size_t other" }
+      body: (one.get_value() << other)
+    vbsrli:
+      args: { raw: "const composed_t one, const size_t other" }
+      body: (one.get_value() >> other)
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
     vlneg:

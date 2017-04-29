@@ -113,6 +113,12 @@ namespace zacc {
         std::vector<capability> match_capabilities(raw_t required) const;
 
         /**
+         * @brief Get all capability objects from raw representation
+         * @return array of capabilities for each enabled capability
+         */
+        std::vector<capability> make_capabilities(raw_t value) const;
+
+        /**
          * @brief Resolves platform information and populates capabilities, fluent interface
          * @return self
          */

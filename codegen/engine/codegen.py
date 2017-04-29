@@ -98,7 +98,7 @@ class Func:
 
         self.is_member = entries.is_member if is_copy else entries.get("member")
 
-        self.prefix     = entries.prefix if is_copy else "friend" if not self.is_member and not self.name == "" else entries.get("prefix", "")
+        self.prefix     = entries.prefix if is_copy else entries.get("prefix", "friend") if not self.is_member and not self.name == "" else entries.get("prefix", "")
         self.suffix     = entries.suffix if is_copy else entries.get("suffix", "const" if self.is_member else "")
         self.returns    = entries.returns if is_copy else entries.get("returns", "z{}<base_t::capability>".format(self.parent.parent.type))
 
@@ -114,9 +114,9 @@ class Func:
 
 
         #override if in comparison or  logical module
-        if self.parent.name == "comparison" or self.parent.name == "logical":
+        #if (self.parent.name == "comparison" or self.parent.name == "logical"):
             #self.returns = "bval<composed_t, mask_t>"
-            self.returns = "b{}<base_t::capability>".format(self.parent.parent.type)
+            #self.returns = "b{}<base_t::capability>".format(self.parent.parent.type)
 
         test       = parent.test_config and parent.test_config.get(self.name)
 
@@ -320,12 +320,12 @@ class Arg:
         #override if in logical module
         module = self.parent.parent.parent
 
-        if isinstance(module, Module):
+        #if isinstance(module, Module):
             #self.default_type = "z{}<base_t::capability>".format(module.parent.type)
 
-            if module.name == "logical":
+            #if module.name == "logical":
                 #self.type = "bval<composed_t, mask_t>"
-                self.type = "b{}<base_t::capability>".format(module.parent.type)
+                #self.type = "b{}<base_t::capability>".format(module.parent.type)
 
 
 

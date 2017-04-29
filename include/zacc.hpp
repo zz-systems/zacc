@@ -22,36 +22,43 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-
 #pragma once
 
-#include "backend/avx512/float32.impl.hpp"
-#include "backend/avx512/float64.impl.hpp"
-#include "backend/avx512/int8.impl.hpp"
-#include "backend/avx512/int16.impl.hpp"
-#include "backend/avx512/int32.impl.hpp"
+#include <numeric>
+#include <algorithm>
+#include <type_traits>
 
-namespace zacc { namespace avx512 {
+#include "type_traits.hpp"
+#include "zval.hpp"
+#include "common.hpp"
+#include "util/algorithm.hpp"
 
-    template<typename _capability>
-    struct types
-    {
-        using capability = _capability;
+#include "backend/all.hpp"
 
-        using zfloat32  = ::zacc::avx512::zfloat32<capability::value>;
-        using zfloat64  = ::zacc::avx512::zfloat64<capability::value>;
-        using zint8     = ::zacc::avx512::zint8<capability::value>;
-        using zint16    = ::zacc::avx512::zint16<capability::value>;
-        using zint32    = ::zacc::avx512::zint32<capability::value>;
+#define DISPATCHED template<typename dispatcher, \
+    typename zint8      = typename dispatcher::zint8, \
+    typename zint16     = typename dispatcher::zint16, \
+    typename zint32     = typename dispatcher::zint32, \
+    typename zfloat32   = typename dispatcher::zfloat32, \
+    typename zfloat64   = typename dispatcher::zfloat64, \
+    typename zbyte      = zint8, \
+    typename zshort     = zint16, \
+    typename zint       = zint32, \
+    typename zfloat     = zfloat32, \
+    typename zdouble    = zfloat64, \
+    typename bint8      = typename dispatcher::bint8, \
+    typename bint16     = typename dispatcher::bint16, \
+    typename bint32     = typename dispatcher::bint32, \
+    typename bfloat32   = typename dispatcher::bfloat32, \
+    typename bfloat64   = typename dispatcher::bfloat64, \
+    typename bbyte      = bint8, \
+    typename bshort     = bint16, \
+    typename bint       = bint32, \
+    typename bfloat     = bfloat32, \
+    typename bdouble    = bfloat64>
 
-        using bfloat32  = ::zacc::avx512::bfloat32<capability::value>;
-        using bfloat64  = ::zacc::avx512::bfloat64<capability::value>;
-        using bint8     = ::zacc::avx512::bint8<capability::value>;
-        using bint16    = ::zacc::avx512::bint16<capability::value>;
-        using bint32    = ::zacc::avx512::bint32<capability::value>;
-
-        static constexpr const size_t alignment = zint32::alignment;
-
-        static const std::string major_branch_name() { return "AVX512"; }
-    };
-}}
+template<typename T>
+std::enable_if_t<!zacc::is_zval<T>::value, bool> is_set(T value)
+{
+    return value != 0;
+};

@@ -26,6 +26,7 @@
 #pragma once
 
 #include <numeric>
+#include <type_traits>
 
 namespace zacc {
 
@@ -65,10 +66,31 @@ namespace zacc {
      */
     template< class InputIt >
     std::string join(InputIt first, InputIt last, const std::string& separator) {
+        if(first == last)
+            return "";
+
         return std::accumulate(first + 1, last, first->str(),
                         [separator](std::string &acc, auto &part) {
                             return acc + separator + part.str();
             });
     }
+
+    /**
+     * @brief Concatenates all the elements of a collection
+     * using the specified separator between each element.
+     * The collection value type must provide a str() method.
+     * @tparam InputIt collection iterator type
+     * @param first Begin
+     * @param last End
+     * @param separator The string to use as separator
+     * @return A string that consists of the elements in provided collection delimited by the separator string
+     */
+    template< class Collection >
+    std::string join(const Collection &collection, const std::string& separator) {
+        return join(std::begin(collection),
+                    std::end(collection),
+                    separator);
+    }
+
 
 }

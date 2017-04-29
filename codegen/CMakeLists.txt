@@ -22,18 +22,6 @@ set(codegen.deps
         ${test_template}
         )
 
-function(preprocess_paths path type template)
-    string(REGEX REPLACE "${template.schema}" "${${type}.schema}" outpath ${template})
-    string(REPLACE "codegen/" "" outpath ${outpath})
-
-    set(${path} "${outpath}" PARENT_SCOPE)
-endfunction()
-
-function(find_files files schema)
-    file(GLOB_RECURSE _files RELATIVE ${PROJECT_SOURCE_DIR} ${schema})
-    set(${files} ${_files} PARENT_SCOPE)
-endfunction()
-
 function(generate_file output template template_data)
     get_filename_component(output_dir ${output} DIRECTORY)
 

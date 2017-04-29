@@ -33,13 +33,26 @@
 
 namespace zacc { namespace sse {
 
-    template<uint64_t capability>
+    template<typename _capability>
     struct types
     {
-        using zfloat32  = ::zacc::sse::zfloat32<capability>;
-        using zfloat64  = ::zacc::sse::zfloat64<capability>;
-        using zint8     = ::zacc::sse::zint8<capability>;
-        using zint16    = ::zacc::sse::zint16<capability>;
-        using zint32    = ::zacc::sse::zint32<capability>;
+        using capability = _capability;
+
+        using zfloat32  = ::zacc::sse::zfloat32<capability::value>;
+        using zfloat64  = ::zacc::sse::zfloat64<capability::value>;
+        using zint8     = ::zacc::sse::zint8<capability::value>;
+        using zint16    = ::zacc::sse::zint16<capability::value>;
+        using zint32    = ::zacc::sse::zint32<capability::value>;
+
+        using bfloat32  = ::zacc::sse::bfloat32<capability::value>;
+        using bfloat64  = ::zacc::sse::bfloat64<capability::value>;
+        using bint8     = ::zacc::sse::bint8<capability::value>;
+        using bint16    = ::zacc::sse::bint16<capability::value>;
+        using bint32    = ::zacc::sse::bint32<capability::value>;
+
+        static constexpr const size_t alignment = zint32::alignment;
+
+        static const std::string major_branch_name() { return "SSE"; }
     };
+
 }}

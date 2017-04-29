@@ -65,7 +65,7 @@ namespace zacc {
              * @brief create a snapshot of current value
              * @return snapshot's begin iterator
              */
-            iterator begin() {
+            iterator begin() const {
                 _snapshot = base_t::data();
                 return _snapshot.begin();
             }
@@ -73,10 +73,10 @@ namespace zacc {
             /**
              * @return snapshot's end iterator
              */
-            iterator end() { return _snapshot.end(); }
+            iterator end() const { return _snapshot.end(); }
 
         private:
-            typename base_t::extracted_t _snapshot;
+            mutable typename base_t::extracted_t _snapshot;
         };
     };
 

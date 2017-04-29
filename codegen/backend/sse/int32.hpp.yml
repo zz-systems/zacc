@@ -13,13 +13,15 @@ type:
       - iteratable
       - convertable
      internal:
-       - io
-       - arithmetic
-       - bitwise
-       - bitwise_shift
-       - logical
-       - comparison
-       - conditional
+      - io
+      - math
+      - numeric
+      - arithmetic
+      - bitwise
+      - bitwise_shift
+      - logical
+      - comparison
+      - conditional
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
@@ -49,6 +51,48 @@ modules:
     vstream:
       <<: *io_store
       body:  _mm_stream_si128((__m128i*)target.data(), source)
+
+    vgather:
+      args: { raw: "T* source, zint32<base_t::capability> index" }
+      prefix: "template<typename T> friend"
+      #returns: "std::enable_if_t<is_integral<T>:: value && T::dim == 4, composed_t>"
+      body:
+        - auto i = index.data();
+        - return _mm_set_epi32(source[i[3]], source[i[2]], source[i[1]], source[i[0]]);
+#-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_abs_epi32
+        default:
+          requires: [not SSE41]
+          body: vmax(one, -one);
+    vmin:
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_min_epi32
+        default:
+          requires: [not SSE41]
+          body: vsel(one < other, one, other);
+    vmax:
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_max_epi32
+        default:
+          requires: [not SSE41]
+          body: vsel(one < other, one, other);
+
+    vclamp:
+     args: [self, from, to]
+     body: vmin(to, vmax(from, self))
+
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
@@ -92,6 +136,20 @@ modules:
       body: _mm_and_si128
     vbxor:  &bitwise_xor
       body: _mm_xor_si128
+
+    is_set:
+      args: one
+      returns: bool
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_test_all_ones(one) != 0
+        default:
+          requires: [not SSE41]
+          body:
+            - __m128i junk;
+            - auto ones = _mm_cmpeq_epi32(junk, junk);
+            - return _mm_movemask_epi8(_mm_cmpeq_epi32(one, ones)) == 0xFFFF
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
     vbsll:  _mm_sll_epi32

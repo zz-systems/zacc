@@ -594,7 +594,7 @@ namespace zacc { namespace math {
         mat<T, N, M> result;
 
         for(int i = 0; i < N * M; i++)
-            result(i) = a(i).trunc();
+            result(i) = clamp_int32(a(i));
 
         return result;
     }

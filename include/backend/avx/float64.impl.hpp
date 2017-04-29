@@ -50,9 +50,9 @@
 #include "traits/conditional.hpp"
 
 // emulation
-#include "backend/sse/int8.impl.hpp"
-#include "backend/sse/int16.impl.hpp"
-#include "backend/sse/int32.impl.hpp"
+#include "backend/avx/int8.impl.hpp"
+#include "backend/avx/int16.impl.hpp"
+#include "backend/avx/int32.impl.hpp"
 
 /**
  * @brief float64 implementation for the avx branch
@@ -92,7 +92,6 @@ namespace zacc { namespace avx {
         struct __impl : base_t
         {
             using mask_t = typename base_t::mask_t;
-
 
 
 
@@ -173,7 +172,7 @@ namespace zacc { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            __impl(std::array<sse::zint32<base_t::capability>, 2> value) : base_t(_mm256_set_m128(_mm_cvtepi32_pd(value.get_value()[1]), _mm_cvtepi32_pd(value.get_value()[0]))) {
+            __impl(std::array<sse::zint32<base_t::capability>, 2> value) : base_t(_mm256_set_m128(_mm_cvtepi32_pd(value[1]), _mm_cvtepi32_pd(value[0]))) {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(std::array<sse::zint32<base_t::c..)");
 
@@ -198,8 +197,13 @@ namespace zacc { namespace avx {
          * @relates float64
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, composed_t>;
+        //using impl = traits::construction<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::construction<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -258,6 +262,19 @@ namespace zacc { namespace avx {
                 _mm256_stream_pd(target.data(), source);
             }
 
+
+            /**
+             * @brief io default branch
+             * @relates float64
+             * @remark avx - default
+             */
+            template<typename T, typename U = zint32<base_t::capability>> friend std::enable_if_t<std::is_same<typename U::vector_t, std::array<sse::zint32<base_t::capability>, 2>>::value, composed_t> vgather(T* source, U index)  noexcept {
+
+                ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vgather");
+
+                return _mm256_set_m128d(vgather(source, index.get_value()[1]), vgather(source, index.get_value()[0]));
+            }
+
         };
 
         /**
@@ -265,8 +282,13 @@ namespace zacc { namespace avx {
          * @relates float64
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::io<__impl<base_t>, composed_t>;
+        //using impl = traits::io<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::io<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -306,8 +328,13 @@ namespace zacc { namespace avx {
          * @relates float64
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::numeric<__impl<base_t>, composed_t>;
+        //using impl = traits::numeric<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::numeric<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -438,8 +465,13 @@ namespace zacc { namespace avx {
          * @relates float64
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::math<__impl<base_t>, composed_t>;
+        //using impl = traits::math<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::math<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -570,8 +602,13 @@ namespace zacc { namespace avx {
          * @relates float64
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::arithmetic<__impl<base_t>, composed_t>;
+        //using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -658,6 +695,35 @@ namespace zacc { namespace avx {
                 return _mm256_xor_pd(one, other);
             }
 
+
+            /**
+             * @brief bitwise avx2 branch
+             * @relates float64
+             * @remark avx - avx2
+             */
+            template<typename T = bool> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::AVX2), T> is_set(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "avx2", "is_set");
+
+                auto ival =  _mm256_castpd_si256(one);
+                return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
+            }
+
+
+            /**
+             * @brief bitwise default branch
+             * @relates float64
+             * @remark avx - default
+             */
+            template<typename T = bool> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::AVX2), T> is_set(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "is_set");
+
+                auto hi = _mm_castpd_si128(_mm256_extractf128_pd(one, 1));
+                auto lo = _mm_castpd_si128(_mm256_extractf128_pd(one, 0));
+                return _mm_test_all_ones(hi) != 0 && _mm_test_all_ones(lo) != 0;
+            }
+
         };
 
         /**
@@ -665,8 +731,13 @@ namespace zacc { namespace avx {
          * @relates float64
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::bitwise<__impl<base_t>, composed_t>;
+        //using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -705,7 +776,7 @@ namespace zacc { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            friend bfloat64<base_t::capability> vlneg(bfloat64<base_t::capability> one)  noexcept {
+            friend zfloat64<base_t::capability> vlneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vlneg");
 
@@ -718,7 +789,7 @@ namespace zacc { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            friend bfloat64<base_t::capability> vlor(bfloat64<base_t::capability> one, bfloat64<base_t::capability> other)  noexcept {
+            friend zfloat64<base_t::capability> vlor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vlor");
 
@@ -731,7 +802,7 @@ namespace zacc { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            friend bfloat64<base_t::capability> vland(bfloat64<base_t::capability> one, bfloat64<base_t::capability> other)  noexcept {
+            friend zfloat64<base_t::capability> vland(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vland");
 
@@ -745,8 +816,13 @@ namespace zacc { namespace avx {
          * @relates float64
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::logical<__impl<base_t>, composed_t>;
+        //using impl = traits::logical<__impl<base_t>, bfloat64<base_t::capability>>;
+
+        using impl = traits::logical<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -785,7 +861,7 @@ namespace zacc { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            friend bfloat64<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "veq");
 
@@ -798,7 +874,7 @@ namespace zacc { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            friend bfloat64<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vneq");
 
@@ -811,7 +887,7 @@ namespace zacc { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            friend bfloat64<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vgt");
 
@@ -824,7 +900,7 @@ namespace zacc { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            friend bfloat64<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vlt");
 
@@ -837,7 +913,7 @@ namespace zacc { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            friend bfloat64<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vge");
 
@@ -851,7 +927,7 @@ namespace zacc { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            friend bfloat64<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vle");
 
@@ -865,8 +941,13 @@ namespace zacc { namespace avx {
          * @relates float64
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::comparison<__impl<base_t>, composed_t>;
+        //using impl = traits::comparison<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::comparison<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -920,8 +1001,13 @@ namespace zacc { namespace avx {
          * @relates float64
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::conditional<__impl<base_t>, composed_t>;
+        //using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -934,80 +1020,83 @@ namespace zacc { namespace avx {
      */
     ///@{
 
-    /**
-     * @brief zval parametrization using
-     * - '__m256d' as underlying vector type
-     * - 'double' as scalar type
-     * - '4' as vector size
-     * - '32' as alignment
-     * @relates float64
-     * @remark avx
-     */
-    template<uint64_t capability>
-    struct __zval_float64
-    {
-        using zval_t = zval<__m256d, __m256d, double, 4, 32, capability>;
+    //namespace composition {
 
-        struct impl : public zval_t
+        /**
+         * @brief zval parametrization using
+         * - '__m256d' as underlying vector type
+         * - 'double' as scalar type
+         * - '4' as vector size
+         * - '32' as alignment
+         * @relates float64
+         * @remark avx
+         */
+        template<uint64_t capability>
+        struct __zval_float64
         {
-            FORWARD2(impl, zval_t);
+            using zval_t = zval<__m256d, __m256d, double, 4, 32, capability>;
+
+            struct impl : public zval_t
+            {
+                FORWARD2(impl, zval_t);
+            };
         };
-    };
-    /**
-     * @brief zval composition
-     * @relates float64
-     * @remark avx
-     */
-    template<uint64_t capability>
-    struct __zfloat64
-    {
-        struct impl;
-
-        using zval_t = typename __zval_float64<capability>::impl;
-        using composition_t = compose
-        <
-            printable::impl,
-            iteratable::impl,
-            convertable::impl,
-            float64_io<impl>::template impl,
-            float64_math<impl>::template impl,
-            float64_numeric<impl>::template impl,
-            float64_arithmetic<impl>::template impl,
-            float64_bitwise<impl>::template impl,
-            float64_logical<impl>::template impl,
-            float64_comparison<impl>::template impl,
-            float64_conditional<impl>::template impl,
-            float64_construction<impl>::template impl,
-
-            composable<zval_t>::template type
-        >;
-
-        struct impl : public composition_t
+        /**
+         * @brief zval composition
+         * @relates float64
+         * @remark avx
+         */
+        template<uint64_t capability>
+        struct __zfloat64
         {
-            FORWARD2(impl, composition_t);
+            struct impl;
+
+            using zval_t = typename __zval_float64<capability>::impl;
+            using composition_t = compose
+            <
+                printable::impl,
+                iteratable::impl,
+                convertable::impl,
+                float64_io<impl>::template impl,
+                float64_math<impl>::template impl,
+                float64_numeric<impl>::template impl,
+                float64_arithmetic<impl>::template impl,
+                float64_bitwise<impl>::template impl,
+                float64_logical<impl>::template impl,
+                float64_comparison<impl>::template impl,
+                float64_conditional<impl>::template impl,
+                float64_construction<impl>::template impl,
+
+                composable<zval_t>::template type
+            >;
+
+            struct impl : public composition_t
+            {
+                FORWARD2(impl, composition_t);
+            };
         };
-    };
 
-    template<uint64_t capability>
-    struct zfloat64 : public __zfloat64<capability>::impl
-    {
-        FORWARD2(zfloat64, __zfloat64<capability>::impl);
-    };
-
-    template<uint64_t capability>
-    struct __bfloat64
-    {
-        using bval_t = bval<typename __zfloat64<capability>::impl, __m256d>;
-        struct impl : public bval_t
+        template<uint64_t capability>
+        struct __bfloat64
         {
-            FORWARD2(impl, bval_t);
+            using bval_t = bval<typename __zfloat64<capability>::impl, __m256d>;
+            struct impl : public bval_t
+            {
+                FORWARD2(impl, bval_t);
+            };
         };
+    //}
+
+    template<uint64_t capability>
+    struct zfloat64 : public /*composition::*/__zfloat64<capability>::impl
+    {
+        FORWARD2(zfloat64, /*composition::*/__zfloat64<capability>::impl);
     };
 
     template<uint64_t capability>
-    struct bfloat64 : public __bfloat64<capability>::impl
+    struct bfloat64 : public /*composition::*/__bfloat64<capability>::impl
     {
-        FORWARD2(bfloat64, __bfloat64<capability>::impl);
+        FORWARD2(bfloat64, /*composition::*/__bfloat64<capability>::impl);
     };
 
     static_assert(is_zval<zfloat64<0>>::value, "is_zval for zfloat64 failed.");

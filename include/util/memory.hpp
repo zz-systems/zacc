@@ -83,6 +83,10 @@ namespace zacc {
         inline bool operator!=(const aligned_allocator &rhs) { return !operator==(rhs); }
     };
 
+    // TODO
+    //template<class T>
+    //aligned_allocator<T, std::enable_if<
+
     namespace detail
     {
         inline void* _aligned_malloc(size_t size, size_t alignment)

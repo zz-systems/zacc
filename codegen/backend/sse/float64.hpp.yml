@@ -52,6 +52,14 @@ modules:
     vstream:
       <<: *io_store
       body:  _mm_stream_pd(target.data(), source)
+
+    vgather:
+      args: { raw: "double* source, zint32<base_t::capability> index" }
+      prefix: "template<typename T> friend"
+      #returns: "std::enable_if_t<is_integral<T>:: value && T::dim == 4, composed_t>"
+      body:
+        - auto i = index.data();
+        - return _mm_set_pd(source[i[3]], source[i[1]]);
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -134,12 +142,23 @@ modules:
     vbneg:
       args: one
       body: &bitwise_negate_body
-        - __m128d junk;
-        - auto ones = _mm_cmpeq_pd(junk, junk);
+        - auto ones = _mm_cmpeq_pd(one, one);
         - return _mm_xor_pd(one, ones);
     vband:  _mm_or_pd
     vbor:   _mm_and_pd
     vbxor:  _mm_xor_pd
+
+    is_set:
+      args: one
+      returns: bool
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_test_all_ones(_mm_castpd_si128(one)) != 0
+        default:
+          requires: [not SSE41]
+          body:
+            - _mm_movemask_pd(_mm_cmpeq_pd(one, _mm_cmpeq_pd(one, one))) == 0xFFFF
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
     vlneg:

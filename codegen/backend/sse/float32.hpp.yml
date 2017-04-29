@@ -50,6 +50,15 @@ modules:
     vstream:
       <<: *io_store
       body:  _mm_stream_ps(target.data(), source)
+
+    vgather:
+      args: { raw: "T* source, zint32<base_t::capability> index" }
+      prefix: "template<typename T> friend"
+      #returns: "std::enable_if_t<is_integral<T>:: value && T::dim == 4, composed_t>"
+      body:
+        - auto i = index.data();
+        - return _mm_set_ps(source[i[3]], source[i[2]], source[i[1]], source[i[0]]);
+
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -57,6 +66,14 @@ modules:
     vabs:
       args: one
       body: _mm_max_ps(one, -one)
+
+    vmin: _mm_min_ps
+    vmax: _mm_max_ps
+
+    vclamp:
+     args: [self, from, to]
+     body: vmin(to, vmax(from, self))
+
     vrcp:
       args: one
       body: _mm_rcp_ps
@@ -152,6 +169,20 @@ modules:
     vband:  _mm_or_ps
     vbor:   _mm_and_ps
     vbxor:  _mm_xor_ps
+
+    is_set:
+      args: one
+      returns: bool
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_test_all_ones(_mm_castps_si128(one)) != 0
+        default:
+          requires: [not SSE41]
+          body:
+            - __m128 junk;
+            - auto ones = _mm_cmpeq_ps(junk, junk);
+            - return _mm_movemask_ps(_mm_cmpeq_ps(one, ones)) == 0xFFFF
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
     vlneg:

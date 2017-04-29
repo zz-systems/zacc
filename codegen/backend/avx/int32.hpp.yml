@@ -15,6 +15,8 @@ type:
       - convertable
      internal:
        - io
+       - math
+       - numeric
        - arithmetic
        - bitwise
        - bitwise_shift
@@ -58,6 +60,26 @@ modules:
       body:
        - _mm_stream_si128((__m128i*)(target.data()), source.get_value()[1]);
        - _mm_stream_si128((__m128i*)(target.data() + base_t::dim / 2), source.get_value()[0]);
+
+    vgather:
+      args: { raw: "T* source, zint32<base_t::capability> index" }
+      prefix: "template<typename T> friend"
+      #returns: "std::enable_if_t<is_integral<T>::value && T::dim == 8, composed_t>"
+      body: zint32<base_t::capability> ({ vgather(source, index.get_value()[1]), vgather(source, index.get_value()[0]) });
+#-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: return zint32<base_t::capability> ({ vabs(one.get_value()[1]), vabs(one.get_value()[0]) });
+
+    vmin: return zint32<base_t::capability> ({ vmin(one.get_value()[1], other.get_value()[1]), vmin(one.get_value()[0], other.get_value()[0]) });
+    vmax: return zint32<base_t::capability> ({ vmax(one.get_value()[1], other.get_value()[1]), vmax(one.get_value()[0], other.get_value()[0]) });
+
+    vclamp:
+     args: [self, from, to]
+     body: return zint32<base_t::capability> ({ vabs(self.get_value()[1], from.get_value()[1], to.get_value()[1]), vabs(self.get_value()[0], from.get_value()[0], to.get_value()[0]) });
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
@@ -71,13 +93,18 @@ modules:
   bitwise:
     vbneg: &bitwise_negate
       args: one
-      body: return zint32<base_t::capability> ({ ~one.get_value()[1], ~one.get_value()[1] });
+      body: return zint32<base_t::capability> ({ ~one.get_value()[1], ~one.get_value()[0] });
     vbor:   &bitwise_or
       body: return zint32<base_t::capability> ({ one.get_value()[1] | other.get_value()[1], one.get_value()[0] | other.get_value()[0] });
     vband:  &bitwise_and
       body: return zint32<base_t::capability> ({ one.get_value()[1] & other.get_value()[1], one.get_value()[0] & other.get_value()[0] });
     vbxor:  &bitwise_xor
       body: return zint32<base_t::capability> ({ one.get_value()[1] ^ other.get_value()[1], one.get_value()[0] ^ other.get_value()[0] });
+
+    is_set:
+      args: one
+      returns: bool
+      body: return is_set(one.get_value()[1]) && is_set(one.get_value()[0])
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
     vbsll:  return zint32<base_t::capability> ({ one.get_value()[1] << other.get_value()[1], one.get_value()[0] << other.get_value()[0] });
@@ -92,7 +119,7 @@ modules:
   logical:
     vlneg:
       args: one
-      body: return zint32<base_t::capability> ({ !one.get_value()[1], !one.get_value()[1] });
+      body: return zint32<base_t::capability> ({ !one.get_value()[1], !one.get_value()[0] });
     vlor:   return zint32<base_t::capability> ({ one.get_value()[1] || other.get_value()[1], one.get_value()[0] || other.get_value()[0] });
     vland:  return zint32<base_t::capability> ({ one.get_value()[1] && other.get_value()[1], one.get_value()[0] && other.get_value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------

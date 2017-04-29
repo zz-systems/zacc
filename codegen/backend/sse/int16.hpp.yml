@@ -66,6 +66,20 @@ modules:
       body: _mm_and_si128
     vbxor:  &bitwise_xor
       body: _mm_xor_si128
+
+    is_set:
+      args: one
+      returns: bool
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_test_all_ones(one) != 0
+        default:
+          requires: [not SSE41]
+          body:
+            - __m128i junk;
+            - auto ones = _mm_cmpeq_epi32(junk, junk);
+            - return _mm_movemask_epi8(_mm_cmpeq_epi16(one, ones)) == 0xFFFF
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
     vbsll:  _mm_sll_epi16

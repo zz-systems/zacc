@@ -237,19 +237,21 @@ namespace zacc {
     struct branches {
         using flag_t        = std::underlying_type_t<capabilities>;
 
-        using scalar        = std::integral_constant<flag_t, make_flag(capabilities::SCALAR)>;
+        struct scalar       : public std::integral_constant<flag_t, make_flag(capabilities::SCALAR)> {};
 
-        using sse2          = std::integral_constant<flag_t, make_flag(capabilities::SSE2)>;
+        struct sse2         : public std::integral_constant<flag_t, make_flag(capabilities::SSE2)>{};
 
-        using sse3          = std::integral_constant<flag_t, sse2::value | make_flag(capabilities::SSE3)>;
-        using sse41         = std::integral_constant<flag_t, sse3::value | make_flag(capabilities::SSE41)>;
-        using sse41_fma3    = std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA3)>;
-        using sse41_fma4    = std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA4)>;
+        struct sse3         : public std::integral_constant<flag_t, sse2::value | make_flag(capabilities::SSE3, capabilities::SSSE3)>{};
+        struct sse41        : public std::integral_constant<flag_t, sse3::value | make_flag(capabilities::SSE41)>{};
+        struct sse41_fma3   : public std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA3)>{};
+        struct sse41_fma4   : public std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA4)>{};
 
-        using avx1          = std::integral_constant<flag_t, make_flag(capabilities::FMA3, capabilities::AVX1)>;
-        using avx2          = std::integral_constant<flag_t, avx1::value | make_flag(capabilities::AVX2)>;
-        using avx512        = std::integral_constant<flag_t, make_flag(capabilities::AVX512)>;
+        struct avx1         : public std::integral_constant<flag_t, make_flag(capabilities::FMA3, capabilities::AVX1)>{};
+        struct avx2         : public std::integral_constant<flag_t, avx1::value | make_flag(capabilities::AVX2)>{};
+        struct avx512       : public std::integral_constant<flag_t, make_flag(capabilities::AVX512)>{};
 
-        using opencl        = std::integral_constant<flag_t, make_flag(capabilities::OPENCL)>;
+        struct opencl       : public std::integral_constant<flag_t, make_flag(capabilities::OPENCL)>{};
     };
+
+
 }

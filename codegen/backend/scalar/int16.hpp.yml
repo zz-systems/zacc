@@ -27,7 +27,7 @@ modules:
     - args: [[*scalar_t, value]]
       init: value
 
-    - prefix: "template <typename T, typename enable = std::enable_if_t<std::is_base_of<zval_base, T>::value, T>>"
+    - prefix: "template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>"
       args: "const T &value"
       init: value.get_value()
 
@@ -59,10 +59,22 @@ modules:
     vband:  (one.get_value() & other.get_value());
     vbor:   (one.get_value() | other.get_value());
     vbxor:  (one.get_value() ^ other.get_value());
+
+    is_set:
+      args: one
+      returns: bool
+      body: one.get_value() != 0
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
-    vsll:  (one.get_value() << other.get_value())
-    vsrl:  (one.get_value() >> other.get_value())
+    vbsll:  (one.get_value() << other.get_value())
+    vbsrl:  (one.get_value() >> other.get_value())
+
+    vbslli:
+      args: { raw: "const composed_t one, const size_t other" }
+      body: (one.get_value() << other)
+    vbsrli:
+      args: { raw: "const composed_t one, const size_t other" }
+      body: (one.get_value() >> other)
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
     vlneg:

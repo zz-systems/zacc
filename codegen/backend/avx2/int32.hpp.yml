@@ -14,6 +14,8 @@ type:
       - convertable
      internal:
        - io
+       - math
+       - numeric
        - arithmetic
        - bitwise
        - bitwise_shift
@@ -49,6 +51,26 @@ modules:
     vstream:
       <<: *io_store
       body: _mm256_stream_si256((__m256i*)target.data(), source);
+
+
+    vgather:
+      args: { raw: "T* source, zint32<base_t::capability> index" }
+      prefix: "template<typename T> friend"
+      #returns: "std::enable_if_t<is_zval<T>::value && is_integral<T>::value && T::dim == 8, composed_t>"
+      body: _mm256_i32gather_epi32(source, index, 4)
+#-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: _mm256_abs_epi32
+    vmin: _mm256_min_epi32
+    vmax: _mm256_max_epi32
+
+    vclamp:
+     args: [self, from, to]
+     body: vmin(to, vmax(from, self))
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
@@ -69,14 +91,19 @@ modules:
     vband:  _mm256_or_si256
     vbor:   _mm256_and_si256
     vbxor:  _mm256_xor_si256
+
+    is_set:
+      args: one
+      returns: bool
+      body: _mm256_testc_si256(one, _mm256_cmpeq_epi32(one,one));
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
-    vsll:  _mm256_sll_epi32
-    vsrl:  _mm256_srl_epi32
-    vslli:
+    vbsll:  _mm256_sll_epi32
+    vbsrl:  _mm256_srl_epi32
+    vbslli:
       args: { raw: "const composed_t one, const size_t other" }
       body: _mm256_slli_epi32(one, other)
-    vsrli:
+    vbsrli:
       args: { raw: "const composed_t one, const size_t other" }
       body: _mm256_srli_epi32(one, other)
 #-----------------------------------------------------------------------------------------------------------------------

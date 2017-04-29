@@ -25,33 +25,34 @@
 
 #pragma once
 
-#include "backend/avx512/float32.impl.hpp"
-#include "backend/avx512/float64.impl.hpp"
-#include "backend/avx512/int8.impl.hpp"
-#include "backend/avx512/int16.impl.hpp"
-#include "backend/avx512/int32.impl.hpp"
+#include <type_traits>
+#include <algorithm>
+#include <numeric>
 
-namespace zacc { namespace avx512 {
+namespace zacc { namespace math {
 
-    template<typename _capability>
-    struct types
+    template<class T>
+    constexpr const std::enable_if_t<std::is_fundamental<T>::value, T> vclamp( const T& v, const T& lo, const T& hi )
     {
-        using capability = _capability;
+        return std::min(hi, std::max(lo, v));
+    }
 
-        using zfloat32  = ::zacc::avx512::zfloat32<capability::value>;
-        using zfloat64  = ::zacc::avx512::zfloat64<capability::value>;
-        using zint8     = ::zacc::avx512::zint8<capability::value>;
-        using zint16    = ::zacc::avx512::zint16<capability::value>;
-        using zint32    = ::zacc::avx512::zint32<capability::value>;
+    template<class T>
+    constexpr const T clamp_int32(const T& value)
+    {
+        return vclamp(value, -1073741824.0, 1073741824.0);
+    }
 
-        using bfloat32  = ::zacc::avx512::bfloat32<capability::value>;
-        using bfloat64  = ::zacc::avx512::bfloat64<capability::value>;
-        using bint8     = ::zacc::avx512::bint8<capability::value>;
-        using bint16    = ::zacc::avx512::bint16<capability::value>;
-        using bint32    = ::zacc::avx512::bint32<capability::value>;
+    template<class T>
+    const std::enable_if_t<std::is_fundamental<T>::value, T> vfmadd( const T& a, const T& b, const T& c )
+    {
+        return a * b + c;
+    }
 
-        static constexpr const size_t alignment = zint32::alignment;
+    template<class T>
+    const std::enable_if_t<std::is_fundamental<T>::value, T> vfmsub( const T& a, const T& b, const T& c )
+    {
+        return a * b - c;
+    }
 
-        static const std::string major_branch_name() { return "AVX512"; }
-    };
 }}

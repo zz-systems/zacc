@@ -46,6 +46,18 @@ namespace zacc { namespace traits {
             return vabs(*this);
         }
 
+        composed_t max(const composed_t other) const noexcept {
+            return vmax(*this, other);
+        }
+
+        composed_t min(const composed_t other) const noexcept {
+            return vmin(*this, other);
+        }
+
+        composed_t clamp(const composed_t from, const composed_t to) const noexcept {
+            return vclamp(*this, from, to);
+        }
+
         /**
          * @brief inverse value
          * @return 1 / value

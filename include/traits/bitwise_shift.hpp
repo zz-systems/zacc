@@ -46,14 +46,27 @@ namespace zacc { namespace traits {
             return vbsrli(one, immediate);
         }
 // TODO: Disabled for now.
-//        friend composed_t operator<<(const composed_t one, const composed_t other) {
-//            return bitwise_shift_sll(one, other);
-//        }
-//
-//        friend composed_t operator>>(const composed_t one, const composed_t other) {
-//            return bitwise_shift_srl(one, other);
-//        }
+        /*friend composed_t operator<<(const composed_t one, const composed_t other) {
+            return vbsll(one, other);
+        }
 
+        friend composed_t operator>>(const composed_t one, const composed_t other) {
+            return vbsrl(one, other);
+        }*/
+
+        /**
+        * @brief merged << - assignment operator
+        */
+        friend composed_t &operator <<=(composed_t &one, const size_t immediate) {
+            return one = one << immediate;
+        }
+
+        /**
+        * @brief merged >> - assignment operator
+        */
+        friend composed_t &operator >>=(composed_t &one, const size_t immediate) {
+            return one = one >> immediate;
+        }
 
         CONVERSION(<<);
         ASSIGNMENT(<<);

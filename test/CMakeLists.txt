@@ -3,11 +3,6 @@ enable_testing()
 foreach(branch ${branches})
     get_branch_files(files ${branch} "${test.schema}")
 
-    #add_executable(zacc.${branch}.playground WIN32 ${CMAKE_CURRENT_LIST_DIR}/playground.cpp)
-    #add_dependencies("zacc.${branch}.playground" "zacc.generate.${branch}.types" )
-    #target_compile_options("zacc.${branch}.playground" PUBLIC ${branch_flags_${branch}})
-    #target_include_directories(zacc.${branch}.playground PUBLIC "${CMAKE_SOURCE_DIR}/include")
-
     add_executable("zacc.tests.${branch}" ${files} ${CMAKE_CURRENT_LIST_DIR}/test_trigonometry.cpp ${CMAKE_CURRENT_LIST_DIR}/test_matrix.cpp)
     add_dependencies("zacc.tests.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
 
@@ -24,7 +19,6 @@ foreach(branch ${branches})
 
     foreach(def ${branch_defs_${branch}})
         target_compile_definitions(zacc.tests.${branch}  PUBLIC "${def}")
-        #target_compile_definitions(zacc.${branch}.playground  PUBLIC "${def}")
     endforeach()
 
         add_test(
@@ -33,8 +27,6 @@ foreach(branch ${branches})
         )
 
     list(APPEND tests "zacc.tests.${branch}")
-    #list(APPEND playgrounds "zacc.${branch}.playground")
 endforeach()
 
 add_custom_target(zacc.tests.all DEPENDS ${tests})
-#add_custom_target(zacc.playgrounds.all DEPENDS ${tests})

@@ -93,7 +93,6 @@ namespace zacc { namespace avx {
 
 
 
-
             /**
              * @brief construction default branch
              * @relates int8
@@ -160,8 +159,13 @@ namespace zacc { namespace avx {
          * @relates int8
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, composed_t>;
+        //using impl = traits::construction<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::construction<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -229,8 +233,13 @@ namespace zacc { namespace avx {
          * @relates int8
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::io<__impl<base_t>, composed_t>;
+        //using impl = traits::io<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::io<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -322,8 +331,13 @@ namespace zacc { namespace avx {
          * @relates int8
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::arithmetic<__impl<base_t>, composed_t>;
+        //using impl = traits::arithmetic<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::arithmetic<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -408,6 +422,19 @@ namespace zacc { namespace avx {
                 return zint8<base_t::capability> ({ one.get_value()[1] ^ other.get_value()[1], one.get_value()[0] ^ other.get_value()[0] });
             }
 
+
+            /**
+             * @brief bitwise default branch
+             * @relates int8
+             * @remark avx - default
+             */
+            friend bool is_set(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "is_set");
+
+                return is_set(one.get_value()[1]) && is_set(one.get_value()[0]);
+            }
+
         };
 
         /**
@@ -415,8 +442,13 @@ namespace zacc { namespace avx {
          * @relates int8
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::bitwise<__impl<base_t>, composed_t>;
+        //using impl = traits::bitwise<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::bitwise<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -455,7 +487,7 @@ namespace zacc { namespace avx {
              * @relates int8
              * @remark avx - default
              */
-            friend bint8<base_t::capability> vlneg(bint8<base_t::capability> one)  noexcept {
+            friend zint8<base_t::capability> vlneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vlneg");
 
@@ -468,7 +500,7 @@ namespace zacc { namespace avx {
              * @relates int8
              * @remark avx - default
              */
-            friend bint8<base_t::capability> vlor(bint8<base_t::capability> one, bint8<base_t::capability> other)  noexcept {
+            friend zint8<base_t::capability> vlor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vlor");
 
@@ -481,7 +513,7 @@ namespace zacc { namespace avx {
              * @relates int8
              * @remark avx - default
              */
-            friend bint8<base_t::capability> vland(bint8<base_t::capability> one, bint8<base_t::capability> other)  noexcept {
+            friend zint8<base_t::capability> vland(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vland");
 
@@ -495,8 +527,13 @@ namespace zacc { namespace avx {
          * @relates int8
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::logical<__impl<base_t>, composed_t>;
+        //using impl = traits::logical<__impl<base_t>, bint8<base_t::capability>>;
+
+        using impl = traits::logical<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -535,7 +572,7 @@ namespace zacc { namespace avx {
              * @relates int8
              * @remark avx - default
              */
-            friend bint8<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "veq");
 
@@ -548,7 +585,7 @@ namespace zacc { namespace avx {
              * @relates int8
              * @remark avx - default
              */
-            friend bint8<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vneq");
 
@@ -561,7 +598,7 @@ namespace zacc { namespace avx {
              * @relates int8
              * @remark avx - default
              */
-            friend bint8<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vgt");
 
@@ -574,7 +611,7 @@ namespace zacc { namespace avx {
              * @relates int8
              * @remark avx - default
              */
-            friend bint8<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vlt");
 
@@ -587,7 +624,7 @@ namespace zacc { namespace avx {
              * @relates int8
              * @remark avx - default
              */
-            friend bint8<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vge");
 
@@ -600,7 +637,7 @@ namespace zacc { namespace avx {
              * @relates int8
              * @remark avx - default
              */
-            friend bint8<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vle");
 
@@ -614,8 +651,13 @@ namespace zacc { namespace avx {
          * @relates int8
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::comparison<__impl<base_t>, composed_t>;
+        //using impl = traits::comparison<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::comparison<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -668,8 +710,13 @@ namespace zacc { namespace avx {
          * @relates int8
          * @remark avx
          */
+
+
         template<typename base_t>
-        using impl = traits::conditional<__impl<base_t>, composed_t>;
+        //using impl = traits::conditional<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::conditional<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -682,78 +729,81 @@ namespace zacc { namespace avx {
      */
     ///@{
 
-    /**
-     * @brief zval parametrization using
-     * - 'std::array<sse::zint8<capability>, 2>' as underlying vector type
-     * - 'int8_t' as scalar type
-     * - '32' as vector size
-     * - '32' as alignment
-     * @relates int8
-     * @remark avx
-     */
-    template<uint64_t capability>
-    struct __zval_int8
-    {
-        using zval_t = zval<std::array<sse::zint8<capability>, 2>, std::array<sse::zint8<capability>, 2>, int8_t, 32, 32, capability>;
+    //namespace composition {
 
-        struct impl : public zval_t
+        /**
+         * @brief zval parametrization using
+         * - 'std::array<sse::zint8<capability>, 2>' as underlying vector type
+         * - 'int8_t' as scalar type
+         * - '32' as vector size
+         * - '32' as alignment
+         * @relates int8
+         * @remark avx
+         */
+        template<uint64_t capability>
+        struct __zval_int8
         {
-            FORWARD2(impl, zval_t);
+            using zval_t = zval<std::array<sse::zint8<capability>, 2>, std::array<sse::zint8<capability>, 2>, int8_t, 32, 32, capability>;
+
+            struct impl : public zval_t
+            {
+                FORWARD2(impl, zval_t);
+            };
         };
-    };
-    /**
-     * @brief zval composition
-     * @relates int8
-     * @remark avx
-     */
-    template<uint64_t capability>
-    struct __zint8
-    {
-        struct impl;
-
-        using zval_t = typename __zval_int8<capability>::impl;
-        using composition_t = compose
-        <
-            printable::impl,
-            iteratable::impl,
-            convertable::impl,
-            int8_io<impl>::template impl,
-            int8_arithmetic<impl>::template impl,
-            int8_bitwise<impl>::template impl,
-            int8_logical<impl>::template impl,
-            int8_comparison<impl>::template impl,
-            int8_conditional<impl>::template impl,
-            int8_construction<impl>::template impl,
-
-            composable<zval_t>::template type
-        >;
-
-        struct impl : public composition_t
+        /**
+         * @brief zval composition
+         * @relates int8
+         * @remark avx
+         */
+        template<uint64_t capability>
+        struct __zint8
         {
-            FORWARD2(impl, composition_t);
+            struct impl;
+
+            using zval_t = typename __zval_int8<capability>::impl;
+            using composition_t = compose
+            <
+                printable::impl,
+                iteratable::impl,
+                convertable::impl,
+                int8_io<impl>::template impl,
+                int8_arithmetic<impl>::template impl,
+                int8_bitwise<impl>::template impl,
+                int8_logical<impl>::template impl,
+                int8_comparison<impl>::template impl,
+                int8_conditional<impl>::template impl,
+                int8_construction<impl>::template impl,
+
+                composable<zval_t>::template type
+            >;
+
+            struct impl : public composition_t
+            {
+                FORWARD2(impl, composition_t);
+            };
         };
-    };
 
-    template<uint64_t capability>
-    struct zint8 : public __zint8<capability>::impl
-    {
-        FORWARD2(zint8, __zint8<capability>::impl);
-    };
-
-    template<uint64_t capability>
-    struct __bint8
-    {
-        using bval_t = bval<typename __zint8<capability>::impl, std::array<sse::zint8<capability>, 2>>;
-        struct impl : public bval_t
+        template<uint64_t capability>
+        struct __bint8
         {
-            FORWARD2(impl, bval_t);
+            using bval_t = bval<typename __zint8<capability>::impl, std::array<sse::zint8<capability>, 2>>;
+            struct impl : public bval_t
+            {
+                FORWARD2(impl, bval_t);
+            };
         };
+    //}
+
+    template<uint64_t capability>
+    struct zint8 : public /*composition::*/__zint8<capability>::impl
+    {
+        FORWARD2(zint8, /*composition::*/__zint8<capability>::impl);
     };
 
     template<uint64_t capability>
-    struct bint8 : public __bint8<capability>::impl
+    struct bint8 : public /*composition::*/__bint8<capability>::impl
     {
-        FORWARD2(bint8, __bint8<capability>::impl);
+        FORWARD2(bint8, /*composition::*/__bint8<capability>::impl);
     };
 
     static_assert(is_zval<zint8<0>>::value, "is_zval for zint8 failed.");

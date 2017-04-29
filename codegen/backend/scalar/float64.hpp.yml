@@ -17,7 +17,7 @@ type:
        - math
        - numeric
        - arithmetic
-       #- bitwise
+       - bitwise
        - logical
        - comparison
        - conditional
@@ -27,7 +27,7 @@ modules:
     - args: [[*scalar_t, value]]
       init: value
 
-    - prefix: "template <typename T, typename enable = std::enable_if_t<std::is_base_of<zval_base, T>::value, T>>"
+    - prefix: "template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>"
       args: "const T &value"
       init: value.get_value()
 
@@ -40,6 +40,11 @@ modules:
       args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       body: target.data()[0] = source.get_value();
     vstream: *io_store
+    vgather:
+      args: { raw: "T* source, zint32<base_t::capability> index" }
+      prefix: "template<typename T> friend"
+      #returns: "std::enable_if_t<is_integral<T>::value && T::dim == 1, composed_t>"
+      body: return source[index.get_value()]
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -47,6 +52,13 @@ modules:
     vabs:
       args: one
       body: std::abs(one.get_value())
+
+    vmin: std::min(one.get_value(), other.get_value())
+    vmax: std::max(one.get_value(), other.get_value())
+
+    vclamp:
+      args: [self, from, to]
+      body: vmin(to, vmax(from, self))
     vrcp:
       args: one
       body: (1 / one.get_value())
@@ -81,13 +93,19 @@ modules:
       args: [multiplicand, multiplier, addendum]
       body: std::fma(multiplicand.get_value(), multiplier.get_value(), -addendum.get_value())
 #-----------------------------------------------------------------------------------------------------------------------
-#  bitwise:
-#    vneg:
-#      args: one
-#      body: ~one;
-#    vand:  one & other;
-#    or:   one | other;
-#    xor:  one ^ other;
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    vbneg:
+      args: one
+      body: (*reinterpret_cast<double*>(~(*reinterpret_cast<const unsigned int*>(&one.get_value()))));
+    vband:   (*reinterpret_cast<double*>((*reinterpret_cast<const unsigned int*>(&one.get_value())) & (*reinterpret_cast<const unsigned int*>(&other.get_value()))));
+    vbor:     (*reinterpret_cast<double*>((*reinterpret_cast<const unsigned int*>(&one.get_value())) | (*reinterpret_cast<const unsigned int*>(&other.get_value()))));
+    vbxor:    (*reinterpret_cast<double*>((*reinterpret_cast<const unsigned int*>(&one.get_value())) ^ (*reinterpret_cast<const unsigned int*>(&other.get_value()))));
+
+    is_set:
+      args: one
+      returns: bool
+      body: one.get_value() != 0
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
     vlneg:

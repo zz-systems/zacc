@@ -198,6 +198,48 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
+    TEST(scalar_int8_bitwise_shift, vbslli_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        std::array<int8_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) ((a[i]) << (4));
+        }
+
+        VASSERT_EQ((zint8(a) << (4)), zint8(expected));
+    }
+
+    TEST(scalar_int8_bitwise_shift, vbsrli_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        std::array<int8_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = distribution2(generator);
+            b[i] = distribution1(generator);
+
+            expected[i] = (int8_t) ((a[i]) >> (3));
+        }
+
+        VASSERT_EQ((zint8(a) >> (3)), zint8(expected));
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
     TEST(scalar_int8_logical, vlneg_default)
     {
         REQUIRES(ZACC_CAPABILITIES);

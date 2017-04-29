@@ -48,6 +48,8 @@ namespace zacc { namespace math {
         static const constexpr double  Z_L2U = .69314718055966295651160180568695068359375;
         static const constexpr double  Z_L2L = .28235290563031577122588448175013436025525412068e-12;
         static const constexpr double  Z_R_LN2 = 1.442695040888963407359924681001892137426645954152985934135449406931;
+
+        static const constexpr double  Z_SQRT_3 = 1.73205080756887729353;
     };
 
     template<>
@@ -67,5 +69,7 @@ namespace zacc { namespace math {
         static const constexpr float  Z_L2U = 0.693145751953125f;
         static const constexpr float  Z_L2L = 1.428606765330187045e-06f;
         static const constexpr float  Z_R_LN2 = 1.442695040888963407359924681001892137426645954152985934135449406931f;
+
+        static const constexpr double  Z_SQRT_3 = 1.73205080756887729353;
     };
 }}

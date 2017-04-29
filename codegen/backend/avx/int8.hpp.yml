@@ -72,6 +72,11 @@ modules:
       body: return zint8<base_t::capability> ({ one.get_value()[1] & other.get_value()[1], one.get_value()[0] & other.get_value()[0] });
     vbxor:  &bitwise_xor
       body: return zint8<base_t::capability> ({ one.get_value()[1] ^ other.get_value()[1], one.get_value()[0] ^ other.get_value()[0] });
+
+    is_set:
+      args: one
+      returns: bool
+      body: return is_set(one.get_value()[1]) && is_set(one.get_value()[0])
 #-----------------------------------------------------------------------------------------------------------------------
   #bitwise_shift:
   #  vbsll:  return zint8<base_t::capability> { one.get_value()[1] << other.get_value()[1], one.get_value()[0] << other.get_value()[0] };

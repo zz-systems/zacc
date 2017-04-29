@@ -43,11 +43,16 @@
 #include "traits/{{ module.name }}.hpp"
 {% endfor %}
 
-{% if type.branch == 'avx' %}
+{% if type.branch == 'avx' and not (type.scalar_t == 'float' or type.scalar_t == 'double') %}
 // emulation
 #include "backend/sse/int8.impl.hpp"
 #include "backend/sse/int16.impl.hpp"
 #include "backend/sse/int32.impl.hpp"
+{% else  %}
+// emulation
+#include "backend/{{type.branch}}/int8.impl.hpp"
+#include "backend/{{type.branch}}/int16.impl.hpp"
+#include "backend/{{type.branch}}/int32.impl.hpp"
 {% endif %}
 
 /**
@@ -93,7 +98,6 @@ namespace zacc { namespace {{ type.branch }} {
             {% if not module in type.construction  %}
             FORWARD(__impl);
             {% else %}
-
             {% endif  %}
 
             {% for func in module.functions %}
@@ -126,8 +130,18 @@ namespace zacc { namespace {{ type.branch }} {
          * @relates {{ type.type }}
          * @remark {{ type.branch }}
          */
+
+
+        {% if module.name == 'logical' %}
         template<typename base_t>
-        using impl = traits::{{ module.name }}<__impl<base_t>, composed_t>;
+        //using impl = traits::{{ module.name }}<__impl<base_t>, b{{ type.type }}<base_t::capability>>;
+        {% else  %}
+        template<typename base_t>
+        //using impl = traits::{{ module.name }}<__impl<base_t>, z{{ type.type }}<base_t::capability>>;
+        {% endif %}
+
+        using impl = traits::{{ module.name }}<__impl<base_t>, z{{ type.type }}<base_t::capability>>;
+
     };
 
     ///@}
@@ -141,71 +155,74 @@ namespace zacc { namespace {{ type.branch }} {
      */
     ///@{
 
-    /**
-     * @brief zval parametrization using
-     * - '{{ type.vector_t }}' as underlying vector type
-     * - '{{ type.scalar_t }}' as scalar type
-     * - '{{ type.vec_size }}' as vector size
-     * - '{{ type.alignment }}' as alignment
-     * @relates {{ type.type }}
-     * @remark {{ type.branch }}
-     */
-    template<uint64_t capability>
-    struct __zval_{{ type.type }}
-    {
-        using zval_t = zval<{{ type.vector_t }}, {{ type.mask_t }}, {{ type.scalar_t }}, {{ type.vec_size }}, {{ type.alignment }}, capability>;
+    //namespace composition {
 
-        struct impl : public zval_t
+        /**
+         * @brief zval parametrization using
+         * - '{{ type.vector_t }}' as underlying vector type
+         * - '{{ type.scalar_t }}' as scalar type
+         * - '{{ type.vec_size }}' as vector size
+         * - '{{ type.alignment }}' as alignment
+         * @relates {{ type.type }}
+         * @remark {{ type.branch }}
+         */
+        template<uint64_t capability>
+        struct __zval_{{ type.type }}
         {
-            FORWARD2(impl, zval_t);
+            using zval_t = zval<{{ type.vector_t }}, {{ type.mask_t }}, {{ type.scalar_t }}, {{ type.vec_size }}, {{ type.alignment }}, capability>;
+
+            struct impl : public zval_t
+            {
+                FORWARD2(impl, zval_t);
+            };
         };
-    };
-    /**
-     * @brief zval composition
-     * @relates {{ type.type }}
-     * @remark {{ type.branch }}
-     */
-    template<uint64_t capability>
-    struct __z{{ type.type }}
-    {
-        struct impl;
-
-        using zval_t = typename __zval_{{ type.type }}<capability>::impl;
-        using composition_t = compose
-        <
-        {% for trait in type.get_traits() %}
-            {{ trait }},
-        {% endfor %}
-
-            composable<zval_t>::template type
-        >;
-
-        struct impl : public composition_t
+        /**
+         * @brief zval composition
+         * @relates {{ type.type }}
+         * @remark {{ type.branch }}
+         */
+        template<uint64_t capability>
+        struct __z{{ type.type }}
         {
-            FORWARD2(impl, composition_t);
+            struct impl;
+
+            using zval_t = typename __zval_{{ type.type }}<capability>::impl;
+            using composition_t = compose
+            <
+            {% for trait in type.get_traits() %}
+                {{ trait }},
+            {% endfor %}
+
+                composable<zval_t>::template type
+            >;
+
+            struct impl : public composition_t
+            {
+                FORWARD2(impl, composition_t);
+            };
         };
-    };
 
-    template<uint64_t capability>
-    struct z{{ type.type }} : public __z{{ type.type }}<capability>::impl
-    {
-        FORWARD2(z{{ type.type }}, __z{{ type.type }}<capability>::impl);
-    };
-
-    template<uint64_t capability>
-    struct __b{{ type.type }}
-    {
-        using bval_t = bval<typename __z{{ type.type }}<capability>::impl, {{ type.mask_t }}>;
-        struct impl : public bval_t
+        template<uint64_t capability>
+        struct __b{{ type.type }}
         {
-            FORWARD2(impl, bval_t);
+            using bval_t = bval<typename __z{{ type.type }}<capability>::impl, {{ type.mask_t }}>;
+            struct impl : public bval_t
+            {
+                FORWARD2(impl, bval_t);
+            };
         };
+    //}
+
+    template<uint64_t capability>
+    struct z{{ type.type }} : public /*composition::*/__z{{ type.type }}<capability>::impl
+    {
+        FORWARD2(z{{ type.type }}, /*composition::*/__z{{ type.type }}<capability>::impl);
     };
 
     template<uint64_t capability>
-    struct b{{ type.type }} : public __b{{ type.type }}<capability>::impl
+    struct b{{ type.type }} : public /*composition::*/__b{{ type.type }}<capability>::impl
     {
-        FORWARD2(b{{ type.type }}, __b{{ type.type }}<capability>::impl);
+        FORWARD2(b{{ type.type }}, /*composition::*/__b{{ type.type }}<capability>::impl);
     };
 
     static_assert(is_zval<z{{ type.type }}<0>>::value, "is_zval for z{{ type.type }} failed.");

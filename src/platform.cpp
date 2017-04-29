@@ -107,6 +107,17 @@ namespace zacc {
         return result;
     }
 
+    std::vector<capability> platform::make_capabilities(platform::raw_t value) const {
+        std::vector<capability> result;
+
+        transform_if(_capabilities.begin(), _capabilities.end(),
+                     std::back_inserter(result),
+                     [this](auto &item) { return item.second; },
+                     [this, value](auto &item) { return (value & static_cast<raw_t>(item.first)) != 0; });
+
+        return result;
+    }
+
     platform &platform::reload() {
         _flags = 0;
 
