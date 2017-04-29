@@ -74,7 +74,7 @@ before_build:
 - call %VCVARSALL%
 - set PATH=c:\Program Files\LLVM\msbuild-bin\;%PATH%
 - set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
-- cd C:\projects\gorynych
+- cd C:\projects\zacc
 
 
 build_script:
