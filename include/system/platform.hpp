@@ -139,6 +139,11 @@ namespace zacc {
         platform & register_capability(const capabilities cap, const char* str);
 
         /**
+         * @brief returns number of threads available on this machine
+         */
+        size_t num_threads();
+
+        /**
          * @brief returns the singleton instance
          * @return singleton instance
          */
@@ -153,6 +158,7 @@ namespace zacc {
          * @brief assignment operator not available
          */
         void operator=(platform const&)  = delete;
+
     private:
         raw_t _flags;
 
@@ -181,5 +187,12 @@ namespace zacc {
          * @return
          */
         friend std::ostream& operator<<(std::ostream& os, const platform& cap);
+    };
+
+    /**
+     * @brief derive from this struct to mark a type as a branch entrypoint
+     */
+    struct entrypoint {
+
     };
 }

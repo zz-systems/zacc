@@ -28,7 +28,7 @@
 
 #include "gtest/gtest.h"
 #include "util/gtest_ext.hpp"
-#include "system/dispatcher.hpp"
+#include "system/branch.hpp"
 #include <random>
 
 namespace zacc { namespace test {

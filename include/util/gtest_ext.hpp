@@ -26,7 +26,7 @@
 #pragma once
 
 #include "system/platform.hpp"
-#include "system/dispatcher.hpp"
+#include "system/branch.hpp"
 #include "util/algorithm.hpp"
 #include "gtest/gtest.h"
 

@@ -79,9 +79,8 @@ namespace zacc {
      * @brief Concatenates all the elements of a collection
      * using the specified separator between each element.
      * The collection value type must provide a str() method.
-     * @tparam InputIt collection iterator type
-     * @param first Begin
-     * @param last End
+     * @tparam Collection collection
+     * @param collection collection
      * @param separator The string to use as separator
      * @return A string that consists of the elements in provided collection delimited by the separator string
      */

@@ -27,7 +27,7 @@
 
 #include <cmath>
 #include "math/common.hpp"
-#include "system/dispatcher.hpp"
+#include "system/branch.hpp"
 
 namespace zacc { namespace math {
 

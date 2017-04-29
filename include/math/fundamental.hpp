@@ -31,24 +31,54 @@
 
 namespace zacc { namespace math {
 
+    /**
+     * @brief
+     * @tparam T
+     * @param v
+     * @param lo
+     * @param hi
+     * @return
+     */
     template<class T>
     constexpr const std::enable_if_t<std::is_fundamental<T>::value, T> vclamp( const T& v, const T& lo, const T& hi )
     {
         return std::min(hi, std::max(lo, v));
     }
 
+    /**
+     * @brief
+     * @tparam T
+     * @param value
+     * @return
+     */
     template<class T>
     constexpr const T clamp_int32(const T& value)
     {
         return vclamp(value, -1073741824.0, 1073741824.0);
     }
 
+    /**
+     * @brief
+     * @tparam T
+     * @param a
+     * @param b
+     * @param c
+     * @return
+     */
     template<class T>
     const std::enable_if_t<std::is_fundamental<T>::value, T> vfmadd( const T& a, const T& b, const T& c )
     {
         return a * b + c;
     }
 
+    /**
+     * @brief
+     * @tparam T
+     * @param a
+     * @param b
+     * @param c
+     * @return
+     */
     template<class T>
     const std::enable_if_t<std::is_fundamental<T>::value, T> vfmsub( const T& a, const T& b, const T& c )
     {

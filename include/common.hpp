@@ -29,16 +29,20 @@
 
 
 #if defined(__clang__)
+
 #elif defined(__GNUC__) || defined(__GNUG__)
-inline __m256 _mm256_set_m128(__m128 hi, __m128 lo)
-{
-    return _mm256_insertf128_ps(_mm256_castps128_ps256(hi),(lo),1);
-}
+
+    inline __m256 _mm256_set_m128(__m128 hi, __m128 lo)
+    {
+        return _mm256_insertf128_ps(_mm256_castps128_ps256(hi),(lo),1);
+    }
+
 #elif defined(_MSC_VER)
+
 #endif
 
-#ifdef _MSC_VER
-#else
+#if defined(_MSC_VER) && (defined(ZACC_AVX) || defined(ZACC_AVX2))
+
     inline bool _mm256_test_all_ones(__m256 val)
     {
         auto ival = _mm256_castps_si256(val);
@@ -49,6 +53,7 @@ inline __m256 _mm256_set_m128(__m128 hi, __m128 lo)
     {
         return _mm256_testc_si256(val, _mm256_cmpeq_epi32(val,val));
     }
+
 #endif
 
 
@@ -149,3 +154,28 @@ std::enable_if_t<!zacc::is_zval<T>::value, bool> is_set(T value)
 
 #define STRINGIZE_DETAIL(x) #x
 #define STRINGIZE(x) STRINGIZE_DETAIL(x)
+
+/**
+ * @brief compile- and runtime type dispatching
+ */
+#define DISPATCHED template<typename dispatcher, \
+    typename zint8      = typename dispatcher::zint8, \
+    typename zint16     = typename dispatcher::zint16, \
+    typename zint32     = typename dispatcher::zint32, \
+    typename zfloat32   = typename dispatcher::zfloat32, \
+    typename zfloat64   = typename dispatcher::zfloat64, \
+    typename zbyte      = zint8, \
+    typename zshort     = zint16, \
+    typename zint       = zint32, \
+    typename zfloat     = zfloat32, \
+    typename zdouble    = zfloat64, \
+    typename bint8      = typename dispatcher::bint8, \
+    typename bint16     = typename dispatcher::bint16, \
+    typename bint32     = typename dispatcher::bint32, \
+    typename bfloat32   = typename dispatcher::bfloat32, \
+    typename bfloat64   = typename dispatcher::bfloat64, \
+    typename bbyte      = bint8, \
+    typename bshort     = bint16, \
+    typename bint       = bint32, \
+    typename bfloat     = bfloat32, \
+    typename bdouble    = bfloat64>

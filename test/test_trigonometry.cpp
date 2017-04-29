@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "system/dispatcher.hpp"
+#include "system/branch.hpp"
 #include "math/trigonometry/trigonometry.hpp"
 #include "math/trigonometry/emulated_trigonometry.hpp"
 

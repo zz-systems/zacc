@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "system/dispatcher.hpp"
+#include "system/branch.hpp"
 #include "math/linear/generic_matrix.hpp"
 #include "math/linear/specialized_matrix.hpp"
 

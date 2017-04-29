@@ -27,26 +27,14 @@
 
 #include "platform.hpp"
 #include "capabilities.hpp"
-
-
-#if defined(ZACC_AVX)
-    #include "backend/avx/types.hpp"
-#elif defined(ZACC_AVX2)
-    #include "backend/avx2/types.hpp"
-#elif defined(ZACC_AVX512)
-    #include "backend/avx512/types.hpp"
-#elif defined(ZACC_SCALAR)
-    #include "backend/scalar/types.hpp"
-#elif defined(ZACC_SSE)
-    #include "backend/sse/types.hpp"
-#endif
+#include "backend/all.hpp"
 
 namespace zacc {
 
     /**
      * @brief provides all necessary types for the current branch at compile time
      */
-    struct dispatcher
+    struct branch
     {
         /// fast float enabled? used for faster and less precise computations
         static const constexpr bool use_fast_float = ZACC_FAST_FLOAT;
@@ -55,49 +43,26 @@ namespace zacc {
         using types = ZACC_MAJOR_BRANCH::types<branches::ZACC_CAPABILITIES>;
     };
 
-
-    using zint8      = typename dispatcher::types::zint8;
-    using zint16     = typename dispatcher::types::zint16;
-    using zint32     = typename dispatcher::types::zint32;
-    using zfloat32   = typename dispatcher::types::zfloat32;
-    using zfloat64   = typename dispatcher::types::zfloat64;
+    using zint8      = typename branch::types::zint8;
+    using zint16     = typename branch::types::zint16;
+    using zint32     = typename branch::types::zint32;
+    using zfloat32   = typename branch::types::zfloat32;
+    using zfloat64   = typename branch::types::zfloat64;
     using zbyte      = zint8;
     using zshort     = zint16;
     using zint       = zint32;
     using zfloat     = zfloat32;
     using zdouble    = zfloat64;
 
-    using bint8      = typename dispatcher::types::bint8;
-    using bint16     = typename dispatcher::types::bint16;
-    using bint32     = typename dispatcher::types::bint32;
-    using bfloat32   = typename dispatcher::types::bfloat32;
-    using bfloat64   = typename dispatcher::types::bfloat64;
+    using bint8      = typename branch::types::bint8;
+    using bint16     = typename branch::types::bint16;
+    using bint32     = typename branch::types::bint32;
+    using bfloat32   = typename branch::types::bfloat32;
+    using bfloat64   = typename branch::types::bfloat64;
     using bbyte      = bint8;
     using bshort     = bint16;
     using bint       = bint32;
     using bfloat     = bfloat32;
     using bdouble    = bfloat64;
-
-#define DISPATCHED template<typename dispatcher, \
-    typename zint8      = typename dispatcher::zint8, \
-    typename zint16     = typename dispatcher::zint16, \
-    typename zint32     = typename dispatcher::zint32, \
-    typename zfloat32   = typename dispatcher::zfloat32, \
-    typename zfloat64   = typename dispatcher::zfloat64, \
-    typename zbyte      = zint8, \
-    typename zshort     = zint16, \
-    typename zint       = zint32, \
-    typename zfloat     = zfloat32, \
-    typename zdouble    = zfloat64, \
-    typename bint8      = typename dispatcher::bint8, \
-    typename bint16     = typename dispatcher::bint16, \
-    typename bint32     = typename dispatcher::bint32, \
-    typename bfloat32   = typename dispatcher::bfloat32, \
-    typename bfloat64   = typename dispatcher::bfloat64, \
-    typename bbyte      = bint8, \
-    typename bshort     = bint16, \
-    typename bint       = bint32, \
-    typename bfloat     = bfloat32, \
-    typename bdouble    = bfloat64>
 
 }

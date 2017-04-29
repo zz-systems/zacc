@@ -32,29 +32,49 @@
 
 namespace zacc {
 
+    /**
+     * @brief Provides functionality to select a branch to run during runtime
+     * Inject your own logic via subclassing (crtp) or simply using a type alias
+     * @example using engine_dispatcher = runtime_dispatcher<engine_dispatcher_impl>;
+     * @tparam base_t
+     */
     template<typename base_t>
     struct runtime_dispatcher : public base_t
     {
         FORWARD(runtime_dispatcher);
 
+        /**
+         * @brief execute all _valid_ code paths
+         */
         template<typename ...Args>
         void dispatch_some(Args&&... args)
         {
             dispatch(false, std::forward<Args>(args)...);
         }
 
+        /**
+         * @brief execute one _valid_ code path (highest featureset)
+         */
         template<typename ...Args>
         void dispatch_one(Args&&... args)
         {
             dispatch(true, std::forward<Args>(args)...);
         }
 
+        /**
+         * @brief execute all or one _valid_ code paths (highest featureset)
+         * @param select_one if ture, only one path will be executed
+         */
         template<typename ...Args>
         void operator()(bool select_one, Args&&... args)
         {
             dispatch(select_one, std::forward<Args>(args)...);
         }
 
+        /**
+         * @brief execute all or one _valid_ code paths (highest featureset)
+         * @param select_one if ture, only one path will be executed
+         */
         template<typename ...Args>
         void dispatch(bool select_one, Args&&... args)
         {
@@ -156,49 +176,10 @@ namespace zacc {
 #endif
         }
 
-        template<typename ...Args>
-        void dispatch_all(Args&&... args)
-        {
-            _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
-            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
-
-#if defined(ZACC_OPENCL)
-            // opencl - not implemented yet
-            //base_t::dispatch_impl<zacc::opencl::types<branches::opencl>>(std::forward<Args>(args)...);
-#endif
-#if defined(ZACC_AVX512)
-            // avx512 - not implemented yet
-            //base_t::dispatch_impl<zacc::avx512::types<branches::avx512>>(std::forward<Args>(args)...);
-#endif
-#if defined(ZACC_AVX2)
-            // avx2
-            base_t::template dispatch_impl<avx2::types<branches::avx2>>(std::forward<Args>(args)...);
-#endif
-#if defined(ZACC_AVX)
-            // avx1
-            base_t::template dispatch_impl<avx::types<branches::avx1>>(std::forward<Args>(args)...);
-#endif
-#if defined(ZACC_SSE)
-            // sse41 - fma4
-            base_t::template dispatch_impl<sse::types<branches::sse41_fma4>>(std::forward<Args>(args)...);
-            // sse41 - fma3
-            base_t::template dispatch_impl<sse::types<branches::sse41_fma3>>(std::forward<Args>(args)...);
-            // sse41 - no fma
-            base_t::template dispatch_impl<sse::types<branches::sse41>>(std::forward<Args>(args)...);
-
-            // sse3
-            base_t::template dispatch_impl<sse::types<branches::sse3>>(std::forward<Args>(args)...);
-            // sse2
-            base_t::template dispatch_impl<sse::types<branches::sse2>>(std::forward<Args>(args)...);
-#endif
-
-#if defined(ZACC_SCALAR)
-            // scalar
-            base_t::template dispatch_impl<scalar::types<branches::scalar>>(std::forward<Args>(args)...);
-#endif
-        }
-
     private:
+        /**
+         * @brief displays the selected branch with extended information
+         */
         DISPATCHED void log_branch() const
         {
             std::cout << "Dispatching: " << dispatcher::major_branch_name()

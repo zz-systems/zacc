@@ -22,7 +22,14 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
+#include <thread>
+
 #include "system/platform.hpp"
+
+#if defined(_OPENMP)
+    #include <omp>
+#endif
+
 
 namespace zacc {
     platform &platform::enable(const capabilities capability) {
@@ -214,6 +221,14 @@ namespace zacc {
         os << endl;
 
         return os;
+    }
+
+    size_t platform::num_threads() {
+        #if defined(_OPENMP)
+        return omp_num_threads();
+        #else
+        return std::thread::hardware_concurrency();
+        #endif
     }
 
     thread_local cpuid platform::_cpuid;
