@@ -48,62 +48,11 @@ namespace zacc {
      */
     struct dispatcher
     {
-        /// max capability
-        //static const constexpr uint64_t capability = branches::ZACC_CAPABILITIES::value;
-
         /// fast float enabled? used for faster and less precise computations
         static const constexpr bool use_fast_float = ZACC_FAST_FLOAT;
 
-        /// capability type made from integral capability value
-        //using capability_t =  std::integral_constant<uint64_t, capability>;
-
         /// type provider alias
         using types = ZACC_MAJOR_BRANCH::types<branches::ZACC_CAPABILITIES>;
-
-        /// float32 type alias
-        //using zfloat32  = typename types::zfloat32;
-        /// float64 type alias
-       // using zfloat64  = typename types::zfloat64;
-        /// int8 type alias
-        //using zint8     = typename types::zint8;
-        /// int16 type alias
-       // using zint16    = typename types::zint16;
-        /// int32 type alias
-        //using zint32    = typename types::zint32;
-
-        /// float32 type alias
-        //using zfloat    = zfloat32;
-        /// float64 type alias
-        //using zdouble   = zfloat64;
-        /// int8 type alias
-        //using zbyte     = zint8;
-        /// int16 type alias
-        //using zshort    = zint16;
-        /// int32 type alias
-        //using zint      = zint32;
     };
-
-    /// float32 type alias
-    //using zfloat    = dispatcher::zfloat;
-    /// float64 type alias
-    //using zdouble   = dispatcher::zdouble;
-    /// int8 type alias
-    //using zbyte     = dispatcher::zbyte;
-    /// int16 type alias
-    //using zshort    = dispatcher::zshort;
-    /// int32 type alias
-    //using zint      = dispatcher::zint;
-
-    /// float32 type
-    //using zfloat32  = dispatcher::zfloat32;
-    /// float64 type
-    //using zfloat64  = dispatcher::zfloat64;
-    /// int8 type
-    //using zint8     = dispatcher::zint8;
-    /// int16 type
-    //using zint16    = dispatcher::zint16;
-    /// int32 type
-    //using zint32    = dispatcher::zint32;
-
 
 }

@@ -26,10 +26,33 @@
 #pragma once
 
 #include "system/platform.hpp"
+#include "system/dispatcher.hpp"
 #include "util/algorithm.hpp"
 #include "gtest/gtest.h"
 
 namespace zacc { namespace test {
+
+    using zint8      = typename dispatcher::types::zint8;
+    using zint16     = typename dispatcher::types::zint16;
+    using zint32     = typename dispatcher::types::zint32;
+    using zfloat32   = typename dispatcher::types::zfloat32;
+    using zfloat64   = typename dispatcher::types::zfloat64;
+    using zbyte      = zint8;
+    using zshort     = zint16;
+    using zint       = zint32;
+    using zfloat     = zfloat32;
+    using zdouble    = zfloat64;
+        
+    using bint8      = typename dispatcher::types::bint8;
+    using bint16     = typename dispatcher::types::bint16;
+    using bint32     = typename dispatcher::types::bint32;
+    using bfloat32   = typename dispatcher::types::bfloat32;
+    using bfloat64   = typename dispatcher::types::bfloat64;
+    using bbyte      = bint8;
+    using bshort     = bint16;
+    using bint       = bint32;
+    using bfloat     = bfloat32;
+    using bdouble    = bfloat64;
 
 #define ZTRACE_TEST_OUTPUT(cmd) ZTRACE_INTERNAL(cmd)
 #define REQUIRES(raw) \
