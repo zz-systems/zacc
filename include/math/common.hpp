@@ -25,17 +25,23 @@
 
 #pragma once
 
+#include "system/dispatcher.hpp"
+
 namespace zacc { namespace math {
+
+    //template<typename vreal_t, typename enable = void>
     template<typename vreal_t>
     struct constants {
-        
+
     };
 
-    template<> 
-    struct constants<zdouble>
+    //template<typename vreal_t>
+    //struct constants<vreal_t, std::enable_if_t<is_double<vreal_t>::value>>
+    template<>
+    struct constants<zfloat64>
     {
         static const constexpr double  Z_PI = 3.14159265358979323846;
-        static const constexpr double  Z_PI_2 = M_PI / 2;
+        static const constexpr double  Z_PI_2 = Z_PI / 2;
 
         static const constexpr double  Z_1_PI = 0.318309886183790671538;
         static const constexpr double  Z_4_PI = 1.273239544735162542821171882678754627704620361328125;
@@ -52,11 +58,13 @@ namespace zacc { namespace math {
         static const constexpr double  Z_SQRT_3 = 1.73205080756887729353;
     };
 
+    //template<typename vreal_t>
+    //struct constants<vreal_t, std::enable_if_t<is_float<vreal_t>::value>>
     template<>
-    struct constants<zfloat>
+    struct constants<zfloat32>
     {
         static const constexpr float  Z_PI = 3.14159265358979323846f;
-        static const constexpr float  Z_PI_2 = M_PI / 2;
+        static const constexpr float  Z_PI_2 = Z_PI / 2;
 
         static const constexpr float  Z_1_PI = 0.318309886183790671538f;
         static const constexpr float  Z_4_PI = 1.273239544735162542821171882678754627704620361328125f;
@@ -70,6 +78,6 @@ namespace zacc { namespace math {
         static const constexpr float  Z_L2L = 1.428606765330187045e-06f;
         static const constexpr float  Z_R_LN2 = 1.442695040888963407359924681001892137426645954152985934135449406931f;
 
-        static const constexpr double  Z_SQRT_3 = 1.73205080756887729353;
+        static const constexpr float  Z_SQRT_3 = 1.73205080756887729353;
     };
 }}

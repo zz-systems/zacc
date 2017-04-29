@@ -35,30 +35,3 @@
 
 #include "backend/all.hpp"
 
-#define DISPATCHED template<typename dispatcher, \
-    typename zint8      = typename dispatcher::zint8, \
-    typename zint16     = typename dispatcher::zint16, \
-    typename zint32     = typename dispatcher::zint32, \
-    typename zfloat32   = typename dispatcher::zfloat32, \
-    typename zfloat64   = typename dispatcher::zfloat64, \
-    typename zbyte      = zint8, \
-    typename zshort     = zint16, \
-    typename zint       = zint32, \
-    typename zfloat     = zfloat32, \
-    typename zdouble    = zfloat64, \
-    typename bint8      = typename dispatcher::bint8, \
-    typename bint16     = typename dispatcher::bint16, \
-    typename bint32     = typename dispatcher::bint32, \
-    typename bfloat32   = typename dispatcher::bfloat32, \
-    typename bfloat64   = typename dispatcher::bfloat64, \
-    typename bbyte      = bint8, \
-    typename bshort     = bint16, \
-    typename bint       = bint32, \
-    typename bfloat     = bfloat32, \
-    typename bdouble    = bfloat64>
-
-template<typename T>
-std::enable_if_t<!zacc::is_zval<T>::value, bool> is_set(T value)
-{
-    return value != 0;
-};

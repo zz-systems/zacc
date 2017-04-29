@@ -25,8 +25,9 @@
 
 #pragma once
 
-#include "math/common.hpp"
 #include "system/dispatcher.hpp"
+#include "math/common.hpp"
+#include "math/fundamental.hpp"
 
 namespace zacc { namespace math {
 
