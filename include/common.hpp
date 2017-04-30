@@ -32,10 +32,12 @@
 
 #elif defined(__GNUC__) || defined(__GNUG__)
 
-    inline __m256 _mm256_set_m128(__m128 hi, __m128 lo)
-    {
-        return _mm256_insertf128_ps(_mm256_castps128_ps256(hi),(lo),1);
-    }
+    #if defined(ZACC_AVX) || defined(ZACC_AVX2)
+        inline __m256 _mm256_set_m128(__m128 hi, __m128 lo)
+        {
+            return _mm256_insertf128_ps(_mm256_castps128_ps256(hi),(lo),1);
+        }
+    #endif
 
 #elif defined(_MSC_VER)
 
