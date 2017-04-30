@@ -18,6 +18,8 @@ option(BUILD_CI_TEST "Build tests for CI environments" Off)
 
 option(BUILD_SANITIZE_MEMORY "Build with clang memory sanitizer" Off)
 
+option(BUILD_OPENMP "Build with OpenMP support" Off)
+
 # util =================================================================================================================
 
 macro(insert_kv dict key)
@@ -208,12 +210,14 @@ else()
     message(FATAL_ERROR "Python not found")
 endif()
 
-find_package(OpenMP)
-if(OPENMP_FOUND)
-    message("OPENMP FOUND")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+if(BUILD_OPENMP)
+    find_package(OpenMP)
+    if(OPENMP_FOUND)
+        message("OPENMP FOUND")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+    endif()
 endif()
 
 #find_package(GTest REQUIRED)
