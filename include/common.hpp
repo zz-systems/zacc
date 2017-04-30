@@ -43,7 +43,7 @@
 
 #endif
 
-#if defined(_MSC_VER) && (defined(ZACC_AVX) || defined(ZACC_AVX2))
+#if !defined(_MSC_VER) && (defined(ZACC_AVX) || defined(ZACC_AVX2))
 
     inline bool _mm256_test_all_ones(__m256 val)
     {
