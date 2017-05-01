@@ -79,17 +79,59 @@ namespace zacc {
      * @brief Concatenates all the elements of a collection
      * using the specified separator between each element.
      * The collection value type must provide a str() method.
-     * @tparam Collection collection
+     * @tparam Container collection
      * @param collection collection
      * @param separator The string to use as separator
      * @return A string that consists of the elements in provided collection delimited by the separator string
      */
-    template< class Collection >
-    std::string join(const Collection &collection, const std::string& separator) {
-        return join(std::begin(collection),
-                    std::end(collection),
+    template< class Container >
+    std::string join(const Container &container, const std::string& separator) {
+        return join(std::begin(container),
+                    std::end(container),
                     separator);
     }
 
+
+    /**
+     * @brief
+     * @tparam ztype
+     * @tparam ForwardIt
+     * @tparam UnaryOperation
+     * @param first
+     * @param last
+     * @param unary_op
+     */
+    template<class ztype, class ForwardIt, class Generator>
+    void generate(ForwardIt first, ForwardIt last, Generator g)
+    {
+        auto dim        = ztype::dim;
+        auto real_size  = std::distance(first, last);
+        auto remainder  = real_size % dim;
+        auto fake_size  = real_size + remainder;
+
+        for (auto i = 0; i < real_size; i += dim)
+        {
+            auto result = g(i);
+
+            auto to_fetch = i < real_size ? dim : remainder;
+
+            std::copy(std::begin(result), std::begin(result) + to_fetch, first + i);
+        }
+    };
+
+    /**
+     * @brief
+     * @tparam Container
+     * @tparam UnaryOperation
+     * @param container
+     * @param unary_op
+     */
+    template<class Container, class Generator>
+    void generate(const Container &container, Generator g)
+    {
+        generate<Container::value_type>(std::begin(container),
+                                        std::end(container),
+                                        g);
+    };
 
 }

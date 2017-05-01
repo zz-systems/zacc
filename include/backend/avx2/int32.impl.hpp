@@ -519,6 +519,19 @@ namespace zacc { namespace avx2 {
                 return _mm256_div_ps(_mm256_cvtepi32_ps(one), _mm256_cvtepi32_ps(other));
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int32
+             * @remark avx2 - default
+             */
+            friend zint32<base_t::capability> vmod(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vmod");
+
+                return vsub(one, vmul(other, vdiv(one, other)));
+            }
+
         };
 
         /**

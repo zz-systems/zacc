@@ -5,8 +5,8 @@ include(cmake/shared.cmake)
 
 # BUILD! ===============================================================================================================
 
-# fetch gtest
-include(test/tests.cmake)
+# fetch dependencies
+add_subdirectory(dependencies)
 
 # add codegen targets
 include(codegen/CMakeLists.txt)

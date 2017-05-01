@@ -87,6 +87,16 @@ namespace zacc { namespace traits {
             return vdiv(one, other);
         }
 
+        /**
+         * @brief modulus operator
+         * @param one
+         * @param other
+         * @return one % other
+         */
+        friend composed_t operator%(const composed_t one, const composed_t other) {
+            return vmod(one, other);
+        }
+
 
         /**
          * @brief prefix increment

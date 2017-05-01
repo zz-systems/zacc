@@ -80,6 +80,7 @@ modules:
     vsub: _mm256_sub_epi32
     vmul: _mm256_mullo_epi32
     vdiv: _mm256_div_ps(_mm256_cvtepi32_ps(one), _mm256_cvtepi32_ps(other));
+    vmod: vsub(one, vmul(other, vdiv(one, other)))
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate

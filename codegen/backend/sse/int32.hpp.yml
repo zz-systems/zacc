@@ -122,6 +122,7 @@ modules:
             #- for(auto i = 0; i < base_t::dim; i++) raw_result[i] = d0[i] * d1[i];
             #- return raw_result.data();
     vdiv: _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));
+    vmod: vsub(one, vmul(other, vdiv(one, other)))
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate

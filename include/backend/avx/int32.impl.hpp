@@ -521,6 +521,19 @@ namespace zacc { namespace avx {
                 return zint32<base_t::capability> ({ one.get_value()[1] / other.get_value()[1], one.get_value()[0] / other.get_value()[0] });
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int32
+             * @remark avx - default
+             */
+            friend zint32<base_t::capability> vmod(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vmod");
+
+                return zint32<base_t::capability> ({ one.get_value()[1] % other.get_value()[1], one.get_value()[0] % other.get_value()[0] });
+            }
+
         };
 
         /**

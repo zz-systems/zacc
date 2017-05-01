@@ -69,6 +69,7 @@ modules:
     vsub: (one.get_value() - other.get_value());
     vmul: (one.get_value() * other.get_value());
     vdiv: (one.get_value() / other.get_value());
+    vmod: (one.get_value() % other.get_value());
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg:

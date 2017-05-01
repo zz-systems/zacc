@@ -64,5 +64,4 @@ namespace zacc {
     using bint       = bint32;
     using bfloat     = bfloat32;
     using bdouble    = bfloat64;
-
 }

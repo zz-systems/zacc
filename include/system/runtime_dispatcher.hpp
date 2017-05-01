@@ -182,10 +182,9 @@ namespace zacc {
          */
         DISPATCHED void log_branch() const
         {
-            std::cout << "Dispatching: " << dispatcher::major_branch_name()
-                      << " [" << join(platform::instance().make_capabilities(dispatcher::capability::value), ", ") << "]"
+            std::cout << "Dispatching: " << branch::major_branch_name()
+                      << " [" << join(platform::instance().make_capabilities(branch::capability::value), ", ") << "]"
                       << std::endl;
         }
     };
-
 }

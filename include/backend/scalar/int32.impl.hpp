@@ -483,6 +483,19 @@ namespace zacc { namespace scalar {
                 return (one.get_value() / other.get_value());
             }
 
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int32
+             * @remark scalar - default
+             */
+            friend zint32<base_t::capability> vmod(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vmod");
+
+                return (one.get_value() % other.get_value());
+            }
+
         };
 
         /**

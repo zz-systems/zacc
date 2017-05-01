@@ -89,6 +89,7 @@ modules:
     vsub: return zint32<base_t::capability> ({ one.get_value()[1] - other.get_value()[1], one.get_value()[0] - other.get_value()[0] });
     vmul: return zint32<base_t::capability> ({ one.get_value()[1] * other.get_value()[1], one.get_value()[0] * other.get_value()[0] });
     vdiv: return zint32<base_t::capability> ({ one.get_value()[1] / other.get_value()[1], one.get_value()[0] / other.get_value()[0] });
+    vmod: return zint32<base_t::capability> ({ one.get_value()[1] % other.get_value()[1], one.get_value()[0] % other.get_value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate

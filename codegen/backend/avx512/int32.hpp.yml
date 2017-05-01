@@ -52,6 +52,7 @@ modules:
     vsub: _mm512_sub_epi32
     vmul: _mm512_mullo_epi32
     vdiv: _mm512_div_ps(_mm512_cvtepi32_ps(one), _mm512_cvtepi32_ps(other));
+    vmod: vsub(one, vmul(other, vdiv(one, other)))
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vneg: &bitwise_negate
