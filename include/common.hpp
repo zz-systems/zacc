@@ -181,3 +181,5 @@ std::enable_if_t<!zacc::is_zval<T>::value, bool> is_set(T value)
     typename bint       = bint32, \
     typename bfloat     = bfloat32, \
     typename bdouble    = bfloat64>
+
+#define ALIGNED alignas(branch::alignment)
