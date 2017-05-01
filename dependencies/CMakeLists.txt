@@ -53,8 +53,8 @@ endif()
 
 # Add asyncplusplus directly to our build.
 add_subdirectory(
-        ${CMAKE_CURRENT_BINARY_DIR}/asyncplusplus-src
-        ${CMAKE_CURRENT_BINARY_DIR}/asyncplusplus-build
+        ${CMAKE_CURRENT_BINARY_DIR}/asyncplusplus/src
+        ${CMAKE_CURRENT_BINARY_DIR}/asyncplusplus/build
 )
 
 include_directories(
