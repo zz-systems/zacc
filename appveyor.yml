@@ -39,7 +39,7 @@ install:
 
 # Install OpenCL
 #- echo Fetching source
-- git submodule update --init --recursive
+#- git submodule update --init --recursive
 #- echo Installing OpenCL
 #- ps: mkdir $env:OPENCL_ROOT
 #- ps: pushd $env:OPENCL_ROOT
@@ -75,6 +75,7 @@ before_build:
 - set PATH=c:\Program Files\LLVM\msbuild-bin\;%PATH%
 - set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
 - cd C:\projects\zacc
+- git submodule update --init --recursive
 
 
 build_script:
