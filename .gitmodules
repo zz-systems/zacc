@@ -1,6 +1,6 @@
 [submodule "doc/page"]
 	path = doc/page
-	url = https://github.com/zz-systems/gorynych.git
+	url = https://github.com/zz-systems/zacc.git
 [submodule "dependencies/asyncplusplus"]
 	path = dependencies/asyncplusplus
 	url = https://github.com/Amanieu/asyncplusplus.git
