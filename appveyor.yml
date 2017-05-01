@@ -27,6 +27,7 @@ environment:
       
 
 install:
+- ps: ls
 - cd C:\projects\zacc
 - ps: ls
 - git submodule update --init --recursive
