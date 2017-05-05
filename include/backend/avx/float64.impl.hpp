@@ -33,7 +33,7 @@
 #include <cmath>
 
 #include "util/type_composition.hpp"
-
+#include "util/memory.hpp"
 #include "zval.hpp"
 #include "common.hpp"
 #include "type_traits.hpp"
@@ -48,11 +48,6 @@
 #include "traits/logical.hpp"
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
-
-// emulation
-#include "backend/avx/int8.impl.hpp"
-#include "backend/avx/int16.impl.hpp"
-#include "backend/avx/int32.impl.hpp"
 
 /**
  * @brief float64 implementation for the avx branch
@@ -268,7 +263,7 @@ namespace zacc { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            template<typename T, typename U = zint32<base_t::capability>> friend std::enable_if_t<std::is_same<typename U::vector_t, std::array<sse::zint32<base_t::capability>, 2>>::value, composed_t> vgather(T* source, U index)  noexcept {
+            friend zfloat64<base_t::capability> vgather(composed_t &target, raw_ptr<double> source, zint32<base_t::capability> index)  noexcept {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vgather");
 

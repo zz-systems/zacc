@@ -53,9 +53,7 @@ modules:
       body:  _mm_stream_si128((__m128i*)target.data(), source)
 
     vgather:
-      args: { raw: "T* source, zint32<base_t::capability> index" }
-      prefix: "template<typename T> friend"
-      #returns: "std::enable_if_t<is_integral<T>:: value && T::dim == 4, composed_t>"
+      args: { raw: "composed_t &target, raw_ptr<int> source, zint32<base_t::capability> index" }
       body:
         - auto i = index.data();
         - return _mm_set_epi32(source[i[3]], source[i[2]], source[i[1]], source[i[0]]);

@@ -33,7 +33,7 @@
 #include <cmath>
 
 #include "util/type_composition.hpp"
-
+#include "util/memory.hpp"
 #include "zval.hpp"
 #include "common.hpp"
 #include "type_traits.hpp"
@@ -46,11 +46,6 @@
 #include "traits/logical.hpp"
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
-
-// emulation
-#include "backend/sse/int8.impl.hpp"
-#include "backend/sse/int16.impl.hpp"
-#include "backend/sse/int32.impl.hpp"
 
 /**
  * @brief int8 implementation for the sse branch

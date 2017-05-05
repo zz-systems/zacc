@@ -33,7 +33,7 @@
 #include <cmath>
 
 #include "util/type_composition.hpp"
-
+#include "util/memory.hpp"
 #include "zval.hpp"
 #include "common.hpp"
 #include "type_traits.hpp"
@@ -48,11 +48,6 @@
 #include "traits/logical.hpp"
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
-
-// emulation
-#include "backend/avx/int8.impl.hpp"
-#include "backend/avx/int16.impl.hpp"
-#include "backend/avx/int32.impl.hpp"
 
 /**
  * @brief float32 implementation for the avx branch
@@ -268,11 +263,11 @@ namespace zacc { namespace avx {
              * @relates float32
              * @remark avx - default
              */
-            template<typename T, typename U = zint32<base_t::capability>> friend std::enable_if_t<std::is_same<typename U::vector_t, std::array<sse::zint32<base_t::capability>, 2>>::value, composed_t> vgather(T* source, U index)  noexcept {
+            friend zfloat32<base_t::capability> vgather(composed_t &target, raw_ptr<const float> source, zint32<base_t::capability> index)  noexcept {
 
                 ZTRACE_BACKEND("avx.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vgather");
 
-                return _mm256_set_m128(vgather(source, index.get_value()[1]), vgather(source, index.get_value()[0]));
+                return _mm256_set_m128(sse::zfloat32<base_t::capability>::gather(source, index.get_value()[1]), sse::zfloat32<base_t::capability>::gather(source, index.get_value()[0]));
             }
 
         };

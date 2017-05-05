@@ -62,8 +62,8 @@ modules:
        - _mm_stream_si128((__m128i*)(target.data() + base_t::dim / 2), source.get_value()[0]);
 
     vgather:
-      args: { raw: "T* source, zint32<base_t::capability> index" }
-      prefix: "template<typename T> friend"
+      args: { raw: "composed_t &target, raw_ptr<int> source, zint32<base_t::capability> index" }
+      #prefix: "template<typename T> friend"
       #returns: "std::enable_if_t<is_integral<T>::value && T::dim == 8, composed_t>"
       body: zint32<base_t::capability> ({ vgather(source, index.get_value()[1]), vgather(source, index.get_value()[0]) });
 #-----------------------------------------------------------------------------------------------------------------------

@@ -173,4 +173,26 @@ namespace zacc {
             return std::make_shared<T>(std::forward<Args>(args)...);
         }
     }
+
+    template<typename T>
+    struct raw_ptr
+    {
+        T *data;
+
+        raw_ptr() = default;
+
+        constexpr raw_ptr(T* data) noexcept : data(data)
+        { }
+
+        operator T*() const
+        {
+            return data;
+        }
+    };
+
+    template<typename T>
+    raw_ptr<T> make_raw(T *data)
+    {
+        return raw_ptr<T> { data };
+    }
 }

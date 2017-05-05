@@ -50,11 +50,11 @@
 #include "traits/conditional.hpp"
 
 /**
- * @brief float32 implementation for the scalar branch
- * provides unified access to 1 'float' values
+ * @brief float32 implementation for the avx2 branch
+ * provides unified access to 8 'float' values
  */
 
-namespace zacc { namespace scalar {
+namespace zacc { namespace avx2 {
 
     template<uint64_t capability>
     struct bfloat32;
@@ -72,7 +72,7 @@ namespace zacc { namespace scalar {
     /**
      * @brief construction
      * @relates float32
-     * @remark scalar
+     * @remark avx2
      */
     template<typename composed_t>
     struct float32_construction
@@ -81,7 +81,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief construction basic interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -93,11 +93,11 @@ namespace zacc { namespace scalar {
             /**
              * @brief construction default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             __impl() : base_t() {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "CONS()");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "CONS()");
 
             }
 
@@ -105,11 +105,11 @@ namespace zacc { namespace scalar {
             /**
              * @brief construction default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
-            __impl(float value) : base_t(value) {
+            __impl(__m256 value) : base_t(value) {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "CONS(float value)");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "CONS(__m256 value)");
 
             }
 
@@ -117,11 +117,11 @@ namespace zacc { namespace scalar {
             /**
              * @brief construction default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
-            template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> __impl(const T &value) : base_t(value.get_value()) {
+            __impl(__m256d value) : base_t(_mm256_castps128_ps256(_mm256_cvtpd_ps(value))) {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "CONS(const T &value)");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "CONS(__m256d value)");
 
             }
 
@@ -129,11 +129,47 @@ namespace zacc { namespace scalar {
             /**
              * @brief construction default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(value[0]) {
+            __impl(__m256i value) : base_t(_mm256_cvtepi32_ps(value)) {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "CONS(std::array<typename base_t::scal..)");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "CONS(__m256i value)");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            __impl(float value) : base_t(_mm256_set1_ps(value)) {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "CONS(float value)");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_load_ps(value.data())) {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "CONS(std::array<typename base_t::scal..)");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            __impl(float arg7, float arg6, float arg5, float arg4, float arg3, float arg2, float arg1, float arg0) : base_t(_mm256_set_ps(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)) {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "CONS(float arg7, float arg6, float ar..)");
 
             }
 
@@ -142,7 +178,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief construction public interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
 
 
@@ -165,7 +201,7 @@ namespace zacc { namespace scalar {
     /**
      * @brief io
      * @relates float32
-     * @remark scalar
+     * @remark avx2
      */
     template<typename composed_t>
     struct float32_io
@@ -174,7 +210,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief io basic interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -187,39 +223,39 @@ namespace zacc { namespace scalar {
             /**
              * @brief io default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend void vstore(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vstore");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vstore");
 
-                target.data()[0] = source.get_value();
+                _mm256_store_ps(target.data(), source);
             }
 
 
             /**
              * @brief io default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend void vstream(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vstream");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vstream");
 
-                target.data()[0] = source.get_value();
+                _mm256_stream_ps(target.data(), source);
             }
 
 
             /**
              * @brief io default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
-            friend zfloat32<base_t::capability> vgather(composed_t &target, raw_ptr<float> source, zint32<base_t::capability> index)  noexcept {
+            friend zfloat32<base_t::capability> vgather(composed_t &target, raw_ptr<const float> source, zint32<base_t::capability> index)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vgather");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vgather");
 
-                return source[index.get_value()];
+                return _mm256_i32gather_ps(source, index, 4);
             }
 
         };
@@ -227,7 +263,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief io public interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
 
 
@@ -250,7 +286,7 @@ namespace zacc { namespace scalar {
     /**
      * @brief numeric
      * @relates float32
-     * @remark scalar
+     * @remark avx2
      */
     template<typename composed_t>
     struct float32_numeric
@@ -259,7 +295,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief numeric basic interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -273,7 +309,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief numeric public interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
 
 
@@ -296,7 +332,7 @@ namespace zacc { namespace scalar {
     /**
      * @brief math
      * @relates float32
-     * @remark scalar
+     * @remark avx2
      */
     template<typename composed_t>
     struct float32_math
@@ -305,7 +341,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief math basic interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -318,50 +354,50 @@ namespace zacc { namespace scalar {
             /**
              * @brief math default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vabs(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vabs");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vabs");
 
-                return std::abs(one.get_value());
+                return _mm256_max_ps(one, -one);
             }
 
 
             /**
              * @brief math default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vmin(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vmin");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vmin");
 
-                return std::min(one.get_value(), other.get_value());
+                return _mm256_min_ps(one, other);
             }
 
 
             /**
              * @brief math default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vmax(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vmax");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vmax");
 
-                return std::max(one.get_value(), other.get_value());
+                return _mm256_max_ps(one, other);
             }
 
 
             /**
              * @brief math default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vclamp");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vclamp");
 
                 return vmin(to, vmax(from, self));
             }
@@ -370,78 +406,78 @@ namespace zacc { namespace scalar {
             /**
              * @brief math default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vrcp(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vrcp");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vrcp");
 
-                return (1 / one.get_value());
+                return _mm256_rcp_ps(one);
             }
 
 
             /**
              * @brief math default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vtrunc(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vtrunc");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vtrunc");
 
-                return std::trunc(one.get_value());
+                return _mm256_cvtepi32_ps(_mm256_cvtps_epi32(one));
             }
 
 
             /**
              * @brief math default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vfloor(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vfloor");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vfloor");
 
-                return std::floor(one.get_value());
+                return _mm256_floor_ps(one);
             }
 
 
             /**
              * @brief math default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vceil(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vceil");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vceil");
 
-                return std::ceil(one.get_value());
+                return _mm256_ceil_ps(one);
             }
 
 
             /**
              * @brief math default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vround(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vround");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vround");
 
-                return std::round(one.get_value());
+                return _mm256_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
             }
 
 
             /**
              * @brief math default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vsqrt(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vsqrt");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vsqrt");
 
-                return std::sqrt(one.get_value());
+                return _mm256_sqrt_ps(one);
             }
 
         };
@@ -449,7 +485,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief math public interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
 
 
@@ -472,7 +508,7 @@ namespace zacc { namespace scalar {
     /**
      * @brief arithmetic
      * @relates float32
-     * @remark scalar
+     * @remark avx2
      */
     template<typename composed_t>
     struct float32_arithmetic
@@ -481,7 +517,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief arithmetic basic interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -494,91 +530,91 @@ namespace zacc { namespace scalar {
             /**
              * @brief arithmetic default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vneg(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vneg");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vneg");
 
-                return (-one.get_value());
+                return _mm256_sub_ps(_mm256_setzero_ps(), one);
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vadd(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vadd");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vadd");
 
-                return (one.get_value() + other.get_value());
+                return _mm256_add_ps(one, other);
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vsub(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vsub");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vsub");
 
-                return (one.get_value() - other.get_value());
+                return _mm256_sub_ps(one, other);
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vmul(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vmul");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vmul");
 
-                return (one.get_value() * other.get_value());
+                return _mm256_mul_ps(one, other);
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vdiv(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vdiv");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vdiv");
 
-                return (one.get_value() / other.get_value());
+                return _mm256_div_ps(one, other);
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vfmadd");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vfmadd");
 
-                return std::fma(multiplicand.get_value(), multiplier.get_value(), addendum.get_value());
+                return _mm256_fmadd_ps (multiplicand, multiplier, addendum);
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vfmsub");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vfmsub");
 
-                return std::fma(multiplicand.get_value(), multiplier.get_value(), -addendum.get_value());
+                return _mm256_fmsub_ps(multiplicand, multiplier, -addendum);
             }
 
         };
@@ -586,7 +622,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief arithmetic public interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
 
 
@@ -609,7 +645,7 @@ namespace zacc { namespace scalar {
     /**
      * @brief bitwise
      * @relates float32
-     * @remark scalar
+     * @remark avx2
      */
     template<typename composed_t>
     struct float32_bitwise
@@ -618,7 +654,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief bitwise basic interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -631,65 +667,83 @@ namespace zacc { namespace scalar {
             /**
              * @brief bitwise default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vbneg(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vbneg");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vbneg");
 
-                return (*reinterpret_cast<float*>(~(*reinterpret_cast<const unsigned int*>(&one.get_value()))));
+                __m256 junk;
+                auto ones = _mm256_cmp_ps(junk, junk, _CMP_EQ_OQ);
+                return _mm256_xor_ps(one, ones);
             }
 
 
             /**
              * @brief bitwise default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vband(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vband");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vband");
 
-                return (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.get_value())) & (*reinterpret_cast<const unsigned int*>(&other.get_value()))));
+                return _mm256_or_ps(one, other);
             }
 
 
             /**
              * @brief bitwise default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vbor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vbor");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vbor");
 
-                return (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.get_value())) | (*reinterpret_cast<const unsigned int*>(&other.get_value()))));
+                return _mm256_and_ps(one, other);
             }
 
 
             /**
              * @brief bitwise default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vbxor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vbxor");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vbxor");
 
-                return (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.get_value())) ^ (*reinterpret_cast<const unsigned int*>(&other.get_value()))));
+                return _mm256_xor_ps(one, other);
+            }
+
+
+            /**
+             * @brief bitwise avx2 branch
+             * @relates float32
+             * @remark avx2 - avx2
+             */
+            template<typename T = bool> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::AVX2), T> is_set(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "avx2", "is_set");
+
+                auto ival =  _mm256_castps_si256(one);
+                return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
             }
 
 
             /**
              * @brief bitwise default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
-            friend bool is_set(composed_t one)  noexcept {
+            template<typename T = bool> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::AVX2), T> is_set(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "is_set");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "is_set");
 
-                return one.get_value() != 0;
+                auto hi = _mm_castps_si128(_mm256_extractf128_ps(one, 1));
+                auto lo = _mm_castps_si128(_mm256_extractf128_ps(one, 0));
+                return _mm_test_all_ones(hi) != 0 && _mm_test_all_ones(lo) != 0;
             }
 
         };
@@ -697,7 +751,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief bitwise public interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
 
 
@@ -720,7 +774,7 @@ namespace zacc { namespace scalar {
     /**
      * @brief logical
      * @relates float32
-     * @remark scalar
+     * @remark avx2
      */
     template<typename composed_t>
     struct float32_logical
@@ -729,7 +783,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief logical basic interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -742,39 +796,39 @@ namespace zacc { namespace scalar {
             /**
              * @brief logical default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vlneg(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vlneg");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vlneg");
 
-                return !one.get_value();
+                return _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ);
             }
 
 
             /**
              * @brief logical default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vlor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vlor");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vlor");
 
-                return (one.get_value() || other.get_value());
+                return _mm256_or_ps(one, other);
             }
 
 
             /**
              * @brief logical default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vland(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vland");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vland");
 
-                return (one.get_value() && other.get_value());
+                return _mm256_and_ps(one, other);
             }
 
         };
@@ -782,7 +836,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief logical public interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
 
 
@@ -805,7 +859,7 @@ namespace zacc { namespace scalar {
     /**
      * @brief comparison
      * @relates float32
-     * @remark scalar
+     * @remark avx2
      */
     template<typename composed_t>
     struct float32_comparison
@@ -814,7 +868,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief comparison basic interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -827,78 +881,78 @@ namespace zacc { namespace scalar {
             /**
              * @brief comparison default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "veq");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "veq");
 
-                return (one.get_value() == other.get_value());
+                return _mm256_cmp_ps(one, other, _CMP_EQ_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vneq");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vneq");
 
-                return (one.get_value() != other.get_value());
+                return _mm256_cmp_ps(one, other, _CMP_NEQ_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vgt");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vgt");
 
-                return (one.get_value() > other.get_value());
+                return _mm256_cmp_ps(one, other, _CMP_GT_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vlt");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vlt");
 
-                return (one.get_value() < other.get_value());
+                return _mm256_cmp_ps(one, other, _CMP_LT_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vge");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vge");
 
-                return (one.get_value() >= other.get_value());
+                return _mm256_cmp_ps(one, other, _CMP_GE_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vle");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vle");
 
-                return (one.get_value() <= other.get_value());
+                return _mm256_cmp_ps(one, other, _CMP_LE_OQ);
             }
 
         };
@@ -906,7 +960,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief comparison public interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
 
 
@@ -929,7 +983,7 @@ namespace zacc { namespace scalar {
     /**
      * @brief conditional
      * @relates float32
-     * @remark scalar
+     * @remark avx2
      */
     template<typename composed_t>
     struct float32_conditional
@@ -938,7 +992,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief conditional basic interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -951,13 +1005,14 @@ namespace zacc { namespace scalar {
             /**
              * @brief conditional default branch
              * @relates float32
-             * @remark scalar - default
+             * @remark avx2 - default
              */
             friend zfloat32<base_t::capability> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vsel");
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vsel");
 
-                return (condition.get_value() != 0 ? if_value : else_value);
+                auto mask = _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ);
+                return _mm256_blendv_ps(if_value, else_value, mask);
             }
 
         };
@@ -965,7 +1020,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief conditional public interface implementation
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
 
 
@@ -990,17 +1045,17 @@ namespace zacc { namespace scalar {
 
         /**
          * @brief zval parametrization using
-         * - 'float' as underlying vector type
+         * - '__m256' as underlying vector type
          * - 'float' as scalar type
-         * - '1' as vector size
-         * - '8' as alignment
+         * - '8' as vector size
+         * - '32' as alignment
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
         template<uint64_t capability>
         struct __zval_float32
         {
-            using zval_t = zval<float, bool, float, 1, 8, capability>;
+            using zval_t = zval<__m256, __m256, float, 8, 32, capability>;
 
             struct impl : public zval_t
             {
@@ -1010,7 +1065,7 @@ namespace zacc { namespace scalar {
         /**
          * @brief zval composition
          * @relates float32
-         * @remark scalar
+         * @remark avx2
          */
         template<uint64_t capability>
         struct __zfloat32
@@ -1045,7 +1100,7 @@ namespace zacc { namespace scalar {
         template<uint64_t capability>
         struct __bfloat32
         {
-            using bval_t = bval<typename __zfloat32<capability>::impl, bool>;
+            using bval_t = bval<typename __zfloat32<capability>::impl, __m256>;
             struct impl : public bval_t
             {
                 FORWARD2(impl, bval_t);

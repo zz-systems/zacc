@@ -25,11 +25,12 @@
 
 #pragma once
 
-#include "float32.impl.hpp"
-#include "float64.impl.hpp"
 #include "int8.impl.hpp"
 #include "int16.impl.hpp"
 #include "int32.impl.hpp"
+
+#include "float32.impl.hpp"
+#include "float64.impl.hpp"
 
 namespace zacc { namespace scalar {
 

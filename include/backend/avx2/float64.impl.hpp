@@ -50,11 +50,11 @@
 #include "traits/conditional.hpp"
 
 /**
- * @brief float64 implementation for the sse branch
- * provides unified access to 2 'double' values
+ * @brief float64 implementation for the avx2 branch
+ * provides unified access to 4 'double' values
  */
 
-namespace zacc { namespace sse {
+namespace zacc { namespace avx2 {
 
     template<uint64_t capability>
     struct bfloat64;
@@ -72,7 +72,7 @@ namespace zacc { namespace sse {
     /**
      * @brief construction
      * @relates float64
-     * @remark sse
+     * @remark avx2
      */
     template<typename composed_t>
     struct float64_construction
@@ -81,7 +81,7 @@ namespace zacc { namespace sse {
         /**
          * @brief construction basic interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -93,11 +93,11 @@ namespace zacc { namespace sse {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             __impl() : base_t() {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS()");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS()");
 
             }
 
@@ -105,11 +105,11 @@ namespace zacc { namespace sse {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
-            __impl(__m128 value) : base_t(_mm_cvtps_pd(value)) {
+            __impl(const __m256 &value) : base_t(_mm256_cvtps_pd(_mm256_castps256_ps128(value))) {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(__m128 value)");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(const __m256 &value)");
 
             }
 
@@ -117,11 +117,11 @@ namespace zacc { namespace sse {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
-            __impl(__m128d value) : base_t(value) {
+            __impl(const __m256d &value) : base_t(value) {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(__m128d value)");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(const __m256d &value)");
 
             }
 
@@ -129,11 +129,11 @@ namespace zacc { namespace sse {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
-            __impl(__m128i value) : base_t(_mm_cvtepi32_pd(_mm_shuffle_epi32(value, _MM_SHUFFLE(0,2,0,0)))) {
+            __impl(const __m256i &value) : base_t(_mm256_cvtepi32_pd(_mm256_castsi256_si128(value))) {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(__m128i value)");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(const __m256i &value)");
 
             }
 
@@ -141,11 +141,11 @@ namespace zacc { namespace sse {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
-            __impl(double value) : base_t(_mm_set1_pd(value)) {
+            __impl(double value) : base_t(_mm256_set1_pd(value)) {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(double value)");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(double value)");
 
             }
 
@@ -153,11 +153,11 @@ namespace zacc { namespace sse {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm_load_pd(value.data())) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_load_pd(value.data())) {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(std::array<typename base_t::scal..)");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(std::array<typename base_t::scal..)");
 
             }
 
@@ -165,11 +165,11 @@ namespace zacc { namespace sse {
             /**
              * @brief construction default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
-            __impl(double arg1, double arg0) : base_t(_mm_set_pd(arg0, arg1)) {
+            __impl(double arg3, double arg2, double arg1, double arg0) : base_t(_mm256_set_pd(arg0, arg1, arg2, arg3)) {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(double arg1, double arg0)");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(double arg3, double arg2, double..)");
 
             }
 
@@ -178,7 +178,7 @@ namespace zacc { namespace sse {
         /**
          * @brief construction public interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
 
 
@@ -201,7 +201,7 @@ namespace zacc { namespace sse {
     /**
      * @brief io
      * @relates float64
-     * @remark sse
+     * @remark avx2
      */
     template<typename composed_t>
     struct float64_io
@@ -210,7 +210,7 @@ namespace zacc { namespace sse {
         /**
          * @brief io basic interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -223,40 +223,39 @@ namespace zacc { namespace sse {
             /**
              * @brief io default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend void vstore(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vstore");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vstore");
 
-                _mm_store_pd(target.data(), source);
+                _mm256_store_pd(target.data(), source);
             }
 
 
             /**
              * @brief io default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend void vstream(typename base_t::extracted_t &target, composed_t source)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vstream");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vstream");
 
-                _mm_stream_pd(target.data(), source);
+                _mm256_stream_pd(target.data(), source);
             }
 
 
             /**
              * @brief io default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
-            template<typename T> friend zfloat64<base_t::capability> vgather(double* source, zint32<base_t::capability> index)  noexcept {
+            friend zfloat64<base_t::capability> vgather(composed_t &target, raw_ptr<double> source, zint32<base_t::capability> index)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vgather");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vgather");
 
-                auto i = index.data();
-                return _mm_set_pd(source[i[3]], source[i[1]]);
+                return _mm256_i32gather_pd(source, index, 8);
             }
 
         };
@@ -264,7 +263,7 @@ namespace zacc { namespace sse {
         /**
          * @brief io public interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
 
 
@@ -287,7 +286,7 @@ namespace zacc { namespace sse {
     /**
      * @brief numeric
      * @relates float64
-     * @remark sse
+     * @remark avx2
      */
     template<typename composed_t>
     struct float64_numeric
@@ -296,7 +295,7 @@ namespace zacc { namespace sse {
         /**
          * @brief numeric basic interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -310,7 +309,7 @@ namespace zacc { namespace sse {
         /**
          * @brief numeric public interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
 
 
@@ -333,7 +332,7 @@ namespace zacc { namespace sse {
     /**
      * @brief math
      * @relates float64
-     * @remark sse
+     * @remark avx2
      */
     template<typename composed_t>
     struct float64_math
@@ -342,7 +341,7 @@ namespace zacc { namespace sse {
         /**
          * @brief math basic interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -355,147 +354,91 @@ namespace zacc { namespace sse {
             /**
              * @brief math default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vabs(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vabs");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vabs");
 
-                return _mm_max_pd(one, -one);
+                return _mm256_max_ps(one, -one);
             }
 
 
             /**
              * @brief math default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vrcp(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vrcp");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vrcp");
 
-                return (1 / one);
+                return _mm256_rcp_ps(one);
             }
 
 
             /**
              * @brief math default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vtrunc(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vtrunc");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vtrunc");
 
-                return _mm_cvtepi32_pd(_mm_cvtpd_epi32(one));
-            }
-
-
-            /**
-             * @brief math sse4 branch
-             * @relates float64
-             * @remark sse - sse4
-             */
-            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vfloor(composed_t one)  noexcept {
-
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "vfloor");
-
-                return _mm_floor_pd(one);
+                return _mm256_cvtepi32_ps(_mm256_cvtps_epi32(one));
             }
 
 
             /**
              * @brief math default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
-            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vfloor(composed_t one)  noexcept {
+            friend zfloat64<base_t::capability> vfloor(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vfloor");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vfloor");
 
-                __m128i junk;
-                auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(junk, junk), 31);
-                auto fi = vtrunc(one);
-                return vsel(vgt(fi, one), vsub(fi, _1), fi);
-            }
-
-
-            /**
-             * @brief math sse4 branch
-             * @relates float64
-             * @remark sse - sse4
-             */
-            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vceil(composed_t one)  noexcept {
-
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "vceil");
-
-                return _mm_ceil_pd(one);
+                return _mm256_floor_ps(one);
             }
 
 
             /**
              * @brief math default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
-            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vceil(composed_t one)  noexcept {
+            friend zfloat64<base_t::capability> vceil(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vceil");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vceil");
 
-                __m128i junk;
-                auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(junk, junk), 31);
-                auto fi = vtrunc(one);
-                return vsel(vlt(fi, one), vadd(fi, _1), fi);
-            }
-
-
-            /**
-             * @brief math sse4 branch
-             * @relates float64
-             * @remark sse - sse4
-             */
-            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vround(composed_t one)  noexcept {
-
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "vround");
-
-                return _mm_round_pd (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
+                return _mm256_ceil_ps(one);
             }
 
 
             /**
              * @brief math default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
-            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vround(composed_t one)  noexcept {
+            friend zfloat64<base_t::capability> vround(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vround");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vround");
 
-                auto zero = _mm_setzero_si128();
-                auto ones = _mm_cmpeq_epi32(zero, zero);
-                // generate the highest value < 2;
-                auto nearest = _mm_castsi128_pd(_mm_srli_epi64(ones, 2));
-                auto tr = vtrunc(one);
-                // get remainder;
-                auto rmd = one - tr;
-                // mul remainder by near 2 will yield the needed offset;
-                auto rmd2 = vmul(rmd, nearest);
-                // after being truncated of course;
-                auto rmd2tr = vtrunc(rmd2);
-                return tr + rmd2tr;
+                return _mm256_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
             }
 
 
             /**
              * @brief math default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vsqrt(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vsqrt");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vsqrt");
 
-                return _mm_sqrt_pd(one);
+                return _mm256_sqrt_ps(one);
             }
 
         };
@@ -503,7 +446,7 @@ namespace zacc { namespace sse {
         /**
          * @brief math public interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
 
 
@@ -526,7 +469,7 @@ namespace zacc { namespace sse {
     /**
      * @brief arithmetic
      * @relates float64
-     * @remark sse
+     * @remark avx2
      */
     template<typename composed_t>
     struct float64_arithmetic
@@ -535,7 +478,7 @@ namespace zacc { namespace sse {
         /**
          * @brief arithmetic basic interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -548,91 +491,91 @@ namespace zacc { namespace sse {
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vneg(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vneg");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vneg");
 
-                return _mm_sub_pd(_mm_setzero_pd(), one);
+                return _mm256_sub_pd(_mm256_setzero_pd(), one);
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vadd(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vadd");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vadd");
 
-                return _mm_add_pd(one, other);
+                return _mm256_add_pd(one, other);
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vsub(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vsub");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vsub");
 
-                return _mm_sub_pd(one, other);
+                return _mm256_sub_pd(one, other);
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vmul(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vmul");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vmul");
 
-                return _mm_mul_pd(one, other);
+                return _mm256_mul_pd(one, other);
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vdiv(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vdiv");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vdiv");
 
-                return _mm_div_pd(one, other);
+                return _mm256_div_pd(one, other);
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vfmadd");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vfmadd");
 
-                return vadd(vmul(multiplicand, multiplier), addendum);
+                return _mm256_fmadd_pd(multiplicand, multiplier, addendum);
             }
 
 
             /**
              * @brief arithmetic default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vfmsub");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vfmsub");
 
-                return vsub(vmul(multiplicand, multiplier), addendum);
+                return _mm256_fmsub_pd(multiplicand, multiplier, -addendum);
             }
 
         };
@@ -640,7 +583,7 @@ namespace zacc { namespace sse {
         /**
          * @brief arithmetic public interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
 
 
@@ -663,7 +606,7 @@ namespace zacc { namespace sse {
     /**
      * @brief bitwise
      * @relates float64
-     * @remark sse
+     * @remark avx2
      */
     template<typename composed_t>
     struct float64_bitwise
@@ -672,7 +615,7 @@ namespace zacc { namespace sse {
         /**
          * @brief bitwise basic interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -685,79 +628,83 @@ namespace zacc { namespace sse {
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vbneg(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vbneg");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vbneg");
 
-                auto ones = _mm_cmpeq_pd(one, one);
-                return _mm_xor_pd(one, ones);
+                __m256d junk;
+                auto ones = _mm256_cmp_pd(junk, junk, _CMP_EQ_OQ);
+                return _mm256_xor_pd(one, ones);
             }
 
 
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vband(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vband");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vband");
 
-                return _mm_or_pd(one, other);
+                return _mm256_or_pd(one, other);
             }
 
 
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vbor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vbor");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vbor");
 
-                return _mm_and_pd(one, other);
+                return _mm256_and_pd(one, other);
             }
 
 
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vbxor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vbxor");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vbxor");
 
-                return _mm_xor_pd(one, other);
+                return _mm256_xor_pd(one, other);
             }
 
 
             /**
-             * @brief bitwise sse4 branch
+             * @brief bitwise avx2 branch
              * @relates float64
-             * @remark sse - sse4
+             * @remark avx2 - avx2
              */
-            template<typename T = bool> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> is_set(composed_t one)  noexcept {
+            template<typename T = bool> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::AVX2), T> is_set(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "is_set");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "avx2", "is_set");
 
-                return _mm_test_all_ones(_mm_castpd_si128(one)) != 0;
+                auto ival =  _mm256_castpd_si256(one);
+                return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
             }
 
 
             /**
              * @brief bitwise default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
-            template<typename T = bool> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> is_set(composed_t one)  noexcept {
+            template<typename T = bool> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::AVX2), T> is_set(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "is_set");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "is_set");
 
-                return _mm_movemask_pd(_mm_cmpeq_pd(one, _mm_cmpeq_pd(one, one))) == 0xFFFF;
+                auto hi = _mm_castpd_si128(_mm256_extractf128_pd(one, 1));
+                auto lo = _mm_castpd_si128(_mm256_extractf128_pd(one, 0));
+                return _mm_test_all_ones(hi) != 0 && _mm_test_all_ones(lo) != 0;
             }
 
         };
@@ -765,7 +712,7 @@ namespace zacc { namespace sse {
         /**
          * @brief bitwise public interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
 
 
@@ -788,7 +735,7 @@ namespace zacc { namespace sse {
     /**
      * @brief logical
      * @relates float64
-     * @remark sse
+     * @remark avx2
      */
     template<typename composed_t>
     struct float64_logical
@@ -797,7 +744,7 @@ namespace zacc { namespace sse {
         /**
          * @brief logical basic interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -810,39 +757,39 @@ namespace zacc { namespace sse {
             /**
              * @brief logical default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vlneg(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vlneg");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vlneg");
 
-                return _mm_cmpeq_pd(one, _mm_setzero_pd());
+                return _mm256_cmp_pd(one, _mm256_setzero_pd(), _CMP_EQ_OQ);
             }
 
 
             /**
              * @brief logical default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vlor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vlor");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vlor");
 
-                return _mm_or_pd(one, other);
+                return _mm256_or_pd(one, other);
             }
 
 
             /**
              * @brief logical default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vland(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vland");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vland");
 
-                return _mm_and_pd(one, other);
+                return _mm256_and_pd(one, other);
             }
 
         };
@@ -850,7 +797,7 @@ namespace zacc { namespace sse {
         /**
          * @brief logical public interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
 
 
@@ -873,7 +820,7 @@ namespace zacc { namespace sse {
     /**
      * @brief comparison
      * @relates float64
-     * @remark sse
+     * @remark avx2
      */
     template<typename composed_t>
     struct float64_comparison
@@ -882,7 +829,7 @@ namespace zacc { namespace sse {
         /**
          * @brief comparison basic interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -895,78 +842,79 @@ namespace zacc { namespace sse {
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "veq");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "veq");
 
-                return _mm_cmpeq_pd(one, other);
+                return _mm256_cmp_pd(one, other, _CMP_EQ_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vneq");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vneq");
 
-                return _mm_cmpneq_pd(one, other);
+                return _mm256_cmp_pd(one, other, _CMP_NEQ_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vgt");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vgt");
 
-                return _mm_cmpgt_pd(one, other);
+                return _mm256_cmp_pd(one, other, _CMP_GT_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vlt");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vlt");
 
-                return _mm_cmplt_pd(one, other);
+                return _mm256_cmp_pd(one, other, _CMP_LT_OQ);
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vge");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vge");
 
-                return _mm_cmpge_pd(one, other);
+                auto result = _mm256_cmp_pd(one, other, _CMP_GE_OQ);
+                return result;
             }
 
 
             /**
              * @brief comparison default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vle");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vle");
 
-                return _mm_cmple_pd(one, other);
+                return _mm256_cmp_pd(one, other, _CMP_LE_OQ);
             }
 
         };
@@ -974,7 +922,7 @@ namespace zacc { namespace sse {
         /**
          * @brief comparison public interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
 
 
@@ -997,7 +945,7 @@ namespace zacc { namespace sse {
     /**
      * @brief conditional
      * @relates float64
-     * @remark sse
+     * @remark avx2
      */
     template<typename composed_t>
     struct float64_conditional
@@ -1006,7 +954,7 @@ namespace zacc { namespace sse {
         /**
          * @brief conditional basic interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
@@ -1017,30 +965,16 @@ namespace zacc { namespace sse {
 
 
             /**
-             * @brief conditional sse4 branch
-             * @relates float64
-             * @remark sse - sse4
-             */
-            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vsel(mask_t condition, composed_t if_value, composed_t else_value)  noexcept {
-
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "vsel");
-
-                auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
-                return _mm_blendv_pd(if_value, else_value, mask);
-            }
-
-
-            /**
              * @brief conditional default branch
              * @relates float64
-             * @remark sse - default
+             * @remark avx2 - default
              */
-            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vsel(mask_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            friend zfloat64<base_t::capability> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vsel");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vsel");
 
-                auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
-                return _mm_xor_pd(if_value, _mm_and_pd( mask, _mm_xor_pd(else_value, if_value)));
+                auto mask = _mm256_cmp_pd(_mm256_setzero_pd(), condition, _CMP_EQ_OQ);
+                return _mm256_blendv_pd(if_value, else_value, mask);
             }
 
         };
@@ -1048,7 +982,7 @@ namespace zacc { namespace sse {
         /**
          * @brief conditional public interface implementation
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
 
 
@@ -1073,17 +1007,17 @@ namespace zacc { namespace sse {
 
         /**
          * @brief zval parametrization using
-         * - '__m128d' as underlying vector type
+         * - '__m256d' as underlying vector type
          * - 'double' as scalar type
-         * - '2' as vector size
-         * - '16' as alignment
+         * - '4' as vector size
+         * - '32' as alignment
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
         template<uint64_t capability>
         struct __zval_float64
         {
-            using zval_t = zval<__m128d, __m128d, double, 2, 16, capability>;
+            using zval_t = zval<__m256d, __m256d, double, 4, 32, capability>;
 
             struct impl : public zval_t
             {
@@ -1093,7 +1027,7 @@ namespace zacc { namespace sse {
         /**
          * @brief zval composition
          * @relates float64
-         * @remark sse
+         * @remark avx2
          */
         template<uint64_t capability>
         struct __zfloat64
@@ -1114,7 +1048,6 @@ namespace zacc { namespace sse {
                 float64_logical<impl>::template impl,
                 float64_comparison<impl>::template impl,
                 float64_conditional<impl>::template impl,
-                float64_numeric<impl>::template impl,
                 float64_construction<impl>::template impl,
 
                 composable<zval_t>::template type
@@ -1129,7 +1062,7 @@ namespace zacc { namespace sse {
         template<uint64_t capability>
         struct __bfloat64
         {
-            using bval_t = bval<typename __zfloat64<capability>::impl, __m128d>;
+            using bval_t = bval<typename __zfloat64<capability>::impl, __m256d>;
             struct impl : public bval_t
             {
                 FORWARD2(impl, bval_t);

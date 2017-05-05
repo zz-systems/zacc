@@ -43,8 +43,8 @@ modules:
     vstream: *io_store
 
     vgather:
-      args: { raw: "T* source, zint32<base_t::capability> index" }
-      prefix: "template<typename T> friend"
+      args: { raw: "composed_t &target, raw_ptr<float> source, zint32<base_t::capability> index" }
+      #prefix: "template<typename T> friend"
       #returns: "std::enable_if_t<is_integral<T>::value && T::dim == 1, composed_t>"
       body: return source[index.get_value()]
 #-----------------------------------------------------------------------------------------------------------------------

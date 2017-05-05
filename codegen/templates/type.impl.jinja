@@ -33,7 +33,7 @@
 #include <cmath>
 
 #include "util/type_composition.hpp"
-
+#include "util/memory.hpp"
 #include "zval.hpp"
 #include "common.hpp"
 #include "type_traits.hpp"
@@ -42,18 +42,6 @@
 {% for module in type.get_modules() %}
 #include "traits/{{ module.name }}.hpp"
 {% endfor %}
-
-{% if type.branch == 'avx' and not (type.scalar_t == 'float' or type.scalar_t == 'double') %}
-// emulation
-#include "backend/sse/int8.impl.hpp"
-#include "backend/sse/int16.impl.hpp"
-#include "backend/sse/int32.impl.hpp"
-{% else  %}
-// emulation
-#include "backend/{{type.branch}}/int8.impl.hpp"
-#include "backend/{{type.branch}}/int16.impl.hpp"
-#include "backend/{{type.branch}}/int32.impl.hpp"
-{% endif %}
 
 /**
  * @brief {{ type.type }} implementation for the {{ type.branch }} branch

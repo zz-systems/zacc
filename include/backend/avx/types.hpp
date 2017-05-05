@@ -25,11 +25,19 @@
 
 #pragma once
 
-#include "backend/avx/float32.impl.hpp"
-#include "backend/avx/float64.impl.hpp"
+#include "backend/sse/int8.impl.hpp"
+#include "backend/sse/int16.impl.hpp"
+#include "backend/sse/int32.impl.hpp"
+
+#include "backend/sse/float32.impl.hpp"
+#include "backend/sse/float64.impl.hpp"
+
 #include "backend/avx/int8.impl.hpp"
 #include "backend/avx/int16.impl.hpp"
 #include "backend/avx/int32.impl.hpp"
+
+#include "backend/avx/float32.impl.hpp"
+#include "backend/avx/float64.impl.hpp"
 
 namespace zacc { namespace avx {
 

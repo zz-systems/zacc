@@ -33,7 +33,7 @@
 #include <cmath>
 
 #include "util/type_composition.hpp"
-
+#include "util/memory.hpp"
 #include "zval.hpp"
 #include "common.hpp"
 #include "type_traits.hpp"
@@ -48,11 +48,6 @@
 #include "traits/logical.hpp"
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
-
-// emulation
-#include "backend/scalar/int8.impl.hpp"
-#include "backend/scalar/int16.impl.hpp"
-#include "backend/scalar/int32.impl.hpp"
 
 /**
  * @brief float64 implementation for the scalar branch
@@ -220,7 +215,7 @@ namespace zacc { namespace scalar {
              * @relates float64
              * @remark scalar - default
              */
-            template<typename T> friend zfloat64<base_t::capability> vgather(T* source, zint32<base_t::capability> index)  noexcept {
+            friend zfloat64<base_t::capability> vgather(composed_t &target, raw_ptr<double> source, zint32<base_t::capability> index)  noexcept {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vgather");
 

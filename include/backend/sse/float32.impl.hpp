@@ -33,7 +33,7 @@
 #include <cmath>
 
 #include "util/type_composition.hpp"
-
+#include "util/memory.hpp"
 #include "zval.hpp"
 #include "common.hpp"
 #include "type_traits.hpp"
@@ -48,11 +48,6 @@
 #include "traits/logical.hpp"
 #include "traits/comparison.hpp"
 #include "traits/conditional.hpp"
-
-// emulation
-#include "backend/sse/int8.impl.hpp"
-#include "backend/sse/int16.impl.hpp"
-#include "backend/sse/int32.impl.hpp"
 
 /**
  * @brief float32 implementation for the sse branch
@@ -256,7 +251,7 @@ namespace zacc { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            template<typename T> friend zfloat32<base_t::capability> vgather(T* source, zint32<base_t::capability> index)  noexcept {
+            friend zfloat32<base_t::capability> vgather(composed_t &target, raw_ptr<const float> source, zint32<base_t::capability> index)  noexcept {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vgather");
 

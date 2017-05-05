@@ -52,8 +52,8 @@ modules:
       body:  _mm_stream_ps(target.data(), source)
 
     vgather:
-      args: { raw: "T* source, zint32<base_t::capability> index" }
-      prefix: "template<typename T> friend"
+      args: { raw: "composed_t &target, raw_ptr<const float> source, zint32<base_t::capability> index" }
+      #prefix: "template<typename T> friend"
       #returns: "std::enable_if_t<is_integral<T>:: value && T::dim == 4, composed_t>"
       body:
         - auto i = index.data();

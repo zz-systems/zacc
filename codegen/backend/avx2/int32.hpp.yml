@@ -54,8 +54,8 @@ modules:
 
 
     vgather:
-      args: { raw: "T* source, zint32<base_t::capability> index" }
-      prefix: "template<typename T> friend"
+      args: { raw: "composed_t &target, raw_ptr<int> source, zint32<base_t::capability> index" }
+      #prefix: "template<typename T> friend"
       #returns: "std::enable_if_t<is_zval<T>::value && is_integral<T>::value && T::dim == 8, composed_t>"
       body: _mm256_i32gather_epi32(source, index, 4)
 #-----------------------------------------------------------------------------------------------------------------------
