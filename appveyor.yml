@@ -27,8 +27,9 @@ environment:
       
 
 install:
+- ps: ls
 - cd C:\projects\zacc
-- ps ls
+- ps: ls
 - git submodule update --init --recursive
 # Install yasha
 - "%PYTHON%/python.exe -m pip install yasha"
