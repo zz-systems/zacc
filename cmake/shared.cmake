@@ -69,6 +69,10 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         message("Using clang-cl")
         set(CLANG_CL 1)
         
+		set(CMAKE_CXX_STANDARD 14)
+		set(CMAKE_CXX_STANDARD_REQUIRED on)
+		set(CMAKE_CXX_EXTENSIONS OFF)
+
 		if(CMAKE_GENERATOR MATCHES "Visual Studio")
 			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /GX /wd4996")
 		else()
