@@ -67,10 +67,8 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 
     if(MSVC)
         message("Using clang-cl")
-        set(CLANG_CL 1)
-        
-		set(CMAKE_CXX_STANDARD 14)
-		set(CMAKE_CXX_STANDARD_REQUIRED on)
+        set(CLANG_CL 1)       
+		
 		set(CMAKE_CXX_EXTENSIONS OFF)
 
 		if(CMAKE_GENERATOR MATCHES "Visual Studio")
@@ -142,7 +140,7 @@ endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-if(kkMSVC)
+if(MSVC AND (NOT CLANG_CL))
 	#include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/branch_flags_msvc.cmake)
 	insert_kv(branch_flags  scalar              /arch:IA32)
 	insert_kv(branch_flags  sse.sse2            /arch:SSE2)

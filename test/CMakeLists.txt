@@ -30,3 +30,10 @@ foreach(branch ${branches})
 endforeach()
 
 add_custom_target(zacc.tests.all DEPENDS ${tests})
+
+set(GTEST_LIBS $<TARGET_FILE:gtest> $<TARGET_FILE:gtest_main>)
+add_custom_command(TARGET zacc.tests.scalar POST_BUILD      
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different  
+        ${GTEST_LIBS}      
+        $<TARGET_FILE_DIR:zacc.tests.scalar> 
+		) 
