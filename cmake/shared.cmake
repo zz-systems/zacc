@@ -63,18 +63,16 @@ endmacro()
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 
-	set(CMAKE_CXX_STANDARD 14)
-    set(CMAKE_CXX_STANDARD_REQUIRED on)
-    set(CMAKE_CXX_EXTENSIONS ON)
+	
 
     if(MSVC)
         message("Using clang-cl")
         set(CLANG_CL 1)
         
 		if(CMAKE_GENERATOR MATCHES "Visual Studio")
-			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /GX")
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /GX /wd4996")
 		else()
-			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -std=c++14 -Xclang -Wno-missing-braces -Xclang -Wmissing-field-initializers")#	-Xclang -fsanitize=alignment")
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -std=c++14 -Xclang -Wno-missing-braces -Xclang -Wmissing-field-initializers -Xclang -Wno-deprecated-declarations")#	-Xclang -fsanitize=alignment")
 		endif()
 
         if(BUILD_SANITIZE_MEMORY)
@@ -83,6 +81,10 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         add_definitions(-DNOMINMAX -D_USE_MATH_DEFINES)
     else()
         message("Using clang")        
+
+		set(CMAKE_CXX_STANDARD 14)
+		set(CMAKE_CXX_STANDARD_REQUIRED on)
+		set(CMAKE_CXX_EXTENSIONS OFF)
 
         if(BUILD_SANITIZE_MEMORY)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=alignment")
