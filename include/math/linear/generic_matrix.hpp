@@ -460,7 +460,7 @@ namespace zacc { namespace math {
     {
         mat<T, rows, cols> result;
 
-#pragma unroll
+// #pragma unroll
         for(int i = 0; i < rows * cols; i++)
             result(i) = a(i) + b;
 
@@ -475,7 +475,7 @@ namespace zacc { namespace math {
     {
         mat<T, rows, cols> result;
 
-#pragma unroll
+// #pragma unroll
         for(int i = 0; i < rows * cols; i++)
             result(i) = a(i) - b;
 
@@ -490,7 +490,7 @@ namespace zacc { namespace math {
     {
         mat<T, rows, cols> result;
 
-#pragma unroll
+// #pragma unroll
         for(int i = 0; i < rows * cols; i++)
             result(i) = a(i) * b;
 
@@ -505,7 +505,7 @@ namespace zacc { namespace math {
     {
         mat<T, rows, cols> result;
 
-#pragma unroll
+// #pragma unroll
         for(int i = 0; i < rows * cols; i++)
             result(i) = a(i) / b;
 
@@ -521,7 +521,7 @@ namespace zacc { namespace math {
     {
         vec<T, rows> result;
 
-#pragma unroll
+// #pragma unroll
         for(int i = 0; i < rows; i++)
             result(i) = a(i) * b(i);
 
@@ -536,7 +536,7 @@ namespace zacc { namespace math {
     {
         vec<T, rows> result;
 
-#pragma unroll
+// #pragma unroll
         for(int i = 0; i < rows; i++)
             result(i) = a(i) / b(i);
 

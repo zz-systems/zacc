@@ -67,7 +67,11 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         message("Using clang-cl")
         set(CLANG_CL 1)
 
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -std=c++14 -Xclang -Wno-missing-braces -Xclang -Wmissing-field-initializers")#	-Xclang -fsanitize=alignment")
+        #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -std=c++14 -Xclang -Wno-missing-braces -Xclang -Wmissing-field-initializers")#	-Xclang -fsanitize=alignment")
+
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /GX")
+
+		#add_definitions(-DJSON_NOEXCEPTION)
 
         if(BUILD_SANITIZE_MEMORY)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -fsanitize=alignment")
@@ -114,6 +118,9 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     set(CMAKE_CXX_STANDARD 14)
     set(CMAKE_CXX_STANDARD_REQUIRED on)
     set(CMAKE_CXX_EXTENSIONS OFF)
+
+	
+    add_definitions(-DNOMINMAX -D_USE_MATH_DEFINES)
 endif()
 
 if(ENABLE_TRACE)
@@ -129,21 +136,40 @@ endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-insert_kv(branch_flags  scalar              "")
-insert_kv(branch_flags  sse.sse2            -msse2)
-insert_kv(branch_flags  sse.sse3            -msse3 -mssse3)
+if(kkMSVC)
+	#include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/branch_flags_msvc.cmake)
+	insert_kv(branch_flags  scalar              /arch:IA32)
+	insert_kv(branch_flags  sse.sse2            /arch:SSE2)
+	insert_kv(branch_flags  sse.sse3            /arch:SSE2)
 
-insert_kv(branch_flags  sse.sse41           -msse4.1)
-insert_kv(branch_flags  sse.sse41.fma3      -msse4.1 -mfma)
-insert_kv(branch_flags  sse.sse41.fma4      -msse4.1 -mfma4)
+	insert_kv(branch_flags  sse.sse41           /arch:SSE2)
+	insert_kv(branch_flags  sse.sse41.fma3      /arch:SSE2)
+	insert_kv(branch_flags  sse.sse41.fma4      /arch:SSE2)
 
-#insert_kv(branch_flags  sse.sse42      -msse4.1 -msse4.2)
-#insert_kv(branch_flags  sse.sse42.fma3 -msse4.1 -msse4.2 -mfma)
-#insert_kv(branch_flags  sse.sse42.fma4 -msse4.1 -msse4.2 -mfma4)
+	#insert_kv(branch_flags  sse.sse42      -msse4.1 -msse4.2)
+	#insert_kv(branch_flags  sse.sse42.fma3 -msse4.1 -msse4.2 -mfma)
+	#insert_kv(branch_flags  sse.sse42.fma4 -msse4.1 -msse4.2 -mfma4)
 
-insert_kv(branch_flags  avx           -mavx -mfma)
-insert_kv(branch_flags  avx2          -mavx2 -mfma)
-insert_kv(branch_flags  avx512        -mavx512f -mavx512pf -mavx512er -mavx512cd -mavx512vl -mavx512bw -mavx512dq)
+	insert_kv(branch_flags  avx           /arch:AVX)
+	insert_kv(branch_flags  avx2          /arch:AVX2)
+	insert_kv(branch_flags  avx512        /arch:AVX512)
+else()
+	insert_kv(branch_flags  scalar              "")
+	insert_kv(branch_flags  sse.sse2            -msse2)
+	insert_kv(branch_flags  sse.sse3            -msse3 -mssse3)
+
+	insert_kv(branch_flags  sse.sse41           -msse4.1)
+	insert_kv(branch_flags  sse.sse41.fma3      -msse4.1 -mfma)
+	insert_kv(branch_flags  sse.sse41.fma4      -msse4.1 -mfma4)
+
+	#insert_kv(branch_flags  sse.sse42      -msse4.1 -msse4.2)
+	#insert_kv(branch_flags  sse.sse42.fma3 -msse4.1 -msse4.2 -mfma)
+	#insert_kv(branch_flags  sse.sse42.fma4 -msse4.1 -msse4.2 -mfma4)
+
+	insert_kv(branch_flags  avx           -mavx -mfma)
+	insert_kv(branch_flags  avx2          -mavx2 -mfma)
+	insert_kv(branch_flags  avx512        -mavx512f -mavx512pf -mavx512er -mavx512cd -mavx512vl -mavx512bw -mavx512dq)
+endif()
 
 insert_kv(branch_defs   scalar          ZACC_CAPABILITIES=scalar        ZACC_MAJOR_BRANCH=scalar    ZACC_SCALAR=1)
 insert_kv(branch_defs   sse.sse2        ZACC_CAPABILITIES=sse2          ZACC_MAJOR_BRANCH=sse       ZACC_SSE=1)

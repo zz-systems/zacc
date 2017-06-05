@@ -28,7 +28,7 @@
 
 #pragma once
 
-#include <x86intrin.h>
+#include "intrin.hpp"
 #include <type_traits>
 #include <cmath>
 
