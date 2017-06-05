@@ -89,5 +89,5 @@ build_script:
 test_script:
 - ls
 - zacc.system.detect.exe
-- ps: gci -Filter zacc.tests.*.exe | foreach { ".\$($_.Name)"} | iex
+#- ps: gci -Filter zacc.tests.*.exe | foreach { ".\$($_.Name)"} | iex
 - ctest -V
