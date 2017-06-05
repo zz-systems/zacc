@@ -63,6 +63,10 @@ endmacro()
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 
+	set(CMAKE_CXX_STANDARD 14)
+    set(CMAKE_CXX_STANDARD_REQUIRED on)
+    set(CMAKE_CXX_EXTENSIONS ON)
+
     if(MSVC)
         message("Using clang-cl")
         set(CLANG_CL 1)
@@ -78,11 +82,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         endif()
         add_definitions(-DNOMINMAX -D_USE_MATH_DEFINES)
     else()
-        message("Using clang")
-
-        set(CMAKE_CXX_STANDARD 14)
-        set(CMAKE_CXX_STANDARD_REQUIRED on)
-        set(CMAKE_CXX_EXTENSIONS OFF)
+        message("Using clang")        
 
         if(BUILD_SANITIZE_MEMORY)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=alignment")
@@ -102,7 +102,7 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
 
     set(CMAKE_CXX_STANDARD 14)
     set(CMAKE_CXX_STANDARD_REQUIRED on)
-    set(CMAKE_CXX_EXTENSIONS OFF)
+    set(CMAKE_CXX_EXTENSIONS ON)
 
     # GCC fails to retain attributes while passing as template arg. hide warnings
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-ignored-attributes")
@@ -111,13 +111,13 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "Intel")
 
     set(CMAKE_CXX_STANDARD 14)
     set(CMAKE_CXX_STANDARD_REQUIRED on)
-    set(CMAKE_CXX_EXTENSIONS OFF)
+    set(CMAKE_CXX_EXTENSIONS ON)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     message("Using Visual Studio C++")
 
     set(CMAKE_CXX_STANDARD 14)
     set(CMAKE_CXX_STANDARD_REQUIRED on)
-    set(CMAKE_CXX_EXTENSIONS OFF)
+    set(CMAKE_CXX_EXTENSIONS ON)
 
 	
     add_definitions(-DNOMINMAX -D_USE_MATH_DEFINES)
