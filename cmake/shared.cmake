@@ -66,12 +66,12 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     if(MSVC)
         message("Using clang-cl")
         set(CLANG_CL 1)
-
-        #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -std=c++14 -Xclang -Wno-missing-braces -Xclang -Wmissing-field-initializers")#	-Xclang -fsanitize=alignment")
-
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /GX")
-
-		#add_definitions(-DJSON_NOEXCEPTION)
+        
+		if(CMAKE_GENERATOR MATCHES "Visual Studio")
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /GX")
+		else()
+			set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -std=c++14 -Xclang -Wno-missing-braces -Xclang -Wmissing-field-initializers")#	-Xclang -fsanitize=alignment")
+		endif()
 
         if(BUILD_SANITIZE_MEMORY)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -fsanitize=alignment")
