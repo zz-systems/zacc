@@ -9,7 +9,7 @@ configuration:
 - Release
 
 # Only clone the top level commit; don't bother with history
-shallow_clone: true
+shallow_clone: false
 
 # environment: specifies additional global variables to define per row in build matrix
 environment:
