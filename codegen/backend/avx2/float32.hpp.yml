@@ -37,7 +37,7 @@ modules:
       init: _mm256_set1_ps(value)
 
     - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
-      init: _mm256_load_ps(value.data())
+      init: _mm256_loadu_ps(value.data())
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_ps }
@@ -62,7 +62,7 @@ modules:
   math:
     vabs:
       args: one
-      body: _mm256_max_ps(one, -one)
+      body: _mm256_max_ps(one, _mm256_sub_ps(_mm256_setzero_ps(), one))
 
     vmin: _mm256_min_ps
     vmax: _mm256_max_ps
@@ -103,7 +103,7 @@ modules:
       body: _mm256_fmadd_ps (multiplicand, multiplier, addendum)
     vfmsub:
       args: [multiplicand, multiplier, addendum]
-      body: _mm256_fmsub_ps(multiplicand, multiplier, -addendum)
+      body: _mm256_fmsub_ps(multiplicand, multiplier, addendum)
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate

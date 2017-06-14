@@ -30,7 +30,7 @@ modules:
       init: _mm256_set1_epi8(value)
 
     - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
-      init: _mm256_load_si256((__m256i*)value.data())
+      init: _mm256_loadu_si256((__m256i*)value.data())
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi8 }

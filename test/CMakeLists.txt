@@ -1,5 +1,7 @@
 enable_testing()
 
+set(GTEST_LIBS $<TARGET_FILE:gtest> $<TARGET_FILE:gtest_main>)
+
 foreach(branch ${branches})
     get_branch_files(files ${branch} "${test.schema}")
 
@@ -21,19 +23,19 @@ foreach(branch ${branches})
         target_compile_definitions(zacc.tests.${branch}  PUBLIC "${def}")
     endforeach()
 
-        add_test(
-                NAME ci.zacc.tests.${branch}
-                COMMAND zacc.tests.${branch}
-        )
+    add_test(
+            NAME ci.zacc.tests.${branch}
+            COMMAND zacc.tests.${branch}
+    )
+
+    add_custom_command(TARGET "zacc.tests.${branch}" POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${GTEST_LIBS}
+            $<TARGET_FILE_DIR:zacc.tests.${branch}>
+            )
 
     list(APPEND tests "zacc.tests.${branch}")
 endforeach()
 
 add_custom_target(zacc.tests.all DEPENDS ${tests})
 
-set(GTEST_LIBS $<TARGET_FILE:gtest> $<TARGET_FILE:gtest_main>)
-add_custom_command(TARGET zacc.tests.scalar POST_BUILD      
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different  
-        ${GTEST_LIBS}      
-        $<TARGET_FILE_DIR:zacc.tests.scalar> 
-		) 

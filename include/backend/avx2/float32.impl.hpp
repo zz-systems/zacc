@@ -155,7 +155,7 @@ namespace zacc { namespace avx2 {
              * @relates float32
              * @remark avx2 - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_load_ps(value.data())) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_loadu_ps(value.data())) {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "CONS(std::array<typename base_t::scal..)");
 
@@ -360,7 +360,7 @@ namespace zacc { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vabs");
 
-                return _mm256_max_ps(one, -one);
+                return _mm256_max_ps(one, _mm256_sub_ps(_mm256_setzero_ps(), one));
             }
 
 
@@ -614,7 +614,7 @@ namespace zacc { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vfmsub");
 
-                return _mm256_fmsub_ps(multiplicand, multiplier, -addendum);
+                return _mm256_fmsub_ps(multiplicand, multiplier, addendum);
             }
 
         };

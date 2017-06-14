@@ -36,7 +36,7 @@ modules:
       init: _mm256_set1_pd(value)
 
     - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
-      init: _mm256_load_pd(value.data())
+      init: _mm256_loadu_pd(value.data())
 
     - args: "std::array<sse::zint32<base_t::capability>, 2> value"
       init: _mm256_set_m128(_mm_cvtepi32_pd(value[1]), _mm_cvtepi32_pd(value[0]))
@@ -97,7 +97,7 @@ modules:
       body: _mm256_fmadd_pd(multiplicand, multiplier, addendum)
     vfmsub:
       args: [multiplicand, multiplier, addendum]
-      body: _mm256_fmsub_pd(multiplicand, multiplier, -addendum)
+      body: _mm256_fmsub_pd(multiplicand, multiplier, addendum)
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate

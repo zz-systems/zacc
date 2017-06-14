@@ -311,6 +311,7 @@ class Args:
 
 class Arg:
     default_type = "composed_t"
+    #defaul_type = "z{}<base_t::capability>"
     default_type_invocation = ""#"".get_value()"
 
     def __init__(self, parent, type, name):
@@ -320,8 +321,9 @@ class Arg:
         #override if in logical module
         module = self.parent.parent.parent
 
-        #if isinstance(module, Module):
-            #self.default_type = "z{}<base_t::capability>".format(module.parent.type)
+        #if isinstance(module, Module) and type == self.default_type:
+        #   if module.name not in ["construction"]:
+        #        self.type = "z{}<base_t::capability>".format(module.parent.type)
 
             #if module.name == "logical":
                 #self.type = "bval<composed_t, mask_t>"

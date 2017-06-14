@@ -45,8 +45,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (-a[i]);
         }
@@ -65,8 +65,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (a[i] + b[i]);
         }
@@ -85,8 +85,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (a[i] - b[i]);
         }
@@ -105,8 +105,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (a[i] * b[i]);
         }
@@ -127,8 +127,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) ((a[i] | 64));
         }
@@ -147,8 +147,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) ((a[i] & 64));
         }
@@ -167,8 +167,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) ((a[i] ^ 64));
         }
@@ -189,8 +189,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) ((a[i]) << (4));
         }
@@ -209,8 +209,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) ((a[i]) >> (3));
         }
@@ -231,8 +231,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (false);
         }
@@ -251,8 +251,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (true);
         }
@@ -271,8 +271,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (false);
         }
@@ -293,8 +293,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (0);
         }
@@ -313,8 +313,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (0);
         }
@@ -333,8 +333,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (0);
         }
@@ -353,8 +353,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (0);
         }
@@ -373,8 +373,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (true);
         }
@@ -393,8 +393,8 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (true);
         }
@@ -415,13 +415,13 @@ namespace zacc { namespace test {
         std::array<int16_t, 16> a, b, expected;
         for(int i = 0; i < 16; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
 
             expected[i] = (int16_t) (2);
         }
 
-        VASSERT_EQ((vsel(zint16(1) == zint16(1), zint16(2), zint16(3))), zint16(expected));
+        VASSERT_EQ((zint16(2).when(zint16(1) == zint16(1)).otherwise(zint16(3))), zint16(expected));
     }
 
 // =====================================================================================================================

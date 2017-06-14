@@ -51,8 +51,8 @@ namespace zacc { namespace test {
         std::array<{{ type.scalar_t }}, {{type.vec_size}}> a, b, expected;
         for(int i = 0; i < {{type.vec_size}}; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<{{ type.scalar_t }}>(distribution2(generator));
+            b[i] = static_cast<{{ type.scalar_t }}>(distribution1(generator));
 
             expected[i] = ({{ type.scalar_t }}) ({{ branch.expected }});
         }

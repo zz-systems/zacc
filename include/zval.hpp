@@ -101,7 +101,7 @@ namespace zacc {
          * @param value
          */
         //template<typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>
-        zval(const zval& value) : _value(value.get_value()) {}
+        zval(const zval& value) : _value(value._value) {}
 
         /**
          * @brief construct from mask
@@ -122,11 +122,11 @@ namespace zacc {
          * @brief cast to underlying vector type
          * @return raw value
          */
-        const vector_t &get_value() const {
+        vector_t get_value() const {
             return _value;
         }
     protected:
-        vector_t _value;
+        alignas(_alignment) vector_t _value;
     };
 
     /// TODO: separate file, impl traits.

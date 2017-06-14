@@ -130,7 +130,7 @@ namespace zacc { namespace avx2 {
              * @relates int16
              * @remark avx2 - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_load_si256((__m256i*)value.data())) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_loadu_si256((__m256i*)value.data())) {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "CONS(std::array<typename base_t::scal..)");
 

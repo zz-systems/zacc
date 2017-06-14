@@ -45,8 +45,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (-a[i]);
         }
@@ -65,8 +65,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (a[i] + b[i]);
         }
@@ -85,8 +85,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (a[i] - b[i]);
         }
@@ -105,8 +105,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (a[i] * b[i]);
         }
@@ -125,8 +125,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (1);
         }
@@ -149,8 +149,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (false);
         }
@@ -169,8 +169,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (true);
         }
@@ -189,8 +189,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (false);
         }
@@ -211,8 +211,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (0);
         }
@@ -231,8 +231,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (0);
         }
@@ -251,8 +251,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (0);
         }
@@ -271,8 +271,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (0);
         }
@@ -291,8 +291,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (true);
         }
@@ -311,8 +311,8 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (true);
         }
@@ -333,13 +333,13 @@ namespace zacc { namespace test {
         std::array<float, 8> a, b, expected;
         for(int i = 0; i < 8; i++)
         {
-            a[i] = distribution2(generator);
-            b[i] = distribution1(generator);
+            a[i] = static_cast<float>(distribution2(generator));
+            b[i] = static_cast<float>(distribution1(generator));
 
             expected[i] = (float) (2);
         }
 
-        VASSERT_EQ((vsel(zfloat32(1) == zfloat32(1), zfloat32(2), zfloat32(3))), zfloat32(expected));
+        VASSERT_EQ((zfloat32(2).when(zfloat32(1) == zfloat32(1)).otherwise(zfloat32(3))), zfloat32(expected));
     }
 
 // =====================================================================================================================
