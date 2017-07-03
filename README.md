@@ -1,45 +1,62 @@
-[![Build Status](https://travis-ci.org/zz-systems/gorynych.svg?branch=develop)](https://travis-ci.org/zz-systems/gorynych)
-[![Build status](https://ci.appveyor.com/api/projects/status/j2pe355ld0pt60sq/branch/develop?svg=true)](https://ci.appveyor.com/project/zz-systems/gorynych/branch/develop)
+[![Build Status](https://travis-ci.org/zz-systems/zacc.svg?branch=develop)](https://travis-ci.org/zz-systems/zacc)
+[![Build status](https://ci.appveyor.com/api/projects/status/j2pe355ld0pt60sq/branch/develop?svg=true)](https://ci.appveyor.com/project/zz-systems/zacc/branch/develop)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# Gorynych
-Yet another SIMD Abstraction layer
+# ZACC
+SIMD Abstraction layer that lets you write code as usual.
 
 ## License
 Gorynych is released under the MIT License. See LICENSE.txt for details.
 
 ## About
-Gorynych is an simple yet powerful computation abstraction layer targeting primarily game development due to its less precise nature.
+ZACC is a powerful computation abstraction layer targeting primarily game development due to its less precise nature.
 
-It is still under development which is synchronous to [libsolowej](https://github.com/zz-systems/solowej) development.
+It is still under development which is synchronous to [cacophony](https://github.com/zz-systems/cacophony) development.
 
-Please keep in mind, that this release is a **Preview/Alpha Release** and feel free to report issues and bugs to the [Issue tracker on GitHub](https://github.com/zz-systems/gorynych/issues)
+Please keep in mind, that this release is a **Preview/Alpha Release** and feel free to report issues and bugs to the [Issue tracker on GitHub](https://github.com/zz-systems/zacc/issues)
 
-[Documentation](http://zz-systems.github.io/gorynych/htmldoc/index.html)
+[Documentation](http://zz-systems.github.io/zacc/htmldoc/index.html)
 
 ## Current state
 * In development! 
 * Tests insufficent (Only two different CPU's tested)
-* Successfully used in [libsolowej](https://github.com/zz-systems/solowej) - a coherent noise library
+* Successfully used in [cacophony](https://github.com/zz-systems/cacophony) - a coherent noise library
 
-## Tested CPU's:
-* AMD FX-8350, Max. Feature: AVX1
-* Intel Core i7 6500U, Max. Feature: AVX2
+## Tested processing units:
 
-## Supported featuresets
-* x87 FPU
-* SSE2
-* SSE3
-* SSE3 + SSSE3
-* SSE4.1/2
-* FMA3/4 (not completely tested though)
-* AVX1 (incomplete - int emulation is simply bad. You're better off using SSE4 for now) 
-* AVX2
+| Processor | Featureset |
+|-----------|------------|
+| AMD FX-8350 | AVX1 |
+| Intel Core i7 6500U | AVX2 |
+| Intel Core i7 7700K | SSE4.1 |
 
-## Planned featuresets
-* OpenCL / GPGPU support
-* Verilog / VHDL generation for hardware synthesis
-* Extending with more datatypes
+## Featuresets
+
+| Featureset | State |  |
+|-----------|---|--------------|
+| x87 FPU | :white_check_mark: | scalar |
+| SSE2 | :white_check_mark: |  |
+| SSE3 | :white_check_mark: |
+| SSE3 + SSSE3 | :white_check_mark: |
+| SSE4.1 | :white_check_mark: |
+| SSE4.1 + FMA3 | :white_check_mark: |
+| SSE4.1 + FMA4 | :white_check_mark: |
+| AVX1 | :warning: | integer vector emulation sucks |
+| AVX2 | :warning: | in development |
+| AVX512 | :no_entry: | in development, can't be tested by myself* |
+| GPGPU | :no_entry: | May come, depending on my research success |
+| HDL | :no_entry: | May come, depending on my research success |
+
+## Supported datatypes 
+| Type | State |  |
+|-----------|---|--------------|
+| int8 | :warning: | No real-life tests yet |
+| int16 | :warning: | No real-life tests yet |
+| int32 | :white_check_mark: |  |
+| int64 | :no_entry: | Not implemented yet |
+| float16 | :no_entry: | Not implemented yet |
+| float32| :white_check_mark: |  |
+| float64 | :white_check_mark: |  |
 
 ## Functionality
 * Basic matrix / vector support
