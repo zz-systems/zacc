@@ -88,7 +88,7 @@ script:
   - make -j 2 && make zacc.tests.all
   - ls
   - ./zacc.system.detect
-  - ./zacc.tests.sse.scalar
+  - ./zacc.tests.scalar
   - ./zacc.tests.sse.sse2
   - ./zacc.tests.sse.sse3
   - ./zacc.tests.sse.sse41
