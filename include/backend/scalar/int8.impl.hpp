@@ -876,14 +876,14 @@ namespace zacc { namespace scalar {
          * - 'int8_t' as underlying vector type
          * - 'int8_t' as scalar type
          * - '1' as vector size
-         * - '8' as alignment
+         * - '16' as alignment
          * @relates int8
          * @remark scalar
          */
         template<uint64_t capability>
         struct __zval_int8
         {
-            using zval_t = zval<int8_t, bool, int8_t, 1, 8, capability>;
+            using zval_t = zval<int8_t, bool, int8_t, 1, 16, capability>;
 
             struct impl : public zval_t
             {
