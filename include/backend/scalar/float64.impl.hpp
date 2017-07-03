@@ -993,14 +993,14 @@ namespace zacc { namespace scalar {
          * - 'double' as underlying vector type
          * - 'double' as scalar type
          * - '1' as vector size
-         * - '8' as alignment
+         * - '16' as alignment
          * @relates float64
          * @remark scalar
          */
         template<uint64_t capability>
         struct __zval_float64
         {
-            using zval_t = zval<double, bool, double, 1, 8, capability>;
+            using zval_t = zval<double, bool, double, 1, 16, capability>;
 
             struct impl : public zval_t
             {

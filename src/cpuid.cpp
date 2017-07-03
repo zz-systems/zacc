@@ -73,18 +73,28 @@ namespace zacc {
         for (auto i = 0; i < highestId; i++)
             _data.push_back(get_cpuid(i, 0));
 
-        highestId = get_cpuid(0x80000000)[0].to_ulong();
-
-        for (auto i = 0x80000000; i < highestId; i++)
-            _ext_data.push_back(get_cpuid(i, 0));
 
         append(_vendor_str, std::array<reg_t, 3>{_data[0][EBX], _data[0][EDX], _data[0][ECX]});
 
         _vendor = _vendor_mapping[_vendor_str];
 
+        highestId = get_cpuid(0x80000000)[0].to_ulong();
+
+        // EAX=80000000h: Get Highest Extended Function Supported
+        highestId = get_cpuid(0x80000000)[0].to_ulong();
+        _ext_data.push_back(get_cpuid(0x80000000, 0));
+
+        // EAX=80000001h: Extended Processor Info and Feature Bits
+        _ext_data.push_back(get_cpuid(0x80000001, 0));
+
+        //EAX=80000002h,80000003h,80000004h: Processor Brand String
         if (highestId >= 0x80000004) {
-            for (auto i = 2; i <= 4; i++)
-                append(_brand_str, _ext_data[i]);
+            for (auto i = 0x80000002; i <= 0x80000004; i++) {
+                auto data = get_cpuid(i, 0);
+
+                _ext_data.push_back(data);
+                append(_brand_str, data);
+            }
         }
     }
 

@@ -1001,14 +1001,14 @@ namespace zacc { namespace scalar {
          * - 'int32_t' as underlying vector type
          * - 'int32_t' as scalar type
          * - '1' as vector size
-         * - '8' as alignment
+         * - '16' as alignment
          * @relates int32
          * @remark scalar
          */
         template<uint64_t capability>
         struct __zval_int32
         {
-            using zval_t = zval<int32_t, bool, int32_t, 1, 8, capability>;
+            using zval_t = zval<int32_t, bool, int32_t, 1, 16, capability>;
 
             struct impl : public zval_t
             {
