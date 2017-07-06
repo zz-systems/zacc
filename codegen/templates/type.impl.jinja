@@ -48,7 +48,7 @@
  * provides unified access to {{ type.vec_size }} '{{ type.scalar_t }}' values
  */
 
-namespace zacc { namespace {{ type.branch }} {
+namespace zacc { namespace backend { namespace {{ type.branch }} {
 
     template<uint64_t capability>
     struct b{{ type.type }};
@@ -223,4 +223,4 @@ namespace zacc { namespace {{ type.branch }} {
     static_assert({{ type.double_condition }}is_double<z{{ type.type }}<0>>::value, "is_double for z{{ type.type }} failed.");
 
     ///@}
-}}
+}}}

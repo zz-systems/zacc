@@ -89,8 +89,8 @@ modules:
         - __m256i junk;
         - auto ones = _mm256_cmpeq_epi32(junk, junk);
         - return _mm256_xor_si256(one, ones);
-    vband:  _mm256_or_si256
-    vbor:   _mm256_and_si256
+    vband:  _mm256_and_si256
+    vbor:   _mm256_or_si256
     vbxor:  _mm256_xor_si256
 
     is_set:

@@ -55,7 +55,7 @@
  * provides unified access to 1 'int32_t' values
  */
 
-namespace zacc { namespace scalar {
+namespace zacc { namespace backend { namespace scalar {
 
     template<uint64_t capability>
     struct bint32;
@@ -120,7 +120,7 @@ namespace zacc { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> __impl(const T &value) : base_t(value.get_value()) {
+            template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> __impl(const T &value) : base_t(value.value()) {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "CONS(const T &value)");
 
@@ -194,7 +194,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vstore");
 
-                target.data()[0] = source.get_value();
+                target.data()[0] = source.value();
             }
 
 
@@ -207,7 +207,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vstream");
 
-                target.data()[0] = source.get_value();
+                target.data()[0] = source.value();
             }
 
 
@@ -220,7 +220,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vgather");
 
-                return source[index.get_value()];
+                return source[index.value()];
             }
 
         };
@@ -338,7 +338,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vmin");
 
-                return std::min(one.get_value(), other.get_value());
+                return std::min(one.value(), other.value());
             }
 
 
@@ -351,7 +351,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vmax");
 
-                return std::max(one.get_value(), other.get_value());
+                return std::max(one.value(), other.value());
             }
 
 
@@ -423,7 +423,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vneg");
 
-                return (-one.get_value());
+                return (-one.value());
             }
 
 
@@ -436,7 +436,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vadd");
 
-                return (one.get_value() + other.get_value());
+                return (one.value() + other.value());
             }
 
 
@@ -449,7 +449,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vsub");
 
-                return (one.get_value() - other.get_value());
+                return (one.value() - other.value());
             }
 
 
@@ -462,7 +462,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vmul");
 
-                return (one.get_value() * other.get_value());
+                return (one.value() * other.value());
             }
 
 
@@ -475,7 +475,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vdiv");
 
-                return (one.get_value() / other.get_value());
+                return (one.value() / other.value());
             }
 
 
@@ -488,7 +488,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vmod");
 
-                return (one.get_value() % other.get_value());
+                return (one.value() % other.value());
             }
 
         };
@@ -547,7 +547,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbneg");
 
-                return (~one.get_value());
+                return (~one.value());
             }
 
 
@@ -560,7 +560,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vband");
 
-                return (one.get_value() & other.get_value());
+                return (one.value() & other.value());
             }
 
 
@@ -573,7 +573,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbor");
 
-                return (one.get_value() | other.get_value());
+                return (one.value() | other.value());
             }
 
 
@@ -586,7 +586,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbxor");
 
-                return (one.get_value() ^ other.get_value());
+                return (one.value() ^ other.value());
             }
 
 
@@ -599,7 +599,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "is_set");
 
-                return one.get_value() != 0;
+                return one.value() != 0;
             }
 
         };
@@ -658,7 +658,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbsll");
 
-                return (one.get_value() << other.get_value());
+                return (one.value() << other.value());
             }
 
 
@@ -671,7 +671,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbsrl");
 
-                return (one.get_value() >> other.get_value());
+                return (one.value() >> other.value());
             }
 
 
@@ -684,7 +684,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbslli");
 
-                return (one.get_value() << other);
+                return (one.value() << other);
             }
 
 
@@ -697,7 +697,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbsrli");
 
-                return (one.get_value() >> other);
+                return (one.value() >> other);
             }
 
         };
@@ -756,7 +756,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vlneg");
 
-                return (!one.get_value());
+                return (!one.value());
             }
 
 
@@ -769,7 +769,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vlor");
 
-                return (one.get_value() || other.get_value());
+                return (one.value() || other.value());
             }
 
 
@@ -782,7 +782,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vland");
 
-                return (one.get_value() && other.get_value());
+                return (one.value() && other.value());
             }
 
         };
@@ -841,7 +841,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "veq");
 
-                return (one.get_value() == other.get_value());
+                return (one.value() == other.value());
             }
 
 
@@ -854,7 +854,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vneq");
 
-                return (one.get_value() != other.get_value());
+                return (one.value() != other.value());
             }
 
 
@@ -867,7 +867,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vgt");
 
-                return (one.get_value() > other.get_value());
+                return (one.value() > other.value());
             }
 
 
@@ -880,7 +880,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vlt");
 
-                return (one.get_value() < other.get_value());
+                return (one.value() < other.value());
             }
 
 
@@ -893,7 +893,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vge");
 
-                return (one.get_value() >= other.get_value());
+                return (one.value() >= other.value());
             }
 
 
@@ -906,7 +906,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vle");
 
-                return (one.get_value() <= other.get_value());
+                return (one.value() <= other.value());
             }
 
         };
@@ -965,7 +965,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vsel");
 
-                return (condition.get_value() != 0 ? if_value : else_value);
+                return (condition.value() != 0 ? if_value : else_value);
             }
 
         };
@@ -1084,4 +1084,4 @@ namespace zacc { namespace scalar {
     static_assert(!is_double<zint32<0>>::value, "is_double for zint32 failed.");
 
     ///@}
-}}
+}}}

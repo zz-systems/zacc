@@ -135,20 +135,20 @@ std::enable_if_t<!zacc::is_zval<T>::value, bool> is_set(T value)
     typename zint32     = typename branch::zint32, \
     typename zfloat32   = typename branch::zfloat32, \
     typename zfloat64   = typename branch::zfloat64, \
-    typename zbyte      = zint8, \
-    typename zshort     = zint16, \
-    typename zint       = zint32, \
-    typename zfloat     = zfloat32, \
-    typename zdouble    = zfloat64, \
+    typename zbyte      = typename branch::zint8, \
+    typename zshort     = typename branch::zint16, \
+    typename zint       = typename branch::zint32, \
+    typename zfloat     = typename branch::zfloat32, \
+    typename zdouble    = typename branch::zfloat64, \
     typename bint8      = typename branch::bint8, \
     typename bint16     = typename branch::bint16, \
     typename bint32     = typename branch::bint32, \
     typename bfloat32   = typename branch::bfloat32, \
     typename bfloat64   = typename branch::bfloat64, \
-    typename bbyte      = bint8, \
-    typename bshort     = bint16, \
-    typename bint       = bint32, \
-    typename bfloat     = bfloat32, \
-    typename bdouble    = bfloat64>
+    typename bbyte      = typename branch::bint8, \
+    typename bshort     = typename branch::bint16, \
+    typename bint       = typename branch::bint32, \
+    typename bfloat     = typename branch::bfloat32, \
+    typename bdouble    = typename branch::bfloat64>
 
 #define ALIGNED alignas(branch::alignment)

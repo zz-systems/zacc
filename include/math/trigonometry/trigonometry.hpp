@@ -66,7 +66,7 @@ namespace zacc { namespace math {
         zint iq = q;
 
         // when performance > precision
-        if(branch::use_fast_float)
+        if(dispatched_branch::use_fast_float)
         {
             val = vfmadd(q, Z_PI, val);
         }
@@ -138,7 +138,7 @@ namespace zacc { namespace math {
         zint iq = q;
 
         // when performance > precision
-        if(branch::use_fast_float)
+        if(dispatched_branch::use_fast_float)
         {
             val -= q * Z_PI_2;
         }
@@ -210,7 +210,7 @@ namespace zacc { namespace math {
         zint iq = q;
 
         // when performance > precision
-        if(branch::use_fast_float)
+        if(dispatched_branch::use_fast_float)
         {
             val -= q * Z_PI_2;
         }

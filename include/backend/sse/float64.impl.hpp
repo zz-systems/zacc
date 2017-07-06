@@ -54,7 +54,7 @@
  * provides unified access to 2 'double' values
  */
 
-namespace zacc { namespace sse {
+namespace zacc { namespace backend { namespace sse {
 
     template<uint64_t capability>
     struct bfloat64;
@@ -1159,4 +1159,4 @@ namespace zacc { namespace sse {
     static_assert(is_double<zfloat64<0>>::value, "is_double for zfloat64 failed.");
 
     ///@}
-}}
+}}}

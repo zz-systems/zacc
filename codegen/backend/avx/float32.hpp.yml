@@ -58,7 +58,7 @@ modules:
       args: { raw: "composed_t &target, raw_ptr<const float> source, zint32<base_t::capability> index" }
       #args: { raw: "composed_t &target, raw_ptr<const float> source, T index" }
       #prefix: "template<typename T> friend "
-      body: _mm256_set_m128(sse::zfloat32<base_t::capability>::gather(source, index.get_value()[1]), sse::zfloat32<base_t::capability>::gather(source, index.get_value()[0]))
+      body: _mm256_set_m128(sse::zfloat32<base_t::capability>::gather(source, index.value()[1]), sse::zfloat32<base_t::capability>::gather(source, index.value()[0]))
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------

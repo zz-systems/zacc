@@ -53,7 +53,7 @@
  * provides unified access to 8 'int16_t' values
  */
 
-namespace zacc { namespace sse {
+namespace zacc { namespace backend { namespace sse {
 
     template<uint64_t capability>
     struct bint16;
@@ -926,4 +926,4 @@ namespace zacc { namespace sse {
     static_assert(!is_double<zint16<0>>::value, "is_double for zint16 failed.");
 
     ///@}
-}}
+}}}

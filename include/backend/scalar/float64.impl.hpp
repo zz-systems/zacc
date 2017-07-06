@@ -54,7 +54,7 @@
  * provides unified access to 1 'double' values
  */
 
-namespace zacc { namespace scalar {
+namespace zacc { namespace backend { namespace scalar {
 
     template<uint64_t capability>
     struct bfloat64;
@@ -119,7 +119,7 @@ namespace zacc { namespace scalar {
              * @relates float64
              * @remark scalar - default
              */
-            template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> __impl(const T &value) : base_t(value.get_value()) {
+            template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> __impl(const T &value) : base_t(value.value()) {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "CONS(const T &value)");
 
@@ -193,7 +193,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vstore");
 
-                target.data()[0] = source.get_value();
+                target.data()[0] = source.value();
             }
 
 
@@ -206,7 +206,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vstream");
 
-                target.data()[0] = source.get_value();
+                target.data()[0] = source.value();
             }
 
 
@@ -219,7 +219,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vgather");
 
-                return source[index.get_value()];
+                return source[index.value()];
             }
 
         };
@@ -324,7 +324,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vabs");
 
-                return std::abs(one.get_value());
+                return std::abs(one.value());
             }
 
 
@@ -337,7 +337,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vmin");
 
-                return std::min(one.get_value(), other.get_value());
+                return std::min(one.value(), other.value());
             }
 
 
@@ -350,7 +350,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vmax");
 
-                return std::max(one.get_value(), other.get_value());
+                return std::max(one.value(), other.value());
             }
 
 
@@ -376,7 +376,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vrcp");
 
-                return (1 / one.get_value());
+                return (1 / one.value());
             }
 
 
@@ -389,7 +389,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vtrunc");
 
-                return std::trunc(one.get_value());
+                return std::trunc(one.value());
             }
 
 
@@ -402,7 +402,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vfloor");
 
-                return std::floor(one.get_value());
+                return std::floor(one.value());
             }
 
 
@@ -415,7 +415,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vceil");
 
-                return std::ceil(one.get_value());
+                return std::ceil(one.value());
             }
 
 
@@ -428,7 +428,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vround");
 
-                return std::round(one.get_value());
+                return std::round(one.value());
             }
 
 
@@ -441,7 +441,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vsqrt");
 
-                return std::sqrt(one.get_value());
+                return std::sqrt(one.value());
             }
 
         };
@@ -500,7 +500,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vneg");
 
-                return (-one.get_value());
+                return (-one.value());
             }
 
 
@@ -513,7 +513,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vadd");
 
-                return (one.get_value() + other.get_value());
+                return (one.value() + other.value());
             }
 
 
@@ -526,7 +526,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vsub");
 
-                return (one.get_value() - other.get_value());
+                return (one.value() - other.value());
             }
 
 
@@ -539,7 +539,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vmul");
 
-                return (one.get_value() * other.get_value());
+                return (one.value() * other.value());
             }
 
 
@@ -552,7 +552,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vdiv");
 
-                return (one.get_value() / other.get_value());
+                return (one.value() / other.value());
             }
 
 
@@ -565,7 +565,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vfmadd");
 
-                return std::fma(multiplicand.get_value(), multiplier.get_value(), addendum.get_value());
+                return std::fma(multiplicand.value(), multiplier.value(), addendum.value());
             }
 
 
@@ -578,7 +578,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vfmsub");
 
-                return std::fma(multiplicand.get_value(), multiplier.get_value(), -addendum.get_value());
+                return std::fma(multiplicand.value(), multiplier.value(), -addendum.value());
             }
 
         };
@@ -637,7 +637,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vbneg");
 
-                return (*reinterpret_cast<double*>(~(*reinterpret_cast<const unsigned int*>(&one.get_value()))));
+                return (*reinterpret_cast<double*>(~(*reinterpret_cast<const unsigned int*>(&one.value()))));
             }
 
 
@@ -650,7 +650,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vband");
 
-                return (*reinterpret_cast<double*>((*reinterpret_cast<const unsigned int*>(&one.get_value())) & (*reinterpret_cast<const unsigned int*>(&other.get_value()))));
+                return (*reinterpret_cast<double*>((*reinterpret_cast<const unsigned int*>(&one.value())) & (*reinterpret_cast<const unsigned int*>(&other.value()))));
             }
 
 
@@ -663,7 +663,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vbor");
 
-                return (*reinterpret_cast<double*>((*reinterpret_cast<const unsigned int*>(&one.get_value())) | (*reinterpret_cast<const unsigned int*>(&other.get_value()))));
+                return (*reinterpret_cast<double*>((*reinterpret_cast<const unsigned int*>(&one.value())) | (*reinterpret_cast<const unsigned int*>(&other.value()))));
             }
 
 
@@ -676,7 +676,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vbxor");
 
-                return (*reinterpret_cast<double*>((*reinterpret_cast<const unsigned int*>(&one.get_value())) ^ (*reinterpret_cast<const unsigned int*>(&other.get_value()))));
+                return (*reinterpret_cast<double*>((*reinterpret_cast<const unsigned int*>(&one.value())) ^ (*reinterpret_cast<const unsigned int*>(&other.value()))));
             }
 
 
@@ -689,7 +689,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "is_set");
 
-                return one.get_value() != 0;
+                return one.value() != 0;
             }
 
         };
@@ -748,7 +748,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vlneg");
 
-                return (!one.get_value());
+                return (!one.value());
             }
 
 
@@ -761,7 +761,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vlor");
 
-                return (one.get_value() || other.get_value());
+                return (one.value() || other.value());
             }
 
 
@@ -774,7 +774,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vland");
 
-                return (one.get_value() && other.get_value());
+                return (one.value() && other.value());
             }
 
         };
@@ -833,7 +833,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "veq");
 
-                return (one.get_value() == other.get_value());
+                return (one.value() == other.value());
             }
 
 
@@ -846,7 +846,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vneq");
 
-                return (one.get_value() != other.get_value());
+                return (one.value() != other.value());
             }
 
 
@@ -859,7 +859,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vgt");
 
-                return (one.get_value() > other.get_value());
+                return (one.value() > other.value());
             }
 
 
@@ -872,7 +872,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vlt");
 
-                return (one.get_value() < other.get_value());
+                return (one.value() < other.value());
             }
 
 
@@ -885,7 +885,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vge");
 
-                return (one.get_value() >= other.get_value());
+                return (one.value() >= other.value());
             }
 
 
@@ -898,7 +898,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vle");
 
-                return (one.get_value() <= other.get_value());
+                return (one.value() <= other.value());
             }
 
         };
@@ -957,7 +957,7 @@ namespace zacc { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "zfloat64(double[1])", "default", "vsel");
 
-                return (condition.get_value() != 0 ? if_value : else_value);
+                return (condition.value() != 0 ? if_value : else_value);
             }
 
         };
@@ -1075,4 +1075,4 @@ namespace zacc { namespace scalar {
     static_assert(is_double<zfloat64<0>>::value, "is_double for zfloat64 failed.");
 
     ///@}
-}}
+}}}

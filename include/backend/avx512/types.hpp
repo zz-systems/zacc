@@ -38,17 +38,17 @@ namespace zacc { namespace avx512 {
     {
         using capability = _capability;
 
-        using zfloat32  = ::zacc::avx512::zfloat32<capability::value>;
-        using zfloat64  = ::zacc::avx512::zfloat64<capability::value>;
-        using zint8     = ::zacc::avx512::zint8<capability::value>;
-        using zint16    = ::zacc::avx512::zint16<capability::value>;
-        using zint32    = ::zacc::avx512::zint32<capability::value>;
+        using zfloat32  = zacc::backend::avx512::zfloat32<capability::value>;
+        using zfloat64  = zacc::backend::avx512::zfloat64<capability::value>;
+        using zint8     = zacc::backend::avx512::zint8<capability::value>;
+        using zint16    = zacc::backend::avx512::zint16<capability::value>;
+        using zint32    = zacc::backend::avx512::zint32<capability::value>;
 
-        using bfloat32  = ::zacc::avx512::bfloat32<capability::value>;
-        using bfloat64  = ::zacc::avx512::bfloat64<capability::value>;
-        using bint8     = ::zacc::avx512::bint8<capability::value>;
-        using bint16    = ::zacc::avx512::bint16<capability::value>;
-        using bint32    = ::zacc::avx512::bint32<capability::value>;
+        using bfloat32  = zacc::backend::avx512::bfloat32<capability::value>;
+        using bfloat64  = zacc::backend::avx512::bfloat64<capability::value>;
+        using bint8     = zacc::backend::avx512::bint8<capability::value>;
+        using bint16    = zacc::backend::avx512::bint16<capability::value>;
+        using bint32    = zacc::backend::avx512::bint32<capability::value>;
 
         static constexpr const size_t alignment = zint32::alignment;
 

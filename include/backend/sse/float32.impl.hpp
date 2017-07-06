@@ -54,7 +54,7 @@
  * provides unified access to 4 'float' values
  */
 
-namespace zacc { namespace sse {
+namespace zacc { namespace backend { namespace sse {
 
     template<uint64_t capability>
     struct bfloat32;
@@ -229,7 +229,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vstore");
 
-                _mm_store_ps(target.data(), source);
+                _mm_storeu_ps(target.data(), source);
             }
 
 
@@ -1226,4 +1226,4 @@ namespace zacc { namespace sse {
     static_assert(!is_double<zfloat32<0>>::value, "is_double for zfloat32 failed.");
 
     ///@}
-}}
+}}}

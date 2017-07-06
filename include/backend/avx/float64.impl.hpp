@@ -54,7 +54,7 @@
  * provides unified access to 4 'double' values
  */
 
-namespace zacc { namespace avx {
+namespace zacc { namespace backend { namespace avx {
 
     template<uint64_t capability>
     struct bfloat64;
@@ -267,7 +267,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vgather");
 
-                return _mm256_set_m128d(vgather(source, index.get_value()[1]), vgather(source, index.get_value()[0]));
+                return _mm256_set_m128d(vgather(source, index.value()[1]), vgather(source, index.value()[0]));
             }
 
         };
@@ -1104,4 +1104,4 @@ namespace zacc { namespace avx {
     static_assert(is_double<zfloat64<0>>::value, "is_double for zfloat64 failed.");
 
     ///@}
-}}
+}}}

@@ -57,7 +57,7 @@ modules:
       args: { raw: "composed_t &target, raw_ptr<double> source, zint32<base_t::capability> index" }
       #args: { raw: "composed_t &target, raw_ptr<const double> source, T index" }
       #prefix: "template<typename T> friend"
-      body: _mm256_set_m128d(vgather(source, index.get_value()[1]), vgather(source, index.get_value()[0]))
+      body: _mm256_set_m128d(vgather(source, index.value()[1]), vgather(source, index.value()[0]))
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------

@@ -55,7 +55,7 @@
  * provides unified access to 8 'int32_t' values
  */
 
-namespace zacc { namespace avx {
+namespace zacc { namespace backend { namespace avx {
 
     template<uint64_t capability>
     struct bint32;
@@ -230,8 +230,8 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vstore");
 
-                _mm_store_si128((__m128i*)(target.data()), source.get_value()[1]);
-                _mm_store_si128((__m128i*)(target.data() + base_t::dim / 2), source.get_value()[0]);
+                _mm_store_si128((__m128i*)(target.data()), source.value()[1]);
+                _mm_store_si128((__m128i*)(target.data() + base_t::dim / 2), source.value()[0]);
             }
 
 
@@ -244,8 +244,8 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vstream");
 
-                _mm_stream_si128((__m128i*)(target.data()), source.get_value()[1]);
-                _mm_stream_si128((__m128i*)(target.data() + base_t::dim / 2), source.get_value()[0]);
+                _mm_stream_si128((__m128i*)(target.data()), source.value()[1]);
+                _mm_stream_si128((__m128i*)(target.data() + base_t::dim / 2), source.value()[0]);
             }
 
 
@@ -258,7 +258,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vgather");
 
-                return zint32<base_t::capability> ({ vgather(source, index.get_value()[1]), vgather(source, index.get_value()[0]) });
+                return zint32<base_t::capability> ({ vgather(source, index.value()[1]), vgather(source, index.value()[0]) });
             }
 
         };
@@ -363,7 +363,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vabs");
 
-                return zint32<base_t::capability> ({ vabs(one.get_value()[1]), vabs(one.get_value()[0]) });
+                return zint32<base_t::capability> ({ vabs(one.value()[1]), vabs(one.value()[0]) });
             }
 
 
@@ -376,7 +376,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vmin");
 
-                return zint32<base_t::capability> ({ vmin(one.get_value()[1], other.get_value()[1]), vmin(one.get_value()[0], other.get_value()[0]) });
+                return zint32<base_t::capability> ({ vmin(one.value()[1], other.value()[1]), vmin(one.value()[0], other.value()[0]) });
             }
 
 
@@ -389,7 +389,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vmax");
 
-                return zint32<base_t::capability> ({ vmax(one.get_value()[1], other.get_value()[1]), vmax(one.get_value()[0], other.get_value()[0]) });
+                return zint32<base_t::capability> ({ vmax(one.value()[1], other.value()[1]), vmax(one.value()[0], other.value()[0]) });
             }
 
 
@@ -402,7 +402,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vclamp");
 
-                return zint32<base_t::capability> ({ vabs(self.get_value()[1], from.get_value()[1], to.get_value()[1]), vabs(self.get_value()[0], from.get_value()[0], to.get_value()[0]) });
+                return zint32<base_t::capability> ({ vabs(self.value()[1], from.value()[1], to.value()[1]), vabs(self.value()[0], from.value()[0], to.value()[0]) });
             }
 
         };
@@ -461,7 +461,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vneg");
 
-                return zint32<base_t::capability> ({ -one.get_value()[1], -one.get_value()[0] });
+                return zint32<base_t::capability> ({ -one.value()[1], -one.value()[0] });
             }
 
 
@@ -474,7 +474,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vadd");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] + other.get_value()[1], one.get_value()[0] + other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] + other.value()[1], one.value()[0] + other.value()[0] });
             }
 
 
@@ -487,7 +487,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsub");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] - other.get_value()[1], one.get_value()[0] - other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] - other.value()[1], one.value()[0] - other.value()[0] });
             }
 
 
@@ -500,7 +500,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vmul");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] * other.get_value()[1], one.get_value()[0] * other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] * other.value()[1], one.value()[0] * other.value()[0] });
             }
 
 
@@ -513,7 +513,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vdiv");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] / other.get_value()[1], one.get_value()[0] / other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] / other.value()[1], one.value()[0] / other.value()[0] });
             }
 
 
@@ -526,7 +526,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vmod");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] % other.get_value()[1], one.get_value()[0] % other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] % other.value()[1], one.value()[0] % other.value()[0] });
             }
 
         };
@@ -585,7 +585,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbneg");
 
-                return zint32<base_t::capability> ({ ~one.get_value()[1], ~one.get_value()[0] });
+                return zint32<base_t::capability> ({ ~one.value()[1], ~one.value()[0] });
             }
 
 
@@ -598,7 +598,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbor");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] | other.get_value()[1], one.get_value()[0] | other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] | other.value()[1], one.value()[0] | other.value()[0] });
             }
 
 
@@ -611,7 +611,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vband");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] & other.get_value()[1], one.get_value()[0] & other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] & other.value()[1], one.value()[0] & other.value()[0] });
             }
 
 
@@ -624,7 +624,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbxor");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] ^ other.get_value()[1], one.get_value()[0] ^ other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] ^ other.value()[1], one.value()[0] ^ other.value()[0] });
             }
 
 
@@ -637,7 +637,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "is_set");
 
-                return is_set(one.get_value()[1]) && is_set(one.get_value()[0]);
+                return is_set(one.value()[1]) && is_set(one.value()[0]);
             }
 
         };
@@ -696,7 +696,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbsll");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] << other.get_value()[1], one.get_value()[0] << other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] << other.value()[1], one.value()[0] << other.value()[0] });
             }
 
 
@@ -709,7 +709,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbsrl");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] >> other.get_value()[1], one.get_value()[0] >> other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] >> other.value()[1], one.value()[0] >> other.value()[0] });
             }
 
 
@@ -722,7 +722,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbslli");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] << other, one.get_value()[0] << other });
+                return zint32<base_t::capability> ({ one.value()[1] << other, one.value()[0] << other });
             }
 
 
@@ -735,7 +735,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbsrli");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] >> other, one.get_value()[0] >> other });
+                return zint32<base_t::capability> ({ one.value()[1] >> other, one.value()[0] >> other });
             }
 
         };
@@ -794,7 +794,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vlneg");
 
-                return zint32<base_t::capability> ({ !one.get_value()[1], !one.get_value()[0] });
+                return zint32<base_t::capability> ({ !one.value()[1], !one.value()[0] });
             }
 
 
@@ -807,7 +807,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vlor");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] || other.get_value()[1], one.get_value()[0] || other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] || other.value()[1], one.value()[0] || other.value()[0] });
             }
 
 
@@ -820,7 +820,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vland");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] && other.get_value()[1], one.get_value()[0] && other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] && other.value()[1], one.value()[0] && other.value()[0] });
             }
 
         };
@@ -879,7 +879,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "veq");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] == other.get_value()[1], one.get_value()[0] == other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] == other.value()[1], one.value()[0] == other.value()[0] });
             }
 
 
@@ -892,7 +892,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vneq");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] != other.get_value()[1], one.get_value()[0] != other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] != other.value()[1], one.value()[0] != other.value()[0] });
             }
 
 
@@ -905,7 +905,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vgt");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] > other.get_value()[1], one.get_value()[0] > other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] > other.value()[1], one.value()[0] > other.value()[0] });
             }
 
 
@@ -918,7 +918,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vlt");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] < other.get_value()[1], one.get_value()[0] < other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] < other.value()[1], one.value()[0] < other.value()[0] });
             }
 
 
@@ -931,7 +931,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vge");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] >= other.get_value()[1], one.get_value()[0] >= other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] >= other.value()[1], one.value()[0] >= other.value()[0] });
             }
 
 
@@ -944,7 +944,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vle");
 
-                return zint32<base_t::capability> ({ one.get_value()[1] <= other.get_value()[1], one.get_value()[0] <= other.get_value()[0] });
+                return zint32<base_t::capability> ({ one.value()[1] <= other.value()[1], one.value()[0] <= other.value()[0] });
             }
 
         };
@@ -1003,7 +1003,7 @@ namespace zacc { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsel");
 
-                return zint32<base_t::capability> ({ vsel(condition.get_value()[1], if_value.get_value()[1], else_value.get_value()[1]), vsel(condition.get_value()[0], if_value.get_value()[0], else_value.get_value()[0]) });
+                return zint32<base_t::capability> ({ vsel(condition.value()[1], if_value.value()[1], else_value.value()[1]), vsel(condition.value()[0], if_value.value()[0], else_value.value()[0]) });
             }
 
         };
@@ -1122,4 +1122,4 @@ namespace zacc { namespace avx {
     static_assert(!is_double<zint32<0>>::value, "is_double for zint32 failed.");
 
     ///@}
-}}
+}}}

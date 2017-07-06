@@ -71,7 +71,7 @@ namespace zacc { namespace traits {
         template<typename index_t>
         static composed_t gather(raw_ptr<const typename base_t::scalar_t> source, const index_t &index)
         {
-            composed_t temp;
+            alignas(base_t::alignment) composed_t temp;
             return vgather(temp, source, index);
         }
     };

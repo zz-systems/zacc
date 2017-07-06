@@ -2,11 +2,20 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/j2pe355ld0pt60sq/branch/develop?svg=true)](https://ci.appveyor.com/project/zz-systems/zacc/branch/develop)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# ZACC
-SIMD Abstraction layer that lets you write code as usual.
+# Design goals
 
-## License
-Gorynych is released under the MIT License. See LICENSE.txt for details.
+# Integration
+
+The required main header, file `zacc.hpp` is in the include directory. All you need to do is add
+
+```cpp
+#include "zacc.hpp"
+```
+
+To adapt your CMake project to the dispatched build system of **ZACC**, consider using the predefined macro `dispatch(_your_target_name_)`
+
+
+# Examples
 
 ## About
 ZACC is a powerful computation abstraction layer targeting primarily game development due to its less precise nature.
@@ -42,7 +51,7 @@ Please keep in mind, that this release is a **Preview/Alpha Release** and feel f
 | SSE4.1 + FMA3 | :white_check_mark: |
 | SSE4.1 + FMA4 | :white_check_mark: |
 | AVX1 | :warning: | integer vector emulation sucks |
-| AVX2 | :warning: | in development |
+| AVX2 | :warning: | in development, works on windows |
 | AVX512 | :no_entry: | in development, can't be tested by myself* |
 | GPGPU | :no_entry: | May come, depending on my research success |
 | HDL | :no_entry: | May come, depending on my research success |
@@ -65,3 +74,17 @@ Please keep in mind, that this release is a **Preview/Alpha Release** and feel f
 * Basic functions like abs, min, max, etc...
 * Rounding 
 * Trigonometry is in development
+
+## License
+
+<img align="right" src="http://opensource.org/trademarks/opensource/OSI-Approved-License-100x137.png">
+
+The class is licensed under the [MIT License](http://opensource.org/licenses/MIT):
+
+Copyright &copy; 2013-2017 Sergej Zuyev
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

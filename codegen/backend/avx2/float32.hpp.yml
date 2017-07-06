@@ -46,7 +46,7 @@ modules:
     vstore: &io_store
       args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       returns: void
-      body: _mm256_store_ps(target.data(), source)
+      body: _mm256_storeu_ps(target.data(), source)
     vstream:
       <<: *io_store
       body: _mm256_stream_ps(target.data(), source)
@@ -112,8 +112,8 @@ modules:
         - __m256 junk;
         - auto ones = _mm256_cmp_ps(junk, junk, _CMP_EQ_OQ);
         - return _mm256_xor_ps(one, ones);
-    vband:  _mm256_or_ps
-    vbor:   _mm256_and_ps
+    vband:  _mm256_and_ps
+    vbor:   _mm256_or_ps
     vbxor:  _mm256_xor_ps
 
     is_set:

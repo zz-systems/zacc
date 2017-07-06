@@ -29,7 +29,7 @@ modules:
 
     - prefix: "template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>"
       args: "const T &value"
-      init: value.get_value()
+      init: value.value()
 
     - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
       init: "value[0]"
@@ -39,24 +39,24 @@ modules:
     vstore: &io_store
       returns: void
       args: { raw: "typename base_t::extracted_t &target, composed_t source" }
-      body: target.data()[0] = source.get_value();
+      body: target.data()[0] = source.value();
     vstream: *io_store
 
     vgather:
-      args: { raw: "composed_t &target, raw_ptr<float> source, zint32<base_t::capability> index" }
+      args: { raw: "composed_t &target, raw_ptr<const float> source, zint32<base_t::capability> index" }
       #prefix: "template<typename T> friend"
       #returns: "std::enable_if_t<is_integral<T>::value && T::dim == 1, composed_t>"
-      body: return source[index.get_value()]
+      body: return source[index.value()]
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
   math:
     vabs:
       args: one
-      body: std::abs(one.get_value())
+      body: std::abs(one.value())
 
-    vmin: std::min(one.get_value(), other.get_value())
-    vmax: std::max(one.get_value(), other.get_value())
+    vmin: std::min(one.value(), other.value())
+    vmax: std::max(one.value(), other.value())
 
     vclamp:
       args: [self, from, to]
@@ -64,69 +64,69 @@ modules:
 
     vrcp:
       args: one
-      body: (1 / one.get_value())
+      body: (1 / one.value())
     vtrunc:
       args: one
-      body: std::trunc(one.get_value())
+      body: std::trunc(one.value())
     vfloor:
       args: one
-      body: std::floor(one.get_value())
+      body: std::floor(one.value())
     vceil:
       args: one
-      body: std::ceil(one.get_value())
+      body: std::ceil(one.value())
     vround:
       args: one
-      body: std::round(one.get_value())
+      body: std::round(one.value())
     vsqrt:
       args: one
-      body: std::sqrt(one.get_value())
+      body: std::sqrt(one.value())
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
       args: one
-      body: (-one.get_value());
-    vadd: (one.get_value() + other.get_value());
-    vsub: (one.get_value() - other.get_value());
-    vmul: (one.get_value() * other.get_value());
-    vdiv: (one.get_value() / other.get_value());
+      body: (-one.value());
+    vadd: (one.value() + other.value());
+    vsub: (one.value() - other.value());
+    vmul: (one.value() * other.value());
+    vdiv: (one.value() / other.value());
     vfmadd:
       args: [multiplicand, multiplier, addendum]
-      body: std::fma(multiplicand.get_value(), multiplier.get_value(), addendum.get_value())
+      body: std::fma(multiplicand.value(), multiplier.value(), addendum.value())
     vfmsub:
       args: [multiplicand, multiplier, addendum]
-      body: std::fma(multiplicand.get_value(), multiplier.get_value(), -addendum.get_value())
+      body: std::fma(multiplicand.value(), multiplier.value(), -addendum.value())
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg:
       args: one
-      body: (*reinterpret_cast<float*>(~(*reinterpret_cast<const unsigned int*>(&one.get_value()))));
-    vband:   (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.get_value())) & (*reinterpret_cast<const unsigned int*>(&other.get_value()))));
-    vbor:     (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.get_value())) | (*reinterpret_cast<const unsigned int*>(&other.get_value()))));
-    vbxor:    (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.get_value())) ^ (*reinterpret_cast<const unsigned int*>(&other.get_value()))));
+      body: (*reinterpret_cast<float*>(~(*reinterpret_cast<const unsigned int*>(&one.value()))));
+    vband:   (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.value())) & (*reinterpret_cast<const unsigned int*>(&other.value()))));
+    vbor:     (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.value())) | (*reinterpret_cast<const unsigned int*>(&other.value()))));
+    vbxor:    (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.value())) ^ (*reinterpret_cast<const unsigned int*>(&other.value()))));
 
     is_set:
       args: one
       returns: bool
-      body: one.get_value() != 0
+      body: one.value() != 0
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
     vlneg:
       args: one
-      body: "!one.get_value()"
-    vlor:   (one.get_value() || other.get_value());
-    vland:  (one.get_value() && other.get_value());
+      body: "!one.value()"
+    vlor:   (one.value() || other.value());
+    vland:  (one.value() && other.value());
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    veq:   (one.get_value() == other.get_value());
-    vneq:  (one.get_value() != other.get_value());
-    vgt:   (one.get_value() > other.get_value());
-    vlt:   (one.get_value() < other.get_value());
-    vge:   (one.get_value() >= other.get_value());
-    vle:   (one.get_value() <= other.get_value());
+    veq:   (one.value() == other.value());
+    vneq:  (one.value() != other.value());
+    vgt:   (one.value() > other.value());
+    vlt:   (one.value() < other.value());
+    vge:   (one.value() >= other.value());
+    vle:   (one.value() <= other.value());
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
       args: [condition, if_value, else_value]
       mangling: false
-      body: "(condition.get_value() != 0 ? if_value : else_value)"
+      body: "(condition.value() != 0 ? if_value : else_value)"
 #-----------------------------------------------------------------------------------------------------------------------

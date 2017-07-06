@@ -54,7 +54,7 @@
  * provides unified access to 8 'float' values
  */
 
-namespace zacc { namespace avx2 {
+namespace zacc { namespace backend { namespace avx2 {
 
     template<uint64_t capability>
     struct bfloat32;
@@ -229,7 +229,7 @@ namespace zacc { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vstore");
 
-                _mm256_store_ps(target.data(), source);
+                _mm256_storeu_ps(target.data(), source);
             }
 
 
@@ -688,7 +688,7 @@ namespace zacc { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vband");
 
-                return _mm256_or_ps(one, other);
+                return _mm256_and_ps(one, other);
             }
 
 
@@ -701,7 +701,7 @@ namespace zacc { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vbor");
 
-                return _mm256_and_ps(one, other);
+                return _mm256_or_ps(one, other);
             }
 
 
@@ -1130,4 +1130,4 @@ namespace zacc { namespace avx2 {
     static_assert(!is_double<zfloat32<0>>::value, "is_double for zfloat32 failed.");
 
     ///@}
-}}
+}}}

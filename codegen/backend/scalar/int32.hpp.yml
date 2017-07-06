@@ -30,7 +30,7 @@ modules:
 
     - prefix: "template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>"
       args: "const T &value"
-      init: value.get_value()
+      init: value.value()
 
     - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
       init: "value[0]"
@@ -39,13 +39,13 @@ modules:
     vstore: &io_store
       returns: void
       args: { raw: "typename base_t::extracted_t &target, composed_t source" }
-      body: target.data()[0] = source.get_value();
+      body: target.data()[0] = source.value();
     vstream: *io_store
     vgather:
       args: { raw: "composed_t &target, raw_ptr<int> source, zint32<base_t::capability> index" }
       #prefix: "template<typename T> friend"
       #returns: "std::enable_if_t<is_integral<T>::value && T::dim == 1, composed_t>"
-      body: return source[index.get_value()]
+      body: return source[index.value()]
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -54,8 +54,8 @@ modules:
       args: one
       body: std::abs(one)
 
-    vmin: std::min(one.get_value(), other.get_value())
-    vmax: std::max(one.get_value(), other.get_value())
+    vmin: std::min(one.value(), other.value())
+    vmax: std::max(one.value(), other.value())
 
     vclamp:
       args: [self, from, to]
@@ -64,54 +64,54 @@ modules:
   arithmetic:
     vneg:
       args: one
-      body: (-one.get_value());
-    vadd: (one.get_value() + other.get_value());
-    vsub: (one.get_value() - other.get_value());
-    vmul: (one.get_value() * other.get_value());
-    vdiv: (one.get_value() / other.get_value());
-    vmod: (one.get_value() % other.get_value());
+      body: (-one.value());
+    vadd: (one.value() + other.value());
+    vsub: (one.value() - other.value());
+    vmul: (one.value() * other.value());
+    vdiv: (one.value() / other.value());
+    vmod: (one.value() % other.value());
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg:
       args: one
-      body: (~one.get_value());
-    vband:  (one.get_value() & other.get_value());
-    vbor:   (one.get_value() | other.get_value());
-    vbxor:  (one.get_value() ^ other.get_value());
+      body: (~one.value());
+    vband:  (one.value() & other.value());
+    vbor:   (one.value() | other.value());
+    vbxor:  (one.value() ^ other.value());
 
     is_set:
       args: one
       returns: bool
-      body: one.get_value() != 0
+      body: one.value() != 0
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
-    vbsll:  (one.get_value() << other.get_value())
-    vbsrl:  (one.get_value() >> other.get_value())
+    vbsll:  (one.value() << other.value())
+    vbsrl:  (one.value() >> other.value())
 
     vbslli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: (one.get_value() << other)
+      body: (one.value() << other)
     vbsrli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: (one.get_value() >> other)
+      body: (one.value() >> other)
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
     vlneg:
       args: one
-      body: (!one.get_value())
-    vlor:   (one.get_value() || other.get_value());
-    vland:  (one.get_value() && other.get_value());
+      body: (!one.value())
+    vlor:   (one.value() || other.value());
+    vland:  (one.value() && other.value());
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    veq:   (one.get_value() == other.get_value());
-    vneq:  (one.get_value() != other.get_value());
-    vgt:   (one.get_value() > other.get_value());
-    vlt:   (one.get_value() < other.get_value());
-    vge:   (one.get_value() >= other.get_value());
-    vle:   (one.get_value() <= other.get_value());
+    veq:   (one.value() == other.value());
+    vneq:  (one.value() != other.value());
+    vgt:   (one.value() > other.value());
+    vlt:   (one.value() < other.value());
+    vge:   (one.value() >= other.value());
+    vle:   (one.value() <= other.value());
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
      vsel:
         args: [condition, if_value, else_value]
         mangling: false
-        body: "(condition.get_value() != 0 ? if_value : else_value)"
+        body: "(condition.value() != 0 ? if_value : else_value)"

@@ -25,6 +25,13 @@
 
 #pragma once
 
+#include "backend/sse/int8.impl.hpp"
+#include "backend/sse/int16.impl.hpp"
+#include "backend/sse/int32.impl.hpp"
+
+#include "backend/sse/float32.impl.hpp"
+#include "backend/sse/float64.impl.hpp"
+
 #include "backend/avx2/int8.impl.hpp"
 #include "backend/avx2/int16.impl.hpp"
 #include "backend/avx2/int32.impl.hpp"
@@ -39,18 +46,18 @@ namespace zacc { namespace avx2 {
     {
         using capability = _capability;
 
-        using zfloat32  = ::zacc::avx2::zfloat32<capability::value>;
-        using zfloat64  = ::zacc::avx2::zfloat64<capability::value>;
+        using zfloat32  = zacc::backend::avx2::zfloat32<capability::value>;
+        using zfloat64  = zacc::backend::avx2::zfloat64<capability::value>;
 
-        using zint8     = ::zacc::avx2::zint8<capability::value>;
-        using zint16    = ::zacc::avx2::zint16<capability::value>;
-        using zint32    = ::zacc::avx2::zint32<capability::value>;
+        using zint8     = zacc::backend::avx2::zint8<capability::value>;
+        using zint16    = zacc::backend::avx2::zint16<capability::value>;
+        using zint32    = zacc::backend::avx2::zint32<capability::value>;
 
-        using bfloat32  = ::zacc::avx2::bfloat32<capability::value>;
-        using bfloat64  = ::zacc::avx2::bfloat64<capability::value>;
-        using bint8     = ::zacc::avx2::bint8<capability::value>;
-        using bint16    = ::zacc::avx2::bint16<capability::value>;
-        using bint32    = ::zacc::avx2::bint32<capability::value>;
+        using bfloat32  = zacc::backend::avx2::bfloat32<capability::value>;
+        using bfloat64  = zacc::backend::avx2::bfloat64<capability::value>;
+        using bint8     = zacc::backend::avx2::bint8<capability::value>;
+        using bint16    = zacc::backend::avx2::bint16<capability::value>;
+        using bint32    = zacc::backend::avx2::bint32<capability::value>;
 
         static constexpr const size_t alignment = zint32::alignment;
 

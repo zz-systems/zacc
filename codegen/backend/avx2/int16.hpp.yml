@@ -39,7 +39,7 @@ modules:
     vstore: &io_store
       returns: void
       args: { raw: "typename base_t::extracted_t &target, composed_t source" }
-      body: _mm256_store_si256((__m256i*)target.data(), source);
+      body: _mm256_storeu_si256((__m256i*)target.data(), source);
     vstream:
       <<: *io_store
       body: _mm256_stream_si256((__m256i*)target.data(), source);
@@ -60,8 +60,8 @@ modules:
         - __m256i junk;
         - auto ones = _mm256_cmpeq_epi16(junk, junk);
         - return _mm256_xor_si256(one, ones);
-    vband:  _mm256_or_si256
-    vbor:   _mm256_and_si256
+    vband:  _mm256_and_si256
+    vbor:   _mm256_or_si256
     vbxor:  _mm256_xor_si256
 
     is_set:

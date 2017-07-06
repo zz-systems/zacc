@@ -53,87 +53,87 @@ modules:
       args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       returns: void
       body:
-         - _mm_store_si128((__m128i*)(target.data()), source.get_value()[1]);
-         - _mm_store_si128((__m128i*)(target.data() + base_t::dim / 2), source.get_value()[0]);
+         - _mm_store_si128((__m128i*)(target.data()), source.value()[1]);
+         - _mm_store_si128((__m128i*)(target.data() + base_t::dim / 2), source.value()[0]);
     vstream:
       <<: *io_store
       body:
-       - _mm_stream_si128((__m128i*)(target.data()), source.get_value()[1]);
-       - _mm_stream_si128((__m128i*)(target.data() + base_t::dim / 2), source.get_value()[0]);
+       - _mm_stream_si128((__m128i*)(target.data()), source.value()[1]);
+       - _mm_stream_si128((__m128i*)(target.data() + base_t::dim / 2), source.value()[0]);
 
     vgather:
       args: { raw: "composed_t &target, raw_ptr<int> source, zint32<base_t::capability> index" }
       #prefix: "template<typename T> friend"
       #returns: "std::enable_if_t<is_integral<T>::value && T::dim == 8, composed_t>"
-      body: zint32<base_t::capability> ({ vgather(source, index.get_value()[1]), vgather(source, index.get_value()[0]) });
+      body: zint32<base_t::capability> ({ vgather(source, index.value()[1]), vgather(source, index.value()[0]) });
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
   math:
     vabs:
       args: one
-      body: return zint32<base_t::capability> ({ vabs(one.get_value()[1]), vabs(one.get_value()[0]) });
+      body: return zint32<base_t::capability> ({ vabs(one.value()[1]), vabs(one.value()[0]) });
 
-    vmin: return zint32<base_t::capability> ({ vmin(one.get_value()[1], other.get_value()[1]), vmin(one.get_value()[0], other.get_value()[0]) });
-    vmax: return zint32<base_t::capability> ({ vmax(one.get_value()[1], other.get_value()[1]), vmax(one.get_value()[0], other.get_value()[0]) });
+    vmin: return zint32<base_t::capability> ({ vmin(one.value()[1], other.value()[1]), vmin(one.value()[0], other.value()[0]) });
+    vmax: return zint32<base_t::capability> ({ vmax(one.value()[1], other.value()[1]), vmax(one.value()[0], other.value()[0]) });
 
     vclamp:
      args: [self, from, to]
-     body: return zint32<base_t::capability> ({ vabs(self.get_value()[1], from.get_value()[1], to.get_value()[1]), vabs(self.get_value()[0], from.get_value()[0], to.get_value()[0]) });
+     body: return zint32<base_t::capability> ({ vabs(self.value()[1], from.value()[1], to.value()[1]), vabs(self.value()[0], from.value()[0], to.value()[0]) });
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
       args: one
-      body: return zint32<base_t::capability> ({ -one.get_value()[1], -one.get_value()[0] });
-    vadd: return zint32<base_t::capability> ({ one.get_value()[1] + other.get_value()[1], one.get_value()[0] + other.get_value()[0] });
-    vsub: return zint32<base_t::capability> ({ one.get_value()[1] - other.get_value()[1], one.get_value()[0] - other.get_value()[0] });
-    vmul: return zint32<base_t::capability> ({ one.get_value()[1] * other.get_value()[1], one.get_value()[0] * other.get_value()[0] });
-    vdiv: return zint32<base_t::capability> ({ one.get_value()[1] / other.get_value()[1], one.get_value()[0] / other.get_value()[0] });
-    vmod: return zint32<base_t::capability> ({ one.get_value()[1] % other.get_value()[1], one.get_value()[0] % other.get_value()[0] });
+      body: return zint32<base_t::capability> ({ -one.value()[1], -one.value()[0] });
+    vadd: return zint32<base_t::capability> ({ one.value()[1] + other.value()[1], one.value()[0] + other.value()[0] });
+    vsub: return zint32<base_t::capability> ({ one.value()[1] - other.value()[1], one.value()[0] - other.value()[0] });
+    vmul: return zint32<base_t::capability> ({ one.value()[1] * other.value()[1], one.value()[0] * other.value()[0] });
+    vdiv: return zint32<base_t::capability> ({ one.value()[1] / other.value()[1], one.value()[0] / other.value()[0] });
+    vmod: return zint32<base_t::capability> ({ one.value()[1] % other.value()[1], one.value()[0] % other.value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate
       args: one
-      body: return zint32<base_t::capability> ({ ~one.get_value()[1], ~one.get_value()[0] });
+      body: return zint32<base_t::capability> ({ ~one.value()[1], ~one.value()[0] });
     vbor:   &bitwise_or
-      body: return zint32<base_t::capability> ({ one.get_value()[1] | other.get_value()[1], one.get_value()[0] | other.get_value()[0] });
+      body: return zint32<base_t::capability> ({ one.value()[1] | other.value()[1], one.value()[0] | other.value()[0] });
     vband:  &bitwise_and
-      body: return zint32<base_t::capability> ({ one.get_value()[1] & other.get_value()[1], one.get_value()[0] & other.get_value()[0] });
+      body: return zint32<base_t::capability> ({ one.value()[1] & other.value()[1], one.value()[0] & other.value()[0] });
     vbxor:  &bitwise_xor
-      body: return zint32<base_t::capability> ({ one.get_value()[1] ^ other.get_value()[1], one.get_value()[0] ^ other.get_value()[0] });
+      body: return zint32<base_t::capability> ({ one.value()[1] ^ other.value()[1], one.value()[0] ^ other.value()[0] });
 
     is_set:
       args: one
       returns: bool
-      body: return is_set(one.get_value()[1]) && is_set(one.get_value()[0])
+      body: return is_set(one.value()[1]) && is_set(one.value()[0])
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:
-    vbsll:  return zint32<base_t::capability> ({ one.get_value()[1] << other.get_value()[1], one.get_value()[0] << other.get_value()[0] });
-    vbsrl:  return zint32<base_t::capability> ({ one.get_value()[1] >> other.get_value()[1], one.get_value()[0] >> other.get_value()[0] });
+    vbsll:  return zint32<base_t::capability> ({ one.value()[1] << other.value()[1], one.value()[0] << other.value()[0] });
+    vbsrl:  return zint32<base_t::capability> ({ one.value()[1] >> other.value()[1], one.value()[0] >> other.value()[0] });
     vbslli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: return zint32<base_t::capability> ({ one.get_value()[1] << other, one.get_value()[0] << other });
+      body: return zint32<base_t::capability> ({ one.value()[1] << other, one.value()[0] << other });
     vbsrli:
       args: { raw: "const composed_t one, const size_t other" }
-      body: return zint32<base_t::capability> ({ one.get_value()[1] >> other, one.get_value()[0] >> other });
+      body: return zint32<base_t::capability> ({ one.value()[1] >> other, one.value()[0] >> other });
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
     vlneg:
       args: one
-      body: return zint32<base_t::capability> ({ !one.get_value()[1], !one.get_value()[0] });
-    vlor:   return zint32<base_t::capability> ({ one.get_value()[1] || other.get_value()[1], one.get_value()[0] || other.get_value()[0] });
-    vland:  return zint32<base_t::capability> ({ one.get_value()[1] && other.get_value()[1], one.get_value()[0] && other.get_value()[0] });
+      body: return zint32<base_t::capability> ({ !one.value()[1], !one.value()[0] });
+    vlor:   return zint32<base_t::capability> ({ one.value()[1] || other.value()[1], one.value()[0] || other.value()[0] });
+    vland:  return zint32<base_t::capability> ({ one.value()[1] && other.value()[1], one.value()[0] && other.value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    veq:   return zint32<base_t::capability> ({ one.get_value()[1] == other.get_value()[1], one.get_value()[0] == other.get_value()[0] });
-    vneq:  return zint32<base_t::capability> ({ one.get_value()[1] != other.get_value()[1], one.get_value()[0] != other.get_value()[0] });
-    vgt:   return zint32<base_t::capability> ({ one.get_value()[1] > other.get_value()[1], one.get_value()[0] > other.get_value()[0] });
-    vlt:   return zint32<base_t::capability> ({ one.get_value()[1] < other.get_value()[1], one.get_value()[0] < other.get_value()[0] });
-    vge:   return zint32<base_t::capability> ({ one.get_value()[1] >= other.get_value()[1], one.get_value()[0] >= other.get_value()[0] });
-    vle:   return zint32<base_t::capability> ({ one.get_value()[1] <= other.get_value()[1], one.get_value()[0] <= other.get_value()[0] });
+    veq:   return zint32<base_t::capability> ({ one.value()[1] == other.value()[1], one.value()[0] == other.value()[0] });
+    vneq:  return zint32<base_t::capability> ({ one.value()[1] != other.value()[1], one.value()[0] != other.value()[0] });
+    vgt:   return zint32<base_t::capability> ({ one.value()[1] > other.value()[1], one.value()[0] > other.value()[0] });
+    vlt:   return zint32<base_t::capability> ({ one.value()[1] < other.value()[1], one.value()[0] < other.value()[0] });
+    vge:   return zint32<base_t::capability> ({ one.value()[1] >= other.value()[1], one.value()[0] >= other.value()[0] });
+    vle:   return zint32<base_t::capability> ({ one.value()[1] <= other.value()[1], one.value()[0] <= other.value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
       args: [condition, if_value, else_value]
       mangling: false
-      body: return zint32<base_t::capability> ({ vsel(condition.get_value()[1], if_value.get_value()[1], else_value.get_value()[1]), vsel(condition.get_value()[0], if_value.get_value()[0], else_value.get_value()[0]) });
+      body: return zint32<base_t::capability> ({ vsel(condition.value()[1], if_value.value()[1], else_value.value()[1]), vsel(condition.value()[0], if_value.value()[0], else_value.value()[0]) });

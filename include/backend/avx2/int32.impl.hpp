@@ -55,7 +55,7 @@
  * provides unified access to 8 'int32_t' values
  */
 
-namespace zacc { namespace avx2 {
+namespace zacc { namespace backend { namespace avx2 {
 
     template<uint64_t capability>
     struct bint32;
@@ -598,7 +598,7 @@ namespace zacc { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vband");
 
-                return _mm256_or_si256(one, other);
+                return _mm256_and_si256(one, other);
             }
 
 
@@ -611,7 +611,7 @@ namespace zacc { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbor");
 
-                return _mm256_and_si256(one, other);
+                return _mm256_or_si256(one, other);
             }
 
 
@@ -1122,4 +1122,4 @@ namespace zacc { namespace avx2 {
     static_assert(!is_double<zint32<0>>::value, "is_double for zint32 failed.");
 
     ///@}
-}}
+}}}

@@ -53,7 +53,7 @@
  * provides unified access to 16 'int16_t' values
  */
 
-namespace zacc { namespace avx2 {
+namespace zacc { namespace backend { namespace avx2 {
 
     template<uint64_t capability>
     struct bint16;
@@ -204,7 +204,7 @@ namespace zacc { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vstore");
 
-                _mm256_store_si256((__m256i*)target.data(), source);
+                _mm256_storeu_si256((__m256i*)target.data(), source);
             }
 
 
@@ -389,7 +389,7 @@ namespace zacc { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vband");
 
-                return _mm256_or_si256(one, other);
+                return _mm256_and_si256(one, other);
             }
 
 
@@ -402,7 +402,7 @@ namespace zacc { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbor");
 
-                return _mm256_and_si256(one, other);
+                return _mm256_or_si256(one, other);
             }
 
 
@@ -912,4 +912,4 @@ namespace zacc { namespace avx2 {
     static_assert(!is_double<zint16<0>>::value, "is_double for zint16 failed.");
 
     ///@}
-}}
+}}}

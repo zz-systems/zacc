@@ -193,6 +193,7 @@ namespace zacc {
     template<typename T>
     raw_ptr<T> make_raw(T *data)
     {
+        //std::cout << "make raw" << std::endl;
         return raw_ptr<T> { data };
     }
 }

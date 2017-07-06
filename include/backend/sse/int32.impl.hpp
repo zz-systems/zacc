@@ -55,7 +55,7 @@
  * provides unified access to 4 'int32_t' values
  */
 
-namespace zacc { namespace sse {
+namespace zacc { namespace backend { namespace sse {
 
     template<uint64_t capability>
     struct bint32;
@@ -230,7 +230,7 @@ namespace zacc { namespace sse {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vstore");
 
-                _mm_store_si128((__m128i*)target.data(), source);
+                _mm_storeu_si128((__m128i*)target.data(), source);
             }
 
 
@@ -1206,4 +1206,4 @@ namespace zacc { namespace sse {
     static_assert(!is_double<zint32<0>>::value, "is_double for zint32 failed.");
 
     ///@}
-}}
+}}}

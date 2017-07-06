@@ -29,6 +29,7 @@
 
 #include "system/capabilities.hpp"
 #include "util/type_casts.hpp"
+#include "util/collections.hpp"
 
 namespace zacc {
 
@@ -73,7 +74,7 @@ namespace zacc {
         /// scalar type, like int for sse 4x integer vector
         using scalar_t = _scalar_t;
         /// extracted std::array of (dim) scalar values
-        using extracted_t = std::array<scalar_t, dim>;
+        using extracted_t = std::array<scalar_t, dim>; //aligned_array<scalar_t, dim, alignment>;
 
         /// mask type for boolean operations
         using mask_t = _mask_t;
@@ -115,14 +116,14 @@ namespace zacc {
          */
         template <typename dim_t = std::integral_constant<size_t, dim>, typename enable = typename std::enable_if<(dim_t::value > 1), vector_t>::type>
         operator vector_t() const {
-            return get_value();
+            return value();
         }
 
         /**
          * @brief cast to underlying vector type
          * @return raw value
          */
-        vector_t get_value() const {
+        vector_t value() const {
             return _value;
         }
     protected:
@@ -142,7 +143,7 @@ namespace zacc {
         using vector_t = typename zval_t::vector_t;
         using scalar_t = bool;
 
-        using extracted_t = typename std::array<scalar_t, dim>;
+        using extracted_t = std::array<scalar_t, dim>;// aligned_array<scalar_t, dim, alignment>;
         using iterator    = typename extracted_t::iterator;
 
         /**
@@ -152,16 +153,16 @@ namespace zacc {
          * @param value
          */
         bval(const zval_t& value) :
-                _value(value.get_value())
+                _value(value.value())
         {
-            ZTRACE("bval(zval_t)");
+            ZTRACE_RAW("bval(zval_t)");
         }
 
 
         bval(const bval_t& value) :
                 _value(value)
         {
-            ZTRACE("bval(bval_t)");
+            ZTRACE_RAW("bval(bval_t)");
         }
 
         /**

@@ -46,7 +46,7 @@ modules:
     vstore: &io_store
       args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       returns: void
-      body: _mm_store_ps(target.data(), source)
+      body: _mm_storeu_ps(target.data(), source)
     vstream:
       <<: *io_store
       body:  _mm_stream_ps(target.data(), source)
