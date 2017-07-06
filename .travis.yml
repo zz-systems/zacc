@@ -68,7 +68,7 @@ matrix:
       osx_image: xcode8.3
       compiler: clang
       language: generic
-      env: COMPILER='clang++' BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
+      env: COMPILER='clang++' BUILD_TYPE='Release' CXX=c++ CC=cc
 
 # Perform the manual steps on osx to install python3 and activate venv
 before_install:
