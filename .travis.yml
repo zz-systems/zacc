@@ -68,7 +68,7 @@ matrix:
       osx_image: xcode8.3
       compiler: clang
       language: generic
-      env: BUILD_TYPE='Release' CXX=c++ CC=cc
+      env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc
 
 # Perform the manual steps on osx to install python3 and activate venv
 before_install:
@@ -91,6 +91,7 @@ install:
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}
+  - export CXX=${COMPILER}
   - cmake -H../zacc -BBuild -DCMAKE_BUILD_TYPE=${BUILD_TYPE}
   - cd Build
 
