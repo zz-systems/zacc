@@ -37,8 +37,8 @@
 #endif
 
 extern "C" {
-    ZACC_DLL_API const void*    zacc_dlopen(const char* path);
-    ZACC_DLL_API const char*    zacc_dlerror();
-    ZACC_DLL_API const void*    zacc_dlsym(const void* handle, const char* member);
-    ZACC_DLL_API bool           zacc_dlclose(const void* handle);
+    ZACC_DLL_API void*    zacc_dlopen(const char* path);
+    ZACC_DLL_API char*    zacc_dlerror();
+    ZACC_DLL_API void*    zacc_dlsym(void* handle, const char* member);
+    ZACC_DLL_API bool     zacc_dlclose(void* handle);
 }

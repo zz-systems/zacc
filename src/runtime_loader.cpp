@@ -22,6 +22,7 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
+#include "system/runtime_loader.hpp"
 
 #ifdef WIN32
 #include <windows.h>
@@ -30,7 +31,7 @@
 #endif
 
 
-const void* zacc_dlopen(const char* path)
+void* zacc_dlopen(const char* path)
 {
 #ifdef WIN32
     return LoadLibrary(path);
@@ -39,7 +40,7 @@ const void* zacc_dlopen(const char* path)
 #endif
 }
 
-const char* zacc_dlerror()
+char* zacc_dlerror()
 {
 #ifdef WIN32
     return "";
@@ -48,7 +49,7 @@ const char* zacc_dlerror()
 #endif
 }
 
-const void* zacc_dlsym(const void* handle, const char* symbol)
+void* zacc_dlsym(void* handle, const char* symbol)
 {
 #ifdef WIN32
     return GetProcAddress(handle, symbol);
@@ -57,7 +58,7 @@ const void* zacc_dlsym(const void* handle, const char* symbol)
 #endif
 }
 
-bool zacc_dlclose(const void* handle)
+bool zacc_dlclose(void* handle)
 {
 #ifdef WIN32
     return FreeLibrary(handle);
