@@ -25,7 +25,20 @@ branches:
 matrix:
   include:
 
-    # 1/ Linux Clang Builds
+    # OSX Clang Builds
+    - os: osx
+      osx_image: xcode8.3
+      compiler: clang
+      language: generic
+      env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc
+
+    - os: osx
+      osx_image: xcode9
+      compiler: clang
+      language: generic
+      env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc
+
+    # Linux Clang Builds
     - os: linux
       compiler: clang
       addons: &addons
@@ -47,7 +60,7 @@ matrix:
       addons: *addons
       env: COMPILER=clang++-4.0 BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
 
-    # 2/ Linux GCC Builds
+    # Linux GCC Builds
     - os: linux
       compiler: gcc
       addons: *addons
@@ -63,12 +76,7 @@ matrix:
     #  addons: *addons
     #  env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7
 
-    # 3/ OSX Clang Builds
-    - os: osx
-      osx_image: xcode8.3
-      compiler: clang
-      language: generic
-      env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc
+
 
 # Perform the manual steps on osx to install python3 and activate venv
 before_install:

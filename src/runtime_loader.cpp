@@ -23,25 +23,45 @@
 //---------------------------------------------------------------------------------
 
 
-#include <iostream>
+#ifdef WIN32
+#include <windows.h>
+#else
+#include <dlfcn.h>
+#endif
 
-#include "gtest/gtest.h"
-#include "system/platform.hpp"
-#include "util/test_entry_point.hpp"
 
-int main(int argc, char **argv) {
-    std::cout << "Running main() from est_main.cpp" << std::endl;
+const void* zacc_dlopen(const char* path)
+{
+#ifdef WIN32
+    return LoadLibrary(path);
+#else
+    return dlopen(path, RTLD_LAZY);
+#endif
+}
 
-    auto c = zacc::platform::instance().match_capabilities(zacc::branches::ZACC_CAPABILITIES::value);
-    std::string str;
+const char* zacc_dlerror()
+{
+#ifdef WIN32
+    return "";
+#else
+    return dlerror();
+#endif
+}
 
-    if(c.size() != 0) {
-        str = join(std::begin(c), std::end(c), ", ");
-        ZTRACE_INTERNAL("SKIPPED: Features [" << str << "] not supported");
-        return 0;
-    }
+const void* zacc_dlsym(const void* handle, const char* symbol)
+{
+#ifdef WIN32
+    return GetProcAddress(handle, symbol);
+#else
+    return dlsym(handle, symbol);
+#endif
+}
 
-    return 0;//zacc_run_gtests(argc, argv);
-    //testing::InitGoogleTest(&argc, argv);
-    //return RUN_ALL_TESTS();
+bool zacc_dlclose(const void* handle)
+{
+#ifdef WIN32
+    return FreeLibrary(handle);
+#else
+    return dlclose(handle) == 0;
+#endif
 }

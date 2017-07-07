@@ -23,25 +23,22 @@
 //---------------------------------------------------------------------------------
 
 
-#include <iostream>
+#pragma once
 
-#include "gtest/gtest.h"
-#include "system/platform.hpp"
-#include "util/test_entry_point.hpp"
 
-int main(int argc, char **argv) {
-    std::cout << "Running main() from est_main.cpp" << std::endl;
+#ifdef WIN32
+#ifdef ZACC_EXPORTS
+        #define ZACC_DLL_API __declspec(dllexport) 
+    #else
+        #define ZACC_DLL_API __declspec(dllimport) 
+    #endif
+#else
+#define ZACC_DLL_API
+#endif
 
-    auto c = zacc::platform::instance().match_capabilities(zacc::branches::ZACC_CAPABILITIES::value);
-    std::string str;
-
-    if(c.size() != 0) {
-        str = join(std::begin(c), std::end(c), ", ");
-        ZTRACE_INTERNAL("SKIPPED: Features [" << str << "] not supported");
-        return 0;
-    }
-
-    return 0;//zacc_run_gtests(argc, argv);
-    //testing::InitGoogleTest(&argc, argv);
-    //return RUN_ALL_TESTS();
+extern "C" {
+    ZACC_DLL_API const void*    zacc_dlopen(const char* path);
+    ZACC_DLL_API const char*    zacc_dlerror();
+    ZACC_DLL_API const void*    zacc_dlsym(const void* handle, const char* member);
+    ZACC_DLL_API bool           zacc_dlclose(const void* handle);
 }
