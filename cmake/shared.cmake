@@ -258,35 +258,3 @@ endif()
 
 
 # build
-
-macro(dispatch target_name)
-    foreach(branch ${branches})
-
-        add_library("${target_name}.${branch}" OBJECT src/${target_name}_branch_entrypoint.cpp)
-        add_dependencies("${target_name}.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
-
-        foreach(flag ${branch_flags_${branch}})
-            if(CLANG_CL)
-                set(flag "-Xclang ${flag}")
-            endif()
-
-            target_compile_options("${target_name}.${branch}" PUBLIC ${branch_flags_${branch}})
-        endforeach()
-
-        target_include_directories(${target_name}.${branch} PUBLIC "${CMAKE_SOURCE_DIR}/include" "${CMAKE_SOURCE_DIR}/dependencies/zacc/include")
-
-        foreach(def ${branch_defs_${branch}})
-            target_compile_definitions(${target_name}.${branch}  PUBLIC "${def}")
-        endforeach()
-
-        list(APPEND sources $<TARGET_OBJECTS:${target_name}.${branch}>)
-    endforeach()
-
-    add_library(${target_name} SHARED ${sources} src/lib${target_name}.cpp dependencies/zacc/src/dllmain.cpp)
-    target_link_libraries(${target_name} zacc.system)
-
-    target_compile_definitions(${target_name} PUBLIC ZACC_FAST_FLOAT=false)
-    foreach(def ${generic_build_defs})
-        target_compile_definitions(${target_name}  PUBLIC "${def}")
-    endforeach()
-endmacro()

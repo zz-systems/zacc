@@ -88,13 +88,5 @@ build_script:
   
 test_script:
 - ls
-- zacc.system.detect.exe
-- zacc.tests.scalar.exe
-- zacc.tests.sse.sse2.exe
-- zacc.tests.sse.sse3.exe
-- zacc.tests.sse.sse41.exe
-- zacc.tests.sse.sse41.fma3.exe
-- zacc.tests.sse.sse41.fma4.exe
-- zacc.tests.avx.exe
-- zacc.tests.avx2.exe
+- ps: gci -Filter zacc.tests.*.exe | foreach { ".\$($_.Name)"} | iex
 - ctest -V

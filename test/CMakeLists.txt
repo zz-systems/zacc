@@ -1,41 +1,18 @@
 enable_testing()
 
-set(GTEST_LIBS $<TARGET_FILE:gtest> $<TARGET_FILE:gtest_main>)
+set(test_main ${CMAKE_CURRENT_LIST_DIR}/../src/test_main.cpp)
 
-foreach(branch ${branches})
-    get_branch_files(files ${branch} "${test.schema}")
+set(GTEST_LIBS $<TARGET_FILE:gtest>)
 
-    add_executable("zacc.tests.${branch}" ${files} ${CMAKE_CURRENT_LIST_DIR}/test_trigonometry.cpp ${CMAKE_CURRENT_LIST_DIR}/test_matrix.cpp)
-    add_dependencies("zacc.tests.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
+add_branch_main(zacc.tests.test_main
+        BRANCHES "${branches}"
+        INCLUDES ${CMAKE_SOURCE_DIR}/include
+        SOURCES ${test_main}
+        LIBRARIES gtest zacc.system)
 
-    target_link_libraries("zacc.tests.${branch}" gtest_main zacc.system)
-
-	foreach(flag ${branch_flags_${branch}})
-		if(CLANG_CL)
-			set(flag "-Xclang ${flag}")
-		endif()
-		
-		target_compile_options("zacc.tests.${branch}" PUBLIC ${branch_flags_${branch}})
-	endforeach()
-    target_include_directories(zacc.tests.${branch} PUBLIC "${CMAKE_SOURCE_DIR}/include")
-
-    foreach(def ${branch_defs_${branch}})
-        target_compile_definitions(zacc.tests.${branch}  PUBLIC "${def}")
-    endforeach()
-
-    add_test(
-            NAME ci.zacc.tests.${branch}
-            COMMAND zacc.tests.${branch}
-    )
-
-    add_custom_command(TARGET "zacc.tests.${branch}" POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            ${GTEST_LIBS}
-            $<TARGET_FILE_DIR:zacc.tests.${branch}>
-            )
-
-    list(APPEND tests "zacc.tests.${branch}")
-endforeach()
-
-add_custom_target(zacc.tests.all DEPENDS ${tests})
-
+add_branch_test(zacc.tests
+        BRANCHES "${branches}"
+        INCLUDES ${CMAKE_SOURCE_DIR}/include
+        SOURCES ${CMAKE_CURRENT_LIST_DIR}/test_trigonometry.cpp ${CMAKE_CURRENT_LIST_DIR}/test_matrix.cpp
+        LIBRARIES gtest zacc.system
+        )

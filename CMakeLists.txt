@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.6)
 project(zacc)
 
 include(cmake/shared.cmake)
+include(cmake/dispatched_build.cmake)
 
 # BUILD! ===============================================================================================================
 
