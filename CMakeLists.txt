@@ -4,6 +4,8 @@ project(zacc)
 include(cmake/shared.cmake)
 
 #=======================================================================================================================
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 function(target_native_compile_options target)
     set(options OPTIONAL ZACC_FAST_FLOAT)
     set(oneValueArgs "")
