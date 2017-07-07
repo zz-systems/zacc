@@ -64,7 +64,7 @@ function(add_branch_main target_name)
     foreach(branch ${target_branches})
         message(STATUS "Adding dispatched main ${target_name}.${branch}")
 
-        add_library("${target_name}.${branch}" ${target_sources})
+        add_library("${target_name}.${branch}" STATIC ${target_sources})
         add_dependencies("${target_name}.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" ${target_dependencies})
 
         target_include_directories(${target_name}.${branch} PUBLIC ${target_includes})
