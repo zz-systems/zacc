@@ -27,7 +27,6 @@
 
 #include "gtest/gtest.h"
 #include "system/platform.hpp"
-#include "system/branch.hpp"
 
 int main(int argc, char **argv) {
     std::cout << "Running main() from branched_gtest_main.cpp" << std::endl;
