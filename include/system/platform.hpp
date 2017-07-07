@@ -28,10 +28,12 @@
 #include <map>
 #include <algorithm>
 
+#include <type_traits>
+
+#include "type_traits.hpp"
 #include "cpuid.hpp"
 #include "capabilities.hpp"
 
-#include "type_traits.hpp"
 #include "util/algorithm.hpp"
 #include "util/bithacks.hpp"
 
