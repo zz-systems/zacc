@@ -98,5 +98,5 @@ script:
   - make -j 2 && make zacc.tests.all
   - ls
   - ./zacc.system.detect
-  - ./zacc.tests.*
+  #- ./zacc.tests.*
   - ctest -V
