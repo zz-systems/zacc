@@ -7,6 +7,7 @@ set(GTEST_LIBS $<TARGET_FILE:gtest>)
 add_branch_main(zacc.tests.test_main
         BRANCHES "${branches}"
         INCLUDES ${CMAKE_SOURCE_DIR}/include
+        DEPENDS gtest
         SOURCES ${test_main}
         LIBRARIES gtest zacc.system)
 

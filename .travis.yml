@@ -40,23 +40,23 @@ matrix:
             - g++-5
             - g++-6
             #- g++-7
-      env: BUILD_TYPE='Release' CXX=clang++-3.9 CC=clang-3.9
+      env: COMPILER=clang++-3.9 BUILD_TYPE='Release' CXX=clang++-3.9 CC=clang-3.9
 
     - os: linux
       compiler: clang
       addons: *addons
-      env: BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
+      env: COMPILER=clang++-4.0 BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
 
     # 2/ Linux GCC Builds
     - os: linux
       compiler: gcc
       addons: *addons
-      env: BUILD_TYPE='Release' CXX=g++-5 CC=gcc-5
+      env: COMPILER=g++-5 BUILD_TYPE='Release' CXX=g++-5 CC=gcc-5
 
     - os: linux
       compiler: gcc
       addons: *addons
-      env: BUILD_TYPE='Release' CXX=g++-6 CC=gcc-6
+      env: COMPILER=g++-6 BUILD_TYPE='Release' CXX=g++-6 CC=gcc-6
 
     #- os: linux
     #  compiler: gcc

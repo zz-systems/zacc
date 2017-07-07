@@ -64,11 +64,11 @@ function(add_branch_main target_name)
     foreach(branch ${target_branches})
         message(STATUS "Adding dispatched main ${target_name}.${branch}")
 
-        add_library("${target_name}.${branch}" STATIC ${target_sources})
+        add_library("${target_name}.${branch}" OBJECT ${target_sources})
         add_dependencies("${target_name}.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" ${target_dependencies})
 
         target_include_directories(${target_name}.${branch} PUBLIC ${target_includes})
-        target_link_libraries(${target_name}.${branch} ${target_libraries})
+        #target_link_libraries(${target_name}.${branch} ${target_libraries})
 
         foreach(def ${branch_defs_${branch}})
             target_compile_definitions(${target_name}.${branch}  PUBLIC "${def}")
@@ -98,10 +98,10 @@ function(add_branch_test target_name)
 
         get_branch_files(files ${branch} "${test.schema}")
 
-        add_executable("${target_name}.${branch}" ${files} ${target_sources} )
+        add_executable("${target_name}.${branch}" $<TARGET_OBJECTS:zacc.tests.test_main.${branch}> ${files} ${target_sources} )
         add_dependencies("${target_name}.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" ${target_dependencies})
 
-        target_link_libraries("${target_name}.${branch}" zacc.tests.test_main.${branch} gtest zacc.system ${target_libraries})
+        target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries})
 
         foreach(flag ${branch_flags_${branch}})
             if(CLANG_CL)
