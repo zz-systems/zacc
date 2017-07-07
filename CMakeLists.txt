@@ -13,25 +13,20 @@ function(target_native_compile_options target)
 
     cmake_parse_arguments(opt "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
+    if(CLANG_CL)
+        set(prefix "-Xclang ")
+    endif()
+
     foreach(flag ${opt_PRIVATE})
-        if(CLANG_CL)
-            target_compile_options(${target} PRIVATE -Xclang)
-        endif()
-        target_compile_options(${target} PRIVATE ${flag})
+        target_compile_options(${target} PRIVATE "${prefix}${flag}")
     endforeach()
 
     foreach(flag ${opt_PUBLIC})
-        if(CLANG_CL)
-            target_compile_options(${target} PUBLIC -Xclang)
-        endif()
-        target_compile_options(${target} PUBLIC ${flag})
+        target_compile_options(${target} PUBLIC "${prefix}${flag}")
     endforeach()
 
     foreach(flag ${opt_INTERFACE})
-        if(CLANG_CL)
-            target_compile_options(${target} INTERFACE -Xclang)
-        endif()
-        target_compile_options(${target} INTERFACE ${flag})
+        target_compile_options(${target} INTERFACE "${prefix}${flag}")
     endforeach()
 endfunction()
 
