@@ -99,4 +99,4 @@ script:
   - ls
   - ./zacc.system.detect
   #- ./zacc.tests.*
-  - ctest -V
+  - ctest --output-on-failure

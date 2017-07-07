@@ -89,4 +89,4 @@ build_script:
 test_script:
 - ls
 #- ps: gci -Filter zacc.tests.*.exe | foreach { ".\$($_.Name)"} | iex
-- ctest -V
+- ctest --output-on-failure
