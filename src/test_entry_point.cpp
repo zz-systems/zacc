@@ -26,22 +26,11 @@
 #include <iostream>
 
 #include "gtest/gtest.h"
-#include "system/platform.hpp"
 #include "util/test_entry_point.hpp"
 
-int main(int argc, char **argv) {
-    std::cout << "Running main() from est_main.cpp" << std::endl;
+int zacc_run_gtests(int argc, char **argv) {
+    std::cout << "Running run_gtests() from run_gtests.cpp" << std::endl;
 
-    auto c = zacc::platform::instance().match_capabilities(zacc::branches::ZACC_CAPABILITIES::value);
-    std::string str;
-
-    if(c.size() != 0) {
-        str = join(std::begin(c), std::end(c), ", ");
-        ZTRACE_INTERNAL("SKIPPED: Features [" << str << "] not supported");
-        return 0;
-    }
-
-    return zacc_run_gtests(argc, argv);
-    //testing::InitGoogleTest(&argc, argv);
-    //return RUN_ALL_TESTS();
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

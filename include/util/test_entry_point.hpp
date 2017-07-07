@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
 //
-// Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
+// Copyright (c) 2015-2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,18 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
+#pragma once
 
-#include <iostream>
+#ifdef WIN32
+#ifdef ZACC_EXPORTS
+        #define ZACC_DLL_API __declspec(dllexport)
+    #else
+        #define ZACC_DLL_API __declspec(dllimport)
+    #endif
+#else
+#define ZACC_DLL_API
+#endif
 
-#include "gtest/gtest.h"
-#include "system/platform.hpp"
-#include "util/test_entry_point.hpp"
-
-int main(int argc, char **argv) {
-    std::cout << "Running main() from est_main.cpp" << std::endl;
-
-    auto c = zacc::platform::instance().match_capabilities(zacc::branches::ZACC_CAPABILITIES::value);
-    std::string str;
-
-    if(c.size() != 0) {
-        str = join(std::begin(c), std::end(c), ", ");
-        ZTRACE_INTERNAL("SKIPPED: Features [" << str << "] not supported");
-        return 0;
-    }
-
-    return zacc_run_gtests(argc, argv);
-    //testing::InitGoogleTest(&argc, argv);
-    //return RUN_ALL_TESTS();
+extern "C" {
+    ZACC_DLL_API int zacc_run_gtests(int argc, char **argv);
 }

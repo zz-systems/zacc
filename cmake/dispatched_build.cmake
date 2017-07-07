@@ -15,31 +15,33 @@ function(add_dispatched_vectorized_target target_name)
     foreach(branch ${target_branches})
         message(STATUS "Adding dispatched vectorized branch ${target_name}.${branch}")
 
-        add_library("${target_name}.${branch}" OBJECT ${target_entrypoints})
+        add_library("${target_name}.${branch}" STATIC ${target_entrypoints})
+        target_link_libraries("${target_name}.${branch}" zacc.system zacc.interface.${branch})
+
         add_dependencies("${target_name}.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
 
-        foreach(flag ${branch_flags_${branch}})
-            if(CLANG_CL)
-                set(flag "-Xclang ${flag}")
-            endif()
+        #foreach(flag ${branch_flags_${branch}})
+        #    if(CLANG_CL)
+        #        set(flag "-Xclang ${flag}")
+        #    endif()
 
-            target_compile_options("${target_name}.${branch}" PUBLIC ${branch_flags_${branch}})
-        endforeach()
+        #    target_compile_options("${target_name}.${branch}" PRIVATE ${branch_flags_${branch}})
+        #endforeach()
 
-        target_include_directories(${target_name}.${branch} PUBLIC ${target_includes})
+        target_include_directories(${target_name}.${branch} PRIVATE ${target_includes})
 
         foreach(def ${branch_defs_${branch}})
-            target_compile_definitions(${target_name}.${branch}  PUBLIC "${def}")
+            target_compile_definitions(${target_name}.${branch}  PRIVATE "${def}")
         endforeach()
 
-        list(APPEND branch_objects $<TARGET_OBJECTS:${target_name}.${branch}>)
+        list(APPEND branch_objects ${target_name}.${branch})#$<TARGET_OBJECTS:${target_name}.${branch}>)
     endforeach()
 
     message(STATUS "Combining dispatched vectorized branches to ${target_name}")
 
-    add_library(${target_name} SHARED ${branch_objects} ${target_sources})
-    target_link_libraries(${target_name} zacc.system ${target_libraries})
-
+    add_library(${target_name} SHARED  ${target_sources})
+    target_link_libraries(${target_name} zacc.system ${branch_objects} ${target_libraries})
+    target_compile_options(${target_name} PUBLIC -mno-fma -mno-fma4 -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4.1 -mno-avx -mno-avx2)
     target_compile_definitions(${target_name} PUBLIC ZACC_FAST_FLOAT=false)
     foreach(def ${generic_build_defs})
         target_compile_definitions(${target_name}  PUBLIC "${def}")
@@ -81,40 +83,46 @@ endfunction()
 
 function(add_branch_test target_name)
     set(options OPTIONAL ZACC_FAST_FLOAT)
-    set(oneValueArgs TEST_MAIN)
-    set(multiValueArgs INCLUDES SOURCES LIBRARIES BRANCHES DEPENDS)
+    set(oneValueArgs "")
+    set(multiValueArgs TESTMAIN INCLUDES SOURCES LIBRARIES BRANCHES DEPENDS)
 
-    cmake_parse_arguments(add_dispatched_main "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
+    cmake_parse_arguments(add_branch_test "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
-    #set(target_name ${add_dispatched_main_TARGET})
-    set(target_includes ${add_dispatched_main_INCLUDES})
-    set(target_sources ${add_dispatched_main_SOURCES})
-    set(target_dependencies ${add_dispatched_main_DEPENDS})
-    set(target_branches ${add_dispatched_main_BRANCHES})
-    set(target_libraries ${add_dispatched_main_LIBRARIES})
+    set(test_main ${add_branch_test_TESTMAIN})
+    set(target_includes ${add_branch_test_INCLUDES})
+    set(target_sources ${add_branch_test_SOURCES})
+    set(target_dependencies ${add_branch_test_DEPENDS})
+    set(target_branches ${add_branch_test_BRANCHES})
+    set(target_libraries ${add_branch_test_LIBRARIES})
 
+    message("test_main: ${test_main}")
     foreach(branch ${target_branches})
         message(STATUS "Adding dispatched test ${target_name}.${branch}")
 
         get_branch_files(files ${branch} "${test.schema}")
 
-        add_executable("${target_name}.${branch}" $<TARGET_OBJECTS:zacc.tests.test_main.${branch}> ${files} ${target_sources} )
-        add_dependencies("${target_name}.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" ${target_dependencies})
+        add_library("${target_name}.${branch}.obj" SHARED ${files} ${target_sources})
+        target_include_directories(${target_name}.${branch}.obj PUBLIC ${gtest_SOURCE_DIR}/include ${target_includes})
+        target_link_libraries("${target_name}.${branch}.obj" gtest zacc.system zacc.interface.${branch})
 
-        target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries})
+        add_dependencies("${target_name}.${branch}.obj" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" ${target_dependencies})
+        #target_link_libraries("${target_name}.${branch}.lib" gtest zacc.system ${target_libraries})
 
-        foreach(flag ${branch_flags_${branch}})
-            if(CLANG_CL)
-                set(flag "-Xclang ${flag}")
-            endif()
+        add_executable("${target_name}.${branch}" ${test_main})
+        target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} ${target_name}.${branch}.obj)
 
-            target_compile_options("${target_name}.${branch}" PUBLIC ${branch_flags_${branch}})
-        endforeach()
-
-        target_include_directories(${target_name}.${branch} PUBLIC ${target_includes})
+        target_compile_options(${target_name}.${branch} PUBLIC -mno-fma -mno-fma4 -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4.1 -mno-avx -mno-avx2)
+#        foreach(flag ${branch_flags_${branch}})
+#            if(CLANG_CL)
+#                set(flag "-Xclang ${flag}")
+#            endif()
+#
+#            target_compile_options("${target_name}.${branch}.obj" PRIVATE ${branch_flags_${branch}})
+#        endforeach()
 
         foreach(def ${branch_defs_${branch}})
-            target_compile_definitions(${target_name}.${branch}  PUBLIC "${def}")
+            #target_compile_definitions(${target_name}.${branch}.obj  PUBLIC "${def}")
+            #target_compile_definitions(${target_name}.${branch}  PUBLIC "${def}")
         endforeach()
 
         add_test(
