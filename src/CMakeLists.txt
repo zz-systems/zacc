@@ -5,6 +5,8 @@ add_library(zacc.system STATIC
 add_library(zacc.runtimeloader STATIC
         "${CMAKE_CURRENT_LIST_DIR}/runtime_loader.cpp")
 
+link_libraries(zacc.runtimeloader -ldl)
+
 add_executable(zacc.system.detect WIN32
         "${CMAKE_CURRENT_LIST_DIR}/platform_detector.cpp"
         )

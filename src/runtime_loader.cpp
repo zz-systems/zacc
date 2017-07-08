@@ -34,7 +34,7 @@
 void* zacc_dlopen(const char* path)
 {
 #ifdef WIN32
-    return LoadLibrary(path);
+    return (void*)LoadLibrary(path);
 #else
     return dlopen(path, RTLD_LAZY);
 #endif
@@ -52,7 +52,7 @@ char* zacc_dlerror()
 void* zacc_dlsym(void* handle, const char* symbol)
 {
 #ifdef WIN32
-    return GetProcAddress(handle, symbol);
+    return GetProcAddress((HMODULE)handle, symbol);
 #else
     return dlsym(handle, symbol);
 #endif
@@ -61,7 +61,7 @@ void* zacc_dlsym(void* handle, const char* symbol)
 bool zacc_dlclose(void* handle)
 {
 #ifdef WIN32
-    return FreeLibrary(handle);
+    return FreeLibrary((HMODULE)handle);
 #else
     return dlclose(handle) == 0;
 #endif

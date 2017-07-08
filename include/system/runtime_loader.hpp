@@ -35,7 +35,7 @@
         #define ZACC_DLL_API extern "C" __declspec(dllimport)
     #endif
 #else
-#define ZACC_DLL_API
+#define ZACC_DLL_API extern "C"
 #endif
 
 
