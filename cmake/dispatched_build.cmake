@@ -16,7 +16,7 @@ function(add_dispatched_vectorized_target target_name)
         message(STATUS "Adding dispatched vectorized branch ${target_name}.${branch}")
 
         add_library("${target_name}.${branch}" STATIC ${target_entrypoints})
-        target_link_libraries("${target_name}.${branch}" zacc.system zacc.interface.${branch})
+        target_link_libraries("${target_name}.${branch}" PRIVATE zacc.system zacc.interface.${branch})
 
         add_dependencies("${target_name}.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
 
@@ -41,7 +41,6 @@ function(add_dispatched_vectorized_target target_name)
 
     add_library(${target_name} SHARED  ${target_sources})
     target_link_libraries(${target_name} zacc.system ${branch_objects} ${target_libraries})
-    target_compile_options(${target_name} PUBLIC -mno-fma -mno-fma4 -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4.1 -mno-avx -mno-avx2)
     target_compile_definitions(${target_name} PUBLIC ZACC_FAST_FLOAT=false)
     foreach(def ${generic_build_defs})
         target_compile_definitions(${target_name}  PUBLIC "${def}")
@@ -101,9 +100,9 @@ function(add_branch_test target_name)
 
         get_branch_files(files ${branch} "${test.schema}")
 
-        add_library("${target_name}.${branch}.obj" SHARED ${files} ${target_sources})
+        add_library("${target_name}.${branch}.obj" STATIC ${files} ${target_sources})
         target_include_directories(${target_name}.${branch}.obj PUBLIC ${gtest_SOURCE_DIR}/include ${target_includes})
-        target_link_libraries("${target_name}.${branch}.obj" gtest zacc.system zacc.interface.${branch})
+        target_link_libraries("${target_name}.${branch}.obj" PRIVATE gtest zacc.system zacc.interface.${branch})
 
         add_dependencies("${target_name}.${branch}.obj" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" ${target_dependencies})
         #target_link_libraries("${target_name}.${branch}.lib" gtest zacc.system ${target_libraries})
@@ -111,7 +110,10 @@ function(add_branch_test target_name)
         add_executable("${target_name}.${branch}" ${test_main})
         target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} ${target_name}.${branch}.obj)
 
-        target_compile_options(${target_name}.${branch} PUBLIC -mno-fma -mno-fma4 -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4.1 -mno-avx -mno-avx2)
+        #set_target_properties(${target_name}.${branch}.obj PROPERTIES LINK_INTERFACE_LIBRARIES "")
+        #set_target_properties(${target_name}.${branch} PROPERTIES LINK_INTERFACE_LIBRARIES "")
+
+        #target_compile_options(${target_name}.${branch} PUBLIC -mno-fma -mno-fma4 -mno-sse2 -mno-sse3 -mno-ssse3 -mno-sse4.1 -mno-avx -mno-avx2)
 #        foreach(flag ${branch_flags_${branch}})
 #            if(CLANG_CL)
 #                set(flag "-Xclang ${flag}")
@@ -122,7 +124,7 @@ function(add_branch_test target_name)
 
         foreach(def ${branch_defs_${branch}})
             #target_compile_definitions(${target_name}.${branch}.obj  PUBLIC "${def}")
-            #target_compile_definitions(${target_name}.${branch}  PUBLIC "${def}")
+            target_compile_definitions(${target_name}.${branch}  PUBLIC "${def}")
         endforeach()
 
         add_test(

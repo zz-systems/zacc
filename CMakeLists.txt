@@ -14,21 +14,23 @@ function(target_native_compile_options target)
     cmake_parse_arguments(opt "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
     if(CLANG_CL)
-        set(prefix "-Xclang ")
+        set(prefix -Xclang)
     endif()
 
     foreach(flag ${opt_PRIVATE})
-        target_compile_options(${target} PRIVATE "${prefix}${flag}")
+        target_compile_options(${target} PRIVATE ${prefix}${flag})
     endforeach()
 
     foreach(flag ${opt_PUBLIC})
-        target_compile_options(${target} PUBLIC "${prefix}${flag}")
+        target_compile_options(${target} PUBLIC ${prefix}${flag})
     endforeach()
 
     foreach(flag ${opt_INTERFACE})
-        target_compile_options(${target} INTERFACE "${prefix}${flag}")
+        target_compile_options(${target} INTERFACE ${prefix}${flag})
     endforeach()
 endfunction()
+
+
 
 add_library(zacc.interface.scalar INTERFACE)
 target_compile_definitions(zacc.interface.scalar INTERFACE
