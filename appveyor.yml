@@ -68,6 +68,9 @@ before_build:
 - set PATH=C:\mingw-w64\x86_64-6.3.0-posix-seh-rt_v5-rev1;%PATH%
 - set PATH=c:\Program Files\LLVM\bin\;%PATH%
 - set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
+- set COMPILER=clang++.exe
+- set CXX=clang++.exe
+- set CC=clang.exe
 - mkdir %BUILD_DIR% && cd %BUILD_DIR%
 - cmake .. -G"%BUILD_ENV%" -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe
 
