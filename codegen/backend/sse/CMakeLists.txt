@@ -23,7 +23,8 @@ target_link_libraries(zacc.interface.sse.sse2 INTERFACE zacc.interface.sse.sse2.
 add_library(zacc.interface.sse.sse3 INTERFACE)
 
 if(CLANG_CL)
-    target_compile_options(zacc.interface.sse.sse3 INTERFACE -Xclang -msse3 -Xclang -mssse3)
+    target_compile_options(zacc.interface.sse.sse3 INTERFACE -Xclang -msse3)
+    target_compile_options(zacc.interface.sse.sse3 INTERFACE -Xclang -mssse3)
 else()
     target_compile_options(zacc.interface.sse.sse3 INTERFACE -msse3 -mssse3)
 endif()
@@ -61,7 +62,8 @@ target_link_libraries(zacc.interface.sse.sse41 INTERFACE zacc.interface.sse.sse4
 add_library(zacc.interface.sse.sse41.fma3 INTERFACE)
 
 if(CLANG_CL)
-    target_compile_options(zacc.interface.sse.sse41.fma3 INTERFACE -Xclang -msse4.1 -Xclang -mfma)
+    target_compile_options(zacc.interface.sse.sse41.fma3 INTERFACE -Xclang -msse4.1)
+    target_compile_options(zacc.interface.sse.sse41.fma3 INTERFACE -Xclang -mfma)
 else()
     target_compile_options(zacc.interface.sse.sse41.fma3 INTERFACE -msse4.1 -mfma)
 endif()
@@ -79,7 +81,8 @@ target_link_libraries(zacc.interface.sse.sse41.fma3 INTERFACE zacc.interface.sse
 add_library(zacc.interface.sse.sse41.fma4 INTERFACE)
 
 if(CLANG_CL)
-    target_compile_options(zacc.interface.sse.sse41.fma4 INTERFACE -Xclang -msse4.1 -Xclang -mfma4)
+    target_compile_options(zacc.interface.sse.sse41.fma4 INTERFACE -Xclang -msse4.1)
+    target_compile_options(zacc.interface.sse.sse41.fma4 INTERFACE -Xclang -mfma4)
 else()
     target_compile_options(zacc.interface.sse.sse41.fma4 INTERFACE -msse4.1 -mfma4)
 endif()

@@ -3,7 +3,8 @@
 add_library(zacc.interface.avx2 INTERFACE)
 
 if(CLANG_CL)
-    target_compile_options(zacc.interface.avx2 INTERFACE -Xclang -mavx2 -Xclang -mfma)
+    target_compile_options(zacc.interface.avx2 INTERFACE -Xclang -mavx2)
+    target_compile_options(zacc.interface.avx2 INTERFACE -Xclang -mfma)
 else()
     target_compile_options(zacc.interface.avx2 INTERFACE -mavx2 -mfma)
 endif()
