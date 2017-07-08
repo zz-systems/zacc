@@ -58,7 +58,7 @@ inline __m256 _mm256_set_m128(__m128 hi, __m128 lo)
 }
 
 
-inline __m256 _mm256_set_m128d(__m128 hi, __m128 lo)
+inline __m256d _mm256_set_m128d(__m128d hi, __m128d lo)
 {
 	return _mm256_insertf128_pd(_mm256_castpd128_pd256(hi), (lo), 1);
 }
