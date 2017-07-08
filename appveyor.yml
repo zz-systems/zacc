@@ -72,12 +72,12 @@ before_build:
 - set PATH=C:\MinGW\bin;%PATH%
 - set PATH=c:\Program Files\LLVM\bin\;%PATH%
 - set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
-- cd C:\projects\zacc
+- mkdir %BUILD_DIR% && cd %BUILD_DIR%
+- cmake .. -G"%BUILD_ENV%" -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe
 
 
 build_script:
-  - mkdir %BUILD_DIR% && cd %BUILD_DIR%
-  - cmake .. -G"%BUILD_ENV%" -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe
+
   - cmake --build . --config %CONFIGURATION% --target zacc.system.detect
   - cmake --build . --config %CONFIGURATION% --target zacc.tests.all
   
