@@ -32,7 +32,7 @@
 
 namespace zacc { namespace test {
 
-#define ZTRACE_TEST_OUTPUT(cmd) ZTRACE_INTERNAL(cmd)
+#define ZTRACE_TEST_OUTPUT(cmd) //ZTRACE_INTERNAL(cmd)
 #define REQUIRES(raw) \
     do { \
         auto c = zacc::platform::instance().match_capabilities(zacc::branches::raw::value); \

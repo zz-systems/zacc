@@ -56,6 +56,12 @@ inline __m256 _mm256_set_m128(__m128 hi, __m128 lo)
 {
 	return _mm256_insertf128_ps(_mm256_castps128_ps256(hi), (lo), 1);
 }
+
+
+inline __m256 _mm256_set_m128d(__m128 hi, __m128 lo)
+{
+	return _mm256_insertf128_pd(_mm256_castpd128_pd256(hi), (lo), 1);
+}
 #endif
 
 #elif defined(_MSC_VER)
