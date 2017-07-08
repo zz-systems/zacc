@@ -19,9 +19,8 @@ environment:
         OPENCL_REGISTRY: "https://www.khronos.org/registry/cl"    
     
   matrix:
-    -   VCVARSALL: C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
-        PYTHON: "C:/Python36/"
-        BUILD_ENV: "Ninja"
+    -   PYTHON: "C:/Python36/"
+        BUILD_ENV: "MSYS Makefiles"
         BUILD_DIR: "build"
         PYTHON_VERSION: "3.6"
       
@@ -34,12 +33,6 @@ install:
 # Install yasha
 - "%PYTHON%/python.exe -m pip install yasha"
 
-# Install Ninja
-- set NINJA_URL="https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-win.zip"
-- appveyor DownloadFile %NINJA_URL% -FileName ninja.zip
-- 7z x ninja.zip -oC:\projects\deps\ninja > nul
-- set PATH=C:\projects\deps\ninja;%PATH%
-- ninja --version
 
 # Install OpenCL
 #- echo Fetching source
