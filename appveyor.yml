@@ -65,9 +65,9 @@ before_build:
 - git submodule update --init --recursive
 # Workaround for CMake not wanting sh.exe on PATH for MinGW
 - set PATH=%PATH:C:\Program Files\Git\usr\bin;=%
-#- set PATH=C:\Mingw-w64\bin;%PATH%
-#- set PATH=c:\Program Files\LLVM\bin\;%PATH%
-#- set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
+- set PATH=C:\Mingw-w64\bin;%PATH%
+- set PATH=c:\Program Files\LLVM\bin\;%PATH%
+- set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
 - mkdir %BUILD_DIR% && cd %BUILD_DIR%
 - cmake .. -G"%BUILD_ENV%" -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe
 
