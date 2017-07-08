@@ -62,6 +62,9 @@ bool zacc_dlclose(void* handle)
 {
 #ifdef WIN32
     return FreeLibrary((HMODULE)handle);
+#elif defined(__APPLE__)
+    // currently calling dlclose causes a segfault on application exit
+    return true;
 #else
     return dlclose(handle) == 0;
 #endif

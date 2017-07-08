@@ -42,7 +42,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -62,7 +62,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -82,7 +82,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -102,7 +102,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -122,7 +122,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -146,7 +146,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -166,7 +166,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -186,7 +186,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -208,7 +208,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -228,7 +228,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -248,7 +248,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -268,7 +268,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -288,7 +288,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -308,7 +308,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));
@@ -330,7 +330,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<double, 1> a, b, expected;
+        alignas(16) std::array<double, 1> a, b, expected;
         for(int i = 0; i < 1; i++)
         {
             a[i] = static_cast<double>(distribution2(generator));

@@ -168,9 +168,9 @@ namespace zacc { namespace backend { namespace avx {
              * @relates int32
              * @remark avx - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(std::array<sse::zint32<base_t::capability>, 2> ({ _mm_loadu_si128((__m128i*)value.data()), _mm_loadu_si128((__m128i*)(value.data() + 4)) })) {
+            __impl(const std::array<typename base_t::scalar_t, base_t::dim> &value) : base_t(std::array<sse::zint32<base_t::capability>, 2> ({ _mm_loadu_si128((__m128i*)value.data()), _mm_loadu_si128((__m128i*)(value.data() + 4)) })) {
 
-                ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(std::array<typename base_t::scal..)");
+                ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(const std::array<typename base_t..)");
 
             }
 

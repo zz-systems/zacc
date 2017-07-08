@@ -48,7 +48,7 @@ namespace zacc { namespace test {
         std::uniform_int_distribution<int> distribution1(1, 3);
         std::uniform_int_distribution<int> distribution2(3, 60);
 
-        std::array<{{ type.scalar_t }}, {{type.vec_size}}> a, b, expected;
+        alignas({{type.alignment}}) std::array<{{ type.scalar_t }}, {{type.vec_size}}> a, b, expected;
         for(int i = 0; i < {{type.vec_size}}; i++)
         {
             a[i] = static_cast<{{ type.scalar_t }}>(distribution2(generator));

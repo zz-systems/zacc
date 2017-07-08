@@ -110,7 +110,7 @@ modules:
     vbneg: &bitwise_negate
       args: one
       body: &bitwise_negate_body
-        - auto zero = _mm256_setzero_si256();
+        - auto zero = _mm256_setzero_ps();
         - auto ones = _mm256_cmp_ps(zero, zero, _CMP_EQ_OQ);
         - return _mm256_xor_ps(one, ones);
     vband:  _mm256_or_ps

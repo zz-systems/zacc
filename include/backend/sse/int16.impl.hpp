@@ -132,9 +132,9 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int16
              * @remark sse - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm_load_si128((__m128i *) value.data())) {
+            __impl(const std::array<typename base_t::scalar_t, base_t::dim> &value) : base_t(_mm_loadu_si128((__m128i *) value.data())) {
 
-                ZTRACE_BACKEND("sse.int16.impl", __LINE__, "zint16(int16_t[8])", "default", "CONS(std::array<typename base_t::scal..)");
+                ZTRACE_BACKEND("sse.int16.impl", __LINE__, "zint16(int16_t[8])", "default", "CONS(const std::array<typename base_t..)");
 
             }
 
@@ -206,7 +206,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "zint16(int16_t[8])", "default", "vstore");
 
-                _mm_store_si128((__m128i*)target.data(), source);
+                _mm_storeu_si128((__m128i*)target.data(), source);
             }
 
 

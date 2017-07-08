@@ -156,7 +156,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm_load_si128((__m128i*)value.data())) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm_loadu_si128((__m128i*)value.data())) {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS(std::array<typename base_t::scal..)");
 

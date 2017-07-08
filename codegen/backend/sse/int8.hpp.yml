@@ -31,8 +31,8 @@ modules:
     - args: [[*scalar_t, value]]
       init: _mm_set1_epi8(value)
 
-    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
-      init: _mm_load_si128((__m128i*)value.data())
+    - args: "const std::array<typename base_t::scalar_t, base_t::dim> &value"
+      init: _mm_loadu_si128((__m128i*)value.data())
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi8 }
@@ -41,7 +41,7 @@ modules:
     vstore: &io_store
       args: { raw: "typename base_t::extracted_t &target, composed_t source" }
       returns: void
-      body: _mm_store_si128((__m128i*)target.data(), source)
+      body: _mm_storeu_si128((__m128i*)target.data(), source)
     vstream:
       <<: *io_store
       body:  _mm_stream_si128((__m128i*)target.data(), source)

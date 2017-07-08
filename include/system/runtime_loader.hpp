@@ -27,6 +27,7 @@
 
 #include <functional>
 #include <string>
+#include <iostream>
 #include "util/zacc_exports.hpp"
 
 ZACC_DLL_API void*    zacc_dlopen(const char* path);
@@ -41,6 +42,7 @@ namespace zacc {
     {
     public:
         runtime_loader(const std::string& library_path)
+                : _library_name(library_path)
         {
             zacc_dlerror();
 
@@ -56,7 +58,14 @@ namespace zacc {
         ~runtime_loader()
         {
             if(_handle != nullptr)
-                zacc_dlclose(_handle);
+            {
+                if(!zacc_dlclose(_handle))
+                {
+                    std::clog << zacc_dlerror() << std::endl;
+                    //throw std::logic_error("can't unload library named \"" + _library_name + "\": " + error);
+                }
+                _handle = nullptr;
+            }
         }
 
         template<typename Signature>
@@ -77,5 +86,6 @@ namespace zacc {
         }
     private:
         void* _handle;
+        std::string _library_name;
     };
 }
