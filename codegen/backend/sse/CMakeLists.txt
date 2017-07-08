@@ -1,8 +1,7 @@
 # SSE2 interface =======================================================================================================
 
 add_library(zacc.interface.sse.sse2 INTERFACE)
-
-target_translate_compile_options(zacc.interface.sse.sse2 INTERFACE -msse2)
+target_compile_options(zacc.interface.sse.sse2 INTERFACE -msse2)
 
 add_library(zacc.interface.sse.sse2.defs INTERFACE)
 target_compile_definitions(zacc.interface.sse.sse2.defs INTERFACE
