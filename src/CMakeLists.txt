@@ -5,9 +5,10 @@ add_library(zacc.system STATIC
 add_library(zacc.system.loader SHARED
         "${CMAKE_CURRENT_LIST_DIR}/runtime_loader.cpp")
 
-#if(NOT MSVC)
-    link_libraries(zacc.system.loader -ldl)
-#endif()
+if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    link_libraries(zacc.system.loader --no-as-needed -ldl)
+endif()
+
 target_compile_definitions(zacc.system.loader PRIVATE ZACC_EXPORTS=1)
 
 add_executable(zacc.system.detect WIN32
