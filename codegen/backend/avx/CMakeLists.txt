@@ -1,13 +1,7 @@
 # AVX interface ========================================================================================================
 
 add_library(zacc.interface.avx INTERFACE)
-
-if(CLANG_CL)
-    target_compile_options(zacc.interface.avx INTERFACE -Xclang -mavx)
-    target_compile_options(zacc.interface.avx INTERFACE -Xclang -mfma)
-else()
-    target_compile_options(zacc.interface.avx INTERFACE -mavx -mfma)
-endif()
+target_compile_options(zacc.interface.avx INTERFACE -mavx -mfma)
 
 add_library(zacc.interface.avx.defs INTERFACE)
 target_compile_definitions(zacc.interface.avx.defs INTERFACE
