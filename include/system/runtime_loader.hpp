@@ -25,20 +25,67 @@
 
 #pragma once
 
+#include <functional>
+#include <string>
 
 #ifdef WIN32
 #ifdef ZACC_EXPORTS
-        #define ZACC_DLL_API __declspec(dllexport) 
+        #define ZACC_DLL_API extern "C" __declspec(dllexport)
     #else
-        #define ZACC_DLL_API __declspec(dllimport) 
+        #define ZACC_DLL_API extern "C" __declspec(dllimport)
     #endif
 #else
 #define ZACC_DLL_API
 #endif
 
-extern "C" {
-    ZACC_DLL_API void*    zacc_dlopen(const char* path);
-    ZACC_DLL_API char*    zacc_dlerror();
-    ZACC_DLL_API void*    zacc_dlsym(void* handle, const char* member);
-    ZACC_DLL_API bool     zacc_dlclose(void* handle);
+
+ZACC_DLL_API void*    zacc_dlopen(const char* path);
+ZACC_DLL_API char*    zacc_dlerror();
+ZACC_DLL_API void*    zacc_dlsym(void* handle, const char* member);
+ZACC_DLL_API bool     zacc_dlclose(void* handle);
+
+
+namespace zacc {
+
+    class runtime_loader
+    {
+    public:
+        runtime_loader(const std::string& library_path)
+        {
+            zacc_dlerror();
+
+            _handle = zacc_dlopen(library_path.c_str());
+
+            auto error = zacc_dlerror();
+            if (!_handle)
+            {
+                throw std::logic_error("can't load library named \"" + library_path + "\": " + error);
+            }
+        }
+
+        ~runtime_loader()
+        {
+            if(_handle != nullptr)
+                zacc_dlclose(_handle);
+        }
+
+        template<typename Signature>
+        std::function<Signature> resolve(std::string const &function_name)
+        {
+            zacc_dlerror();
+            auto result = zacc_dlsym(_handle, function_name.c_str());
+            if (!result)
+            {
+                auto error = zacc_dlerror();
+                if (error)
+                {
+                    throw std::logic_error("can't find symbol named \"" + function_name + "\": " + error);
+                }
+            }
+
+            return reinterpret_cast<Signature*>(result);
+        }
+    private:
+        void* _handle;
+    };
 }

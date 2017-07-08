@@ -42,5 +42,9 @@ int main(int argc, char **argv) {
         return 0;
     }
 
+    auto loader = zacc::runtime_loader("./" ZACC_TEST_LIBNAME);
+
+    auto zacc_run_gtests = loader.resolve<int(int, char**)>("zacc_run_gtests");
+
     return zacc_run_gtests(argc, argv);
 }

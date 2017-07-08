@@ -26,14 +26,13 @@
 
 #ifdef WIN32
 #ifdef ZACC_EXPORTS
-        #define ZACC_DLL_API __declspec(dllexport)
+        #define ZACC_DLL_API extern "C" __declspec(dllexport)
     #else
-        #define ZACC_DLL_API __declspec(dllimport)
+        #define ZACC_DLL_API extern "C" __declspec(dllimport)
     #endif
 #else
-#define ZACC_DLL_API
+#define ZACC_DLL_API extern "C"
 #endif
 
-extern "C" {
-    ZACC_DLL_API int zacc_run_gtests(int argc, char **argv);
-}
+
+ZACC_DLL_API int zacc_run_gtests(int argc, char **argv);
