@@ -20,7 +20,7 @@ environment:
     
   matrix:
     -   PYTHON: "C:/Python36/"
-        BUILD_ENV: "MSYS Makefiles"
+        BUILD_ENV: "MinGW Makefiles"
         BUILD_DIR: "build"
         PYTHON_VERSION: "3.6"
       
