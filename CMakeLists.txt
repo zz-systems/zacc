@@ -18,15 +18,15 @@ function(target_native_compile_options target)
     endif()
 
     foreach(flag ${opt_PRIVATE})
-        target_compile_options(${target} PRIVATE ${prefix}${flag})
+        target_compile_options(${target} PRIVATE ${prefix} ${flag})
     endforeach()
 
     foreach(flag ${opt_PUBLIC})
-        target_compile_options(${target} PUBLIC ${prefix}${flag})
+        target_compile_options(${target} PUBLIC ${prefix} ${flag})
     endforeach()
 
     foreach(flag ${opt_INTERFACE})
-        target_compile_options(${target} INTERFACE ${prefix}${flag})
+        target_compile_options(${target} INTERFACE ${prefix} ${flag})
     endforeach()
 endfunction()
 
