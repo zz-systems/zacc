@@ -73,7 +73,7 @@ before_build:
 - git submodule update --init --recursive
 # Setup env
 - call %VCVARSALL%
-- set PATH=c:\Program Files\LLVM\bin\;%PATH%
+- set PATH=c:\Program Files\LLVM\msbuild-bin\;%PATH%
 - set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
 - mkdir %BUILD_DIR% && cd %BUILD_DIR%
 # Generate
