@@ -104,6 +104,9 @@ function(add_branch_test target_name)
         target_include_directories(${target_name}.${branch}.obj PUBLIC ${gtest_SOURCE_DIR}/include ${target_includes})
         target_link_libraries("${target_name}.${branch}.obj" PRIVATE gtest zacc.system zacc.interface.${branch})
 
+        if(APPLE)
+            target_compile_options("${target_name}.${branch}.obj" PUBLIC -lazy-lz)
+        endif()
         add_dependencies("${target_name}.${branch}.obj" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" ${target_dependencies})
         #target_link_libraries("${target_name}.${branch}.lib" gtest zacc.system ${target_libraries})
 
