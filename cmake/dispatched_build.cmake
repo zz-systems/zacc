@@ -104,14 +104,16 @@ function(add_branch_test target_name)
         target_include_directories(${target_name}.${branch}.obj PUBLIC ${gtest_SOURCE_DIR}/include ${target_includes})
         target_link_libraries("${target_name}.${branch}.obj" PRIVATE gtest zacc.system zacc.interface.${branch})
 
-        if(APPLE)
-            target_compile_options("${target_name}.${branch}.obj" PUBLIC -lazy-lz)
-        endif()
+
         add_dependencies("${target_name}.${branch}.obj" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" ${target_dependencies})
         #target_link_libraries("${target_name}.${branch}.lib" gtest zacc.system ${target_libraries})
 
         add_executable("${target_name}.${branch}" ${test_main})
-        target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} ${target_name}.${branch}.obj)
+
+        if(APPLE)
+            set(lazy -lazy-lz)
+        endif()
+        target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} ${target_name}.${branch}.obj ${lazy})
 
         #set_target_properties(${target_name}.${branch}.obj PROPERTIES LINK_INTERFACE_LIBRARIES "")
         #set_target_properties(${target_name}.${branch} PROPERTIES LINK_INTERFACE_LIBRARIES "")
