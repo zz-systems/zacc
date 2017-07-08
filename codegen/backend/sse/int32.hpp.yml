@@ -130,8 +130,8 @@ modules:
     vbneg: &bitwise_negate
       args: one
       body:
-        - __m128i junk;
-        - auto ones = _mm_cmpeq_epi32(junk, junk);
+        - auto zero = _mm_setzero_si128();
+        - auto ones = _mm_cmpeq_epi32(zero, zero);
         - return _mm_xor_si128(one, ones);
     vbor:   &bitwise_or
       body: _mm_or_si128
@@ -150,8 +150,8 @@ modules:
         default:
           requires: [not SSE41]
           body:
-            - __m128i junk;
-            - auto ones = _mm_cmpeq_epi32(junk, junk);
+            - auto zero = _mm_setzero_si128();
+            - auto ones = _mm_cmpeq_epi32(zero, zero);
             - return _mm_movemask_epi8(_mm_cmpeq_epi32(one, ones)) == 0xFFFF
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise_shift:

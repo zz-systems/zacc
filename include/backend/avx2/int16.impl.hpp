@@ -550,8 +550,8 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vbneg");
 
-                __m256i junk;
-                auto ones = _mm256_cmpeq_epi16(junk, junk);
+                auto zero = _mm256_setzero_si256();
+                auto ones = _mm256_cmpeq_epi16(zero, zero);
                 return _mm256_xor_si256(one, ones);
             }
 

@@ -685,8 +685,8 @@ namespace zacc { namespace backend { namespace avx {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vbneg");
 
-                __m256d junk;
-                auto ones = _mm256_cmp_pd(junk, junk, _CMP_EQ_OQ);
+                auto zero = _mm256_setzero_pd();
+                auto ones = _mm256_cmp_pd(zero, zero, _CMP_EQ_OQ);
                 return _mm256_xor_pd(one, ones);
             }
 

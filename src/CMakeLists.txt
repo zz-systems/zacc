@@ -5,9 +5,9 @@ add_library(zacc.system STATIC
 add_library(zacc.system.loader SHARED
         "${CMAKE_CURRENT_LIST_DIR}/runtime_loader.cpp")
 
-if(NOT MSVC)
+#if(NOT MSVC)
     link_libraries(zacc.system.loader -ldl)
-endif()
+#endif()
 target_compile_definitions(zacc.system.loader PRIVATE ZACC_EXPORTS=1)
 
 add_executable(zacc.system.detect WIN32

@@ -452,8 +452,8 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vfloor");
 
-                __m128i junk;
-                auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(junk, junk), 31);
+                auto zero = _mm_setzero_si128();
+                auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
                 auto fi = vtrunc(one);
                 return vsel(vgt(fi, one), vsub(fi, _1), fi);
             }
@@ -481,8 +481,8 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vceil");
 
-                __m128i junk;
-                auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(junk, junk), 31);
+                auto zero = _mm_setzero_si128();
+                auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
                 auto fi = vtrunc(one);
                 return vsel(vlt(fi, one), vadd(fi, _1), fi);
             }

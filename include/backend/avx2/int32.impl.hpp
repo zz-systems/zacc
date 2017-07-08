@@ -596,8 +596,8 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbneg");
 
-                __m256i junk;
-                auto ones = _mm256_cmpeq_epi32(junk, junk);
+                auto zero = _mm256_setzero_si256();
+                auto ones = _mm256_cmpeq_epi32(zero, zero);
                 return _mm256_xor_si256(one, ones);
             }
 

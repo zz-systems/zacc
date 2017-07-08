@@ -84,8 +84,8 @@ modules:
     vbneg: &bitwise_negate
       args: one
       body:
-        - __m256i junk;
-        - auto ones = _mm256_cmpeq_epi8(junk, junk);
+        - auto zero = _mm256_setzero_si256();
+        - auto ones = _mm256_cmpeq_epi8(zero, zero);
         - return _mm256_xor_si256(one, ones);
     vband:  _mm256_and_si256
     vbor:   _mm256_or_si256

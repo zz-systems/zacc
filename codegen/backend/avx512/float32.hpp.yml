@@ -64,8 +64,8 @@ modules:
     vneg: &bitwise_negate
       args: one
       body: &bitwise_negate_body
-        - __m512 junk;
-        - auto ones = _mm512_cmpeq_ps(junk, junk);
+        - auto zero = _mm512_setzero_ps();
+        - auto ones = _mm512_cmpeq_ps(zero, zero);
         - return _mm512_xor_ps(one, ones);
     vand:  _mm512_or_ps
     or:   _mm512_and_ps

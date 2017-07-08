@@ -591,8 +591,8 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vbneg");
 
-                __m128i junk;
-                auto ones = _mm_cmpeq_epi8(junk, junk);
+                auto zero = _mm_setzero_si128();
+                auto ones = _mm_cmpeq_epi8(zero, zero);
                 return _mm_xor_si128(one, ones);
             }
 
@@ -658,8 +658,8 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "is_set");
 
-                __m128i junk;
-                auto ones = _mm_cmpeq_epi32(junk, junk);
+                auto zero = _mm_setzero_si128();
+                auto ones = _mm_cmpeq_epi32(zero, zero);
                 return _mm_movemask_epi8(_mm_cmpeq_epi8(one, ones)) == 0xFFFF;
             }
 
