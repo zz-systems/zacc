@@ -6,7 +6,7 @@ add_library(zacc.system.loader SHARED
         "${CMAKE_CURRENT_LIST_DIR}/runtime_loader.cpp")
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    link_libraries(zacc.system.loader --no-as-needed -ldl)
+    link_libraries(zacc.system.loader -Wl,--no-as-needed -ldl)
 endif()
 
 target_compile_definitions(zacc.system.loader PRIVATE ZACC_EXPORTS=1)

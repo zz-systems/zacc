@@ -40,7 +40,7 @@ void* zacc_dlopen(const char* path)
 #endif
 }
 
-char* zacc_dlerror()
+const char* const zacc_dlerror()
 {
 #ifdef WIN32
     return "";
@@ -52,7 +52,7 @@ char* zacc_dlerror()
 void* zacc_dlsym(void* handle, const char* symbol)
 {
 #ifdef WIN32
-    return GetProcAddress((HMODULE)handle, symbol);
+    return (void*)GetProcAddress((HMODULE)handle, symbol);
 #else
     return dlsym(handle, symbol);
 #endif
