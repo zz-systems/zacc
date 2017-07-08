@@ -216,7 +216,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vgather(composed_t &target, raw_ptr<int> source, zint32<base_t::capability> index)  noexcept {
+            friend zint32<base_t::capability> vgather(composed_t &target, raw_ptr<const int> source, zint32<base_t::capability> index)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vgather");
 
@@ -325,7 +325,7 @@ namespace zacc { namespace backend { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vabs");
 
-                return std::abs(one);
+                return std::abs(one.value());
             }
 
 
@@ -365,6 +365,19 @@ namespace zacc { namespace backend { namespace scalar {
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vclamp");
 
                 return vmin(to, vmax(from, self));
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int32
+             * @remark scalar - default
+             */
+            friend zint32<base_t::capability> vsqrt(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vsqrt");
+
+                return std::sqrt(one.value());
             }
 
         };

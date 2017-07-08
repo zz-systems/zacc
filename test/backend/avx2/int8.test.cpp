@@ -27,7 +27,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "util/gtest_ext.hpp"
+#include "util/testing/gtest_ext.hpp"
 #include "system/branch.hpp"
 #include <random>
 
@@ -92,6 +92,46 @@ namespace zacc { namespace test {
         }
 
         VASSERT_EQ((zint8(a) - zint8(b)), zint8(expected));
+    }
+
+    TEST(avx2_int8_arithmetic, vmul_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        std::array<int8_t, 32> a, b, expected;
+        for(int i = 0; i < 32; i++)
+        {
+            a[i] = static_cast<int8_t>(distribution2(generator));
+            b[i] = static_cast<int8_t>(distribution1(generator));
+
+            expected[i] = (int8_t) (a[i] * b[i]);
+        }
+
+        VASSERT_EQ((zint8(a) * zint8(b)), zint8(expected));
+    }
+
+    TEST(avx2_int8_arithmetic, vdiv_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        std::array<int8_t, 32> a, b, expected;
+        for(int i = 0; i < 32; i++)
+        {
+            a[i] = static_cast<int8_t>(distribution2(generator));
+            b[i] = static_cast<int8_t>(distribution1(generator));
+
+            expected[i] = (int8_t) (1);
+        }
+
+        VASSERT_EQ((zint8(a) / zint8(a)), zint8(expected));
     }
 
 // =====================================================================================================================

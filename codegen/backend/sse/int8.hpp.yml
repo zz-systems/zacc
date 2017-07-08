@@ -14,6 +14,8 @@ type:
       - convertable
      internal:
        - io
+       - math
+       - numeric
        - arithmetic
        - bitwise
        #- bitwise_shift
@@ -44,6 +46,39 @@ modules:
       <<: *io_store
       body:  _mm_stream_si128((__m128i*)target.data(), source)
 #-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body:
+        sse4:
+          requires: [SSE3]
+          body: _mm_abs_epi8
+        default:
+          requires: [not SSE3]
+          body: vmax(one, -one);
+    vmin:
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_min_epi8
+        default:
+          requires: [not SSE41]
+          body: vsel(one < other, one, other);
+    vmax:
+      body:
+        sse4:
+          requires: [SSE41]
+          body: _mm_max_epi8
+        default:
+          requires: [not SSE41]
+          body: vsel(one < other, one, other);
+
+    vclamp:
+     args: [self, from, to]
+     body: vmin(to, vmax(from, self))
+#-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
       args: one
@@ -56,16 +91,14 @@ modules:
         - auto even = _mm_mullo_epi16(one, other);
         - auto odd  = _mm_mullo_epi16(_mm_srli_epi16(one, 8),_mm_srli_epi16(other, 8));
         - return _mm_or_si128(_mm_slli_epi16(odd, 8), _mm_and_si128(even, _mm_set1_epi16(0xFF)));
-        #sse41: &sse41
-        #  - _mm_mullo_epi8
-    #    sse42: *sse41
-    #   default:
-    #      - /* vmul 2,0*/
-    #      - auto tmp1 = _mm_castsi128_ps(_mm_mul_epu32(one, other));
-    #      - /* vmul 3,1 */
-    #      - auto tmp2 = _mm_castsi128_ps(_mm_mul_epu32(_mm_srli_si128(one, 4), _mm_srli_si128(other, 4)));
-    #      - return _mm_castps_si128(_mm_shuffle_ps(tmp1, tmp2, _MM_SHUFFLE(2, 0, 2, 0)));
-    #vdiv: _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));
+    vdiv:
+      body:
+        - auto dividend = one.data();
+        - auto divisor = other.data();
+        - typename composed_t::extracted_t result;
+        - for (auto i = 0; i < composed_t::dim; i++) { result[i] = dividend[i] / divisor[i]; }
+        - return result;
+    vmod: vsub(one, vmul(other, vdiv(one, other)))
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate

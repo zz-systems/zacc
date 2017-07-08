@@ -54,35 +54,40 @@ modules:
       body: _mm256_stream_pd(target.data(), source)
 
     vgather:
-      args: { raw: "composed_t &target, raw_ptr<double> source, zint32<base_t::capability> index" }
-      #args: { raw: "composed_t &target, raw_ptr<const double> source, T index" }
-      #prefix: "template<typename T> friend"
-      body: _mm256_set_m128d(vgather(source, index.value()[1]), vgather(source, index.value()[0]))
+      args: { raw: "composed_t &target, raw_ptr<const double> source, zint32<base_t::capability> index" }
+      body: _mm256_set_m128d(sse::zfloat64<base_t::capability>::gather(source, index.value()[1]), sse::zfloat64<base_t::capability>::gather(source, index.value()[0]))
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
   math:
     vabs:
       args: one
-      body: _mm256_max_ps(one, -one)
+      body: _mm256_max_pd(one, -one)
+
+    vmin: _mm256_min_pd
+    vmax: _mm256_max_pd
+
+    vclamp:
+      args: [self, from, to]
+      body: vmin(to, vmax(from, self))
     vrcp:
       args: one
-      body: _mm256_rcp_ps
+      body: (1 / one);
     vtrunc:
       args: one
-      body: _mm256_cvtepi32_ps(_mm256_cvtps_epi32(one))
+      body: _mm256_cvtepi32_pd(_mm256_cvtpd_epi32(one))
     vfloor:
       args: one
-      body: _mm256_floor_ps
+      body: _mm256_floor_pd
     vceil:
       args: one
-      body: _mm256_ceil_ps
+      body: _mm256_ceil_pd
     vround:
       args: one
-      body: _mm256_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+      body: _mm256_round_pd (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
     vsqrt:
       args: one
-      body: _mm256_sqrt_ps
+      body: _mm256_sqrt_pd
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:

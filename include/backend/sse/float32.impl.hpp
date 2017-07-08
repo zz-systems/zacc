@@ -771,7 +771,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vband");
 
-                return _mm_or_ps(one, other);
+                return _mm_and_ps(one, other);
             }
 
 
@@ -784,7 +784,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vbor");
 
-                return _mm_and_ps(one, other);
+                return _mm_or_ps(one, other);
             }
 
 

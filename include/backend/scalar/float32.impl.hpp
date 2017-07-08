@@ -637,7 +637,10 @@ namespace zacc { namespace backend { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vbneg");
 
-                return (*reinterpret_cast<float*>(~(*reinterpret_cast<const unsigned int*>(&one.value()))));
+                auto _one = one.value();
+                float result;
+                reinterpret_cast<uint32_t&>(result) = ~reinterpret_cast<uint32_t&>(_one);
+                return result;
             }
 
 
@@ -650,7 +653,11 @@ namespace zacc { namespace backend { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vband");
 
-                return (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.value())) & (*reinterpret_cast<const unsigned int*>(&other.value()))));
+                auto _one = one.value();
+                auto _other = other.value();
+                float result;
+                reinterpret_cast<uint32_t&>(result) = reinterpret_cast<uint32_t&>(_one) & reinterpret_cast<uint32_t&>(_other);
+                return result;
             }
 
 
@@ -663,7 +670,11 @@ namespace zacc { namespace backend { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vbor");
 
-                return (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.value())) | (*reinterpret_cast<const unsigned int*>(&other.value()))));
+                auto _one = one.value();
+                auto _other = other.value();
+                float result;
+                reinterpret_cast<uint32_t&>(result) = reinterpret_cast<uint32_t&>(_one) | reinterpret_cast<uint32_t&>(_other);
+                return result;
             }
 
 
@@ -676,7 +687,11 @@ namespace zacc { namespace backend { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vbxor");
 
-                return (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.value())) ^ (*reinterpret_cast<const unsigned int*>(&other.value()))));
+                auto _one = one.value();
+                auto _other = other.value();
+                float result;
+                reinterpret_cast<uint32_t&>(result) = reinterpret_cast<uint32_t&>(_one) ^ reinterpret_cast<uint32_t&>(_other);
+                return result;
             }
 
 

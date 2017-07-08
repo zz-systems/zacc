@@ -53,7 +53,7 @@ modules:
       body:  _mm_stream_si128((__m128i*)target.data(), source)
 
     vgather:
-      args: { raw: "composed_t &target, raw_ptr<int> source, zint32<base_t::capability> index" }
+      args: { raw: "composed_t &target, raw_ptr<const int> source, zint32<base_t::capability> index" }
       body:
         - auto i = index.data();
         - return _mm_set_epi32(source[i[3]], source[i[2]], source[i[1]], source[i[0]]);
@@ -64,11 +64,11 @@ modules:
     vabs:
       args: one
       body:
-        sse4:
-          requires: [SSE41]
+        sse3:
+          requires: [SSE3]
           body: _mm_abs_epi32
         default:
-          requires: [not SSE41]
+          requires: [not SSE3]
           body: vmax(one, -one);
     vmin:
       body:
@@ -90,6 +90,10 @@ modules:
     vclamp:
      args: [self, from, to]
      body: vmin(to, vmax(from, self))
+
+    vsqrt:
+     args: one
+     body: _mm_sqrt_ps(_mm_cvtepi32_ps(one))
 
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:

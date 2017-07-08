@@ -99,10 +99,32 @@ modules:
   bitwise:
     vbneg:
       args: one
-      body: (*reinterpret_cast<float*>(~(*reinterpret_cast<const unsigned int*>(&one.value()))));
-    vband:   (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.value())) & (*reinterpret_cast<const unsigned int*>(&other.value()))));
-    vbor:     (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.value())) | (*reinterpret_cast<const unsigned int*>(&other.value()))));
-    vbxor:    (*reinterpret_cast<float*>((*reinterpret_cast<const unsigned int*>(&one.value())) ^ (*reinterpret_cast<const unsigned int*>(&other.value()))));
+      body:
+        - auto _one = one.value();
+        - float result;
+        - reinterpret_cast<uint32_t&>(result) = ~reinterpret_cast<uint32_t&>(_one);
+        - return result;
+    vband:
+      body:
+        - auto _one = one.value();
+        - auto _other = other.value();
+        - float result;
+        - reinterpret_cast<uint32_t&>(result) = reinterpret_cast<uint32_t&>(_one) & reinterpret_cast<uint32_t&>(_other);
+        - return result;
+    vbor:
+      body:
+        - auto _one = one.value();
+        - auto _other = other.value();
+        - float result;
+        - reinterpret_cast<uint32_t&>(result) = reinterpret_cast<uint32_t&>(_one) | reinterpret_cast<uint32_t&>(_other);
+        - return result;
+    vbxor:
+      body:
+        - auto _one = one.value();
+        - auto _other = other.value();
+        - float result;
+        - reinterpret_cast<uint32_t&>(result) = reinterpret_cast<uint32_t&>(_one) ^ reinterpret_cast<uint32_t&>(_other);
+        - return result;
 
     is_set:
       args: one

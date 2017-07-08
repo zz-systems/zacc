@@ -62,24 +62,26 @@ modules:
        - _mm_stream_si128((__m128i*)(target.data() + base_t::dim / 2), source.value()[0]);
 
     vgather:
-      args: { raw: "composed_t &target, raw_ptr<int> source, zint32<base_t::capability> index" }
-      #prefix: "template<typename T> friend"
-      #returns: "std::enable_if_t<is_integral<T>::value && T::dim == 8, composed_t>"
-      body: zint32<base_t::capability> ({ vgather(source, index.value()[1]), vgather(source, index.value()[0]) });
+      args: { raw: "composed_t &target, raw_ptr<const int> source, zint32<base_t::capability> index" }
+      body: zint32<base_t::capability> ({ sse::zint32<base_t::capability>::gather(source, index.value()[1]), sse::zint32<base_t::capability>::gather(source, index.value()[0]) });
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
   math:
     vabs:
       args: one
-      body: return zint32<base_t::capability> ({ vabs(one.value()[1]), vabs(one.value()[0]) });
+      body: return zint32<base_t::capability> ({ one.value()[1].abs(), one.value()[0].abs() });
 
     vmin: return zint32<base_t::capability> ({ vmin(one.value()[1], other.value()[1]), vmin(one.value()[0], other.value()[0]) });
     vmax: return zint32<base_t::capability> ({ vmax(one.value()[1], other.value()[1]), vmax(one.value()[0], other.value()[0]) });
 
     vclamp:
      args: [self, from, to]
-     body: return zint32<base_t::capability> ({ vabs(self.value()[1], from.value()[1], to.value()[1]), vabs(self.value()[0], from.value()[0], to.value()[0]) });
+     body: return zint32<base_t::capability> ({ vclamp(self.value()[1], from.value()[1], to.value()[1]), vclamp(self.value()[0], from.value()[0], to.value()[0]) });
+
+    vsqrt:
+     args: one
+     body: return zint32<base_t::capability> ({ vsqrt(one.value()[1]), vsqrt(one.value()[0])});
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:

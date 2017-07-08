@@ -42,7 +42,7 @@ modules:
       body: target.data()[0] = source.value();
     vstream: *io_store
     vgather:
-      args: { raw: "composed_t &target, raw_ptr<int> source, zint32<base_t::capability> index" }
+      args: { raw: "composed_t &target, raw_ptr<const int> source, zint32<base_t::capability> index" }
       #prefix: "template<typename T> friend"
       #returns: "std::enable_if_t<is_integral<T>::value && T::dim == 1, composed_t>"
       body: return source[index.value()]
@@ -52,7 +52,7 @@ modules:
   math:
     vabs:
       args: one
-      body: std::abs(one)
+      body: std::abs(one.value())
 
     vmin: std::min(one.value(), other.value())
     vmax: std::max(one.value(), other.value())
@@ -60,6 +60,10 @@ modules:
     vclamp:
       args: [self, from, to]
       body: vmin(to, vmax(from, self))
+
+    vsqrt:
+     args: one
+     body: std::sqrt(one.value());
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:

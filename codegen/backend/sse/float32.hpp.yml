@@ -53,8 +53,6 @@ modules:
 
     vgather:
       args: { raw: "composed_t &target, raw_ptr<const float> source, zint32<base_t::capability> index" }
-      #prefix: "template<typename T> friend"
-      #returns: "std::enable_if_t<is_integral<T>:: value && T::dim == 4, composed_t>"
       body:
         - auto i = index.data();
         - return _mm_set_ps(source[i[3]], source[i[2]], source[i[1]], source[i[0]]);
@@ -166,8 +164,8 @@ modules:
         - __m128 junk;
         - auto ones = _mm_cmpeq_ps(junk, junk);
         - return _mm_xor_ps(one, ones);
-    vband:  _mm_or_ps
-    vbor:   _mm_and_ps
+    vband:  _mm_and_ps
+    vbor:   _mm_or_ps
     vbxor:  _mm_xor_ps
 
     is_set:

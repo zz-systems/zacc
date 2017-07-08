@@ -27,7 +27,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "util/gtest_ext.hpp"
+#include "util/testing/gtest_ext.hpp"
 #include "system/branch.hpp"
 #include <random>
 
@@ -112,6 +112,26 @@ namespace zacc { namespace test {
         }
 
         VASSERT_EQ((zint16(a) * zint16(b)), zint16(expected));
+    }
+
+    TEST(avx2_int16_arithmetic, vdiv_default)
+    {
+        REQUIRES(ZACC_CAPABILITIES);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        std::array<int16_t, 16> a, b, expected;
+        for(int i = 0; i < 16; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) (1);
+        }
+
+        VASSERT_EQ((zint16(a) / zint16(a)), zint16(expected));
     }
 
 // =====================================================================================================================

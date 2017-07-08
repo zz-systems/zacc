@@ -14,6 +14,8 @@ type:
       - convertable
      internal:
        - io
+       - math
+       - numeric
        - arithmetic
        - bitwise
        - bitwise_shift
@@ -44,6 +46,20 @@ modules:
       <<: *io_store
       body: _mm256_stream_si256((__m256i*)target.data(), source);
 #-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: _mm256_abs_epi16(one)
+
+    vmin: _mm256_min_epi16
+    vmax: _mm256_max_epi16
+
+    vclamp:
+     args: [self, from, to]
+     body: vmin(to, vmax(from, self))
+#-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
       args: one
@@ -51,7 +67,14 @@ modules:
     vadd: _mm256_add_epi16
     vsub: _mm256_sub_epi16
     vmul: _mm256_mullo_epi16
-    #vdiv: _mm256_div_ps(_mm256_cvtepi16_ps(one), _mm256_cvtepi16_ps(other));
+    vdiv:
+      body:
+        - auto dividend = one.data();
+        - auto divisor = other.data();
+        - typename composed_t::extracted_t result;
+        - for (auto i = 0; i < composed_t::dim; i++) { result[i] = dividend[i] / divisor[i]; }
+        - return result;
+    vmod: vsub(one, vmul(other, vdiv(one, other)))
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate

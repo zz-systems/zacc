@@ -28,7 +28,7 @@
 #include "math/trigonometry/emulated_trigonometry.hpp"
 
 #include <cmath>
-#include "util/gtest_ext.hpp"
+#include "util/testing/gtest_ext.hpp"
 
 namespace zacc { namespace test {
 

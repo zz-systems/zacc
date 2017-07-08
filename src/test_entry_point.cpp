@@ -26,7 +26,7 @@
 #include <iostream>
 
 #include "gtest/gtest.h"
-#include "util/test_entry_point.hpp"
+#include "util/testing/test_entry_point.hpp"
 
 int zacc_run_gtests(int argc, char **argv) {
     std::cout << "Running run_gtests() from run_gtests.cpp" << std::endl;

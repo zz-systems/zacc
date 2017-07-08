@@ -252,7 +252,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend zint32<base_t::capability> vgather(composed_t &target, raw_ptr<int> source, zint32<base_t::capability> index)  noexcept {
+            friend zint32<base_t::capability> vgather(composed_t &target, raw_ptr<const int> source, zint32<base_t::capability> index)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vgather");
 
@@ -354,13 +354,13 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief math sse4 branch
+             * @brief math sse3 branch
              * @relates int32
-             * @remark sse - sse4
+             * @remark sse - sse3
              */
-            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE41), T> vabs(composed_t one)  noexcept {
+            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::SSE3), T> vabs(composed_t one)  noexcept {
 
-                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "sse4", "vabs");
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "sse3", "vabs");
 
                 return _mm_abs_epi32(one);
             }
@@ -371,7 +371,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE41), T> vabs(composed_t one)  noexcept {
+            template<typename T = zint32<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::SSE3), T> vabs(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vabs");
 
@@ -441,6 +441,19 @@ namespace zacc { namespace backend { namespace sse {
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vclamp");
 
                 return vmin(to, vmax(from, self));
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int32
+             * @remark sse - default
+             */
+            friend zint32<base_t::capability> vsqrt(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vsqrt");
+
+                return _mm_sqrt_ps(_mm_cvtepi32_ps(one));
             }
 
         };

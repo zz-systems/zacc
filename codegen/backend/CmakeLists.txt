@@ -1,0 +1,5 @@
+add_subdirectory(scalar)
+add_subdirectory(sse)
+add_subdirectory(avx)
+add_subdirectory(avx2)
+add_subdirectory(avx512)

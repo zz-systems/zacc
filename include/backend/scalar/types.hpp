@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include <cmath>
 #include "int8.impl.hpp"
 #include "int16.impl.hpp"
 #include "int32.impl.hpp"

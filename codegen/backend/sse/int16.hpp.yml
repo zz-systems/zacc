@@ -14,6 +14,8 @@ type:
       - convertable
      internal:
        - io
+       - math
+       - numeric
        - arithmetic
        - bitwise
        - bitwise_shift
@@ -44,6 +46,39 @@ modules:
       <<: *io_store
       body:  _mm_stream_si128((__m128i*)target.data(), source)
 #-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+      vabs:
+        args: one
+        body:
+          sse4:
+            requires: [SSE3]
+            body: _mm_abs_epi16
+          default:
+            requires: [not SSE3]
+            body: vmax(one, -one);
+      vmin:
+        body:
+          sse4:
+            requires: [SSE41]
+            body: _mm_min_epi16
+          default:
+            requires: [not SSE41]
+            body: vsel(one < other, one, other);
+      vmax:
+        body:
+          sse4:
+            requires: [SSE41]
+            body: _mm_max_epi16
+          default:
+            requires: [not SSE41]
+            body: vsel(one < other, one, other);
+
+      vclamp:
+       args: [self, from, to]
+       body: vmin(to, vmax(from, self))
+#-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
       args: one
@@ -51,7 +86,14 @@ modules:
     vadd: _mm_add_epi16
     vsub: _mm_sub_epi16
     vmul: _mm_mullo_epi16
-    #vdiv: _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));
+    vdiv:
+      body:
+        - auto dividend = one.data();
+        - auto divisor = other.data();
+        - typename composed_t::extracted_t result;
+        - for (auto i = 0; i < composed_t::dim; i++) { result[i] = dividend[i] / divisor[i]; }
+        - return result;
+    vmod: vsub(one, vmul(other, vdiv(one, other)))
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate

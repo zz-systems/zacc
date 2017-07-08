@@ -263,11 +263,11 @@ namespace zacc { namespace backend { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            friend zfloat64<base_t::capability> vgather(composed_t &target, raw_ptr<double> source, zint32<base_t::capability> index)  noexcept {
+            friend zfloat64<base_t::capability> vgather(composed_t &target, raw_ptr<const double> source, zint32<base_t::capability> index)  noexcept {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vgather");
 
-                return _mm256_set_m128d(vgather(source, index.value()[1]), vgather(source, index.value()[0]));
+                return _mm256_set_m128d(sse::zfloat64<base_t::capability>::gather(source, index.value()[1]), sse::zfloat64<base_t::capability>::gather(source, index.value()[0]));
             }
 
         };
@@ -372,7 +372,46 @@ namespace zacc { namespace backend { namespace avx {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vabs");
 
-                return _mm256_max_ps(one, -one);
+                return _mm256_max_pd(one, -one);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float64
+             * @remark avx - default
+             */
+            friend zfloat64<base_t::capability> vmin(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vmin");
+
+                return _mm256_min_pd(one, other);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float64
+             * @remark avx - default
+             */
+            friend zfloat64<base_t::capability> vmax(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vmax");
+
+                return _mm256_max_pd(one, other);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float64
+             * @remark avx - default
+             */
+            friend zfloat64<base_t::capability> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
+
+                ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vclamp");
+
+                return vmin(to, vmax(from, self));
             }
 
 
@@ -385,7 +424,7 @@ namespace zacc { namespace backend { namespace avx {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vrcp");
 
-                return _mm256_rcp_ps(one);
+                return (1 / one);
             }
 
 
@@ -398,7 +437,7 @@ namespace zacc { namespace backend { namespace avx {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vtrunc");
 
-                return _mm256_cvtepi32_ps(_mm256_cvtps_epi32(one));
+                return _mm256_cvtepi32_pd(_mm256_cvtpd_epi32(one));
             }
 
 
@@ -411,7 +450,7 @@ namespace zacc { namespace backend { namespace avx {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vfloor");
 
-                return _mm256_floor_ps(one);
+                return _mm256_floor_pd(one);
             }
 
 
@@ -424,7 +463,7 @@ namespace zacc { namespace backend { namespace avx {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vceil");
 
-                return _mm256_ceil_ps(one);
+                return _mm256_ceil_pd(one);
             }
 
 
@@ -437,7 +476,7 @@ namespace zacc { namespace backend { namespace avx {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vround");
 
-                return _mm256_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
+                return _mm256_round_pd (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
             }
 
 
@@ -450,7 +489,7 @@ namespace zacc { namespace backend { namespace avx {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vsqrt");
 
-                return _mm256_sqrt_ps(one);
+                return _mm256_sqrt_pd(one);
             }
 
         };

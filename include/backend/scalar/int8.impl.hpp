@@ -42,6 +42,7 @@
 #include "traits/construction.hpp"
 #include "traits/io.hpp"
 #include "traits/numeric.hpp"
+#include "traits/math.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/bitwise_shift.hpp"
@@ -276,6 +277,104 @@ namespace zacc { namespace backend { namespace scalar {
 
     // =================================================================================================================
     /**
+     * @name math operations
+     */
+    ///@{
+
+    /**
+     * @brief math
+     * @relates int8
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct int8_math
+    {
+
+        /**
+         * @brief math basic interface implementation
+         * @relates int8
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using mask_t = typename base_t::mask_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief math default branch
+             * @relates int8
+             * @remark scalar - default
+             */
+            friend zint8<base_t::capability> vabs(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(int8_t[1])", "default", "vabs");
+
+                return std::abs(one.value());
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int8
+             * @remark scalar - default
+             */
+            friend zint8<base_t::capability> vmin(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(int8_t[1])", "default", "vmin");
+
+                return std::min(one.value(), other.value());
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int8
+             * @remark scalar - default
+             */
+            friend zint8<base_t::capability> vmax(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(int8_t[1])", "default", "vmax");
+
+                return std::max(one.value(), other.value());
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int8
+             * @remark scalar - default
+             */
+            friend zint8<base_t::capability> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(int8_t[1])", "default", "vclamp");
+
+                return vmin(to, vmax(from, self));
+            }
+
+        };
+
+        /**
+         * @brief math public interface implementation
+         * @relates int8
+         * @remark scalar
+         */
+
+
+        template<typename base_t>
+        //using impl = traits::math<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::math<__impl<base_t>, zint8<base_t::capability>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
      * @name arithmetic operations
      */
     ///@{
@@ -364,6 +463,19 @@ namespace zacc { namespace backend { namespace scalar {
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(int8_t[1])", "default", "vdiv");
 
                 return (one.value() / other.value());
+            }
+
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int8
+             * @remark scalar - default
+             */
+            friend zint8<base_t::capability> vmod(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "zint8(int8_t[1])", "default", "vmod");
+
+                return (one.value() % other.value());
             }
 
         };
@@ -907,6 +1019,7 @@ namespace zacc { namespace backend { namespace scalar {
                 iteratable::impl,
                 convertable::impl,
                 int8_io<impl>::template impl,
+                int8_math<impl>::template impl,
                 int8_numeric<impl>::template impl,
                 int8_arithmetic<impl>::template impl,
                 int8_bitwise<impl>::template impl,

@@ -24,11 +24,12 @@
 
 #include "gtest/gtest.h"
 #include "system/branch.hpp"
+#include "util/testing/gtest_ext.hpp"
 #include "math/linear/generic_matrix.hpp"
 #include "math/linear/specialized_matrix.hpp"
 
 #include <cmath>
-#include "util/gtest_ext.hpp"
+
 
 namespace zacc { namespace test {
 

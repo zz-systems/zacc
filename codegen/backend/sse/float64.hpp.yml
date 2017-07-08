@@ -54,9 +54,7 @@ modules:
       body:  _mm_stream_pd(target.data(), source)
 
     vgather:
-      args: { raw: "double* source, zint32<base_t::capability> index" }
-      prefix: "template<typename T> friend"
-      #returns: "std::enable_if_t<is_integral<T>:: value && T::dim == 4, composed_t>"
+      args: { raw: "composed_t &target, raw_ptr<const double> source, zint32<base_t::capability> index" }
       body:
         - auto i = index.data();
         - return _mm_set_pd(source[i[3]], source[i[1]]);
@@ -67,6 +65,12 @@ modules:
     vabs:
       args: one
       body: _mm_max_pd(one, -one)
+
+    vmin: _mm_min_pd
+    vmax: _mm_max_pd
+    vclamp:
+     args: [self, from, to]
+     body: vmin(to, vmax(from, self))
     vrcp:
       args: one
       body: "return (1 / one);" #bug in automatic arg insertion
@@ -144,8 +148,8 @@ modules:
       body: &bitwise_negate_body
         - auto ones = _mm_cmpeq_pd(one, one);
         - return _mm_xor_pd(one, ones);
-    vband:  _mm_or_pd
-    vbor:   _mm_and_pd
+    vband:  _mm_and_pd
+    vbor:   _mm_or_pd
     vbxor:  _mm_xor_pd
 
     is_set:

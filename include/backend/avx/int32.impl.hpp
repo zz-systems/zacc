@@ -254,11 +254,11 @@ namespace zacc { namespace backend { namespace avx {
              * @relates int32
              * @remark avx - default
              */
-            friend zint32<base_t::capability> vgather(composed_t &target, raw_ptr<int> source, zint32<base_t::capability> index)  noexcept {
+            friend zint32<base_t::capability> vgather(composed_t &target, raw_ptr<const int> source, zint32<base_t::capability> index)  noexcept {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vgather");
 
-                return zint32<base_t::capability> ({ vgather(source, index.value()[1]), vgather(source, index.value()[0]) });
+                return zint32<base_t::capability> ({ sse::zint32<base_t::capability>::gather(source, index.value()[1]), sse::zint32<base_t::capability>::gather(source, index.value()[0]) });
             }
 
         };
@@ -363,7 +363,7 @@ namespace zacc { namespace backend { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vabs");
 
-                return zint32<base_t::capability> ({ vabs(one.value()[1]), vabs(one.value()[0]) });
+                return zint32<base_t::capability> ({ one.value()[1].abs(), one.value()[0].abs() });
             }
 
 
@@ -402,7 +402,20 @@ namespace zacc { namespace backend { namespace avx {
 
                 ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vclamp");
 
-                return zint32<base_t::capability> ({ vabs(self.value()[1], from.value()[1], to.value()[1]), vabs(self.value()[0], from.value()[0], to.value()[0]) });
+                return zint32<base_t::capability> ({ vclamp(self.value()[1], from.value()[1], to.value()[1]), vclamp(self.value()[0], from.value()[0], to.value()[0]) });
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int32
+             * @remark avx - default
+             */
+            friend zint32<base_t::capability> vsqrt(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("avx.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsqrt");
+
+                return zint32<base_t::capability> ({ vsqrt(one.value()[1]), vsqrt(one.value()[0])});
             }
 
         };

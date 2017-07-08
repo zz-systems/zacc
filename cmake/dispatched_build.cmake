@@ -100,7 +100,7 @@ function(add_branch_test target_name)
 
         get_branch_files(files ${branch} "${test.schema}")
 
-        add_library("${target_name}.${branch}.obj" STATIC ${files} ${target_sources})
+        add_library("${target_name}.${branch}.obj" SHARED ${files} ${target_sources})
         target_include_directories(${target_name}.${branch}.obj PUBLIC ${gtest_SOURCE_DIR}/include ${target_includes})
         target_link_libraries("${target_name}.${branch}.obj" PRIVATE gtest zacc.system zacc.interface.${branch})
 
@@ -131,6 +131,8 @@ function(add_branch_test target_name)
                 NAME ci.${target_name}.${branch}
                 COMMAND ${target_name}.${branch}
         )
+
+        set(GTEST_LIBS $<TARGET_FILE:gtest>)
 
         add_custom_command(TARGET "${target_name}.${branch}" POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different

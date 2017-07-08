@@ -251,11 +251,12 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float64
              * @remark avx2 - default
              */
-            friend zfloat64<base_t::capability> vgather(composed_t &target, raw_ptr<double> source, zint32<base_t::capability> index)  noexcept {
+            friend zfloat64<base_t::capability> vgather(composed_t &target, raw_ptr<const double> source, zint32<base_t::capability> index)  noexcept {
 
                 ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vgather");
 
-                return _mm256_i32gather_pd(source, index, 8);
+                auto i = _mm256_extractf128_si256(index, 1);
+                return _mm256_i32gather_pd(source, i, 8);
             }
 
         };
@@ -369,11 +370,50 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float64
              * @remark avx2 - default
              */
+            friend zfloat64<base_t::capability> vmin(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vmin");
+
+                return _mm256_min_pd(one, other);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float64
+             * @remark avx2 - default
+             */
+            friend zfloat64<base_t::capability> vmax(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vmax");
+
+                return _mm256_max_pd(one, other);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float64
+             * @remark avx2 - default
+             */
+            friend zfloat64<base_t::capability> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vclamp");
+
+                return vmin(to, vmax(from, self));
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float64
+             * @remark avx2 - default
+             */
             friend zfloat64<base_t::capability> vrcp(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vrcp");
 
-                return _mm256_rcp_pd(one);
+                return (1 / one);
             }
 
 

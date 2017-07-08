@@ -27,10 +27,10 @@
 
 #include "gtest/gtest.h"
 #include "system/platform.hpp"
-#include "util/test_entry_point.hpp"
+#include "util/testing/test_entry_point.hpp"
 
 int main(int argc, char **argv) {
-    std::cout << "Running main() from est_main.cpp" << std::endl;
+    std::cout << "Running main() from test_main.cpp" << std::endl;
 
     auto c = zacc::platform::instance().match_capabilities(zacc::branches::ZACC_CAPABILITIES::value);
     std::string str;

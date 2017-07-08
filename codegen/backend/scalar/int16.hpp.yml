@@ -14,6 +14,7 @@ type:
       - convertable
      internal:
        - io
+       - math
        - numeric
        - arithmetic
        - bitwise
@@ -43,6 +44,17 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: std::abs(one.value());
+    vmin: std::min(one.value(), other.value());
+    vmax: std::max(one.value(), other.value());
+
+    vclamp:
+     args: [self, from, to]
+     body: vmin(to, vmax(from, self))
+#-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
       args: one
@@ -51,6 +63,7 @@ modules:
     vsub: (one.value() - other.value());
     vmul: (one.value() * other.value());
     vdiv: (one.value() / other.value());
+    vmod: (one.value() % other.value());
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg:

@@ -27,7 +27,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "util/gtest_ext.hpp"
+#include "util/testing/gtest_ext.hpp"
 #include "system/branch.hpp"
 #include <random>
 

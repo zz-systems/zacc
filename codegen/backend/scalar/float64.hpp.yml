@@ -41,7 +41,7 @@ modules:
       body: target.data()[0] = source.value();
     vstream: *io_store
     vgather:
-      args: { raw: "composed_t &target, raw_ptr<double> source, zint32<base_t::capability> index" }
+      args: { raw: "composed_t &target, raw_ptr<const double> source, zint32<base_t::capability> index" }
       #prefix: "template<typename T> friend"
       #returns: "std::enable_if_t<is_integral<T>::value && T::dim == 1, composed_t>"
       body: return source[index.value()]
@@ -97,10 +97,32 @@ modules:
   bitwise:
     vbneg:
       args: one
-      body: (*reinterpret_cast<double*>(~(*reinterpret_cast<const unsigned int*>(&one.value()))));
-    vband:   (*reinterpret_cast<double*>((*reinterpret_cast<const unsigned int*>(&one.value())) & (*reinterpret_cast<const unsigned int*>(&other.value()))));
-    vbor:     (*reinterpret_cast<double*>((*reinterpret_cast<const unsigned int*>(&one.value())) | (*reinterpret_cast<const unsigned int*>(&other.value()))));
-    vbxor:    (*reinterpret_cast<double*>((*reinterpret_cast<const unsigned int*>(&one.value())) ^ (*reinterpret_cast<const unsigned int*>(&other.value()))));
+      body:
+        - auto _one = one.value();
+        - float result;
+        - reinterpret_cast<uint64_t&>(result) = ~reinterpret_cast<uint64_t&>(_one);
+        - return result;
+    vband:
+      body:
+        - auto _one = one.value();
+        - auto _other = other.value();
+        - float result;
+        - reinterpret_cast<uint64_t&>(result) = reinterpret_cast<uint64_t&>(_one) & reinterpret_cast<uint32_t&>(_other);
+        - return result;
+    vbor:
+      body:
+        - auto _one = one.value();
+        - auto _other = other.value();
+        - float result;
+        - reinterpret_cast<uint64_t&>(result) = reinterpret_cast<uint64_t&>(_one) | reinterpret_cast<uint32_t&>(_other);
+        - return result;
+    vbxor:
+      body:
+        - auto _one = one.value();
+        - auto _other = other.value();
+        - float result;
+        - reinterpret_cast<uint64_t&>(result) = reinterpret_cast<uint64_t&>(_one) ^ reinterpret_cast<uint32_t&>(_other);
+        - return result;
 
     is_set:
       args: one

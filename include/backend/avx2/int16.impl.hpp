@@ -41,6 +41,8 @@
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
 #include "traits/io.hpp"
+#include "traits/numeric.hpp"
+#include "traits/math.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/bitwise_shift.hpp"
@@ -241,6 +243,150 @@ namespace zacc { namespace backend { namespace avx2 {
 
     // =================================================================================================================
     /**
+     * @name numeric operations
+     */
+    ///@{
+
+    /**
+     * @brief numeric
+     * @relates int16
+     * @remark avx2
+     */
+    template<typename composed_t>
+    struct int16_numeric
+    {
+
+        /**
+         * @brief numeric basic interface implementation
+         * @relates int16
+         * @remark avx2
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using mask_t = typename base_t::mask_t;
+
+            FORWARD(__impl);
+
+        };
+
+        /**
+         * @brief numeric public interface implementation
+         * @relates int16
+         * @remark avx2
+         */
+
+
+        template<typename base_t>
+        //using impl = traits::numeric<__impl<base_t>, zint16<base_t::capability>>;
+
+        using impl = traits::numeric<__impl<base_t>, zint16<base_t::capability>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name math operations
+     */
+    ///@{
+
+    /**
+     * @brief math
+     * @relates int16
+     * @remark avx2
+     */
+    template<typename composed_t>
+    struct int16_math
+    {
+
+        /**
+         * @brief math basic interface implementation
+         * @relates int16
+         * @remark avx2
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using mask_t = typename base_t::mask_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief math default branch
+             * @relates int16
+             * @remark avx2 - default
+             */
+            friend zint16<base_t::capability> vabs(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vabs");
+
+                return _mm256_abs_epi16(one);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int16
+             * @remark avx2 - default
+             */
+            friend zint16<base_t::capability> vmin(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vmin");
+
+                return _mm256_min_epi16(one, other);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int16
+             * @remark avx2 - default
+             */
+            friend zint16<base_t::capability> vmax(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vmax");
+
+                return _mm256_max_epi16(one, other);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int16
+             * @remark avx2 - default
+             */
+            friend zint16<base_t::capability> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
+
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vclamp");
+
+                return vmin(to, vmax(from, self));
+            }
+
+        };
+
+        /**
+         * @brief math public interface implementation
+         * @relates int16
+         * @remark avx2
+         */
+
+
+        template<typename base_t>
+        //using impl = traits::math<__impl<base_t>, zint16<base_t::capability>>;
+
+        using impl = traits::math<__impl<base_t>, zint16<base_t::capability>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
      * @name arithmetic operations
      */
     ///@{
@@ -316,6 +462,36 @@ namespace zacc { namespace backend { namespace avx2 {
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vmul");
 
                 return _mm256_mullo_epi16(one, other);
+            }
+
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int16
+             * @remark avx2 - default
+             */
+            friend zint16<base_t::capability> vdiv(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vdiv");
+
+                auto dividend = one.data();
+                auto divisor = other.data();
+                typename composed_t::extracted_t result;
+                for (auto i = 0; i < composed_t::dim; i++) { result[i] = dividend[i] / divisor[i]; };
+                return result;
+            }
+
+
+            /**
+             * @brief arithmetic default branch
+             * @relates int16
+             * @remark avx2 - default
+             */
+            friend zint16<base_t::capability> vmod(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "zint16(int16_t[16])", "default", "vmod");
+
+                return vsub(one, vmul(other, vdiv(one, other)));
             }
 
         };
@@ -862,6 +1038,8 @@ namespace zacc { namespace backend { namespace avx2 {
                 iteratable::impl,
                 convertable::impl,
                 int16_io<impl>::template impl,
+                int16_math<impl>::template impl,
+                int16_numeric<impl>::template impl,
                 int16_arithmetic<impl>::template impl,
                 int16_bitwise<impl>::template impl,
                 int16_bitwise_shift<impl>::template impl,

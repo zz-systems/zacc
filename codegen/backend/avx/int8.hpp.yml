@@ -15,6 +15,8 @@ type:
       - convertable
      internal:
        - io
+       - math
+       - numeric
        - arithmetic
        - bitwise
        #- bitwise_shift
@@ -53,6 +55,20 @@ modules:
         - _mm_stream_si128((__m128i*)(target.data()), source.value()[1]);
         - _mm_stream_si128((__m128i*)(target.data() + base_t::dim / 2), source.value()[0]);
 #-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: return zint8<base_t::capability> ({ vabs(one.value()[1]), vabs(one.value()[0]) });
+
+    vmin: return zint8<base_t::capability> ({ vmin(one.value()[1], other.value()[1]), vmin(one.value()[0], other.value()[0]) });
+    vmax: return zint8<base_t::capability> ({ vmax(one.value()[1], other.value()[1]), vmax(one.value()[0], other.value()[0]) });
+
+    vclamp:
+     args: [self, from, to]
+     body: return zint8<base_t::capability> ({ vclamp(self.value()[1], from.value()[1], to.value()[1]), vclamp(self.value()[0], from.value()[0], to.value()[0]) });
+#-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
       args: one
@@ -60,7 +76,8 @@ modules:
     vadd: return zint8<base_t::capability> ({ one.value()[1] + other.value()[1], one.value()[0] + other.value()[0] });
     vsub: return zint8<base_t::capability> ({ one.value()[1] - other.value()[1], one.value()[0] - other.value()[0] });
     vmul: return zint8<base_t::capability> ({ one.value()[1] * other.value()[1], one.value()[0] * other.value()[0] });
-    #vdiv: return zint8<base_t::capability> ({ one.value()[1] / other.value()[1], one.value()[0] / other.value()[0] });
+    vdiv: return zint8<base_t::capability> ({ one.value()[1] / other.value()[1], one.value()[0] / other.value()[0] });
+    vmod: return zint8<base_t::capability> ({ one.value()[1] % other.value()[1], one.value()[0] % other.value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate

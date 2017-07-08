@@ -251,7 +251,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            template<typename T> friend zfloat64<base_t::capability> vgather(double* source, zint32<base_t::capability> index)  noexcept {
+            friend zfloat64<base_t::capability> vgather(composed_t &target, raw_ptr<const double> source, zint32<base_t::capability> index)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vgather");
 
@@ -362,6 +362,45 @@ namespace zacc { namespace backend { namespace sse {
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vabs");
 
                 return _mm_max_pd(one, -one);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float64
+             * @remark sse - default
+             */
+            friend zfloat64<base_t::capability> vmin(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vmin");
+
+                return _mm_min_pd(one, other);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float64
+             * @remark sse - default
+             */
+            friend zfloat64<base_t::capability> vmax(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vmax");
+
+                return _mm_max_pd(one, other);
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates float64
+             * @remark sse - default
+             */
+            friend zfloat64<base_t::capability> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vclamp");
+
+                return vmin(to, vmax(from, self));
             }
 
 
@@ -705,7 +744,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vband");
 
-                return _mm_or_pd(one, other);
+                return _mm_and_pd(one, other);
             }
 
 
@@ -718,7 +757,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vbor");
 
-                return _mm_and_pd(one, other);
+                return _mm_or_pd(one, other);
             }
 
 

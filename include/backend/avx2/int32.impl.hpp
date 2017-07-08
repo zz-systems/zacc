@@ -252,7 +252,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vgather(composed_t &target, raw_ptr<int> source, zint32<base_t::capability> index)  noexcept {
+            friend zint32<base_t::capability> vgather(composed_t &target, raw_ptr<const int> source, zint32<base_t::capability> index)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vgather");
 
@@ -401,6 +401,19 @@ namespace zacc { namespace backend { namespace avx2 {
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vclamp");
 
                 return vmin(to, vmax(from, self));
+            }
+
+
+            /**
+             * @brief math default branch
+             * @relates int32
+             * @remark avx2 - default
+             */
+            friend zint32<base_t::capability> vsqrt(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsqrt");
+
+                return _mm256_sqrt_ps(_mm256_cvtepi32_ps(one));
             }
 
         };
