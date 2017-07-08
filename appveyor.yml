@@ -67,8 +67,11 @@ install:
 # before_build is used to run configure steps
 before_build:
 - echo before_build step
-#- set PATH=c:\Program Files\LLVM\bin\;%PATH%
-#- set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
+# Workaround for CMake not wanting sh.exe on PATH for MinGW
+- set PATH=%PATH:C:\Program Files (x86)\Git\bin;=%
+- set PATH=C:\MinGW\bin;%PATH%
+- set PATH=c:\Program Files\LLVM\bin\;%PATH%
+- set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
 - cd C:\projects\zacc
 
 
