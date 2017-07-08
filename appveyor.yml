@@ -74,7 +74,7 @@ before_build:
 
 build_script:
   - mkdir %BUILD_DIR% && cd %BUILD_DIR%
-  - cmake .. -G%BUILD_ENV% -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe
+  - cmake .. -G"%BUILD_ENV%" -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe
   - cmake --build . --config %CONFIGURATION% --target zacc.system.detect
   - cmake --build . --config %CONFIGURATION% --target zacc.tests.all
   
