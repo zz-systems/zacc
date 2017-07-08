@@ -2,10 +2,13 @@ add_library(zacc.system STATIC
         "${CMAKE_CURRENT_LIST_DIR}/all.cpp"
         "${CMAKE_CURRENT_LIST_DIR}/cpuid.cpp")
 
-add_library(zacc.runtimeloader STATIC
+add_library(zacc.system.loader SHARED
         "${CMAKE_CURRENT_LIST_DIR}/runtime_loader.cpp")
 
-link_libraries(zacc.runtimeloader -ldl)
+if(NOT MSVC)
+    link_libraries(zacc.system.loader -ldl)
+endif()
+target_compile_definitions(zacc.system.loader PRIVATE ZACC_EXPORTS=1)
 
 add_executable(zacc.system.detect WIN32
         "${CMAKE_CURRENT_LIST_DIR}/platform_detector.cpp"

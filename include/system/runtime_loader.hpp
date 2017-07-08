@@ -27,17 +27,7 @@
 
 #include <functional>
 #include <string>
-
-#ifdef WIN32
-#ifdef ZACC_EXPORTS
-        #define ZACC_DLL_API extern "C" __declspec(dllexport)
-    #else
-        #define ZACC_DLL_API extern "C" __declspec(dllimport)
-    #endif
-#else
-#define ZACC_DLL_API extern "C"
-#endif
-
+#include "util/zacc_exports.hpp"
 
 ZACC_DLL_API void*    zacc_dlopen(const char* path);
 ZACC_DLL_API char*    zacc_dlerror();
