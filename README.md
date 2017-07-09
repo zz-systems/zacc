@@ -289,7 +289,7 @@ zacc_add_dispatched_tests(cacophony.tests
 | SSE4.1 | :white_check_mark: |
 | SSE4.1 + FMA3 | :white_check_mark: |
 | SSE4.1 + FMA4 | :white_check_mark: |
-| AVX1 | :white_check_mark: | Emulated integers (dispatch to 2x SSE vectors) |
+| AVX1 | :white_check_mark: | Emulated |
 | AVX2 | :white_check_mark: |  |
 | AVX512 | :no_entry: | in development, can't be tested yet* |
 | ARM NEON | :no_entry: | Not implemented yet |

@@ -237,20 +237,55 @@ namespace zacc {
     struct branches {
         using flag_t        = std::underlying_type_t<capabilities>;
 
-        struct scalar       : public std::integral_constant<flag_t, make_flag(capabilities::SCALAR)> {};
+        struct scalar       : public std::integral_constant<flag_t, make_flag(capabilities::SCALAR)>
+        {
+            static const std::string branch_name() { return "scalar"; }
+        };
 
-        struct sse2         : public std::integral_constant<flag_t, make_flag(capabilities::SSE2)>{};
+        struct sse2         : public std::integral_constant<flag_t, make_flag(capabilities::SSE2)>
+        {
+            static const std::string branch_name() { return "sse.sse2"; }
+        };
 
-        struct sse3         : public std::integral_constant<flag_t, sse2::value | make_flag(capabilities::SSE3, capabilities::SSSE3)>{};
-        struct sse41        : public std::integral_constant<flag_t, sse3::value | make_flag(capabilities::SSE41)>{};
-        struct sse41_fma3   : public std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA3)>{};
-        struct sse41_fma4   : public std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA4)>{};
+        struct sse3         : public std::integral_constant<flag_t, sse2::value | make_flag(capabilities::SSE3, capabilities::SSSE3)>
+        {
+            static const std::string branch_name() { return "sse.sse3"; }
+        };
 
-        struct avx1         : public std::integral_constant<flag_t, make_flag(capabilities::FMA3, capabilities::AVX1)>{};
-        struct avx2         : public std::integral_constant<flag_t, avx1::value | make_flag(capabilities::AVX2)>{};
-        struct avx512       : public std::integral_constant<flag_t, make_flag(capabilities::AVX512)>{};
+        struct sse41        : public std::integral_constant<flag_t, sse3::value | make_flag(capabilities::SSE41)>
+        {
+            static const std::string branch_name() { return "sse.sse41"; }
+        };
 
-        struct opencl       : public std::integral_constant<flag_t, make_flag(capabilities::OPENCL)>{};
+        struct sse41_fma3   : public std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA3)>
+        {
+            static const std::string branch_name() { return "sse.sse41.fma3"; }
+        };
+
+        struct sse41_fma4   : public std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA4)>
+        {
+            static const std::string branch_name() { return "sse.sse41.fma4"; }
+        };
+
+        struct avx1         : public std::integral_constant<flag_t, make_flag(capabilities::FMA3, capabilities::AVX1)>
+        {
+            static const std::string branch_name() { return "avx"; }
+        };
+
+        struct avx2         : public std::integral_constant<flag_t, avx1::value | make_flag(capabilities::AVX2)>
+        {
+            static const std::string branch_name() { return "avx2"; }
+        };
+
+        struct avx512       : public std::integral_constant<flag_t, make_flag(capabilities::AVX512)>
+        {
+            static const std::string branch_name() { return "avx512"; }
+        };
+
+        struct opencl       : public std::integral_constant<flag_t, make_flag(capabilities::OPENCL)>
+        {
+            static const std::string branch_name() { return "gpgpu.opencl"; }
+        };
     };
 
 

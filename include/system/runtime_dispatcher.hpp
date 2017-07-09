@@ -27,10 +27,10 @@
 
 #include "util/algorithm.hpp"
 #include "platform.hpp"
-#include "backend/all.hpp"
 #include "system/capabilities.hpp"
+#include "system/runtime_loader.hpp"
 
-namespace zacc {
+namespace zacc { namespace system {
 
     /**
      * @brief Provides functionality to select a branch to run during runtime
@@ -102,8 +102,8 @@ namespace zacc {
 #if defined(ZACC_AVX2)
             if(p->is_set(capabilities::AVX2))
             {
-                log_branch<avx2::types<branches::avx2>>();
-                base_t::template dispatch_impl<avx2::types<branches::avx2>>(std::forward<Args>(args)...);
+                log_branch<branches::avx2>();
+                base_t::template dispatch_impl<branches::avx2>(std::forward<Args>(args)...);
 
                 if(select_one)
                     return;
@@ -113,8 +113,8 @@ namespace zacc {
 #if defined(ZACC_AVX)
             if(p->is_set(capabilities::AVX1))
             {
-                log_branch<avx::types<branches::avx1>>();
-                base_t::template dispatch_impl<avx::types<branches::avx1>>(std::forward<Args>(args)...);
+                log_branch<branches::avx1>();
+                base_t::template dispatch_impl<branches::avx1>(std::forward<Args>(args)...);
 
                 if(select_one)
                     return;
@@ -126,8 +126,8 @@ namespace zacc {
             {
                 if(p->is_set(capabilities::FMA4))
                 {
-                    log_branch<sse::types<branches::sse41_fma4>>();
-                    base_t::template dispatch_impl<sse::types<branches::sse41_fma4>>(std::forward<Args>(args)...);
+                    log_branch<branches::sse41_fma4>();
+                    base_t::template dispatch_impl<branches::sse41_fma4>(std::forward<Args>(args)...);
 
                     if(select_one)
                         return;
@@ -135,16 +135,16 @@ namespace zacc {
 
                 if(p->is_set(capabilities::FMA3))
                 {
-                    log_branch<sse::types<branches::sse41_fma3>>();
-                    base_t::template dispatch_impl<sse::types<branches::sse41_fma3>>(std::forward<Args>(args)...);
+                    log_branch<branches::sse41_fma3>();
+                    base_t::template dispatch_impl<branches::sse41_fma3>(std::forward<Args>(args)...);
 
                     if(select_one)
                         return;
                 }
 
                 // no fma
-                log_branch<sse::types<branches::sse41>>();
-                base_t::template dispatch_impl<sse::types<branches::sse41>>(std::forward<Args>(args)...);
+                log_branch<branches::sse41>();
+                base_t::template dispatch_impl<branches::sse41>(std::forward<Args>(args)...);
 
                 if(select_one)
                     return;
@@ -152,8 +152,8 @@ namespace zacc {
 
             if(p->is_set(capabilities::SSSE3) && p->is_set(capabilities::SSE3))
             {
-                log_branch<sse::types<branches::sse3>>();
-                base_t::template dispatch_impl<sse::types<branches::sse3>>(std::forward<Args>(args)...);
+                log_branch<branches::sse3>();
+                base_t::template dispatch_impl<branches::sse3>(std::forward<Args>(args)...);
 
                 if(select_one)
                     return;
@@ -161,8 +161,8 @@ namespace zacc {
 
             if(p->is_set(capabilities::SSE2))
             {
-                log_branch<sse::types<branches::sse2>>();
-                base_t::template dispatch_impl<sse::types<branches::sse2>>(std::forward<Args>(args)...);
+                log_branch<branches::sse2>();
+                base_t::template dispatch_impl<branches::sse2>(std::forward<Args>(args)...);
 
                 if(select_one)
                     return;
@@ -171,20 +171,18 @@ namespace zacc {
 
 #if defined(ZACC_SCALAR)
             // scalar
-            log_branch<scalar::types<branches::scalar>>();
-            base_t::template dispatch_impl<scalar::types<branches::scalar>>(std::forward<Args>(args)...);
+            log_branch<branches::scalar>();
+            base_t::template dispatch_impl<branches::scalar>(std::forward<Args>(args)...);
 #endif
         }
-
-    private:
         /**
          * @brief displays the selected branch with extended information
          */
-        DISPATCHED void log_branch() const
+        template<typename branch> void log_branch() const
         {
-            std::cout << "Dispatching: " << branch::major_branch_name()
-                      << " [" << join(platform::instance().make_capabilities(branch::capability::value), ", ") << "]"
+            std::cout << "Dispatching: " << branch::branch_name()
+                      << " [" << join(platform::instance().make_capabilities(branch::value), ", ") << "]"
                       << std::endl;
         }
     };
-}
+}}

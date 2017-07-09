@@ -1,13 +1,6 @@
-set(template.schema ".hpp.yml")
-set(impl.schema ".impl.hpp")
-set(test.schema ".test.cpp")
-
-set(type_template "codegen/templates/type.impl.jinja")
-set(test_template "codegen/templates/type.test.jinja")
-
 file(GLOB_RECURSE templates    RELATIVE ${CMAKE_SOURCE_DIR}    "*${template.schema}")
 
-set(codegen.cmd "${PYTHON_DIR}/Scripts/yasha.exe")
+
 # fallback to PATH
 if(EXISTS "${codegen.cmd}")
 else()
@@ -21,9 +14,6 @@ set(codegen.deps
         ${type_template}
         ${test_template}
         )
-
-add_library(zacc.interface.codegen INTERFACE)
-add_dependencies(zacc.interface.codegen "zacc.generate.types.all" "zacc.generate.tests.all" ${target_dependencies})
 
 function(preprocess_paths path type template)
     string(REGEX REPLACE "${template.schema}" "${${type}.schema}" outpath ${template})
@@ -61,14 +51,14 @@ function(generate_file output template template_data)
     add_custom_command(
             OUTPUT ${PROJECT_SOURCE_DIR}/${output}
             COMMAND ${CMAKE_COMMAND} -E make_directory ${output_dir}
-            COMMAND ${codegen.cmd} -o ${output}  -V ${template} ${template_data} -E ${codegen.ext}
+            COMMAND ${codegen.cmd} -o ${PROJECT_SOURCE_DIR}/${output}  -V ${template} ${template_data} -E ${codegen.ext}
             COMMAND ${CMAKE_COMMAND}  -E copy  ${PROJECT_SOURCE_DIR}/${output} ${PROJECT_BINARY_DIR}/${output}
             DEPENDS ${template} ${template_data} ${codegen.deps}
             WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
             COMMENT "GEN ${template} ==> ${output}"
     )
 
-    set_source_files_properties(${output} PROPERTIES GENERATED TRUE)
+    set_source_files_properties(${PROJECT_BINARY_DIR}/${output} PROPERTIES GENERATED TRUE)
     set_source_files_properties(${PROJECT_SOURCE_DIR}/${output} PROPERTIES GENERATED TRUE)
 endfunction()
 
@@ -113,3 +103,6 @@ endforeach()
 add_custom_target(zacc.generate.types.all ALL DEPENDS ${generate.types.all})
 add_custom_target(zacc.generate.tests.all ALL DEPENDS ${generate.tests.all})
 add_custom_target(zacc.generate.all ALL DEPENDS zacc.generate.types.all zacc.generate.tests.all)
+
+add_library(zacc.interface.codegen INTERFACE)
+add_dependencies(zacc.interface.codegen "zacc.generate.types.all" "zacc.generate.tests.all" ${target_dependencies})

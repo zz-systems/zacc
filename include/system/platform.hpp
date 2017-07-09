@@ -191,11 +191,4 @@ namespace zacc {
          */
         friend std::ostream& operator<<(std::ostream& os, const platform& cap);
     };
-
-    /**
-     * @brief derive from this struct to mark a type as a branch entrypoint
-     */
-    struct entrypoint {
-
-    };
 }

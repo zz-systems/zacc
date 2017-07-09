@@ -25,9 +25,10 @@
 
 #include <iostream>
 
-#include "system/platform.hpp"
-#include "system/runtime_loader.hpp"
 #include "util/testing/test_entry_point.hpp"
+
+#include "system/managed_library.hpp"
+#include "system/platform.hpp"
 
 int main(int argc, char **argv) {
     std::cout << "Running main() from test_main.cpp" << std::endl;
@@ -41,9 +42,9 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    auto loader = zacc::runtime_loader("./" ZACC_TEST_LIBNAME);
+    auto loader = zacc::system::managed_library(ZACC_DYLIBNAME);
 
-    auto zacc_run_gtests = loader.resolve<int(int, char**)>("zacc_run_gtests");
+    auto zacc_run_gtests = loader.resolve_symbol<int(int, char**)>("zacc_run_gtests");
 
     return zacc_run_gtests(argc, argv);
 }

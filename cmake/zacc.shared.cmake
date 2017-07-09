@@ -111,6 +111,15 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
+set(template.schema ".hpp.yml")
+set(impl.schema ".impl.hpp")
+set(test.schema ".test.cpp")
+
+set(type_template "codegen/templates/type.impl.jinja")
+set(test_template "codegen/templates/type.test.jinja")
+
+set(codegen.cmd "${PYTHON_DIR}/Scripts/yasha.exe")
+
 # branch config ========================================================================================================
 
 if(BUILD_SCALAR_BRANCH)
@@ -183,6 +192,7 @@ endif()
 
 # build helpers ========================================================================================================
 
+
 function(zacc_add_dispatched_library target_name)
     set(options OPTIONAL ZACC_FAST_FLOAT)
     set(oneValueArgs ENTRYPOINT)
@@ -197,10 +207,19 @@ function(zacc_add_dispatched_library target_name)
     set(target_branches ${add_dispatched_vectorized_target_BRANCHES})
     set(target_libraries ${add_dispatched_vectorized_target_LIBRARIES})
 
+
+    add_library(${target_name} SHARED  ${target_sources})
+    target_link_libraries(${target_name} PRIVATE zacc.system zacc.system.loader ${target_libraries})
+
+    if(NOT WIN32) # dlls are copied to bin folder for windows targets
+        set(search_prefix "../lib/")
+    endif()
+    target_compile_definitions(${target_name} PUBLIC ZACC_FAST_FLOAT=false ZACC_DYLIBNAME="./${search_prefix}$<TARGET_FILE_NAME:${target_name}>")
+
     foreach(branch ${target_branches})
         message(STATUS "Adding dispatched vectorized branch ${target_name}.${branch}")
 
-        add_library("${target_name}.${branch}" STATIC ${target_entrypoints})
+        add_library("${target_name}.${branch}" SHARED ${target_entrypoints})
         target_link_libraries("${target_name}.${branch}" PRIVATE zacc.system zacc.interface.${branch})
         target_link_libraries("${target_name}.${branch}" PUBLIC gtest zacc.system zacc.interface.${branch}.aggregate)
 
@@ -208,15 +227,18 @@ function(zacc_add_dispatched_library target_name)
 
         target_include_directories(${target_name}.${branch} PRIVATE ${target_includes})
 
-
+        target_link_libraries(${target_name} PRIVATE zacc.interface.${branch}.aggregate)
         list(APPEND branch_objects ${target_name}.${branch})#$<TARGET_OBJECTS:${target_name}.${branch}>)
     endforeach()
 
     message(STATUS "Combining dispatched vectorized branches to ${target_name}")
 
-    add_library(${target_name} SHARED  ${target_sources})
-    target_link_libraries(${target_name} zacc.system ${branch_objects} ${target_libraries})
-    target_compile_definitions(${target_name} PUBLIC ZACC_FAST_FLOAT=false)
+
+
+
+    #target_compile_definitions(${target_name} PRIVATE ZACC_LIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}>")
+
+    add_dependencies("${target_name}" ${branch_objects})
 endfunction()
 
 function(zacc_add_dispatched_tests target_name)
@@ -238,12 +260,12 @@ function(zacc_add_dispatched_tests target_name)
         message(STATUS "Adding dispatched test ${target_name}.${branch}")
 
         get_branch_files(files ${branch} "${test.schema}")
-
+        message(STATUS "branch files: ${files}")
         add_library("${target_name}.${branch}.impl" SHARED ${files} ${target_sources} ${test_entrypoint})
         target_include_directories(${target_name}.${branch}.impl PUBLIC ${gtest_SOURCE_DIR}/include ${target_includes})
         target_compile_definitions(${target_name}.${branch}.impl PRIVATE ZACC_EXPORTS=1)
         target_link_libraries("${target_name}.${branch}.impl" PRIVATE gtest zacc.system zacc.interface.${branch})
-
+        target_link_libraries("${target_name}.${branch}.impl" PUBLIC gtest zacc.system zacc.interface.${branch}.aggregate)
 
         add_executable("${target_name}.${branch}" ${test_main})
 
@@ -251,9 +273,9 @@ function(zacc_add_dispatched_tests target_name)
             set(search_prefix "../lib/")
         endif()
 
-        target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_TEST_LIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
+        target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_DYLIBNAME="./${search_prefix}$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
 
-        target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} zacc.system zacc.system.loader zacc.interface.${branch}.defs zacc.interface.${branch}.aggregate)
+        target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} zacc.system zacc.system.loader zacc.interface.${branch}.defs)
         add_dependencies("${target_name}.${branch}" "${target_name}.${branch}.impl")
 
         add_test(

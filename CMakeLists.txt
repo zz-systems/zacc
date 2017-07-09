@@ -22,7 +22,7 @@ include(codegen/CMakeLists.txt)
 include(src/CMakeLists.txt)
 
 # add test targets
-add_subdirectory(test)
+include(test/CMakeLists.txt)
 
 # add documentation targets
 include(doc/CMakeLists.txt)

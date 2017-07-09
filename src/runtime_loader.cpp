@@ -36,7 +36,7 @@ void* zacc_dlopen(const char* path)
 #ifdef WIN32
     return (void*)LoadLibrary(path);
 #else
-    return dlopen(path, RTLD_LAZY);
+    return dlopen(path, RTLD_NOW);
 #endif
 }
 

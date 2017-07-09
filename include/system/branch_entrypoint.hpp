@@ -22,43 +22,15 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
+
 #pragma once
-#include <memory>
-#include "backend/all.hpp"
 
 namespace zacc { namespace system {
 
-    template<typename dispatcher>
-    std::shared_ptr<entrypoint> resolve_entrypoint();
+    /**
+     * @brief derive from this struct to mark a type as a branch entrypoint
+     */
+    struct entrypoint
+    {};
 
-#if defined(ZACC_AVX512)
-    template<>
-    std::shared_ptr<entrypoint> resolve_entrypoint<zacc::avx512::types<zacc::branches::avx512>>();
-#endif
-#if defined(ZACC_AVX2)
-    template<>
-    std::shared_ptr<entrypoint> resolve_entrypoint<zacc::avx2::types<zacc::branches::avx2>>();
-#endif
-#if defined(ZACC_AVX)
-    template<>
-    std::shared_ptr<entrypoint> resolve_entrypoint<zacc::avx::types<zacc::branches::avx1>>();
-#endif
-#if defined(ZACC_SSE)
-    template<>
-    std::shared_ptr<entrypoint> resolve_entrypoint<zacc::sse::types<zacc::branches::sse41_fma4>>();
-    template<>
-    std::shared_ptr<entrypoint> resolve_entrypoint<zacc::sse::types<zacc::branches::sse41_fma3>>();
-    template<>
-    std::shared_ptr<entrypoint> resolve_entrypoint<zacc::sse::types<zacc::branches::sse41>>();
-
-    template<>
-    std::shared_ptr<entrypoint> resolve_entrypoint<zacc::sse::types<zacc::branches::sse3>>();
-
-    template<>
-    std::shared_ptr<entrypoint> resolve_entrypoint<zacc::sse::types<zacc::branches::sse2>>();
-#endif
-#if defined(ZACC_SCALAR)
-    template<>
-    std::shared_ptr<entrypoint> resolve_entrypoint<zacc::scalar::types<zacc::branches::scalar>>();
-#endif
 }}
