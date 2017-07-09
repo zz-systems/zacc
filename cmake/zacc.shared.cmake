@@ -201,7 +201,7 @@ function(zacc_add_dispatched_library target_name)
 
 
     add_library(${target_name} SHARED  ${target_sources})
-    target_link_libraries(${target_name} PRIVATE zacc.system zacc.system.loader ${target_libraries})
+    target_link_libraries(${target_name} PUBLIC zacc.system zacc.system.loader ${target_libraries})
 
     #if(NOT WIN32) # dlls are copied to bin folder for windows targets
     #    set(search_prefix "../lib/")
