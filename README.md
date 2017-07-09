@@ -266,9 +266,10 @@ zacc_add_dispatched_tests(cacophony.tests
 | Processor | Highest featureset |
 |-----------|------------|
 | AMD FX-8350 | AVX1 |
-| Intel Core i7 6500U | AVX2 |
-| Intel Core i7 7700K | AVX2 |
-| Intel Xeon E5-2680 v3 | AVX2 |
+| Intel Core i7 6500U | AVX2 + FMA |
+| Intel Core i7 7700K | AVX2 + FMA |
+| Intel Xeon E5-2697 v3 | AVX2 + FMA|
+| Intel Xeon E5-2680 v3 | AVX2 + FMA|
 | Intel Xeon E5-2680 v2 | AVX1 |
 | Intel Xeon X5570 | SSE4.1 |
 
@@ -289,7 +290,8 @@ zacc_add_dispatched_tests(cacophony.tests
 | SSE4.1 | :white_check_mark: |
 | SSE4.1 + FMA3 | :white_check_mark: |
 | SSE4.1 + FMA4 | :white_check_mark: |
-| AVX1 | :white_check_mark: | Emulated |
+| AVX1 | :white_check_mark: | Emulated integer vectors |
+| AVX1 + FMA3 | :white_check_mark: | Emulated integer vectors |
 | AVX2 | :white_check_mark: |  |
 | AVX512 | :no_entry: | in development, can't be tested yet* |
 | ARM NEON | :no_entry: | Not implemented yet |

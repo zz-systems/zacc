@@ -39,7 +39,7 @@ namespace zacc { namespace system {
     {
     public:
         managed_library(const std::string& library_path, size_t retry_policy = 3)
-                : _library_name(library_path), _handle(nullptr)
+                : _handle(nullptr), _library_name(library_path)
         {
             zacc_dlerror();
 

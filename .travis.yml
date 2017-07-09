@@ -108,4 +108,5 @@ script:
   - ls ./bin
   - ls ./lib
   - ./bin/zacc.system.detect
+  - sleep 5
   - ctest --output-on-failure
