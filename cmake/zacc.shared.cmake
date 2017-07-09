@@ -111,15 +111,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-set(template.schema ".hpp.yml")
-set(impl.schema ".impl.hpp")
-set(test.schema ".test.cpp")
-
-set(type_template "codegen/templates/type.impl.jinja")
-set(test_template "codegen/templates/type.test.jinja")
-
-set(codegen.cmd "${PYTHON_DIR}/Scripts/yasha.exe")
-
 # branch config ========================================================================================================
 
 if(BUILD_SCALAR_BRANCH)
@@ -214,7 +205,7 @@ function(zacc_add_dispatched_library target_name)
     if(NOT WIN32) # dlls are copied to bin folder for windows targets
         set(search_prefix "../lib/")
     endif()
-    target_compile_definitions(${target_name} PUBLIC ZACC_FAST_FLOAT=false ZACC_DYLIBNAME="./${search_prefix}$<TARGET_FILE_NAME:${target_name}>")
+    target_compile_definitions(${target_name} PUBLIC ZACC_FAST_FLOAT=false ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}>")
 
     foreach(branch ${target_branches})
         message(STATUS "Adding dispatched vectorized branch ${target_name}.${branch}")
@@ -273,7 +264,7 @@ function(zacc_add_dispatched_tests target_name)
             set(search_prefix "../lib/")
         endif()
 
-        target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_DYLIBNAME="./${search_prefix}$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
+        target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
 
         target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} zacc.system zacc.system.loader zacc.interface.${branch}.defs)
         add_dependencies("${target_name}.${branch}" "${target_name}.${branch}.impl")

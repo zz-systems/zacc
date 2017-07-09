@@ -1,5 +1,13 @@
 file(GLOB_RECURSE templates    RELATIVE ${CMAKE_SOURCE_DIR}    "*${template.schema}")
 
+set(template.schema ".hpp.yml")
+set(impl.schema ".impl.hpp")
+set(test.schema ".test.cpp")
+
+set(type_template "codegen/templates/type.impl.jinja")
+set(test_template "codegen/templates/type.test.jinja")
+
+set(codegen.cmd "${PYTHON_DIR}/Scripts/yasha.exe")
 
 # fallback to PATH
 if(EXISTS "${codegen.cmd}")
