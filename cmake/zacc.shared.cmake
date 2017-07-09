@@ -248,20 +248,21 @@ function(zacc_add_dispatched_tests target_name)
         add_executable("${target_name}.${branch}" ${test_main})
         target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_TEST_LIBNAME="$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
         target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} zacc.system zacc.system.loader zacc.interface.${branch}.defs)
+        add_dependencies("${target_name}.${branch}" "${target_name}.${branch}.impl")
 
         add_test(
                 NAME ci.${target_name}.${branch}
                 COMMAND $<TARGET_FILE:${target_name}.${branch}>
         )
 
-        set(GTEST_LIBS $<TARGET_FILE:gtest> $<TARGET_FILE:${target_name}.${branch}.impl>)
+        #set(GTEST_LIBS $<TARGET_FILE:gtest> $<TARGET_FILE:${target_name}.${branch}.impl>)
 
 
-        add_custom_command(TARGET "${target_name}.${branch}" POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                ${GTEST_LIBS}
-                $<TARGET_FILE_DIR:${target_name}.${branch}>
-                )
+        #add_custom_command(TARGET "${target_name}.${branch}" POST_BUILD
+        #        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        #        ${GTEST_LIBS}
+         #       $<TARGET_FILE_DIR:${target_name}.${branch}>
+        #        )
 
         list(APPEND tests "${target_name}.${branch}")
     endforeach()
