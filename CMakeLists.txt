@@ -7,6 +7,8 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+enable_testing()
+
 # include branched code generation config
 add_subdirectory(codegen/backend)
 
