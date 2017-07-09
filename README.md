@@ -4,6 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
+- [Abstract](#abstract)
 - [Design goals](#design-goals)
 - [Integration](#integration)
 - [Examples](#examples)
@@ -23,13 +24,14 @@
 - [Execute unit tests](#execute-unit-tests)
 
 
+## Abstract
 
 ZACC is a human-readable and extensible computation abstraction layer. 
 Using ZACC and ZACC build, you are able to write and compile code once and execute it on target machines, unleashing their potential. 
 
 It is still under development which is synchronous to [cacophony](https://github.com/zz-systems/cacophony) development.
 
-Please keep in mind, that this release is a **Preview/Alpha Release** and feel free to report issues and bugs to the [Issue tracker on GitHub](https://github.com/zz-systems/zacc/issues)
+Feel free to report issues and bugs to the [Issue tracker on GitHub](https://github.com/zz-systems/zacc/issues)
 
 [Documentation](http://zz-systems.github.io/zacc/htmldoc/index.html)
 
@@ -287,7 +289,7 @@ zacc_add_dispatched_tests(cacophony.tests
 | SSE4.1 | :white_check_mark: |
 | SSE4.1 + FMA3 | :white_check_mark: |
 | SSE4.1 + FMA4 | :white_check_mark: |
-| AVX1 | :white_check_mark: | Partially emulated |
+| AVX1 | :white_check_mark: | Emulated integers (dispatch to 2x SSE vectors) |
 | AVX2 | :white_check_mark: |  |
 | AVX512 | :no_entry: | in development, can't be tested yet* |
 | ARM NEON | :no_entry: | Not implemented yet |
@@ -341,7 +343,7 @@ Instead Clang-cl is used, which is binary compatible with MSVC ([work in progres
 
 The library is licensed under the [MIT License](http://opensource.org/licenses/MIT):
 
-Copyright &copy; 2013-2017 Sergej Zuyev
+Copyright &copy; 2015-2017 Sergej Zuyev
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
@@ -349,7 +351,7 @@ The above copyright notice and this permission notice shall be included in all c
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-## Unit tests
+## Execute unit tests
 To compile and run the tests, you need to execute 
 ```
 $ make zacc.tests.all

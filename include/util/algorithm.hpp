@@ -111,7 +111,7 @@ namespace zacc {
         auto remainder  = real_size % dim;
         auto fake_size  = real_size + remainder;
 
-        for (auto i = 0; i < real_size; i += dim)
+        for (auto i = 0; i < fake_size; i += dim)
         {
             auto result = g(i);
 
