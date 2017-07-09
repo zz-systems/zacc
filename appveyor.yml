@@ -87,5 +87,5 @@ test_script:
 - ls
 - ls test
 - zacc.system.detect.exe
-- zacc.tests.scalar.exe
+- test/zacc.tests.scalar.exe
 - ctest --output-on-failure
