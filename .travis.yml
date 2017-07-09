@@ -107,6 +107,7 @@ script:
   - make -j 4 zacc.system.detect zacc.tests.all
   - ls ./bin
   - ls ./lib
+  - if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$TRAVIS_BUILD_DIR/lib ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export DYLD_LIBRARY_PATH=DYLD_LIBRARY_PATH:$TRAVIS_BUILD_DIR/lib ; fi
   - ./bin/zacc.system.detect
-  - sleep 5
   - ctest --output-on-failure

@@ -203,9 +203,9 @@ function(zacc_add_dispatched_library target_name)
     add_library(${target_name} SHARED  ${target_sources})
     target_link_libraries(${target_name} PRIVATE zacc.system zacc.system.loader ${target_libraries})
 
-    if(NOT WIN32) # dlls are copied to bin folder for windows targets
-        set(search_prefix "../lib/")
-    endif()
+    #if(NOT WIN32) # dlls are copied to bin folder for windows targets
+    #    set(search_prefix "../lib/")
+    #endif()
     target_compile_definitions(${target_name} PUBLIC ZACC_FAST_FLOAT=false ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}>")
 
     foreach(branch ${target_branches})
@@ -261,9 +261,9 @@ function(zacc_add_dispatched_tests target_name)
 
         add_executable("${target_name}.${branch}" ${test_main})
 
-        if(NOT WIN32) # dlls are copied to bin folder for windows targets
-            set(search_prefix "../lib/")
-        endif()
+        #if(NOT WIN32) # dlls are copied to bin folder for windows targets
+        #    set(search_prefix "../lib/")
+        #endif()
 
         target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
 
