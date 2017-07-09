@@ -80,11 +80,12 @@ before_build:
 - cmake .. -G"%BUILD_ENV%" -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe
 
 build_script:
-  - cmake --build . --config %CONFIGURATION% --target zacc.system.detect
-  - cmake --build . --config %CONFIGURATION% --target zacc.tests.all
+  - cmake --build . --config %CONFIGURATION% --target zacc.system.detect -- -j 4
+  - cmake --build . --config %CONFIGURATION% --target zacc.tests.all -- -j 4
   
 test_script:
 - ls
 - ls test
 - zacc.system.detect.exe
+- zacc.tests.scalar.exe
 - ctest --output-on-failure
