@@ -90,7 +90,7 @@ std::enable_if_t<!zacc::is_zval<T>::value, bool> is_set(T value)
 };
 
 
-void adjust_rounding_mode()
+inline void adjust_rounding_mode()
 {
 #if defined(_MM_SET_ROUNDING_MODE) && defined(_MM_SET_FLUSH_ZERO_MODE)
     _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
