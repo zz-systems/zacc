@@ -202,7 +202,7 @@ function(zacc_add_dispatched_library target_name)
 
         add_library("${target_name}.${branch}" STATIC ${target_entrypoints})
         target_link_libraries("${target_name}.${branch}" PRIVATE zacc.system zacc.interface.${branch})
-        target_link_libraries("${target_name}.${branch}" PUBLIC gtest zacc.system zacc.interface.${branch}.defs)
+        target_link_libraries("${target_name}.${branch}" PUBLIC gtest zacc.system zacc.interface.${branch}.aggregate)
 
         add_dependencies("${target_name}.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
 
@@ -253,7 +253,7 @@ function(zacc_add_dispatched_tests target_name)
 
         target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_TEST_LIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
 
-        target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} zacc.system zacc.system.loader zacc.interface.${branch}.defs)
+        target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} zacc.system zacc.system.loader zacc.interface.${branch}.defs zacc.interface.${branch}.aggregate)
         add_dependencies("${target_name}.${branch}" "${target_name}.${branch}.impl")
 
         add_test(
