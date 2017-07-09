@@ -115,7 +115,7 @@ namespace zacc { namespace system {
             {
                 if(p->is_set(capabilities::FMA3))
                 {
-                    log_branch<branches::avx1>();
+                    log_branch<branches::avx1_fma3>();
                     base_t::template dispatch_impl<branches::avx1_fma3>(std::forward<Args>(args)...);
 
                     if(select_one)

@@ -277,7 +277,7 @@ namespace zacc {
             static const std::string branch_name() { return "avx.avx1.fma3"; }
         };
 
-        struct avx2         : public std::integral_constant<flag_t, avx1::value | make_flag(capabilities::AVX2)>
+        struct avx2         : public std::integral_constant<flag_t, avx1_fma3::value | make_flag(capabilities::AVX2)>
         {
             static const std::string branch_name() { return "avx.avx2"; }
         };

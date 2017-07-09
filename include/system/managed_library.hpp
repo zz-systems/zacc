@@ -27,6 +27,8 @@
 #include <functional>
 #include <iostream>
 #include <string>
+#include <chrono>
+#include <thread>
 
 #include "system/capabilities.hpp"
 #include "system/runtime_loader.hpp"
@@ -36,12 +38,18 @@ namespace zacc { namespace system {
     class managed_library
     {
     public:
-        managed_library(const std::string& library_path)
-                : _library_name(library_path)
+        managed_library(const std::string& library_path, size_t retry_policy = 3)
+                : _library_name(library_path), _handle(nullptr)
         {
             zacc_dlerror();
 
-            _handle = zacc_dlopen(library_path.c_str());
+            for(size_t retry = 0; retry < retry_policy && _handle == nullptr; retry++)
+            {
+                _handle = zacc_dlopen(library_path.c_str());
+
+                if(_handle == nullptr)
+                    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+            }
 
             auto error = zacc_dlerror();
             if (!_handle)
