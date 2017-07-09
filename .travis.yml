@@ -104,7 +104,7 @@ before_script:
   - cd Build
 
 script:
-  - make -j 2 && make zacc.tests.all
+  - make -j 4 zacc.tests.all
   - ls
   - ./zacc.system.detect
   - ctest --output-on-failure
