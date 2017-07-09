@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include <algorithm>
+#include <string>
 #include <numeric>
 #include <type_traits>
 

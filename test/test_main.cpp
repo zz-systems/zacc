@@ -25,7 +25,6 @@
 
 #include <iostream>
 
-#include "gtest/gtest.h"
 #include "system/platform.hpp"
 #include "system/runtime_loader.hpp"
 #include "util/testing/test_entry_point.hpp"

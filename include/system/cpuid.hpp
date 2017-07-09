@@ -30,7 +30,7 @@
 #include <vector>
 #include <string>
 
-#include "util/type_casts.hpp"
+#include "util/type/type_casts.hpp"
 
 namespace zacc {
     struct cpuid

@@ -24,13 +24,8 @@
 
 #pragma once
 
-#include <numeric>
-#include <algorithm>
-#include <type_traits>
-
-#include "type_traits.hpp"
-#include "zval.hpp"
-#include "common.hpp"
+#include "util/type/type_traits.hpp"
+#include "util/macros.hpp"
 #include "util/algorithm.hpp"
 
 #include "backend/all.hpp"

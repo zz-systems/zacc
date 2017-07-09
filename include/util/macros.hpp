@@ -25,9 +25,6 @@
 
 #pragma once
 
-#include "intrin.hpp"
-
-
 template<typename T>
 std::enable_if_t<!zacc::is_zval<T>::value, bool> is_set(T value)
 {

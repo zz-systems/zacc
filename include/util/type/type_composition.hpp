@@ -29,7 +29,7 @@
 #pragma once
 
 #include <utility>
-#include "common.hpp"
+#include "util/macros.hpp"
 
 namespace zacc {
     template<template<class> class ... policies>

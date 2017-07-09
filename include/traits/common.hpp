@@ -25,8 +25,9 @@
 
 #pragma once
 
-#include "common.hpp"
+
 #include <sstream>
+#include "util/macros.hpp"
 
 namespace zacc {
 

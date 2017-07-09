@@ -1,20 +1,14 @@
 cmake_minimum_required(VERSION 3.6)
 project(zacc)
 
-include(cmake/shared.cmake)
+include(cmake/zacc.shared.cmake)
 
-#=======================================================================================================================
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-add_library(zacc.interface.codegen INTERFACE)
-add_dependencies(zacc.interface.codegen "zacc.generate.types.all" "zacc.generate.tests.all" ${target_dependencies})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-
+# include branched code generation config
 add_subdirectory(codegen/backend)
-
-include(cmake/dispatched_build.cmake)
-
-# BUILD! ===============================================================================================================
 
 # fetch dependencies
 add_subdirectory(dependencies)
@@ -26,7 +20,7 @@ include(codegen/CMakeLists.txt)
 include(src/CMakeLists.txt)
 
 # add test targets
-include(test/CMakeLists.txt)
+add_subdirectory(test)
 
 # add documentation targets
 include(doc/CMakeLists.txt)

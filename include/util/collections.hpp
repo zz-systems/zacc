@@ -33,7 +33,7 @@
 
 #include <map>
 #include <vector>
-#include "util/type_casts.hpp"
+#include "util/type/type_casts.hpp"
 #include "util/memory.hpp"
 
 

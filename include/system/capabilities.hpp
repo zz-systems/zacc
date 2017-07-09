@@ -27,7 +27,7 @@
 
 #include <iostream>
 #include "util/io.hpp"
-#include "util/type_casts.hpp"
+#include "util/type/type_casts.hpp"
 #include "util/bithacks.hpp"
 
 namespace zacc {

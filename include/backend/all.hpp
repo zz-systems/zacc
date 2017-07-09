@@ -24,6 +24,9 @@
 
 #pragma once
 
+#include "intrin.hpp"
+#include "zval.hpp"
+
 #if defined(ZACC_AVX)
     #include "backend/avx/types.hpp"
 #endif

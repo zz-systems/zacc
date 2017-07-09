@@ -22,6 +22,39 @@ set(codegen.deps
         ${test_template}
         )
 
+add_library(zacc.interface.codegen INTERFACE)
+add_dependencies(zacc.interface.codegen "zacc.generate.types.all" "zacc.generate.tests.all" ${target_dependencies})
+
+function(preprocess_paths path type template)
+    string(REGEX REPLACE "${template.schema}" "${${type}.schema}" outpath ${template})
+    string(REPLACE "codegen/" "" outpath ${outpath})
+
+    set(${path} "${outpath}" PARENT_SCOPE)
+endfunction()
+
+function(find_files files schema)
+    file(GLOB_RECURSE _files RELATIVE ${PROJECT_SOURCE_DIR} ${schema})
+    set(${files} ${_files} PARENT_SCOPE)
+endfunction()
+
+macro(get_branch_files files branch schema)
+    # sse.sse4 => [major; minor] => [sse; sse4]
+    string(REPLACE "." ";" parts ${branch})
+    list(LENGTH parts len)
+
+    if(${len} GREATER 1) # majorbranch.subbranch.ignored.ignored
+        list(GET parts 0 majorbranch)
+        find_files(_files "*/backend/${majorbranch}/*${schema}")
+
+    elseif(${len} EQUAL 1) # majorbranch
+        find_files(_files "*/backend/${branch}/*${schema}")
+    else()
+        message(FATAL_ERROR "malformed branch definition")
+    endif()
+
+    set(${files} ${_files})
+endmacro()
+
 function(generate_file output template template_data)
     get_filename_component(output_dir ${output} DIRECTORY)
 

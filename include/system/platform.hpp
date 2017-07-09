@@ -30,12 +30,13 @@
 
 #include <type_traits>
 
-#include "type_traits.hpp"
+#include "util/type/type_traits.hpp"
+#include "util/algorithm.hpp"
+#include "util/bithacks.hpp"
+
 #include "cpuid.hpp"
 #include "capabilities.hpp"
 
-#include "util/algorithm.hpp"
-#include "util/bithacks.hpp"
 
 namespace zacc {
 

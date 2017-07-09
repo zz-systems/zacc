@@ -24,12 +24,15 @@
 
 #pragma once
 #include <array>
-#include "type_traits.hpp"
-#include "common.hpp"
 
 #include "system/capabilities.hpp"
-#include "util/type_casts.hpp"
+
+#include "util/type/type_traits.hpp"
+#include "util/type/type_casts.hpp"
+
+#include "util/macros.hpp"
 #include "util/collections.hpp"
+
 
 namespace zacc {
 

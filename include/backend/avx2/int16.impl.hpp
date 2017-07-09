@@ -28,15 +28,17 @@
 
 #pragma once
 
-#include "intrin.hpp"
 #include <type_traits>
 #include <cmath>
 
-#include "util/type_composition.hpp"
+#include "backend/intrin.hpp"
+#include "backend/zval.hpp"
+
+#include "util/type/type_composition.hpp"
+#include "util/type/type_traits.hpp"
+
 #include "util/memory.hpp"
-#include "zval.hpp"
-#include "common.hpp"
-#include "type_traits.hpp"
+#include "util/macros.hpp"
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
