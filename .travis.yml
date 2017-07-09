@@ -105,5 +105,7 @@ before_script:
 
 script:
   - make -j 4 zacc.system.detect zacc.tests.all
+  - ls ./bin
+  - ls ./lib
   - ./bin/zacc.system.detect
   - ctest --output-on-failure
