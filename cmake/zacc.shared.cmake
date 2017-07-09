@@ -215,6 +215,8 @@ function(zacc_add_dispatched_library target_name)
         target_link_libraries("${target_name}.${branch}" PRIVATE zacc.system zacc.interface.${branch})
         target_link_libraries("${target_name}.${branch}" PUBLIC gtest zacc.system zacc.interface.${branch}.aggregate)
 
+        #target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_EXPORTS=1)
+
         add_dependencies("${target_name}.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
 
         target_include_directories(${target_name}.${branch} PRIVATE ${target_includes})
@@ -261,10 +263,6 @@ function(zacc_add_dispatched_tests target_name)
 
         add_executable("${target_name}.${branch}" ${test_main})
 
-        #if(NOT WIN32) # dlls are copied to bin folder for windows targets
-        #    set(search_prefix "../lib/")
-        #endif()
-
         target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
 
         target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} zacc.system zacc.system.loader zacc.interface.${branch}.defs)
@@ -274,15 +272,6 @@ function(zacc_add_dispatched_tests target_name)
                 NAME ci.${target_name}.${branch}
                 COMMAND $<TARGET_FILE:${target_name}.${branch}>
         )
-
-        #set(GTEST_LIBS $<TARGET_FILE:gtest> $<TARGET_FILE:${target_name}.${branch}.impl>)
-
-
-        #add_custom_command(TARGET "${target_name}.${branch}" POST_BUILD
-        #        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        #        ${GTEST_LIBS}
-         #       $<TARGET_FILE_DIR:${target_name}.${branch}>
-        #        )
 
         list(APPEND tests "${target_name}.${branch}")
     endforeach()

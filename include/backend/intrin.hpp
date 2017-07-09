@@ -82,3 +82,18 @@ inline bool _mm256_test_all_ones(__m256i val)
 }
 
 #endif
+
+template<typename T>
+std::enable_if_t<!zacc::is_zval<T>::value, bool> is_set(T value)
+{
+	return value != 0;
+};
+
+
+void adjust_rounding_mode()
+{
+#if defined(_MM_SET_ROUNDING_MODE) && defined(_MM_SET_FLUSH_ZERO_MODE)
+    _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+    _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+#endif
+}

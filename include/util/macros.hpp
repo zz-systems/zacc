@@ -25,12 +25,6 @@
 
 #pragma once
 
-template<typename T>
-std::enable_if_t<!zacc::is_zval<T>::value, bool> is_set(T value)
-{
-    return value != 0;
-};
-
 /**
  * @brief shortcut to write forwarding constructors
  * @param name current type (constructor)
