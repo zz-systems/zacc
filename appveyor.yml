@@ -84,7 +84,7 @@ build_script:
   - cmake --build . --config %CONFIGURATION% --target zacc.tests.all -- -j 4
   
 test_script:
-- ls ./bin
-- ls ./lib
-- ./bin/zacc.system.detect.exe
+- ls .\bin
+- ls .\lib
+- .\bin\zacc.system.detect.exe
 - ctest --output-on-failure
