@@ -246,7 +246,7 @@ function(zacc_add_dispatched_tests target_name)
 
 
         add_executable("${target_name}.${branch}" ${test_main})
-        target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_TEST_LIBNAME="$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
+        target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_TEST_LIBNAME="../lib/$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
         target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} zacc.system zacc.system.loader zacc.interface.${branch}.defs)
         add_dependencies("${target_name}.${branch}" "${target_name}.${branch}.impl")
 
