@@ -6,9 +6,13 @@ add_library(zacc.system.loader SHARED
         "${CMAKE_CURRENT_LIST_DIR}/runtime_loader.cpp")
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    message(STATUS "ADD libdl, GNU")
     link_libraries(zacc.system.loader -Wl,--no-as-needed -ldl)
 elseif ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") AND (NOT APPLE) AND (NOT MSVC))
+    message(STATUS "ADD libdl, Clang")
     link_libraries(zacc.system.loader -Wl,--no-as-needed -ldl)
+else()
+    message(STATUS "SKIP libdl")
 endif()
 
 target_compile_definitions(zacc.system.loader PRIVATE ZACC_EXPORTS=1)

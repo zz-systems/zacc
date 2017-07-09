@@ -28,12 +28,6 @@ option(BUILD_CI_TEST "Build tests for CI environments" Off)
 
 option(BUILD_DOC "Build the documentation" OFF)
 
-
-
-
-
-
-
 # compiler config ======================================================================================================
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -112,6 +106,10 @@ if(BUILD_FAST_FLOAT)
 else()
     add_definitions(-DZACC_FAST_FLOAT=false)
 endif()
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 # branch config ========================================================================================================
 
@@ -253,7 +251,7 @@ function(zacc_add_dispatched_tests target_name)
 
         add_test(
                 NAME ci.${target_name}.${branch}
-                COMMAND ${target_name}.${branch}
+                COMMAND $<TARGET_FILE:${target_name}.${branch}>
         )
 
         set(GTEST_LIBS $<TARGET_FILE:gtest> $<TARGET_FILE:${target_name}.${branch}.impl>)
