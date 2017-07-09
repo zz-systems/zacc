@@ -1,0 +1,8 @@
+//
+// Created by Sergej Zuyev on 09.07.17.
+//
+
+#ifndef CACOPHONY_PERLIN_ENGINE_HPP
+#define CACOPHONY_PERLIN_ENGINE_HPP
+
+#endif //CACOPHONY_PERLIN_ENGINE_HPP
