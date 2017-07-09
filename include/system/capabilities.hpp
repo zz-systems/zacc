@@ -267,19 +267,24 @@ namespace zacc {
             static const std::string branch_name() { return "sse.sse41.fma4"; }
         };
 
-        struct avx1         : public std::integral_constant<flag_t, make_flag(capabilities::FMA3, capabilities::AVX1)>
+        struct avx1         : public std::integral_constant<flag_t, make_flag(capabilities::AVX1)>
         {
-            static const std::string branch_name() { return "avx"; }
+            static const std::string branch_name() { return "avx.avx1"; }
+        };
+
+        struct avx1_fma3     : public std::integral_constant<flag_t, make_flag(capabilities::FMA3, capabilities::AVX1)>
+        {
+            static const std::string branch_name() { return "avx.avx1.fma3"; }
         };
 
         struct avx2         : public std::integral_constant<flag_t, avx1::value | make_flag(capabilities::AVX2)>
         {
-            static const std::string branch_name() { return "avx2"; }
+            static const std::string branch_name() { return "avx.avx2"; }
         };
 
         struct avx512       : public std::integral_constant<flag_t, make_flag(capabilities::AVX512)>
         {
-            static const std::string branch_name() { return "avx512"; }
+            static const std::string branch_name() { return "avx.avx512"; }
         };
 
         struct opencl       : public std::integral_constant<flag_t, make_flag(capabilities::OPENCL)>

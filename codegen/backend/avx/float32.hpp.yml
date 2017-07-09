@@ -99,12 +99,25 @@ modules:
     vsub: _mm256_sub_ps
     vmul: _mm256_mul_ps
     vdiv: _mm256_div_ps
+
     vfmadd:
       args: [multiplicand, multiplier, addendum]
-      body: _mm256_fmadd_ps (multiplicand, multiplier, addendum)
+      body:
+        fma:
+          requires: [FMA3]
+          body: _mm256_fmadd_ps(multiplicand, multiplier, addendum)
+        default:
+          requires: [not FMA3]
+          body: vadd(vmul(multiplicand, multiplier), addendum)
     vfmsub:
       args: [multiplicand, multiplier, addendum]
-      body: _mm256_fmsub_ps(multiplicand, multiplier, addendum)
+      body:
+        fma:
+          requires: [FMA3]
+          body: _mm256_fmsub_ps(multiplicand, multiplier, addendum)
+        default:
+          requires: [not FMA3]
+          body: vsub(vmul(multiplicand, multiplier), addendum)
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate

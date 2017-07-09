@@ -607,13 +607,13 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic fma branch
              * @relates float64
-             * @remark avx - default
+             * @remark avx - fma
              */
-            friend zfloat64<base_t::capability> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::FMA3), T> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
-                ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vfmadd");
+                ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "fma", "vfmadd");
 
                 return _mm256_fmadd_pd(multiplicand, multiplier, addendum);
             }
@@ -624,11 +624,37 @@ namespace zacc { namespace backend { namespace avx {
              * @relates float64
              * @remark avx - default
              */
-            friend zfloat64<base_t::capability> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::FMA3), T> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+
+                ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vfmadd");
+
+                return vadd(vmul(multiplicand, multiplier), addendum);
+            }
+
+
+            /**
+             * @brief arithmetic fma branch
+             * @relates float64
+             * @remark avx - fma
+             */
+            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<base_t::dispatcher::is_set(capabilities::FMA3), T> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+
+                ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "fma", "vfmsub");
+
+                return _mm256_fmsub_pd(multiplicand, multiplier, addendum);
+            }
+
+
+            /**
+             * @brief arithmetic default branch
+             * @relates float64
+             * @remark avx - default
+             */
+            template<typename T = zfloat64<base_t::capability>> friend std::enable_if_t<!base_t::dispatcher::is_set(capabilities::FMA3), T> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
 
                 ZTRACE_BACKEND("avx.float64.impl", __LINE__, "zfloat64(double[4])", "default", "vfmsub");
 
-                return _mm256_fmsub_pd(multiplicand, multiplier, addendum);
+                return vsub(vmul(multiplicand, multiplier), addendum);
             }
 
         };

@@ -130,25 +130,26 @@ if(BUILD_SSE_BRANCH)
 endif()
 
 if(BUILD_AVX_BRANCH)
-    list(APPEND branches avx)
+    list(APPEND branches avx.avx1)
+    list(APPEND branches avx.avx1.fma3)
 
     list(APPEND generic_build_defs ZACC_AVX=1)
 endif()
 
 if(BUILD_AVX2_BRANCH)
-    list(APPEND branches avx2)
+    list(APPEND branches avx.avx2)
 
     list(APPEND generic_build_defs ZACC_AVX2=1)
 endif()
 
 if(BUILD_AVX512_BRANCH)
-    list(APPEND branches avx512)
+    list(APPEND branches avx.avx512)
 
     list(APPEND generic_build_defs ZACC_AVX512=1)
 endif()
 
 if(BUILD_OPENCL_BRANCH)
-    list(APPEND branches openCL)
+    list(APPEND branches gpgpu.opencl)
 
     list(APPEND generic_build_defs ZACC_OPENCL=1)
 endif()

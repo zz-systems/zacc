@@ -113,6 +113,15 @@ namespace zacc { namespace system {
 #if defined(ZACC_AVX)
             if(p->is_set(capabilities::AVX1))
             {
+                if(p->is_set(capabilities::FMA3))
+                {
+                    log_branch<branches::avx1>();
+                    base_t::template dispatch_impl<branches::avx1_fma3>(std::forward<Args>(args)...);
+
+                    if(select_one)
+                        return;
+                }
+
                 log_branch<branches::avx1>();
                 base_t::template dispatch_impl<branches::avx1>(std::forward<Args>(args)...);
 
