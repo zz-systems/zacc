@@ -6,9 +6,9 @@ add_library(zacc.system.loader SHARED
         "${CMAKE_CURRENT_LIST_DIR}/runtime_loader.cpp")
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    link_libraries(zacc.system.loader -Wl,--no-as-needed -ldl)
+    link_libraries(zacc.system.loader PUBLIC -Wl,--no-as-needed -ldl)
 elseif ((CMAKE_CXX_COMPILER_ID MATCHES "Clang") AND (NOT APPLE) AND (NOT MSVC))
-    link_libraries(zacc.system.loader -Wl,--no-as-needed -ldl)
+    link_libraries(zacc.system.loader PUBLIC -Wl,--no-as-needed -ldl)
 endif()
 
 

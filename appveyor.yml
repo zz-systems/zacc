@@ -85,5 +85,6 @@ build_script:
   
 test_script:
 - ls
+- ls test
 - zacc.system.detect.exe
 - ctest --output-on-failure
