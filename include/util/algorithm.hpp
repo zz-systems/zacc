@@ -115,7 +115,7 @@ namespace zacc {
         {
             auto result = g(i);
 
-            auto to_fetch = i < real_size ? dim : remainder;
+            auto to_fetch = i < real_size - 1 ? dim : remainder;
 
             std::copy(std::begin(result), std::begin(result) + to_fetch, first + i);
         }
