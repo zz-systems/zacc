@@ -1,4 +1,4 @@
-add_library(zacc.system SHARED
+add_library(zacc.system STATIC
         "${CMAKE_CURRENT_LIST_DIR}/platform.cpp"
         "${CMAKE_CURRENT_LIST_DIR}/cpuid.cpp")
 
