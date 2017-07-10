@@ -29,4 +29,4 @@ add_executable(zacc.system.detect WIN32
         )
 
 
-target_link_libraries(zacc.system.detect zacc.system)
+target_link_libraries(zacc.system.detect zacc.system.info)
