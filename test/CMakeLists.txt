@@ -8,7 +8,7 @@ file(GLOB test.math "${CMAKE_CURRENT_LIST_DIR}/math/*.cpp")
 
 
 if(BUILD_SANITIZE_MEMORY)
-    add_compile_options(-fsanitize=address -fno-omit-frame-pointer)
+    add_compile_options(-fsanitize=address)
     link_libraries(-fsanitize=address)
 endif()
 
