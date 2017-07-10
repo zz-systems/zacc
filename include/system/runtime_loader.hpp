@@ -28,9 +28,13 @@
 #include <functional>
 #include <string>
 #include <iostream>
-#include "util/zacc_exports.hpp"
 
-ZACC_DLL_API void*              zacc_dlopen(const char* path);
-ZACC_DLL_API const char* const  zacc_dlerror();
-ZACC_DLL_API void*              zacc_dlsym(void* handle, const char* member);
-ZACC_DLL_API bool               zacc_dlclose(void* handle);
+#include "zacc_systemloader_export.hpp"
+
+extern "C"
+{
+    ZACC_LOADER_EXPORT void *               zacc_dlopen(const char *path);
+    ZACC_LOADER_EXPORT const char *const    zacc_dlerror();
+    ZACC_LOADER_EXPORT void *               zacc_dlsym(void *handle, const char *member);
+    ZACC_LOADER_EXPORT bool                 zacc_dlclose(void *handle);
+}

@@ -180,7 +180,9 @@ endif()
 
 
 # build helpers ========================================================================================================
+include (GenerateExportHeader)
 
+include_directories(${CMAKE_BINARY_DIR}/exports)
 
 function(zacc_add_dispatched_library target_name)
     set(options OPTIONAL ZACC_FAST_FLOAT)
@@ -198,36 +200,43 @@ function(zacc_add_dispatched_library target_name)
 
 
     add_library(${target_name} SHARED  ${target_sources})
-    target_link_libraries(${target_name} PUBLIC zacc.system zacc.system.loader ${target_libraries})
+    target_link_libraries(${target_name} PUBLIC zacc.system.info zacc.system.loader ${target_libraries})
 
-    #if(NOT WIN32) # dlls are copied to bin folder for windows targets
-    #    set(search_prefix "../lib/")
-    #endif()
+    string(TOUPPER ${target_name} macro_target_name)
+
+    generate_export_header(${target_name}
+            BASE_NAME ${target_name}
+            EXPORT_MACRO_NAME ${macro_target_name}_EXPORT
+            EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/${target_name}_export.hpp
+            STATIC_DEFINE ${macro_target_name}_BUILT_AS_STATIC
+            )
+
     target_compile_definitions(${target_name} PUBLIC ZACC_FAST_FLOAT=false ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}>")
 
     foreach(branch ${target_branches})
         message(STATUS "Adding dispatched vectorized branch ${target_name}.${branch}")
 
         add_library("${target_name}.${branch}" SHARED ${target_entrypoints})
-        target_link_libraries("${target_name}.${branch}" PRIVATE zacc.system zacc.interface.${branch})
-        target_link_libraries("${target_name}.${branch}" PUBLIC gtest zacc.system zacc.interface.${branch}.aggregate)
+        target_link_libraries("${target_name}.${branch}" PRIVATE zacc.system.info zacc.interface.${branch})
+        target_link_libraries("${target_name}.${branch}" PUBLIC zacc.interface.${branch}.aggregate)
 
-        #target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_EXPORTS=1)
+
+        generate_export_header(${target_name}.${branch}
+                BASE_NAME ${target_name}
+                EXPORT_MACRO_NAME ${macro_target_name}_BRANCH_EXPORT
+                EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/${target_name}_branch_export.hpp
+                STATIC_DEFINE ${macro_target_name}_BRANCH_BUILT_AS_STATIC
+                )
 
         add_dependencies("${target_name}.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
 
         target_include_directories(${target_name}.${branch} PRIVATE ${target_includes})
 
-        target_link_libraries(${target_name} PRIVATE zacc.interface.${branch}.aggregate)
-        list(APPEND branch_objects ${target_name}.${branch})#$<TARGET_OBJECTS:${target_name}.${branch}>)
+        target_link_libraries(${target_name} PRIVATE zacc.interface.${branch}.aggregate ${target_libraries})
+        list(APPEND branch_objects ${target_name}.${branch})
     endforeach()
 
-    message(STATUS "Combining dispatched vectorized branches to ${target_name}")
-
-
-
-
-    #target_compile_definitions(${target_name} PRIVATE ZACC_LIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}>")
+    message(STATUS "Combining dispatched branches to ${target_name}")
 
     add_dependencies("${target_name}" ${branch_objects})
 endfunction()
@@ -247,6 +256,8 @@ function(zacc_add_dispatched_tests target_name)
     set(target_branches ${add_branch_test_BRANCHES})
     set(target_libraries ${add_branch_test_LIBRARIES})
 
+    string(TOUPPER ${target_name} macro_target_name)
+
     foreach(branch ${target_branches})
         message(STATUS "Adding dispatched test ${target_name}.${branch}")
 
@@ -254,15 +265,22 @@ function(zacc_add_dispatched_tests target_name)
         message(STATUS "branch files: ${files}")
         add_library("${target_name}.${branch}.impl" SHARED ${files} ${target_sources} ${test_entrypoint})
         target_include_directories(${target_name}.${branch}.impl PUBLIC ${gtest_SOURCE_DIR}/include ${target_includes})
-        target_compile_definitions(${target_name}.${branch}.impl PRIVATE ZACC_EXPORTS=1)
-        target_link_libraries("${target_name}.${branch}.impl" PRIVATE gtest zacc.system zacc.interface.${branch})
-        target_link_libraries("${target_name}.${branch}.impl" PUBLIC gtest zacc.system zacc.interface.${branch}.aggregate)
+
+        generate_export_header(${target_name}.${branch}.impl
+                BASE_NAME ${target_name}
+                EXPORT_MACRO_NAME ${macro_target_name}_BRANCH_EXPORT
+                EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/${target_name}_branch_export.hpp
+                STATIC_DEFINE ${macro_target_name}_BRANCH_BUILT_AS_STATIC
+                )
+
+        target_link_libraries("${target_name}.${branch}.impl" PRIVATE gtest zacc.interface.${branch})
+        target_link_libraries("${target_name}.${branch}.impl" PUBLIC zacc.system.info zacc.interface.${branch}.aggregate)
 
         add_executable("${target_name}.${branch}" ${test_main})
 
         target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
 
-        target_link_libraries("${target_name}.${branch}" gtest zacc.system ${target_libraries} zacc.system zacc.system.loader zacc.interface.${branch}.defs)
+        target_link_libraries("${target_name}.${branch}" ${target_libraries} zacc.system.info zacc.system.loader zacc.interface.${branch}.defs)
         add_dependencies("${target_name}.${branch}" "${target_name}.${branch}.impl")
 
         add_test(

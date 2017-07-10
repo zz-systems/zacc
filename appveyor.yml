@@ -24,6 +24,7 @@ environment:
         BUILD_ENV: "Ninja"
         BUILD_DIR: "build"
         PYTHON_VERSION: "3.6"
+        BUILD_SANITIZE_MEMORY: 0
       
 
 install:
@@ -77,7 +78,7 @@ before_build:
 - set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
 - mkdir %BUILD_DIR% && cd %BUILD_DIR%
 # Generate
-- cmake .. -G"%BUILD_ENV%" -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe -DBUILD_SANITIZE_MEMORY=1
+- cmake .. -G"%BUILD_ENV%" -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe -DBUILD_SANITIZE_MEMORY=%BUILD_SANITIZE_MEMORY%
 
 build_script:
   - cmake --build . --config %CONFIGURATION% --target zacc.system.detect -- -j 4
