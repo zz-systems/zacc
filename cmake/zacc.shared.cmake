@@ -218,7 +218,7 @@ function(zacc_add_dispatched_library target_name)
 
         add_library("${target_name}.${branch}" SHARED ${target_entrypoints})
         target_link_libraries("${target_name}.${branch}" PRIVATE zacc.system.info zacc.interface.${branch})
-        target_link_libraries("${target_name}.${branch}" PUBLIC zacc.interface.${branch}.aggregate)
+        target_link_libraries("${target_name}.${branch}" PUBLIC zacc.interface.${branch}.interface)
 
 
         generate_export_header(${target_name}.${branch}
@@ -232,7 +232,7 @@ function(zacc_add_dispatched_library target_name)
 
         target_include_directories(${target_name}.${branch} PRIVATE ${target_includes})
 
-        target_link_libraries(${target_name} PRIVATE zacc.interface.${branch}.aggregate ${target_libraries})
+        target_link_libraries(${target_name} PRIVATE zacc.interface.${branch}.interface ${target_libraries})
         list(APPEND branch_objects ${target_name}.${branch})
     endforeach()
 
@@ -274,13 +274,13 @@ function(zacc_add_dispatched_tests target_name)
                 )
 
         target_link_libraries("${target_name}.${branch}.impl" PRIVATE gtest zacc.interface.${branch})
-        target_link_libraries("${target_name}.${branch}.impl" PUBLIC zacc.system.info zacc.interface.${branch}.aggregate)
+        target_link_libraries("${target_name}.${branch}.impl" PUBLIC zacc.system.info zacc.interface.${branch}.interface)
 
         add_executable("${target_name}.${branch}" ${test_main})
 
         target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
 
-        target_link_libraries("${target_name}.${branch}" ${target_libraries} zacc.system.info zacc.system.loader zacc.interface.${branch}.defs)
+        target_link_libraries("${target_name}.${branch}" ${target_libraries} zacc.system.info zacc.system.loader zacc.interface.${branch}.private)
         add_dependencies("${target_name}.${branch}" "${target_name}.${branch}.impl")
 
         add_test(

@@ -1,15 +1,5 @@
 # AVX512 interface =====================================================================================================
 
-add_library(zacc.interface.avx.avx512 INTERFACE)
-target_compile_options(zacc.interface.avx.avx512 INTERFACE -mavx512f -mavx512pf -mavx512er -mavx512cd -mavx512vl -mavx512bw -mavx512dq)
-
-add_library(zacc.interface.avx.avx512.defs INTERFACE)
-target_compile_definitions(zacc.interface.avx.avx512.defs INTERFACE
-        ZACC_MAJOR_BRANCH=avx512
-        ZACC_CAPABILITIES=avx512)
-
-add_library(zacc.interface.avx.avx512.aggregate INTERFACE)
-target_compile_definitions(zacc.interface.avx.avx512.aggregate INTERFACE
-        ZACC_AVX512=1)
-
-target_link_libraries(zacc.interface.avx.avx512 INTERFACE zacc.interface.avx.avx512.aggregate zacc.interface.avx.avx512.defs zacc.interface.codegen)
+zacc_target_metadata(avx.avx512
+        MAJOR_TARGET avx512
+        COMPILE_FLAGS -mavx512f -mavx512pf -mavx512er -mavx512cd -mavx512vl -mavx512bw -mavx512dq)
