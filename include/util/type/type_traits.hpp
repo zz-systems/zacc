@@ -70,7 +70,7 @@ namespace zacc {
     };
 
     template<typename T>
-    bool is_any_set(T ref_value) {
+    bool is_any_set(T) {
         return false;
     }
 
@@ -160,4 +160,9 @@ namespace zacc {
      */
     template<typename T>
     using element_type_t = std::remove_reference_t<decltype(*std::begin(std::declval<T&>()))>;
+
+    /**
+     * @see https://stackoverflow.com/a/19532607/1261537
+     */
+    struct sink { template<typename ...Args> sink(Args const & ... ) {} };
 }

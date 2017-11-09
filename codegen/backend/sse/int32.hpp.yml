@@ -53,10 +53,11 @@ modules:
       body:  _mm_stream_si128((__m128i*)target.data(), source)
 
     vgather:
-      args: { raw: "composed_t &target, raw_ptr<const int> source, zint32<base_t::capability> index" }
+      prefix: "template<typename RandomIt> friend"
+      args: { raw: "RandomIt input, const zint32<base_t::capability> &index" }
       body:
         - auto i = index.data();
-        - return _mm_set_epi32(source[i[3]], source[i[2]], source[i[1]], source[i[0]]);
+        - return _mm_set_epi32(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------

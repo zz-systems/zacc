@@ -146,7 +146,7 @@ namespace zacc {
 
     template <class T, int N>
     typename aligned_allocator<T,N>::pointer
-    aligned_allocator<T,N>::allocate(size_type n, typename std::allocator<void>::const_pointer hint)
+    aligned_allocator<T,N>::allocate(size_type n, typename std::allocator<void>::const_pointer)
     {
         pointer res = reinterpret_cast<pointer>(aligned_malloc(sizeof(T)*n,N));
         if(res == 0)
@@ -172,28 +172,5 @@ namespace zacc {
         else {
             return std::make_shared<T>(std::forward<Args>(args)...);
         }
-    }
-
-    template<typename T>
-    struct raw_ptr
-    {
-        T *data;
-
-        raw_ptr() = default;
-
-        constexpr raw_ptr(T* data) noexcept : data(data)
-        { }
-
-        operator T*() const
-        {
-            return data;
-        }
-    };
-
-    template<typename T>
-    raw_ptr<T> make_raw(T *data)
-    {
-        //std::cout << "make raw" << std::endl;
-        return raw_ptr<T> { data };
     }
 }

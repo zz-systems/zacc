@@ -58,10 +58,11 @@ modules:
       body:  _mm_stream_pd(target.data(), source)
 
     vgather:
-      args: { raw: "composed_t &target, raw_ptr<const double> source, zint32<base_t::capability> index" }
+      prefix: "template<typename RandomIt> friend"
+      args: { raw: "RandomIt input, const zint32<base_t::capability> &index" }
       body:
         - auto i = index.data();
-        - return _mm_set_pd(source[i[3]], source[i[1]]);
+        - return _mm_set_pd(input[i[3]], input[i[1]]);
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------

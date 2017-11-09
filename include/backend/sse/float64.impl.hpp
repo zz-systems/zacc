@@ -249,12 +249,12 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            friend zfloat64<base_t::capability> vgather(composed_t &target, raw_ptr<const double> source, zint32<base_t::capability> index)  noexcept {
+            template<typename RandomIt> friend zfloat64<base_t::capability> vgather(RandomIt input, const zint32<base_t::capability> &index)  noexcept {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vgather");
 
                 auto i = index.data();
-                return _mm_set_pd(source[i[3]], source[i[1]]);
+                return _mm_set_pd(input[i[3]], input[i[1]]);
             }
 
         };

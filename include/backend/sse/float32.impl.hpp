@@ -249,12 +249,12 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse - default
              */
-            friend zfloat32<base_t::capability> vgather(composed_t &target, raw_ptr<const float> source, zint32<base_t::capability> index)  noexcept {
+            template<typename RandomIt> friend zfloat32<base_t::capability> vgather(RandomIt input, const zint32<base_t::capability> &index)  noexcept {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vgather");
 
                 auto i = index.data();
-                return _mm_set_ps(source[i[3]], source[i[2]], source[i[1]], source[i[0]]);
+                return _mm_set_ps(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
             }
 
         };
@@ -766,12 +766,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vbor");
 
-                auto r = _mm_or_ps(one, other);
-
-
-                std::cerr << one << " | " << other << " = " << zfloat32<base_t::capability>(r) << std::endl;
-
-                return r;
+                return _mm_or_ps(one, other);
             }
 
 
@@ -784,14 +779,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "zfloat32(float[4])", "default", "vbxor");
 
-                //return _mm_xor_ps(one, other);
-
-                auto r = _mm_xor_ps(one, other);
-
-
-                std::cerr << one << " ^ " << other << " = " << zfloat32<base_t::capability>(r) << std::endl;
-
-                return r;
+                return _mm_xor_ps(one, other);
             }
 
 

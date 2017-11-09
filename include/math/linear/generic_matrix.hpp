@@ -57,7 +57,7 @@ namespace zacc { namespace math {
         /// MEMO: NEVER use greedy Args&&... in combination with copy constructor
         template<typename... Args, typename = std::enable_if_t<all_true<std::is_convertible<Args, T>::value...>::value>>
         mat(Args... args) noexcept
-                : data{static_cast<T>(std::forward<Args>(args))...}
+                : data{{static_cast<T>(std::forward<Args>(args))...}}
         {}
 
         //__attribute__((optimize("unroll-loops")))
@@ -112,17 +112,17 @@ namespace zacc { namespace math {
         /// @brief access
         /// @{
 
-        inline T &operator()(int row, int col)
+        inline T &operator()(size_t row, size_t col)
         {
             return data[col + row * cols];
         }
 
-        inline T &operator()(int i)
+        inline T &operator()(size_t i)
         {
             return data[i];
         }
 
-        inline T &at(int row, int col)
+        inline T &at(size_t row, size_t col)
         {
             if(col >= cols || row >= rows)
                 throw std::out_of_range("matrix 2D index out of range");
@@ -130,7 +130,7 @@ namespace zacc { namespace math {
             return (*this)(row, col);
         }
 
-        inline T &at (int i)
+        inline T &at (size_t i)
         {
             if(i > data.size())
                 throw std::out_of_range("matrix 1D index out of range");
@@ -138,12 +138,12 @@ namespace zacc { namespace math {
             return data[i];
         }
 
-        inline const T &operator()(int row, int col) const
+        inline const T &operator()(size_t row, size_t col) const
         {
             return data[col + row * cols];
         }
 
-        inline const T &at(int row, int col) const
+        inline const T &at(size_t row, size_t col) const
         {
             if(col >= cols || row >= rows)
                 throw std::out_of_range("matrix 2D index out of range");
@@ -151,12 +151,12 @@ namespace zacc { namespace math {
             return (*this)(row, col);
         }
 
-        inline const T &operator()(int i) const
+        inline const T &operator()(size_t i) const
         {
             return data[i];
         }
 
-        inline const T &at (int i) const
+        inline const T &at (size_t i) const
         {
             if(i > data.size())
                 throw std::out_of_range("matrix 1D index out of range");
@@ -165,11 +165,11 @@ namespace zacc { namespace math {
         }
 
         //__attribute__((optimize("unroll-loops")))
-        inline auto get_row(int row) const
+        inline auto get_row(size_t row) const
         {
             mat<T, cols, 1> result;
 
-            for (int i = 0; i < cols; i++)
+            for (size_t i = 0; i < cols; i++)
                 result(i) = (*this)(row, i);
 
             return result;
@@ -226,7 +226,7 @@ namespace zacc { namespace math {
         {
             T sum = data[0] * data[0];
 
-            for(int i = 1; i < get_length(); i++)
+            for(size_t i = 1; i < get_length(); i++)
                 sum = sum + data[i] * data[i];
 
             return sum;
@@ -237,7 +237,7 @@ namespace zacc { namespace math {
         {
             T result = data[0] * other(0);
 
-            for(int i = 1; i < get_length(); i++)
+            for(size_t i = 1; i < get_length(); i++)
                 result = result + data[i] * other(i);
 
             return result;
@@ -359,7 +359,7 @@ namespace zacc { namespace math {
     {
         mat<T, N, M> result;
 
-        for(int i = 0; i < N * M; i++)
+        for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) < b(i);
 
         return result;
@@ -371,7 +371,7 @@ namespace zacc { namespace math {
     {
         mat<T, N, M> result;
 
-        for(int i = 0; i < N * M; i++)
+        for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) <= b(i);
 
         return result;
@@ -383,7 +383,7 @@ namespace zacc { namespace math {
     {
         mat<T, N, M> result;
 
-        for(int i = 0; i < N * M; i++)
+        for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) > b(i);
 
         return result;
@@ -395,7 +395,7 @@ namespace zacc { namespace math {
     {
         mat<T, N, M> result;
 
-        for(int i = 0; i < N * M; i++)
+        for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) >= b(i);
 
         return result;
@@ -407,7 +407,7 @@ namespace zacc { namespace math {
     {
         mat<T, N, M> result;
 
-        for(int i = 0; i < N * M; i++)
+        for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) == b(i);
 
         return result;
@@ -419,7 +419,7 @@ namespace zacc { namespace math {
     {
         mat<T, N, M> result;
 
-        for(int i = 0; i < N * M; i++)
+        for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) != b(i);
 
         return result;
@@ -432,7 +432,7 @@ namespace zacc { namespace math {
     {
         mat<T, rows, cols> result;
 
-        for(int i = 0; i < rows * cols; i++)
+        for(size_t i = 0; i < rows * cols; i++)
             result(i) = a(i) + b(i);
 
         return result;
@@ -446,7 +446,7 @@ namespace zacc { namespace math {
     {
         mat<T, rows, cols> result;
 
-        for(int i = 0; i < rows * cols; i++)
+        for(size_t i = 0; i < rows * cols; i++)
             result(i) = a(i) - b(i);
 
         return result;
@@ -461,7 +461,7 @@ namespace zacc { namespace math {
         mat<T, rows, cols> result;
 
 // #pragma unroll
-        for(int i = 0; i < rows * cols; i++)
+        for(size_t i = 0; i < rows * cols; i++)
             result(i) = a(i) + b;
 
         return result;
@@ -476,7 +476,7 @@ namespace zacc { namespace math {
         mat<T, rows, cols> result;
 
 // #pragma unroll
-        for(int i = 0; i < rows * cols; i++)
+        for(size_t i = 0; i < rows * cols; i++)
             result(i) = a(i) - b;
 
         return result;
@@ -491,7 +491,7 @@ namespace zacc { namespace math {
         mat<T, rows, cols> result;
 
 // #pragma unroll
-        for(int i = 0; i < rows * cols; i++)
+        for(size_t i = 0; i < rows * cols; i++)
             result(i) = a(i) * b;
 
         return result;
@@ -506,7 +506,7 @@ namespace zacc { namespace math {
         mat<T, rows, cols> result;
 
 // #pragma unroll
-        for(int i = 0; i < rows * cols; i++)
+        for(size_t i = 0; i < rows * cols; i++)
             result(i) = a(i) / b;
 
         return result;
@@ -522,7 +522,7 @@ namespace zacc { namespace math {
         vec<T, rows> result;
 
 // #pragma unroll
-        for(int i = 0; i < rows; i++)
+        for(size_t i = 0; i < rows; i++)
             result(i) = a(i) * b(i);
 
         return result;
@@ -537,7 +537,7 @@ namespace zacc { namespace math {
         vec<T, rows> result;
 
 // #pragma unroll
-        for(int i = 0; i < rows; i++)
+        for(size_t i = 0; i < rows; i++)
             result(i) = a(i) / b(i);
 
         return result;
@@ -551,13 +551,13 @@ namespace zacc { namespace math {
     {
         mat<T, N, M> result;
 
-        for (int n = 0; n < N; n++)
+        for (size_t n = 0; n < N; n++)
         {
-            for (int m = 0; m < M; m++)
+            for (size_t m = 0; m < M; m++)
             {
                 T temp = a(n, 0) * b(0, m);
 
-                for (int c = 1; c < cols; c++)
+                for (size_t c = 1; c < cols; c++)
                 {
                     temp = temp + a(n, c) * b(c, m);
                 }
@@ -581,7 +581,7 @@ namespace zacc { namespace math {
 
         //result(0) = a(0) * b(0);
 
-        for(int i = 1; i < n; i++)
+        for(size_t i = 1; i < n; i++)
             result = result + a(i) * b(i);
 
         return result;
@@ -593,7 +593,7 @@ namespace zacc { namespace math {
     {
         mat<T, N, M> result;
 
-        for(int i = 0; i < N * M; i++)
+        for(size_t i = 0; i < N * M; i++)
             result(i) = clamp_int32(a(i));
 
         return result;
@@ -605,7 +605,7 @@ namespace zacc { namespace math {
     {
         vec<data, N> result;
 
-        for(int i = 0; i < N; i++)
+        for(size_t i = 0; i < N; i++)
             result(i) = vsel<mask, data>(condition(i), choice1(i), choice2(i));
 
         return result;
@@ -618,7 +618,7 @@ namespace zacc { namespace math {
     {
         vec<T, N> result;
 
-        for(int i = 0; i < N; i++)
+        for(size_t i = 0; i < N; i++)
             result(i) = a(i).trunc();
 
         return result;
@@ -627,14 +627,14 @@ namespace zacc { namespace math {
     template<typename T, size_t elems>
     inline std::ostream& operator<<(std::ostream& out, const vec<T, elems> &other)
     {
-        auto print_row = [&](auto rowi)
+        auto print_row = [&]()
         {
-            for(auto coli = 0; coli < elems; coli++)
+            for(size_t coli = 0; coli < elems; coli++)
                 out << other(coli) << " ";
         };
 
         out << "[ ";
-        print_row(0);
+        print_row();
         out << "]";
 
         return out;
@@ -645,7 +645,7 @@ namespace zacc { namespace math {
     {
         auto print_row = [&](auto rowi)
         {
-            for(auto coli = 0; coli < cols; coli++)
+            for(size_t coli = 0; coli < cols; coli++)
                 out << other(rowi, coli) << " ";
         };
 
@@ -660,7 +660,7 @@ namespace zacc { namespace math {
         {
             out << std::endl;
             // TODO: Proper box chars. ncurses?
-            for(auto rowi = 0; rowi < rows; rowi++)
+            for(size_t rowi = 0; rowi < rows; rowi++)
             {
                 switch(rowi)
                 {

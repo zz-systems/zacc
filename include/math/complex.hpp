@@ -29,6 +29,7 @@
 #include <initializer_list>
 #include "traits/arithmetic.hpp"
 #include <complex>
+
 namespace zacc { namespace math {
 
     template<typename T>
@@ -49,7 +50,6 @@ namespace zacc { namespace math {
 
             using vector_t = std::array<scalar_t, dim>;
             using extracted_t = vector_t;
-
 
             constexpr impl() : _value {}
             {}
@@ -130,7 +130,7 @@ namespace zacc { namespace math {
 //            {}
 
             constexpr __impl(const scalar_t& re = 0, const scalar_t& im = 0)
-                    : base_t(vector_t{re, im})
+                    : base_t(vector_t{{re, im}})
             {}
 
             constexpr __impl(const vector_t& value)

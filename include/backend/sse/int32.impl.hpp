@@ -250,12 +250,12 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            friend zint32<base_t::capability> vgather(composed_t &target, raw_ptr<const int> source, zint32<base_t::capability> index)  noexcept {
+            template<typename RandomIt> friend zint32<base_t::capability> vgather(RandomIt input, const zint32<base_t::capability> &index)  noexcept {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vgather");
 
                 auto i = index.data();
-                return _mm_set_epi32(source[i[3]], source[i[2]], source[i[1]], source[i[0]]);
+                return _mm_set_epi32(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
             }
 
         };

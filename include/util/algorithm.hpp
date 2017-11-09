@@ -149,15 +149,15 @@ namespace zacc {
         template<class InputTuple, class UnaryOperation, size_t... index>
         void for_each_impl(InputTuple&& input, UnaryOperation&& func, std::index_sequence<index...>)
         {
-            auto dummy = { true, (func(std::get<index>(std::forward<InputTuple>(input))),
+            sink { true, (func(std::get<index>(std::forward<InputTuple>(input))),
                     void(), true)... };
         };
 
         template<class InputTuple1, class InputTuple2, class BinaryOperation, size_t... index>
         void for_each_impl(InputTuple1&& input1, InputTuple2&& input2, BinaryOperation&& func, std::index_sequence<index...>)
         {
-            auto dummy = { true, (func(std::get<index>(std::forward<InputTuple1>(input1)),
-                                       std::get<index>(std::forward<InputTuple2>(input2))),
+            sink { true, (func(std::get<index>(std::forward<InputTuple1>(input1)),
+                               std::get<index>(std::forward<InputTuple2>(input2))),
                     void(), true)... };
         };
 
@@ -196,7 +196,7 @@ namespace zacc {
         template<class InputTuple, class Acc, class BinaryOperation, size_t... index>
         auto accumulate_impl(InputTuple&& input, Acc accumulator, BinaryOperation&& func, std::index_sequence<index...>)
         {
-            auto dummy = { true, ((accumulator = func(accumulator, std::get<index>(std::forward<InputTuple>(input)))),
+            sink { true, ((accumulator = func(accumulator, std::get<index>(std::forward<InputTuple>(input)))),
                     void(), true)... };
 
             return accumulator;
@@ -205,9 +205,9 @@ namespace zacc {
         template<class InputTuple1, class InputTuple2, class Acc, class TernaryOperation, size_t... index>
         auto accumulate_impl(InputTuple1&& input1, InputTuple2&& input2, Acc accumulator, TernaryOperation&& func, std::index_sequence<index...>)
         {
-            auto dummy = { true, ((accumulator = func(accumulator,
-                                                      std::get<index>(std::forward<InputTuple1>(input1)),
-                                                      std::get<index>(std::forward<InputTuple2>(input2)))),
+            sink { true, ((accumulator = func(accumulator,
+                                              std::get<index>(std::forward<InputTuple1>(input1)),
+                                              std::get<index>(std::forward<InputTuple2>(input2)))),
                     void(), true)... };
 
             return accumulator;

@@ -26,6 +26,7 @@
 #pragma once
 
 #include "common.hpp"
+#include "memory.h"
 
 namespace zacc { namespace traits {
 
@@ -43,12 +44,12 @@ namespace zacc { namespace traits {
 
         void store (extracted_t &target) const
         {
-            vstore(target, static_cast<composed_t>(base_t::_value));
+            vstore(target, static_cast<composed_t>(base_t::value()));
         }
 
         void stream (extracted_t &target) const
         {
-            vstream(target, static_cast<composed_t>(base_t::_value));
+            vstream(target, static_cast<composed_t>(base_t::value()));
         }
 
         const extracted_t data() const {
@@ -68,11 +69,10 @@ namespace zacc { namespace traits {
             return result;
         }
 
-        template<typename index_t>
-        static composed_t gather(raw_ptr<const typename base_t::scalar_t> source, const index_t &index)
+        template<typename RandomIt, typename index_t>
+        static composed_t gather(RandomIt input, index_t index)
         {
-            alignas(base_t::alignment) composed_t temp;
-            return vgather(temp, source, index);
+            return vgather(input, index);
         }
     };
 

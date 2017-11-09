@@ -54,11 +54,14 @@ namespace zacc { namespace test {
 
         TYPED_TEST_P(gather_test, gather)
         {
+            zfloat::extracted_t da;
+            zfloat::gather(std::begin(da), zint32(0));
+
             typename TypeParam::extracted_t data;
             for(size_t i = 0; i < TypeParam::dim; i++)
                 data[i] = 10 + i;
 
-            TypeParam actual = TypeParam::gather(data.data(), zint32(0));
+            TypeParam actual = TypeParam::gather(std::begin(data), zint32(0));
 
             VASSERT_EQ(actual, 10);
         }
