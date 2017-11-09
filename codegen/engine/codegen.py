@@ -65,6 +65,9 @@ class Module:
         needs_default_cons = not [i for i,x in enumerate(constructors) if x.get('args') == '' or not x.get('args')]
         constructors = [ {'args':'','init':''} ] + constructors if needs_default_cons else constructors
 
+        # add implicit copy constructor
+        #constructors += [{ 'args': 'const composed_t& rhs', 'init': 'rhs.value()'}]
+
         # build constructors
         result.functions = [Func.make_constructor(result, entry) for entry in constructors]
 
@@ -143,12 +146,13 @@ class Func:
                                              suffix     = self.suffix).strip()
         elif self.inits:
             return self.cons_template_init.format(  prefix     = self.prefix,
-                                                    name          = "__impl",
+                                                    name          = "constexpr __impl",
                                                     args          = self.args,
                                                     initializer   = self.inits,
                                                     suffix        = self.suffix).strip()
         else:
-            return self.cons_template.format(   name   = "__impl",
+            return self.cons_template.format(   prefix     = self.prefix,
+                                                name   = "constexpr __impl",
                                                 args   = self.args,
                                                 suffix = self.suffix).strip()
 

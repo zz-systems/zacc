@@ -1,3 +1,4 @@
 # x87 interface ========================================================================================================
 
-zacc_target_metadata(scalar)
+dispatchable_target_interface(scalar
+        ARCH scalar)

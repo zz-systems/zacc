@@ -28,14 +28,17 @@
 
 #pragma once
 
-#include <x86intrin.h>
 #include <type_traits>
+#include <cmath>
 
-#include "util/type_composition.hpp"
+#include "backend/intrin.hpp"
+#include "backend/zval.hpp"
 
-#include "zval.hpp"
-#include "common.hpp"
-#include "type_traits.hpp"
+#include "util/type/type_composition.hpp"
+#include "util/type/type_traits.hpp"
+
+#include "util/memory.hpp"
+#include "util/macros.hpp"
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
@@ -51,7 +54,14 @@
  * provides unified access to 8 'double' values
  */
 
-namespace zacc { namespace avx512 {
+namespace zacc { namespace backend { namespace avx512 {
+
+    template<uint64_t capability>
+    struct bfloat64;
+
+    template<uint64_t capability>
+    struct zfloat64;
+
 
     // =================================================================================================================
     /**
@@ -76,6 +86,20 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
+
+
+            /**
+             * @brief construction default branch
+             * @relates float64
+             * @remark avx512 - default
+             */
+            __impl() : base_t() {
+
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS()");
+
+            }
 
 
             /**
@@ -85,7 +109,7 @@ namespace zacc { namespace avx512 {
              */
             __impl(__m512 value) : base_t(_mm512_cvtps_pd(value)) {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "CONS(__m512 value)");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(__m512 value)");
 
             }
 
@@ -97,7 +121,7 @@ namespace zacc { namespace avx512 {
              */
             __impl(__m512d value) : base_t(value) {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "CONS(__m512d value)");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(__m512d value)");
 
             }
 
@@ -109,7 +133,7 @@ namespace zacc { namespace avx512 {
              */
             __impl(__m512i value) : base_t(_mm512_cvtepi32_pd(value)) {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "CONS(__m512i value)");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(__m512i value)");
 
             }
 
@@ -121,7 +145,7 @@ namespace zacc { namespace avx512 {
              */
             __impl(double value) : base_t(_mm512_set1_pd(value)) {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "CONS(double value)");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(double value)");
 
             }
 
@@ -131,9 +155,9 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            __impl(double *value) : base_t(_mm512_load_pd(value)) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm512_load_pd(value.data())) {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "CONS(double *value)");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(std::array<typename base_t::scal..)");
 
             }
 
@@ -145,7 +169,7 @@ namespace zacc { namespace avx512 {
              */
             __impl(double arg7, double arg6, double arg5, double arg4, double arg3, double arg2, double arg1, double arg0) : base_t(_mm512_set_pd(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)) {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "CONS(double arg7, double arg6, double..)");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(double arg7, double arg6, double..)");
 
             }
 
@@ -156,8 +180,13 @@ namespace zacc { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::construction<__impl<base_t>, composed_t>;
+        //using impl = traits::construction<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::construction<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -186,6 +215,8 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -194,11 +225,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            void io_store(typename base_t::extracted_t &target) const noexcept {
+            void vstore(typename base_t::extracted_t &target, composed_t source) const noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "store");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vstore");
 
-                _mm512_store_pd(target.data(), base_t::_value);
+                _mm512_store_pd(target.data(), source);
             }
 
 
@@ -207,11 +238,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            void io_stream(typename base_t::extracted_t &target) const noexcept {
+            void vstream(typename base_t::extracted_t &target, composed_t source) const noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "stream");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vstream");
 
-                _mm512_stream_pd(target.data(), base_t::_value);
+                _mm512_stream_pd(target.data(), source);
             }
 
         };
@@ -221,8 +252,13 @@ namespace zacc { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::io<__impl<base_t>, composed_t>;
+        //using impl = traits::io<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::io<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -251,6 +287,8 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -259,11 +297,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t arithmetic_negate(composed_t one)  noexcept {
+            friend zfloat64<base_t::capability> vneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "negate");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vneg");
 
-                return _mm512_sub_pd(_mm512_setzero_pd(), one.get_value());
+                return _mm512_sub_pd(_mm512_setzero_pd(), one);
             }
 
 
@@ -272,11 +310,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t arithmetic_add(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vadd(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "add");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vadd");
 
-                return _mm512_add_pd(one.get_value(), other.get_value());
+                return _mm512_add_pd(one, other);
             }
 
 
@@ -285,11 +323,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t arithmetic_sub(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vsub(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "sub");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vsub");
 
-                return _mm512_sub_pd(one.get_value(), other.get_value());
+                return _mm512_sub_pd(one, other);
             }
 
 
@@ -298,11 +336,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t arithmetic_mul(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vmul(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "mul");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vmul");
 
-                return _mm512_mul_pd(one.get_value(), other.get_value());
+                return _mm512_mul_pd(one, other);
             }
 
 
@@ -311,11 +349,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t arithmetic_div(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vdiv(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "div");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vdiv");
 
-                return _mm512_div_pd(one.get_value(), other.get_value());
+                return _mm512_div_pd(one, other);
             }
 
         };
@@ -325,8 +363,13 @@ namespace zacc { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::arithmetic<__impl<base_t>, composed_t>;
+        //using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -355,6 +398,8 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -363,13 +408,13 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t bitwise_negate(composed_t one)  noexcept {
+            friend zfloat64<base_t::capability> vneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "negate");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vneg");
 
                 auto zero = _mm512_setzero_pd();
                 auto ones = _mm512_cmpeq_pd(zero, zero);
-                return _mm512_xor_pd(one.get_value(), ones);
+                return _mm512_xor_pd(one, ones);
             }
 
 
@@ -378,11 +423,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t bitwise_and(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vand(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "and");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vand");
 
-                return _mm512_or_pd(one.get_value(), other.get_value());
+                return _mm512_or_pd(one, other);
             }
 
 
@@ -391,11 +436,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t bitwise_or(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> or(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "or");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "or");
 
-                return _mm512_and_pd(one.get_value(), other.get_value());
+                return _mm512_and_pd(one, other);
             }
 
 
@@ -404,11 +449,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t bitwise_xor(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> xor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "xor");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "xor");
 
-                return _mm512_xor_pd(one.get_value(), other.get_value());
+                return _mm512_xor_pd(one, other);
             }
 
         };
@@ -418,8 +463,13 @@ namespace zacc { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::bitwise<__impl<base_t>, composed_t>;
+        //using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -448,6 +498,8 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -456,13 +508,13 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t logical_negate(composed_t one)  noexcept {
+            friend zfloat64<base_t::capability> vneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "negate");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vneg");
 
                 auto zero = _mm512_setzero_pd();
                 auto ones = _mm512_cmpeq_pd(zero, zero);
-                return _mm512_xor_pd(one.get_value(), ones);
+                return _mm512_xor_pd(one, ones);
             }
 
 
@@ -471,11 +523,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t logical_or(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> or(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "or");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "or");
 
-                return _mm512_or_pd(one.get_value(), other.get_value());
+                return _mm512_or_pd(one, other);
             }
 
 
@@ -484,11 +536,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t logical_and(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vand(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "and");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vand");
 
-                return _mm512_and_pd(one.get_value(), other.get_value());
+                return _mm512_and_pd(one, other);
             }
 
         };
@@ -498,8 +550,13 @@ namespace zacc { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::logical<__impl<base_t>, composed_t>;
+        //using impl = traits::logical<__impl<base_t>, bfloat64<base_t::capability>>;
+
+        using impl = traits::logical<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -528,6 +585,8 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -536,11 +595,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t comparison_eq(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "eq");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "veq");
 
-                return _mm512_cmpeq_pd(one.get_value(), other.get_value());
+                return _mm512_cmpeq_pd(one, other);
             }
 
 
@@ -549,11 +608,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t comparison_neq(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "neq");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vneq");
 
-                return _mm512_cmpneq_pd(one.get_value(), other.get_value());
+                return _mm512_cmpneq_pd(one, other);
             }
 
 
@@ -562,11 +621,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t comparison_gt(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "gt");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vgt");
 
-                return _mm512_cmpgt_pd(one.get_value(), other.get_value());
+                return _mm512_cmpgt_pd(one, other);
             }
 
 
@@ -575,11 +634,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t comparison_lt(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "lt");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vlt");
 
-                return _mm512_cmplt_pd(one.get_value(), other.get_value());
+                return _mm512_cmplt_pd(one, other);
             }
 
 
@@ -588,11 +647,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t comparison_ge(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "ge");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vge");
 
-                return _mm512_cmpge_pd(one.get_value(), other.get_value());
+                return _mm512_cmpge_pd(one, other);
             }
 
 
@@ -601,11 +660,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t comparison_le(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "le");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vle");
 
-                return _mm512_cmple_pd(one.get_value(), other.get_value());
+                return _mm512_cmple_pd(one, other);
             }
 
         };
@@ -615,8 +674,13 @@ namespace zacc { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::comparison<__impl<base_t>, composed_t>;
+        //using impl = traits::comparison<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::comparison<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -645,6 +709,8 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -653,11 +719,11 @@ namespace zacc { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            friend zfloat64<base_t::capability> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.float64.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zfloat64(double[8]) " << std::left << std::setw(10) << "default" << "vsel");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vsel");
 
-                return _mm512_or_pd(_mm512_andnot_pd(condition.get_value(), else_value.get_value()), _mm512_and_pd(condition.get_value(), if_value.get_value()));
+                return _mm512_or_pd(_mm512_andnot_pd(condition, else_value), _mm512_and_pd(condition, if_value));
             }
 
         };
@@ -667,8 +733,13 @@ namespace zacc { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::conditional<__impl<base_t>, composed_t>;
+        //using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::capability>>;
+
+        using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::capability>>;
+
     };
 
     ///@}
@@ -681,60 +752,91 @@ namespace zacc { namespace avx512 {
      */
     ///@{
 
-    /**
-     * @brief zval parametrization using
-     * - '__m512d' as underlying vector type
-     * - 'double' as scalar type
-     * - '8' as vector size
-     * - '64' as alignment
-     * @relates float64
-     * @remark avx512
-     */
-    template<uint64_t capability>
-    struct __zval_float64
-    {
-        using zval_t = zval<__m512d, double, 8, 64, capability>;
+    //namespace composition {
 
-        struct impl : public zval_t
+        /**
+         * @brief zval parametrization using
+         * - '__m512d' as underlying vector type
+         * - 'double' as scalar type
+         * - '8' as vector size
+         * - '64' as alignment
+         * @relates float64
+         * @remark avx512
+         */
+        template<uint64_t capability>
+        struct __zval_float64
         {
-            FORWARD2(impl, zval_t);
+            using zval_t = zval<__m512d, __mmask8, double, 8, 64, capability>;
+
+            struct impl : public zval_t
+            {
+                FORWARD2(impl, zval_t);
+            };
         };
-    };
-    /**
-     * @brief zval composition
-     * @relates float64
-     * @remark avx512
-     */
-    template<uint64_t capability>
-    struct __zfloat64
-    {
-        struct impl;
-
-        using zval_t = typename __zval_float64<capability>::impl;
-        using composition_t = compose
-        <
-            printable::impl,
-            iteratable::impl,
-            convertable::impl,
-            float64_io<impl>::template impl,
-            float64_arithmetic<impl>::template impl,
-            float64_bitwise<impl>::template impl,
-            float64_logical<impl>::template impl,
-            float64_comparison<impl>::template impl,
-            float64_conditional<impl>::template impl,
-            float64_construction<impl>::template impl,
-
-            composable<zval_t>::template type
-        >;
-
-        struct impl : public composition_t
+        /**
+         * @brief zval composition
+         * @relates float64
+         * @remark avx512
+         */
+        template<uint64_t capability>
+        struct __zfloat64
         {
-            FORWARD2(impl, composition_t);
+            struct impl;
+
+            using zval_t = typename __zval_float64<capability>::impl;
+            using composition_t = compose
+            <
+                printable::impl,
+                iteratable::impl,
+                convertable::impl,
+                float64_io<impl>::template impl,
+                float64_arithmetic<impl>::template impl,
+                float64_bitwise<impl>::template impl,
+                float64_logical<impl>::template impl,
+                float64_comparison<impl>::template impl,
+                float64_conditional<impl>::template impl,
+                float64_construction<impl>::template impl,
+
+                composable<zval_t>::template type
+            >;
+
+            struct impl : public composition_t
+            {
+                FORWARD2(impl, composition_t);
+            };
         };
+
+        template<uint64_t capability>
+        struct __bfloat64
+        {
+            using bval_t = bval<typename __zfloat64<capability>::impl, __mmask8>;
+            struct impl : public bval_t
+            {
+                FORWARD2(impl, bval_t);
+            };
+        };
+    //}
+
+    template<uint64_t capability>
+    struct zfloat64 : public /*composition::*/__zfloat64<capability>::impl
+    {
+        FORWARD2(zfloat64, /*composition::*/__zfloat64<capability>::impl);
     };
 
-    template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    using zfloat64 = typename __zfloat64<capability>::impl;
+    template<uint64_t capability>
+    struct bfloat64 : public /*composition::*/__bfloat64<capability>::impl
+    {
+        FORWARD2(bfloat64, /*composition::*/__bfloat64<capability>::impl);
+    };
+
+    static_assert(is_zval<zfloat64<0>>::value, "is_zval for zfloat64 failed.");
+    static_assert(is_bval<bfloat64<0>>::value, "is_bval for bfloat64 failed.");
+
+    static_assert(is_floating_point<zfloat64<0>>::value, "is_floating_point for zfloat64 failed.");
+    static_assert(!is_integral<zfloat64<0>>::value, "is_integral for zfloat64 failed.");
+
+    static_assert(!is_float<zfloat64<0>>::value, "is_float for zfloat64 failed.");
+    static_assert(is_double<zfloat64<0>>::value, "is_double for zfloat64 failed.");
 
     ///@}
-}}
+}}}

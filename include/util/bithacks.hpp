@@ -25,6 +25,7 @@
 
 #pragma once
 #include <type_traits>
+#include "type/type_traits.hpp"
 
 namespace zacc {
     /**
@@ -52,4 +53,59 @@ namespace zacc {
         return n;
     }
 
+    template<typename T>
+    union twiddler;
+
+    template<>
+    union twiddler<float>
+    {
+        using uint_t = uint32_t;
+        float f;
+        uint32_t i;
+    };
+
+    template<>
+    union twiddler<double>
+    {
+        using uint_t = uint64_t;
+        double f;
+
+        uint64_t i;
+    };
+
+//    template<typename T>
+//    auto &bitsof(T &value)
+//    {
+//        //return twiddler<T> { .f = value }.i;
+//
+//        //return /**(twiddler<T>::uint_t*)&*/value;
+//
+//        return *reinterpret_cast<resolve_uint_t<T>*>(&value);
+//    }
+
+    template<typename T>
+    auto && bitsof(T& value)
+    {
+        //return twiddler<T> { .f = value }.i;
+        //return /**(twiddler<T>::uint_t*)&*/std::forward<T>(value);
+
+        return *reinterpret_cast<resolve_uint_t<T>*>(&value);
+    }
+
+    template<typename T>
+    auto const& bitsof(T&& value)
+    {
+
+
+        //return twiddler<T> { .f = value }.i;
+        //return /**(twiddler<T>::uint_t*)&*/value;
+
+        return *reinterpret_cast<resolve_uint_t<T>*>(&value);
+    }
+
+//    template<typename T>
+//    auto && bitsof(T &&t)// -> decltype(twiddler<T> { .f = std::forward<T>(t) }.i) {
+//    {
+//        return twiddler<std::remove_reference_t<T>> { .f = t }.i;
+//    }
 }

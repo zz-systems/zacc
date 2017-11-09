@@ -99,6 +99,14 @@ namespace zacc { namespace traits {
         }
 
         /**
+         * @brief pow
+         * @return value ^ exponent
+         */
+        composed_t pow(const composed_t exponent) const noexcept {
+            return vpow(*this, exponent);
+        }
+
+        /**
          * @brief square root
          * @return sqrt(value)
          */

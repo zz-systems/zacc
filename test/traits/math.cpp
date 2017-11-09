@@ -109,7 +109,7 @@ namespace zacc { namespace test {
         TYPED_TEST_P(float_math_test, floor)
         {
             TypeParam value = 5.5;
-            TypeParam actual= value.trunc();
+            TypeParam actual= value.floor();
 
             VASSERT_EQ(actual, 5);
         }
@@ -117,7 +117,7 @@ namespace zacc { namespace test {
         TYPED_TEST_P(float_math_test, ceil)
         {
             TypeParam value = 5.5;
-            TypeParam actual= value.trunc();
+            TypeParam actual= value.ceil();
 
             VASSERT_EQ(actual, 6);
         }

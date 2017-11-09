@@ -97,7 +97,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            __impl() : base_t() {
+            constexpr __impl() : base_t() {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS()");
 
@@ -109,7 +109,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            __impl(__m128 value) : base_t(_mm_cvtps_pd(value)) {
+            constexpr __impl(__m128 value) : base_t(_mm_cvtps_pd(value)) {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(__m128 value)");
 
@@ -121,7 +121,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            __impl(__m128d value) : base_t(value) {
+            constexpr __impl(__m128d value) : base_t(value) {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(__m128d value)");
 
@@ -133,7 +133,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            __impl(__m128i value) : base_t(_mm_cvtepi32_pd(_mm_shuffle_epi32(value, _MM_SHUFFLE(0,2,0,0)))) {
+            constexpr __impl(__m128i value) : base_t(_mm_cvtepi32_pd(_mm_shuffle_epi32(value, _MM_SHUFFLE(0,2,0,0)))) {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(__m128i value)");
 
@@ -145,7 +145,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            __impl(double value) : base_t(_mm_set1_pd(value)) {
+            constexpr __impl(double value) : base_t(_mm_set1_pd(value)) {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(double value)");
 
@@ -157,7 +157,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm_load_pd(value.data())) {
+            constexpr __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm_load_pd(value.data())) {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(std::array<typename base_t::scal..)");
 
@@ -169,7 +169,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - default
              */
-            __impl(double arg1, double arg0) : base_t(_mm_set_pd(arg0, arg1)) {
+            constexpr __impl(double arg1, double arg0) : base_t(_mm_set_pd(arg0, arg1)) {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(double arg1, double arg0)");
 
@@ -182,11 +182,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float64
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::construction<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::construction<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -268,11 +264,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float64
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::io<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::io<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -314,11 +306,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float64
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::numeric<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::numeric<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -428,7 +416,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vtrunc");
 
-                return _mm_cvtepi32_pd(_mm_cvtpd_epi32(one));
+                return _mm_cvtepi32_pd(_mm_cvttpd_epi32(one));
             }
 
 
@@ -546,11 +534,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float64
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::math<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::math<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -683,11 +667,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float64
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -808,11 +788,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float64
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -893,11 +869,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float64
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::logical<__impl<base_t>, bfloat64<base_t::capability>>;
-
         using impl = traits::logical<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -1017,11 +989,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float64
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::comparison<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::comparison<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -1091,11 +1059,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float64
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };

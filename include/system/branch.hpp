@@ -40,7 +40,7 @@ namespace zacc {
         static const constexpr bool use_fast_float = ZACC_FAST_FLOAT;
 
         /// type provider alias
-        using types = ZACC_MAJOR_BRANCH::types<branches::ZACC_CAPABILITIES>;
+        using types = ZACC_MAJOR_ARCH::types<branches::ZACC_ARCH>;
     };
 
     using zint8      = typename dispatched_branch::types::zint8;

@@ -37,12 +37,14 @@ namespace zacc {
 
     template<template<class> class head,
             template<class> class ... tail>
-    struct compose<head, tail...> : head<compose<tail...>> {
+    struct compose<head, tail...> : head<compose<tail...>>
+    {
         template<typename... Args>
-        compose(Args &&...args) : head<compose<tail...>>(std::forward<Args>(args)...) {}
+        constexpr compose(Args &&...args) : head<compose<tail...>>(std::forward<Args>(args)...)
+        {}
     };
 
     template<>
-    struct compose<> {
-    };
+    struct compose<>
+    {};
 }

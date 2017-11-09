@@ -34,7 +34,7 @@
 extern "C"
 {
     ZACC_LOADER_EXPORT void *               zacc_dlopen(const char *path);
-    ZACC_LOADER_EXPORT const char *const    zacc_dlerror();
+    ZACC_LOADER_EXPORT const char *         zacc_dlerror();
     ZACC_LOADER_EXPORT void *               zacc_dlsym(void *handle, const char *member);
     ZACC_LOADER_EXPORT bool                 zacc_dlclose(void *handle);
 }

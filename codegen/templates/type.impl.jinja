@@ -120,16 +120,13 @@ namespace zacc { namespace backend { namespace {{ type.branch }} {
          * @relates {{ type.type }}
          * @remark {{ type.branch }}
          */
-
-
         {% if module.name == 'logical' %}
         template<typename base_t>
-        //using impl = traits::{{ module.name }}<__impl<base_t>, b{{ type.type }}<base_t::capability>>;
+        {#//using impl = traits::{{ module.name }}<__impl<base_t>, b{{ type.type }}<base_t::capability>>; #}
         {% else  %}
         template<typename base_t>
-        //using impl = traits::{{ module.name }}<__impl<base_t>, z{{ type.type }}<base_t::capability>>;
+        {#//using impl = traits::{{ module.name }}<__impl<base_t>, z{{ type.type }}<base_t::capability>>; #}
         {% endif %}
-
         using impl = traits::{{ module.name }}<__impl<base_t>, z{{ type.type }}<base_t::capability>>;
 
     };

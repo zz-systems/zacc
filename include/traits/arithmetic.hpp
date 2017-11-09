@@ -39,6 +39,15 @@ namespace zacc { namespace traits {
         FORWARD(arithmetic);
 
         /**
+         * @brief promotion operator for symmetry sake
+         * @param one
+         * @return a copy of the argument
+         */
+        friend composed_t operator+(const composed_t one) {
+            return one;
+        }
+
+        /**
          * @brief negation operator
          * @param one
          * @return negated value

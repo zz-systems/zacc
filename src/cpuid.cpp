@@ -74,7 +74,7 @@ namespace zacc {
             _data.push_back(get_cpuid(i, 0));
 
 
-        append(_vendor_str, std::array<reg_t, 3>{_data[0][EBX], _data[0][EDX], _data[0][ECX]});
+        append(_vendor_str, std::array<reg_t, 3>{{_data[0][EBX], _data[0][EDX], _data[0][ECX]}});
 
         _vendor = _vendor_mapping[_vendor_str];
 
@@ -108,7 +108,7 @@ namespace zacc {
         target += temp;
     }
 
-    const cpuid::vendors cpuid::vendor()	const { return _vendor; }
+    cpuid::vendors cpuid::vendor()	        const { return _vendor; }
 
     const std::string &cpuid::vendor_str()	const { return _vendor_str; }
 

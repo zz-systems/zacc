@@ -98,7 +98,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            __impl() : base_t() {
+            constexpr __impl() : base_t() {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "CONS()");
 
@@ -110,7 +110,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            __impl(int32_t value) : base_t(value) {
+            constexpr __impl(int32_t value) : base_t(value) {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "CONS(int32_t value)");
 
@@ -122,7 +122,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> __impl(const T &value) : base_t(value.value()) {
+            template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> constexpr __impl(const T &value) : base_t(value.value()) {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "CONS(const T &value)");
 
@@ -134,7 +134,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(value[0]) {
+            constexpr __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(value[0]) {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "CONS(std::array<typename base_t::scal..)");
 
@@ -147,11 +147,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int32
          * @remark scalar
          */
-
-
         template<typename base_t>
-        //using impl = traits::construction<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::construction<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -232,11 +228,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int32
          * @remark scalar
          */
-
-
         template<typename base_t>
-        //using impl = traits::io<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::io<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -278,11 +270,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int32
          * @remark scalar
          */
-
-
         template<typename base_t>
-        //using impl = traits::numeric<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::numeric<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -389,11 +377,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int32
          * @remark scalar
          */
-
-
         template<typename base_t>
-        //using impl = traits::math<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::math<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -513,11 +497,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int32
          * @remark scalar
          */
-
-
         template<typename base_t>
-        //using impl = traits::arithmetic<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::arithmetic<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -624,11 +604,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int32
          * @remark scalar
          */
-
-
         template<typename base_t>
-        //using impl = traits::bitwise<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::bitwise<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -722,11 +698,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int32
          * @remark scalar
          */
-
-
         template<typename base_t>
-        //using impl = traits::bitwise_shift<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::bitwise_shift<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -807,11 +779,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int32
          * @remark scalar
          */
-
-
         template<typename base_t>
-        //using impl = traits::logical<__impl<base_t>, bint32<base_t::capability>>;
-
         using impl = traits::logical<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -931,11 +899,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int32
          * @remark scalar
          */
-
-
         template<typename base_t>
-        //using impl = traits::comparison<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::comparison<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -990,11 +954,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int32
          * @remark scalar
          */
-
-
         template<typename base_t>
-        //using impl = traits::conditional<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::conditional<__impl<base_t>, zint32<base_t::capability>>;
 
     };

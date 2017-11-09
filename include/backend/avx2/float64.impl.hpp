@@ -97,7 +97,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float64
              * @remark avx2 - default
              */
-            __impl() : base_t() {
+            constexpr __impl() : base_t() {
 
                 ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS()");
 
@@ -109,7 +109,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float64
              * @remark avx2 - default
              */
-            __impl(const __m256 &value) : base_t(_mm256_cvtps_pd(_mm256_castps256_ps128(value))) {
+            constexpr __impl(const __m256 &value) : base_t(_mm256_cvtps_pd(_mm256_castps256_ps128(value))) {
 
                 ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(const __m256 &value)");
 
@@ -121,7 +121,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float64
              * @remark avx2 - default
              */
-            __impl(const __m256d &value) : base_t(value) {
+            constexpr __impl(const __m256d &value) : base_t(value) {
 
                 ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(const __m256d &value)");
 
@@ -133,7 +133,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float64
              * @remark avx2 - default
              */
-            __impl(const __m256i &value) : base_t(_mm256_cvtepi32_pd(_mm256_castsi256_si128(value))) {
+            constexpr __impl(const __m256i &value) : base_t(_mm256_cvtepi32_pd(_mm256_castsi256_si128(value))) {
 
                 ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(const __m256i &value)");
 
@@ -145,7 +145,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float64
              * @remark avx2 - default
              */
-            __impl(double value) : base_t(_mm256_set1_pd(value)) {
+            constexpr __impl(double value) : base_t(_mm256_set1_pd(value)) {
 
                 ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(double value)");
 
@@ -157,7 +157,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float64
              * @remark avx2 - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_loadu_pd(value.data())) {
+            constexpr __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_loadu_pd(value.data())) {
 
                 ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(std::array<typename base_t::scal..)");
 
@@ -169,7 +169,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float64
              * @remark avx2 - default
              */
-            __impl(double arg3, double arg2, double arg1, double arg0) : base_t(_mm256_set_pd(arg0, arg1, arg2, arg3)) {
+            constexpr __impl(double arg3, double arg2, double arg1, double arg0) : base_t(_mm256_set_pd(arg0, arg1, arg2, arg3)) {
 
                 ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "zfloat64(double[4])", "default", "CONS(double arg3, double arg2, double..)");
 
@@ -182,11 +182,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float64
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::construction<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::construction<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -268,11 +264,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float64
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::io<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::io<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -314,11 +306,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float64
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::numeric<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::numeric<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -490,11 +478,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float64
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::math<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::math<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -627,11 +611,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float64
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -756,11 +736,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float64
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -841,11 +817,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float64
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::logical<__impl<base_t>, bfloat64<base_t::capability>>;
-
         using impl = traits::logical<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -966,11 +938,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float64
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::comparison<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::comparison<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };
@@ -1026,11 +994,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float64
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::capability>>;
-
         using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::capability>>;
 
     };

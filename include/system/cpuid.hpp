@@ -84,7 +84,7 @@ namespace zacc {
          * @brief
          * @return
          */
-        const vendors vendor()                      const;
+        vendors vendor()                            const;
 
         /**
          * @brief

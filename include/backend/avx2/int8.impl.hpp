@@ -97,7 +97,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int8
              * @remark avx2 - default
              */
-            __impl() : base_t() {
+            constexpr __impl() : base_t() {
 
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "CONS()");
 
@@ -109,7 +109,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int8
              * @remark avx2 - default
              */
-            __impl(__m256i value) : base_t(value) {
+            constexpr __impl(__m256i value) : base_t(value) {
 
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "CONS(__m256i value)");
 
@@ -121,7 +121,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int8
              * @remark avx2 - default
              */
-            __impl(int8_t value) : base_t(_mm256_set1_epi8(value)) {
+            constexpr __impl(int8_t value) : base_t(_mm256_set1_epi8(value)) {
 
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "CONS(int8_t value)");
 
@@ -133,7 +133,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int8
              * @remark avx2 - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_loadu_si256((__m256i*)value.data())) {
+            constexpr __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_loadu_si256((__m256i*)value.data())) {
 
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "CONS(std::array<typename base_t::scal..)");
 
@@ -145,7 +145,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int8
              * @remark avx2 - default
              */
-            __impl(int8_t arg31, int8_t arg30, int8_t arg29, int8_t arg28, int8_t arg27, int8_t arg26, int8_t arg25, int8_t arg24, int8_t arg23, int8_t arg22, int8_t arg21, int8_t arg20, int8_t arg19, int8_t arg18, int8_t arg17, int8_t arg16, int8_t arg15, int8_t arg14, int8_t arg13, int8_t arg12, int8_t arg11, int8_t arg10, int8_t arg9, int8_t arg8, int8_t arg7, int8_t arg6, int8_t arg5, int8_t arg4, int8_t arg3, int8_t arg2, int8_t arg1, int8_t arg0) : base_t(_mm256_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20, arg21, arg22, arg23, arg24, arg25, arg26, arg27, arg28, arg29, arg30, arg31)) {
+            constexpr __impl(int8_t arg31, int8_t arg30, int8_t arg29, int8_t arg28, int8_t arg27, int8_t arg26, int8_t arg25, int8_t arg24, int8_t arg23, int8_t arg22, int8_t arg21, int8_t arg20, int8_t arg19, int8_t arg18, int8_t arg17, int8_t arg16, int8_t arg15, int8_t arg14, int8_t arg13, int8_t arg12, int8_t arg11, int8_t arg10, int8_t arg9, int8_t arg8, int8_t arg7, int8_t arg6, int8_t arg5, int8_t arg4, int8_t arg3, int8_t arg2, int8_t arg1, int8_t arg0) : base_t(_mm256_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20, arg21, arg22, arg23, arg24, arg25, arg26, arg27, arg28, arg29, arg30, arg31)) {
 
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "CONS(int8_t arg31, int8_t arg30, int8..)");
 
@@ -158,11 +158,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int8
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::construction<__impl<base_t>, zint8<base_t::capability>>;
-
         using impl = traits::construction<__impl<base_t>, zint8<base_t::capability>>;
 
     };
@@ -230,11 +226,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int8
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::io<__impl<base_t>, zint8<base_t::capability>>;
-
         using impl = traits::io<__impl<base_t>, zint8<base_t::capability>>;
 
     };
@@ -276,11 +268,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int8
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::numeric<__impl<base_t>, zint8<base_t::capability>>;
-
         using impl = traits::numeric<__impl<base_t>, zint8<base_t::capability>>;
 
     };
@@ -374,11 +362,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int8
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::math<__impl<base_t>, zint8<base_t::capability>>;
-
         using impl = traits::math<__impl<base_t>, zint8<base_t::capability>>;
 
     };
@@ -504,11 +488,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int8
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::arithmetic<__impl<base_t>, zint8<base_t::capability>>;
-
         using impl = traits::arithmetic<__impl<base_t>, zint8<base_t::capability>>;
 
     };
@@ -617,11 +597,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int8
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::bitwise<__impl<base_t>, zint8<base_t::capability>>;
-
         using impl = traits::bitwise<__impl<base_t>, zint8<base_t::capability>>;
 
     };
@@ -702,11 +678,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int8
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::logical<__impl<base_t>, bint8<base_t::capability>>;
-
         using impl = traits::logical<__impl<base_t>, zint8<base_t::capability>>;
 
     };
@@ -827,11 +799,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int8
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::comparison<__impl<base_t>, zint8<base_t::capability>>;
-
         using impl = traits::comparison<__impl<base_t>, zint8<base_t::capability>>;
 
     };
@@ -887,11 +855,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int8
          * @remark avx2
          */
-
-
         template<typename base_t>
-        //using impl = traits::conditional<__impl<base_t>, zint8<base_t::capability>>;
-
         using impl = traits::conditional<__impl<base_t>, zint8<base_t::capability>>;
 
     };

@@ -42,7 +42,7 @@ namespace zacc { namespace test {
                 {% if branch.test and (module.name != 'bitwise' or not type.type.startswith('float')) %}
     TEST({{ type.branch}}_{{ module.mangled_name() }}, {{ branch.name }}_{{ branch.branch_name }})
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);

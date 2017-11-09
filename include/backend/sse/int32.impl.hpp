@@ -98,7 +98,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            __impl() : base_t() {
+            constexpr __impl() : base_t() {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS()");
 
@@ -110,7 +110,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            __impl(__m128 value) : base_t(_mm_cvtps_epi32(value)) {
+            constexpr __impl(__m128 value) : base_t(_mm_cvtps_epi32(value)) {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS(__m128 value)");
 
@@ -122,7 +122,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            __impl(__m128d value) : base_t(_mm_cvtpd_epi32(value)) {
+            constexpr __impl(__m128d value) : base_t(_mm_cvtpd_epi32(value)) {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS(__m128d value)");
 
@@ -134,7 +134,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            __impl(__m128i value) : base_t(value) {
+            constexpr __impl(__m128i value) : base_t(value) {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS(__m128i value)");
 
@@ -146,7 +146,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            __impl(int32_t value) : base_t(_mm_set1_epi32(value)) {
+            constexpr __impl(int32_t value) : base_t(_mm_set1_epi32(value)) {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS(int32_t value)");
 
@@ -158,7 +158,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm_loadu_si128((__m128i*)value.data())) {
+            constexpr __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm_loadu_si128((__m128i*)value.data())) {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS(std::array<typename base_t::scal..)");
 
@@ -170,7 +170,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            __impl(int32_t arg3, int32_t arg2, int32_t arg1, int32_t arg0) : base_t(_mm_set_epi32(arg0, arg1, arg2, arg3)) {
+            constexpr __impl(int32_t arg3, int32_t arg2, int32_t arg1, int32_t arg0) : base_t(_mm_set_epi32(arg0, arg1, arg2, arg3)) {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS(int32_t arg3, int32_t arg2, int3..)");
 
@@ -183,11 +183,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int32
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::construction<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::construction<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -269,11 +265,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int32
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::io<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::io<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -315,11 +307,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int32
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::numeric<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::numeric<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -465,11 +453,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int32
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::math<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::math<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -604,11 +588,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int32
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::arithmetic<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::arithmetic<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -732,11 +712,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int32
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::bitwise<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::bitwise<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -830,11 +806,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int32
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::bitwise_shift<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::bitwise_shift<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -915,11 +887,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int32
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::logical<__impl<base_t>, bint32<base_t::capability>>;
-
         using impl = traits::logical<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -1039,11 +1007,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int32
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::comparison<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::comparison<__impl<base_t>, zint32<base_t::capability>>;
 
     };
@@ -1112,11 +1076,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int32
          * @remark sse
          */
-
-
         template<typename base_t>
-        //using impl = traits::conditional<__impl<base_t>, zint32<base_t::capability>>;
-
         using impl = traits::conditional<__impl<base_t>, zint32<base_t::capability>>;
 
     };

@@ -37,7 +37,7 @@ namespace zacc { namespace test {
 
     TEST(vector, load)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
         vec3<zint32> v{2, 3, 4};
 
         VASSERT_EQ(v(0), 2);
@@ -47,7 +47,7 @@ namespace zacc { namespace test {
     
     TEST(matrix, load)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         mat<zint32, 3, 3> v
         {
@@ -71,7 +71,7 @@ namespace zacc { namespace test {
     
     TEST(vector, sqr_magnitude)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         vec3<zint32> v{2, 3, 4};
 
@@ -84,7 +84,7 @@ namespace zacc { namespace test {
     /*
     TEST(vector, magnitude)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         vec3<zint32> v{2, 3, 4};
 
@@ -97,7 +97,7 @@ namespace zacc { namespace test {
 
     TEST(vector, add)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         vec3<zint32> v1{1, 2, 3}, v2{6, 5, 4};
 
@@ -111,7 +111,7 @@ namespace zacc { namespace test {
     
     TEST(vector, sub)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         vec3<zint32> v1{ 1, 2, 3 }, v2{ 6, 5, 4 };
 
@@ -124,7 +124,7 @@ namespace zacc { namespace test {
     
     TEST(vector, scale)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         vec3<zint32> v1{ 1, 2, 3 };
 
@@ -137,7 +137,7 @@ namespace zacc { namespace test {
     
     TEST(vector, reciproc_scale)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         vec3<zint32> v1{ 1, 2, 3 };
 
@@ -150,7 +150,7 @@ namespace zacc { namespace test {
     
     TEST(vector, row_vector_mul_col_vector)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         mat<zint32, 1, 3> m1{2, 2, 2};
         mat<zint32, 3, 1> m2{2, 2, 2};
@@ -167,7 +167,7 @@ namespace zacc { namespace test {
     
     TEST(vector, col_vector_mul_row_vector)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         //SECTION("3 elem col vector * 3 elem row vector should yield a 3x3 matrix")
         {
@@ -216,7 +216,7 @@ namespace zacc { namespace test {
     
     TEST(matrix, matrix_2x3_mul_3x2)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         mat<zint32, 2, 3> m1(
         {
@@ -245,7 +245,7 @@ namespace zacc { namespace test {
 
     TEST(matrix, matrix_5x4_mul_4x3)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         mat<zint32, 5, 4> m1
         {
@@ -294,7 +294,7 @@ namespace zacc { namespace test {
     
     TEST(vector, vector_implicit_init_and_cast)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         vec3<zint32> v {0, 1, 2};
 
@@ -310,7 +310,7 @@ namespace zacc { namespace test {
     
     TEST(vector, dot_product)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         vec3<zint32> v {0, 1, 2}, v2 {3, 4, 5};
 
@@ -321,7 +321,7 @@ namespace zacc { namespace test {
     
     TEST(vector, dot_product_float)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         vec3<zfloat32> v {0.5f, 0.5f, 0.5f}, v2 {2.0f, 4.0f, 8.0f};
 

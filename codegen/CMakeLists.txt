@@ -35,22 +35,16 @@ function(find_files files schema)
     set(${files} ${_files} PARENT_SCOPE)
 endfunction()
 
-macro(get_branch_files files branch schema)
-    # sse.sse4 => [major; minor] => [sse; sse4]
-    string(REPLACE "." ";" parts ${branch})
-    list(LENGTH parts len)
+macro(get_arch_files files branch schema)
 
-    if(${len} GREATER 1) # majorbranch.subbranch.ignored.ignored
-        list(GET parts 0 majorbranch)
-        find_files(_files "*/backend/${majorbranch}/*${schema}")
+    #parse_arch(${branch})
 
-    elseif(${len} EQUAL 1) # majorbranch
-        find_files(_files "*/backend/${branch}/*${schema}")
-    else()
-        message(FATAL_ERROR "malformed branch definition")
-    endif()
+    set(arch ${${branch}.arch})
+
+    find_files(_files "*/backend/${arch}/*${schema}")
 
     set(${files} ${_files})
+
 endmacro()
 
 function(generate_file output template template_data)
@@ -70,7 +64,7 @@ function(generate_file output template template_data)
     set_source_files_properties(${PROJECT_SOURCE_DIR}/${output} PROPERTIES GENERATED TRUE)
 endfunction()
 
-function (generate branch templates)
+macro (generate branch templates)
     MESSAGE(STATUS "configuring '${branch}' branch with templates [${templates}]")
 
     foreach(template ${templates})
@@ -90,27 +84,23 @@ function (generate branch templates)
         list(APPEND generated_tests ${PROJECT_SOURCE_DIR}/${test_output})
     endforeach()
 
-    add_custom_target(zacc.generate.${branch}.types
-            DEPENDS ${generated_types}
-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+    list(APPEND zacc.codegen.types ${generated_types})
+    list(APPEND zacc.codegen.tests ${generated_tests})
+endmacro()
 
-    add_custom_target(zacc.generate.${branch}.tests
-            DEPENDS ${generated_tests}
-            WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
-endfunction()
+foreach(target ${branches})
+    get_arch_files(templates ${target} ${template.schema})
 
-foreach(branch ${branches})
-    get_branch_files(templates ${branch} "${template.schema}")
-
-    generate(${branch} "${templates}")
-
-    list(APPEND generate.types.all zacc.generate.${branch}.types)
-    list(APPEND generate.tests.all zacc.generate.${branch}.tests)
+    generate(${target} "${templates}")
 endforeach()
 
-add_custom_target(zacc.generate.types.all ALL DEPENDS ${generate.types.all})
-add_custom_target(zacc.generate.tests.all ALL DEPENDS ${generate.tests.all})
-add_custom_target(zacc.generate.all ALL DEPENDS zacc.generate.types.all zacc.generate.tests.all)
 
-add_library(zacc.interface.codegen INTERFACE)
-add_dependencies(zacc.interface.codegen "zacc.generate.types.all" "zacc.generate.tests.all" ${target_dependencies})
+add_custom_target(zacc.codegen.types.all ALL DEPENDS ${zacc.codegen.types} WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+add_custom_target(zacc.codegen.tests.all ALL DEPENDS ${zacc.codegen.tests} WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
+
+add_custom_target(zacc.codegen.all ALL DEPENDS zacc.codegen.types.all zacc.codegen.tests.all)
+
+add_library(zacc.codegen INTERFACE)
+add_dependencies(zacc.codegen zacc.codegen.types.all zacc.codegen.tests.all)
+
+#add_custom_target(zacc.codegen.all DEPENDS zacc.codegen)

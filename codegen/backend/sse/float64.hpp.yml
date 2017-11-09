@@ -38,6 +38,10 @@ modules:
     - args: [[*scalar_t, value]]
       init: _mm_set1_pd(value)
 
+    #- args: T value #[[*scalar_t, value]]
+    #  prefix: "template<typename T, typename = typename std::enable_if_t<std::is_convertible<T, double>::value>>"
+    #  init: _mm_set1_pd((double)value)
+
     - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
       init: _mm_load_pd(value.data())
 
@@ -76,7 +80,7 @@ modules:
       body: "return (1 / one);" #bug in automatic arg insertion
     vtrunc:
       args: one
-      body: _mm_cvtepi32_pd(_mm_cvtpd_epi32(one))
+      body: _mm_cvtepi32_pd(_mm_cvttpd_epi32(one))
     vfloor:
       args: one
       body:

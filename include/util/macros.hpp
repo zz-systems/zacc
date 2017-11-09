@@ -24,6 +24,7 @@
 
 
 #pragma once
+#include <utility>
 
 /**
  * @brief shortcut to write forwarding constructors
@@ -35,7 +36,7 @@
      * @brief forwarding constructor \
      */ \
     template<typename ...Args> \
-    name(Args&&... args) : base(std::forward<Args>(args)...) {}
+    constexpr name(Args&&... args) : base(std::forward<Args>(args)...) {}
 
 
 /**

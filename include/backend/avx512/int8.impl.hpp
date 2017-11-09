@@ -28,14 +28,17 @@
 
 #pragma once
 
-#include <x86intrin.h>
 #include <type_traits>
+#include <cmath>
 
-#include "util/type_composition.hpp"
+#include "backend/intrin.hpp"
+#include "backend/zval.hpp"
 
-#include "zval.hpp"
-#include "common.hpp"
-#include "type_traits.hpp"
+#include "util/type/type_composition.hpp"
+#include "util/type/type_traits.hpp"
+
+#include "util/memory.hpp"
+#include "util/macros.hpp"
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
@@ -48,10 +51,17 @@
 
 /**
  * @brief int8 implementation for the avx512 branch
- * provides unified access to 64 'char' values
+ * provides unified access to 64 'int8_t' values
  */
 
-namespace zacc { namespace avx512 {
+namespace zacc { namespace backend { namespace avx512 {
+
+    template<uint64_t capability>
+    struct bint8;
+
+    template<uint64_t capability>
+    struct zint8;
+
 
     // =================================================================================================================
     /**
@@ -76,6 +86,20 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
+
+
+            /**
+             * @brief construction default branch
+             * @relates int8
+             * @remark avx512 - default
+             */
+            __impl() : base_t() {
+
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "CONS()");
+
+            }
 
 
             /**
@@ -85,7 +109,7 @@ namespace zacc { namespace avx512 {
              */
             __impl(__m512i value) : base_t(value) {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "CONS(__m512i value)");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "CONS(__m512i value)");
 
             }
 
@@ -95,21 +119,9 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            __impl(char value) : base_t(_mm512_set1_epi8(value)) {
+            __impl(int8_t value) : base_t(_mm512_set1_epi8(value)) {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "CONS(char value)");
-
-            }
-
-
-            /**
-             * @brief construction default branch
-             * @relates int8
-             * @remark avx512 - default
-             */
-            __impl(char *value) : base_t(_mm512_load_si512(value)) {
-
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "CONS(char *value)");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "CONS(int8_t value)");
 
             }
 
@@ -119,9 +131,21 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            __impl(char arg63, char arg62, char arg61, char arg60, char arg59, char arg58, char arg57, char arg56, char arg55, char arg54, char arg53, char arg52, char arg51, char arg50, char arg49, char arg48, char arg47, char arg46, char arg45, char arg44, char arg43, char arg42, char arg41, char arg40, char arg39, char arg38, char arg37, char arg36, char arg35, char arg34, char arg33, char arg32, char arg31, char arg30, char arg29, char arg28, char arg27, char arg26, char arg25, char arg24, char arg23, char arg22, char arg21, char arg20, char arg19, char arg18, char arg17, char arg16, char arg15, char arg14, char arg13, char arg12, char arg11, char arg10, char arg9, char arg8, char arg7, char arg6, char arg5, char arg4, char arg3, char arg2, char arg1, char arg0) : base_t(_mm512_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20, arg21, arg22, arg23, arg24, arg25, arg26, arg27, arg28, arg29, arg30, arg31, arg32, arg33, arg34, arg35, arg36, arg37, arg38, arg39, arg40, arg41, arg42, arg43, arg44, arg45, arg46, arg47, arg48, arg49, arg50, arg51, arg52, arg53, arg54, arg55, arg56, arg57, arg58, arg59, arg60, arg61, arg62, arg63)) {
+            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm512_load_si512(value.data())) {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "CONS(char arg63, char arg62, char arg..)");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "CONS(std::array<typename base_t::scal..)");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates int8
+             * @remark avx512 - default
+             */
+            __impl(int8_t arg63, int8_t arg62, int8_t arg61, int8_t arg60, int8_t arg59, int8_t arg58, int8_t arg57, int8_t arg56, int8_t arg55, int8_t arg54, int8_t arg53, int8_t arg52, int8_t arg51, int8_t arg50, int8_t arg49, int8_t arg48, int8_t arg47, int8_t arg46, int8_t arg45, int8_t arg44, int8_t arg43, int8_t arg42, int8_t arg41, int8_t arg40, int8_t arg39, int8_t arg38, int8_t arg37, int8_t arg36, int8_t arg35, int8_t arg34, int8_t arg33, int8_t arg32, int8_t arg31, int8_t arg30, int8_t arg29, int8_t arg28, int8_t arg27, int8_t arg26, int8_t arg25, int8_t arg24, int8_t arg23, int8_t arg22, int8_t arg21, int8_t arg20, int8_t arg19, int8_t arg18, int8_t arg17, int8_t arg16, int8_t arg15, int8_t arg14, int8_t arg13, int8_t arg12, int8_t arg11, int8_t arg10, int8_t arg9, int8_t arg8, int8_t arg7, int8_t arg6, int8_t arg5, int8_t arg4, int8_t arg3, int8_t arg2, int8_t arg1, int8_t arg0) : base_t(_mm512_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16, arg17, arg18, arg19, arg20, arg21, arg22, arg23, arg24, arg25, arg26, arg27, arg28, arg29, arg30, arg31, arg32, arg33, arg34, arg35, arg36, arg37, arg38, arg39, arg40, arg41, arg42, arg43, arg44, arg45, arg46, arg47, arg48, arg49, arg50, arg51, arg52, arg53, arg54, arg55, arg56, arg57, arg58, arg59, arg60, arg61, arg62, arg63)) {
+
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "CONS(int8_t arg63, int8_t arg62, int8..)");
 
             }
 
@@ -132,8 +156,13 @@ namespace zacc { namespace avx512 {
          * @relates int8
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::construction<__impl<base_t>, composed_t>;
+        //using impl = traits::construction<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::construction<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -162,6 +191,8 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -170,11 +201,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend void io_store(typename base_t::extracted_t &target) const noexcept {
+            friend void vstore(typename base_t::extracted_t &target, composed_t source) const noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "store");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vstore");
 
-                _mm512_store_si512(target.data(), base_t::_value);
+                _mm512_store_si512(target.data(), source);
             }
 
 
@@ -183,11 +214,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend void io_stream(typename base_t::extracted_t &target) const noexcept {
+            friend void vstream(typename base_t::extracted_t &target, composed_t source) const noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "stream");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vstream");
 
-                _mm512_stream_si512(target.data(), base_t::_value);
+                _mm512_stream_si512(target.data(), source);
             }
 
         };
@@ -197,8 +228,13 @@ namespace zacc { namespace avx512 {
          * @relates int8
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::io<__impl<base_t>, composed_t>;
+        //using impl = traits::io<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::io<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -227,6 +263,8 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -235,11 +273,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t arithmetic_negate(composed_t one)  noexcept {
+            friend zint8<base_t::capability> vneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "negate");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vneg");
 
-                return _mm512_sub_epi8(_mm512_setzero_epi8(), one.get_value());
+                return _mm512_sub_epi8(_mm512_setzero_epi8(), one);
             }
 
         };
@@ -249,8 +287,13 @@ namespace zacc { namespace avx512 {
          * @relates int8
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::arithmetic<__impl<base_t>, composed_t>;
+        //using impl = traits::arithmetic<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::arithmetic<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -279,6 +322,8 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -287,13 +332,13 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_negate(composed_t one)  noexcept {
+            friend zint8<base_t::capability> vneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "negate");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vneg");
 
                 auto zero = _mm512_setzero_si128();
                 auto ones = _mm512_cmpeq_epi8(zero, zero);
-                return _mm512_xor_si128(one.get_value(), ones);
+                return _mm512_xor_si128(one, ones);
             }
 
 
@@ -302,11 +347,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_and(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vand(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "and");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vand");
 
-                return _mm512_or_epi8(one.get_value(), other.get_value());
+                return _mm512_or_epi8(one, other);
             }
 
 
@@ -315,11 +360,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_or(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> or(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "or");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "or");
 
-                return _mm512_and_epi8(one.get_value(), other.get_value());
+                return _mm512_and_epi8(one, other);
             }
 
 
@@ -328,11 +373,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_xor(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> xor(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "xor");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "xor");
 
-                return _mm512_xor_si128(one.get_value(), other.get_value());
+                return _mm512_xor_si128(one, other);
             }
 
 
@@ -341,11 +386,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_sll(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vsll(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "sll");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vsll");
 
-                return _mm512_sll_epi8(one.get_value(), other.get_value());
+                return _mm512_sll_epi8(one, other);
             }
 
 
@@ -354,11 +399,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_srl(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vsrl(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "srl");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vsrl");
 
-                return _mm512_srl_epi8(one.get_value(), other.get_value());
+                return _mm512_srl_epi8(one, other);
             }
 
 
@@ -367,9 +412,9 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_slli(const composed_t one, const size_t other)  noexcept {
+            friend zint8<base_t::capability> vslli(const composed_t one, const size_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "slli");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vslli");
 
                 return _mm512_slli_epi8(const composed_t one, const size_t other);
             }
@@ -380,9 +425,9 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t bitwise_srli(const composed_t one, const size_t other)  noexcept {
+            friend zint8<base_t::capability> vsrli(const composed_t one, const size_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "srli");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vsrli");
 
                 return _mm512_srli_epi8(const composed_t one, const size_t other);
             }
@@ -394,8 +439,13 @@ namespace zacc { namespace avx512 {
          * @relates int8
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::bitwise<__impl<base_t>, composed_t>;
+        //using impl = traits::bitwise<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::bitwise<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -424,6 +474,8 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -432,13 +484,13 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t logical_negate(composed_t one)  noexcept {
+            friend zint8<base_t::capability> vneg(composed_t one)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "negate");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vneg");
 
                 auto zero = _mm512_setzero_si128();
                 auto ones = _mm512_cmpeq_epi8(zero, zero);
-                return _mm512_xor_si128(one.get_value(), ones);
+                return _mm512_xor_si128(one, ones);
             }
 
 
@@ -447,11 +499,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t logical_or(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> or(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "or");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "or");
 
-                return _mm512_or_epi8(one.get_value(), other.get_value());
+                return _mm512_or_epi8(one, other);
             }
 
 
@@ -460,11 +512,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t logical_and(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vand(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "and");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vand");
 
-                return _mm512_and_epi8(one.get_value(), other.get_value());
+                return _mm512_and_epi8(one, other);
             }
 
         };
@@ -474,8 +526,13 @@ namespace zacc { namespace avx512 {
          * @relates int8
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::logical<__impl<base_t>, composed_t>;
+        //using impl = traits::logical<__impl<base_t>, bint8<base_t::capability>>;
+
+        using impl = traits::logical<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -504,6 +561,8 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -512,11 +571,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t comparison_eq(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "eq");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "veq");
 
-                return _mm512_cmpeq_epi8(one.get_value(), other.get_value());
+                return _mm512_cmpeq_epi8(one, other);
             }
 
 
@@ -525,11 +584,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t comparison_neq(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "neq");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vneq");
 
-                return _mm512_cmpneq_epi8(one.get_value(), other.get_value());
+                return _mm512_cmpneq_epi8(one, other);
             }
 
 
@@ -538,11 +597,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t comparison_gt(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "gt");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vgt");
 
-                return _mm512_cmpgt_epi8(one.get_value(), other.get_value());
+                return _mm512_cmpgt_epi8(one, other);
             }
 
 
@@ -551,11 +610,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t comparison_lt(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "lt");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vlt");
 
-                return _mm512_cmplt_epi8(one.get_value(), other.get_value());
+                return _mm512_cmplt_epi8(one, other);
             }
 
 
@@ -564,11 +623,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t comparison_ge(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "ge");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vge");
 
-                return _mm512_cmpge_epi8(one.get_value(), other.get_value());
+                return _mm512_cmpge_epi8(one, other);
             }
 
 
@@ -577,11 +636,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t comparison_le(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "le");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vle");
 
-                return _mm512_cmple_epi8(one.get_value(), other.get_value());
+                return _mm512_cmple_epi8(one, other);
             }
 
         };
@@ -591,8 +650,13 @@ namespace zacc { namespace avx512 {
          * @relates int8
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::comparison<__impl<base_t>, composed_t>;
+        //using impl = traits::comparison<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::comparison<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -621,6 +685,8 @@ namespace zacc { namespace avx512 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using mask_t = typename base_t::mask_t;
+
             FORWARD(__impl);
 
 
@@ -629,11 +695,11 @@ namespace zacc { namespace avx512 {
              * @relates int8
              * @remark avx512 - default
              */
-            friend composed_t vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            friend zint8<base_t::capability> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
-                ZTRACE(std::left << std::setw(32) << "avx512.int8.impl line " STRINGIZE(__LINE__) ":" << std::left << std::setw(24) << " zint8(char[64]) " << std::left << std::setw(10) << "default" << "vsel");
+                ZTRACE_BACKEND("avx512.int8.impl", __LINE__, "zint8(int8_t[64])", "default", "vsel");
 
-                return _mm512_or_si128(_mm512_andnot_si128(condition.get_value(), else_value.get_value()), _mm512_and_si128(condition.get_value(), if_value.get_value()));
+                return _mm512_or_si128(_mm512_andnot_si128(condition, else_value), _mm512_and_si128(condition, if_value));
             }
 
         };
@@ -643,8 +709,13 @@ namespace zacc { namespace avx512 {
          * @relates int8
          * @remark avx512
          */
+
+
         template<typename base_t>
-        using impl = interface::conditional<__impl<base_t>, composed_t>;
+        //using impl = traits::conditional<__impl<base_t>, zint8<base_t::capability>>;
+
+        using impl = traits::conditional<__impl<base_t>, zint8<base_t::capability>>;
+
     };
 
     ///@}
@@ -657,60 +728,91 @@ namespace zacc { namespace avx512 {
      */
     ///@{
 
-    /**
-     * @brief zval parametrization using
-     * - '__m512i' as underlying vector type
-     * - 'char' as scalar type
-     * - '64' as vector size
-     * - '64' as alignment
-     * @relates int8
-     * @remark avx512
-     */
-    template<uint64_t capability>
-    struct __zval_int8
-    {
-        using zval_t = zval<__m512i, char, 64, 64, capability>;
+    //namespace composition {
 
-        struct impl : public zval_t
+        /**
+         * @brief zval parametrization using
+         * - '__m512i' as underlying vector type
+         * - 'int8_t' as scalar type
+         * - '64' as vector size
+         * - '64' as alignment
+         * @relates int8
+         * @remark avx512
+         */
+        template<uint64_t capability>
+        struct __zval_int8
         {
-            FORWARD2(impl, zval_t);
+            using zval_t = zval<__m512i, __mmask64, int8_t, 64, 64, capability>;
+
+            struct impl : public zval_t
+            {
+                FORWARD2(impl, zval_t);
+            };
         };
-    };
-    /**
-     * @brief zval composition
-     * @relates int8
-     * @remark avx512
-     */
-    template<uint64_t capability>
-    struct __zint8
-    {
-        struct impl;
-
-        using zval_t = typename __zval_int8<capability>::impl;
-        using composition_t = compose
-        <
-            printable::impl,
-            iteratable::impl,
-            convertable::impl,
-            int8_io<impl>::template impl,
-            int8_arithmetic<impl>::template impl,
-            int8_bitwise<impl>::template impl,
-            int8_logical<impl>::template impl,
-            int8_comparison<impl>::template impl,
-            int8_conditional<impl>::template impl,
-            int8_construction<impl>::template impl,
-
-            composable<zval_t>::template type
-        >;
-
-        struct impl : public composition_t
+        /**
+         * @brief zval composition
+         * @relates int8
+         * @remark avx512
+         */
+        template<uint64_t capability>
+        struct __zint8
         {
-            FORWARD2(impl, composition_t);
+            struct impl;
+
+            using zval_t = typename __zval_int8<capability>::impl;
+            using composition_t = compose
+            <
+                printable::impl,
+                iteratable::impl,
+                convertable::impl,
+                int8_io<impl>::template impl,
+                int8_arithmetic<impl>::template impl,
+                int8_bitwise<impl>::template impl,
+                int8_logical<impl>::template impl,
+                int8_comparison<impl>::template impl,
+                int8_conditional<impl>::template impl,
+                int8_construction<impl>::template impl,
+
+                composable<zval_t>::template type
+            >;
+
+            struct impl : public composition_t
+            {
+                FORWARD2(impl, composition_t);
+            };
         };
+
+        template<uint64_t capability>
+        struct __bint8
+        {
+            using bval_t = bval<typename __zint8<capability>::impl, __mmask64>;
+            struct impl : public bval_t
+            {
+                FORWARD2(impl, bval_t);
+            };
+        };
+    //}
+
+    template<uint64_t capability>
+    struct zint8 : public /*composition::*/__zint8<capability>::impl
+    {
+        FORWARD2(zint8, /*composition::*/__zint8<capability>::impl);
     };
 
-    template<uint64_t capability = 0xFFFF'FFFF'FFFF'FFFF>
-    using zint8 = typename __zint8<capability>::impl;
+    template<uint64_t capability>
+    struct bint8 : public /*composition::*/__bint8<capability>::impl
+    {
+        FORWARD2(bint8, /*composition::*/__bint8<capability>::impl);
+    };
+
+    static_assert(is_zval<zint8<0>>::value, "is_zval for zint8 failed.");
+    static_assert(is_bval<bint8<0>>::value, "is_bval for bint8 failed.");
+
+    static_assert(!is_floating_point<zint8<0>>::value, "is_floating_point for zint8 failed.");
+    static_assert(is_integral<zint8<0>>::value, "is_integral for zint8 failed.");
+
+    static_assert(!is_float<zint8<0>>::value, "is_float for zint8 failed.");
+    static_assert(!is_double<zint8<0>>::value, "is_double for zint8 failed.");
 
     ///@}
-}}
+}}}

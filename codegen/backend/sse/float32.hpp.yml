@@ -36,6 +36,10 @@ modules:
     - args: [[*scalar_t, value]]
       init: _mm_set1_ps(value)
 
+    #- args: T value #[[*scalar_t, value]]
+    #  prefix: "template<typename T, typename = typename std::enable_if_t<std::is_convertible<T, float>::value>>"
+    #  init: _mm_set1_ps((float)value)
+
     - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
       init: _mm_load_ps(value.data())
 
@@ -74,10 +78,11 @@ modules:
 
     vrcp:
       args: one
-      body: _mm_rcp_ps
+      #body: _mm_rcp_ps
+      body: "return (1 / one);" #bug in automatic arg insertion
     vtrunc:
       args: one
-      body: _mm_cvtepi32_ps(_mm_cvtps_epi32(one))
+      body: _mm_cvtepi32_ps(_mm_cvttps_epi32(one))
     vfloor:
       args: one
       body:

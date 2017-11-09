@@ -36,7 +36,7 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(avx_float64_arithmetic, vneg_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -56,7 +56,7 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_arithmetic, vadd_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -76,7 +76,7 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_arithmetic, vsub_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -96,7 +96,7 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_arithmetic, vmul_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -116,7 +116,7 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_arithmetic, vdiv_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -140,7 +140,7 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(avx_float64_logical, vlneg_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -160,7 +160,7 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_logical, vlor_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -180,7 +180,7 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_logical, vland_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -202,7 +202,7 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(avx_float64_comparison, veq_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -222,7 +222,7 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_comparison, vneq_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -242,7 +242,7 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_comparison, vgt_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -262,7 +262,7 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_comparison, vlt_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -282,7 +282,7 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_comparison, vge_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -302,7 +302,7 @@ namespace zacc { namespace test {
 
     TEST(avx_float64_comparison, vle_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -324,7 +324,7 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(avx_float64_conditional, vsel_default)
     {
-        REQUIRES(ZACC_CAPABILITIES);
+        REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);

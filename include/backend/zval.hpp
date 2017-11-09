@@ -96,7 +96,7 @@ namespace zacc {
          * @param value
          */
         template<typename T, typename enable = std::enable_if_t<!is_zval<T>::value && !is_bval<T>::value>>
-        zval(T value) : _value(value) {}
+        constexpr zval(T value) : _value(value) {}
 
         /**
          * @brief zval copy constructor
@@ -105,20 +105,20 @@ namespace zacc {
          * @param value
          */
         //template<typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>
-        zval(const zval& value) : _value(value._value) {}
+        constexpr zval(const zval& value) : _value(value._value) {}
 
         /**
          * @brief construct from mask
          * @param value
          */
-        zval(const mask_t value) : _value(value) {}
+        constexpr zval(const mask_t value) : _value(value) {}
 
         /**
          * @brief cast to underlying vector type
          * @return raw value
          */
         template <typename dim_t = std::integral_constant<size_t, dim>, typename enable = typename std::enable_if<(dim_t::value > 1), vector_t>::type>
-        operator vector_t() const {
+        constexpr operator vector_t() const {
             return value();
         }
 
@@ -126,7 +126,7 @@ namespace zacc {
          * @brief cast to underlying vector type
          * @return raw value
          */
-        vector_t value() const {
+        constexpr vector_t value() const {
             return _value;
         }
     protected:
@@ -155,14 +155,14 @@ namespace zacc {
          * or null member pointer value is converted to false; any other value is converted to true.
          * @param value
          */
-        bval(const zval_t& value) :
+        constexpr bval(const zval_t& value) :
                 _value(value.value())
         {
             ZTRACE_RAW("bval(zval_t)");
         }
 
 
-        bval(const bval_t& value) :
+        constexpr bval(const bval_t& value) :
                 _value(value)
         {
             ZTRACE_RAW("bval(bval_t)");
@@ -172,7 +172,7 @@ namespace zacc {
          * @brief
          * @return
          */
-        operator zval_t() const {
+        constexpr operator zval_t() const {
             return get_value();
         }
 
@@ -180,11 +180,11 @@ namespace zacc {
          * @brief
          * @return
          */
-        operator bval_t() const {
+        constexpr operator bval_t() const {
             return get_value();
         }
 
-        const bval_t get_value() const {
+        constexpr const bval_t get_value() const {
             return _value.get_value();
         }
 

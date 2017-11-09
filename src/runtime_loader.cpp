@@ -40,7 +40,7 @@ void* zacc_dlopen(const char* path)
 #endif
 }
 
-const char* const zacc_dlerror()
+const char* zacc_dlerror()
 {
 #ifdef WIN32
     return "";

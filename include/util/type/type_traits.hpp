@@ -140,4 +140,24 @@ namespace zacc {
     struct is_integral<val_t, std::enable_if_t<std::is_integral<typename val_t::scalar_t>::value>>
             : public std::true_type
     {};
+
+
+    template<typename T>
+    using resolve_uint_t = std::conditional_t<
+            sizeof(T) == 8,
+                uint64_t,
+                std::conditional_t<
+            sizeof(T) == 4,
+                uint32_t,
+                std::conditional_t<
+            sizeof(T) == 2,
+                uint16_t,
+                uint8_t>>>;
+
+
+    /**
+     * @see https://stackoverflow.com/a/44522730/1261537
+     */
+    template<typename T>
+    using element_type_t = std::remove_reference_t<decltype(*std::begin(std::declval<T&>()))>;
 }
