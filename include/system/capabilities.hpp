@@ -222,6 +222,13 @@ namespace zacc {
         bool _is_set;
     };
 
+
+    template<typename T, capabilities feature>
+    constexpr bool is_eligible_v = capability::dispatcher<zval_traits<T>::features>::is_set(feature);
+
+    template<typename T>
+    constexpr bool has_integer_types = capability::dispatcher<zval_traits<T>::features>::has_floating_types;
+
     template <typename T, typename... TList>
     static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, capability::flag_t>
     make_flag(T && capability, TList &&... list) noexcept {

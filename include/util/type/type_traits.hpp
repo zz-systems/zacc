@@ -38,6 +38,10 @@ namespace zacc {
 //        static constexpr bool value = decltype(is_derived_from::test(std::declval<U>()))::value;
 //    };
 
+    struct zval_tag {};
+    struct bval_tag : zval_tag {};
+    struct cval_tag : zval_tag {};
+
 
     template<typename from_t, typename to_t>
     using enable_if_convertible = std::enable_if_t<std::is_convertible<from_t, to_t>::value, from_t>;
@@ -85,7 +89,8 @@ namespace zacc {
     {};
 
     template<typename val_t>
-    struct is_zval<val_t, std::enable_if_t<std::is_arithmetic<typename val_t::scalar_t>::value>>
+    struct is_zval<val_t, std::enable_if_t<std::is_same<typename val_t::tag, zval_tag>::value
+                                           && std::is_arithmetic<typename val_t::element_t>::value>>
             : public std::true_type
     {};
 
@@ -95,9 +100,22 @@ namespace zacc {
     {};
 
     template<typename val_t>
-    struct is_bval<val_t, std::enable_if_t<std::is_same<typename val_t::scalar_t, bool>::value>>
+    struct is_bval<val_t, std::enable_if_t<std::is_same<typename val_t::tag, bval_tag>::value
+                                           && std::is_same<typename val_t::element_t, bool>::value>>
             : public std::true_type
     {};
+
+    template<typename val_t, typename enable_t = void>
+    struct is_cval
+            : public std::false_type
+    {};
+
+    template<typename val_t>
+    struct is_cval<val_t, std::enable_if_t<std::is_same<typename val_t::tag, cval_tag>::value
+                                           && is_zval<typename val_t::element_t>::value>>
+            : public std::true_type
+    {};
+
 
     template<typename val_t, typename enable_t = void>
     struct is_floating_point
@@ -105,7 +123,7 @@ namespace zacc {
     {};
 
     template<typename val_t>
-    struct is_floating_point<val_t, std::enable_if_t<std::is_floating_point<typename val_t::scalar_t>::value>>
+    struct is_floating_point<val_t, std::enable_if_t<std::is_floating_point<typename val_t::element_t>::value>>
             : public std::true_type
     {};
 
@@ -116,7 +134,7 @@ namespace zacc {
     {};
 
     template<typename val_t>
-    struct is_float<val_t, std::enable_if_t<std::is_same<typename val_t::scalar_t, float>::value>>
+    struct is_float<val_t, std::enable_if_t<std::is_same<typename val_t::element_t, float>::value>>
             : public std::true_type
     {};
 
@@ -127,7 +145,7 @@ namespace zacc {
     {};
 
     template<typename val_t>
-    struct is_double<val_t, std::enable_if_t<std::is_same<typename val_t::scalar_t, double>::value>>
+    struct is_double<val_t, std::enable_if_t<std::is_same<typename val_t::element_t, double>::value>>
             : public std::true_type
     {};
 
@@ -137,7 +155,7 @@ namespace zacc {
     {};
 
     template<typename val_t>
-    struct is_integral<val_t, std::enable_if_t<std::is_integral<typename val_t::scalar_t>::value>>
+    struct is_integral<val_t, std::enable_if_t<std::is_integral<typename val_t::element_t>::value>>
             : public std::true_type
     {};
 
@@ -165,4 +183,179 @@ namespace zacc {
      * @see https://stackoverflow.com/a/19532607/1261537
      */
     struct sink { template<typename ...Args> sink(Args const & ... ) {} };
+
+    template<class> struct type_sink { using type = void; };
+    template<class T> using type_sink_t = typename type_sink<T>::type;
+
+}
+
+namespace zacc
+{
+
+
+    template<typename _Vector, typename _MaskVector, typename _Element, typename _Tag, size_t _Size, size_t _Alignment, uint64_t _Features = 0xFFFF'FFFF'FFFF'FFFF>
+    struct zval_base
+    {
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static constexpr size_t size() noexcept
+        {
+            return _Size;
+        }
+
+        /// scalar type? vector type?
+        static const bool is_vector = _Size > 1;
+
+        /// capabilities
+        static const uint64_t features = _Features;
+
+        /// memory alignment
+        static const size_t alignment = _Alignment;
+
+
+        /// vector type, like __m128i for sse 4x integer vector
+        using vector_t = _Vector;
+
+        /// scalar type, like int for sse 4x integer vector
+        using element_t = _Element;
+
+        /// mask type for boolean operations
+        using mask_vector_t = _MaskVector;
+
+        using tag = _Tag;
+    };
+
+
+    template<typename T, typename enable_t = void>
+    struct zval_traits
+    {
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static const size_t size = 1;
+
+        /// capabilities
+        static const uint64_t features = 0;
+
+        /// memory alignment
+        static const size_t alignment = alignof(T);
+
+        /// vector type, like __m128i for sse 4x integer vector
+        using vector_t = void;
+
+        /// scalar type, like int for sse 4x integer vector
+        using element_t = void;
+
+        /// mask type for boolean operations
+        using mask_vector_t = void;
+
+        /// extracted std::array of (dim) scalar values
+        using extracted_t = T;
+    };
+
+    template<typename T>
+    struct zval_traits<T, std::enable_if_t<is_cval<T>::value || is_zval<T>::value || is_bval<T>::value>>
+    {
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static const size_t size = T::size();
+
+        /// capabilities
+        static const uint64_t features = T::features;
+
+        /// memory alignment
+        static const size_t alignment = T::alignment;
+
+        /// vector type, like __m128i for sse 4x integer vector
+        using vector_t = typename T::vector_t;
+
+        /// scalar type, like int for sse 4x integer vector
+        using element_t = typename T::element_t;
+
+        /// mask type for boolean operations
+        using mask_vector_t = typename T::mask_vector_t;
+
+        /// extracted std::array of (dim) scalar values
+        using extracted_t = std::array<element_t, size>; //aligned_array<scalar_t, dim, alignment>;
+    };
+
+//    template<typename T, typename enable = void>
+//    struct is_iterable : std::false_type {};
+//
+//    template<typename T>
+//    struct is_iterable <T, type_sink_t<decltype((std::declval<std::remove_pointer<T>>().begin()) - (std::declval<std::remove_pointer<T>>().end()))>>
+//            : std::true_type
+//    {};
+
+
+
+    template<typename Rule>
+    struct _is : Rule
+    {
+        using Rule::test;
+
+        template<class>
+        constexpr static auto test(...) -> std::false_type;
+    };
+
+    template<typename Rule, typename T>
+    struct __is : decltype(_is<Rule>:: template test<T>(0)) {};
+
+
+    template<typename Rule, typename... Ts>
+    struct __all;
+
+    template<typename Rule, typename T, typename... Ts>
+    struct __all<Rule, T, Ts...> : std::integral_constant<bool, __is<Rule, T>::value && __all<Rule, Ts...>::value>
+    {} ;
+
+    template<typename Rule, typename T>
+    struct __all<Rule, T> : std::integral_constant<bool, __is<Rule, T>::value>
+    {};
+
+    template<typename Rule, typename... Ts>
+    struct __any;
+
+    template<typename Rule, typename T, typename... Ts>
+    struct __any<Rule, T, Ts...> : std::integral_constant<bool, __is<Rule, T>::value || __all<Rule, Ts...>::value>
+    {};
+
+    template<typename Rule, typename T>
+    struct __any<Rule, T> : std::integral_constant<bool, __is<Rule, T>::value>
+    {};
+
+
+    template<typename Rule, typename T>
+    constexpr bool is = __is<Rule, T>::value;
+
+    template<typename Rule, typename... Ts>
+    constexpr bool all = __all<Rule, Ts...>::value;
+
+    template<typename Rule, typename... Ts>
+    constexpr bool any = __any<Rule, Ts...>::value;
+
+
+
+
+    struct measurable
+    {
+        template<class U>
+        constexpr static auto test(U* p) -> decltype(p->size(), std::true_type());
+    };
+
+    struct iterable
+    {
+        template<class U>
+        constexpr static auto test(U* p) -> decltype(p->begin(), p->end(), std::true_type());
+    };
+
+    struct resizable
+    {
+        template<class U>
+        constexpr static auto test(U* p) -> decltype(p->resize(1), p->shrink_to_fit(), std::true_type());
+    };
+
+    struct swappable
+    {
+        template<class U>
+        constexpr static auto test(U* p) -> decltype(p->swap(*p), std::true_type());
+    };
+
+
 }

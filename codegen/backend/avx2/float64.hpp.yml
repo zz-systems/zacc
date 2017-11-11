@@ -35,7 +35,7 @@ modules:
     - args: [[*scalar_t, value]]
       init: _mm256_set1_pd(value)
 
-    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+    - args: "std::array<typename base_t::element_t, base_t::size()> value"
       init: _mm256_loadu_pd(value.data())
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -43,18 +43,20 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
-      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm256_storeu_pd(target.data(), source)
+      body: _mm256_storeu_pd(result, input)
     vstream:
       <<: *io_store
-      body: _mm256_stream_pd(target.data(), source)
+      body: _mm256_stream_pd(result, input)
 
     vgather:
-      args: { raw: "composed_t &target, raw_ptr<const double> source, zint32<base_t::capability> index" }
+      prefix: "template<typename RandomIt> friend"
+      args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
       body:
         - auto i = _mm256_extractf128_si256(index, 1);
-        - _mm256_i32gather_pd(source, i, 8)
+        - _mm256_i32gather_pd(input, i, 8)
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -74,7 +76,7 @@ modules:
       body: (1 / one);
     vtrunc:
       args: one
-      body: _mm256_cvtepi32_pd(_mm256_cvtpd_epi32(one))
+      body: _mm256_cvtepi32_pd(_mm256_cvttpd_epi32(one))
     vfloor:
       args: one
       body: _mm256_floor_pd

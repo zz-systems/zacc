@@ -103,7 +103,7 @@ class Func:
 
         self.prefix     = entries.prefix if is_copy else entries.get("prefix", "friend") if not self.is_member and not self.name == "" else entries.get("prefix", "")
         self.suffix     = entries.suffix if is_copy else entries.get("suffix", "const" if self.is_member else "")
-        self.returns    = entries.returns if is_copy else entries.get("returns", "z{}<base_t::capability>".format(self.parent.parent.type))
+        self.returns    = entries.returns if is_copy else entries.get("returns", "z{}<base_t::features>".format(self.parent.parent.type))
 
         self.body = entries.body if is_copy else entries.get("body", "")
 
@@ -119,7 +119,7 @@ class Func:
         #override if in comparison or  logical module
         #if (self.parent.name == "comparison" or self.parent.name == "logical"):
             #self.returns = "bval<composed_t, mask_t>"
-            #self.returns = "b{}<base_t::capability>".format(self.parent.parent.type)
+            #self.returns = "b{}<base_t::features>".format(self.parent.parent.type)
 
         test       = parent.test_config and parent.test_config.get(self.name)
 
@@ -205,7 +205,7 @@ class Func:
 
 
         #dispatch_if = "{0}base_t::dispatcher::has_{1}"
-        dispatch_if = "{0}base_t::dispatcher::is_set(capabilities::{1})"
+        dispatch_if = "{0}is_eligible_v<base_t, capabilities::{1}>"
         returns = "std::enable_if_t<{condition}, T>"
 
         def map_requirement(requirement):
@@ -315,7 +315,7 @@ class Args:
 
 class Arg:
     default_type = "composed_t"
-    #defaul_type = "z{}<base_t::capability>"
+    #defaul_type = "z{}<base_t::features>"
     default_type_invocation = ""#"".get_value()"
 
     def __init__(self, parent, type, name):
@@ -327,11 +327,11 @@ class Arg:
 
         #if isinstance(module, Module) and type == self.default_type:
         #   if module.name not in ["construction"]:
-        #        self.type = "z{}<base_t::capability>".format(module.parent.type)
+        #        self.type = "z{}<base_t::features>".format(module.parent.type)
 
             #if module.name == "logical":
                 #self.type = "bval<composed_t, mask_t>"
-                #self.type = "b{}<base_t::capability>".format(module.parent.type)
+                #self.type = "b{}<base_t::features>".format(module.parent.type)
 
 
 

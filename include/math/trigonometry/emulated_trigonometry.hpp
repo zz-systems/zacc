@@ -38,18 +38,9 @@ namespace zacc { namespace math {
          * @return [-1; 1]
          */
         template<typename vreal_t>
-        std::enable_if_t<is_floating_point<vreal_t>::value && !vreal_t::dispatcher::has_integer_types, vreal_t> vsin(vreal_t val)
+        std::enable_if_t<is_floating_point<vreal_t>::value && !zval_traits<vreal_t>::dispatcher::has_integer_types, vreal_t> vsin(vreal_t val)
         {
-            auto vv = val.data();
-
-            alignas(vreal_t::alignment) typename vreal_t::extracted_t raw_result;
-
-            for(auto i = 0; i < vreal_t::dim; i++)
-            {
-                raw_result[i] = std::sin(vv[i]);
-            }
-
-            return raw_result;
+            return zacc::transform<typename zval_traits<vreal_t>::extracted_t>(val, [](auto i) { std::sin(i); });
         }
 
         /**
@@ -59,18 +50,9 @@ namespace zacc { namespace math {
          * @return [-1; 1]
          */
         template<typename vreal_t>
-        std::enable_if_t<is_floating_point<vreal_t>::value && !vreal_t::dispatcher::has_integer_types, vreal_t> vcos(vreal_t val)
+        std::enable_if_t<is_floating_point<vreal_t>::value && !zval_traits<vreal_t>::dispatcher::has_integer_types, vreal_t> vcos(vreal_t val)
         {
-            auto vv = val.data();
-
-            alignas(vreal_t::alignment) typename vreal_t::extracted_t raw_result;
-
-            for(auto i = 0; i < vreal_t::dim; i++)
-            {
-                raw_result[i] = std::cos(vv[i]);
-            }
-
-            return raw_result;
+            return zacc::transform(val, [](auto i) { std::cos(i); });
         }
 
         /**
@@ -80,18 +62,9 @@ namespace zacc { namespace math {
          * @return [-1; 1]
          */
         template <typename vreal_t>
-        std::enable_if_t<is_floating_point<vreal_t>::value && !vreal_t::dispatcher::has_integer_types, vreal_t> vtan(vreal_t val)
+        std::enable_if_t<is_floating_point<vreal_t>::value && !zval_traits<vreal_t>::dispatcher::has_integer_types, vreal_t> vtan(vreal_t val)
         {
-            auto vv = val.data();
-
-            alignas(vreal_t::alignment) typename vreal_t::extracted_t raw_result;
-
-            for(auto i = 0; i < vreal_t::dim; i++)
-            {
-                raw_result[i] = std::tan(vv[i]);
-            }
-
-            return raw_result;
+            return zacc::transform(val, [](auto i) { std::tan(i); });
         }
 
         /**
@@ -101,16 +74,8 @@ namespace zacc { namespace math {
          * @return [-1; 1]
          */
         template<typename vreal_t>
-        std::enable_if_t<is_floating_point<vreal_t>::value && !vreal_t::dispatcher::has_integer_types, vreal_t> vatan2(vreal_t y, vreal_t x)
+        std::enable_if_t<is_floating_point<vreal_t>::value && !zval_traits<vreal_t>::dispatcher::has_integer_types, vreal_t> vatan2(vreal_t y, vreal_t x)
         {
-            auto xx = x.data();
-            auto yy = y.data();
-
-            alignas(vreal_t::alignment) typename vreal_t::extracted_t raw_result;
-
-            for(auto i = 0; i < vreal_t::dim; i++)
-                raw_result[i] = std::atan2(yy[i], xx[i]);
-
-            return raw_result;
+            return zacc::transform(x, y, [](auto i, auto j) { std::atan2(i, j); });
         }
     }}

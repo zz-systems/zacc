@@ -39,11 +39,11 @@ namespace zacc { namespace test {
             TypeParam value = 5;
             TypeParam actual= !value;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) false));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
 
             actual = !actual;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
         }
 
         TYPED_TEST_P(logical_test, or_operation)
@@ -51,19 +51,19 @@ namespace zacc { namespace test {
             TypeParam value = 5;
             TypeParam actual= value || (value >= 2);
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
             actual = TypeParam(0) || (value >= 2);
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
             actual = value || (value < 2);
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
             actual = TypeParam(0) || (value <= 2);
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) false));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
         }
 
         TYPED_TEST_P(logical_test, and_operation)
@@ -71,11 +71,11 @@ namespace zacc { namespace test {
             TypeParam value = 5;
             TypeParam actual= value && (value >= 2);
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
             actual = value && (value < 2);
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) false));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
         }
 
         REGISTER_TYPED_TEST_CASE_P(logical_test,

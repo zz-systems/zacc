@@ -57,7 +57,7 @@ namespace zacc { namespace test {
     std::enable_if_t<is_integral<T>::value && !is_bval<T>::value/* && std::is_constructible<T, U>::value*/, ::testing::AssertionResult>
     vassert_eq(const char* actual_expr, const char* expected_expr, const T& actual, const U& expected)
     {
-        auto dataset = zip(actual.data(), static_cast<T>(expected).data());
+        auto dataset = zip(std::move(actual.data()), std::move(static_cast<T>(expected).data()));
         element_type_t<T> actual_elem, expected_elem;
 
         bool isValid = std::accumulate(std::begin(dataset), std::end(dataset), true, [&](auto acc, auto pair)
@@ -148,12 +148,14 @@ namespace zacc { namespace test {
         return ::testing::AssertionFailure()
                 << "The difference between " << actual_expr << " and " << expected_expr
                 << " exceeds " << abs_error_expr << ", where\n"
-                << actual_expr << " evaluates to " << actual_expr << ",\n"
-                << expected_expr << " evaluates to " << expected_expr << ", and\n"
+                << actual_expr << " evaluates to " << actual << ",\n"
+                << expected_expr << " evaluates to " << expected << ", and\n"
                 << abs_error_expr << " evaluates to " << abs_error << ".";
     }
 
 #define VASSERT_EQ(actual, expected) ASSERT_PRED_FORMAT2(::zacc::test::vassert_eq, actual, expected)
-#define VEXPECT_NEAR(actual, expected, abs_error) EXPECT_TRUE(::zacc::test::vexpect_near(#actual, #expected, #abs_error, actual, expected, abs_error))
+#define VEXPECT_EQ(actual, expected) EXPECT_PRED_FORMAT2(::zacc::test::vassert_eq, actual, expected)
+#define VASSERT_NEAR(actual, expected, abs_error) ASSERT_PRED_FORMAT3(::zacc::test::vexpect_near, actual, expected, abs_error)
+#define VEXPECT_NEAR(actual, expected, abs_error) EXPECT_PRED_FORMAT3(::zacc::test::vexpect_near, actual, expected, abs_error)
 
 }}

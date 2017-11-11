@@ -59,10 +59,10 @@
 
 namespace zacc { namespace backend { namespace scalar {
 
-    template<uint64_t capability>
+    template<uint64_t features>
     struct bint32;
 
-    template<uint64_t capability>
+    template<uint64_t features>
     struct zint32;
 
 
@@ -89,7 +89,10 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
 
 
@@ -134,9 +137,9 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            constexpr __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(value[0]) {
+            constexpr __impl(std::array<typename base_t::element_t, base_t::size()> value) : base_t(value[0]) {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "CONS(std::array<typename base_t::scal..)");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "CONS(std::array<typename base_t::elem..)");
 
             }
 
@@ -148,7 +151,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @remark scalar
          */
         template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::construction<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -178,7 +181,10 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -188,11 +194,11 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend void vstore(typename base_t::extracted_t &target, composed_t source)  noexcept {
+            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vstore");
 
-                target.data()[0] = source.value();
+                result[0] = input.value();
             }
 
 
@@ -201,11 +207,11 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend void vstream(typename base_t::extracted_t &target, composed_t source)  noexcept {
+            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vstream");
 
-                target.data()[0] = source.value();
+                result[0] = input.value();
             }
 
 
@@ -214,11 +220,11 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vgather(composed_t &target, raw_ptr<const int> source, zint32<base_t::capability> index)  noexcept {
+            template<typename RandomIt> friend zint32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vgather");
 
-                return source[index.value()];
+                return input[index.value()];
             }
 
         };
@@ -229,7 +235,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @remark scalar
          */
         template<typename base_t>
-        using impl = traits::io<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::io<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -259,7 +265,10 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -271,7 +280,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @remark scalar
          */
         template<typename base_t>
-        using impl = traits::numeric<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::numeric<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -301,7 +310,10 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -311,7 +323,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vabs(composed_t one)  noexcept {
+            friend zint32<base_t::features> vabs(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vabs");
 
@@ -324,7 +336,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vmin(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vmin(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vmin");
 
@@ -337,7 +349,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vmax(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vmax(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vmax");
 
@@ -350,7 +362,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
+            friend zint32<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vclamp");
 
@@ -363,7 +375,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vsqrt(composed_t one)  noexcept {
+            friend zint32<base_t::features> vsqrt(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vsqrt");
 
@@ -378,7 +390,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @remark scalar
          */
         template<typename base_t>
-        using impl = traits::math<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::math<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -408,7 +420,10 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -418,7 +433,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vneg(composed_t one)  noexcept {
+            friend zint32<base_t::features> vneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vneg");
 
@@ -431,7 +446,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vadd(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vadd(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vadd");
 
@@ -444,7 +459,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vsub(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vsub(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vsub");
 
@@ -457,7 +472,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vmul(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vmul(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vmul");
 
@@ -470,7 +485,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vdiv(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vdiv(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vdiv");
 
@@ -483,7 +498,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vmod(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vmod(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vmod");
 
@@ -498,7 +513,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @remark scalar
          */
         template<typename base_t>
-        using impl = traits::arithmetic<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::arithmetic<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -528,7 +543,10 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -538,7 +556,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vbneg(composed_t one)  noexcept {
+            friend zint32<base_t::features> vbneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbneg");
 
@@ -551,7 +569,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vband(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vband(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vband");
 
@@ -564,7 +582,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vbor(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vbor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbor");
 
@@ -577,7 +595,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vbxor(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vbxor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbxor");
 
@@ -605,7 +623,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @remark scalar
          */
         template<typename base_t>
-        using impl = traits::bitwise<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::bitwise<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -635,7 +653,10 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -645,7 +666,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vbsll(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vbsll(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbsll");
 
@@ -658,7 +679,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vbsrl(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vbsrl(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbsrl");
 
@@ -671,7 +692,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vbslli(const composed_t one, const size_t other)  noexcept {
+            friend zint32<base_t::features> vbslli(const composed_t one, const size_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbslli");
 
@@ -684,7 +705,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vbsrli(const composed_t one, const size_t other)  noexcept {
+            friend zint32<base_t::features> vbsrli(const composed_t one, const size_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vbsrli");
 
@@ -699,7 +720,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @remark scalar
          */
         template<typename base_t>
-        using impl = traits::bitwise_shift<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::bitwise_shift<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -729,7 +750,10 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -739,7 +763,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vlneg(composed_t one)  noexcept {
+            friend zint32<base_t::features> vlneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vlneg");
 
@@ -752,7 +776,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vlor(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vlor");
 
@@ -765,7 +789,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vland(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vland(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vland");
 
@@ -780,7 +804,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @remark scalar
          */
         template<typename base_t>
-        using impl = traits::logical<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::logical<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -810,7 +834,10 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -820,7 +847,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "veq");
 
@@ -833,7 +860,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vneq");
 
@@ -846,7 +873,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vgt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vgt");
 
@@ -859,7 +886,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vlt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vlt");
 
@@ -872,7 +899,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vge(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vge");
 
@@ -885,7 +912,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vle(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vle");
 
@@ -900,7 +927,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @remark scalar
          */
         template<typename base_t>
-        using impl = traits::comparison<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::comparison<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -930,7 +957,10 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -940,7 +970,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int32
              * @remark scalar - default
              */
-            friend zint32<base_t::capability> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            friend zint32<base_t::features> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "zint32(int32_t[1])", "default", "vsel");
 
@@ -955,7 +985,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @remark scalar
          */
         template<typename base_t>
-        using impl = traits::conditional<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::conditional<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -980,10 +1010,10 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int32
          * @remark scalar
          */
-        template<uint64_t capability>
+        template<uint64_t features>
         struct __zval_int32
         {
-            using zval_t = zval<int32_t, bool, int32_t, 1, 16, capability>;
+            using zval_t = zval<int32_t, bool, int32_t, zval_tag, 1, 16, features>;
 
             struct impl : public zval_t
             {
@@ -995,12 +1025,12 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int32
          * @remark scalar
          */
-        template<uint64_t capability>
+        template<uint64_t features>
         struct __zint32
         {
             struct impl;
 
-            using zval_t = typename __zval_int32<capability>::impl;
+            using zval_t = typename __zval_int32<features>::impl;
             using composition_t = compose
             <
                 printable::impl,
@@ -1026,10 +1056,10 @@ namespace zacc { namespace backend { namespace scalar {
             };
         };
 
-        template<uint64_t capability>
+        template<uint64_t features>
         struct __bint32
         {
-            using bval_t = bval<typename __zint32<capability>::impl, bool>;
+            using bval_t = bval<typename __zint32<features>::impl, bool>;
             struct impl : public bval_t
             {
                 FORWARD2(impl, bval_t);
@@ -1037,16 +1067,16 @@ namespace zacc { namespace backend { namespace scalar {
         };
     //}
 
-    template<uint64_t capability>
-    struct zint32 : public /*composition::*/__zint32<capability>::impl
+    template<uint64_t features>
+    struct zint32 : public /*composition::*/__zint32<features>::impl
     {
-        FORWARD2(zint32, /*composition::*/__zint32<capability>::impl);
+        FORWARD2(zint32, /*composition::*/__zint32<features>::impl);
     };
 
-    template<uint64_t capability>
-    struct bint32 : public /*composition::*/__bint32<capability>::impl
+    template<uint64_t features>
+    struct bint32 : public /*composition::*/__bint32<features>::impl
     {
-        FORWARD2(bint32, /*composition::*/__bint32<capability>::impl);
+        FORWARD2(bint32, /*composition::*/__bint32<features>::impl);
     };
 
     static_assert(is_zval<zint32<0>>::value, "is_zval for zint32 failed.");

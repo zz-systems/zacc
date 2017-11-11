@@ -35,38 +35,33 @@ namespace zacc { namespace math {
     template<typename T>
     struct zcomplex;
 
+    template<typename zval_t>
+    using __cval = zval_base
+    <
+        std::array<zval_t, 2>, //std::array<typename zval_traits<zval_t>::vector_t, 2>,
+        std::array<typename zval_traits<zval_t>::mask_vector_t, 2>,
+        zval_t,
+        cval_tag,
+        2,
+        zval_traits<zval_t>::alignment,
+        zval_traits<zval_t>::features
+    >;
+
     template<typename T>
     struct __zcomplex_base
     {
 
-        struct impl
+        struct impl : __cval<T>
         {
-            static constexpr const unsigned dim = 2;
-            static constexpr const bool is_vector = true;
-            static constexpr const unsigned alignment = alignof(T);
+            using base_t = __cval<T>;
 
-            using type = T;
-            using scalar_t = T;
+            using base_t::size;
+            using typename base_t::element_t;
+            using typename base_t::vector_t;
 
-            using vector_t = std::array<scalar_t, dim>;
-            using extracted_t = vector_t;
-
-            constexpr impl() : _value {}
-            {}
-
-            //constexpr impl(const impl& rhs) : _value(rhs._value)
-            //{}
-
-
-
-            //template<typename U = T>
             constexpr impl(const vector_t& value)
                     : _value(value)
             {}
-
-            //constexpr impl(const std::initializer_list<T>& value) : _value(value)
-            //{}
-
             constexpr T real() const
             {
                 return _value[0];
@@ -81,31 +76,15 @@ namespace zacc { namespace math {
             void imag(T value) { _value[1] = value; }
 
 
-            /**
-            * @brief cast to underlying vector type
-            * @return raw value
-            */
-            constexpr operator vector_t() const {
-                return value();
-            }
-
-            /**
-             * @brief cast to underlying vector type
-             * @return raw value
-             */
-            constexpr vector_t value() const {
-                return _value;
-            }
-
-
-        protected:
-            alignas(alignment) std::array<T, 2> _value;
+        private:
+            //alignas(base_t::alignment) std::array<T, 2> _value;
+            alignas(base_t::alignment) vector_t _value;
         };
     };
 
     /**
-    * @brief construction
-    */
+     * @brief construction
+     */
     template<typename composed_t>
     struct complex_construction
     {
@@ -115,7 +94,7 @@ namespace zacc { namespace math {
         template<typename base_t>
         struct __impl : base_t
         {
-            using scalar_t = typename base_t::scalar_t;
+            using element_t = typename base_t::element_t;
             using vector_t = typename base_t::vector_t;
 
             //constexpr __impl() : base_t()
@@ -124,12 +103,12 @@ namespace zacc { namespace math {
             //constexpr __impl(const impl& rhs) : _value(rhs._value)
             //{}
 
-//            template<typename T>
-//            constexpr __impl(const __impl& rhs)
-//                    : base_t(array_cast<scalar_t>(rhs.value()))
-//            {}
+    //            template<typename T>
+    //            constexpr __impl(const __impl& rhs)
+    //                    : base_t(array_cast<element_t>(rhs.value()))
+    //            {}
 
-            constexpr __impl(const scalar_t& re = 0, const scalar_t& im = 0)
+            constexpr __impl(const element_t& re = 0, const element_t& im = 0)
                     : base_t(vector_t{{re, im}})
             {}
 
@@ -137,16 +116,16 @@ namespace zacc { namespace math {
                     : base_t(value)
             {}
 
-            //template<typename T = scalar_t>
-            //constexpr __impl(const std::initializer_list<T>& list) : base_t(array_cast<scalar_t>(list)) {}
+            //template<typename T = element_t>
+            //constexpr __impl(const std::initializer_list<T>& list) : base_t(array_cast<element_t>(list)) {}
 
         };
 
         template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, zcomplex<typename base_t::scalar_t>>;
+        using impl = traits::construction<__impl<base_t>, zcomplex<typename base_t::element_t>>;
     };
 
-    /**
+        /**
     * @brief io
     * @relates float32
     * @remark avx
@@ -163,6 +142,8 @@ namespace zacc { namespace math {
         template<typename base_t>
         struct __impl : base_t
         {
+            using extracted_t = typename zval_traits<base_t>::extracted_t;
+
             FORWARD(__impl);
 
             /**
@@ -170,7 +151,7 @@ namespace zacc { namespace math {
              * @relates float32
              * @remark avx - default
              */
-            friend void vstore(typename base_t::extracted_t &target, composed_t source)  noexcept {
+            friend void vstore(extracted_t &target, composed_t source)  noexcept {
                 //std::copy(source.value().begin(), source.value().end(), target.begin());
                 target = source.value();
             }
@@ -181,7 +162,7 @@ namespace zacc { namespace math {
              * @relates float32
              * @remark avx - default
              */
-            friend void vstream(typename base_t::extracted_t &target, composed_t source)  noexcept {
+            friend void vstream(extracted_t &target, composed_t source)  noexcept {
                 //std::copy(source.value().begin(), source.value().end(), target.begin());
                 target = source.value();
             }
@@ -196,7 +177,7 @@ namespace zacc { namespace math {
 
 
         template<typename base_t>
-        using impl = traits::io<__impl<base_t>, zcomplex<typename base_t::scalar_t>>;
+        using impl = traits::io<__impl<base_t>, zcomplex<typename base_t::element_t>>;
 
     };
 
@@ -226,7 +207,7 @@ namespace zacc { namespace math {
                 if (base_t::is_vector)
                     ss << "[ ";
 
-                for(auto i = 0; i < base_t::scalar_t::dim; i++)
+                for(auto i = 0; i < base_t::element_t::size(); i++)
                 {
                     ss << "( " << re[i] << ", " << im[i] << "i ) ";
                 }
@@ -264,7 +245,7 @@ namespace zacc { namespace math {
         {
             FORWARD(__impl);
 
-            using scalar_t = typename base_t::scalar_t;
+            using element_t = typename base_t::element_t;
 
             /**
              *
@@ -272,8 +253,8 @@ namespace zacc { namespace math {
              * @param b
              * @return
              */
-            friend zcomplex<scalar_t> vadd(const composed_t &a, const composed_t &b) noexcept{
-                zcomplex<scalar_t> result = {
+            friend zcomplex<element_t> vadd(const composed_t &a, const composed_t &b) noexcept{
+                zcomplex<element_t> result = {
                            a.real() + b.real(),
                            a.imag() + b.imag()
                        };
@@ -287,8 +268,8 @@ namespace zacc { namespace math {
              * @param b
              * @return
              */
-            friend zcomplex<scalar_t> vsub(const composed_t &a, const composed_t &b) noexcept {
-                zcomplex<scalar_t> result = {
+            friend zcomplex<element_t> vsub(const composed_t &a, const composed_t &b) noexcept {
+                zcomplex<element_t> result = {
                            a.real() - b.real(),
                            a.imag() - b.imag()
                        };
@@ -302,7 +283,7 @@ namespace zacc { namespace math {
              * @param b
              * @return
              */
-            friend zcomplex<scalar_t> vmul(const composed_t &a, const composed_t &b) noexcept {
+            friend zcomplex<element_t> vmul(const composed_t &a, const composed_t &b) noexcept {
                 return {
                            (a.real() * b.real() - a.imag() * b.imag()),
                            (a.imag() * b.real() + a.real() * b.imag())
@@ -315,7 +296,7 @@ namespace zacc { namespace math {
              * @param b
              * @return
              */
-            friend zcomplex<scalar_t> vdiv(const composed_t &a, const composed_t &b) noexcept {
+            friend zcomplex<element_t> vdiv(const composed_t &a, const composed_t &b) noexcept {
                 return {
                            ((a.real() * b.real() + a.imag() * b.imag()) / (b.real() * b.real() + b.imag() * b.imag())),
                            ((a.imag() * b.real() - a.real() * b.imag()) / (b.real() * b.real() + b.imag() * b.imag()))
@@ -329,7 +310,7 @@ namespace zacc { namespace math {
              * @param addendum
              * @return
              */
-            friend zcomplex<scalar_t> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum) noexcept{
+            friend zcomplex<element_t> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum) noexcept{
                 return vadd(vmul(multiplicand, multiplier), addendum);
             }
 
@@ -340,13 +321,13 @@ namespace zacc { namespace math {
              * @param addendum
              * @return
              */
-            friend zcomplex<scalar_t> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum) noexcept{
+            friend zcomplex<element_t> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum) noexcept{
                 return vsub(vmul(multiplicand, multiplier), addendum);
             }
         };
 
         template<typename base_t>
-        using impl = traits::arithmetic<__impl<base_t>, zcomplex<typename base_t::scalar_t>>;
+        using impl = traits::arithmetic<__impl<base_t>, zcomplex<typename base_t::element_t>>;
     };
 
     template<typename T>
@@ -362,7 +343,7 @@ namespace zacc { namespace math {
 
             complex_io<impl>::template impl,
             complex_arithmetic<impl>::template impl,
-            complex_construction<zcomplex_t>::template impl,
+            complex_construction<impl>::template impl,
 
             composable<zcomplex_t>::template type
         >;

@@ -37,7 +37,7 @@ modules:
     - args: [[*scalar_t, "value"]]
       init: _mm_set1_epi32(value)
 
-    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+    - args: "std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> value"
       init: _mm_loadu_si128((__m128i*)value.data())
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -45,16 +45,17 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
-      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm_storeu_si128((__m128i*)target.data(), source)
+      body: _mm_storeu_si128((__m128i*)result, input)
     vstream:
       <<: *io_store
-      body:  _mm_stream_si128((__m128i*)target.data(), source)
+      body:  _mm_stream_si128((__m128i*)result, input)
 
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args: { raw: "RandomIt input, const zint32<base_t::capability> &index" }
+      args: { raw: "RandomIt input, const zint32<base_t::features> &index, composed_t" }
       body:
         - auto i = index.data();
         - return _mm_set_epi32(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
@@ -122,7 +123,7 @@ modules:
             #- auto d0 = one.data();
             #- auto d1 = other.data();
             #- alignas(base_t::alignment) typename base_t::extracted_t raw_result;
-            #- for(auto i = 0; i < base_t::dim; i++) raw_result[i] = d0[i] * d1[i];
+            #- for(auto i = 0; i < zval_traits<base_t>::size; i++) raw_result[i] = d0[i] * d1[i];
             #- return raw_result.data();
     vdiv: _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));
     vmod: vsub(one, vmul(other, vdiv(one, other)))

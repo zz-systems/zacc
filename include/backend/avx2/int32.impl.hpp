@@ -59,10 +59,10 @@
 
 namespace zacc { namespace backend { namespace avx2 {
 
-    template<uint64_t capability>
+    template<uint64_t features>
     struct bint32;
 
-    template<uint64_t capability>
+    template<uint64_t features>
     struct zint32;
 
 
@@ -89,7 +89,10 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
 
 
@@ -122,7 +125,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            constexpr __impl(__m256d value) : base_t(_mm256_cvtpd_epi32(value)) {
+            constexpr __impl(__m256d value) : base_t(_mm256_castsi128_si256(_mm256_cvtpd_epi32(value))) {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(__m256d value)");
 
@@ -158,9 +161,9 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            constexpr __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm256_loadu_si256((__m256i*)value.data())) {
+            constexpr __impl(std::array<typename base_t::element_t, base_t::size()> value) : base_t(_mm256_loadu_si256((__m256i*)value.data())) {
 
-                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(std::array<typename base_t::scal..)");
+                ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(std::array<typename base_t::elem..)");
 
             }
 
@@ -184,7 +187,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::construction<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -214,7 +217,10 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -224,11 +230,11 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend void vstore(typename base_t::extracted_t &target, composed_t source)  noexcept {
+            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vstore");
 
-                _mm256_storeu_si256((__m256i*)target.data(), source);
+                _mm256_storeu_si256((__m256i*)result, input);
             }
 
 
@@ -237,11 +243,11 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend void vstream(typename base_t::extracted_t &target, composed_t source)  noexcept {
+            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vstream");
 
-                _mm256_stream_si256((__m256i*)target.data(), source);
+                _mm256_stream_si256((__m256i*)result, input);
             }
 
 
@@ -250,11 +256,11 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vgather(composed_t &target, raw_ptr<const int> source, zint32<base_t::capability> index)  noexcept {
+            template<typename RandomIt> friend zint32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vgather");
 
-                return _mm256_i32gather_epi32(source, index, 4);
+                return _mm256_i32gather_epi32(input, index, 4);
             }
 
         };
@@ -265,7 +271,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = traits::io<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::io<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -295,7 +301,10 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -307,7 +316,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = traits::numeric<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::numeric<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -337,7 +346,10 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -347,7 +359,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vabs(composed_t one)  noexcept {
+            friend zint32<base_t::features> vabs(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vabs");
 
@@ -360,7 +372,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vmin(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vmin(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vmin");
 
@@ -373,7 +385,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vmax(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vmax(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vmax");
 
@@ -386,7 +398,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
+            friend zint32<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vclamp");
 
@@ -399,7 +411,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vsqrt(composed_t one)  noexcept {
+            friend zint32<base_t::features> vsqrt(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsqrt");
 
@@ -414,7 +426,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = traits::math<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::math<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -444,7 +456,10 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -454,7 +469,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vneg(composed_t one)  noexcept {
+            friend zint32<base_t::features> vneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vneg");
 
@@ -467,7 +482,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vadd(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vadd(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vadd");
 
@@ -480,7 +495,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vsub(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vsub(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsub");
 
@@ -493,7 +508,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vmul(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vmul(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vmul");
 
@@ -506,7 +521,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vdiv(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vdiv(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vdiv");
 
@@ -519,7 +534,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vmod(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vmod(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vmod");
 
@@ -534,7 +549,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = traits::arithmetic<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::arithmetic<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -564,7 +579,10 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -574,7 +592,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vbneg(composed_t one)  noexcept {
+            friend zint32<base_t::features> vbneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbneg");
 
@@ -589,7 +607,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vband(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vband(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vband");
 
@@ -602,7 +620,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vbor(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vbor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbor");
 
@@ -615,7 +633,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vbxor(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vbxor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbxor");
 
@@ -643,7 +661,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = traits::bitwise<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::bitwise<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -673,7 +691,10 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -683,7 +704,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vbsll(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vbsll(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbsll");
 
@@ -696,7 +717,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vbsrl(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vbsrl(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbsrl");
 
@@ -709,7 +730,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vbslli(const composed_t one, const size_t other)  noexcept {
+            friend zint32<base_t::features> vbslli(const composed_t one, const size_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbslli");
 
@@ -722,7 +743,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vbsrli(const composed_t one, const size_t other)  noexcept {
+            friend zint32<base_t::features> vbsrli(const composed_t one, const size_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vbsrli");
 
@@ -737,7 +758,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = traits::bitwise_shift<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::bitwise_shift<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -767,7 +788,10 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -777,7 +801,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vlneg(composed_t one)  noexcept {
+            friend zint32<base_t::features> vlneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vlneg");
 
@@ -790,7 +814,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vlor(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vlor");
 
@@ -803,7 +827,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vland(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vland(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vland");
 
@@ -818,7 +842,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = traits::logical<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::logical<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -848,7 +872,10 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -858,7 +885,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "veq");
 
@@ -871,11 +898,11 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vneq");
 
-                return _mm256_xor_si256(_mm256_cmpeq_epi32(one, other), _mm256_setzero_si256());
+                return !(one == other);
             }
 
 
@@ -884,7 +911,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vgt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vgt");
 
@@ -897,11 +924,11 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vlt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vlt");
 
-                return (one != other) && (one <= other);
+                return _mm256_cmpgt_epi32(other, one);
             }
 
 
@@ -910,11 +937,11 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vge(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vge");
 
-                return (one == other) || _mm256_cmpgt_epi32(one, other);
+                return !(one < other);
             }
 
 
@@ -923,11 +950,11 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
+            friend zint32<base_t::features> vle(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vle");
 
-                return _mm256_xor_si256(_mm256_cmpgt_epi32(one, other), _mm256_setzero_si256());
+                return !(one > other);
             }
 
         };
@@ -938,7 +965,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = traits::comparison<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::comparison<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -968,7 +995,10 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
-            using mask_t = typename base_t::mask_t;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
             FORWARD(__impl);
 
@@ -978,11 +1008,11 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            friend zint32<base_t::capability> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            friend zint32<base_t::features> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsel");
 
-                return _mm256_blendv_epi8(if_value, else_value, condition);
+                return _mm256_blendv_epi8(else_value, if_value, condition);
             }
 
         };
@@ -993,7 +1023,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = traits::conditional<__impl<base_t>, zint32<base_t::capability>>;
+        using impl = traits::conditional<__impl<base_t>, zint32<base_t::features>>;
 
     };
 
@@ -1018,10 +1048,10 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int32
          * @remark avx2
          */
-        template<uint64_t capability>
+        template<uint64_t features>
         struct __zval_int32
         {
-            using zval_t = zval<__m256i, __m256i, int32_t, 8, 32, capability>;
+            using zval_t = zval<__m256i, __m256i, int32_t, zval_tag, 8, 32, features>;
 
             struct impl : public zval_t
             {
@@ -1033,12 +1063,12 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int32
          * @remark avx2
          */
-        template<uint64_t capability>
+        template<uint64_t features>
         struct __zint32
         {
             struct impl;
 
-            using zval_t = typename __zval_int32<capability>::impl;
+            using zval_t = typename __zval_int32<features>::impl;
             using composition_t = compose
             <
                 printable::impl,
@@ -1064,10 +1094,10 @@ namespace zacc { namespace backend { namespace avx2 {
             };
         };
 
-        template<uint64_t capability>
+        template<uint64_t features>
         struct __bint32
         {
-            using bval_t = bval<typename __zint32<capability>::impl, __m256i>;
+            using bval_t = bval<typename __zint32<features>::impl, __m256i>;
             struct impl : public bval_t
             {
                 FORWARD2(impl, bval_t);
@@ -1075,16 +1105,16 @@ namespace zacc { namespace backend { namespace avx2 {
         };
     //}
 
-    template<uint64_t capability>
-    struct zint32 : public /*composition::*/__zint32<capability>::impl
+    template<uint64_t features>
+    struct zint32 : public /*composition::*/__zint32<features>::impl
     {
-        FORWARD2(zint32, /*composition::*/__zint32<capability>::impl);
+        FORWARD2(zint32, /*composition::*/__zint32<features>::impl);
     };
 
-    template<uint64_t capability>
-    struct bint32 : public /*composition::*/__bint32<capability>::impl
+    template<uint64_t features>
+    struct bint32 : public /*composition::*/__bint32<features>::impl
     {
-        FORWARD2(bint32, /*composition::*/__bint32<capability>::impl);
+        FORWARD2(bint32, /*composition::*/__bint32<features>::impl);
     };
 
     static_assert(is_zval<zint32<0>>::value, "is_zval for zint32 failed.");

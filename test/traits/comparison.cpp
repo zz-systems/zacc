@@ -39,11 +39,11 @@ namespace zacc { namespace test {
             TypeParam value = 5;
             TypeParam actual= value == 5;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
             actual = value == 6;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) false));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
         }
 
         TYPED_TEST_P(comparison_test, not_equals)
@@ -51,11 +51,11 @@ namespace zacc { namespace test {
             TypeParam value = 5;
             TypeParam actual= value != 5;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) false));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
 
             actual = value != 6;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
         }
 
         TYPED_TEST_P(comparison_test, greater_than)
@@ -63,15 +63,15 @@ namespace zacc { namespace test {
             TypeParam value = 5;
             TypeParam actual= value > 4;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
             actual = value > 5;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) false));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
 
             actual = value > 6;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) false));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
         }
 
         TYPED_TEST_P(comparison_test, greater_than_equal)
@@ -79,15 +79,15 @@ namespace zacc { namespace test {
             TypeParam value = 5;
             TypeParam actual= value >= 4;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
             actual = value >= 5;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
             actual = value >= 6;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) false));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
         }
 
         TYPED_TEST_P(comparison_test, less_than)
@@ -95,15 +95,15 @@ namespace zacc { namespace test {
             TypeParam value = 5;
             TypeParam actual= value < 4;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) false));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
 
             actual = value < 5;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) false));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
 
             actual = value < 6;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
         }
 
         TYPED_TEST_P(comparison_test, less_than_equal)
@@ -111,15 +111,15 @@ namespace zacc { namespace test {
             TypeParam value = 5;
             TypeParam actual= value <= 4;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) false));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
 
             actual = value <= 5;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
             actual = value <= 6;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::scalar_t) true));
+            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
         }
 
 

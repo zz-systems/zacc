@@ -46,17 +46,37 @@ namespace zacc { namespace math {
         };
         //vec3(const T* rhs) { v = rhs; };
 
-        mat(const mat &rhs) : x(rhs.x), y(rhs.y), z(rhs.z) { };
+        constexpr mat(const T &all) : x(all), y(all), z(all) { };
+
+        constexpr mat(const T &x, const T &y, const T &z) : x(x), y(y), z(z) { };
+
+
+
+        constexpr mat(const mat &rhs) : x(rhs.x), y(rhs.y), z(rhs.z)
+        { };
 
         template<typename U = T>
-        mat(const mat<U, 3, 1> &rhs) : x(rhs.x), y(rhs.y), z(rhs.z) { };
+        constexpr mat(const mat<U, 3, 1> &rhs) : x(rhs.x), y(rhs.y), z(rhs.z)
+        { };
 
-        mat(const T &all) : x(all), y(all), z(all) { };
+        constexpr mat(mat&& other) noexcept
+            : data(std::move(other.data))
+        {}
 
-        mat(const T &x, const T &y, const T &z) : x(x), y(y), z(z) { };
+        constexpr mat& operator=(const mat& other)
+        {
+            data = other.data;
+            return *this;
+        }
+
+        constexpr mat& operator=(mat&& other) noexcept
+        {
+            data = std::move(other.data);
+            return *this;
+        }
 
         //__attribute__((optimize("unroll-loops")))
-        mat(std::initializer_list<T> init_list) noexcept
+        constexpr mat(std::initializer_list<T> init_list) noexcept
         {
             std::copy(init_list.begin(), init_list.end(), data.begin());
         }
@@ -65,7 +85,7 @@ namespace zacc { namespace math {
         static constexpr size_t get_cols()     { return 1; }
         static constexpr size_t get_length()   { return 3; }
 
-        T &operator()(int row, int col)
+        T &operator()(int row, int)
         {
             return data[row];
         }
@@ -75,7 +95,7 @@ namespace zacc { namespace math {
             return data[i];
         }
 
-        const T &operator()(int row, int col) const
+        const T &operator()(int row, int) const
         {
             return data[row];
         }
@@ -236,6 +256,22 @@ namespace zacc { namespace math {
 
         mat(const vec3<T> &row0, const vec3<T> &row1) : row0(row0), row1(row1) { };
 
+        constexpr mat(mat&& other) noexcept
+                : flat_data(std::move(other.flat_data))
+        {}
+
+        constexpr mat& operator=(const mat& other)
+        {
+            flat_data = other.flat_data;
+            return *this;
+        }
+
+        constexpr mat& operator=(mat&& other) noexcept
+        {
+            flat_data = std::move(other.flat_data);
+            return *this;
+        }
+
         static constexpr size_t get_rows()     { return 2; }
         static constexpr size_t get_cols()     { return 3; }
         static constexpr size_t get_length()   { return 6; }
@@ -297,17 +333,33 @@ namespace zacc { namespace math {
             struct { vec3<T> row0, row1, row2; };
         };
 
-        mat() {};
+        constexpr mat() {};
         //vec3(const T* rhs) { v = rhs; };
 
-        mat(const mat &rhs) : row0(rhs.row0), row1(rhs.row1), row2(rhs.row2) { };
+        constexpr mat(const mat &rhs) : row0(rhs.row0), row1(rhs.row1), row2(rhs.row2) { };
 
         template<typename U = T>
-        mat(const mat<U, 3, 3> &rhs) : row0(rhs.row0), row1(rhs.row1), row2(rhs.row2) { };
+        constexpr mat(const mat<U, 3, 3> &rhs) : row0(rhs.row0), row1(rhs.row1), row2(rhs.row2) { };
 
-        mat(const T &all) : row0(all), row1(all), row2(all) { };
+        constexpr mat(const T &all) : row0(all), row1(all), row2(all) { };
 
-        mat(const vec3<T> &row0, const vec3<T> &row1, const vec3<T> &row2) : row0(row0), row1(row1), row2(row2) { };
+        constexpr mat(const vec3<T> &row0, const vec3<T> &row1, const vec3<T> &row2) : row0(row0), row1(row1), row2(row2) { };
+
+        constexpr mat(mat&& other) noexcept
+                : flat_data(std::move(other.flat_data))
+        {}
+
+        constexpr mat& operator=(const mat& other)
+        {
+            flat_data = other.flat_data;
+            return *this;
+        }
+
+        constexpr mat& operator=(mat&& other) noexcept
+        {
+            flat_data = std::move(other.flat_data);
+            return *this;
+        }
 
         static constexpr size_t get_rows()     { return 3; }
         static constexpr size_t get_cols()     { return 3; }

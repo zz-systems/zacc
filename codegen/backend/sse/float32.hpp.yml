@@ -40,7 +40,7 @@ modules:
     #  prefix: "template<typename T, typename = typename std::enable_if_t<std::is_convertible<T, float>::value>>"
     #  init: _mm_set1_ps((float)value)
 
-    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+    - args: "std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> value"
       init: _mm_load_ps(value.data())
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -48,16 +48,17 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
-      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm_storeu_ps(target.data(), source)
+      body: _mm_storeu_ps(result, input)
     vstream:
       <<: *io_store
-      body:  _mm_stream_ps(target.data(), source)
+      body:  _mm_stream_ps(result, input)
 
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args: { raw: "RandomIt input, const zint32<base_t::capability> &index" }
+      args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
       body:
         - auto i = index.data();
         - return _mm_set_ps(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
@@ -209,7 +210,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: ["mask_t condition", if_value, else_value]
+      args: ["mask_vector_t condition", if_value, else_value]
       mangling: false
       body:
         sse4:

@@ -62,13 +62,13 @@ namespace zacc {
          * @brief read data from serializer
          * @param serializer
          */
-        virtual void deserialize(const tserializer &serializer) {}
+        virtual void deserialize(const tserializer &) {}
 
         /**
          * @brief write data to serializer
          * @param serializer
          */
-        virtual void serialize(tserializer &serializer) const {}
+        virtual void serialize(tserializer &) const {}
     };
 }
 

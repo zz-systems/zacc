@@ -29,7 +29,7 @@ modules:
       init: _mm256_cvtps_epi32(value)
 
     - args: __m256d value
-      init: _mm256_cvtpd_epi32(value)
+      init: _mm256_castsi128_si256(_mm256_cvtpd_epi32(value))
 
     - args: __m256i value
       init: value
@@ -37,7 +37,7 @@ modules:
     - args: [[*scalar_t, value]]
       init: _mm256_set1_epi32(value)
 
-    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+    - args: "std::array<typename base_t::element_t, base_t::size()> value"
       init: _mm256_loadu_si256((__m256i*)value.data())
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -45,19 +45,19 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, composed_t input"
       returns: void
-      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
-      body: _mm256_storeu_si256((__m256i*)target.data(), source);
+      body: _mm256_storeu_si256((__m256i*)result, input);
     vstream:
       <<: *io_store
-      body: _mm256_stream_si256((__m256i*)target.data(), source);
+      body: _mm256_stream_si256((__m256i*)result, input);
 
 
     vgather:
-      args: { raw: "composed_t &target, raw_ptr<const int> source, zint32<base_t::capability> index" }
-      #prefix: "template<typename T> friend"
-      #returns: "std::enable_if_t<is_zval<T>::value && is_integral<T>::value && T::dim == 8, composed_t>"
-      body: _mm256_i32gather_epi32(source, index, 4)
+      prefix: "template<typename RandomIt> friend"
+      args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
+      body: _mm256_i32gather_epi32(input, index, 4)
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -120,14 +120,14 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
     veq:   _mm256_cmpeq_epi32
-    vneq:  _mm256_xor_si256(_mm256_cmpeq_epi32(one, other), _mm256_setzero_si256());
+    vneq:  "!(one == other)"
     vgt:   _mm256_cmpgt_epi32
-    vlt:   (one != other) && (one <= other)
-    vge:   (one == other) || _mm256_cmpgt_epi32(one, other)
-    vle:   _mm256_xor_si256(_mm256_cmpgt_epi32(one, other), _mm256_setzero_si256());
+    vlt:   _mm256_cmpgt_epi32(other, one)
+    vge:   "!(one < other)"
+    vle:   "!(one > other)"
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
       args: [condition, if_value, else_value]
       mangling: false
-      body: _mm256_blendv_epi8(if_value, else_value, condition);
+      body: _mm256_blendv_epi8(else_value, if_value, condition);

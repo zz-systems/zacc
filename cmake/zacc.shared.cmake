@@ -18,6 +18,7 @@ option(BUILD_OPENMP "Build with OpenMP support" Off)
 
 option(BUILD_ENABLE_TRACE "Enable tracing (EXTREMELY SLOW!)" OFF)
 option(BUILD_SANITIZE_MEMORY "Build with clang memory sanitizer" Off)
+option(BUILD_SANITIZE_UNDEFINED "Build with clang undefined behavior sanitizer" Off)
 
 # testing ==============================================================================================================
 
@@ -56,6 +57,10 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 
         if(BUILD_SANITIZE_MEMORY)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=alignment")
+        endif()
+
+        if(BUILD_SANITIZE_UNDEFINED)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
         endif()
     endif()
 

@@ -38,6 +38,13 @@ namespace zacc { namespace traits {
      */
     template<typename base_t, typename composed_t>
     struct numeric : public base_t {
+
+        using vector_t      = typename zval_traits<base_t>::vector_t;
+        using element_t     = typename zval_traits<base_t>::element_t;
+        using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+        using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+
         FORWARD(numeric);
 
         /**
@@ -46,7 +53,7 @@ namespace zacc { namespace traits {
          * @return NaN
          */
         static constexpr composed_t quiet_NaN() noexcept {
-            return std::numeric_limits<typename base_t::scalar_t>::quiet_NaN();
+            return std::numeric_limits<element_t>::quiet_NaN();
         };
 
         /**
@@ -63,7 +70,7 @@ namespace zacc { namespace traits {
          * @return infinity
          */
         static constexpr composed_t infinity() noexcept {
-            return std::numeric_limits<typename base_t::scalar_t>::infinity();
+            return std::numeric_limits<element_t>::infinity();
         };
 
         /**
@@ -72,7 +79,7 @@ namespace zacc { namespace traits {
          * @return minimum value
          */
         static constexpr composed_t min() noexcept {
-            return std::numeric_limits<typename base_t::scalar_t>::min();
+            return std::numeric_limits<element_t>::min();
         }
 
         /**
@@ -81,7 +88,7 @@ namespace zacc { namespace traits {
          * @return maximum value
          */
         static constexpr composed_t max() noexcept {
-            return std::numeric_limits<typename base_t::scalar_t>::max();
+            return std::numeric_limits<element_t>::max();
         }
     };
 }}

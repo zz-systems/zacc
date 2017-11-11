@@ -35,7 +35,7 @@ modules:
     - args: [[*scalar_t, value]]
       init: _mm512_set1_pd(value)
 
-    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+    - args: "std::array<typename base_t::element_t, base_t::size()> value"
       init: _mm512_load_pd(value.data())
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -43,14 +43,13 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, composed_t input"
       returns: void
-      member: true
-      suffix: const
-      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
-      body: _mm512_store_pd(target.data(), source);
+      body: _mm512_store_pd(result, input);
     vstream:
       <<: *io_store
-      body: _mm512_stream_pd(target.data(), source);
+      body: _mm512_stream_pd(result, input);
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:

@@ -36,7 +36,7 @@ modules:
     - args: [[*scalar_t, value]]
       init: _mm256_set1_ps(value)
 
-    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+    - args: "std::array<typename base_t::element_t, base_t::size()> value"
       init: _mm256_loadu_ps(value.data())
 
     - args: "std::array<sse::zint32<base_t::capability>, 2> value"
@@ -47,16 +47,18 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
-      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm256_store_ps(target.data(), source)
+      body: _mm256_store_ps(result, input)
     vstream:
       <<: *io_store
-      body: _mm256_stream_ps(target.data(), source)
+      body: _mm256_stream_ps(result, input)
 
     vgather:
-      args: { raw: "composed_t &target, raw_ptr<const float> source, zint32<base_t::capability> index" }
-      body: _mm256_set_m128(sse::zfloat32<base_t::capability>::gather(source, index.value()[1]), sse::zfloat32<base_t::capability>::gather(source, index.value()[0]))
+      prefix: "template<typename RandomIt> friend"
+      args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
+      body: _mm256_set_m128(sse::zfloat32<base_t::capability>::gather(input, index.value()[1]), sse::zfloat32<base_t::capability>::gather(input, index.value()[0]))
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -77,7 +79,7 @@ modules:
       body: _mm256_rcp_ps
     vtrunc:
       args: one
-      body: _mm256_cvtepi32_ps(_mm256_cvtps_epi32(one))
+      body: _mm256_cvtepi32_ps(_mm256_cvttps_epi32(one))
     vfloor:
       args: one
       body: _mm256_floor_ps

@@ -5,6 +5,7 @@ set(ZACC_TEST_ENTRYPOINT ${CMAKE_CURRENT_LIST_DIR}/test_entry_point.cpp)
 
 file(GLOB test.traits "${CMAKE_CURRENT_LIST_DIR}/traits/*.cpp")
 file(GLOB test.math "${CMAKE_CURRENT_LIST_DIR}/math/*.cpp")
+file(GLOB_RECURSE test.util "${CMAKE_CURRENT_LIST_DIR}/util/*.cpp")
 
 #
 #if(BUILD_SANITIZE_MEMORY)
@@ -20,4 +21,5 @@ zacc_add_dispatched_tests(zacc.tests
         SOURCES
             ${test.traits}
             ${test.math}
+            ${test.util}
         )

@@ -31,20 +31,20 @@ modules:
       args: "const T &value"
       init: value.value()
 
-    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+    - args: "std::array<typename base_t::element_t, base_t::size()> value"
       init: "value[0]"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, composed_t input"
       returns: void
-      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
-      body: target.data()[0] = source.value();
+      body: result[0] = input.value();
     vstream: *io_store
     vgather:
-      args: { raw: "composed_t &target, raw_ptr<const double> source, zint32<base_t::capability> index" }
-      #prefix: "template<typename T> friend"
-      #returns: "std::enable_if_t<is_integral<T>::value && T::dim == 1, composed_t>"
-      body: return source[index.value()]
+      prefix: "template<typename RandomIt> friend"
+      args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
+      body: return input[index.value()]
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -99,29 +99,29 @@ modules:
       args: one
       body:
         - auto _one = one.value();
-        - float result;
-        - reinterpret_cast<uint64_t&>(result) = ~reinterpret_cast<uint64_t&>(_one);
+        - double result;
+        - bitsof(result) = ~bitsof(_one);
         - return result;
     vband:
       body:
         - auto _one = one.value();
         - auto _other = other.value();
-        - float result;
-        - reinterpret_cast<uint64_t&>(result) = reinterpret_cast<uint64_t&>(_one) & reinterpret_cast<uint32_t&>(_other);
+        - double result;
+        - bitsof(result) = bitsof(_one) & bitsof(_other);
         - return result;
     vbor:
       body:
         - auto _one = one.value();
         - auto _other = other.value();
-        - float result;
-        - reinterpret_cast<uint64_t&>(result) = reinterpret_cast<uint64_t&>(_one) | reinterpret_cast<uint32_t&>(_other);
+        - double result;
+        - bitsof(result) = bitsof(_one) | bitsof(_other);
         - return result;
     vbxor:
       body:
         - auto _one = one.value();
         - auto _other = other.value();
-        - float result;
-        - reinterpret_cast<uint64_t&>(result) = reinterpret_cast<uint64_t&>(_one) ^ reinterpret_cast<uint32_t&>(_other);
+        - double result;
+        - bitsof(result) = bitsof(_one) ^ bitsof(_other);
         - return result;
 
     is_set:

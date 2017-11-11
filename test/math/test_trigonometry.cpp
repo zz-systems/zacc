@@ -41,7 +41,7 @@ namespace zacc { namespace test {
             auto actual     = math::vsin(zfloat(i / 180.0 * M_PI));
             zfloat expected   = std::sin(i / 180.0f * M_PI);
 
-            VEXPECT_NEAR(actual, expected, 0.004);
+            VASSERT_NEAR(actual, expected, 0.004);
         }
     }
 
@@ -54,7 +54,7 @@ namespace zacc { namespace test {
             auto actual     = math::vcos(zfloat(i / 180.0 * M_PI));
             zfloat expected   = std::cos(i / 180.0f * M_PI);
 
-            VEXPECT_NEAR(actual, expected, 0.004);
+            VASSERT_NEAR(actual, expected, 0.004);
         }
     }
 
@@ -67,7 +67,7 @@ namespace zacc { namespace test {
             auto actual     = math::vtan(zfloat(i / 180.0 * M_PI));
             zfloat expected   = std::tan(i / 180.0f * M_PI);
 
-            VEXPECT_NEAR(actual, expected, 0.004);
+            VASSERT_NEAR(actual, expected, 0.004);
         }
     }
 
@@ -80,7 +80,7 @@ namespace zacc { namespace test {
             auto actual     = math::vsin(zdouble(i / 180.0 * M_PI));
             zdouble expected   = std::sin(i / 180.0 * M_PI);
 
-            VEXPECT_NEAR(actual, expected, 0.00000006);
+            VASSERT_NEAR(actual, expected, 0.00000006);
         }
     }
 
@@ -93,7 +93,7 @@ namespace zacc { namespace test {
             auto actual     = math::vcos(zdouble(i / 180.0 * M_PI));
             zdouble expected   = std::cos(i / 180.0 * M_PI);
 
-            VEXPECT_NEAR(actual, expected, 0.00000006);
+            VASSERT_NEAR(actual, expected, 0.00000006);
         }
     }
 
@@ -106,7 +106,7 @@ namespace zacc { namespace test {
             auto actual     = math::vtan(zdouble(i / 180.0 * M_PI));
             zdouble expected   = std::tan(i / 180.0 * M_PI);
 
-            VEXPECT_NEAR(actual, expected, 0.00000006);
+            VASSERT_NEAR(actual, expected, 0.00000006);
         }
     }
 }}

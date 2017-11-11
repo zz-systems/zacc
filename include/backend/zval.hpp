@@ -36,11 +36,11 @@
 
 namespace zacc {
 
-    struct zval_base {
-    };
 
     template<typename zval_t, typename bval_t>
     struct bval;
+
+
 
     /**
      * @brief base type for all zacc computation types
@@ -51,74 +51,91 @@ namespace zacc {
      * @tparam _alignment memory alignment
      * @tparam _capability capabilities
      */
-    template<typename _vector_t, typename _mask_t = _vector_t, typename _scalar_t = _vector_t, size_t _dim = 1, size_t _alignment = 16, uint64_t _capability = 0xFFFF'FFFF'FFFF'FFFF>
-    struct zval : zval_base {
+    template<typename _Vector, typename _MaskVector, typename _Element, typename _Tag, size_t _Size, size_t _Alignment, uint64_t _Features = 0xFFFF'FFFF'FFFF'FFFF>
+    struct zval : zval_base<_Vector, _MaskVector, _Element, _Tag, _Size, _Alignment, _Features>
+    {
+        constexpr zval() = default;
 
-        /// vector size (1 - scalar, 4, 8, 16, ...)
-        static const unsigned dim = _dim;
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+        constexpr zval(const T& other)
+                : _value (other)
+        {}
 
-        /// capabilities
-        static const uint64_t capability = _capability;
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+        constexpr zval& operator=(const T& other)
+        {
+            _value = other;
+            return *this;
+        }
 
-        /// scalar type? vector type?
-        static const bool is_vector = dim > 1;
+        //template<typename T, typename enable = std::enable_if_t<!is_zval<T>::value && !is_bval<T>::value>>
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+        constexpr zval(T&& value)
+                : _value(std::forward<T>(value))
+        {}
 
-        /// memory alignment
-		static const int alignment = _alignment;
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+        constexpr zval& operator=(T&& other) noexcept
+        {
+            _value = std::move(other);
+            return *this;
+        }
 
-        /// traits
-        static const long traits = 0;
+        constexpr zval(const zval& other)
+                : _value (other._value)
+        {}
 
-        /// capability dispatcher. used in derived types for SFINAE capability checks.
-        using dispatcher = capability::dispatcher<capability>;
+        constexpr zval& operator=(const zval& other)
+        {
+            _value = other._value;
+            return *this;
+        }
 
-        /// vector type, like __m128i for sse 4x integer vector
-        using vector_t = _vector_t;
-        /// scalar type, like int for sse 4x integer vector
-        using scalar_t = _scalar_t;
-        /// extracted std::array of (dim) scalar values
-        using extracted_t = std::array<scalar_t, dim>; //aligned_array<scalar_t, dim, alignment>;
+        constexpr zval(zval&& other) noexcept
+                : _value(std::move(other._value))
+        {}
 
-        /// mask type for boolean operations
-        using mask_t = _mask_t;
+        constexpr zval& operator=(zval&& other) noexcept
+        {
+            _value = std::move(other._value);
+            return *this;
+        }
 
-        //using bval_t = bval;
+        void swap(zval& other) noexcept
+        {
+            std::swap(_value, other._value);
+        }
 
-        /**
-         * @brief default constructor
-         */
-        zval() {}
+//        /**
+//             * @brief non-zval constructor
+//             * @tparam T
+//             * @tparam enable
+//             * @param value
+//             */
+//        template<typename T, typename enable = std::enable_if_t<!is_zval<T>::value && !is_bval<T>::value>>
+//        constexpr zval(T value) : _value(value) {}
+//
+//        /**
+//         * @brief zval copy constructor
+//         * @tparam T
+//         * @tparam enable
+//         * @param value
+//         */
+//        //template<typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>
+//        constexpr zval(const zval& value) : _value(value._value) {}
+//
+//        /**
+//         * @brief construct from mask
+//         * @param value
+//         */
+//        constexpr zval(const _MaskVector value) : _value(value) {}
+//        /**
+//         * @brief cast to underlying vector type
+//         * @return raw value
+//         */
 
-        /**
-         * @brief non-zval constructor
-         * @tparam T
-         * @tparam enable
-         * @param value
-         */
-        template<typename T, typename enable = std::enable_if_t<!is_zval<T>::value && !is_bval<T>::value>>
-        constexpr zval(T value) : _value(value) {}
-
-        /**
-         * @brief zval copy constructor
-         * @tparam T
-         * @tparam enable
-         * @param value
-         */
-        //template<typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>
-        constexpr zval(const zval& value) : _value(value._value) {}
-
-        /**
-         * @brief construct from mask
-         * @param value
-         */
-        constexpr zval(const mask_t value) : _value(value) {}
-
-        /**
-         * @brief cast to underlying vector type
-         * @return raw value
-         */
-        template <typename dim_t = std::integral_constant<size_t, dim>, typename enable = typename std::enable_if<(dim_t::value > 1), vector_t>::type>
-        constexpr operator vector_t() const {
+        template <typename size = std::integral_constant<size_t, _Size>, typename enable = typename std::enable_if<(size::value > 1), _Vector>::type>
+        constexpr operator _Vector() const {
             return value();
         }
 
@@ -126,27 +143,40 @@ namespace zacc {
          * @brief cast to underlying vector type
          * @return raw value
          */
-        constexpr vector_t value() const {
+        constexpr _Vector value() const {
             return _value;
         }
-    protected:
-        alignas(_alignment) vector_t _value;
+    private:
+        alignas(_Alignment) _Vector _value;
     };
+
+    template<typename... Args>
+    void swap(zval<Args...>& one, zval<Args...>& other)
+    {
+        one.swap(other);
+    }
+
+    template<typename zval_t>
+    using __bval = zval_base
+            <
+                    typename zval_traits<zval_t>::vector_t,
+                    typename zval_traits<zval_t>::mask_vector_t,
+                    bool,
+                    bval_tag,
+                    zval_traits<zval_t>::size,
+                    zval_traits<zval_t>::alignment,
+                    zval_traits<zval_t>::features
+            >;
 
     /// TODO: separate file, impl traits.
     template<typename zval_t, typename bval_t>
-    struct bval {
+    struct bval : public __bval<zval_t>
+    {
+        using base_t = __bval<zval_t>;
+        using base_t::size;
     public:
-        static const unsigned dim = zval_t::dim;
-        static const int capability = zval_t::capability;
 
-        static const bool is_vector = zval_t::is_vector;
-        static const int alignment = zval_t::alignment;
-
-        using vector_t = typename zval_t::vector_t;
-        using scalar_t = bool;
-
-        using extracted_t = std::array<scalar_t, dim>;// aligned_array<scalar_t, dim, alignment>;
+        using extracted_t = typename zval_traits<bval>::extracted_t;
         using iterator    = typename extracted_t::iterator;
 
         /**
@@ -185,7 +215,7 @@ namespace zacc {
         }
 
         constexpr const bval_t get_value() const {
-            return _value.get_value();
+            return _value;
         }
 
         const extracted_t data() const {
@@ -217,6 +247,8 @@ namespace zacc {
         std::string to_string() const {
             std::stringstream ss;
 
+            auto is_vector = size() > 1;
+
             if (is_vector)
                 ss << "[ ";
 
@@ -241,9 +273,9 @@ namespace zacc {
             return os;
         }
 
-    protected:
-        alignas(alignment) zval_t _value;
-        alignas(alignment) extracted_t _snapshot;
+    private:
+        alignas(zval_traits<bval>::alignment) zval_t _value;
+        alignas(zval_traits<bval>::alignment) extracted_t _snapshot;
     };
 
 

@@ -60,7 +60,7 @@ namespace zacc {
         struct impl : public base_t {
             FORWARD(impl);
 
-            using iterator = typename base_t::extracted_t::iterator;
+            using iterator = typename zval_traits<base_t>::extracted_t::iterator;
 
             /**
              * @brief create a snapshot of current value
@@ -80,6 +80,8 @@ namespace zacc {
             mutable typename base_t::extracted_t _snapshot;
         };
     };
+
+
 
 
     /**
@@ -142,7 +144,7 @@ namespace zacc {
 
             auto as_bool() const noexcept
             {
-                return bval<impl, typename base_t::mask_t>(*this);
+                return bval<impl, typename base_t::mask_vector_t>(*this);
             }
         };
     };

@@ -22,51 +22,37 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
+#include "gtest/gtest.h"
+#include "system/branch.hpp"
+#include "util/algorithm.hpp"
 
-#pragma once
+#include <cmath>
+#include "util/testing/gtest_ext.hpp"
 
-#include "common.hpp"
-#include "memory.h"
+namespace zacc { namespace test {
 
-namespace zacc { namespace traits {
+        TEST(type_traits_test, is_iterable_trait) {
+                REQUIRES(ZACC_ARCH);
 
-    /**
-     * @brief provides vector load/store definitions
-     * @tparam base_t base type (e.g previous trait)
-     * @tparam composed_t final composed type (e.g zfloat32)
-     */
-    template<typename base_t, typename composed_t>
-    struct io : public base_t {
+                EXPECT_TRUE((is<measurable, std::array<int, 10>>));
+                EXPECT_FALSE((is<measurable, int>));
 
-        typedef typename zval_traits<base_t>::extracted_t extracted_t;
+                EXPECT_TRUE((is<iterable, std::array<int, 10>>));
+                EXPECT_FALSE((is<iterable, int>));
 
-        FORWARD(io);
+                EXPECT_FALSE((is<resizable, std::array<int, 10>>));
+                EXPECT_FALSE((is<resizable, int>));
+                EXPECT_TRUE((is<resizable, std::vector<int>>));
 
-        template<typename OutputIt>
-        void store (OutputIt result) const
-        {
-            vstore(result, static_cast<composed_t>(base_t::value()));
+                EXPECT_FALSE((all<measurable, std::array<int, 10>, std::vector<float>, double>));
+                EXPECT_TRUE((all<measurable, std::array<int, 10>, std::vector<float>>));
+
+                EXPECT_TRUE((any<measurable, std::array<int, 10>, std::vector<float>, double>));
+
+                EXPECT_TRUE((is<swappable, std::tuple<int, float>>));
         }
 
-        template<typename OutputIt>
-        void stream (OutputIt result) const
-        {
-            vstream(result, static_cast<composed_t>(base_t::value()));
-        }
 
-        const extracted_t data() const {
-            alignas(base_t::alignment) extracted_t result;
 
-            store(std::begin(result));
-
-            return result;
-        }
-
-        template<typename RandomIt, typename index_t>
-        static composed_t gather(RandomIt input, index_t index)
-        {
-            return vgather(input, index, composed_t());
-        }
-    };
 
 }}

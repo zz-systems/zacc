@@ -36,7 +36,7 @@ modules:
     - args: [[*scalar_t, "value"]]
       init: "std::array<sse::zint16<base_t::capability>, 2> ({ _mm_set1_epi16(value), _mm_set1_epi16(value) })"
 
-    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+    - args: "std::array<typename base_t::element_t, base_t::size()> value"
       init: "std::array<sse::zint16<base_t::capability>, 2> ({ _mm_loadu_si128((__m128i*)value.data()), _mm_loadu_si128((__m128i*)(value.data() + 4)) })"
 
     #- args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -44,16 +44,17 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
-      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, composed_t input"
       returns: void
       body:
-        - _mm_store_si128((__m128i*)(target.data()), source.value()[1]);
-        - _mm_store_si128((__m128i*)(target.data() + base_t::dim / 2), source.value()[0]);
+        - _mm_store_si128((__m128i*)(target.data()), input.value()[1]);
+        - _mm_store_si128((__m128i*)(result + base_t::size() / 2), input.value()[0]);
     vstream:
       <<: *io_store
       body:
-       - _mm_stream_si128((__m128i*)(target.data()), source.value()[1]);
-       - _mm_stream_si128((__m128i*)(target.data() + base_t::dim / 2), source.value()[0]);
+       - _mm_stream_si128((__m128i*)(target.data()), input.value()[1]);
+       - _mm_stream_si128((__m128i*)(result + base_t::size() / 2), input.value()[0]);
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------

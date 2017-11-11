@@ -40,25 +40,23 @@ namespace zacc { namespace test {
 
         TYPED_TEST_P(io_test, store)
         {
-            std::array<typename TypeParam::scalar_t, TypeParam::dim> test_data;
-            for(size_t i = 0; i < TypeParam::dim; i++)
+            std::array<typename TypeParam::element_t, TypeParam::size()> test_data;
+            for(size_t i = 0; i < TypeParam::size(); i++)
                 test_data[i] = i;
 
             TypeParam actual(test_data);
 
             auto data = actual.data();
 
-            for(size_t i = 0; i < TypeParam::dim; i++)
+            for(size_t i = 0; i < TypeParam::size(); i++)
                 VASSERT_EQ(data[i], test_data[i]);
         }
 
         TYPED_TEST_P(gather_test, gather)
         {
-            zfloat::extracted_t da;
-            zfloat::gather(std::begin(da), zint32(0));
 
             typename TypeParam::extracted_t data;
-            for(size_t i = 0; i < TypeParam::dim; i++)
+            for(size_t i = 0; i < TypeParam::size(); i++)
                 data[i] = 10 + i;
 
             TypeParam actual = TypeParam::gather(std::begin(data), zint32(0));

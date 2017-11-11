@@ -42,7 +42,7 @@ modules:
     #  prefix: "template<typename T, typename = typename std::enable_if_t<std::is_convertible<T, double>::value>>"
     #  init: _mm_set1_pd((double)value)
 
-    - args: "std::array<typename base_t::scalar_t, base_t::dim> value"
+    - args: "std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> value"
       init: _mm_load_pd(value.data())
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -50,16 +50,17 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
-      args: { raw: "typename base_t::extracted_t &target, composed_t source" }
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm_store_pd(target.data(), source)
+      body: _mm_store_pd(result, input)
     vstream:
       <<: *io_store
-      body:  _mm_stream_pd(target.data(), source)
+      body:  _mm_stream_pd(result, input)
 
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args: { raw: "RandomIt input, const zint32<base_t::capability> &index" }
+      args: { raw: "RandomIt input, const zint32<base_t::features> &index, composed_t" }
       body:
         - auto i = index.data();
         - return _mm_set_pd(input[i[3]], input[i[1]]);
@@ -190,7 +191,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: ["mask_t condition", if_value, else_value]
+      args: ["mask_vector_t condition", if_value, else_value]
       body:
         sse4:
           requires: [SSE41]
