@@ -118,10 +118,7 @@
 #define STRINGIZE_DETAIL(x) #x
 #define STRINGIZE(x) STRINGIZE_DETAIL(x)
 
-/**
- * @brief compile- and runtime type dispatching
- */
-#define DISPATCHED template<typename branch, \
+#define TYPES typename branch, \
     typename zint8      = typename branch::zint8, \
     typename zint16     = typename branch::zint16, \
     typename zint32     = typename branch::zint32, \
@@ -141,6 +138,14 @@
     typename bshort     = typename branch::bint16, \
     typename bint       = typename branch::bint32, \
     typename bfloat     = typename branch::bfloat32, \
-    typename bdouble    = typename branch::bfloat64>
+    typename bdouble    = typename branch::bfloat64
+
+//clash with POSIX....
+//#define KERNEL template<typename _Input, typename _Output, TYPES>
+
+/**
+ * @brief compile- and runtime type dispatching
+ */
+#define DISPATCHED template<TYPES>
 
 #define ALIGNED alignas(branch::alignment)

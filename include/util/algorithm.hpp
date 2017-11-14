@@ -156,7 +156,7 @@ namespace zacc {
 
         return output;
     };
- 
+
 
     template<typename Tuple>
     using tuple_size = std::tuple_size<std::remove_reference_t<Tuple>>;

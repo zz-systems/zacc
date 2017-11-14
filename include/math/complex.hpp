@@ -76,6 +76,7 @@ namespace zacc { namespace math {
             void imag(T value) { _value[1] = value; }
 
 
+            T magnitude() { return (real() * real() + imag() * imag()).sqrt(); }
         private:
             //alignas(base_t::alignment) std::array<T, 2> _value;
             alignas(base_t::alignment) vector_t _value;
@@ -330,6 +331,65 @@ namespace zacc { namespace math {
         using impl = traits::arithmetic<__impl<base_t>, zcomplex<typename base_t::element_t>>;
     };
 
+    // =================================================================================================================
+    /**
+     * @name conditional operations
+     */
+    ///@{
+
+    /**
+     * @brief conditional
+     * @relates float32
+     * @remark avx2
+     */
+    template<typename composed_t>
+    struct complex_conditional
+    {
+
+        /**
+         * @brief conditional basic interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief conditional default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            friend zcomplex<element_t> vsel(composed_t condition, composed_t if_value, composed_t else_value) noexcept {
+
+                return
+                {
+                        if_value.real().when(condition.real()).otherwise(else_value.real()),
+                        if_value.imag().when(condition.imag()).otherwise(else_value.imag())
+                };
+            }
+
+        };
+
+        /**
+         * @brief conditional public interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+        template<typename base_t>
+        using impl = traits::conditional<__impl<base_t>, zcomplex<typename base_t::element_t>>;
+
+    };
+
+    ///@}
+
     template<typename T>
     struct __zcomplex
     {
@@ -344,6 +404,7 @@ namespace zacc { namespace math {
             complex_io<impl>::template impl,
             complex_arithmetic<impl>::template impl,
             complex_construction<impl>::template impl,
+            complex_conditional<impl>::template impl,
 
             composable<zcomplex_t>::template type
         >;

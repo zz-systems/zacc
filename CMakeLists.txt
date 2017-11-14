@@ -24,5 +24,8 @@ include(src/CMakeLists.txt)
 # add test targets
 include(test/CMakeLists.txt)
 
+# add example targets
+include(examples/CMakeLists.txt)
+
 # add documentation targets
 include(doc/CMakeLists.txt)

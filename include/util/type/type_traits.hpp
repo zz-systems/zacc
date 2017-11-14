@@ -203,13 +203,13 @@ namespace zacc
         }
 
         /// scalar type? vector type?
-        static const bool is_vector = _Size > 1;
+        static constexpr bool is_vector = _Size > 1;
 
         /// capabilities
-        static const uint64_t features = _Features;
+        static constexpr uint64_t features = _Features;
 
         /// memory alignment
-        static const size_t alignment = _Alignment;
+        static constexpr size_t alignment = _Alignment;
 
 
         /// vector type, like __m128i for sse 4x integer vector
@@ -229,13 +229,16 @@ namespace zacc
     struct zval_traits
     {
         /// vector size (1 - scalar, 4, 8, 16, ...)
-        static const size_t size = 1;
+        static constexpr size_t size = 1;
 
         /// capabilities
-        static const uint64_t features = 0;
+        static constexpr uint64_t features = 0;
 
         /// memory alignment
-        static const size_t alignment = alignof(T);
+        static constexpr size_t alignment = alignof(T);
+
+        /// scalar type? vector type?
+        static constexpr bool is_vector = false;
 
         /// vector type, like __m128i for sse 4x integer vector
         using vector_t = void;
@@ -254,13 +257,16 @@ namespace zacc
     struct zval_traits<T, std::enable_if_t<is_cval<T>::value || is_zval<T>::value || is_bval<T>::value>>
     {
         /// vector size (1 - scalar, 4, 8, 16, ...)
-        static const size_t size = T::size();
+        static constexpr size_t size = T::size();
 
         /// capabilities
-        static const uint64_t features = T::features;
+        static constexpr uint64_t features = T::features;
 
         /// memory alignment
-        static const size_t alignment = T::alignment;
+        static constexpr size_t alignment = T::alignment;
+
+        /// scalar type? vector type?
+        static constexpr bool is_vector = size > 1;
 
         /// vector type, like __m128i for sse 4x integer vector
         using vector_t = typename T::vector_t;
