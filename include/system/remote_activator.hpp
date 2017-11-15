@@ -27,6 +27,7 @@
 #include <memory>
 #include <string>
 #include <map>
+#include <cassert>
 
 #include "system/capabilities.hpp"
 #include "system/managed_library.hpp"
@@ -100,16 +101,50 @@ namespace zacc { namespace system {
          * @param args
          * @return
          */
-        template<typename branch, typename concrete_type, typename ...Args>
+        template<typename branch, typename concrete_type, template<class> class kernel, typename ...Args>
         std::shared_ptr<concrete_type> create_instance(Args&&... args)
         {
+            std::cerr << "creating instance" << std::endl;
             auto loader  = this->branch_library<branch>();
 
+            assert(loader != nullptr);
             // Pitfall. loader->template ... is required
             auto creator = loader->template resolve_symbol<entrypoint*(Args...)>(this->_create_instance);
             auto deleter = loader->template resolve_symbol<void(entrypoint*)>(this->_delete_instance);
 
-            return std::static_pointer_cast<concrete_type>(std::shared_ptr<entrypoint>(creator(std::forward<Args>(args)...), deleter));
+            assert(creator != nullptr);
+            assert(deleter != nullptr);
+
+            auto ptr = std::shared_ptr<entrypoint>(creator(std::forward<Args>(args)...), deleter);
+
+            return std::static_pointer_cast<concrete_type>(std::static_pointer_cast<kernel<concrete_type>>(ptr));
+        }
+
+        /**
+        *
+        * @tparam branch
+        * @tparam concrete_type
+        * @tparam Args
+        * @param args
+        * @return
+        */
+        template<typename branch, typename concrete_type, typename ...Args>
+        std::shared_ptr<concrete_type> create_instance(Args&&... args)
+        {
+            std::cerr << "creating instance" << std::endl;
+            auto loader  = this->branch_library<branch>();
+
+            assert(loader != nullptr);
+            // Pitfall. loader->template ... is required
+            auto creator = loader->template resolve_symbol<entrypoint*(Args...)>(this->_create_instance);
+            auto deleter = loader->template resolve_symbol<void(entrypoint*)>(this->_delete_instance);
+
+            assert(creator != nullptr);
+            assert(deleter != nullptr);
+
+            auto ptr = std::shared_ptr<entrypoint>(creator(std::forward<Args>(args)...), deleter);
+
+            return std::static_pointer_cast<concrete_type>(ptr);
         }
     };
 }}

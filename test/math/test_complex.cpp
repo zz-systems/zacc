@@ -45,7 +45,7 @@ namespace zacc { namespace test {
 
         VASSERT_EQ(actual1.real(), expected1.real());
         VASSERT_EQ(actual1.imag(), expected1.imag());
-
+/*
         auto c = 3 + 4if;
         auto d = 5 + 6if;
 
@@ -53,9 +53,33 @@ namespace zacc { namespace test {
         math::zcomplex<zfloat> expected2 { 8, 10 };
 
         VASSERT_EQ(actual2.real(), expected2.real()) << "kebab";
-        VASSERT_EQ(actual2.imag(), expected2.imag());
+        VASSERT_EQ(actual2.imag(), expected2.imag());*/
     }
 
+    TEST(zfloat32_complex, add2)
+    {
+        REQUIRES(ZACC_ARCH);
+        _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+        _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+        math::zcomplex<zfloat> a { make_index<zfloat>(1), make_index<zfloat>(2) };
+        math::zcomplex<zfloat> b { 3, 4 };
+
+        auto actual1 = a + b;
+        math::zcomplex<zfloat> expected1 { make_index<zfloat>(4), make_index<zfloat>(6) };
+
+        VASSERT_EQ(actual1.real(), expected1.real());
+        VASSERT_EQ(actual1.imag(), expected1.imag());
+/*
+    auto c = 3 + 4if;
+    auto d = 5 + 6if;
+
+    auto actual2 = c + d;
+    math::zcomplex<zfloat> expected2 { 8, 10 };
+
+    VASSERT_EQ(actual2.real(), expected2.real()) << "kebab";
+    VASSERT_EQ(actual2.imag(), expected2.imag());*/
+    }
     TEST(zfloat32_complex, sub) {
         REQUIRES(ZACC_ARCH);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
@@ -69,7 +93,7 @@ namespace zacc { namespace test {
 
         VASSERT_EQ(actual1.real(), expected1.real());
         VASSERT_EQ(actual1.imag(), expected1.imag());
-
+/*
         auto c = 3 + 4if;
         auto d = 5 + 6if;
 
@@ -77,7 +101,7 @@ namespace zacc { namespace test {
         math::zcomplex<zfloat>  expected2 { -2, -2 };
 
         VASSERT_EQ(actual2.real(), expected2.real());
-        VASSERT_EQ(actual2.imag(), expected2.imag());
+        VASSERT_EQ(actual2.imag(), expected2.imag());*//*
     }
 
     TEST(zfloat32_complex, mul) {
@@ -93,7 +117,7 @@ namespace zacc { namespace test {
 
         VASSERT_EQ(actual1.real(), expected1.real());
         VASSERT_EQ(actual1.imag(), expected1.imag());
-
+/*
         auto c = 3 + 4if;
         auto d = 5 + 6if;
 
@@ -101,7 +125,7 @@ namespace zacc { namespace test {
         math::zcomplex<zfloat>  expected2 { -9, 38 };
 
         VASSERT_EQ(actual2.real(), expected2.real());
-        VASSERT_EQ(actual2.imag(), expected2.imag());
+        VASSERT_EQ(actual2.imag(), expected2.imag());*/
     }
 
     TEST(zfloat32_complex, div) {
@@ -117,7 +141,7 @@ namespace zacc { namespace test {
 
         VASSERT_EQ(actual1.real(), expected1.real());
         VASSERT_EQ(actual1.imag(), expected1.imag());
-
+/*
         auto c = 3 + 4if;
         auto d = 5 + 6if;
 
@@ -125,9 +149,22 @@ namespace zacc { namespace test {
         math::zcomplex<zfloat>  expected2 { (39.0 / 61), (2.0/61) };
 
         VASSERT_EQ(actual2.real(), expected2.real());
-        VASSERT_EQ(actual2.imag(), expected2.imag());
+        VASSERT_EQ(actual2.imag(), expected2.imag());*/
     }
 
+    TEST(zfloat32_complex, condition) {
+        REQUIRES(ZACC_ARCH);
+        _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+        _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+        math::zcomplex<zfloat> a { 1, 2 };
+        math::zcomplex<zfloat> b { 3, 4 };
+
+        auto actual1 = a.when({0, 0}).otherwise(b);
+
+        VASSERT_EQ(actual1.real(), b.real());
+        VASSERT_EQ(actual1.imag(), b.imag());
+    }
 //    TEST(float64_complex, sin) {
 //        REQUIRES(ZACC_ARCH);
 //        _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);

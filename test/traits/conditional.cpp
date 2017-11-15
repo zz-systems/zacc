@@ -36,14 +36,33 @@ namespace zacc { namespace test {
 
         TYPED_TEST_P(conditional_test, if_then_else)
         {
-            TypeParam value = 5, one = 1, other = 2;
-            TypeParam condition= value == 5;
+            constexpr auto size = 8;
+            using data_t = typename std::array<typename TypeParam::element_t, size>;
 
-            VASSERT_EQ(one.when(condition).otherwise(other), 1);
+            data_t  _one        {{  1,  2,  3,  4,  5,  6,  7,  8 }},
+                    _other      {{ 10, 11, 12, 13, 14, 15, 16, 17 }};
 
-            condition= value != 5;
+            data_t  _condition  {{ 1, 1,  0, 3, 4,  0, 5, 6 }},
+                    _expected   {{ 1, 2, 12, 4, 5, 15, 7, 8 }};
 
-            VASSERT_EQ(one.when(condition).otherwise(other), 2);
+            typename TypeParam::extracted_t __one, __other, __condition, __expected;
+
+            for(size_t i = 0; i < TypeParam::size(); i+= size)
+            {
+                std::copy(std::begin(_condition), std::begin(_condition) + size, std::begin(__condition) + i);
+                std::copy(std::begin(_expected), std::begin(_expected) + size, std::begin(__expected) + i);
+
+                std::copy(std::begin(_one), std::begin(_one) + size, std::begin(__one) + i);
+                std::copy(std::begin(_other), std::begin(_other) + size, std::begin(__other) + i);
+            }
+
+            TypeParam one(__one), other(__other), condition(__condition), expected(__expected);
+
+            VASSERT_EQ(one.when(condition).otherwise(other), expected);
+
+            //condition= value != 5;
+
+            //VASSERT_EQ(one.when(condition).otherwise(other), 2);
         }
 
 

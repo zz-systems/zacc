@@ -6,6 +6,7 @@ include(cmake/zacc.shared.cmake)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 enable_testing()
 
@@ -25,7 +26,7 @@ include(src/CMakeLists.txt)
 include(test/CMakeLists.txt)
 
 # add example targets
-include(examples/CMakeLists.txt)
+add_subdirectory(examples)
 
 # add documentation targets
 include(doc/CMakeLists.txt)

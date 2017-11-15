@@ -120,7 +120,6 @@ namespace zacc {
             auto result = g(i);
 
             auto to_fetch = i < real_size - 1 ? dim : remainder;
-
             std::copy(std::begin(result), std::begin(result) + to_fetch, first + i);
         }
     };
@@ -156,6 +155,28 @@ namespace zacc {
 
         return output;
     };
+
+    namespace
+    {
+        template<typename T, size_t... seq>
+        constexpr T make_index_impl(T index, std::index_sequence<seq...>)
+        {
+            return index + T{ seq... };
+        }
+    }
+
+    template<typename T>
+    constexpr std::enable_if_t<zval_traits<T>::is_vector, T> make_index(T index)
+    {
+        return make_index_impl(index, std::make_integer_sequence<size_t, zval_traits<T>::size>());
+    }
+
+    template<typename T>
+    constexpr std::enable_if_t<!zval_traits<T>::is_vector, T> make_index(T index)
+    {
+        return index;
+    }
+
 
 
     template<typename Tuple>

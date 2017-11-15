@@ -47,36 +47,92 @@ namespace zacc { namespace math {
         zval_traits<zval_t>::features
     >;
 
-    template<typename T>
+    template<typename _Element>
     struct __zcomplex_base
     {
 
-        struct impl : __cval<T>
+        struct impl : __cval<_Element>
         {
-            using base_t = __cval<T>;
+            using base_t = __cval<_Element>;
 
             using base_t::size;
             using typename base_t::element_t;
             using typename base_t::vector_t;
 
-            constexpr impl(const vector_t& value)
-                    : _value(value)
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            constexpr impl(const T& other)
+                    : _value (other)
             {}
-            constexpr T real() const
+
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            constexpr impl& operator=(const T& other)
+            {
+                _value = other;
+                return *this;
+            }
+
+            //template<typename T, typename enable = std::enable_if_t<!is_zval<T>::value && !is_bval<T>::value>>
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            constexpr impl(T&& value)
+                : _value(std::forward<T>(value))
+            {}
+
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            constexpr impl& operator=(T&& other) noexcept
+            {
+                _value = std::move(other);
+                return *this;
+            }
+
+            constexpr impl(const impl& other)
+                    : _value (other._value)
+            {}
+
+            constexpr impl& operator=(const impl& other)
+            {
+                _value = other._value;
+                return *this;
+            }
+
+            constexpr impl(impl&& other) noexcept
+                : _value(std::move(other._value))
+            {}
+
+            constexpr impl& operator=(impl&& other) noexcept
+            {
+                _value = std::move(other._value);
+                return *this;
+            }
+
+
+            constexpr _Element real() const
             {
                 return _value[0];
             }
 
-            void real(T value) { _value[0] = value; }
+            void real(_Element value) { _value[0] = value; }
 
-            constexpr T imag() const
+            constexpr _Element imag() const
             {
                 return _value[1];
             }
-            void imag(T value) { _value[1] = value; }
+            void imag(_Element value) { _value[1] = value; }
 
 
-            T magnitude() { return (real() * real() + imag() * imag()).sqrt(); }
+            constexpr operator vector_t() const {
+                return value();
+            }
+
+
+            /**
+             * @brief cast to underlying vector type
+             * @return raw value
+             */
+            constexpr vector_t value() const {
+                return _value;
+            }
+
+            _Element magnitude() { return (real() * real() + imag() * imag()).sqrt(); }
         private:
             //alignas(base_t::alignment) std::array<T, 2> _value;
             alignas(base_t::alignment) vector_t _value;
@@ -113,10 +169,14 @@ namespace zacc { namespace math {
                     : base_t(vector_t{{re, im}})
             {}
 
-            constexpr __impl(const vector_t& value)
+            /*constexpr __impl(const vector_t& value)
                     : base_t(value)
+            {}*/
+/*
+            constexpr __impl(const __impl& value)
+                    : base_t(vector_t{{value.real(), value.imag()}})
             {}
-
+*/
             //template<typename T = element_t>
             //constexpr __impl(const std::initializer_list<T>& list) : base_t(array_cast<element_t>(list)) {}
 
@@ -376,6 +436,20 @@ namespace zacc { namespace math {
                 };
             }
 
+            /**
+             * @brief conditional default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            friend zcomplex<element_t> vsel(element_t condition, composed_t if_value, composed_t else_value) noexcept {
+
+                return
+                        {
+                                if_value.real().when(condition).otherwise(else_value.real()),
+                                if_value.imag().when(condition).otherwise(else_value.imag())
+                        };
+            }
+
         };
 
         /**
@@ -403,25 +477,25 @@ namespace zacc { namespace math {
 
             complex_io<impl>::template impl,
             complex_arithmetic<impl>::template impl,
-            complex_construction<impl>::template impl,
             complex_conditional<impl>::template impl,
+            complex_construction<impl>::template impl,
 
             composable<zcomplex_t>::template type
         >;
 
-        struct impl : composition_t
+        struct impl : public composition_t
         {
             FORWARD2(impl, composition_t);
         };
     };
 
     template<typename T>
-    struct zcomplex : __zcomplex<T>::impl
+    struct zcomplex : public __zcomplex<T>::impl
     {
         FORWARD2(zcomplex, __zcomplex<T>::impl);
     };
 
-
+/*
     constexpr zcomplex<zdouble> operator""i(unsigned long long d)
     {
         return { 0.0, d };
@@ -439,4 +513,5 @@ namespace zacc { namespace math {
     {
         return { 0.0, d };
     }
+    */
 }}

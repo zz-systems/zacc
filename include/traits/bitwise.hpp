@@ -52,7 +52,6 @@ namespace zacc { namespace traits {
             return vbxor(one, other);
         }
 
-
         CONVERSION(|);
         ASSIGNMENT(|);
 

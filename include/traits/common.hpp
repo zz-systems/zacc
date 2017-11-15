@@ -82,8 +82,6 @@ namespace zacc {
     };
 
 
-
-
     /**
      * @brief provides pretty-print functionality for zacc types
      */
@@ -107,7 +105,7 @@ namespace zacc {
                     ss << "[ ";
 
                 for (auto entry : base_t::data())
-                    ss << entry << " ";
+                    ss << +entry << " ";
 
                 if (base_t::is_vector)
                     ss << "]";

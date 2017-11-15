@@ -1,23 +1,27 @@
 cmake_minimum_required(VERSION 3.3.2)
+project(zacc.examples)
 
 
-#zacc_add_dispatched_library(zacc.examples.impl
-#        BRANCHES "${branches}"
-#        INCLUDES
-#            ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/dependencies/zacc/include
-#        ENTRYPOINT
-#            ${CMAKE_SOURCE_DIR}/src/cacophony_branch_entrypoint.cpp
-#        SOURCES
-#            ${CMAKE_SOURCE_DIR}/examples/examples.cpp
-#            ${CMAKE_SOURCE_DIR}/src/dllmain.cpp
-#        )
-#
-#add_executable(zacc.examples zacc_examples.cpp)
-#
-#if(WIN32)
-#    target_link_libraries(zacc.examples cacophony)
-#elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin") # requires XQuartz
-#    target_link_libraries(zacc.examples X11 cacophony)
-#else()
-#    target_link_libraries(zacc.examples X11 jpeg png cacophony)
-#endif()
+if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin") # requires XQuartz
+    include_directories(AFTER "/usr/X11/include")
+    link_directories("/usr/X11/lib" "/usr/X11R6/lib")
+endif()
+
+zacc_add_dispatched_executable(zacc_examples
+        BRANCHES "${branches}"
+        INCLUDES
+            ${PROJECT_SOURCE_DIR}/include
+        ENTRYPOINT
+            ${PROJECT_SOURCE_DIR}/branch_entrypoint.cpp
+        SOURCES
+            ${PROJECT_SOURCE_DIR}/examples.cpp
+        )
+
+
+if(WIN32)
+    #target_link_libraries(zacc_examples)
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin") # requires XQuartz
+    target_link_libraries(zacc_examples PUBLIC X11)
+else()
+    target_link_libraries(zacc_examples PUBLIC X11 jpeg png)
+endif()

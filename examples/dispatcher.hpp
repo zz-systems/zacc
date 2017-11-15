@@ -28,7 +28,6 @@
 
 
 #include "zacc.hpp"
-#include "math/complex.hpp"
 #include "system/branch_entrypoint.hpp"
 #include "system/remote_activator.hpp"
 #include "system/runtime_dispatcher.hpp"
@@ -36,39 +35,26 @@
 
 namespace zacc { namespace examples {
 
-    template<typename _InputContainer = _Kernel::input_container_t,
-            typename _OutputContainer = _Kernel::output_container_t>
-    class dispatcher : system::runtime_dispatcher<dispatcher>
-
+    template<typename _Kernel, typename _KernelTraits = kernel_traits<_Kernel>>
+    class dispatcher
     {
     public:
         dispatcher() noexcept
         {
-            _activator = std::make_unique<system::remote_activator>(ZACC_DYLIBNAME, "zacc_create_instance", "zacc_delete_instance");
+            std::cerr << "loading: " << ZACC_DYLIBNAME << std::endl;
+            _activator = std::make_unique<system::remote_activator>(ZACC_DYLIBNAME,
+                                                                    std::string(_KernelTraits::kernel_name()) + "_create_instance",
+                                                                    std::string(_KernelTraits::kernel_name()) + "_delete_instance");
         }
-    private:
+    protected:
         template<typename feature, typename... Args> void dispatch_impl(Args&&... arg)
         {
+            log_has_kernel<feature>();
             if(_kernels.count(feature::value) == 0)
-                _kernels[feature::value] = _activator->create_instance<feature, _Kernel>(std::forward<Args>(arg)...);
-        }
+                _kernels[feature::value] = _activator->create_instance<feature, _Kernel, kernel>(std::forward<Args>(arg)...);
 
-        template<typename feature, typename... Args> void dispatch_impl(Args&&... arg)
-        {
             log_has_kernel<feature>();
-            _kernels[feature::value]->configure(std::forward<Args>(arg)...);
-        }
-
-        template<typename feature, typename... Args> void dispatch_impl(_InputContainer input, _OutputContainer output, Args&&... arg)
-        {
-            log_has_kernel<feature>();
-            _kernels[feature::value]->run(input, output, std::forward<Args>(arg)...);
-        }
-
-        template<typename feature, typename... Args> void dispatch_impl(_OutputContainer output, Args&&... arg)
-        {
-            log_has_kernel<feature>();
-            _kernels[feature::value]->run(output, std::forward<Args>(arg)...);
+            _kernels[feature::value]->operator()(std::forward<Args>(arg)...);
         }
 
     private:
@@ -83,10 +69,10 @@ namespace zacc { namespace examples {
         }
     };
 
-    template<typename _KernelImpl, typename _InputContainer, typename _OutputContainer>
+    template<typename _KernelImpl>
     auto make_dispatcher()
     {
-        return dispatcher<kernel<_KernelImpl, _InputContainer, _OutputContainer>>();
+        return system::runtime_dispatcher<dispatcher<_KernelImpl>>();
     };
 
 }}

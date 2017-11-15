@@ -818,7 +818,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vlor");
 
-                return _mm256_or_si256(one, other) != 0;
+                return _mm256_or_si256(one, other);
             }
 
 
@@ -831,7 +831,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vland");
 
-                return _mm256_and_si256(one, other) != 0;
+                return _mm256_and_si256(one, other);
             }
 
         };

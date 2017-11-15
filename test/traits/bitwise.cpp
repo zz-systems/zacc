@@ -144,9 +144,6 @@ namespace zacc { namespace test {
             twiddler<double> expected;
             expected.f = 5;
 
-            std::cerr << "dürüm " << twiddler<float> { .i = (twiddler<float> { .f = 5 }.i | twiddler<float> { .f = 10 }.i) }.f << std::endl;
-            std::cerr << "dürüm " << twiddler<double> { .i = (twiddler<double> { .f = 5 }.i | twiddler<double> { .f = 10 }.i) }.f << std::endl;
-
             expected.i |= twiddler<double> { .f = 10 }.i;
 
             std::cerr << 5 << " | " << 10 << " = " << expected.f << "; " << twiddler<double> { .f = 10 }.i  << std::endl;

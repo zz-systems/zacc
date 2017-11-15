@@ -25,17 +25,36 @@
 
 #pragma once
 
+#include "util/type/type_casts.hpp"
+#include "util/type/type_traits.hpp"
+
 namespace zacc { namespace math {
 
-
+    template<typename _Vec>
+    struct make_vec
+    {
+        template<typename... Args>
+        static constexpr auto impl(Args&&... arg) {
+            return _Vec {std::forward<Args>(arg)...};
+        };
+    };
+    /*template<typename... Args>
+    struct make_vec<std::tuple<Args...>>
+    {
+        template<typename... Args2 = Args...>
+        static constexpr auto impl(Args2&&... arg) {
+            return std::make_tuple(std::forward<Args2>(arg)...);
+        };
+    };
+*/
     template<typename _Vec, typename T>
     constexpr auto reshape_i_xy(T index, T width) {
-        return _Vec { index % width, index / width };
+        return make_vec<_Vec>::impl(index % width, index / width);
     }
 
     template<typename _Vec, typename T>
     constexpr auto reshape_i_xyz(T index, T width, T height) {
-        return _Vec { index % width, (index / width) % height, index / (width * height) };
+        return make_vec<_Vec>::impl(index % width, (index / width) % height, index / (width * height));
     }
 
     template<typename T>

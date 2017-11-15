@@ -424,6 +424,26 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
+    TEST(sse_int16_conditional, vsel_sse4)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int16_t, 8> a, b, expected;
+        for(int i = 0; i < 8; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) (2);
+        }
+
+        VASSERT_EQ((zint16(2).when(zint16(1) == zint16(1)).otherwise(zint16(3))), zint16(expected));
+    }
+
     TEST(sse_int16_conditional, vsel_default)
     {
         REQUIRES(ZACC_ARCH);

@@ -28,27 +28,11 @@
 // @file mandelbrot_engine.hpp
 
 #include "zacc.hpp"
-#include "math/complex.hpp"
 #include "system/branch_entrypoint.hpp"
 
 namespace zacc { namespace examples {
 
-    template<typename _InitData, typename _RuntimeData, typename _OutputContainer = void, typename _InputContainer = void,
-            typename = std::enable_if_t<all<iterable, _InputContainer, _OutputContainer>>>
-    struct kernel : public zacc::system::entrypoint
-    {
-        using input_container_t     = _InputContainer;
-        using output_container_t    = _OutputContainer;
-
-
-        virtual void configure(_InitData data) {};
-
-
-
-        //template<typename _Output = _OutputContainer>
-        virtual void run(_OutputContainer output, _RuntimeData data) {};
-
-        //template<typename _Input = _InputContainer>
-        virtual void run(_InputContainer input, _OutputContainer output, _RuntimeData data) {};
-    };
+    template<typename _KernelDesc>
+    struct kernel : public _KernelDesc, public zacc::system::entrypoint
+    {};
 }}

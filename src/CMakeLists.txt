@@ -30,3 +30,5 @@ add_executable(zacc.system.detect WIN32
 
 
 target_link_libraries(zacc.system.detect zacc.system.info)
+
+set(SHARED_LIB_DUMMY ${CMAKE_CURRENT_LIST_DIR}/dllmain.cpp)

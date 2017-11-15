@@ -39,10 +39,10 @@ namespace zacc { namespace traits {
         FORWARD(conditional);
 
         struct else_branch {
-            composed_t otherwise(const composed_t else_value) const { return vsel(_condition, _if_value, else_value); }
+            composed_t otherwise(const composed_t& else_value) const { return vsel(_condition, _if_value, else_value); }
 
         private:
-            else_branch(const composed_t condition, const composed_t if_value)
+            else_branch(const composed_t& condition, const composed_t& if_value)
                     : _if_value(if_value), _condition(condition) {}
 
             composed_t _if_value;
@@ -52,7 +52,7 @@ namespace zacc { namespace traits {
         };
 
 
-        else_branch when(const composed_t condition) const {
+        else_branch when(const composed_t& condition) const {
             return else_branch(condition, *this);
         }
     };

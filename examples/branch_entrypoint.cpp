@@ -23,11 +23,12 @@
 //
 
 
-#include "platform/cacophony_branch_entrypoint.hpp"
+#include "branch_entrypoint.hpp"
 
 #include "system/branch.hpp"
-#include "platform/engine/simd_engine.hpp"
+#include "kernels/mandelbrot.hpp"
 
+/*
 zacc::system::entrypoint *examples_perlin_create_instance()
 {
     std::cout << "Creating engine for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
@@ -38,6 +39,20 @@ void examples_perlin_delete_instance(zacc::system::entrypoint* instance)
 {
     if(instance != nullptr)
         delete instance;
+}
+*/
 
-    instance = nullptr;
+zacc::system::entrypoint *mandelbrot_create_instance()
+{
+    std::cout << "Creating engine for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
+    auto result =  new zacc::examples::mandelbrot_kernel<zacc::dispatched_branch::types>();
+    std::cout << "Created engine for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
+
+    return result;
+}
+
+void mandelbrot_delete_instance(zacc::system::entrypoint* instance)
+{
+    if(instance != nullptr)
+        delete instance;
 }
