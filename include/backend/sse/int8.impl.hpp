@@ -917,15 +917,30 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
+             * @brief conditional sse4 branch
+             * @relates int8
+             * @remark sse - sse4
+             */
+            template<typename T = zint8<base_t::features>> friend std::enable_if_t<is_eligible_v<base_t, capabilities::SSE41>, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "sse4", "vsel");
+
+                auto mask = _mm_cmpeq_epi8(_mm_setzero_si128(), condition);
+                return _mm_blendv_epi8(if_value, else_value, mask);
+            }
+
+
+            /**
              * @brief conditional default branch
              * @relates int8
              * @remark sse - default
              */
-            friend zint8<base_t::features> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!is_eligible_v<base_t, capabilities::SSE41>, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vsel");
 
-                return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value));
+                auto mask = _mm_cmpeq_epi8(_mm_setzero_si128(), condition);
+                return _mm_or_si128(_mm_andnot_si128(mask, if_value), _mm_and_si128(mask, else_value));
             }
 
         };

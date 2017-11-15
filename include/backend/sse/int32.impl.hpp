@@ -113,7 +113,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            constexpr __impl(__m128 value) : base_t(_mm_cvtps_epi32(value)) {
+            constexpr __impl(__m128 value) : base_t(_mm_cvttps_epi32(value)) {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS(__m128 value)");
 
@@ -125,7 +125,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - default
              */
-            constexpr __impl(__m128d value) : base_t(_mm_cvtpd_epi32(value)) {
+            constexpr __impl(__m128d value) : base_t(_mm_cvttpd_epi32(value)) {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "CONS(__m128d value)");
 
@@ -1096,7 +1096,8 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "zint32(int32_t[4])", "default", "vsel");
 
-                return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value));
+                auto mask = _mm_cmpeq_epi32(_mm_setzero_si128(), condition);
+                return _mm_or_si128(_mm_andnot_si128(mask, if_value), _mm_and_si128(mask, else_value));
             }
 
         };

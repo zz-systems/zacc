@@ -113,7 +113,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            constexpr __impl(__m256 value) : base_t(_mm256_cvtps_epi32(value)) {
+            constexpr __impl(__m256 value) : base_t(_mm256_cvttps_epi32(value)) {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(__m256 value)");
 
@@ -125,7 +125,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int32
              * @remark avx2 - default
              */
-            constexpr __impl(__m256d value) : base_t(_mm256_castsi128_si256(_mm256_cvtpd_epi32(value))) {
+            constexpr __impl(__m256d value) : base_t(_mm256_castsi128_si256(_mm256_cvttpd_epi32(value))) {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "CONS(__m256d value)");
 
@@ -818,7 +818,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vlor");
 
-                return _mm256_or_si256(one, other);
+                return _mm256_or_si256(one, other) != 0;
             }
 
 
@@ -831,7 +831,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vland");
 
-                return _mm256_and_si256(one, other);
+                return _mm256_and_si256(one, other) != 0;
             }
 
         };
@@ -1012,7 +1012,8 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int32.impl", __LINE__, "zint32(int32_t[8])", "default", "vsel");
 
-                return _mm256_blendv_epi8(else_value, if_value, condition);
+                auto mask = _mm256_cmpeq_epi32(_mm256_setzero_si256(), condition);
+                return _mm256_blendv_epi8(if_value, else_value, mask);
             }
 
         };

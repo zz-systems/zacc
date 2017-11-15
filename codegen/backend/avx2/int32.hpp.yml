@@ -26,10 +26,10 @@ type:
 modules:
   construction:
     - args: __m256 value
-      init: _mm256_cvtps_epi32(value)
+      init: _mm256_cvttps_epi32(value)
 
     - args: __m256d value
-      init: _mm256_castsi128_si256(_mm256_cvtpd_epi32(value))
+      init: _mm256_castsi128_si256(_mm256_cvttpd_epi32(value))
 
     - args: __m256i value
       init: value
@@ -130,4 +130,7 @@ modules:
     vsel:
       args: [condition, if_value, else_value]
       mangling: false
-      body: _mm256_blendv_epi8(else_value, if_value, condition);
+      body:
+        - auto mask = _mm256_cmpeq_epi32(_mm256_setzero_si256(), condition);
+        - _mm256_blendv_epi8(if_value, else_value, mask);
+        #- _mm256_blendv_epi8(else_value, if_value, condition);

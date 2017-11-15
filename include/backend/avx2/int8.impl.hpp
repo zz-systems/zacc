@@ -870,7 +870,8 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "zint8(int8_t[32])", "default", "vsel");
 
-                return _mm256_blendv_epi8(else_value, if_value, condition);
+                auto mask = _mm256_cmpeq_epi8(_mm256_setzero_si256(), condition);
+                return _mm256_blendv_epi8(if_value, else_value, mask);
             }
 
         };
