@@ -391,7 +391,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "zint16(int16_t[8])", "default", "vmax");
 
-                return vsel(one < other, one, other);
+                return vsel(one > other, one, other);
             }
 
 

@@ -74,7 +74,7 @@ modules:
             body: _mm_max_epi16
           default:
             requires: [not SSE41]
-            body: vsel(one < other, one, other);
+            body: vsel(one > other, one, other);
 
       vclamp:
        args: [self, from, to]

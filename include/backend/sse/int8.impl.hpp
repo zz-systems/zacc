@@ -390,7 +390,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vmax");
 
-                return vsel(one < other, one, other);
+                return vsel(one > other, one, other);
             }
 
 

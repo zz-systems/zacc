@@ -26,27 +26,388 @@
 #pragma once
 
 namespace zacc { namespace math {
+
+
+    template<typename _Vec, typename T>
+    constexpr auto reshape_i_xy(T index, T width) {
+        return _Vec { index % width, index / width };
+    }
+
+    template<typename _Vec, typename T>
+    constexpr auto reshape_i_xyz(T index, T width, T height) {
+        return _Vec { index % width, (index / width) % height, index / (width * height) };
+    }
+
+    template<typename T>
+    constexpr auto reshape_xy_i(T x, T y, T width) {
+        return x + width * y;
+    }
+
+    template<typename T>
+    constexpr auto reshape_xyz_i(T x, T y, T z, T width, T height) {
+        return x + width * y + width * height * z;
+    }
+
+    template<typename T, size_t _Rows, size_t _Cols>
+    struct alignas(alignof(T)) __mat;
+        
+    template<typename T, size_t _Rows, size_t _Cols>
+    struct alignas(alignof(T)) mat;
+
+        // @struct mat
+    /// @brief matrix
+    template<typename T, size_t _Rows, size_t _Cols>
+    struct alignas(alignof(T)) __mat
+    {
+        /// data container
+        std::array<T, _Rows * _Cols> data;
+
+        constexpr __mat() {};
+
+
+        constexpr __mat(const __mat& rhs)
+                : data(rhs.data)
+        { }
+
+        constexpr __mat(__mat&& rhs) noexcept
+                : data(std::move(rhs.data))
+        { }
+
+        constexpr __mat& operator=(const __mat& rhs)
+        {
+            data = rhs.data;
+            return *this;
+        }
+
+        constexpr __mat& operator=(__mat&& rhs) noexcept
+        {
+            data = std::move(rhs.data);
+            return *this;
+        }
+
+        template<typename U>
+        constexpr __mat(const __mat<U, _Rows, _Cols> &rhs)
+                : data(array_cast<T>(rhs.data))
+        { };
+
+        constexpr __mat(std::initializer_list<T> init_list)
+        {
+            std::copy(std::begin(init_list), std::end(init_list), std::begin(data));
+        }
+
+        template<typename U = T>
+        constexpr __mat(std::initializer_list<std::initializer_list<U>> init_list)
+        {
+            int index = 0;
+
+            for(auto row : init_list)
+            {
+                for(auto col : row)
+                {
+                    data[index++] = static_cast<T>(col);
+                }
+            }
+        }
+
+        template<typename U = T>
+        constexpr __mat(std::initializer_list<mat<U, _Cols, 1>> init_list)
+        {
+            int index = 0;
+
+            for(auto row : init_list)
+            {
+                for(auto col : row.data)
+                {
+                    data[index++] = static_cast<T>(col);
+                }
+            }
+        }
+
+        constexpr auto& operator()(size_t i)       { return data[i]; }
+        constexpr auto& operator()(size_t i) const { return data[i]; }
+
+        constexpr auto& operator()(size_t y, size_t x)       { return data[reshape_xy_i(x, y, _Cols)]; }
+        constexpr auto& operator()(size_t y, size_t x) const { return data[reshape_xy_i(x, y, _Cols)]; }
+
+        constexpr auto at(size_t x, size_t y)
+        {
+            if (x >= _Cols || y >= _Rows)
+                throw std::out_of_range("mat::at");
+
+            return data[reshape_xy_i(x, y, _Cols)];
+        }
+
+        constexpr auto at(size_t x, size_t y) const
+        {
+            if (x >= _Cols || y >= _Rows)
+                throw std::out_of_range("mat::at");
+
+            return data[reshape_xy_i(x, y, _Cols)];
+        }
+
+        inline auto get_row(size_t row) const
+        {
+            mat<T, _Cols, 1> result;
+
+            for (size_t col = 0; col < _Cols; col++)
+                result(col) = this->operator()(row, col);
+
+            return result;
+        }
+    };
+
     // @struct mat
     /// @brief matrix
-    template<typename T, size_t rows, size_t cols>
-    struct alignas(alignof(T)) mat
+    template<typename T>
+    struct alignas(alignof(T)) __mat<T, 1, 1>
     {
-        static_assert(rows * cols > 0, "Wrong dimensions for a matrix");
-
-
-        typedef mat<T, rows, cols> self_t;
-
         /// data container
-        std::array<T, rows * cols> data;
+        union
+        {
+            std::array<T, 1> data;
 
-        static constexpr size_t get_rows()     { return rows; }
-        static constexpr size_t get_cols()     { return cols; }
-        static constexpr size_t get_length()   { return rows * cols; }
+            T value;
+        };
+
+        constexpr __mat() {};
+
+        constexpr __mat(const __mat& rhs)
+                : data(rhs.data)
+        { }
+
+        constexpr __mat(__mat&& rhs) noexcept
+                : data(std::move(rhs.data))
+        { }
+
+        constexpr __mat(const T &all)
+                : value(all)
+        { }
+
+        template<typename U>
+        constexpr __mat(const __mat<U, 1, 1> &rhs)
+                : data(array_cast<T>(rhs.data))
+        { }
+
+        constexpr __mat(std::initializer_list<T> init_list)
+        {
+            std::copy(std::begin(init_list), std::end(init_list), std::begin(data));
+        }
+
+        constexpr __mat& operator=(const __mat& rhs)
+        {
+            data = rhs.data;
+            return *this;
+        }
+
+        constexpr __mat& operator=(__mat&& rhs) noexcept
+        {
+            data = std::move(rhs.data);
+            return *this;
+        }
+
+
+        constexpr auto& operator()(size_t)       { return data[0]; }
+        constexpr auto& operator()(size_t) const { return data[0]; }
+
+        constexpr auto& operator()(size_t, size_t)       { return data[0]; }
+        constexpr auto& operator()(size_t, size_t) const { return data[0]; }
+
+        constexpr auto at(size_t i)
+        {
+            if (i >= 1)
+                throw std::out_of_range("mat::at");
+
+            return data[i];
+        }
+
+        constexpr auto at(size_t i) const
+        {
+            if (i >= 1)
+                throw std::out_of_range("mat::at");
+
+            return data[i];
+        }
+    };
+
+    // @struct mat
+    /// @brief matrix
+    template<typename T>
+    struct alignas(alignof(T)) __mat<T, 2, 1>
+    {
+        /// data container
+        union
+        {
+            std::array<T, 2> data;
+
+            struct
+            {
+                T x, y;
+            };
+        };
+        constexpr __mat() {};
+
+        constexpr __mat(const __mat& rhs)
+                : data(rhs.data)
+        { }
+
+        constexpr __mat(__mat&& rhs) noexcept
+                : data(std::move(rhs.data))
+        { }
+
+        constexpr __mat& operator=(const __mat& rhs)
+        {
+            data = rhs.data;
+            return *this;
+        }
+
+        constexpr __mat& operator=(__mat&& rhs) noexcept
+        {
+            data = std::move(rhs.data);
+            return *this;
+        }
+
+        constexpr __mat(const T &all)
+                : x(all), y(all)
+        { };
+
+        constexpr __mat(const T &x, const T &y)
+                : x(x), y(y)
+        { };
+
+        template<typename U>
+        constexpr __mat(const __mat<U, 2, 1> &rhs)
+                : data(array_cast<T>(rhs.data))
+        { }
+
+        constexpr __mat(std::initializer_list<T> init_list)
+        {
+            std::copy(std::begin(init_list), std::end(init_list), std::begin(data));
+        }
+
+
+        constexpr auto& operator()(size_t i)       { return data[i]; }
+        constexpr auto& operator()(size_t i) const { return data[i]; }
+
+        constexpr auto& operator()(size_t y, size_t)       { return data[y]; }
+        constexpr auto& operator()(size_t y, size_t) const { return data[y]; }
+
+        constexpr auto at(size_t i)
+        {
+            if (i >= 3)
+                throw std::out_of_range("mat::at");
+
+            return data[i];
+        }
+
+        constexpr auto at(size_t i) const
+        {
+            if (i >= 3)
+                throw std::out_of_range("mat::at");
+
+            return data[i];
+        }
+    };
+
+    // @struct mat
+    /// @brief matrix
+    template<typename T>
+    struct alignas(alignof(T)) __mat<T, 3, 1>
+    {
+        /// data container
+        union
+        {
+            std::array<T, 3> data;
+
+            struct
+            {
+                T x, y, z;
+            };
+        };
+
+        constexpr __mat() {};
+
+        constexpr __mat(const __mat& rhs)
+                : data(rhs.data)
+        { }
+
+        constexpr __mat& operator=(const __mat& rhs)
+        {
+            data = rhs.data;
+            return *this;
+        }
+
+        constexpr __mat& operator=(__mat&& rhs) noexcept
+        {
+            data = std::move(rhs.data);
+            return *this;
+        }
+
+        constexpr __mat(__mat&& rhs) noexcept
+                : data(std::move(rhs.data))
+        { }
+
+        constexpr __mat(const T &all)
+                : x(all), y(all), z(all)
+        { };
+
+        constexpr __mat(const T &x, const T &y, const T &z)
+                : x(x), y(y), z(z)
+        { };
+        template<typename U>
+        constexpr __mat(const __mat<U, 3, 1> &rhs)
+                : data(array_cast<T>(rhs.data))
+        { };
+
+        constexpr __mat(std::initializer_list<T> init_list)
+        {
+            std::copy(std::begin(init_list), std::end(init_list), std::begin(data));
+        }
+
+        constexpr auto& operator()(size_t i)       { return data[i]; }
+        constexpr auto& operator()(size_t i) const { return data[i]; }
+
+        constexpr auto& operator()(size_t y, size_t)       { return data[y]; }
+        constexpr auto& operator()(size_t y, size_t) const { return data[y]; }
+
+        constexpr T& at(size_t i)
+        {
+            if (i >= 3)
+                throw std::out_of_range("mat::at");
+
+            return data[i];
+        }
+
+        constexpr T& at(size_t i) const
+        {
+            if (i >= 3)
+                throw std::out_of_range("mat::at");
+
+            return data[i];
+        }
+    };
+
+
+
+    // @struct mat
+    /// @brief matrix
+    template<typename T, size_t _Rows, size_t _Cols>
+    struct alignas(alignof(T)) mat : __mat<T, _Rows, _Cols>
+    {
+        static_assert(_Rows * _Cols > 0, "Wrong dimensions for a matrix");
+
+
+        using self_t = mat<T, _Rows, _Cols>;
+        using base_t = __mat<T, _Rows, _Cols>;
+        
+        using base_t::data;
+
+        static constexpr size_t rows()     { return _Rows; }
+        static constexpr size_t cols()     { return _Cols; }
+        static constexpr size_t size()     { return _Rows * _Cols; }
 
         /// default constructor
-        //mat() = default; <- MSVC HATES this
-
-        mat() {}
+        constexpr mat() : base_t()
+        {}
 
         // Unusable in MSVC.
         //template<typename... Args, restrict_args<T, Args...>* = nullptr>
@@ -55,154 +416,56 @@ namespace zacc { namespace math {
         //{}
 
         /// MEMO: NEVER use greedy Args&&... in combination with copy constructor
-        template<typename... Args, typename = std::enable_if_t<all_true<std::is_convertible<Args, T>::value...>::value>>
-        mat(Args... args) noexcept
-                : data{{static_cast<T>(std::forward<Args>(args))...}}
+        template<typename... Args>
+        constexpr  mat(Args&&... arg) noexcept
+                : base_t(std::forward<Args>(arg)...)
         {}
 
-        //__attribute__((optimize("unroll-loops")))
-        template<typename U = T>
-        mat(std::initializer_list<U> init_list) noexcept
-                //: data(init_list)
-        {
-            std::copy(init_list.begin(), init_list.end(), data.begin());
-        }
-
-        //__attribute__((optimize("unroll-loops")))
-        template<typename U = T>
-        mat(std::initializer_list<std::initializer_list<U>> init_list) noexcept
-        {
-            int index = 0;
-
-            for(auto row : init_list)
-            {
-                for(auto col : row)
-                {
-                    at(index++) = static_cast<T>(col);
-                }
-            }
-        }
+        constexpr mat(std::initializer_list<T> init_list)
+                : base_t(init_list)
+        {}
 
         template<typename U = T>
-        //__attribute__((optimize("unroll-loops")))
-        mat(std::initializer_list<mat<U, cols, 1>> init_list) noexcept
-        {
-            int index = 0;
-
-            for(auto row : init_list)
-            {
-                for(auto col : row.data)
-                {
-                    at(index++) = col;
-                }
-            }
-        }
-
-
-        /// matrix copy constructor
-        mat(const mat& rhs) noexcept : data(rhs.data)
-        { }
+        constexpr mat(std::initializer_list<std::initializer_list<U>> init_list)
+                : base_t(init_list)
+        {}
 
         template<typename U = T>
-        mat(const mat<U, rows, cols>& rhs) noexcept
-        {
-            this->data = array_cast<T>(rhs.data);
-        }
+        constexpr mat(std::initializer_list<mat<U, _Cols, 1>> init_list)
+                : base_t(init_list)
+        {}
 
         /// @brief access
-        /// @{
+        /// @{        
 
-        inline T &operator()(size_t row, size_t col)
-        {
-            return data[col + row * cols];
-        }
-
-        inline T &operator()(size_t i)
-        {
-            return data[i];
-        }
-
-        inline T &at(size_t row, size_t col)
-        {
-            if(col >= cols || row >= rows)
-                throw std::out_of_range("matrix 2D index out of range");
-
-            return (*this)(row, col);
-        }
-
-        inline T &at (size_t i)
-        {
-            if(i > data.size())
-                throw std::out_of_range("matrix 1D index out of range");
-
-            return data[i];
-        }
-
-        inline const T &operator()(size_t row, size_t col) const
-        {
-            return data[col + row * cols];
-        }
-
-        inline const T &at(size_t row, size_t col) const
-        {
-            if(col >= cols || row >= rows)
-                throw std::out_of_range("matrix 2D index out of range");
-
-            return (*this)(row, col);
-        }
-
-        inline const T &operator()(size_t i) const
-        {
-            return data[i];
-        }
-
-        inline const T &at (size_t i) const
-        {
-            if(i > data.size())
-                throw std::out_of_range("matrix 1D index out of range");
-
-            return (*this)(i);
-        }
-
-        //__attribute__((optimize("unroll-loops")))
-        inline auto get_row(size_t row) const
-        {
-            mat<T, cols, 1> result;
-
-            for (size_t i = 0; i < cols; i++)
-                result(i) = (*this)(row, i);
-
-            return result;
-        }
+        
 
         /// @}
 
         //__attribute__((optimize("unroll-loops")))
-        explicit operator bool() const
+        constexpr explicit operator bool() const
         {
-            //return is_set(x) && is_set(y) && is_set(z);
-
-            for(int i = 0; i < get_length(); i++)
-                if(!is_set(data[i]))
+            for(size_t i = 0; i < size(); i++)
+                if(!is_set(base_t::operator()(i)))
                     return false;
 
             return true;
         }
 
         template<typename U = T>
-        operator typename std::enable_if<rows == 1 && cols == 1, U >::type () const
+        constexpr operator typename std::enable_if<_Rows == 1 && _Cols == 1, U >::type () const
         {
-            return data[0];
+            return base_t::operator()(0);
         }
 
         //__attribute__((optimize("unroll-loops")))
-        inline const mat<T, cols, rows> &transpose() const
+        constexpr auto transpose() const
         {
-            mat<T, cols, rows> result;
+            mat<T, _Cols, _Rows> result;
 
-            for(int n = 0; n < rows; n++)
+            for(int n = 0; n < _Rows; n++)
             {
-                for(int m = 0; m < cols; m++)
+                for(int m = 0; m < _Cols; m++)
                 {
                     result(m, n) = (*this)(n, m);
                 }
@@ -211,48 +474,48 @@ namespace zacc { namespace math {
             return result;
         };
 
-        inline const self_t &normalize() const
+        constexpr auto normalize() const
         {
             return *this / magnitude();
         }
 
-        inline T magnitude() const
+        constexpr auto magnitude() const
         {
             return vsqrt(sqr_magnitude());
         }
 
         //__attribute__((optimize("unroll-loops")))
-        inline T sqr_magnitude() const
+        constexpr auto sqr_magnitude() const
         {
-            T sum = data[0] * data[0];
+            T sum = base_t::data[0] * base_t::data[0];
 
-            for(size_t i = 1; i < get_length(); i++)
+            for(size_t i = 1; i < size(); i++)
                 sum = sum + data[i] * data[i];
 
             return sum;
         }
 
         //__attribute__((optimize("unroll-loops")))
-        inline T dot(const self_t &other) const
+        constexpr auto dot(const self_t &other) const
         {
             T result = data[0] * other(0);
 
-            for(size_t i = 1; i < get_length(); i++)
+            for(size_t i = 1; i < size(); i++)
                 result = result + data[i] * other(i);
 
             return result;
         }
 
-        inline const self_t &cross(const self_t &other)
+        constexpr auto cross(const self_t &other)
         {
-            static_assert(rows * cols == 3, "cross product only for 3-D vector");
+            static_assert(_Rows * _Cols == 3, "cross product only for 3-D vector");
 
             return self_t
-                    (
+                    {
                             data[1] * other(2) - data[2] * other(1),
                             data[2] * other(0) - data[0] * other(2),
                             data[0] * other(1) - data[1] * other(0)
-                    );
+                    };
         };
     };
 
@@ -629,8 +892,8 @@ namespace zacc { namespace math {
     {
         auto print_row = [&]()
         {
-            for(size_t coli = 0; coli < elems; coli++)
-                out << other(coli) << " ";
+            for(size_t i = 0; i < elems; i++)
+                out << other(i) << " ";
         };
 
         out << "[ ";

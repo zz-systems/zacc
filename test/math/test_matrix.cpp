@@ -25,8 +25,7 @@
 #include "gtest/gtest.h"
 #include "system/branch.hpp"
 #include "util/testing/gtest_ext.hpp"
-#include "math/linear/generic_matrix.hpp"
-#include "math/linear/specialized_matrix.hpp"
+#include "math/matrix.hpp"
 
 #include <cmath>
 
@@ -67,6 +66,18 @@ namespace zacc { namespace test {
         VASSERT_EQ(v(6), 7);
         VASSERT_EQ(v(7), 8);
         VASSERT_EQ(v(8), 9);
+
+        VASSERT_EQ(v(0, 0), 1);
+        VASSERT_EQ(v(0, 1), 2);
+        VASSERT_EQ(v(0, 2), 3);
+
+        VASSERT_EQ(v(1, 0), 4);
+        VASSERT_EQ(v(1, 1), 5);
+        VASSERT_EQ(v(1, 2), 6);
+
+        VASSERT_EQ(v(2, 0), 7);
+        VASSERT_EQ(v(2, 1), 8);
+        VASSERT_EQ(v(2, 2), 9);
     }
     
     TEST(vector, sqr_magnitude)
@@ -81,19 +92,43 @@ namespace zacc { namespace test {
         VASSERT_EQ(sqr_magnitude, 29);
     }
     
-    /*
+
     TEST(vector, magnitude)
     {
         REQUIRES(ZACC_ARCH);
 
         vec3<zint32> v{2, 3, 4};
 
-        auto sqr_magnitude = v.magnitude();
+        auto magnitude = v.magnitude();
 
         /// (int) sqrt(29) = 5
-        VASSERT_EQ(sqr_magnitude, 5);
+        VASSERT_EQ(magnitude, 5);
     }
-    */
+
+    TEST(vector, magnitude_float)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        vec3<zfloat> v{2, 3, 4};
+
+        auto magnitude = v.magnitude();
+
+        VASSERT_NEAR(magnitude, std::sqrt(29), 0.0001);
+    }
+
+    TEST(vector, normalize)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        vec3<zfloat> v{1, 1, 1};
+
+        vec3<zfloat> normal = v.normalize();
+
+        VASSERT_NEAR(normal.x, 1 / std::sqrt(3), 0.0001);
+        VASSERT_NEAR(normal.y, 1 / std::sqrt(3), 0.0001);
+        VASSERT_NEAR(normal.z, 1 / std::sqrt(3), 0.0001);
+    }
+
 
     TEST(vector, add)
     {
@@ -157,8 +192,8 @@ namespace zacc { namespace test {
 
         auto result = m1 * m2;
 
-        VASSERT_EQ(result.get_rows(), 1);
-        VASSERT_EQ(result.get_cols(), 1);
+        VASSERT_EQ(result.rows(), 1);
+        VASSERT_EQ(result.cols(), 1);
         VASSERT_EQ(result(0), 12);
 
         zint32 t = result(0);
@@ -176,8 +211,8 @@ namespace zacc { namespace test {
 
             auto result = m1 * m2;
 
-            VASSERT_EQ(result.get_rows(), 3);
-            VASSERT_EQ(result.get_cols(), 3);
+            VASSERT_EQ(result.rows(), 3);
+            VASSERT_EQ(result.cols(), 3);
 
             VASSERT_EQ(result(0, 0), 6);
             VASSERT_EQ(result(0, 1), 12);
@@ -199,8 +234,8 @@ namespace zacc { namespace test {
 
             auto result = m1 * m2;
 
-            VASSERT_EQ(result.get_rows(), 3);
-            VASSERT_EQ(result.get_cols(), 2);
+            VASSERT_EQ(result.rows(), 3);
+            VASSERT_EQ(result.cols(), 2);
 
             VASSERT_EQ(result(0, 0), 6);
             VASSERT_EQ(result(0, 1), 12);
@@ -233,8 +268,8 @@ namespace zacc { namespace test {
 
         auto result = m1 * m2;
 
-        VASSERT_EQ(result.get_rows(), 2);
-        VASSERT_EQ(result.get_cols(), 2);
+        VASSERT_EQ(result.rows(), 2);
+        VASSERT_EQ(result.cols(), 2);
 
         VASSERT_EQ(result(0, 0), 18);
         VASSERT_EQ(result(0, 1), 18);
@@ -266,8 +301,8 @@ namespace zacc { namespace test {
     
         auto result = m1 * m2;
 
-        VASSERT_EQ(result.get_rows(), 5);
-        VASSERT_EQ(result.get_cols(), 3);
+        VASSERT_EQ(result.rows(), 5);
+        VASSERT_EQ(result.cols(), 3);
 
         VASSERT_EQ(result(0, 0), 700);
         VASSERT_EQ(result(0, 1), 800);
@@ -300,8 +335,8 @@ namespace zacc { namespace test {
 
         auto result = v + vec3<zint32>({ 2, 1, 0 });
 
-        VASSERT_EQ(result.get_rows(), 3);
-        VASSERT_EQ(result.get_cols(), 1);
+        VASSERT_EQ(result.rows(), 3);
+        VASSERT_EQ(result.cols(), 1);
 
         VASSERT_EQ(result(0), 2);
         VASSERT_EQ(result(1), 2);
@@ -312,7 +347,7 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_ARCH);
 
-        vec3<zint32> v {0, 1, 2}, v2 {3, 4, 5};
+        vec3<zint32> v {0.0, 1.0, 2.0}, v2 {3, 4, 5};
 
         auto result = v.dot(v2);
 
@@ -323,10 +358,74 @@ namespace zacc { namespace test {
     {
         REQUIRES(ZACC_ARCH);
 
-        vec3<zfloat32> v {0.5f, 0.5f, 0.5f}, v2 {2.0f, 4.0f, 8.0f};
+        vec3<zfloat32> v {0.5f, 0.5f, 0.5f}, v2 {2, 4, 8};
 
         auto result = v.dot(v2);
 
         VASSERT_EQ(result, 7);
+    }
+
+    TEST(matrix, matrix_eq)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        mat<zint32, 2, 3> m1(
+        {
+            {2, 2, 2},
+            {2, 2, 2}
+        });
+
+        mat<zint32, 2, 3> m2(
+        {
+            {3, 3, 3},
+            {3, 3, 3},
+        });
+
+        ASSERT_TRUE(static_cast<bool>(m1 == m1));
+        ASSERT_TRUE(static_cast<bool>(m2 == m2));
+        ASSERT_FALSE(static_cast<bool>(m1 == m2));
+    }
+
+    TEST(matrix, matrix_neq)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        mat<zint32, 2, 3> m1(
+                {
+                        {2, 2, 2},
+                        {2, 2, 2}
+                });
+
+        mat<zint32, 2, 3> m2(
+                {
+                        {3, 3, 3},
+                        {3, 3, 3},
+                });
+
+        ASSERT_FALSE(static_cast<bool>(m1 != m1));
+        ASSERT_FALSE(static_cast<bool>(m2 != m2));
+        ASSERT_TRUE(static_cast<bool>(m1 != m2));
+    }
+
+    TEST(matrix, matrix_gt)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        mat<zint32, 2, 3> m1(
+                {
+                        {2, 2, 2},
+                        {2, 2, 2}
+                });
+
+        mat<zint32, 2, 3> m2(
+                {
+                        {3, 3, 3},
+                        {3, 3, 3},
+                });
+
+        ASSERT_FALSE(static_cast<bool>(m1 > m1));
+        ASSERT_FALSE(static_cast<bool>(m2 > m2));
+        ASSERT_FALSE(static_cast<bool>(m1 > m2));
+        ASSERT_TRUE(static_cast<bool>(m2 > m1));
     }
 }}
