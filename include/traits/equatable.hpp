@@ -35,43 +35,22 @@ namespace zacc { namespace traits {
      * @tparam composed_t final composed type (e.g zfloat32)
      */
     template<typename base_t, typename composed_t>
-    struct comparison : public base_t {
-        FORWARD(comparison);
+    struct equatable : public base_t {
+        FORWARD(equatable);
 
-        friend composed_t::boolean operator==(const composed_t one, const composed_t other) {
-            return veq(one, other);
+        using zval_t = typename base_t::zval_t;
+        using bval_t = typename base_t::bval_t;
+
+        friend bval_t operator==(const composed_t one, const composed_t other) {
+            return bval_t(veq(one, other), last_operation::comparison);
         }
 
-        friend composed_t::boolean operator!=(const composed_t one, const composed_t other) {
-            return vneq(one, other);
-        }
-
-        friend composed_t::boolean operator>(const composed_t one, const composed_t other) {
-            return vgt(one, other);
-        }
-
-        friend composed_t::boolean operator>=(const composed_t one, const composed_t other) {
-            return vge(one, other);
-        }
-
-        friend composed_t::boolean operator<(const composed_t one, const composed_t other) {
-            return vlt(one, other);
-        }
-
-        friend composed_t::boolean operator<=(const composed_t one, const composed_t other) {
-            return vle(one, other);
+        friend bval_t operator!=(const composed_t one, const composed_t other) {
+            return bval_t(vneq(one, other), last_operation::comparison);
         }
 
         CONVERSION(==);
 
         CONVERSION(!=);
-
-        CONVERSION(>);
-
-        CONVERSION(>=);
-
-        CONVERSION(<);
-
-        CONVERSION(<=);
     };
 }}

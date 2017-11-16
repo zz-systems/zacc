@@ -86,9 +86,9 @@ namespace zacc { namespace examples {
                         break;
                 }
 
-                return (iterations % _max_iterations)
-                        .when(iterations > 0 && iterations < _max_iterations)
-                        .otherwise(-5);
+                return (iterations % _max_iterations);
+                        //.when(iterations > 0 && iterations < _max_iterations)
+                        //.otherwise(-5);
             });
         }
     };

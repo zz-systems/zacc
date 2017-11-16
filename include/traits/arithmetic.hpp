@@ -38,6 +38,9 @@ namespace zacc { namespace traits {
     struct arithmetic : public base_t {
         FORWARD(arithmetic);
 
+        using zval_t = typename base_t::zval_t;
+        using bval_t = typename base_t::bval_t;
+
         /**
          * @brief promotion operator for symmetry sake
          * @param one

@@ -44,6 +44,9 @@ namespace zacc { namespace traits {
         using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
         using extracted_t   = typename zval_traits<base_t>::extracted_t;
 
+        using zval_t = typename base_t::zval_t;
+        using bval_t = typename base_t::bval_t;
+
 
         FORWARD(numeric);
 

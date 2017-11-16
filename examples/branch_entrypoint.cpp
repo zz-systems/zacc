@@ -44,15 +44,17 @@ void examples_perlin_delete_instance(zacc::system::entrypoint* instance)
 
 zacc::system::entrypoint *mandelbrot_create_instance()
 {
-    std::cout << "Creating engine for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
+    std::cout << "Creating instance for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
     auto result =  new zacc::examples::mandelbrot_kernel<zacc::dispatched_branch::types>();
-    std::cout << "Created engine for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
+    std::cout << "Created instance for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
 
     return result;
 }
 
 void mandelbrot_delete_instance(zacc::system::entrypoint* instance)
 {
+    std::cout << "Deleting instance for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
     if(instance != nullptr)
         delete instance;
+    std::cout << "Deleted instance for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
 }

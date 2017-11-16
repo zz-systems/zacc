@@ -38,6 +38,9 @@ namespace zacc { namespace traits {
     struct math : public base_t {
         FORWARD(math);
 
+        using zval_t = typename base_t::zval_t;
+        using bval_t = typename base_t::bval_t;
+
         /**
          * @brief absoulute value
          * @return |value|

@@ -38,6 +38,9 @@ namespace zacc { namespace traits {
     template<typename base_t, typename composed_t>
     struct io : public base_t {
 
+        using zval_t = typename base_t::zval_t;
+        using bval_t = typename base_t::bval_t;
+
         typedef typename zval_traits<base_t>::extracted_t extracted_t;
 
         FORWARD(io);

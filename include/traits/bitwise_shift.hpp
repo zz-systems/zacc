@@ -1,3 +1,4 @@
+
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
 // 
@@ -37,6 +38,9 @@ namespace zacc { namespace traits {
     template<typename base_t, typename composed_t>
     struct bitwise_shift : public base_t {
         FORWARD(bitwise_shift);
+
+        using zval_t = typename base_t::zval_t;
+        using bval_t = typename base_t::bval_t;
 
         friend composed_t operator<<(const composed_t one, const size_t immediate) {
             return vbslli(one, immediate);

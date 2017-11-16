@@ -38,6 +38,9 @@ namespace zacc { namespace traits {
     struct bitwise : public base_t {
         FORWARD(bitwise);
 
+        using zval_t = typename base_t::zval_t;
+        using bval_t = typename base_t::bval_t;
+
         friend composed_t operator~(const composed_t one) { return vbneg(one); }
 
         friend composed_t operator|(const composed_t one, const composed_t other) {

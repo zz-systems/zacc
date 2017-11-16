@@ -173,11 +173,7 @@ namespace zacc {
                 uint8_t>>>;
 
 
-    /**
-     * @see https://stackoverflow.com/a/44522730/1261537
-     */
-    template<typename T>
-    using element_type_t = std::remove_reference_t<decltype(*std::begin(std::declval<T&>()))>;
+
 
     /**
      * @see https://stackoverflow.com/a/19532607/1261537
@@ -268,6 +264,8 @@ namespace zacc
         /// scalar type? vector type?
         static constexpr bool is_vector = size > 1;
 
+
+
         /// vector type, like __m128i for sse 4x integer vector
         using vector_t = typename T::vector_t;
 
@@ -279,6 +277,9 @@ namespace zacc
 
         /// extracted std::array of (dim) scalar values
         using extracted_t = std::array<element_t, size>; //aligned_array<scalar_t, dim, alignment>;
+
+        using zval_t = zval_base<vector_t, mask_vector_t , element_t , zval_tag, size, alignment, features>;
+        using bval_t = zval_base<vector_t, mask_vector_t , bool , bval_tag, size, alignment, features>;
     };
 
 //    template<typename T, typename enable = void>
@@ -364,4 +365,29 @@ namespace zacc
     };
 
 
+    /**
+    * @see https://stackoverflow.com/a/44522730/1261537
+    */
+
+    template<typename T, typename enable = void>
+    struct element_type
+    {
+        using type = std::remove_cv_t<std::remove_reference_t<decltype(std::declval<T>().data())>>;
+    };
+
+    template<typename T>
+    struct element_type<T, std::enable_if_t<is_cval<T>::value || is_zval<T>::value || is_bval<T>::value>>
+    {
+        using type = std::remove_cv_t<std::remove_reference_t<typename zval_traits<T>::element_t>>;
+    };
+
+
+    template<typename T>
+    struct element_type<T, std::enable_if_t<is<iterable, T>>>
+    {
+        using type =  std::remove_reference_t<decltype(*std::begin(std::declval<T&>()))>;
+    };
+
+    template<typename T>
+    using element_type_t = typename element_type<T>::type;
 }

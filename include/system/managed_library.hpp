@@ -72,7 +72,7 @@ namespace zacc { namespace system {
         }
 
         template<typename Signature>
-        std::function<Signature> resolve_symbol(const std::string& function_name)
+        std::function<Signature> resolve_symbol(const std::string& function_name) const
         {
             zacc_dlerror();
             auto result = zacc_dlsym(_handle, function_name.c_str());

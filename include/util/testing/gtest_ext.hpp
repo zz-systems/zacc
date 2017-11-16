@@ -57,7 +57,7 @@ namespace zacc { namespace test {
     std::enable_if_t<is_integral<T>::value && !is_bval<T>::value/* && std::is_constructible<T, U>::value*/, ::testing::AssertionResult>
     vassert_eq(const char* actual_expr, const char* expected_expr, const T& actual, const U& expected)
     {
-        auto dataset = zip(std::move(actual.data()), std::move(static_cast<T>(expected).data()));
+        auto dataset = zip(actual.data(), static_cast<T>(expected).data());
         element_type_t<T> actual_elem, expected_elem;
 
         bool isValid = std::accumulate(std::begin(dataset), std::end(dataset), true, [&](auto acc, auto pair)
@@ -103,7 +103,7 @@ namespace zacc { namespace test {
     std::enable_if_t<is_bval<T>::value, ::testing::AssertionResult>
     vassert_eq(const char* actual_expr, const char* expected_expr, const T& actual, const U& expected)
     {
-        auto dataset = zip(actual.data(), static_cast<T>(expected).data());
+        auto dataset = zip(make_iterable(actual), make_iterable(static_cast<T>(expected)));
         element_type_t<T> actual_elem, expected_elem;
 
         bool isValid = std::accumulate(std::begin(dataset), std::end(dataset), true, [&](auto acc, auto pair)

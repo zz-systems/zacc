@@ -60,25 +60,67 @@ namespace zacc {
         struct impl : public base_t {
             FORWARD(impl);
 
-            using iterator = typename zval_traits<base_t>::extracted_t::iterator;
+            using zval_t = typename base_t::zval_t;
+            using bval_t = typename base_t::bval_t;
 
-            /**
-             * @brief create a snapshot of current value
-             * @return snapshot's begin iterator
-             */
-            iterator begin() const {
-                _snapshot = base_t::data();
-                return _snapshot.begin();
-            }
-
-            /**
-             * @return snapshot's end iterator
-             */
-            iterator end() const { return _snapshot.end(); }
-
-        private:
-            mutable typename base_t::extracted_t _snapshot;
+//            using iterator = typename zval_traits<base_t>::extracted_t::iterator;
+//
+//            /**
+//             * @brief create a snapshot of current value
+//             * @return snapshot's begin iterator
+//             */
+//            iterator begin() const {
+//                _snapshot = base_t::data();
+//                return _snapshot.begin();
+//            }
+//
+//            /**
+//             * @return snapshot's end iterator
+//             */
+//            iterator end() const { return _snapshot.end()simple_; }
+//
+//        private:
+//            mutable typename base_t::extracted_t _snapshot;
         };
+    };
+
+    template<typename _Data>
+    struct enumerable //: std::decay_t<_Data>
+    {
+        using iterator          = decltype(std::begin(std::declval<_Data>().data()));
+        using const_iterator    = decltype(std::begin(std::declval<const _Data&>().data()));
+
+        /**
+         *
+         * @param rhs
+         */
+        constexpr enumerable(_Data&& rhs)
+                : _snapshot(std::move(rhs.data()))
+        {}
+
+        /**
+         * @brief create a snapshot of current value
+         * @return snapshot's begin iterator
+         */
+        constexpr auto begin() const {
+            return _snapshot.begin();
+        }
+
+        /**
+         * @return snapshot's end iterator
+         */
+        constexpr auto end() const {
+            return _snapshot.end();
+        }
+
+    private:
+        const decltype(std::declval<_Data>().data()) _snapshot;
+    };
+
+    template<typename T>
+    constexpr auto make_iterable(T&& source)
+    {
+        return enumerable<T>(std::forward<T>(source));
     };
 
 
@@ -93,6 +135,9 @@ namespace zacc {
         template<typename base_t>
         struct impl : public base_t {
             FORWARD(impl);
+
+            using zval_t = typename base_t::zval_t;
+            using bval_t = typename base_t::bval_t;
 
             /**
              * @brief converts current data to string representation
@@ -119,7 +164,7 @@ namespace zacc {
              * @param data printable trait
              * @return target stream
              */
-            friend std::ostream &operator<<(std::ostream &os, const impl data) {
+            friend std::ostream &operator<<(std::ostream &os, const impl &data) {
                 os << data.to_string();
 
                 return os;
@@ -132,6 +177,8 @@ namespace zacc {
      * @brief provides basic conversion functionality
      */
     struct convertable {
+
+
         /**
          * @brief convertable trait implementation
          * @tparam base_t base type (e.g previous trait)
@@ -140,9 +187,12 @@ namespace zacc {
         struct impl : public base_t {
             FORWARD(impl);
 
+            using zval_t = typename base_t::zval_t;
+            using bval_t = typename base_t::bval_t;
+
             auto as_bool() const noexcept
             {
-                return bval<impl, typename base_t::mask_vector_t>(*this);
+                return make_boolean(*this);
             }
         };
     };

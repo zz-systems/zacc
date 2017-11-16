@@ -35,36 +35,27 @@ namespace zacc { namespace traits {
      * @tparam composed_t final composed type (e.g zfloat32)
      */
     template<typename base_t, typename composed_t>
-    struct comparison : public base_t {
-        FORWARD(comparison);
+    struct comparable : public base_t {
+        FORWARD(comparable);
 
-        friend composed_t operator==(const composed_t one, const composed_t other) {
-            return veq(one, other);
+        using zval_t = typename base_t::zval_t;
+        using bval_t = typename base_t::bval_t;
+
+        friend bval_t operator>(const composed_t one, const composed_t other) {
+            return bval_t(vgt(one, other), last_operation::comparison);
         }
 
-        friend composed_t operator!=(const composed_t one, const composed_t other) {
-            return vneq(one, other);
+        friend bval_t operator>=(const composed_t one, const composed_t other) {
+            return bval_t(vge(one, other), last_operation::comparison);
         }
 
-        friend composed_t operator>(const composed_t one, const composed_t other) {
-            return vgt(one, other);
+        friend bval_t operator<(const composed_t one, const composed_t other) {
+            return bval_t(vlt(one, other), last_operation::comparison);
         }
 
-        friend composed_t operator>=(const composed_t one, const composed_t other) {
-            return vge(one, other);
+        friend bval_t operator<=(const composed_t one, const composed_t other) {
+            return bval_t(vle(one, other), last_operation::comparison);
         }
-
-        friend composed_t operator<(const composed_t one, const composed_t other) {
-            return vlt(one, other);
-        }
-
-        friend composed_t operator<=(const composed_t one, const composed_t other) {
-            return vle(one, other);
-        }
-
-        CONVERSION(==);
-
-        CONVERSION(!=);
 
         CONVERSION(>);
 

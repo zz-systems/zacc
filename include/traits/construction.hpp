@@ -38,6 +38,9 @@ namespace zacc { namespace traits {
     struct construction : public base_t {
         FORWARD(construction);
 
+        using zval_t = typename base_t::zval_t;
+        using bval_t = typename base_t::bval_t;
+
 // TODO
 //        static composed_t make_scalar(base_t::scalar_t value)
 //        {

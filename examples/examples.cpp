@@ -44,7 +44,7 @@ namespace zacc { namespace examples
             using namespace chrono;
 
 
-            size_t max_iterations = 1024;
+            size_t max_iterations = 2048;
 
             //PreFetchCacheLine()
 #ifndef PROFILE
@@ -146,7 +146,7 @@ namespace zacc { namespace examples
             vec2<int>   dim  = {2048, 2048};
             vec2<float> cmin = {-2, -2};
             vec2<float> cmax = {2, 2};
-            size_t max_iterations = 1024;
+            size_t max_iterations = 2048;
 
             mandelbrot_dispatcher.dispatch_some(dim, cmin, cmax, max_iterations);
 

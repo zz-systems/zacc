@@ -38,18 +38,24 @@ namespace zacc { namespace traits {
     struct logical : public base_t {
         FORWARD(logical);
 
-        friend composed_t operator!(const composed_t one) { return vlneg(one); }
+        using zval_t = typename base_t::zval_t;
+        using bval_t = typename base_t::bval_t;
 
-        friend composed_t operator||(const composed_t one, const composed_t other) {
-            return vlor(one, other);
+        friend bval_t operator!(const composed_t one) {
+            return bval_t(vlneg(one), last_operation::logic);
         }
 
-        friend composed_t operator&&(const composed_t one, const composed_t other) {
-            return vland(one, other);
+        friend bval_t operator||(const composed_t one, const composed_t other) {
+            return bval_t(vlor(one, other), last_operation::logic);
         }
 
-        CONVERSION(||);
+        friend bval_t operator&&(const composed_t one, const composed_t other) {
+            return bval_t(vland(one, other), last_operation::logic);
+        }
 
-        CONVERSION(&&);
+
+        CONVERSION2(||, bval_t);
+
+        CONVERSION2(&&, bval_t);
     };
 }}

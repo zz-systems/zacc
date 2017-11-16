@@ -38,21 +38,24 @@ namespace zacc { namespace traits {
     struct conditional : public base_t {
         FORWARD(conditional);
 
+        using zval_t = typename base_t::zval_t;
+        using bval_t = typename base_t::bval_t;
+
         struct else_branch {
             composed_t otherwise(const composed_t& else_value) const { return vsel(_condition, _if_value, else_value); }
 
         private:
-            else_branch(const composed_t& condition, const composed_t& if_value)
+            else_branch(const bval_t& condition, const composed_t& if_value)
                     : _if_value(if_value), _condition(condition) {}
 
             composed_t _if_value;
-            composed_t _condition;
+            bval_t _condition;
 
             friend struct conditional<base_t, composed_t>;
         };
 
 
-        else_branch when(const composed_t& condition) const {
+        else_branch when(const bval_t& condition) const {
             return else_branch(condition, *this);
         }
     };
