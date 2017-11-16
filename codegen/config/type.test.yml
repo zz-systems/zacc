@@ -24,7 +24,7 @@ modules:
     vlor:   [ "({type}(0) || {type}(a)).as_bool()", "true"]
     vland:  [ "({type}(0) && {type}(a)).as_bool()", "false"]
 #-----------------------------------------------------------------------------------------------------------------------
-  comparison:
+  equatable:
     veq:   [ "{type}(0) == {type}(a)", 0]
     vneq:  [ "{type}(a) != {type}(a)", 0]
     vgt:   [ "{type}(0) > {type}(a)", 0]

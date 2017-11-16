@@ -37,7 +37,7 @@
 namespace zacc {
 
 
-    template<typename zval_t, typename bval_t>
+    template<typename _Vector, typename _MaskVector, size_t _Size, size_t _Alignment, uint64_t _Features = 0xFFFF'FFFF'FFFF'FFFF>
     struct bval;
 
 
@@ -146,6 +146,7 @@ namespace zacc {
         constexpr _Vector value() const {
             return _value;
         }
+
     private:
         alignas(_Alignment) _Vector _value;
     };
@@ -156,128 +157,109 @@ namespace zacc {
         one.swap(other);
     }
 
-    template<typename zval_t>
-    using __bval = zval_base
-            <
-                    typename zval_traits<zval_t>::vector_t,
-                    typename zval_traits<zval_t>::mask_vector_t,
-                    bool,
-                    bval_tag,
-                    zval_traits<zval_t>::size,
-                    zval_traits<zval_t>::alignment,
-                    zval_traits<zval_t>::features
-            >;
+    enum class last_operation
+    {
+        undefined,
+        comparison,
+        logic,
+        bitwise
+    };
 
     /// TODO: separate file, impl traits.
-    template<typename zval_t, typename bval_t>
-    struct bval : public __bval<zval_t>
+    template<typename _Vector, typename _MaskVector, size_t _Size, size_t _Alignment, uint64_t _Features>
+    struct bval : zval_base<_Vector, _MaskVector, bool, bval_tag, _Size, _Alignment, _Features>
     {
-        using base_t = __bval<zval_t>;
-        using base_t::size;
-    public:
+        constexpr bval() = default;
 
-        using extracted_t = typename zval_traits<bval>::extracted_t;
-        using iterator    = typename extracted_t::iterator;
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+        constexpr bval(const T& other, last_operation last_op = last_operation::undefined)
+                : _value (other), _last_op(last_op)
+        {}
 
-        /**
-         * @brief Converting constructor
-         * @see C++11 4.12/1: A zero value, null pointer value,
-         * or null member pointer value is converted to false; any other value is converted to true.
-         * @param value
-         */
-        constexpr bval(const zval_t& value) :
-                _value(value.value())
+
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+        constexpr bval& operator=(const T& other)
         {
-            ZTRACE_RAW("bval(zval_t)");
+            _value = other;
+            return *this;
         }
 
+        //template<typename T, typename enable = std::enable_if_t<!is_zval<T>::value && !is_bval<T>::value>>
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+        constexpr bval(T&& value)
+                : _value(std::move(value))
+        {}
 
-        constexpr bval(const bval_t& value) :
-                _value(value)
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+        constexpr bval& operator=(T&& other) noexcept
         {
-            ZTRACE_RAW("bval(bval_t)");
+            _value = std::move(other);
+            return *this;
+        }
+
+        constexpr bval(const bval& other, last_operation last_op = last_operation::undefined)
+                : _value (other._value), _last_op(other._last_op)
+        {}
+
+        constexpr bval& operator=(const bval& other)
+        {
+            _value = other._value;
+            return *this;
+        }
+
+        constexpr bval(bval&& other) noexcept
+                : _value(std::move(other._value))
+        {}
+
+        constexpr bval& operator=(bval&& other) noexcept
+        {
+            _value = std::move(other._value);
+            return *this;
+        }
+
+        void swap(bval& other) noexcept
+        {
+            std::swap(_value, other._value);
         }
 
         /**
          * @brief
          * @return
          */
-        constexpr operator zval_t() const {
-            return get_value();
-        }
+        ////constexpr operator zval() const {
+        //    return value();
+       // }
 
+        constexpr operator bool()
+        {
+            return is_set(_value);
+        }
         /**
          * @brief
          * @return
          */
-        constexpr operator bval_t() const {
-            return get_value();
+        constexpr operator _MaskVector() const {
+            return value();
         }
 
-        constexpr const bval_t get_value() const {
+        constexpr const _MaskVector value() const {
             return _value;
         }
 
-        const extracted_t data() const {
-            return array_cast<bool>(_value.data());
-        }
-
-        extracted_t data() {
-            return array_cast<bool>(_value.data());
-        }
-
-        /**
-         * @brief create a snapshot of current value
-         * @return snapshot's begin iterator
-         */
-        iterator begin() {
-            _snapshot = data();
-            return _snapshot.begin();
-        }
-
-        /**
-         * @return snapshot's end iterator
-         */
-        iterator end() { return _snapshot.end(); }
-
-        /**
-         * @brief converts current data to string representation
-         * @return string, e.g [4, 5, 6, 7] for a 4x int vector
-         */
-        std::string to_string() const {
-            std::stringstream ss;
-
-            auto is_vector = size() > 1;
-
-            if (is_vector)
-                ss << "[ ";
-
-            for (auto entry : data())
-                ss << entry << " ";
-
-            if (is_vector)
-                ss << "]";
-
-            return ss.str();
-        }
-
-        /**
-         * @brief prints current value to target stream
-         * @param os target stream
-         * @param data printable trait
-         * @return target stream
-         */
-        friend std::ostream &operator<<(std::ostream &os, const bval data) {
-            os << data.to_string();
-
-            return os;
+        constexpr last_operation last_op() const {
+            return _last_op;
         }
 
     private:
-        alignas(zval_traits<bval>::alignment) zval_t _value;
-        alignas(zval_traits<bval>::alignment) extracted_t _snapshot;
+        alignas(_Alignment) _MaskVector _value;
+        const last_operation _last_op;
     };
 
+    template<typename _ZVal>
+    constexpr auto make_boolean(const _ZVal& value)
+    {
+        return typename _ZVal::bval_t(value);
+    }
 
     template<typename base_t>
     struct composable {

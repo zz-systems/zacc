@@ -18,9 +18,15 @@ type:
       - numeric
       - arithmetic
       - bitwise
+      - comparable
       - logical
-      - comparison
+      - equatable
       - conditional
+
+    boolean:
+      - io
+      - logical
+      - equatable
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
@@ -45,6 +51,16 @@ modules:
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_ps }
+
+  boolean_construction:
+    - args: __m128 value
+      init: value
+
+    - args: __m128d value
+      init: _mm_castpd_ps(value)
+
+    - args: __m128i value
+      init: _mm_castsi128_ps(value)
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -200,9 +216,10 @@ modules:
       body: _mm_and_ps
       #returns: boolvec<composed_t>
 #-----------------------------------------------------------------------------------------------------------------------
-  comparison:
+  equatable:
     veq:   _mm_cmpeq_ps
     vneq:  _mm_cmpneq_ps
+  comparable:
     vgt:   _mm_cmpgt_ps
     vlt:   _mm_cmplt_ps
     vge:   _mm_cmpge_ps

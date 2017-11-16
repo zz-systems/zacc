@@ -42,13 +42,18 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
+#include "traits/construction.hpp"
 #include "traits/io.hpp"
-#include "traits/numeric.hpp"
+#include "traits/logical.hpp"
+#include "traits/equatable.hpp"
+#include "traits/io.hpp"
 #include "traits/math.hpp"
+#include "traits/numeric.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/bitwise.hpp"
+#include "traits/comparable.hpp"
 #include "traits/logical.hpp"
-#include "traits/comparison.hpp"
+#include "traits/equatable.hpp"
 #include "traits/conditional.hpp"
 
 /**
@@ -77,7 +82,7 @@ namespace zacc { namespace backend { namespace avx2 {
      * @remark avx2
      */
     template<typename composed_t>
-    struct float32_construction
+    struct zfloat32_construction
     {
 
         /**
@@ -88,6 +93,8 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -185,8 +192,113 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float32
          * @remark avx2
          */
+
         template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, zfloat32<base_t::features>>;
+        using zimpl = traits::construction<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::construction<__impl<base_t>, bfloat32<base_t::features>>;
+
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name construction operations
+     */
+    ///@{
+
+    /**
+     * @brief construction
+     * @relates float32
+     * @remark avx2
+     */
+    template<typename composed_t>
+    struct bfloat32_construction
+    {
+
+        /**
+         * @brief construction basic interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief construction default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            constexpr __impl() : base_t() {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "bfloat32(float[8])", "default", "");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            constexpr __impl(__m256 value) : base_t(value) {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "bfloat32(float[8])", "default", "");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            constexpr __impl(__m256d value) : base_t(_mm256_castpd_ps(value)) {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "bfloat32(float[8])", "default", "");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            constexpr __impl(__m256i value) : base_t(_mm256_castsi256_ps(value)) {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "bfloat32(float[8])", "default", "");
+
+            }
+
+        };
+
+        /**
+         * @brief construction public interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+
+        template<typename base_t>
+        using zimpl = traits::construction<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::construction<__impl<base_t>, bfloat32<base_t::features>>;
+
 
     };
 
@@ -205,7 +317,7 @@ namespace zacc { namespace backend { namespace avx2 {
      * @remark avx2
      */
     template<typename composed_t>
-    struct float32_io
+    struct bfloat32_io
     {
 
         /**
@@ -216,6 +328,268 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief io default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "bfloat32(float[8])", "default", "vstore");
+
+                _mm256_storeu_ps(result, input);
+            }
+
+
+            /**
+             * @brief io default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "bfloat32(float[8])", "default", "vstream");
+
+                _mm256_stream_ps(result, input);
+            }
+
+
+            /**
+             * @brief io default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            template<typename RandomIt> friend zfloat32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "bfloat32(float[8])", "default", "vgather");
+
+                return _mm256_i32gather_ps(input, index, 4);
+            }
+
+        };
+
+        /**
+         * @brief io public interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+
+        template<typename base_t>
+        using zimpl = traits::io<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::io<__impl<base_t>, bfloat32<base_t::features>>;
+
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name logical operations
+     */
+    ///@{
+
+    /**
+     * @brief logical
+     * @relates float32
+     * @remark avx2
+     */
+    template<typename composed_t>
+    struct bfloat32_logical
+    {
+
+        /**
+         * @brief logical basic interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief logical default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            friend bfloat32<base_t::features> vlneg(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "bfloat32(float[8])", "default", "vlneg");
+
+                return _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ);
+            }
+
+
+            /**
+             * @brief logical default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            friend bfloat32<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "bfloat32(float[8])", "default", "vlor");
+
+                return _mm256_or_ps(one, other);
+            }
+
+
+            /**
+             * @brief logical default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            friend bfloat32<base_t::features> vland(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "bfloat32(float[8])", "default", "vland");
+
+                return _mm256_and_ps(one, other);
+            }
+
+        };
+
+        /**
+         * @brief logical public interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+
+        template<typename base_t>
+        using zimpl = traits::logical<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::logical<__impl<base_t>, bfloat32<base_t::features>>;
+
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name equatable operations
+     */
+    ///@{
+
+    /**
+     * @brief equatable
+     * @relates float32
+     * @remark avx2
+     */
+    template<typename composed_t>
+    struct bfloat32_equatable
+    {
+
+        /**
+         * @brief equatable basic interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief equatable default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            friend bfloat32<base_t::features> veq(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "bfloat32(float[8])", "default", "veq");
+
+                return _mm256_cmp_ps(one, other, _CMP_EQ_OQ);
+            }
+
+
+            /**
+             * @brief equatable default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            friend bfloat32<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "bfloat32(float[8])", "default", "vneq");
+
+                return _mm256_cmp_ps(one, other, _CMP_NEQ_OQ);
+            }
+
+        };
+
+        /**
+         * @brief equatable public interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+
+        template<typename base_t>
+        using zimpl = traits::equatable<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::equatable<__impl<base_t>, bfloat32<base_t::features>>;
+
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name io operations
+     */
+    ///@{
+
+    /**
+     * @brief io
+     * @relates float32
+     * @remark avx2
+     */
+    template<typename composed_t>
+    struct zfloat32_io
+    {
+
+        /**
+         * @brief io basic interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -269,53 +643,13 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float32
          * @remark avx2
          */
+
         template<typename base_t>
-        using impl = traits::io<__impl<base_t>, zfloat32<base_t::features>>;
+        using zimpl = traits::io<__impl<base_t>, zfloat32<base_t::features>>;
 
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name numeric operations
-     */
-    ///@{
-
-    /**
-     * @brief numeric
-     * @relates float32
-     * @remark avx2
-     */
-    template<typename composed_t>
-    struct float32_numeric
-    {
-
-        /**
-         * @brief numeric basic interface implementation
-         * @relates float32
-         * @remark avx2
-         */
         template<typename base_t>
-        struct __impl : base_t
-        {
-            using vector_t      = typename zval_traits<base_t>::vector_t;
-            using element_t     = typename zval_traits<base_t>::element_t;
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+        using bimpl = traits::io<__impl<base_t>, bfloat32<base_t::features>>;
 
-            FORWARD(__impl);
-
-        };
-
-        /**
-         * @brief numeric public interface implementation
-         * @relates float32
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::numeric<__impl<base_t>, zfloat32<base_t::features>>;
 
     };
 
@@ -334,7 +668,7 @@ namespace zacc { namespace backend { namespace avx2 {
      * @remark avx2
      */
     template<typename composed_t>
-    struct float32_math
+    struct zfloat32_math
     {
 
         /**
@@ -345,6 +679,8 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -489,8 +825,65 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float32
          * @remark avx2
          */
+
         template<typename base_t>
-        using impl = traits::math<__impl<base_t>, zfloat32<base_t::features>>;
+        using zimpl = traits::math<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::math<__impl<base_t>, bfloat32<base_t::features>>;
+
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name numeric operations
+     */
+    ///@{
+
+    /**
+     * @brief numeric
+     * @relates float32
+     * @remark avx2
+     */
+    template<typename composed_t>
+    struct zfloat32_numeric
+    {
+
+        /**
+         * @brief numeric basic interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+        };
+
+        /**
+         * @brief numeric public interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+
+        template<typename base_t>
+        using zimpl = traits::numeric<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::numeric<__impl<base_t>, bfloat32<base_t::features>>;
+
 
     };
 
@@ -509,7 +902,7 @@ namespace zacc { namespace backend { namespace avx2 {
      * @remark avx2
      */
     template<typename composed_t>
-    struct float32_arithmetic
+    struct zfloat32_arithmetic
     {
 
         /**
@@ -520,6 +913,8 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -625,8 +1020,13 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float32
          * @remark avx2
          */
+
         template<typename base_t>
-        using impl = traits::arithmetic<__impl<base_t>, zfloat32<base_t::features>>;
+        using zimpl = traits::arithmetic<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::arithmetic<__impl<base_t>, bfloat32<base_t::features>>;
+
 
     };
 
@@ -645,7 +1045,7 @@ namespace zacc { namespace backend { namespace avx2 {
      * @remark avx2
      */
     template<typename composed_t>
-    struct float32_bitwise
+    struct zfloat32_bitwise
     {
 
         /**
@@ -656,6 +1056,8 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -753,8 +1155,117 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float32
          * @remark avx2
          */
+
         template<typename base_t>
-        using impl = traits::bitwise<__impl<base_t>, zfloat32<base_t::features>>;
+        using zimpl = traits::bitwise<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::bitwise<__impl<base_t>, bfloat32<base_t::features>>;
+
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name comparable operations
+     */
+    ///@{
+
+    /**
+     * @brief comparable
+     * @relates float32
+     * @remark avx2
+     */
+    template<typename composed_t>
+    struct zfloat32_comparable
+    {
+
+        /**
+         * @brief comparable basic interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief comparable default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            friend bfloat32<base_t::features> vgt(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vgt");
+
+                return _mm256_cmp_ps(one, other, _CMP_GT_OQ);
+            }
+
+
+            /**
+             * @brief comparable default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            friend bfloat32<base_t::features> vlt(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vlt");
+
+                return _mm256_cmp_ps(one, other, _CMP_LT_OQ);
+            }
+
+
+            /**
+             * @brief comparable default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            friend bfloat32<base_t::features> vge(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vge");
+
+                return _mm256_cmp_ps(one, other, _CMP_GE_OQ);
+            }
+
+
+            /**
+             * @brief comparable default branch
+             * @relates float32
+             * @remark avx2 - default
+             */
+            friend bfloat32<base_t::features> vle(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vle");
+
+                return _mm256_cmp_ps(one, other, _CMP_LE_OQ);
+            }
+
+        };
+
+        /**
+         * @brief comparable public interface implementation
+         * @relates float32
+         * @remark avx2
+         */
+
+        template<typename base_t>
+        using zimpl = traits::comparable<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::comparable<__impl<base_t>, bfloat32<base_t::features>>;
+
 
     };
 
@@ -773,7 +1284,7 @@ namespace zacc { namespace backend { namespace avx2 {
      * @remark avx2
      */
     template<typename composed_t>
-    struct float32_logical
+    struct zfloat32_logical
     {
 
         /**
@@ -784,6 +1295,8 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -797,7 +1310,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float32
              * @remark avx2 - default
              */
-            friend zfloat32<base_t::features> vlneg(composed_t one)  noexcept {
+            friend bfloat32<base_t::features> vlneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vlneg");
 
@@ -810,7 +1323,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float32
              * @remark avx2 - default
              */
-            friend zfloat32<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vlor");
 
@@ -823,7 +1336,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float32
              * @remark avx2 - default
              */
-            friend zfloat32<base_t::features> vland(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::features> vland(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vland");
 
@@ -837,8 +1350,13 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float32
          * @remark avx2
          */
+
         template<typename base_t>
-        using impl = traits::logical<__impl<base_t>, zfloat32<base_t::features>>;
+        using zimpl = traits::logical<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::logical<__impl<base_t>, bfloat32<base_t::features>>;
+
 
     };
 
@@ -847,27 +1365,29 @@ namespace zacc { namespace backend { namespace avx2 {
 
     // =================================================================================================================
     /**
-     * @name comparison operations
+     * @name equatable operations
      */
     ///@{
 
     /**
-     * @brief comparison
+     * @brief equatable
      * @relates float32
      * @remark avx2
      */
     template<typename composed_t>
-    struct float32_comparison
+    struct zfloat32_equatable
     {
 
         /**
-         * @brief comparison basic interface implementation
+         * @brief equatable basic interface implementation
          * @relates float32
          * @remark avx2
          */
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -877,11 +1397,11 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief comparison default branch
+             * @brief equatable default branch
              * @relates float32
              * @remark avx2 - default
              */
-            friend zfloat32<base_t::features> veq(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::features> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "veq");
 
@@ -890,78 +1410,31 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief comparison default branch
+             * @brief equatable default branch
              * @relates float32
              * @remark avx2 - default
              */
-            friend zfloat32<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vneq");
 
                 return _mm256_cmp_ps(one, other, _CMP_NEQ_OQ);
             }
 
-
-            /**
-             * @brief comparison default branch
-             * @relates float32
-             * @remark avx2 - default
-             */
-            friend zfloat32<base_t::features> vgt(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vgt");
-
-                return _mm256_cmp_ps(one, other, _CMP_GT_OQ);
-            }
-
-
-            /**
-             * @brief comparison default branch
-             * @relates float32
-             * @remark avx2 - default
-             */
-            friend zfloat32<base_t::features> vlt(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vlt");
-
-                return _mm256_cmp_ps(one, other, _CMP_LT_OQ);
-            }
-
-
-            /**
-             * @brief comparison default branch
-             * @relates float32
-             * @remark avx2 - default
-             */
-            friend zfloat32<base_t::features> vge(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vge");
-
-                return _mm256_cmp_ps(one, other, _CMP_GE_OQ);
-            }
-
-
-            /**
-             * @brief comparison default branch
-             * @relates float32
-             * @remark avx2 - default
-             */
-            friend zfloat32<base_t::features> vle(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "zfloat32(float[8])", "default", "vle");
-
-                return _mm256_cmp_ps(one, other, _CMP_LE_OQ);
-            }
-
         };
 
         /**
-         * @brief comparison public interface implementation
+         * @brief equatable public interface implementation
          * @relates float32
          * @remark avx2
          */
+
         template<typename base_t>
-        using impl = traits::comparison<__impl<base_t>, zfloat32<base_t::features>>;
+        using zimpl = traits::equatable<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::equatable<__impl<base_t>, bfloat32<base_t::features>>;
+
 
     };
 
@@ -980,7 +1453,7 @@ namespace zacc { namespace backend { namespace avx2 {
      * @remark avx2
      */
     template<typename composed_t>
-    struct float32_conditional
+    struct zfloat32_conditional
     {
 
         /**
@@ -991,6 +1464,8 @@ namespace zacc { namespace backend { namespace avx2 {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -1019,8 +1494,13 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates float32
          * @remark avx2
          */
+
         template<typename base_t>
-        using impl = traits::conditional<__impl<base_t>, zfloat32<base_t::features>>;
+        using zimpl = traits::conditional<__impl<base_t>, zfloat32<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::conditional<__impl<base_t>, bfloat32<base_t::features>>;
+
 
     };
 
@@ -1049,6 +1529,7 @@ namespace zacc { namespace backend { namespace avx2 {
         struct __zval_float32
         {
             using zval_t = zval<__m256, __m256, float, zval_tag, 8, 32, features>;
+            using bval_t = bval<__m256, __m256, 8, 32, features>;
 
             struct impl : public zval_t
             {
@@ -1071,15 +1552,16 @@ namespace zacc { namespace backend { namespace avx2 {
                 printable::impl,
                 iteratable::impl,
                 convertable::impl,
-                float32_io<impl>::template impl,
-                float32_math<impl>::template impl,
-                float32_numeric<impl>::template impl,
-                float32_arithmetic<impl>::template impl,
-                float32_bitwise<impl>::template impl,
-                float32_logical<impl>::template impl,
-                float32_comparison<impl>::template impl,
-                float32_conditional<impl>::template impl,
-                float32_construction<impl>::template impl,
+                zfloat32_io<impl>::template zimpl,
+                zfloat32_math<impl>::template zimpl,
+                zfloat32_numeric<impl>::template zimpl,
+                zfloat32_arithmetic<impl>::template zimpl,
+                zfloat32_bitwise<impl>::template zimpl,
+                zfloat32_comparable<impl>::template zimpl,
+                zfloat32_logical<impl>::template zimpl,
+                zfloat32_equatable<impl>::template zimpl,
+                zfloat32_conditional<impl>::template zimpl,
+                zfloat32_construction<impl>::template zimpl,
 
                 composable<zval_t>::template type
             >;
@@ -1090,13 +1572,49 @@ namespace zacc { namespace backend { namespace avx2 {
             };
         };
 
+        /**
+         * @brief bval parametrization using
+         * - '__m256' as underlying vector type
+         * - 'float' as scalar type
+         * - '8' as vector size
+         * - '32' as alignment
+         * @relates float32
+         * @remark avx2
+         */
         template<uint64_t features>
-        struct __bfloat32
+        struct __bval_float32
         {
-            using bval_t = bval<typename __zfloat32<features>::impl, __m256>;
+            using zval_t = zval<__m256, __m256, float, zval_tag, 8, 32, features>;
+            using bval_t = bval<__m256, __m256, 8, 32, features>;
+
             struct impl : public bval_t
             {
                 FORWARD2(impl, bval_t);
+            };
+        };
+
+        template<uint64_t features>
+        struct __bfloat32
+        {
+            struct impl;
+
+            using bval_t = typename __bval_float32<features>::impl;
+            using composition_t = compose
+            <
+                printable::impl,
+                iteratable::impl,
+                convertable::impl,
+                bfloat32_io<impl>::template bimpl,
+                bfloat32_logical<impl>::template bimpl,
+                bfloat32_equatable<impl>::template bimpl,
+                bfloat32_construction<impl>::template bimpl,
+
+                composable<bval_t>::template type
+            >;
+
+            struct impl : public composition_t
+            {
+                FORWARD2(impl, composition_t);
             };
         };
     //}

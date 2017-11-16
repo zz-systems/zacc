@@ -34,171 +34,7 @@
 namespace zacc { namespace test {
 
 // =====================================================================================================================
-    TEST(sse_int8_arithmetic, vneg_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int8_t, 16> a, b, expected;
-        for(int i = 0; i < 16; i++)
-        {
-            a[i] = static_cast<int8_t>(distribution2(generator));
-            b[i] = static_cast<int8_t>(distribution1(generator));
-
-            expected[i] = (int8_t) (-a[i]);
-        }
-
-        VASSERT_EQ((-zint8(a)), zint8(expected));
-    }
-
-    TEST(sse_int8_arithmetic, vadd_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int8_t, 16> a, b, expected;
-        for(int i = 0; i < 16; i++)
-        {
-            a[i] = static_cast<int8_t>(distribution2(generator));
-            b[i] = static_cast<int8_t>(distribution1(generator));
-
-            expected[i] = (int8_t) (a[i] + b[i]);
-        }
-
-        VASSERT_EQ((zint8(a) + zint8(b)), zint8(expected));
-    }
-
-    TEST(sse_int8_arithmetic, vsub_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int8_t, 16> a, b, expected;
-        for(int i = 0; i < 16; i++)
-        {
-            a[i] = static_cast<int8_t>(distribution2(generator));
-            b[i] = static_cast<int8_t>(distribution1(generator));
-
-            expected[i] = (int8_t) (a[i] - b[i]);
-        }
-
-        VASSERT_EQ((zint8(a) - zint8(b)), zint8(expected));
-    }
-
-    TEST(sse_int8_arithmetic, vmul_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int8_t, 16> a, b, expected;
-        for(int i = 0; i < 16; i++)
-        {
-            a[i] = static_cast<int8_t>(distribution2(generator));
-            b[i] = static_cast<int8_t>(distribution1(generator));
-
-            expected[i] = (int8_t) (a[i] * b[i]);
-        }
-
-        VASSERT_EQ((zint8(a) * zint8(b)), zint8(expected));
-    }
-
-    TEST(sse_int8_arithmetic, vdiv_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int8_t, 16> a, b, expected;
-        for(int i = 0; i < 16; i++)
-        {
-            a[i] = static_cast<int8_t>(distribution2(generator));
-            b[i] = static_cast<int8_t>(distribution1(generator));
-
-            expected[i] = (int8_t) (1);
-        }
-
-        VASSERT_EQ((zint8(a) / zint8(a)), zint8(expected));
-    }
-
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(sse_int8_bitwise, vbor_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int8_t, 16> a, b, expected;
-        for(int i = 0; i < 16; i++)
-        {
-            a[i] = static_cast<int8_t>(distribution2(generator));
-            b[i] = static_cast<int8_t>(distribution1(generator));
-
-            expected[i] = (int8_t) ((a[i] | 64));
-        }
-
-        VASSERT_EQ((zint8(a) | zint8(64)), zint8(expected));
-    }
-
-    TEST(sse_int8_bitwise, vband_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int8_t, 16> a, b, expected;
-        for(int i = 0; i < 16; i++)
-        {
-            a[i] = static_cast<int8_t>(distribution2(generator));
-            b[i] = static_cast<int8_t>(distribution1(generator));
-
-            expected[i] = (int8_t) ((a[i] & 64));
-        }
-
-        VASSERT_EQ((zint8(a) & zint8(64)), zint8(expected));
-    }
-
-    TEST(sse_int8_bitwise, vbxor_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int8_t, 16> a, b, expected;
-        for(int i = 0; i < 16; i++)
-        {
-            a[i] = static_cast<int8_t>(distribution2(generator));
-            b[i] = static_cast<int8_t>(distribution1(generator));
-
-            expected[i] = (int8_t) ((a[i] ^ 64));
-        }
-
-        VASSERT_EQ((zint8(a) ^ zint8(64)), zint8(expected));
-    }
-
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(sse_int8_logical, vlneg_default)
+    TEST(sse_bint8_logical, vlneg_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -218,7 +54,7 @@ namespace zacc { namespace test {
         VASSERT_EQ(((!zint8(a)).as_bool()), zint8(expected));
     }
 
-    TEST(sse_int8_logical, vlor_default)
+    TEST(sse_bint8_logical, vlor_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -238,7 +74,7 @@ namespace zacc { namespace test {
         VASSERT_EQ(((zint8(0) || zint8(a)).as_bool()), zint8(expected));
     }
 
-    TEST(sse_int8_logical, vland_default)
+    TEST(sse_bint8_logical, vland_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -260,7 +96,7 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int8_comparison, veq_default)
+    TEST(sse_bint8_equatable, veq_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -280,7 +116,7 @@ namespace zacc { namespace test {
         VASSERT_EQ((zint8(0) == zint8(a)), zint8(expected));
     }
 
-    TEST(sse_int8_comparison, vneq_default)
+    TEST(sse_bint8_equatable, vneq_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -300,7 +136,9 @@ namespace zacc { namespace test {
         VASSERT_EQ((zint8(a) != zint8(a)), zint8(expected));
     }
 
-    TEST(sse_int8_comparison, vgt_default)
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(sse_zint8_arithmetic, vneg_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -314,13 +152,13 @@ namespace zacc { namespace test {
             a[i] = static_cast<int8_t>(distribution2(generator));
             b[i] = static_cast<int8_t>(distribution1(generator));
 
-            expected[i] = (int8_t) (0);
+            expected[i] = (int8_t) (-a[i]);
         }
 
-        VASSERT_EQ((zint8(0) > zint8(a)), zint8(expected));
+        VASSERT_EQ((-zint8(a)), zint8(expected));
     }
 
-    TEST(sse_int8_comparison, vlt_default)
+    TEST(sse_zint8_arithmetic, vadd_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -334,13 +172,157 @@ namespace zacc { namespace test {
             a[i] = static_cast<int8_t>(distribution2(generator));
             b[i] = static_cast<int8_t>(distribution1(generator));
 
-            expected[i] = (int8_t) (0);
+            expected[i] = (int8_t) (a[i] + b[i]);
         }
 
-        VASSERT_EQ((zint8(a) < zint8(0)), zint8(expected));
+        VASSERT_EQ((zint8(a) + zint8(b)), zint8(expected));
     }
 
-    TEST(sse_int8_comparison, vge_default)
+    TEST(sse_zint8_arithmetic, vsub_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int8_t, 16> a, b, expected;
+        for(int i = 0; i < 16; i++)
+        {
+            a[i] = static_cast<int8_t>(distribution2(generator));
+            b[i] = static_cast<int8_t>(distribution1(generator));
+
+            expected[i] = (int8_t) (a[i] - b[i]);
+        }
+
+        VASSERT_EQ((zint8(a) - zint8(b)), zint8(expected));
+    }
+
+    TEST(sse_zint8_arithmetic, vmul_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int8_t, 16> a, b, expected;
+        for(int i = 0; i < 16; i++)
+        {
+            a[i] = static_cast<int8_t>(distribution2(generator));
+            b[i] = static_cast<int8_t>(distribution1(generator));
+
+            expected[i] = (int8_t) (a[i] * b[i]);
+        }
+
+        VASSERT_EQ((zint8(a) * zint8(b)), zint8(expected));
+    }
+
+    TEST(sse_zint8_arithmetic, vdiv_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int8_t, 16> a, b, expected;
+        for(int i = 0; i < 16; i++)
+        {
+            a[i] = static_cast<int8_t>(distribution2(generator));
+            b[i] = static_cast<int8_t>(distribution1(generator));
+
+            expected[i] = (int8_t) (1);
+        }
+
+        VASSERT_EQ((zint8(a) / zint8(a)), zint8(expected));
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(sse_zint8_bitwise, vbor_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int8_t, 16> a, b, expected;
+        for(int i = 0; i < 16; i++)
+        {
+            a[i] = static_cast<int8_t>(distribution2(generator));
+            b[i] = static_cast<int8_t>(distribution1(generator));
+
+            expected[i] = (int8_t) ((a[i] | 64));
+        }
+
+        VASSERT_EQ((zint8(a) | zint8(64)), zint8(expected));
+    }
+
+    TEST(sse_zint8_bitwise, vband_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int8_t, 16> a, b, expected;
+        for(int i = 0; i < 16; i++)
+        {
+            a[i] = static_cast<int8_t>(distribution2(generator));
+            b[i] = static_cast<int8_t>(distribution1(generator));
+
+            expected[i] = (int8_t) ((a[i] & 64));
+        }
+
+        VASSERT_EQ((zint8(a) & zint8(64)), zint8(expected));
+    }
+
+    TEST(sse_zint8_bitwise, vbxor_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int8_t, 16> a, b, expected;
+        for(int i = 0; i < 16; i++)
+        {
+            a[i] = static_cast<int8_t>(distribution2(generator));
+            b[i] = static_cast<int8_t>(distribution1(generator));
+
+            expected[i] = (int8_t) ((a[i] ^ 64));
+        }
+
+        VASSERT_EQ((zint8(a) ^ zint8(64)), zint8(expected));
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(sse_zint8_logical, vlneg_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int8_t, 16> a, b, expected;
+        for(int i = 0; i < 16; i++)
+        {
+            a[i] = static_cast<int8_t>(distribution2(generator));
+            b[i] = static_cast<int8_t>(distribution1(generator));
+
+            expected[i] = (int8_t) (false);
+        }
+
+        VASSERT_EQ(((!zint8(a)).as_bool()), zint8(expected));
+    }
+
+    TEST(sse_zint8_logical, vlor_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -357,10 +339,10 @@ namespace zacc { namespace test {
             expected[i] = (int8_t) (true);
         }
 
-        VASSERT_EQ(((zint8(b) >= zint8(b)).as_bool()), zint8(expected));
+        VASSERT_EQ(((zint8(0) || zint8(a)).as_bool()), zint8(expected));
     }
 
-    TEST(sse_int8_comparison, vle_default)
+    TEST(sse_zint8_logical, vland_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -374,15 +356,57 @@ namespace zacc { namespace test {
             a[i] = static_cast<int8_t>(distribution2(generator));
             b[i] = static_cast<int8_t>(distribution1(generator));
 
-            expected[i] = (int8_t) (true);
+            expected[i] = (int8_t) (false);
         }
 
-        VASSERT_EQ(((zint8(b) <= zint8(b)).as_bool()), zint8(expected));
+        VASSERT_EQ(((zint8(0) && zint8(a)).as_bool()), zint8(expected));
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_int8_conditional, vsel_sse4)
+    TEST(sse_zint8_equatable, veq_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int8_t, 16> a, b, expected;
+        for(int i = 0; i < 16; i++)
+        {
+            a[i] = static_cast<int8_t>(distribution2(generator));
+            b[i] = static_cast<int8_t>(distribution1(generator));
+
+            expected[i] = (int8_t) (0);
+        }
+
+        VASSERT_EQ((zint8(0) == zint8(a)), zint8(expected));
+    }
+
+    TEST(sse_zint8_equatable, vneq_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int8_t, 16> a, b, expected;
+        for(int i = 0; i < 16; i++)
+        {
+            a[i] = static_cast<int8_t>(distribution2(generator));
+            b[i] = static_cast<int8_t>(distribution1(generator));
+
+            expected[i] = (int8_t) (0);
+        }
+
+        VASSERT_EQ((zint8(a) != zint8(a)), zint8(expected));
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(sse_zint8_conditional, vsel_sse4)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -402,7 +426,7 @@ namespace zacc { namespace test {
         VASSERT_EQ((zint8(2).when(zint8(1) == zint8(1)).otherwise(zint8(3))), zint8(expected));
     }
 
-    TEST(sse_int8_conditional, vsel_default)
+    TEST(sse_zint8_conditional, vsel_default)
     {
         REQUIRES(ZACC_ARCH);
 

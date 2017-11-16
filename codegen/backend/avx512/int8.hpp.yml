@@ -8,17 +8,26 @@ type:
   alignment: 64
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-     external:
+    external:
       - printable
       - iteratable
       - convertable
-     internal:
-       - io
-       - arithmetic
-       - bitwise
-       - logical
-       - comparison
-       - conditional
+    internal:
+      - io
+      - math
+      - numeric
+      - arithmetic
+      - bitwise
+      - bitwise_shift
+      - comparable
+      - logical
+      - equatable
+      - conditional
+
+    boolean:
+      - io
+      - logical
+      - equatable
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
@@ -87,9 +96,10 @@ modules:
     or:   _mm512_or_epi8
     vand:  _mm512_and_epi8
 #-----------------------------------------------------------------------------------------------------------------------
-  comparison:
+  equatable:
     veq:   _mm512_cmpeq_epi8
     vneq:  _mm512_cmpneq_epi8
+  comparable:
     vgt:   _mm512_cmpgt_epi8
     vlt:   _mm512_cmplt_epi8
     vge:   _mm512_cmpge_epi8

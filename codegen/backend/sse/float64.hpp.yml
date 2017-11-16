@@ -9,19 +9,25 @@ type:
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
     external:
-    - printable
-    - iteratable
-    - convertable
+      - printable
+      - iteratable
+      - convertable
     internal:
-    - io
-    - math
-    - numeric
-    - arithmetic
-    - bitwise
-    - logical
-    - comparison
-    - conditional
-    - numeric
+      - io
+      - math
+      - numeric
+      - arithmetic
+      - bitwise
+      - comparable
+      - logical
+      - equatable
+      - conditional
+
+      - numeric
+    boolean:
+      - io
+      - logical
+      - equatable
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
@@ -47,6 +53,16 @@ modules:
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_pd }
+
+  boolean_construction:
+    - args: __m128 value
+      init: _mm_castps_pd(value)
+
+    - args: __m128d value
+      init: value
+
+    - args: __m128i value
+      init: _mm_castsi128_pd(value)
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -181,9 +197,10 @@ modules:
       body: _mm_and_pd
       #returns: boolvec<composed_t>
 #-----------------------------------------------------------------------------------------------------------------------
-  comparison:
+  equatable:
     veq:   _mm_cmpeq_pd
     vneq:  _mm_cmpneq_pd
+  comparable:
     vgt:   _mm_cmpgt_pd
     vlt:   _mm_cmplt_pd
     vge:   _mm_cmpge_pd

@@ -34,7 +34,111 @@
 namespace zacc { namespace test {
 
 // =====================================================================================================================
-    TEST(sse_float64_arithmetic, vneg_default)
+    TEST(sse_bfloat64_logical, vlneg_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<double, 2> a, b, expected;
+        for(int i = 0; i < 2; i++)
+        {
+            a[i] = static_cast<double>(distribution2(generator));
+            b[i] = static_cast<double>(distribution1(generator));
+
+            expected[i] = (double) (false);
+        }
+
+        VASSERT_EQ(((!zfloat64(a)).as_bool()), zfloat64(expected));
+    }
+
+    TEST(sse_bfloat64_logical, vlor_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<double, 2> a, b, expected;
+        for(int i = 0; i < 2; i++)
+        {
+            a[i] = static_cast<double>(distribution2(generator));
+            b[i] = static_cast<double>(distribution1(generator));
+
+            expected[i] = (double) (true);
+        }
+
+        VASSERT_EQ(((zfloat64(0) || zfloat64(a)).as_bool()), zfloat64(expected));
+    }
+
+    TEST(sse_bfloat64_logical, vland_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<double, 2> a, b, expected;
+        for(int i = 0; i < 2; i++)
+        {
+            a[i] = static_cast<double>(distribution2(generator));
+            b[i] = static_cast<double>(distribution1(generator));
+
+            expected[i] = (double) (false);
+        }
+
+        VASSERT_EQ(((zfloat64(0) && zfloat64(a)).as_bool()), zfloat64(expected));
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(sse_bfloat64_equatable, veq_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<double, 2> a, b, expected;
+        for(int i = 0; i < 2; i++)
+        {
+            a[i] = static_cast<double>(distribution2(generator));
+            b[i] = static_cast<double>(distribution1(generator));
+
+            expected[i] = (double) (0);
+        }
+
+        VASSERT_EQ((zfloat64(0) == zfloat64(a)), zfloat64(expected));
+    }
+
+    TEST(sse_bfloat64_equatable, vneq_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<double, 2> a, b, expected;
+        for(int i = 0; i < 2; i++)
+        {
+            a[i] = static_cast<double>(distribution2(generator));
+            b[i] = static_cast<double>(distribution1(generator));
+
+            expected[i] = (double) (0);
+        }
+
+        VASSERT_EQ((zfloat64(a) != zfloat64(a)), zfloat64(expected));
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(sse_zfloat64_arithmetic, vneg_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -54,7 +158,7 @@ namespace zacc { namespace test {
         VASSERT_EQ((-zfloat64(a)), zfloat64(expected));
     }
 
-    TEST(sse_float64_arithmetic, vadd_default)
+    TEST(sse_zfloat64_arithmetic, vadd_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -74,7 +178,7 @@ namespace zacc { namespace test {
         VASSERT_EQ((zfloat64(a) + zfloat64(b)), zfloat64(expected));
     }
 
-    TEST(sse_float64_arithmetic, vsub_default)
+    TEST(sse_zfloat64_arithmetic, vsub_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -94,7 +198,7 @@ namespace zacc { namespace test {
         VASSERT_EQ((zfloat64(a) - zfloat64(b)), zfloat64(expected));
     }
 
-    TEST(sse_float64_arithmetic, vmul_default)
+    TEST(sse_zfloat64_arithmetic, vmul_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -114,7 +218,7 @@ namespace zacc { namespace test {
         VASSERT_EQ((zfloat64(a) * zfloat64(b)), zfloat64(expected));
     }
 
-    TEST(sse_float64_arithmetic, vdiv_default)
+    TEST(sse_zfloat64_arithmetic, vdiv_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -138,7 +242,7 @@ namespace zacc { namespace test {
 // =====================================================================================================================
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_float64_logical, vlneg_default)
+    TEST(sse_zfloat64_logical, vlneg_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -158,7 +262,7 @@ namespace zacc { namespace test {
         VASSERT_EQ(((!zfloat64(a)).as_bool()), zfloat64(expected));
     }
 
-    TEST(sse_float64_logical, vlor_default)
+    TEST(sse_zfloat64_logical, vlor_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -178,7 +282,7 @@ namespace zacc { namespace test {
         VASSERT_EQ(((zfloat64(0) || zfloat64(a)).as_bool()), zfloat64(expected));
     }
 
-    TEST(sse_float64_logical, vland_default)
+    TEST(sse_zfloat64_logical, vland_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -200,7 +304,7 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_float64_comparison, veq_default)
+    TEST(sse_zfloat64_equatable, veq_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -220,7 +324,7 @@ namespace zacc { namespace test {
         VASSERT_EQ((zfloat64(0) == zfloat64(a)), zfloat64(expected));
     }
 
-    TEST(sse_float64_comparison, vneq_default)
+    TEST(sse_zfloat64_equatable, vneq_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -240,89 +344,9 @@ namespace zacc { namespace test {
         VASSERT_EQ((zfloat64(a) != zfloat64(a)), zfloat64(expected));
     }
 
-    TEST(sse_float64_comparison, vgt_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<double, 2> a, b, expected;
-        for(int i = 0; i < 2; i++)
-        {
-            a[i] = static_cast<double>(distribution2(generator));
-            b[i] = static_cast<double>(distribution1(generator));
-
-            expected[i] = (double) (0);
-        }
-
-        VASSERT_EQ((zfloat64(0) > zfloat64(a)), zfloat64(expected));
-    }
-
-    TEST(sse_float64_comparison, vlt_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<double, 2> a, b, expected;
-        for(int i = 0; i < 2; i++)
-        {
-            a[i] = static_cast<double>(distribution2(generator));
-            b[i] = static_cast<double>(distribution1(generator));
-
-            expected[i] = (double) (0);
-        }
-
-        VASSERT_EQ((zfloat64(a) < zfloat64(0)), zfloat64(expected));
-    }
-
-    TEST(sse_float64_comparison, vge_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<double, 2> a, b, expected;
-        for(int i = 0; i < 2; i++)
-        {
-            a[i] = static_cast<double>(distribution2(generator));
-            b[i] = static_cast<double>(distribution1(generator));
-
-            expected[i] = (double) (true);
-        }
-
-        VASSERT_EQ(((zfloat64(b) >= zfloat64(b)).as_bool()), zfloat64(expected));
-    }
-
-    TEST(sse_float64_comparison, vle_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<double, 2> a, b, expected;
-        for(int i = 0; i < 2; i++)
-        {
-            a[i] = static_cast<double>(distribution2(generator));
-            b[i] = static_cast<double>(distribution1(generator));
-
-            expected[i] = (double) (true);
-        }
-
-        VASSERT_EQ(((zfloat64(b) <= zfloat64(b)).as_bool()), zfloat64(expected));
-    }
-
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(sse_float64_conditional, vsel_sse4)
+    TEST(sse_zfloat64_conditional, vsel_sse4)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -342,7 +366,7 @@ namespace zacc { namespace test {
         VASSERT_EQ((zfloat64(2).when(zfloat64(1) == zfloat64(1)).otherwise(zfloat64(3))), zfloat64(expected));
     }
 
-    TEST(sse_float64_conditional, vsel_default)
+    TEST(sse_zfloat64_conditional, vsel_default)
     {
         REQUIRES(ZACC_ARCH);
 

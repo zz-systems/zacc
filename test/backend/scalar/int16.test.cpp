@@ -34,213 +34,7 @@
 namespace zacc { namespace test {
 
 // =====================================================================================================================
-    TEST(scalar_int16_arithmetic, vneg_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int16_t, 1> a, b, expected;
-        for(int i = 0; i < 1; i++)
-        {
-            a[i] = static_cast<int16_t>(distribution2(generator));
-            b[i] = static_cast<int16_t>(distribution1(generator));
-
-            expected[i] = (int16_t) (-a[i]);
-        }
-
-        VASSERT_EQ((-zint16(a)), zint16(expected));
-    }
-
-    TEST(scalar_int16_arithmetic, vadd_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int16_t, 1> a, b, expected;
-        for(int i = 0; i < 1; i++)
-        {
-            a[i] = static_cast<int16_t>(distribution2(generator));
-            b[i] = static_cast<int16_t>(distribution1(generator));
-
-            expected[i] = (int16_t) (a[i] + b[i]);
-        }
-
-        VASSERT_EQ((zint16(a) + zint16(b)), zint16(expected));
-    }
-
-    TEST(scalar_int16_arithmetic, vsub_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int16_t, 1> a, b, expected;
-        for(int i = 0; i < 1; i++)
-        {
-            a[i] = static_cast<int16_t>(distribution2(generator));
-            b[i] = static_cast<int16_t>(distribution1(generator));
-
-            expected[i] = (int16_t) (a[i] - b[i]);
-        }
-
-        VASSERT_EQ((zint16(a) - zint16(b)), zint16(expected));
-    }
-
-    TEST(scalar_int16_arithmetic, vmul_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int16_t, 1> a, b, expected;
-        for(int i = 0; i < 1; i++)
-        {
-            a[i] = static_cast<int16_t>(distribution2(generator));
-            b[i] = static_cast<int16_t>(distribution1(generator));
-
-            expected[i] = (int16_t) (a[i] * b[i]);
-        }
-
-        VASSERT_EQ((zint16(a) * zint16(b)), zint16(expected));
-    }
-
-    TEST(scalar_int16_arithmetic, vdiv_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int16_t, 1> a, b, expected;
-        for(int i = 0; i < 1; i++)
-        {
-            a[i] = static_cast<int16_t>(distribution2(generator));
-            b[i] = static_cast<int16_t>(distribution1(generator));
-
-            expected[i] = (int16_t) (1);
-        }
-
-        VASSERT_EQ((zint16(a) / zint16(a)), zint16(expected));
-    }
-
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(scalar_int16_bitwise, vband_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int16_t, 1> a, b, expected;
-        for(int i = 0; i < 1; i++)
-        {
-            a[i] = static_cast<int16_t>(distribution2(generator));
-            b[i] = static_cast<int16_t>(distribution1(generator));
-
-            expected[i] = (int16_t) ((a[i] & 64));
-        }
-
-        VASSERT_EQ((zint16(a) & zint16(64)), zint16(expected));
-    }
-
-    TEST(scalar_int16_bitwise, vbor_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int16_t, 1> a, b, expected;
-        for(int i = 0; i < 1; i++)
-        {
-            a[i] = static_cast<int16_t>(distribution2(generator));
-            b[i] = static_cast<int16_t>(distribution1(generator));
-
-            expected[i] = (int16_t) ((a[i] | 64));
-        }
-
-        VASSERT_EQ((zint16(a) | zint16(64)), zint16(expected));
-    }
-
-    TEST(scalar_int16_bitwise, vbxor_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int16_t, 1> a, b, expected;
-        for(int i = 0; i < 1; i++)
-        {
-            a[i] = static_cast<int16_t>(distribution2(generator));
-            b[i] = static_cast<int16_t>(distribution1(generator));
-
-            expected[i] = (int16_t) ((a[i] ^ 64));
-        }
-
-        VASSERT_EQ((zint16(a) ^ zint16(64)), zint16(expected));
-    }
-
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(scalar_int16_bitwise_shift, vbslli_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int16_t, 1> a, b, expected;
-        for(int i = 0; i < 1; i++)
-        {
-            a[i] = static_cast<int16_t>(distribution2(generator));
-            b[i] = static_cast<int16_t>(distribution1(generator));
-
-            expected[i] = (int16_t) ((a[i]) << (4));
-        }
-
-        VASSERT_EQ((zint16(a) << (4)), zint16(expected));
-    }
-
-    TEST(scalar_int16_bitwise_shift, vbsrli_default)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        std::default_random_engine generator;
-        std::uniform_int_distribution<int> distribution1(1, 3);
-        std::uniform_int_distribution<int> distribution2(3, 60);
-
-        alignas(16) std::array<int16_t, 1> a, b, expected;
-        for(int i = 0; i < 1; i++)
-        {
-            a[i] = static_cast<int16_t>(distribution2(generator));
-            b[i] = static_cast<int16_t>(distribution1(generator));
-
-            expected[i] = (int16_t) ((a[i]) >> (3));
-        }
-
-        VASSERT_EQ((zint16(a) >> (3)), zint16(expected));
-    }
-
-// =====================================================================================================================
-// =====================================================================================================================
-    TEST(scalar_int16_logical, vlneg_default)
+    TEST(scalar_bint16_logical, vlneg_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -260,7 +54,7 @@ namespace zacc { namespace test {
         VASSERT_EQ(((!zint16(a)).as_bool()), zint16(expected));
     }
 
-    TEST(scalar_int16_logical, vlor_default)
+    TEST(scalar_bint16_logical, vlor_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -280,7 +74,7 @@ namespace zacc { namespace test {
         VASSERT_EQ(((zint16(0) || zint16(a)).as_bool()), zint16(expected));
     }
 
-    TEST(scalar_int16_logical, vland_default)
+    TEST(scalar_bint16_logical, vland_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -302,7 +96,7 @@ namespace zacc { namespace test {
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(scalar_int16_comparison, veq_default)
+    TEST(scalar_bint16_equatable, veq_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -322,7 +116,7 @@ namespace zacc { namespace test {
         VASSERT_EQ((zint16(0) == zint16(a)), zint16(expected));
     }
 
-    TEST(scalar_int16_comparison, vneq_default)
+    TEST(scalar_bint16_equatable, vneq_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -342,7 +136,9 @@ namespace zacc { namespace test {
         VASSERT_EQ((zint16(a) != zint16(a)), zint16(expected));
     }
 
-    TEST(scalar_int16_comparison, vgt_default)
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(scalar_zint16_arithmetic, vneg_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -356,13 +152,13 @@ namespace zacc { namespace test {
             a[i] = static_cast<int16_t>(distribution2(generator));
             b[i] = static_cast<int16_t>(distribution1(generator));
 
-            expected[i] = (int16_t) (0);
+            expected[i] = (int16_t) (-a[i]);
         }
 
-        VASSERT_EQ((zint16(0) > zint16(a)), zint16(expected));
+        VASSERT_EQ((-zint16(a)), zint16(expected));
     }
 
-    TEST(scalar_int16_comparison, vlt_default)
+    TEST(scalar_zint16_arithmetic, vadd_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -376,13 +172,199 @@ namespace zacc { namespace test {
             a[i] = static_cast<int16_t>(distribution2(generator));
             b[i] = static_cast<int16_t>(distribution1(generator));
 
-            expected[i] = (int16_t) (0);
+            expected[i] = (int16_t) (a[i] + b[i]);
         }
 
-        VASSERT_EQ((zint16(a) < zint16(0)), zint16(expected));
+        VASSERT_EQ((zint16(a) + zint16(b)), zint16(expected));
     }
 
-    TEST(scalar_int16_comparison, vge_default)
+    TEST(scalar_zint16_arithmetic, vsub_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int16_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) (a[i] - b[i]);
+        }
+
+        VASSERT_EQ((zint16(a) - zint16(b)), zint16(expected));
+    }
+
+    TEST(scalar_zint16_arithmetic, vmul_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int16_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) (a[i] * b[i]);
+        }
+
+        VASSERT_EQ((zint16(a) * zint16(b)), zint16(expected));
+    }
+
+    TEST(scalar_zint16_arithmetic, vdiv_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int16_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) (1);
+        }
+
+        VASSERT_EQ((zint16(a) / zint16(a)), zint16(expected));
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(scalar_zint16_bitwise, vband_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int16_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) ((a[i] & 64));
+        }
+
+        VASSERT_EQ((zint16(a) & zint16(64)), zint16(expected));
+    }
+
+    TEST(scalar_zint16_bitwise, vbor_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int16_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) ((a[i] | 64));
+        }
+
+        VASSERT_EQ((zint16(a) | zint16(64)), zint16(expected));
+    }
+
+    TEST(scalar_zint16_bitwise, vbxor_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int16_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) ((a[i] ^ 64));
+        }
+
+        VASSERT_EQ((zint16(a) ^ zint16(64)), zint16(expected));
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(scalar_zint16_bitwise_shift, vbslli_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int16_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) ((a[i]) << (4));
+        }
+
+        VASSERT_EQ((zint16(a) << (4)), zint16(expected));
+    }
+
+    TEST(scalar_zint16_bitwise_shift, vbsrli_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int16_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) ((a[i]) >> (3));
+        }
+
+        VASSERT_EQ((zint16(a) >> (3)), zint16(expected));
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(scalar_zint16_logical, vlneg_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int16_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) (false);
+        }
+
+        VASSERT_EQ(((!zint16(a)).as_bool()), zint16(expected));
+    }
+
+    TEST(scalar_zint16_logical, vlor_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -399,10 +381,10 @@ namespace zacc { namespace test {
             expected[i] = (int16_t) (true);
         }
 
-        VASSERT_EQ(((zint16(b) >= zint16(b)).as_bool()), zint16(expected));
+        VASSERT_EQ(((zint16(0) || zint16(a)).as_bool()), zint16(expected));
     }
 
-    TEST(scalar_int16_comparison, vle_default)
+    TEST(scalar_zint16_logical, vland_default)
     {
         REQUIRES(ZACC_ARCH);
 
@@ -416,15 +398,57 @@ namespace zacc { namespace test {
             a[i] = static_cast<int16_t>(distribution2(generator));
             b[i] = static_cast<int16_t>(distribution1(generator));
 
-            expected[i] = (int16_t) (true);
+            expected[i] = (int16_t) (false);
         }
 
-        VASSERT_EQ(((zint16(b) <= zint16(b)).as_bool()), zint16(expected));
+        VASSERT_EQ(((zint16(0) && zint16(a)).as_bool()), zint16(expected));
     }
 
 // =====================================================================================================================
 // =====================================================================================================================
-    TEST(scalar_int16_conditional, vsel_default)
+    TEST(scalar_zint16_equatable, veq_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int16_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) (0);
+        }
+
+        VASSERT_EQ((zint16(0) == zint16(a)), zint16(expected));
+    }
+
+    TEST(scalar_zint16_equatable, vneq_default)
+    {
+        REQUIRES(ZACC_ARCH);
+
+        std::default_random_engine generator;
+        std::uniform_int_distribution<int> distribution1(1, 3);
+        std::uniform_int_distribution<int> distribution2(3, 60);
+
+        alignas(16) std::array<int16_t, 1> a, b, expected;
+        for(int i = 0; i < 1; i++)
+        {
+            a[i] = static_cast<int16_t>(distribution2(generator));
+            b[i] = static_cast<int16_t>(distribution1(generator));
+
+            expected[i] = (int16_t) (0);
+        }
+
+        VASSERT_EQ((zint16(a) != zint16(a)), zint16(expected));
+    }
+
+// =====================================================================================================================
+// =====================================================================================================================
+    TEST(scalar_zint16_conditional, vsel_default)
     {
         REQUIRES(ZACC_ARCH);
 

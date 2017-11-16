@@ -49,7 +49,7 @@
 #include "traits/bitwise.hpp"
 #include "traits/bitwise_shift.hpp"
 #include "traits/logical.hpp"
-#include "traits/comparison.hpp"
+#include "traits/comparable.hpp"
 #include "traits/conditional.hpp"
 
 /**
@@ -922,9 +922,9 @@ namespace zacc { namespace backend { namespace avx {
 
 
         template<typename base_t>
-        //using impl = traits::comparison<__impl<base_t>, zint16<base_t::capability>>;
+        //using impl = traits::comparable<__impl<base_t>, zint16<base_t::capability>>;
 
-        using impl = traits::comparison<__impl<base_t>, zint16<base_t::capability>>;
+        using impl = traits::comparable<__impl<base_t>, zint16<base_t::capability>>;
 
     };
 

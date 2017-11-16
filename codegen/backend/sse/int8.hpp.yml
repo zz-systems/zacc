@@ -8,20 +8,26 @@ type:
   alignment: 16
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-     external:
+    external:
       - printable
       - iteratable
       - convertable
-     internal:
-       - io
-       - math
-       - numeric
-       - arithmetic
-       - bitwise
-       #- bitwise_shift
-       - logical
-       - comparison
-       - conditional
+    internal:
+      - io
+      - math
+      - numeric
+      - arithmetic
+      - bitwise
+      #- bitwise_shift
+      - comparable
+      - logical
+      - equatable
+      - conditional
+
+    boolean:
+      - io
+      - logical
+      - equatable
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
@@ -36,6 +42,16 @@ modules:
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi8 }
+
+  boolean_construction:
+    - args: __m128 value
+      init: _mm_castps_si128(value)
+
+    - args: __m128d value
+      init: _mm_castpd_si128(value)
+
+    - args: __m128i value
+      init: value
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -150,9 +166,10 @@ modules:
       <<: *bitwise_and
       #returns: boolvec<composed_t>
 #-----------------------------------------------------------------------------------------------------------------------
-  comparison:
+  equatable:
     veq:   _mm_cmpeq_epi8
     vneq:  "!(one == other)"
+  comparable:
     vgt:   _mm_cmpgt_epi8
     vlt:   _mm_cmplt_epi8
     vge:   "!(one < other)"

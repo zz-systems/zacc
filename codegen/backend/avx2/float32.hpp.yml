@@ -8,19 +8,25 @@ type:
   alignment: 32
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-     external:
+    external:
       - printable
       - iteratable
       - convertable
-     internal:
-       - io
-       - math
-       - numeric
-       - arithmetic
-       - bitwise
-       - logical
-       - comparison
-       - conditional
+    internal:
+      - io
+      - math
+      - numeric
+      - arithmetic
+      - bitwise
+      - comparable
+      - logical
+      - equatable
+      - conditional
+
+    boolean:
+      - io
+      - logical
+      - equatable
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
@@ -41,6 +47,16 @@ modules:
 
     - args: { from: *vec_size, to: 0, type: *scalar_t }
       init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_ps }
+
+  boolean_construction:
+    - args: __m256 value
+      init: value
+
+    - args: __m256d value
+      init: _mm256_castpd_ps(value)
+
+    - args: __m256i value
+      init: _mm256_castsi256_ps(value)
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -139,9 +155,10 @@ modules:
     vlor:   _mm256_or_ps
     vland:  _mm256_and_ps
 #-----------------------------------------------------------------------------------------------------------------------
-  comparison:
+  equatable:
     veq:   _mm256_cmp_ps(one, other, _CMP_EQ_OQ)
     vneq:  _mm256_cmp_ps(one, other, _CMP_NEQ_OQ)
+  comparable:
     vgt:   _mm256_cmp_ps(one, other, _CMP_GT_OQ)
     vlt:   _mm256_cmp_ps(one, other, _CMP_LT_OQ)
     vge:   _mm256_cmp_ps(one, other, _CMP_GE_OQ)

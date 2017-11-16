@@ -42,14 +42,19 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
+#include "traits/construction.hpp"
 #include "traits/io.hpp"
-#include "traits/numeric.hpp"
+#include "traits/logical.hpp"
+#include "traits/equatable.hpp"
+#include "traits/io.hpp"
 #include "traits/math.hpp"
+#include "traits/numeric.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/bitwise_shift.hpp"
+#include "traits/comparable.hpp"
 #include "traits/logical.hpp"
-#include "traits/comparison.hpp"
+#include "traits/equatable.hpp"
 #include "traits/conditional.hpp"
 
 /**
@@ -78,7 +83,7 @@ namespace zacc { namespace backend { namespace scalar {
      * @remark scalar
      */
     template<typename composed_t>
-    struct int16_construction
+    struct zint16_construction
     {
 
         /**
@@ -89,6 +94,8 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -150,8 +157,113 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int16
          * @remark scalar
          */
+
         template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, zint16<base_t::features>>;
+        using zimpl = traits::construction<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::construction<__impl<base_t>, bint16<base_t::features>>;
+
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name construction operations
+     */
+    ///@{
+
+    /**
+     * @brief construction
+     * @relates int16
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct bint16_construction
+    {
+
+        /**
+         * @brief construction basic interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief construction default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            constexpr __impl() : base_t() {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "bint16(int16_t[1])", "default", "");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            constexpr __impl(float value) : base_t(value != 0) {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "bint16(int16_t[1])", "default", "");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            constexpr __impl(double value) : base_t(value != 0) {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "bint16(int16_t[1])", "default", "");
+
+            }
+
+
+            /**
+             * @brief construction default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            constexpr __impl(int value) : base_t(value != 0) {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "bint16(int16_t[1])", "default", "");
+
+            }
+
+        };
+
+        /**
+         * @brief construction public interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+
+        template<typename base_t>
+        using zimpl = traits::construction<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::construction<__impl<base_t>, bint16<base_t::features>>;
+
 
     };
 
@@ -170,7 +282,7 @@ namespace zacc { namespace backend { namespace scalar {
      * @remark scalar
      */
     template<typename composed_t>
-    struct int16_io
+    struct bint16_io
     {
 
         /**
@@ -181,6 +293,255 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief io default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "bint16(int16_t[1])", "default", "vstore");
+
+                result[0] = input.value();
+            }
+
+
+            /**
+             * @brief io default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "bint16(int16_t[1])", "default", "vstream");
+
+                result[0] = input.value();
+            }
+
+        };
+
+        /**
+         * @brief io public interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+
+        template<typename base_t>
+        using zimpl = traits::io<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::io<__impl<base_t>, bint16<base_t::features>>;
+
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name logical operations
+     */
+    ///@{
+
+    /**
+     * @brief logical
+     * @relates int16
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct bint16_logical
+    {
+
+        /**
+         * @brief logical basic interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief logical default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            friend bint16<base_t::features> vlneg(composed_t one)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "bint16(int16_t[1])", "default", "vlneg");
+
+                return (!one.value());
+            }
+
+
+            /**
+             * @brief logical default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            friend bint16<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "bint16(int16_t[1])", "default", "vlor");
+
+                return (one.value() || other.value());
+            }
+
+
+            /**
+             * @brief logical default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            friend bint16<base_t::features> vland(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "bint16(int16_t[1])", "default", "vland");
+
+                return (one.value() && other.value());
+            }
+
+        };
+
+        /**
+         * @brief logical public interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+
+        template<typename base_t>
+        using zimpl = traits::logical<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::logical<__impl<base_t>, bint16<base_t::features>>;
+
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name equatable operations
+     */
+    ///@{
+
+    /**
+     * @brief equatable
+     * @relates int16
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct bint16_equatable
+    {
+
+        /**
+         * @brief equatable basic interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief equatable default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            friend bint16<base_t::features> veq(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "bint16(int16_t[1])", "default", "veq");
+
+                return (one.value() == other.value());
+            }
+
+
+            /**
+             * @brief equatable default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            friend bint16<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "bint16(int16_t[1])", "default", "vneq");
+
+                return (one.value() != other.value());
+            }
+
+        };
+
+        /**
+         * @brief equatable public interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+
+        template<typename base_t>
+        using zimpl = traits::equatable<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::equatable<__impl<base_t>, bint16<base_t::features>>;
+
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name io operations
+     */
+    ///@{
+
+    /**
+     * @brief io
+     * @relates int16
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct zint16_io
+    {
+
+        /**
+         * @brief io basic interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -221,53 +582,13 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int16
          * @remark scalar
          */
+
         template<typename base_t>
-        using impl = traits::io<__impl<base_t>, zint16<base_t::features>>;
+        using zimpl = traits::io<__impl<base_t>, zint16<base_t::features>>;
 
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name numeric operations
-     */
-    ///@{
-
-    /**
-     * @brief numeric
-     * @relates int16
-     * @remark scalar
-     */
-    template<typename composed_t>
-    struct int16_numeric
-    {
-
-        /**
-         * @brief numeric basic interface implementation
-         * @relates int16
-         * @remark scalar
-         */
         template<typename base_t>
-        struct __impl : base_t
-        {
-            using vector_t      = typename zval_traits<base_t>::vector_t;
-            using element_t     = typename zval_traits<base_t>::element_t;
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+        using bimpl = traits::io<__impl<base_t>, bint16<base_t::features>>;
 
-            FORWARD(__impl);
-
-        };
-
-        /**
-         * @brief numeric public interface implementation
-         * @relates int16
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::numeric<__impl<base_t>, zint16<base_t::features>>;
 
     };
 
@@ -286,7 +607,7 @@ namespace zacc { namespace backend { namespace scalar {
      * @remark scalar
      */
     template<typename composed_t>
-    struct int16_math
+    struct zint16_math
     {
 
         /**
@@ -297,6 +618,8 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -363,8 +686,65 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int16
          * @remark scalar
          */
+
         template<typename base_t>
-        using impl = traits::math<__impl<base_t>, zint16<base_t::features>>;
+        using zimpl = traits::math<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::math<__impl<base_t>, bint16<base_t::features>>;
+
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name numeric operations
+     */
+    ///@{
+
+    /**
+     * @brief numeric
+     * @relates int16
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct zint16_numeric
+    {
+
+        /**
+         * @brief numeric basic interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+        };
+
+        /**
+         * @brief numeric public interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+
+        template<typename base_t>
+        using zimpl = traits::numeric<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::numeric<__impl<base_t>, bint16<base_t::features>>;
+
 
     };
 
@@ -383,7 +763,7 @@ namespace zacc { namespace backend { namespace scalar {
      * @remark scalar
      */
     template<typename composed_t>
-    struct int16_arithmetic
+    struct zint16_arithmetic
     {
 
         /**
@@ -394,6 +774,8 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -486,8 +868,13 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int16
          * @remark scalar
          */
+
         template<typename base_t>
-        using impl = traits::arithmetic<__impl<base_t>, zint16<base_t::features>>;
+        using zimpl = traits::arithmetic<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::arithmetic<__impl<base_t>, bint16<base_t::features>>;
+
 
     };
 
@@ -506,7 +893,7 @@ namespace zacc { namespace backend { namespace scalar {
      * @remark scalar
      */
     template<typename composed_t>
-    struct int16_bitwise
+    struct zint16_bitwise
     {
 
         /**
@@ -517,6 +904,8 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -596,8 +985,13 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int16
          * @remark scalar
          */
+
         template<typename base_t>
-        using impl = traits::bitwise<__impl<base_t>, zint16<base_t::features>>;
+        using zimpl = traits::bitwise<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::bitwise<__impl<base_t>, bint16<base_t::features>>;
+
 
     };
 
@@ -616,7 +1010,7 @@ namespace zacc { namespace backend { namespace scalar {
      * @remark scalar
      */
     template<typename composed_t>
-    struct int16_bitwise_shift
+    struct zint16_bitwise_shift
     {
 
         /**
@@ -627,6 +1021,8 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -693,8 +1089,117 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int16
          * @remark scalar
          */
+
         template<typename base_t>
-        using impl = traits::bitwise_shift<__impl<base_t>, zint16<base_t::features>>;
+        using zimpl = traits::bitwise_shift<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::bitwise_shift<__impl<base_t>, bint16<base_t::features>>;
+
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name comparable operations
+     */
+    ///@{
+
+    /**
+     * @brief comparable
+     * @relates int16
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct zint16_comparable
+    {
+
+        /**
+         * @brief comparable basic interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+
+            FORWARD(__impl);
+
+
+            /**
+             * @brief comparable default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            friend bint16<base_t::features> vgt(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vgt");
+
+                return (one.value() > other.value());
+            }
+
+
+            /**
+             * @brief comparable default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            friend bint16<base_t::features> vlt(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vlt");
+
+                return (one.value() < other.value());
+            }
+
+
+            /**
+             * @brief comparable default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            friend bint16<base_t::features> vge(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vge");
+
+                return (one.value() >= other.value());
+            }
+
+
+            /**
+             * @brief comparable default branch
+             * @relates int16
+             * @remark scalar - default
+             */
+            friend bint16<base_t::features> vle(composed_t one, composed_t other)  noexcept {
+
+                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vle");
+
+                return (one.value() <= other.value());
+            }
+
+        };
+
+        /**
+         * @brief comparable public interface implementation
+         * @relates int16
+         * @remark scalar
+         */
+
+        template<typename base_t>
+        using zimpl = traits::comparable<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::comparable<__impl<base_t>, bint16<base_t::features>>;
+
 
     };
 
@@ -713,7 +1218,7 @@ namespace zacc { namespace backend { namespace scalar {
      * @remark scalar
      */
     template<typename composed_t>
-    struct int16_logical
+    struct zint16_logical
     {
 
         /**
@@ -724,6 +1229,8 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -737,7 +1244,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend zint16<base_t::features> vlneg(composed_t one)  noexcept {
+            friend bint16<base_t::features> vlneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vlneg");
 
@@ -750,7 +1257,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend zint16<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vlor");
 
@@ -763,7 +1270,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int16
              * @remark scalar - default
              */
-            friend zint16<base_t::features> vland(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::features> vland(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vland");
 
@@ -777,8 +1284,13 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int16
          * @remark scalar
          */
+
         template<typename base_t>
-        using impl = traits::logical<__impl<base_t>, zint16<base_t::features>>;
+        using zimpl = traits::logical<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::logical<__impl<base_t>, bint16<base_t::features>>;
+
 
     };
 
@@ -787,27 +1299,29 @@ namespace zacc { namespace backend { namespace scalar {
 
     // =================================================================================================================
     /**
-     * @name comparison operations
+     * @name equatable operations
      */
     ///@{
 
     /**
-     * @brief comparison
+     * @brief equatable
      * @relates int16
      * @remark scalar
      */
     template<typename composed_t>
-    struct int16_comparison
+    struct zint16_equatable
     {
 
         /**
-         * @brief comparison basic interface implementation
+         * @brief equatable basic interface implementation
          * @relates int16
          * @remark scalar
          */
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -817,11 +1331,11 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief comparison default branch
+             * @brief equatable default branch
              * @relates int16
              * @remark scalar - default
              */
-            friend zint16<base_t::features> veq(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::features> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "veq");
 
@@ -830,78 +1344,31 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief comparison default branch
+             * @brief equatable default branch
              * @relates int16
              * @remark scalar - default
              */
-            friend zint16<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
+            friend bint16<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vneq");
 
                 return (one.value() != other.value());
             }
 
-
-            /**
-             * @brief comparison default branch
-             * @relates int16
-             * @remark scalar - default
-             */
-            friend zint16<base_t::features> vgt(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vgt");
-
-                return (one.value() > other.value());
-            }
-
-
-            /**
-             * @brief comparison default branch
-             * @relates int16
-             * @remark scalar - default
-             */
-            friend zint16<base_t::features> vlt(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vlt");
-
-                return (one.value() < other.value());
-            }
-
-
-            /**
-             * @brief comparison default branch
-             * @relates int16
-             * @remark scalar - default
-             */
-            friend zint16<base_t::features> vge(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vge");
-
-                return (one.value() >= other.value());
-            }
-
-
-            /**
-             * @brief comparison default branch
-             * @relates int16
-             * @remark scalar - default
-             */
-            friend zint16<base_t::features> vle(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("scalar.int16.impl", __LINE__, "zint16(int16_t[1])", "default", "vle");
-
-                return (one.value() <= other.value());
-            }
-
         };
 
         /**
-         * @brief comparison public interface implementation
+         * @brief equatable public interface implementation
          * @relates int16
          * @remark scalar
          */
+
         template<typename base_t>
-        using impl = traits::comparison<__impl<base_t>, zint16<base_t::features>>;
+        using zimpl = traits::equatable<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::equatable<__impl<base_t>, bint16<base_t::features>>;
+
 
     };
 
@@ -920,7 +1387,7 @@ namespace zacc { namespace backend { namespace scalar {
      * @remark scalar
      */
     template<typename composed_t>
-    struct int16_conditional
+    struct zint16_conditional
     {
 
         /**
@@ -931,6 +1398,8 @@ namespace zacc { namespace backend { namespace scalar {
         template<typename base_t>
         struct __impl : base_t
         {
+            using zval_t        = zint16<base_t::features>;
+            using bval_t        = bint16<base_t::features>;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
@@ -958,8 +1427,13 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int16
          * @remark scalar
          */
+
         template<typename base_t>
-        using impl = traits::conditional<__impl<base_t>, zint16<base_t::features>>;
+        using zimpl = traits::conditional<__impl<base_t>, zint16<base_t::features>>;
+
+        template<typename base_t>
+        using bimpl = traits::conditional<__impl<base_t>, bint16<base_t::features>>;
+
 
     };
 
@@ -988,6 +1462,7 @@ namespace zacc { namespace backend { namespace scalar {
         struct __zval_int16
         {
             using zval_t = zval<int16_t, bool, int16_t, zval_tag, 1, 16, features>;
+            using bval_t = bval<int16_t, bool, 1, 16, features>;
 
             struct impl : public zval_t
             {
@@ -1010,16 +1485,17 @@ namespace zacc { namespace backend { namespace scalar {
                 printable::impl,
                 iteratable::impl,
                 convertable::impl,
-                int16_io<impl>::template impl,
-                int16_math<impl>::template impl,
-                int16_numeric<impl>::template impl,
-                int16_arithmetic<impl>::template impl,
-                int16_bitwise<impl>::template impl,
-                int16_bitwise_shift<impl>::template impl,
-                int16_logical<impl>::template impl,
-                int16_comparison<impl>::template impl,
-                int16_conditional<impl>::template impl,
-                int16_construction<impl>::template impl,
+                zint16_io<impl>::template zimpl,
+                zint16_math<impl>::template zimpl,
+                zint16_numeric<impl>::template zimpl,
+                zint16_arithmetic<impl>::template zimpl,
+                zint16_bitwise<impl>::template zimpl,
+                zint16_bitwise_shift<impl>::template zimpl,
+                zint16_comparable<impl>::template zimpl,
+                zint16_logical<impl>::template zimpl,
+                zint16_equatable<impl>::template zimpl,
+                zint16_conditional<impl>::template zimpl,
+                zint16_construction<impl>::template zimpl,
 
                 composable<zval_t>::template type
             >;
@@ -1030,13 +1506,49 @@ namespace zacc { namespace backend { namespace scalar {
             };
         };
 
+        /**
+         * @brief bval parametrization using
+         * - 'int16_t' as underlying vector type
+         * - 'int16_t' as scalar type
+         * - '1' as vector size
+         * - '16' as alignment
+         * @relates int16
+         * @remark scalar
+         */
         template<uint64_t features>
-        struct __bint16
+        struct __bval_int16
         {
-            using bval_t = bval<typename __zint16<features>::impl, bool>;
+            using zval_t = zval<int16_t, bool, int16_t, zval_tag, 1, 16, features>;
+            using bval_t = bval<int16_t, bool, 1, 16, features>;
+
             struct impl : public bval_t
             {
                 FORWARD2(impl, bval_t);
+            };
+        };
+
+        template<uint64_t features>
+        struct __bint16
+        {
+            struct impl;
+
+            using bval_t = typename __bval_int16<features>::impl;
+            using composition_t = compose
+            <
+                printable::impl,
+                iteratable::impl,
+                convertable::impl,
+                bint16_io<impl>::template bimpl,
+                bint16_logical<impl>::template bimpl,
+                bint16_equatable<impl>::template bimpl,
+                bint16_construction<impl>::template bimpl,
+
+                composable<bval_t>::template type
+            >;
+
+            struct impl : public composition_t
+            {
+                FORWARD2(impl, composition_t);
             };
         };
     //}

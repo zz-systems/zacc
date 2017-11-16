@@ -8,19 +8,25 @@ type:
   alignment: 16
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-     external:
+    external:
       - printable
       - iteratable
       - convertable
-     internal:
-       - io
-       - math
-       - numeric
-       - arithmetic
-       - bitwise
-       - logical
-       - comparison
-       - conditional
+    internal:
+      - io
+      - math
+      - numeric
+      - arithmetic
+      - bitwise
+      - comparable
+      - logical
+      - equatable
+      - conditional
+
+    boolean:
+      - io
+      - logical
+      - equatable
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
   construction:
@@ -34,6 +40,15 @@ modules:
     - args: "std::array<typename base_t::element_t, base_t::size()> value"
       init: "value[0]"
 
+  boolean_construction:
+    - args: float value
+      init: value != 0
+
+    - args: double value
+      init: value != 0
+
+    - args: int value
+      init: value != 0
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -138,9 +153,10 @@ modules:
     vlor:   (one.value() || other.value());
     vland:  (one.value() && other.value());
 #-----------------------------------------------------------------------------------------------------------------------
-  comparison:
+  equatable:
     veq:   (one.value() == other.value());
     vneq:  (one.value() != other.value());
+  comparable:
     vgt:   (one.value() > other.value());
     vlt:   (one.value() < other.value());
     vge:   (one.value() >= other.value());
