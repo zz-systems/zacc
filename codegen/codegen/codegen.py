@@ -3,15 +3,12 @@ import copy
 
 
 from itertools import chain
-#from pipe import *
 from multipledispatch import dispatch
 
 class Struct:
     def __init__(self, entries):
         self.__dict__.update(entries)
 
-class IllegalArgumentError(ValueError):
-    pass
 
 class Util:
     bval_prefix = "boolean_"
