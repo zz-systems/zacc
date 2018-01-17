@@ -38,9 +38,9 @@ namespace zacc { namespace math {
          * @return [-1; 1]
          */
         template<typename vreal_t>
-        std::enable_if_t<is_floating_point<vreal_t>::value && !zval_traits<vreal_t>::dispatcher::has_integer_types, vreal_t> vsin(vreal_t val)
+        std::enable_if_t<is_floating_point<vreal_t>::value && !has_integer_types_v<vreal_t>, vreal_t> vsin(vreal_t val)
         {
-            return zacc::transform<typename zval_traits<vreal_t>::extracted_t>(val, [](auto i) { std::sin(i); });
+            return zacc::transform(val, [](auto i) { return std::sin(i); });
         }
 
         /**
@@ -50,9 +50,9 @@ namespace zacc { namespace math {
          * @return [-1; 1]
          */
         template<typename vreal_t>
-        std::enable_if_t<is_floating_point<vreal_t>::value && !zval_traits<vreal_t>::dispatcher::has_integer_types, vreal_t> vcos(vreal_t val)
+        std::enable_if_t<is_floating_point<vreal_t>::value && !has_integer_types_v<vreal_t>, vreal_t> vcos(vreal_t val)
         {
-            return zacc::transform(val, [](auto i) { std::cos(i); });
+            return zacc::transform(val, [](auto i) { return std::cos(i); });
         }
 
         /**
@@ -62,9 +62,9 @@ namespace zacc { namespace math {
          * @return [-1; 1]
          */
         template <typename vreal_t>
-        std::enable_if_t<is_floating_point<vreal_t>::value && !zval_traits<vreal_t>::dispatcher::has_integer_types, vreal_t> vtan(vreal_t val)
+        std::enable_if_t<is_floating_point<vreal_t>::value && !has_integer_types_v<vreal_t>, vreal_t> vtan(vreal_t val)
         {
-            return zacc::transform(val, [](auto i) { std::tan(i); });
+            return zacc::transform(val, [](auto i) { return std::tan(i); });
         }
 
         /**
@@ -74,8 +74,8 @@ namespace zacc { namespace math {
          * @return [-1; 1]
          */
         template<typename vreal_t>
-        std::enable_if_t<is_floating_point<vreal_t>::value && !zval_traits<vreal_t>::dispatcher::has_integer_types, vreal_t> vatan2(vreal_t y, vreal_t x)
+        std::enable_if_t<is_floating_point<vreal_t>::value && !has_integer_types_v<vreal_t>, vreal_t> vatan2(vreal_t y, vreal_t x)
         {
-            return zacc::transform(x, y, [](auto i, auto j) { std::atan2(i, j); });
+            return zacc::transform(x, y, [](auto i, auto j) { return std::atan2(i, j); });
         }
     }}

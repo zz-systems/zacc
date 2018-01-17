@@ -42,22 +42,18 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/construction.hpp"
-#include "traits/io.hpp"
-#include "traits/logical.hpp"
+#include "traits/conditional.hpp"
 #include "traits/equatable.hpp"
 #include "traits/io.hpp"
 #include "traits/math.hpp"
-#include "traits/numeric.hpp"
 #include "traits/arithmetic.hpp"
+#include "traits/logical.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/comparable.hpp"
-#include "traits/logical.hpp"
-#include "traits/equatable.hpp"
-#include "traits/conditional.hpp"
+#include "traits/numeric.hpp"
 
 /**
- * @brief float64 implementation for the sse branch
+ * @brief float64 implementation for the sse target
  * provides unified access to 2 'double' values
  */
 
@@ -95,93 +91,94 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zfloat64<base_t::features>;
             using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
+            //FORWARD(__impl);
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl() : base_t() {
+            constexpr __impl(  ) : base_t()  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS()");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(__m128 value) : base_t(_mm_cvtps_pd(value)) {
+            constexpr __impl(__m128 value) : base_t(_mm_cvtps_pd(value))  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(__m128 value)");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(__m128d value) : base_t(value) {
+            constexpr __impl(__m128d value) : base_t(value)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(__m128d value)");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(__m128i value) : base_t(_mm_cvtepi32_pd(_mm_shuffle_epi32(value, _MM_SHUFFLE(0,2,0,0)))) {
+            constexpr __impl(__m128i value) : base_t(_mm_cvtepi32_pd(_mm_shuffle_epi32(value, _MM_SHUFFLE(0,2,0,0))))  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(__m128i value)");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(double value) : base_t(_mm_set1_pd(value)) {
+            constexpr __impl(double value) : base_t(_mm_set1_pd(value))  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(double value)");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> value) : base_t(_mm_load_pd(value.data())) {
+            constexpr __impl(std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> value) : base_t(_mm_load_pd(value.data()))  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(std::array<typename zval_traits<..)");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(double arg1, double arg0) : base_t(_mm_set_pd(arg0, arg1)) {
+            constexpr __impl(double _1, double _0) : base_t(_mm_set_pd(_0, _1))  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "CONS(double arg1, double arg0)");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "", "CONS()");
 
             }
 
@@ -194,11 +191,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::construction<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::construction<__impl<base_t>, bfloat64<base_t::features>>;
-
+        using impl = traits::construction<__impl<base_t>, zfloat64<base_t::features>>;
 
     };
 
@@ -230,58 +223,70 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zfloat64<base_t::features>;
             using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
-            FORWARD(__impl);
+            //FORWARD(__impl);
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl() : base_t() {
+            constexpr __impl(  ) : base_t()  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "bfloat64(double[2])", "default", "");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(__m128 value) : base_t(_mm_castps_pd(value)) {
+            constexpr __impl(__m128 value) : base_t(_mm_castps_pd(value))  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "bfloat64(double[2])", "default", "");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(__m128d value) : base_t(value) {
+            constexpr __impl(__m128d value) : base_t(value)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "bfloat64(double[2])", "default", "");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(__m128i value) : base_t(_mm_castsi128_pd(value)) {
+            constexpr __impl(__m128i value) : base_t(_mm_castsi128_pd(value))  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "bfloat64(double[2])", "default", "");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "", "CONS()");
+
+            }
+
+
+            /**
+             * @brief construction  branch
+             * @relates float64
+             * @remark sse - 
+             */
+            constexpr __impl(composed_t one, last_operation last_op) : base_t(one, last_op)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "", "CONS()");
 
             }
 
@@ -294,272 +299,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::construction<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::construction<__impl<base_t>, bfloat64<base_t::features>>;
-
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name io operations
-     */
-    ///@{
-
-    /**
-     * @brief io
-     * @relates float64
-     * @remark sse
-     */
-    template<typename composed_t>
-    struct bfloat64_io
-    {
-
-        /**
-         * @brief io basic interface implementation
-         * @relates float64
-         * @remark sse
-         */
-        template<typename base_t>
-        struct __impl : base_t
-        {
-            using zval_t        = zfloat64<base_t::features>;
-            using bval_t        = bfloat64<base_t::features>;
-            using vector_t      = typename zval_traits<base_t>::vector_t;
-            using element_t     = typename zval_traits<base_t>::element_t;
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
-            FORWARD(__impl);
-
-
-            /**
-             * @brief io default branch
-             * @relates float64
-             * @remark sse - default
-             */
-            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  noexcept {
-
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "bfloat64(double[2])", "default", "vstore");
-
-                _mm_store_pd(result, input);
-            }
-
-
-            /**
-             * @brief io default branch
-             * @relates float64
-             * @remark sse - default
-             */
-            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  noexcept {
-
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "bfloat64(double[2])", "default", "vstream");
-
-                _mm_stream_pd(result, input);
-            }
-
-
-            /**
-             * @brief io default branch
-             * @relates float64
-             * @remark sse - default
-             */
-            template<typename RandomIt> friend zfloat64<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  noexcept {
-
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "bfloat64(double[2])", "default", "vgather");
-
-                auto i = index.data();
-                return _mm_set_pd(input[i[3]], input[i[1]]);
-            }
-
-        };
-
-        /**
-         * @brief io public interface implementation
-         * @relates float64
-         * @remark sse
-         */
-
-        template<typename base_t>
-        using zimpl = traits::io<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::io<__impl<base_t>, bfloat64<base_t::features>>;
-
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name logical operations
-     */
-    ///@{
-
-    /**
-     * @brief logical
-     * @relates float64
-     * @remark sse
-     */
-    template<typename composed_t>
-    struct bfloat64_logical
-    {
-
-        /**
-         * @brief logical basic interface implementation
-         * @relates float64
-         * @remark sse
-         */
-        template<typename base_t>
-        struct __impl : base_t
-        {
-            using zval_t        = zfloat64<base_t::features>;
-            using bval_t        = bfloat64<base_t::features>;
-            using vector_t      = typename zval_traits<base_t>::vector_t;
-            using element_t     = typename zval_traits<base_t>::element_t;
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
-            FORWARD(__impl);
-
-
-            /**
-             * @brief logical default branch
-             * @relates float64
-             * @remark sse - default
-             */
-            friend bfloat64<base_t::features> vlneg(composed_t one)  noexcept {
-
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "bfloat64(double[2])", "default", "vlneg");
-
-                return _mm_cmpeq_pd(one, _mm_setzero_pd());
-            }
-
-
-            /**
-             * @brief logical default branch
-             * @relates float64
-             * @remark sse - default
-             */
-            friend bfloat64<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "bfloat64(double[2])", "default", "vlor");
-
-                return _mm_or_pd(one, other);
-            }
-
-
-            /**
-             * @brief logical default branch
-             * @relates float64
-             * @remark sse - default
-             */
-            friend bfloat64<base_t::features> vland(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "bfloat64(double[2])", "default", "vland");
-
-                return _mm_and_pd(one, other);
-            }
-
-        };
-
-        /**
-         * @brief logical public interface implementation
-         * @relates float64
-         * @remark sse
-         */
-
-        template<typename base_t>
-        using zimpl = traits::logical<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::logical<__impl<base_t>, bfloat64<base_t::features>>;
-
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name equatable operations
-     */
-    ///@{
-
-    /**
-     * @brief equatable
-     * @relates float64
-     * @remark sse
-     */
-    template<typename composed_t>
-    struct bfloat64_equatable
-    {
-
-        /**
-         * @brief equatable basic interface implementation
-         * @relates float64
-         * @remark sse
-         */
-        template<typename base_t>
-        struct __impl : base_t
-        {
-            using zval_t        = zfloat64<base_t::features>;
-            using bval_t        = bfloat64<base_t::features>;
-            using vector_t      = typename zval_traits<base_t>::vector_t;
-            using element_t     = typename zval_traits<base_t>::element_t;
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
-            FORWARD(__impl);
-
-
-            /**
-             * @brief equatable default branch
-             * @relates float64
-             * @remark sse - default
-             */
-            friend bfloat64<base_t::features> veq(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "bfloat64(double[2])", "default", "veq");
-
-                return _mm_cmpeq_pd(one, other);
-            }
-
-
-            /**
-             * @brief equatable default branch
-             * @relates float64
-             * @remark sse - default
-             */
-            friend bfloat64<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "bfloat64(double[2])", "default", "vneq");
-
-                return _mm_cmpneq_pd(one, other);
-            }
-
-        };
-
-        /**
-         * @brief equatable public interface implementation
-         * @relates float64
-         * @remark sse
-         */
-
-        template<typename base_t>
-        using zimpl = traits::equatable<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::equatable<__impl<base_t>, bfloat64<base_t::features>>;
-
+        using impl = traits::construction<__impl<base_t>, bfloat64<base_t::features>>;
 
     };
 
@@ -591,48 +331,49 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zfloat64<base_t::features>;
             using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief io default branch
+             * @brief io Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  noexcept {
+            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vstore");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 _mm_store_pd(result, input);
             }
 
 
             /**
-             * @brief io default branch
+             * @brief io Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  noexcept {
+            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vstream");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 _mm_stream_pd(result, input);
             }
 
 
             /**
-             * @brief io default branch
+             * @brief io Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename RandomIt> friend zfloat64<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  noexcept {
+            template<typename RandomIt> friend zfloat64<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vgather");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 auto i = index.data();
                 return _mm_set_pd(input[i[3]], input[i[1]]);
@@ -647,11 +388,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::io<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::io<__impl<base_t>, bfloat64<base_t::features>>;
-
+        using impl = traits::io<__impl<base_t>, zfloat64<base_t::features>>;
 
     };
 
@@ -683,87 +420,88 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zfloat64<base_t::features>;
             using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vabs(composed_t one)  noexcept {
+            friend zfloat64<base_t::features> vabs(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vabs");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_max_pd(one, -one);
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vmin(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::features> vmin(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vmin");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_min_pd(one, other);
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vmax(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::features> vmax(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vmax");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_max_pd(one, other);
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
+            friend zfloat64<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vclamp");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return vmin(to, vmax(from, self));
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vrcp(composed_t one)  noexcept {
+            friend zfloat64<base_t::features> vrcp(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vrcp");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return (1 / one);
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vtrunc(composed_t one)  noexcept {
+            friend zfloat64<base_t::features> vtrunc(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vtrunc");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_cvtepi32_pd(_mm_cvttpd_epi32(one));
             }
@@ -774,22 +512,22 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - sse4
              */
-            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<is_eligible_v<base_t, capabilities::SSE41>, T> vfloor(composed_t one)  noexcept {
+            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vfloor(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "vfloor");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "sse4", "");
 
                 return _mm_floor_pd(one);
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<!is_eligible_v<base_t, capabilities::SSE41>, T> vfloor(composed_t one)  noexcept {
+            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vfloor(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vfloor");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 auto zero = _mm_setzero_si128();
                 auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
@@ -803,22 +541,22 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - sse4
              */
-            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<is_eligible_v<base_t, capabilities::SSE41>, T> vceil(composed_t one)  noexcept {
+            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vceil(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "vceil");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "sse4", "");
 
                 return _mm_ceil_pd(one);
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<!is_eligible_v<base_t, capabilities::SSE41>, T> vceil(composed_t one)  noexcept {
+            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vceil(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vceil");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 auto zero = _mm_setzero_si128();
                 auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
@@ -832,22 +570,22 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - sse4
              */
-            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<is_eligible_v<base_t, capabilities::SSE41>, T> vround(composed_t one)  noexcept {
+            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vround(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "vround");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "sse4", "");
 
                 return _mm_round_pd (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<!is_eligible_v<base_t, capabilities::SSE41>, T> vround(composed_t one)  noexcept {
+            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vround(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vround");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 auto zero = _mm_setzero_si128();
                 auto ones = _mm_cmpeq_epi32(zero, zero);
@@ -865,13 +603,13 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vsqrt(composed_t one)  noexcept {
+            friend zfloat64<base_t::features> vsqrt(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vsqrt");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_sqrt_pd(one);
             }
@@ -885,11 +623,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::math<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::math<__impl<base_t>, bfloat64<base_t::features>>;
-
+        using impl = traits::math<__impl<base_t>, zfloat64<base_t::features>>;
 
     };
 
@@ -921,13 +655,14 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zfloat64<base_t::features>;
             using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
-
         };
 
         /**
@@ -937,11 +672,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::numeric<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::numeric<__impl<base_t>, bfloat64<base_t::features>>;
-
+        using impl = traits::numeric<__impl<base_t>, zfloat64<base_t::features>>;
 
     };
 
@@ -973,100 +704,101 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zfloat64<base_t::features>;
             using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vneg(composed_t one)  noexcept {
+            friend zfloat64<base_t::features> vneg(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vneg");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_sub_pd(_mm_setzero_pd(), one);
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vadd(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::features> vadd(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vadd");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_add_pd(one, other);
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vsub(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::features> vsub(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vsub");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_sub_pd(one, other);
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vmul(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::features> vmul(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vmul");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_mul_pd(one, other);
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vdiv(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::features> vdiv(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vdiv");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_div_pd(one, other);
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            friend zfloat64<base_t::features> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vfmadd");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return vadd(vmul(multiplicand, multiplier), addendum);
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            friend zfloat64<base_t::features> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vfmsub");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return vsub(vmul(multiplicand, multiplier), addendum);
             }
@@ -1080,11 +812,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::arithmetic<__impl<base_t>, bfloat64<base_t::features>>;
-
+        using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::features>>;
 
     };
 
@@ -1116,22 +844,23 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zfloat64<base_t::features>;
             using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vbneg(composed_t one)  noexcept {
+            friend zfloat64<base_t::features> vbneg(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vbneg");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 auto ones = _mm_cmpeq_pd(one, one);
                 return _mm_xor_pd(one, ones);
@@ -1139,39 +868,39 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vband(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::features> vband(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vband");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_and_pd(one, other);
             }
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vbor(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::features> vbor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vbor");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_or_pd(one, other);
             }
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zfloat64<base_t::features> vbxor(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<base_t::features> vbxor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vbxor");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_xor_pd(one, other);
             }
@@ -1182,22 +911,22 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - sse4
              */
-            template<typename T = bool> friend std::enable_if_t<is_eligible_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  noexcept {
+            template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "is_set");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "sse4", "");
 
                 return _mm_test_all_ones(_mm_castpd_si128(one)) != 0;
             }
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = bool> friend std::enable_if_t<!is_eligible_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  noexcept {
+            template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "is_set");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_movemask_pd(_mm_cmpeq_pd(one, _mm_cmpeq_pd(one, one))) == 0xFFFF;
             }
@@ -1211,11 +940,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::bitwise<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::bitwise<__impl<base_t>, bfloat64<base_t::features>>;
-
+        using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::features>>;
 
     };
 
@@ -1247,61 +972,62 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zfloat64<base_t::features>;
             using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief comparable default branch
+             * @brief comparable Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bfloat64<base_t::features> vgt(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::features> vgt(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vgt");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_cmpgt_pd(one, other);
             }
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bfloat64<base_t::features> vlt(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::features> vlt(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vlt");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_cmplt_pd(one, other);
             }
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bfloat64<base_t::features> vge(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::features> vge(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vge");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_cmpge_pd(one, other);
             }
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bfloat64<base_t::features> vle(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::features> vle(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vle");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_cmple_pd(one, other);
             }
@@ -1315,11 +1041,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::comparable<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::comparable<__impl<base_t>, bfloat64<base_t::features>>;
-
+        using impl = traits::comparable<__impl<base_t>, zfloat64<base_t::features>>;
 
     };
 
@@ -1351,48 +1073,49 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zfloat64<base_t::features>;
             using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief logical default branch
+             * @brief logical Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bfloat64<base_t::features> vlneg(composed_t one)  noexcept {
+            friend bfloat64<base_t::features> vlneg(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vlneg");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_cmpeq_pd(one, _mm_setzero_pd());
             }
 
 
             /**
-             * @brief logical default branch
+             * @brief logical Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bfloat64<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::features> vlor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vlor");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_or_pd(one, other);
             }
 
 
             /**
-             * @brief logical default branch
+             * @brief logical Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bfloat64<base_t::features> vland(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::features> vland(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vland");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_and_pd(one, other);
             }
@@ -1406,11 +1129,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::logical<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::logical<__impl<base_t>, bfloat64<base_t::features>>;
-
+        using impl = traits::logical<__impl<base_t>, zfloat64<base_t::features>>;
 
     };
 
@@ -1442,35 +1161,36 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zfloat64<base_t::features>;
             using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief equatable default branch
+             * @brief equatable Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bfloat64<base_t::features> veq(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::features> veq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "veq");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_cmpeq_pd(one, other);
             }
 
 
             /**
-             * @brief equatable default branch
+             * @brief equatable Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bfloat64<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
+            friend bfloat64<base_t::features> vneq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vneq");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 return _mm_cmpneq_pd(one, other);
             }
@@ -1484,11 +1204,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::equatable<__impl<base_t>, zfloat64<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::equatable<__impl<base_t>, bfloat64<base_t::features>>;
-
+        using impl = traits::equatable<__impl<base_t>, zfloat64<base_t::features>>;
 
     };
 
@@ -1520,22 +1236,23 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zfloat64<base_t::features>;
             using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
-
 
             /**
              * @brief conditional sse4 branch
              * @relates float64
              * @remark sse - sse4
              */
-            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<is_eligible_v<base_t, capabilities::SSE41>, T> vsel(mask_vector_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vsel(mask_vector_t condition, composed_t if_value, composed_t else_value)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "sse4", "vsel");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "sse4", "");
 
                 auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
                 return _mm_blendv_pd(if_value, else_value, mask);
@@ -1543,13 +1260,13 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief conditional default branch
+             * @brief conditional Tokens.DEFAULT branch
              * @relates float64
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<!is_eligible_v<base_t, capabilities::SSE41>, T> vsel(mask_vector_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vsel(mask_vector_t condition, composed_t if_value, composed_t else_value)  {
 
-                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "zfloat64(double[2])", "default", "vsel");
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
                 auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
                 return _mm_xor_pd(if_value, _mm_and_pd( mask, _mm_xor_pd(else_value, if_value)));
@@ -1564,11 +1281,387 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::conditional<__impl<base_t>, zfloat64<base_t::features>>;
+        using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::features>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name io operations
+     */
+    ///@{
+
+    /**
+     * @brief io
+     * @relates float64
+     * @remark sse
+     */
+    template<typename composed_t>
+    struct bfloat64_io
+    {
+
+        /**
+         * @brief io basic interface implementation
+         * @relates float64
+         * @remark sse
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat64<base_t::features>;
+            using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
+
+            FORWARD(__impl);
+
+            /**
+             * @brief io Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                _mm_store_pd(result, input);
+            }
+
+
+            /**
+             * @brief io Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                _mm_stream_pd(result, input);
+            }
+
+
+            /**
+             * @brief io Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            template<typename RandomIt> friend bfloat64<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                auto i = index.data();
+                return _mm_set_pd(input[i[3]], input[i[1]]);
+            }
+
+        };
+
+        /**
+         * @brief io public interface implementation
+         * @relates float64
+         * @remark sse
+         */
 
         template<typename base_t>
-        using bimpl = traits::conditional<__impl<base_t>, bfloat64<base_t::features>>;
+        using impl = traits::io<__impl<base_t>, bfloat64<base_t::features>>;
 
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name bitwise operations
+     */
+    ///@{
+
+    /**
+     * @brief bitwise
+     * @relates float64
+     * @remark sse
+     */
+    template<typename composed_t>
+    struct bfloat64_bitwise
+    {
+
+        /**
+         * @brief bitwise basic interface implementation
+         * @relates float64
+         * @remark sse
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat64<base_t::features>;
+            using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
+
+            FORWARD(__impl);
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bfloat64<base_t::features> vbneg(composed_t one)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                auto ones = _mm_cmpeq_pd(one, one);
+                return _mm_xor_pd(one, ones);
+            }
+
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bfloat64<base_t::features> vband(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                return _mm_and_pd(one, other);
+            }
+
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bfloat64<base_t::features> vbor(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                return _mm_or_pd(one, other);
+            }
+
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bfloat64<base_t::features> vbxor(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                return _mm_xor_pd(one, other);
+            }
+
+
+            /**
+             * @brief bitwise sse4 branch
+             * @relates float64
+             * @remark sse - sse4
+             */
+            template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "sse4", "");
+
+                return _mm_test_all_ones(_mm_castpd_si128(one)) != 0;
+            }
+
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                return _mm_movemask_pd(_mm_cmpeq_pd(one, _mm_cmpeq_pd(one, one))) == 0xFFFF;
+            }
+
+        };
+
+        /**
+         * @brief bitwise public interface implementation
+         * @relates float64
+         * @remark sse
+         */
+
+        template<typename base_t>
+        using impl = traits::bitwise<__impl<base_t>, bfloat64<base_t::features>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name logical operations
+     */
+    ///@{
+
+    /**
+     * @brief logical
+     * @relates float64
+     * @remark sse
+     */
+    template<typename composed_t>
+    struct bfloat64_logical
+    {
+
+        /**
+         * @brief logical basic interface implementation
+         * @relates float64
+         * @remark sse
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat64<base_t::features>;
+            using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
+
+            FORWARD(__impl);
+
+            /**
+             * @brief logical Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bfloat64<base_t::features> vlneg(composed_t one)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                return _mm_cmpeq_pd(one, _mm_setzero_pd());
+            }
+
+
+            /**
+             * @brief logical Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bfloat64<base_t::features> vlor(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                return _mm_or_pd(one, other);
+            }
+
+
+            /**
+             * @brief logical Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bfloat64<base_t::features> vland(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                return _mm_and_pd(one, other);
+            }
+
+        };
+
+        /**
+         * @brief logical public interface implementation
+         * @relates float64
+         * @remark sse
+         */
+
+        template<typename base_t>
+        using impl = traits::logical<__impl<base_t>, bfloat64<base_t::features>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name equatable operations
+     */
+    ///@{
+
+    /**
+     * @brief equatable
+     * @relates float64
+     * @remark sse
+     */
+    template<typename composed_t>
+    struct bfloat64_equatable
+    {
+
+        /**
+         * @brief equatable basic interface implementation
+         * @relates float64
+         * @remark sse
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat64<base_t::features>;
+            using bval_t        = bfloat64<base_t::features>;
+            using tag           = typename base_t::tag;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
+
+            FORWARD(__impl);
+
+            /**
+             * @brief equatable Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bfloat64<base_t::features> veq(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                return _mm_cmpeq_pd(one, other);
+            }
+
+
+            /**
+             * @brief equatable Tokens.DEFAULT branch
+             * @relates float64
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bfloat64<base_t::features> vneq(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
+
+                return _mm_cmpneq_pd(one, other);
+            }
+
+        };
+
+        /**
+         * @brief equatable public interface implementation
+         * @relates float64
+         * @remark sse
+         */
+
+        template<typename base_t>
+        using impl = traits::equatable<__impl<base_t>, bfloat64<base_t::features>>;
 
     };
 
@@ -1596,12 +1689,15 @@ namespace zacc { namespace backend { namespace sse {
         template<uint64_t features>
         struct __zval_float64
         {
-            using zval_t = zval<__m128d, __m128d, double, zval_tag, 2, 16, features>;
-            using bval_t = bval<__m128d, __m128d, 2, 16, features>;
+            using zval_base_t = zval<__m128d, __m128d, double, zval_tag, 2, 16, features>;
+            using bval_base_t = bval<__m128d, __m128d, 2, 16, features>;
 
-            struct impl : public zval_t
+            struct impl : public zval_base_t
             {
-                FORWARD2(impl, zval_t);
+                using zval_t = zfloat64<features>;
+                using bval_t = bfloat64<features>;
+
+                FORWARD2(impl, zval_base_t);
             };
         };
         /**
@@ -1620,23 +1716,25 @@ namespace zacc { namespace backend { namespace sse {
                 printable::impl,
                 iteratable::impl,
                 convertable::impl,
-                zfloat64_io<impl>::template zimpl,
-                zfloat64_math<impl>::template zimpl,
-                zfloat64_numeric<impl>::template zimpl,
-                zfloat64_arithmetic<impl>::template zimpl,
-                zfloat64_bitwise<impl>::template zimpl,
-                zfloat64_comparable<impl>::template zimpl,
-                zfloat64_logical<impl>::template zimpl,
-                zfloat64_equatable<impl>::template zimpl,
-                zfloat64_conditional<impl>::template zimpl,
-                zfloat64_numeric<impl>::template zimpl,
-                zfloat64_construction<impl>::template zimpl,
+                zfloat64_io<impl>::template impl,
+                zfloat64_math<impl>::template impl,
+                zfloat64_numeric<impl>::template impl,
+                zfloat64_arithmetic<impl>::template impl,
+                zfloat64_bitwise<impl>::template impl,
+                zfloat64_comparable<impl>::template impl,
+                zfloat64_logical<impl>::template impl,
+                zfloat64_equatable<impl>::template impl,
+                zfloat64_conditional<impl>::template impl,
+                zfloat64_construction<impl>::template impl,
 
                 composable<zval_t>::template type
             >;
 
             struct impl : public composition_t
             {
+                using zval_t = zfloat64<features>;
+                using bval_t = bfloat64<features>;
+
                 FORWARD2(impl, composition_t);
             };
         };
@@ -1653,12 +1751,15 @@ namespace zacc { namespace backend { namespace sse {
         template<uint64_t features>
         struct __bval_float64
         {
-            using zval_t = zval<__m128d, __m128d, double, zval_tag, 2, 16, features>;
-            using bval_t = bval<__m128d, __m128d, 2, 16, features>;
+            using zval_base_t = zval<__m128d, __m128d, double, zval_tag, 2, 16, features>;
+            using bval_base_t = bval<__m128d, __m128d, 2, 16, features>;
 
-            struct impl : public bval_t
+            struct impl : public bval_base_t
             {
-                FORWARD2(impl, bval_t);
+                using zval_t = zfloat64<features>;
+                using bval_t = bfloat64<features>;
+
+                FORWARD2(impl, bval_base_t);
             };
         };
 
@@ -1673,31 +1774,41 @@ namespace zacc { namespace backend { namespace sse {
                 printable::impl,
                 iteratable::impl,
                 convertable::impl,
-                bfloat64_io<impl>::template bimpl,
-                bfloat64_logical<impl>::template bimpl,
-                bfloat64_equatable<impl>::template bimpl,
-                bfloat64_construction<impl>::template bimpl,
+                bfloat64_io<impl>::template impl,
+                bfloat64_bitwise<impl>::template impl,
+                bfloat64_logical<impl>::template impl,
+                bfloat64_equatable<impl>::template impl,
+                bfloat64_construction<impl>::template impl,
 
                 composable<bval_t>::template type
             >;
 
             struct impl : public composition_t
             {
+                using zval_t = zfloat64<features>;
+                using bval_t = bfloat64<features>;
+
                 FORWARD2(impl, composition_t);
             };
         };
     //}
 
     template<uint64_t features>
-    struct zfloat64 : public /*composition::*/__zfloat64<features>::impl
+    struct zfloat64 : public __zfloat64<features>::impl
     {
-        FORWARD2(zfloat64, /*composition::*/__zfloat64<features>::impl);
+        using zval_t = zfloat64<features>;
+        using bval_t = bfloat64<features>;
+
+        FORWARD2(zfloat64, __zfloat64<features>::impl);
     };
 
     template<uint64_t features>
-    struct bfloat64 : public /*composition::*/__bfloat64<features>::impl
+    struct bfloat64 : public __bfloat64<features>::impl
     {
-        FORWARD2(bfloat64, /*composition::*/__bfloat64<features>::impl);
+        using zval_t = zfloat64<features>;
+        using bval_t = bfloat64<features>;
+
+        FORWARD2(bfloat64, __bfloat64<features>::impl);
     };
 
     static_assert(is_zval<zfloat64<0>>::value, "is_zval for zfloat64 failed.");

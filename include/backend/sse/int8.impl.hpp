@@ -42,22 +42,18 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/construction.hpp"
-#include "traits/io.hpp"
 #include "traits/logical.hpp"
-#include "traits/equatable.hpp"
-#include "traits/io.hpp"
-#include "traits/math.hpp"
-#include "traits/numeric.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/comparable.hpp"
-#include "traits/logical.hpp"
-#include "traits/equatable.hpp"
+#include "traits/math.hpp"
 #include "traits/conditional.hpp"
+#include "traits/io.hpp"
+#include "traits/equatable.hpp"
+#include "traits/comparable.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/numeric.hpp"
 
 /**
- * @brief int8 implementation for the sse branch
+ * @brief int8 implementation for the sse target
  * provides unified access to 16 'int8_t' values
  */
 
@@ -95,69 +91,70 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zint8<base_t::features>;
             using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
+            //FORWARD(__impl);
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl() : base_t() {
+            constexpr __impl(  ) : base_t()  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "CONS()");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(__m128i value) : base_t(value) {
+            constexpr __impl(__m128i value) : base_t(value)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "CONS(__m128i value)");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(int8_t value) : base_t(_mm_set1_epi8(value)) {
+            constexpr __impl(int8_t value) : base_t(_mm_set1_epi8(value))  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "CONS(int8_t value)");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(const std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> &value) : base_t(_mm_loadu_si128((__m128i*)value.data())) {
+            constexpr __impl(const std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> &value) : base_t(_mm_loadu_si128((__m128i*)value.data()))  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "CONS(const std::array<typename zval_t..)");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(int8_t arg15, int8_t arg14, int8_t arg13, int8_t arg12, int8_t arg11, int8_t arg10, int8_t arg9, int8_t arg8, int8_t arg7, int8_t arg6, int8_t arg5, int8_t arg4, int8_t arg3, int8_t arg2, int8_t arg1, int8_t arg0) : base_t(_mm_set_epi8(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15)) {
+            constexpr __impl(int8_t _15, int8_t _14, int8_t _13, int8_t _12, int8_t _11, int8_t _10, int8_t _9, int8_t _8, int8_t _7, int8_t _6, int8_t _5, int8_t _4, int8_t _3, int8_t _2, int8_t _1, int8_t _0) : base_t(_mm_set_epi8(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15))  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "CONS(int8_t arg15, int8_t arg14, int8..)");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS()");
 
             }
 
@@ -170,11 +167,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::construction<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::construction<__impl<base_t>, bint8<base_t::features>>;
-
+        using impl = traits::construction<__impl<base_t>, zint8<base_t::features>>;
 
     };
 
@@ -206,58 +199,70 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zint8<base_t::features>;
             using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
-            FORWARD(__impl);
+            //FORWARD(__impl);
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl() : base_t() {
+            constexpr __impl(  ) : base_t()  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "bint8(int8_t[16])", "default", "");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(__m128 value) : base_t(_mm_castps_si128(value)) {
+            constexpr __impl(__m128 value) : base_t(_mm_castps_si128(value))  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "bint8(int8_t[16])", "default", "");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(__m128d value) : base_t(_mm_castpd_si128(value)) {
+            constexpr __impl(__m128d value) : base_t(_mm_castpd_si128(value))  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "bint8(int8_t[16])", "default", "");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - 
              */
-            constexpr __impl(__m128i value) : base_t(value) {
+            constexpr __impl(__m128i value) : base_t(value)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "bint8(int8_t[16])", "default", "");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS()");
+
+            }
+
+
+            /**
+             * @brief construction  branch
+             * @relates int8
+             * @remark sse - 
+             */
+            constexpr __impl(composed_t one, last_operation last_op) : base_t(one, last_op)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS()");
 
             }
 
@@ -270,258 +275,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::construction<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::construction<__impl<base_t>, bint8<base_t::features>>;
-
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name io operations
-     */
-    ///@{
-
-    /**
-     * @brief io
-     * @relates int8
-     * @remark sse
-     */
-    template<typename composed_t>
-    struct bint8_io
-    {
-
-        /**
-         * @brief io basic interface implementation
-         * @relates int8
-         * @remark sse
-         */
-        template<typename base_t>
-        struct __impl : base_t
-        {
-            using zval_t        = zint8<base_t::features>;
-            using bval_t        = bint8<base_t::features>;
-            using vector_t      = typename zval_traits<base_t>::vector_t;
-            using element_t     = typename zval_traits<base_t>::element_t;
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
-            FORWARD(__impl);
-
-
-            /**
-             * @brief io default branch
-             * @relates int8
-             * @remark sse - default
-             */
-            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  noexcept {
-
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "bint8(int8_t[16])", "default", "vstore");
-
-                _mm_storeu_si128((__m128i*)result, input);
-            }
-
-
-            /**
-             * @brief io default branch
-             * @relates int8
-             * @remark sse - default
-             */
-            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  noexcept {
-
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "bint8(int8_t[16])", "default", "vstream");
-
-                _mm_stream_si128((__m128i*)result, input);
-            }
-
-        };
-
-        /**
-         * @brief io public interface implementation
-         * @relates int8
-         * @remark sse
-         */
-
-        template<typename base_t>
-        using zimpl = traits::io<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::io<__impl<base_t>, bint8<base_t::features>>;
-
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name logical operations
-     */
-    ///@{
-
-    /**
-     * @brief logical
-     * @relates int8
-     * @remark sse
-     */
-    template<typename composed_t>
-    struct bint8_logical
-    {
-
-        /**
-         * @brief logical basic interface implementation
-         * @relates int8
-         * @remark sse
-         */
-        template<typename base_t>
-        struct __impl : base_t
-        {
-            using zval_t        = zint8<base_t::features>;
-            using bval_t        = bint8<base_t::features>;
-            using vector_t      = typename zval_traits<base_t>::vector_t;
-            using element_t     = typename zval_traits<base_t>::element_t;
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
-            FORWARD(__impl);
-
-
-            /**
-             * @brief logical default branch
-             * @relates int8
-             * @remark sse - default
-             */
-            friend bint8<base_t::features> vlneg(composed_t one)  noexcept {
-
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "bint8(int8_t[16])", "default", "vlneg");
-
-                return _mm_cmpeq_epi8(one, _mm_setzero_si128());
-            }
-
-
-            /**
-             * @brief logical default branch
-             * @relates int8
-             * @remark sse - default
-             */
-            friend bint8<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "bint8(int8_t[16])", "default", "vlor");
-
-                return _mm_or_si128(one, other);
-            }
-
-
-            /**
-             * @brief logical default branch
-             * @relates int8
-             * @remark sse - default
-             */
-            friend bint8<base_t::features> vland(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "bint8(int8_t[16])", "default", "vland");
-
-                return _mm_and_si128(one, other);
-            }
-
-        };
-
-        /**
-         * @brief logical public interface implementation
-         * @relates int8
-         * @remark sse
-         */
-
-        template<typename base_t>
-        using zimpl = traits::logical<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::logical<__impl<base_t>, bint8<base_t::features>>;
-
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name equatable operations
-     */
-    ///@{
-
-    /**
-     * @brief equatable
-     * @relates int8
-     * @remark sse
-     */
-    template<typename composed_t>
-    struct bint8_equatable
-    {
-
-        /**
-         * @brief equatable basic interface implementation
-         * @relates int8
-         * @remark sse
-         */
-        template<typename base_t>
-        struct __impl : base_t
-        {
-            using zval_t        = zint8<base_t::features>;
-            using bval_t        = bint8<base_t::features>;
-            using vector_t      = typename zval_traits<base_t>::vector_t;
-            using element_t     = typename zval_traits<base_t>::element_t;
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
-            FORWARD(__impl);
-
-
-            /**
-             * @brief equatable default branch
-             * @relates int8
-             * @remark sse - default
-             */
-            friend bint8<base_t::features> veq(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "bint8(int8_t[16])", "default", "veq");
-
-                return _mm_cmpeq_epi8(one, other);
-            }
-
-
-            /**
-             * @brief equatable default branch
-             * @relates int8
-             * @remark sse - default
-             */
-            friend bint8<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "bint8(int8_t[16])", "default", "vneq");
-
-                return !(one == other);
-            }
-
-        };
-
-        /**
-         * @brief equatable public interface implementation
-         * @relates int8
-         * @remark sse
-         */
-
-        template<typename base_t>
-        using zimpl = traits::equatable<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::equatable<__impl<base_t>, bint8<base_t::features>>;
-
+        using impl = traits::construction<__impl<base_t>, bint8<base_t::features>>;
 
     };
 
@@ -553,35 +307,36 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zint8<base_t::features>;
             using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief io default branch
+             * @brief io Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  noexcept {
+            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vstore");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 _mm_storeu_si128((__m128i*)result, input);
             }
 
 
             /**
-             * @brief io default branch
+             * @brief io Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  noexcept {
+            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vstream");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 _mm_stream_si128((__m128i*)result, input);
             }
@@ -595,11 +350,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::io<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::io<__impl<base_t>, bint8<base_t::features>>;
-
+        using impl = traits::io<__impl<base_t>, zint8<base_t::features>>;
 
     };
 
@@ -631,35 +382,36 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zint8<base_t::features>;
             using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
-
 
             /**
              * @brief math sse4 branch
              * @relates int8
              * @remark sse - sse4
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<is_eligible_v<base_t, capabilities::SSE3>, T> vabs(composed_t one)  noexcept {
+            template<typename T = zint8<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE3>, T> vabs(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "sse4", "vabs");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "sse4", "");
 
                 return _mm_abs_epi8(one);
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!is_eligible_v<base_t, capabilities::SSE3>, T> vabs(composed_t one)  noexcept {
+            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE3>, T> vabs(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vabs");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return vmax(one, -one);
             }
@@ -670,22 +422,22 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse - sse4
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<is_eligible_v<base_t, capabilities::SSE41>, T> vmin(composed_t one, composed_t other)  noexcept {
+            template<typename T = zint8<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vmin(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "sse4", "vmin");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "sse4", "");
 
                 return _mm_min_epi8(one, other);
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!is_eligible_v<base_t, capabilities::SSE41>, T> vmin(composed_t one, composed_t other)  noexcept {
+            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vmin(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vmin");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return vsel(one < other, one, other);
             }
@@ -696,35 +448,35 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse - sse4
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<is_eligible_v<base_t, capabilities::SSE41>, T> vmax(composed_t one, composed_t other)  noexcept {
+            template<typename T = zint8<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vmax(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "sse4", "vmax");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "sse4", "");
 
                 return _mm_max_epi8(one, other);
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!is_eligible_v<base_t, capabilities::SSE41>, T> vmax(composed_t one, composed_t other)  noexcept {
+            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vmax(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vmax");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return vsel(one > other, one, other);
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zint8<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
+            friend zint8<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vclamp");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return vmin(to, vmax(from, self));
             }
@@ -738,11 +490,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::math<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::math<__impl<base_t>, bint8<base_t::features>>;
-
+        using impl = traits::math<__impl<base_t>, zint8<base_t::features>>;
 
     };
 
@@ -774,13 +522,14 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zint8<base_t::features>;
             using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
-
         };
 
         /**
@@ -790,11 +539,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::numeric<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::numeric<__impl<base_t>, bint8<base_t::features>>;
-
+        using impl = traits::numeric<__impl<base_t>, zint8<base_t::features>>;
 
     };
 
@@ -826,61 +571,62 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zint8<base_t::features>;
             using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zint8<base_t::features> vneg(composed_t one)  noexcept {
+            friend zint8<base_t::features> vneg(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vneg");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return _mm_sub_epi8(_mm_setzero_si128(), one);
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zint8<base_t::features> vadd(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::features> vadd(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vadd");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return _mm_add_epi8(one, other);
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zint8<base_t::features> vsub(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::features> vsub(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vsub");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return _mm_sub_epi8(one, other);
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zint8<base_t::features> vmul(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::features> vmul(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vmul");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 /// @see http://stackoverflow.com/a/29155682/1261537;
                 auto even = _mm_mullo_epi16(one, other);
@@ -890,30 +636,30 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zint8<base_t::features> vdiv(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::features> vdiv(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vdiv");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 auto dividend = one.data();
                 auto divisor = other.data();
                 typename composed_t::extracted_t result;
-                for (auto i = 0; i < composed_t::size(); i++) { result[i] = dividend[i] / divisor[i]; };
+                for (size_t i = 0; i < composed_t::size(); i++) { result[i] = dividend[i] / divisor[i]; };
                 return result;
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zint8<base_t::features> vmod(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::features> vmod(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vmod");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return vsub(one, vmul(other, vdiv(one, other)));
             }
@@ -927,11 +673,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::arithmetic<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::arithmetic<__impl<base_t>, bint8<base_t::features>>;
-
+        using impl = traits::arithmetic<__impl<base_t>, zint8<base_t::features>>;
 
     };
 
@@ -963,22 +705,23 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zint8<base_t::features>;
             using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zint8<base_t::features> vbneg(composed_t one)  noexcept {
+            friend zint8<base_t::features> vbneg(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vbneg");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 auto zero = _mm_setzero_si128();
                 auto ones = _mm_cmpeq_epi8(zero, zero);
@@ -987,39 +730,39 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zint8<base_t::features> vbor(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::features> vbor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vbor");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return _mm_or_si128(one, other);
             }
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zint8<base_t::features> vband(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::features> vband(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vband");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return _mm_and_si128(one, other);
             }
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend zint8<base_t::features> vbxor(composed_t one, composed_t other)  noexcept {
+            friend zint8<base_t::features> vbxor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vbxor");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return _mm_xor_si128(one, other);
             }
@@ -1030,22 +773,22 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse - sse4
              */
-            template<typename T = bool> friend std::enable_if_t<is_eligible_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  noexcept {
+            template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "sse4", "is_set");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "sse4", "");
 
                 return _mm_test_all_ones(one) != 0;
             }
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = bool> friend std::enable_if_t<!is_eligible_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  noexcept {
+            template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "is_set");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 auto zero = _mm_setzero_si128();
                 auto ones = _mm_cmpeq_epi32(zero, zero);
@@ -1061,11 +804,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::bitwise<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::bitwise<__impl<base_t>, bint8<base_t::features>>;
-
+        using impl = traits::bitwise<__impl<base_t>, zint8<base_t::features>>;
 
     };
 
@@ -1097,61 +836,62 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zint8<base_t::features>;
             using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief comparable default branch
+             * @brief comparable Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bint8<base_t::features> vgt(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::features> vgt(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vgt");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return _mm_cmpgt_epi8(one, other);
             }
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bint8<base_t::features> vlt(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::features> vlt(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vlt");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return _mm_cmplt_epi8(one, other);
             }
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bint8<base_t::features> vge(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::features> vge(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vge");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return !(one < other);
             }
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bint8<base_t::features> vle(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::features> vle(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vle");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return !(one > other);
             }
@@ -1165,11 +905,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::comparable<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::comparable<__impl<base_t>, bint8<base_t::features>>;
-
+        using impl = traits::comparable<__impl<base_t>, zint8<base_t::features>>;
 
     };
 
@@ -1201,48 +937,49 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zint8<base_t::features>;
             using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief logical default branch
+             * @brief logical Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bint8<base_t::features> vlneg(composed_t one)  noexcept {
+            friend bint8<base_t::features> vlneg(composed_t one)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vlneg");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return _mm_cmpeq_epi8(one, _mm_setzero_si128());
             }
 
 
             /**
-             * @brief logical default branch
+             * @brief logical Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bint8<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::features> vlor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vlor");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return _mm_or_si128(one, other);
             }
 
 
             /**
-             * @brief logical default branch
+             * @brief logical Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bint8<base_t::features> vland(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::features> vland(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vland");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return _mm_and_si128(one, other);
             }
@@ -1256,11 +993,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::logical<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::logical<__impl<base_t>, bint8<base_t::features>>;
-
+        using impl = traits::logical<__impl<base_t>, zint8<base_t::features>>;
 
     };
 
@@ -1292,35 +1025,36 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zint8<base_t::features>;
             using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief equatable default branch
+             * @brief equatable Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bint8<base_t::features> veq(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::features> veq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "veq");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return _mm_cmpeq_epi8(one, other);
             }
 
 
             /**
-             * @brief equatable default branch
+             * @brief equatable Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            friend bint8<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
+            friend bint8<base_t::features> vneq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vneq");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 return !(one == other);
             }
@@ -1334,11 +1068,7 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::equatable<__impl<base_t>, zint8<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::equatable<__impl<base_t>, bint8<base_t::features>>;
-
+        using impl = traits::equatable<__impl<base_t>, zint8<base_t::features>>;
 
     };
 
@@ -1370,22 +1100,23 @@ namespace zacc { namespace backend { namespace sse {
         {
             using zval_t        = zint8<base_t::features>;
             using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
-
 
             /**
              * @brief conditional sse4 branch
              * @relates int8
              * @remark sse - sse4
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<is_eligible_v<base_t, capabilities::SSE41>, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            template<typename T = zint8<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "sse4", "vsel");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "sse4", "");
 
                 auto mask = _mm_cmpeq_epi8(_mm_setzero_si128(), condition);
                 return _mm_blendv_epi8(if_value, else_value, mask);
@@ -1393,13 +1124,13 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief conditional default branch
+             * @brief conditional Tokens.DEFAULT branch
              * @relates int8
-             * @remark sse - default
+             * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!is_eligible_v<base_t, capabilities::SSE41>, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "zint8(int8_t[16])", "default", "vsel");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
 
                 auto mask = _mm_cmpeq_epi8(_mm_setzero_si128(), condition);
                 return _mm_or_si128(_mm_andnot_si128(mask, if_value), _mm_and_si128(mask, else_value));
@@ -1414,11 +1145,376 @@ namespace zacc { namespace backend { namespace sse {
          */
 
         template<typename base_t>
-        using zimpl = traits::conditional<__impl<base_t>, zint8<base_t::features>>;
+        using impl = traits::conditional<__impl<base_t>, zint8<base_t::features>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name io operations
+     */
+    ///@{
+
+    /**
+     * @brief io
+     * @relates int8
+     * @remark sse
+     */
+    template<typename composed_t>
+    struct bint8_io
+    {
+
+        /**
+         * @brief io basic interface implementation
+         * @relates int8
+         * @remark sse
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zint8<base_t::features>;
+            using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
+
+            FORWARD(__impl);
+
+            /**
+             * @brief io Tokens.DEFAULT branch
+             * @relates int8
+             * @remark sse - Tokens.DEFAULT
+             */
+            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
+
+                _mm_storeu_si128((__m128i*)result, input);
+            }
+
+
+            /**
+             * @brief io Tokens.DEFAULT branch
+             * @relates int8
+             * @remark sse - Tokens.DEFAULT
+             */
+            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
+
+                _mm_stream_si128((__m128i*)result, input);
+            }
+
+        };
+
+        /**
+         * @brief io public interface implementation
+         * @relates int8
+         * @remark sse
+         */
 
         template<typename base_t>
-        using bimpl = traits::conditional<__impl<base_t>, bint8<base_t::features>>;
+        using impl = traits::io<__impl<base_t>, bint8<base_t::features>>;
 
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name bitwise operations
+     */
+    ///@{
+
+    /**
+     * @brief bitwise
+     * @relates int8
+     * @remark sse
+     */
+    template<typename composed_t>
+    struct bint8_bitwise
+    {
+
+        /**
+         * @brief bitwise basic interface implementation
+         * @relates int8
+         * @remark sse
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zint8<base_t::features>;
+            using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
+
+            FORWARD(__impl);
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates int8
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bint8<base_t::features> vbneg(composed_t one)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
+
+                auto zero = _mm_setzero_si128();
+                auto ones = _mm_cmpeq_epi8(zero, zero);
+                return _mm_xor_si128(one, ones);
+            }
+
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates int8
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bint8<base_t::features> vbor(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
+
+                return _mm_or_si128(one, other);
+            }
+
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates int8
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bint8<base_t::features> vband(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
+
+                return _mm_and_si128(one, other);
+            }
+
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates int8
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bint8<base_t::features> vbxor(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
+
+                return _mm_xor_si128(one, other);
+            }
+
+
+            /**
+             * @brief bitwise sse4 branch
+             * @relates int8
+             * @remark sse - sse4
+             */
+            template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "sse4", "");
+
+                return _mm_test_all_ones(one) != 0;
+            }
+
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates int8
+             * @remark sse - Tokens.DEFAULT
+             */
+            template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
+
+                auto zero = _mm_setzero_si128();
+                auto ones = _mm_cmpeq_epi32(zero, zero);
+                return _mm_movemask_epi8(_mm_cmpeq_epi8(one, ones)) == 0xFFFF;
+            }
+
+        };
+
+        /**
+         * @brief bitwise public interface implementation
+         * @relates int8
+         * @remark sse
+         */
+
+        template<typename base_t>
+        using impl = traits::bitwise<__impl<base_t>, bint8<base_t::features>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name logical operations
+     */
+    ///@{
+
+    /**
+     * @brief logical
+     * @relates int8
+     * @remark sse
+     */
+    template<typename composed_t>
+    struct bint8_logical
+    {
+
+        /**
+         * @brief logical basic interface implementation
+         * @relates int8
+         * @remark sse
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zint8<base_t::features>;
+            using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
+
+            FORWARD(__impl);
+
+            /**
+             * @brief logical Tokens.DEFAULT branch
+             * @relates int8
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bint8<base_t::features> vlneg(composed_t one)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
+
+                return _mm_cmpeq_epi8(one, _mm_setzero_si128());
+            }
+
+
+            /**
+             * @brief logical Tokens.DEFAULT branch
+             * @relates int8
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bint8<base_t::features> vlor(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
+
+                return _mm_or_si128(one, other);
+            }
+
+
+            /**
+             * @brief logical Tokens.DEFAULT branch
+             * @relates int8
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bint8<base_t::features> vland(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
+
+                return _mm_and_si128(one, other);
+            }
+
+        };
+
+        /**
+         * @brief logical public interface implementation
+         * @relates int8
+         * @remark sse
+         */
+
+        template<typename base_t>
+        using impl = traits::logical<__impl<base_t>, bint8<base_t::features>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name equatable operations
+     */
+    ///@{
+
+    /**
+     * @brief equatable
+     * @relates int8
+     * @remark sse
+     */
+    template<typename composed_t>
+    struct bint8_equatable
+    {
+
+        /**
+         * @brief equatable basic interface implementation
+         * @relates int8
+         * @remark sse
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zint8<base_t::features>;
+            using bval_t        = bint8<base_t::features>;
+            using tag           = typename base_t::tag;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
+
+            FORWARD(__impl);
+
+            /**
+             * @brief equatable Tokens.DEFAULT branch
+             * @relates int8
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bint8<base_t::features> veq(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
+
+                return _mm_cmpeq_epi8(one, other);
+            }
+
+
+            /**
+             * @brief equatable Tokens.DEFAULT branch
+             * @relates int8
+             * @remark sse - Tokens.DEFAULT
+             */
+            friend bint8<base_t::features> vneq(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "Tokens.DEFAULT", "");
+
+                return !(one == other);
+            }
+
+        };
+
+        /**
+         * @brief equatable public interface implementation
+         * @relates int8
+         * @remark sse
+         */
+
+        template<typename base_t>
+        using impl = traits::equatable<__impl<base_t>, bint8<base_t::features>>;
 
     };
 
@@ -1446,12 +1542,15 @@ namespace zacc { namespace backend { namespace sse {
         template<uint64_t features>
         struct __zval_int8
         {
-            using zval_t = zval<__m128i, __m128i, int8_t, zval_tag, 16, 16, features>;
-            using bval_t = bval<__m128i, __m128i, 16, 16, features>;
+            using zval_base_t = zval<__m128i, __m128i, int8_t, zval_tag, 16, 16, features>;
+            using bval_base_t = bval<__m128i, __m128i, 16, 16, features>;
 
-            struct impl : public zval_t
+            struct impl : public zval_base_t
             {
-                FORWARD2(impl, zval_t);
+                using zval_t = zint8<features>;
+                using bval_t = bint8<features>;
+
+                FORWARD2(impl, zval_base_t);
             };
         };
         /**
@@ -1470,22 +1569,25 @@ namespace zacc { namespace backend { namespace sse {
                 printable::impl,
                 iteratable::impl,
                 convertable::impl,
-                zint8_io<impl>::template zimpl,
-                zint8_math<impl>::template zimpl,
-                zint8_numeric<impl>::template zimpl,
-                zint8_arithmetic<impl>::template zimpl,
-                zint8_bitwise<impl>::template zimpl,
-                zint8_comparable<impl>::template zimpl,
-                zint8_logical<impl>::template zimpl,
-                zint8_equatable<impl>::template zimpl,
-                zint8_conditional<impl>::template zimpl,
-                zint8_construction<impl>::template zimpl,
+                zint8_io<impl>::template impl,
+                zint8_math<impl>::template impl,
+                zint8_numeric<impl>::template impl,
+                zint8_arithmetic<impl>::template impl,
+                zint8_bitwise<impl>::template impl,
+                zint8_comparable<impl>::template impl,
+                zint8_logical<impl>::template impl,
+                zint8_equatable<impl>::template impl,
+                zint8_conditional<impl>::template impl,
+                zint8_construction<impl>::template impl,
 
                 composable<zval_t>::template type
             >;
 
             struct impl : public composition_t
             {
+                using zval_t = zint8<features>;
+                using bval_t = bint8<features>;
+
                 FORWARD2(impl, composition_t);
             };
         };
@@ -1502,12 +1604,15 @@ namespace zacc { namespace backend { namespace sse {
         template<uint64_t features>
         struct __bval_int8
         {
-            using zval_t = zval<__m128i, __m128i, int8_t, zval_tag, 16, 16, features>;
-            using bval_t = bval<__m128i, __m128i, 16, 16, features>;
+            using zval_base_t = zval<__m128i, __m128i, int8_t, zval_tag, 16, 16, features>;
+            using bval_base_t = bval<__m128i, __m128i, 16, 16, features>;
 
-            struct impl : public bval_t
+            struct impl : public bval_base_t
             {
-                FORWARD2(impl, bval_t);
+                using zval_t = zint8<features>;
+                using bval_t = bint8<features>;
+
+                FORWARD2(impl, bval_base_t);
             };
         };
 
@@ -1522,31 +1627,41 @@ namespace zacc { namespace backend { namespace sse {
                 printable::impl,
                 iteratable::impl,
                 convertable::impl,
-                bint8_io<impl>::template bimpl,
-                bint8_logical<impl>::template bimpl,
-                bint8_equatable<impl>::template bimpl,
-                bint8_construction<impl>::template bimpl,
+                bint8_io<impl>::template impl,
+                bint8_bitwise<impl>::template impl,
+                bint8_logical<impl>::template impl,
+                bint8_equatable<impl>::template impl,
+                bint8_construction<impl>::template impl,
 
                 composable<bval_t>::template type
             >;
 
             struct impl : public composition_t
             {
+                using zval_t = zint8<features>;
+                using bval_t = bint8<features>;
+
                 FORWARD2(impl, composition_t);
             };
         };
     //}
 
     template<uint64_t features>
-    struct zint8 : public /*composition::*/__zint8<features>::impl
+    struct zint8 : public __zint8<features>::impl
     {
-        FORWARD2(zint8, /*composition::*/__zint8<features>::impl);
+        using zval_t = zint8<features>;
+        using bval_t = bint8<features>;
+
+        FORWARD2(zint8, __zint8<features>::impl);
     };
 
     template<uint64_t features>
-    struct bint8 : public /*composition::*/__bint8<features>::impl
+    struct bint8 : public __bint8<features>::impl
     {
-        FORWARD2(bint8, /*composition::*/__bint8<features>::impl);
+        using zval_t = zint8<features>;
+        using bval_t = bint8<features>;
+
+        FORWARD2(bint8, __bint8<features>::impl);
     };
 
     static_assert(is_zval<zint8<0>>::value, "is_zval for zint8 failed.");

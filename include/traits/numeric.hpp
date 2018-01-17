@@ -63,7 +63,7 @@ namespace zacc { namespace traits {
          * @brief is the current value infinite?
          * @return true if infinite
          */
-        composed_t is_infinite() const noexcept {
+        bval_t is_infinite() const noexcept {
             return (*this) == infinity();
         };
 

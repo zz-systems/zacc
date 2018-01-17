@@ -42,22 +42,18 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/construction.hpp"
-#include "traits/io.hpp"
-#include "traits/logical.hpp"
-#include "traits/equatable.hpp"
-#include "traits/io.hpp"
-#include "traits/math.hpp"
-#include "traits/numeric.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/comparable.hpp"
-#include "traits/logical.hpp"
-#include "traits/equatable.hpp"
 #include "traits/conditional.hpp"
+#include "traits/logical.hpp"
+#include "traits/equatable.hpp"
+#include "traits/io.hpp"
+#include "traits/numeric.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/math.hpp"
+#include "traits/comparable.hpp"
+#include "traits/arithmetic.hpp"
 
 /**
- * @brief float32 implementation for the scalar branch
+ * @brief float32 implementation for the scalar target
  * provides unified access to 1 'float' values
  */
 
@@ -95,57 +91,58 @@ namespace zacc { namespace backend { namespace scalar {
         {
             using zval_t        = zfloat32<base_t::features>;
             using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
+            //FORWARD(__impl);
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - 
              */
-            constexpr __impl() : base_t() {
+            constexpr __impl(  ) : base_t()  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "CONS()");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - 
              */
-            constexpr __impl(float value) : base_t(value) {
+            constexpr __impl(float value) : base_t(value)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "CONS(float value)");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - 
              */
-            template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> constexpr __impl(const T &value) : base_t(value.value()) {
+            template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> __impl(const T &value) : base_t(value.value())  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "CONS(const T &value)");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - 
              */
-            constexpr __impl(std::array<typename base_t::element_t, base_t::size()> value) : base_t(value[0]) {
+            constexpr __impl(std::array<typename base_t::element_t, base_t::size()> value) : base_t(value[0])  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "CONS(std::array<typename base_t::elem..)");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "", "CONS()");
 
             }
 
@@ -158,11 +155,7 @@ namespace zacc { namespace backend { namespace scalar {
          */
 
         template<typename base_t>
-        using zimpl = traits::construction<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::construction<__impl<base_t>, bfloat32<base_t::features>>;
-
+        using impl = traits::construction<__impl<base_t>, zfloat32<base_t::features>>;
 
     };
 
@@ -194,58 +187,70 @@ namespace zacc { namespace backend { namespace scalar {
         {
             using zval_t        = zfloat32<base_t::features>;
             using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
-            FORWARD(__impl);
+            //FORWARD(__impl);
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - 
              */
-            constexpr __impl() : base_t() {
+            constexpr __impl(  ) : base_t()  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "bfloat32(float[1])", "default", "");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - 
              */
-            constexpr __impl(float value) : base_t(value != 0) {
+            constexpr __impl(float value) : base_t(value != 0)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "bfloat32(float[1])", "default", "");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - 
              */
-            constexpr __impl(double value) : base_t(value != 0) {
+            constexpr __impl(double value) : base_t(value != 0)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "bfloat32(float[1])", "default", "");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "", "CONS()");
 
             }
 
 
             /**
-             * @brief construction default branch
+             * @brief construction  branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - 
              */
-            constexpr __impl(int value) : base_t(value != 0) {
+            constexpr __impl(int value) : base_t(value != 0)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "bfloat32(float[1])", "default", "");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "", "CONS()");
+
+            }
+
+
+            /**
+             * @brief construction  branch
+             * @relates float32
+             * @remark scalar - 
+             */
+            constexpr __impl(composed_t one, last_operation last_op) : base_t(one, last_op)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "", "CONS()");
 
             }
 
@@ -258,271 +263,7 @@ namespace zacc { namespace backend { namespace scalar {
          */
 
         template<typename base_t>
-        using zimpl = traits::construction<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::construction<__impl<base_t>, bfloat32<base_t::features>>;
-
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name io operations
-     */
-    ///@{
-
-    /**
-     * @brief io
-     * @relates float32
-     * @remark scalar
-     */
-    template<typename composed_t>
-    struct bfloat32_io
-    {
-
-        /**
-         * @brief io basic interface implementation
-         * @relates float32
-         * @remark scalar
-         */
-        template<typename base_t>
-        struct __impl : base_t
-        {
-            using zval_t        = zfloat32<base_t::features>;
-            using bval_t        = bfloat32<base_t::features>;
-            using vector_t      = typename zval_traits<base_t>::vector_t;
-            using element_t     = typename zval_traits<base_t>::element_t;
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
-            FORWARD(__impl);
-
-
-            /**
-             * @brief io default branch
-             * @relates float32
-             * @remark scalar - default
-             */
-            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  noexcept {
-
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "bfloat32(float[1])", "default", "vstore");
-
-                result[0] = input.value();
-            }
-
-
-            /**
-             * @brief io default branch
-             * @relates float32
-             * @remark scalar - default
-             */
-            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  noexcept {
-
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "bfloat32(float[1])", "default", "vstream");
-
-                result[0] = input.value();
-            }
-
-
-            /**
-             * @brief io default branch
-             * @relates float32
-             * @remark scalar - default
-             */
-            template<typename RandomIt> friend zfloat32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  noexcept {
-
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "bfloat32(float[1])", "default", "vgather");
-
-                return input[index.value()];
-            }
-
-        };
-
-        /**
-         * @brief io public interface implementation
-         * @relates float32
-         * @remark scalar
-         */
-
-        template<typename base_t>
-        using zimpl = traits::io<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::io<__impl<base_t>, bfloat32<base_t::features>>;
-
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name logical operations
-     */
-    ///@{
-
-    /**
-     * @brief logical
-     * @relates float32
-     * @remark scalar
-     */
-    template<typename composed_t>
-    struct bfloat32_logical
-    {
-
-        /**
-         * @brief logical basic interface implementation
-         * @relates float32
-         * @remark scalar
-         */
-        template<typename base_t>
-        struct __impl : base_t
-        {
-            using zval_t        = zfloat32<base_t::features>;
-            using bval_t        = bfloat32<base_t::features>;
-            using vector_t      = typename zval_traits<base_t>::vector_t;
-            using element_t     = typename zval_traits<base_t>::element_t;
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
-            FORWARD(__impl);
-
-
-            /**
-             * @brief logical default branch
-             * @relates float32
-             * @remark scalar - default
-             */
-            friend bfloat32<base_t::features> vlneg(composed_t one)  noexcept {
-
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "bfloat32(float[1])", "default", "vlneg");
-
-                return !one.value();
-            }
-
-
-            /**
-             * @brief logical default branch
-             * @relates float32
-             * @remark scalar - default
-             */
-            friend bfloat32<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "bfloat32(float[1])", "default", "vlor");
-
-                return (one.value() || other.value());
-            }
-
-
-            /**
-             * @brief logical default branch
-             * @relates float32
-             * @remark scalar - default
-             */
-            friend bfloat32<base_t::features> vland(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "bfloat32(float[1])", "default", "vland");
-
-                return (one.value() && other.value());
-            }
-
-        };
-
-        /**
-         * @brief logical public interface implementation
-         * @relates float32
-         * @remark scalar
-         */
-
-        template<typename base_t>
-        using zimpl = traits::logical<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::logical<__impl<base_t>, bfloat32<base_t::features>>;
-
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name equatable operations
-     */
-    ///@{
-
-    /**
-     * @brief equatable
-     * @relates float32
-     * @remark scalar
-     */
-    template<typename composed_t>
-    struct bfloat32_equatable
-    {
-
-        /**
-         * @brief equatable basic interface implementation
-         * @relates float32
-         * @remark scalar
-         */
-        template<typename base_t>
-        struct __impl : base_t
-        {
-            using zval_t        = zfloat32<base_t::features>;
-            using bval_t        = bfloat32<base_t::features>;
-            using vector_t      = typename zval_traits<base_t>::vector_t;
-            using element_t     = typename zval_traits<base_t>::element_t;
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
-
-            FORWARD(__impl);
-
-
-            /**
-             * @brief equatable default branch
-             * @relates float32
-             * @remark scalar - default
-             */
-            friend bfloat32<base_t::features> veq(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "bfloat32(float[1])", "default", "veq");
-
-                return (one.value() == other.value());
-            }
-
-
-            /**
-             * @brief equatable default branch
-             * @relates float32
-             * @remark scalar - default
-             */
-            friend bfloat32<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
-
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "bfloat32(float[1])", "default", "vneq");
-
-                return (one.value() != other.value());
-            }
-
-        };
-
-        /**
-         * @brief equatable public interface implementation
-         * @relates float32
-         * @remark scalar
-         */
-
-        template<typename base_t>
-        using zimpl = traits::equatable<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::equatable<__impl<base_t>, bfloat32<base_t::features>>;
-
+        using impl = traits::construction<__impl<base_t>, bfloat32<base_t::features>>;
 
     };
 
@@ -554,48 +295,49 @@ namespace zacc { namespace backend { namespace scalar {
         {
             using zval_t        = zfloat32<base_t::features>;
             using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief io default branch
+             * @brief io Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  noexcept {
+            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vstore");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 result[0] = input.value();
             }
 
 
             /**
-             * @brief io default branch
+             * @brief io Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  noexcept {
+            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vstream");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 result[0] = input.value();
             }
 
 
             /**
-             * @brief io default branch
+             * @brief io Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            template<typename RandomIt> friend zfloat32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  noexcept {
+            template<typename RandomIt> friend zfloat32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vgather");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return input[index.value()];
             }
@@ -609,11 +351,7 @@ namespace zacc { namespace backend { namespace scalar {
          */
 
         template<typename base_t>
-        using zimpl = traits::io<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::io<__impl<base_t>, bfloat32<base_t::features>>;
-
+        using impl = traits::io<__impl<base_t>, zfloat32<base_t::features>>;
 
     };
 
@@ -645,139 +383,140 @@ namespace zacc { namespace backend { namespace scalar {
         {
             using zval_t        = zfloat32<base_t::features>;
             using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vabs(composed_t one)  noexcept {
+            friend zfloat32<base_t::features> vabs(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vabs");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return std::abs(one.value());
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vmin(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::features> vmin(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vmin");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return std::min(one.value(), other.value());
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vmax(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::features> vmax(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vmax");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return std::max(one.value(), other.value());
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  noexcept {
+            friend zfloat32<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vclamp");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return vmin(to, vmax(from, self));
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vrcp(composed_t one)  noexcept {
+            friend zfloat32<base_t::features> vrcp(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vrcp");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (1 / one.value());
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vtrunc(composed_t one)  noexcept {
+            friend zfloat32<base_t::features> vtrunc(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vtrunc");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return std::trunc(one.value());
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vfloor(composed_t one)  noexcept {
+            friend zfloat32<base_t::features> vfloor(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vfloor");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return std::floor(one.value());
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vceil(composed_t one)  noexcept {
+            friend zfloat32<base_t::features> vceil(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vceil");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return std::ceil(one.value());
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vround(composed_t one)  noexcept {
+            friend zfloat32<base_t::features> vround(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vround");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return std::round(one.value());
             }
 
 
             /**
-             * @brief math default branch
+             * @brief math Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vsqrt(composed_t one)  noexcept {
+            friend zfloat32<base_t::features> vsqrt(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vsqrt");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return std::sqrt(one.value());
             }
@@ -791,11 +530,7 @@ namespace zacc { namespace backend { namespace scalar {
          */
 
         template<typename base_t>
-        using zimpl = traits::math<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::math<__impl<base_t>, bfloat32<base_t::features>>;
-
+        using impl = traits::math<__impl<base_t>, zfloat32<base_t::features>>;
 
     };
 
@@ -827,13 +562,14 @@ namespace zacc { namespace backend { namespace scalar {
         {
             using zval_t        = zfloat32<base_t::features>;
             using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
-
         };
 
         /**
@@ -843,11 +579,7 @@ namespace zacc { namespace backend { namespace scalar {
          */
 
         template<typename base_t>
-        using zimpl = traits::numeric<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::numeric<__impl<base_t>, bfloat32<base_t::features>>;
-
+        using impl = traits::numeric<__impl<base_t>, zfloat32<base_t::features>>;
 
     };
 
@@ -879,100 +611,101 @@ namespace zacc { namespace backend { namespace scalar {
         {
             using zval_t        = zfloat32<base_t::features>;
             using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vneg(composed_t one)  noexcept {
+            friend zfloat32<base_t::features> vneg(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vneg");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (-one.value());
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vadd(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::features> vadd(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vadd");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (one.value() + other.value());
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vsub(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::features> vsub(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vsub");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (one.value() - other.value());
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vmul(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::features> vmul(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vmul");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (one.value() * other.value());
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vdiv(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::features> vdiv(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vdiv");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (one.value() / other.value());
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            friend zfloat32<base_t::features> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vfmadd");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return std::fma(multiplicand.value(), multiplier.value(), addendum.value());
             }
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  noexcept {
+            friend zfloat32<base_t::features> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vfmsub");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return std::fma(multiplicand.value(), multiplier.value(), -addendum.value());
             }
@@ -986,11 +719,7 @@ namespace zacc { namespace backend { namespace scalar {
          */
 
         template<typename base_t>
-        using zimpl = traits::arithmetic<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::arithmetic<__impl<base_t>, bfloat32<base_t::features>>;
-
+        using impl = traits::arithmetic<__impl<base_t>, zfloat32<base_t::features>>;
 
     };
 
@@ -1022,22 +751,23 @@ namespace zacc { namespace backend { namespace scalar {
         {
             using zval_t        = zfloat32<base_t::features>;
             using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vbneg(composed_t one)  noexcept {
+            friend zfloat32<base_t::features> vbneg(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vbneg");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 auto _one = one.value();
                 float result;
@@ -1047,13 +777,13 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vband(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::features> vband(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vband");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 auto _one = one.value();
                 auto _other = other.value();
@@ -1064,13 +794,13 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vbor(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::features> vbor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vbor");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 auto _one = one.value();
                 auto _other = other.value();
@@ -1081,13 +811,13 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vbxor(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::features> vbxor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vbxor");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 auto _one = one.value();
                 auto _other = other.value();
@@ -1098,13 +828,13 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend bool is_set(composed_t one)  noexcept {
+            friend bool is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "is_set");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return one.value() != 0;
             }
@@ -1118,11 +848,7 @@ namespace zacc { namespace backend { namespace scalar {
          */
 
         template<typename base_t>
-        using zimpl = traits::bitwise<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::bitwise<__impl<base_t>, bfloat32<base_t::features>>;
-
+        using impl = traits::bitwise<__impl<base_t>, zfloat32<base_t::features>>;
 
     };
 
@@ -1154,61 +880,62 @@ namespace zacc { namespace backend { namespace scalar {
         {
             using zval_t        = zfloat32<base_t::features>;
             using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief comparable default branch
+             * @brief comparable Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend bfloat32<base_t::features> vgt(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::features> vgt(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vgt");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (one.value() > other.value());
             }
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend bfloat32<base_t::features> vlt(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::features> vlt(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vlt");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (one.value() < other.value());
             }
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend bfloat32<base_t::features> vge(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::features> vge(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vge");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (one.value() >= other.value());
             }
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend bfloat32<base_t::features> vle(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::features> vle(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vle");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (one.value() <= other.value());
             }
@@ -1222,11 +949,7 @@ namespace zacc { namespace backend { namespace scalar {
          */
 
         template<typename base_t>
-        using zimpl = traits::comparable<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::comparable<__impl<base_t>, bfloat32<base_t::features>>;
-
+        using impl = traits::comparable<__impl<base_t>, zfloat32<base_t::features>>;
 
     };
 
@@ -1258,48 +981,49 @@ namespace zacc { namespace backend { namespace scalar {
         {
             using zval_t        = zfloat32<base_t::features>;
             using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief logical default branch
+             * @brief logical Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend bfloat32<base_t::features> vlneg(composed_t one)  noexcept {
+            friend bfloat32<base_t::features> vlneg(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vlneg");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return !one.value();
             }
 
 
             /**
-             * @brief logical default branch
+             * @brief logical Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend bfloat32<base_t::features> vlor(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::features> vlor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vlor");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (one.value() || other.value());
             }
 
 
             /**
-             * @brief logical default branch
+             * @brief logical Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend bfloat32<base_t::features> vland(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::features> vland(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vland");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (one.value() && other.value());
             }
@@ -1313,11 +1037,7 @@ namespace zacc { namespace backend { namespace scalar {
          */
 
         template<typename base_t>
-        using zimpl = traits::logical<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::logical<__impl<base_t>, bfloat32<base_t::features>>;
-
+        using impl = traits::logical<__impl<base_t>, zfloat32<base_t::features>>;
 
     };
 
@@ -1349,35 +1069,36 @@ namespace zacc { namespace backend { namespace scalar {
         {
             using zval_t        = zfloat32<base_t::features>;
             using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief equatable default branch
+             * @brief equatable Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend bfloat32<base_t::features> veq(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::features> veq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "veq");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (one.value() == other.value());
             }
 
 
             /**
-             * @brief equatable default branch
+             * @brief equatable Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend bfloat32<base_t::features> vneq(composed_t one, composed_t other)  noexcept {
+            friend bfloat32<base_t::features> vneq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vneq");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (one.value() != other.value());
             }
@@ -1391,11 +1112,7 @@ namespace zacc { namespace backend { namespace scalar {
          */
 
         template<typename base_t>
-        using zimpl = traits::equatable<__impl<base_t>, zfloat32<base_t::features>>;
-
-        template<typename base_t>
-        using bimpl = traits::equatable<__impl<base_t>, bfloat32<base_t::features>>;
-
+        using impl = traits::equatable<__impl<base_t>, zfloat32<base_t::features>>;
 
     };
 
@@ -1427,22 +1144,23 @@ namespace zacc { namespace backend { namespace scalar {
         {
             using zval_t        = zfloat32<base_t::features>;
             using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
             using vector_t      = typename zval_traits<base_t>::vector_t;
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
 
             FORWARD(__impl);
 
-
             /**
-             * @brief conditional default branch
+             * @brief conditional Tokens.DEFAULT branch
              * @relates float32
-             * @remark scalar - default
+             * @remark scalar - Tokens.DEFAULT
              */
-            friend zfloat32<base_t::features> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            friend zfloat32<base_t::features> vsel(composed_t condition, composed_t if_value, composed_t else_value)  {
 
-                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "zfloat32(float[1])", "default", "vsel");
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
 
                 return (condition.value() != 0 ? if_value : else_value);
             }
@@ -1456,11 +1174,387 @@ namespace zacc { namespace backend { namespace scalar {
          */
 
         template<typename base_t>
-        using zimpl = traits::conditional<__impl<base_t>, zfloat32<base_t::features>>;
+        using impl = traits::conditional<__impl<base_t>, zfloat32<base_t::features>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name io operations
+     */
+    ///@{
+
+    /**
+     * @brief io
+     * @relates float32
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct bfloat32_io
+    {
+
+        /**
+         * @brief io basic interface implementation
+         * @relates float32
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
+
+            FORWARD(__impl);
+
+            /**
+             * @brief io Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                result[0] = input.value();
+            }
+
+
+            /**
+             * @brief io Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                result[0] = input.value();
+            }
+
+
+            /**
+             * @brief io Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            template<typename RandomIt> friend bfloat32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                return input[index.value()];
+            }
+
+        };
+
+        /**
+         * @brief io public interface implementation
+         * @relates float32
+         * @remark scalar
+         */
 
         template<typename base_t>
-        using bimpl = traits::conditional<__impl<base_t>, bfloat32<base_t::features>>;
+        using impl = traits::io<__impl<base_t>, bfloat32<base_t::features>>;
 
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name bitwise operations
+     */
+    ///@{
+
+    /**
+     * @brief bitwise
+     * @relates float32
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct bfloat32_bitwise
+    {
+
+        /**
+         * @brief bitwise basic interface implementation
+         * @relates float32
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
+
+            FORWARD(__impl);
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            friend bfloat32<base_t::features> vbneg(composed_t one)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                auto _one = one.value();
+                float result;
+                bitsof(result) = ~bitsof(_one);
+                return result;
+            }
+
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            friend bfloat32<base_t::features> vband(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                auto _one = one.value();
+                auto _other = other.value();
+                float result;
+                bitsof(result) = bitsof(_one) & bitsof(_other);
+                return result;
+            }
+
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            friend bfloat32<base_t::features> vbor(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                auto _one = one.value();
+                auto _other = other.value();
+                float result;
+                bitsof(result) = bitsof(_one) | bitsof(_other);
+                return result;
+            }
+
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            friend bfloat32<base_t::features> vbxor(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                auto _one = one.value();
+                auto _other = other.value();
+                float result;
+                bitsof(result) = bitsof(_one) ^ bitsof(_other);
+                return result;
+            }
+
+
+            /**
+             * @brief bitwise Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            friend bool is_set(composed_t one)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                return one.value() != 0;
+            }
+
+        };
+
+        /**
+         * @brief bitwise public interface implementation
+         * @relates float32
+         * @remark scalar
+         */
+
+        template<typename base_t>
+        using impl = traits::bitwise<__impl<base_t>, bfloat32<base_t::features>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name logical operations
+     */
+    ///@{
+
+    /**
+     * @brief logical
+     * @relates float32
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct bfloat32_logical
+    {
+
+        /**
+         * @brief logical basic interface implementation
+         * @relates float32
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
+
+            FORWARD(__impl);
+
+            /**
+             * @brief logical Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            friend bfloat32<base_t::features> vlneg(composed_t one)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                return !one.value();
+            }
+
+
+            /**
+             * @brief logical Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            friend bfloat32<base_t::features> vlor(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                return (one.value() || other.value());
+            }
+
+
+            /**
+             * @brief logical Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            friend bfloat32<base_t::features> vland(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                return (one.value() && other.value());
+            }
+
+        };
+
+        /**
+         * @brief logical public interface implementation
+         * @relates float32
+         * @remark scalar
+         */
+
+        template<typename base_t>
+        using impl = traits::logical<__impl<base_t>, bfloat32<base_t::features>>;
+
+    };
+
+    ///@}
+
+
+    // =================================================================================================================
+    /**
+     * @name equatable operations
+     */
+    ///@{
+
+    /**
+     * @brief equatable
+     * @relates float32
+     * @remark scalar
+     */
+    template<typename composed_t>
+    struct bfloat32_equatable
+    {
+
+        /**
+         * @brief equatable basic interface implementation
+         * @relates float32
+         * @remark scalar
+         */
+        template<typename base_t>
+        struct __impl : base_t
+        {
+            using zval_t        = zfloat32<base_t::features>;
+            using bval_t        = bfloat32<base_t::features>;
+            using tag           = typename base_t::tag;
+            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using element_t     = typename zval_traits<base_t>::element_t;
+            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            //FORWARD(__impl);
+
+            FORWARD(__impl);
+
+            /**
+             * @brief equatable Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            friend bfloat32<base_t::features> veq(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                return (one.value() == other.value());
+            }
+
+
+            /**
+             * @brief equatable Tokens.DEFAULT branch
+             * @relates float32
+             * @remark scalar - Tokens.DEFAULT
+             */
+            friend bfloat32<base_t::features> vneq(composed_t one, composed_t other)  {
+
+                ZTRACE_BACKEND("scalar.float32.impl", __LINE__, "float32(float[1])", "Tokens.DEFAULT", "");
+
+                return (one.value() != other.value());
+            }
+
+        };
+
+        /**
+         * @brief equatable public interface implementation
+         * @relates float32
+         * @remark scalar
+         */
+
+        template<typename base_t>
+        using impl = traits::equatable<__impl<base_t>, bfloat32<base_t::features>>;
 
     };
 
@@ -1488,12 +1582,15 @@ namespace zacc { namespace backend { namespace scalar {
         template<uint64_t features>
         struct __zval_float32
         {
-            using zval_t = zval<float, bool, float, zval_tag, 1, 16, features>;
-            using bval_t = bval<float, bool, 1, 16, features>;
+            using zval_base_t = zval<float, bool, float, zval_tag, 1, 16, features>;
+            using bval_base_t = bval<float, bool, 1, 16, features>;
 
-            struct impl : public zval_t
+            struct impl : public zval_base_t
             {
-                FORWARD2(impl, zval_t);
+                using zval_t = zfloat32<features>;
+                using bval_t = bfloat32<features>;
+
+                FORWARD2(impl, zval_base_t);
             };
         };
         /**
@@ -1512,22 +1609,25 @@ namespace zacc { namespace backend { namespace scalar {
                 printable::impl,
                 iteratable::impl,
                 convertable::impl,
-                zfloat32_io<impl>::template zimpl,
-                zfloat32_math<impl>::template zimpl,
-                zfloat32_numeric<impl>::template zimpl,
-                zfloat32_arithmetic<impl>::template zimpl,
-                zfloat32_bitwise<impl>::template zimpl,
-                zfloat32_comparable<impl>::template zimpl,
-                zfloat32_logical<impl>::template zimpl,
-                zfloat32_equatable<impl>::template zimpl,
-                zfloat32_conditional<impl>::template zimpl,
-                zfloat32_construction<impl>::template zimpl,
+                zfloat32_io<impl>::template impl,
+                zfloat32_math<impl>::template impl,
+                zfloat32_numeric<impl>::template impl,
+                zfloat32_arithmetic<impl>::template impl,
+                zfloat32_bitwise<impl>::template impl,
+                zfloat32_comparable<impl>::template impl,
+                zfloat32_logical<impl>::template impl,
+                zfloat32_equatable<impl>::template impl,
+                zfloat32_conditional<impl>::template impl,
+                zfloat32_construction<impl>::template impl,
 
                 composable<zval_t>::template type
             >;
 
             struct impl : public composition_t
             {
+                using zval_t = zfloat32<features>;
+                using bval_t = bfloat32<features>;
+
                 FORWARD2(impl, composition_t);
             };
         };
@@ -1544,12 +1644,15 @@ namespace zacc { namespace backend { namespace scalar {
         template<uint64_t features>
         struct __bval_float32
         {
-            using zval_t = zval<float, bool, float, zval_tag, 1, 16, features>;
-            using bval_t = bval<float, bool, 1, 16, features>;
+            using zval_base_t = zval<float, bool, float, zval_tag, 1, 16, features>;
+            using bval_base_t = bval<float, bool, 1, 16, features>;
 
-            struct impl : public bval_t
+            struct impl : public bval_base_t
             {
-                FORWARD2(impl, bval_t);
+                using zval_t = zfloat32<features>;
+                using bval_t = bfloat32<features>;
+
+                FORWARD2(impl, bval_base_t);
             };
         };
 
@@ -1564,31 +1667,41 @@ namespace zacc { namespace backend { namespace scalar {
                 printable::impl,
                 iteratable::impl,
                 convertable::impl,
-                bfloat32_io<impl>::template bimpl,
-                bfloat32_logical<impl>::template bimpl,
-                bfloat32_equatable<impl>::template bimpl,
-                bfloat32_construction<impl>::template bimpl,
+                bfloat32_io<impl>::template impl,
+                bfloat32_bitwise<impl>::template impl,
+                bfloat32_logical<impl>::template impl,
+                bfloat32_equatable<impl>::template impl,
+                bfloat32_construction<impl>::template impl,
 
                 composable<bval_t>::template type
             >;
 
             struct impl : public composition_t
             {
+                using zval_t = zfloat32<features>;
+                using bval_t = bfloat32<features>;
+
                 FORWARD2(impl, composition_t);
             };
         };
     //}
 
     template<uint64_t features>
-    struct zfloat32 : public /*composition::*/__zfloat32<features>::impl
+    struct zfloat32 : public __zfloat32<features>::impl
     {
-        FORWARD2(zfloat32, /*composition::*/__zfloat32<features>::impl);
+        using zval_t = zfloat32<features>;
+        using bval_t = bfloat32<features>;
+
+        FORWARD2(zfloat32, __zfloat32<features>::impl);
     };
 
     template<uint64_t features>
-    struct bfloat32 : public /*composition::*/__bfloat32<features>::impl
+    struct bfloat32 : public __bfloat32<features>::impl
     {
-        FORWARD2(bfloat32, /*composition::*/__bfloat32<features>::impl);
+        using zval_t = zfloat32<features>;
+        using bval_t = bfloat32<features>;
+
+        FORWARD2(bfloat32, __bfloat32<features>::impl);
     };
 
     static_assert(is_zval<zfloat32<0>>::value, "is_zval for zfloat32 failed.");

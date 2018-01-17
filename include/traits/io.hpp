@@ -46,13 +46,35 @@ namespace zacc { namespace traits {
         FORWARD(io);
 
         template<typename OutputIt>
-        void store (OutputIt result) const
+        void store (OutputIt result, bval_tag) const
+        {
+            typename zval_traits<typename composed_t::zval_t>::extracted_t data;
+
+            vstore(std::begin(data), static_cast<composed_t>(base_t::value()));
+
+            for(auto i : data)
+                *(result++) = i != 0;
+        }
+
+        template<typename OutputIt>
+        void store (OutputIt result, zval_tag) const
         {
             vstore(result, static_cast<composed_t>(base_t::value()));
         }
 
         template<typename OutputIt>
-        void stream (OutputIt result) const
+        void stream (OutputIt result, bval_tag) const
+        {
+            typename zval_traits<typename composed_t::zval_t>::extracted_t data;
+
+            vstore(std::begin(data), static_cast<composed_t>(base_t::value()));
+
+            for(auto i : data)
+                *(result++) = i != 0;
+        }
+
+        template<typename OutputIt>
+        void stream (OutputIt result, zval_tag) const
         {
             vstream(result, static_cast<composed_t>(base_t::value()));
         }
@@ -60,7 +82,7 @@ namespace zacc { namespace traits {
         const extracted_t data() const {
             alignas(base_t::alignment) extracted_t result;
 
-            store(std::begin(result));
+            store(std::begin(result), typename base_t::tag());
 
             return result;
         }

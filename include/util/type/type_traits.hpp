@@ -247,6 +247,7 @@ namespace zacc
 
         /// extracted std::array of (dim) scalar values
         using extracted_t = T;
+
     };
 
     template<typename T>
@@ -278,8 +279,12 @@ namespace zacc
         /// extracted std::array of (dim) scalar values
         using extracted_t = std::array<element_t, size>; //aligned_array<scalar_t, dim, alignment>;
 
-        using zval_t = zval_base<vector_t, mask_vector_t , element_t , zval_tag, size, alignment, features>;
-        using bval_t = zval_base<vector_t, mask_vector_t , bool , bval_tag, size, alignment, features>;
+
+
+        using zval_t = typename T::zval_t;//zval_base<vector_t, mask_vector_t , element_t , zval_tag, size, alignment, features>;
+        using bval_t = typename T::bval_t;//zval_base<vector_t, mask_vector_t , bool , bval_tag, size, alignment, features>;
+
+        //using tag = typename zval_t::tag;
     };
 
 //    template<typename T, typename enable = void>
@@ -383,7 +388,7 @@ namespace zacc
 
 
     template<typename T>
-    struct element_type<T, std::enable_if_t<is<iterable, T>>>
+    struct element_type<T, std::enable_if_t<is<iterable, T> && !is_cval<T>::value && !is_zval<T>::value && !is_bval<T>::value>>
     {
         using type =  std::remove_reference_t<decltype(*std::begin(std::declval<T&>()))>;
     };

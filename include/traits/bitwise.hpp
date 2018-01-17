@@ -55,6 +55,8 @@ namespace zacc { namespace traits {
             return vbxor(one, other);
         }
 
+        bool is_set() const { return is_set(*this); }
+
         CONVERSION(|);
         ASSIGNMENT(|);
 

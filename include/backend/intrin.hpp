@@ -84,7 +84,7 @@ inline bool _mm256_test_all_ones(__m256i val)
 #endif
 
 template<typename T>
-std::enable_if_t<!zacc::is_zval<T>::value, bool> is_set(T value)
+std::enable_if_t<!zacc::is_zval<T>::value && !zacc::is_bval<T>::value, bool> is_set(T value)
 {
 	return value != 0;
 };

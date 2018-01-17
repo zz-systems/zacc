@@ -46,8 +46,8 @@ namespace zacc { namespace traits {
          * @param one
          * @return a copy of the argument
          */
-        friend composed_t operator+(const composed_t one) {
-            return one;
+        composed_t operator+() {
+            return *this;
         }
 
         /**
@@ -55,8 +55,8 @@ namespace zacc { namespace traits {
          * @param one
          * @return negated value
          */
-        friend composed_t operator-(const composed_t one) {
-            return vneg(one);
+        composed_t operator-() {
+            return vneg(*this);
         }
 
         /**
@@ -65,8 +65,58 @@ namespace zacc { namespace traits {
          * @param other
          * @return one + other
          */
-        friend composed_t operator+(const composed_t one, const composed_t other) {
-            return vadd(one, other);
+        composed_t operator+(const composed_t other) {
+            return vadd(*this, other);
+        }
+
+        /**
+         * @brief addition operator
+         * @param one
+         * @param other
+         * @return one + other
+         */
+        composed_t &operator+=(const composed_t other) {
+            return *this = *this + other;
+        }
+
+        /**
+         * @brief addition operator
+         * @param one
+         * @param other
+         * @return one + other
+         */
+        composed_t &operator-=(const composed_t other) {
+            return *this = *this - other;
+        }
+
+        /**
+         * @brief addition operator
+         * @param one
+         * @param other
+         * @return one + other
+         */
+        composed_t &operator*=(const composed_t other) {
+            return *this = *this * other;
+        }
+
+        /**
+         * @brief addition operator
+         * @param one
+         * @param other
+         * @return one + other
+         */
+        composed_t &operator/=(const composed_t other) {
+            return *this = *this / other;
+        }
+
+        /**
+         * @brief addition operator
+         * @param one
+         * @param other
+         * @return one + other
+         */
+        composed_t &operator%=(const composed_t other) {
+            return *this = *this % other;
         }
 
         /**
@@ -75,8 +125,8 @@ namespace zacc { namespace traits {
          * @param other
          * @return one - other
          */
-        friend composed_t operator-(const composed_t one, const composed_t other) {
-            return vsub(one, other);
+        composed_t operator-(const composed_t other) {
+            return vsub(*this, other);
         }
 
         /**
@@ -85,8 +135,8 @@ namespace zacc { namespace traits {
          * @param other
          * @return one * other
          */
-        friend composed_t operator*(const composed_t one, const composed_t other) {
-            return vmul(one, other);
+        composed_t operator*(const composed_t other) {
+            return vmul(*this, other);
         }
 
         /**
@@ -95,8 +145,8 @@ namespace zacc { namespace traits {
          * @param other
          * @return one / other
          */
-        friend composed_t operator/(const composed_t one, const composed_t other) {
-            return vdiv(one, other);
+        composed_t operator/(const composed_t other) {
+            return vdiv(*this, other);
         }
 
         /**
@@ -105,8 +155,8 @@ namespace zacc { namespace traits {
          * @param other
          * @return one % other
          */
-        friend composed_t operator%(const composed_t one, const composed_t other) {
-            return vmod(one, other);
+        composed_t operator%(const composed_t other) {
+            return vmod(*this, other);
         }
 
 
@@ -151,15 +201,15 @@ namespace zacc { namespace traits {
         }
 
         CONVERSION(+);
-        ASSIGNMENT(+);
+        //ASSIGNMENT(+);
 
         CONVERSION(-);
-        ASSIGNMENT(-);
+        //ASSIGNMENT(-);
 
         CONVERSION(*);
-        ASSIGNMENT(*);
+        //ASSIGNMENT(*);
 
         CONVERSION(/);
-        ASSIGNMENT(/);
+        //ASSIGNMENT(/);
     };
 }}

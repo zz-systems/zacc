@@ -41,21 +41,35 @@ namespace zacc { namespace traits {
         using zval_t = typename base_t::zval_t;
         using bval_t = typename base_t::bval_t;
 
-        friend bval_t operator!(const composed_t one) {
-            return bval_t(vlneg(one), last_operation::logic);
+        bval_t operator!() {
+            return bval_t(vlneg(*this), last_operation::logic);
         }
 
-        friend bval_t operator||(const composed_t one, const composed_t other) {
-            return bval_t(vlor(one, other), last_operation::logic);
+        template<typename U>
+        bval_t operator||(const U other) {
+            return bval_t(vlor(*this, static_cast<bval_t>(other)), last_operation::logic);
         }
 
-        friend bval_t operator&&(const composed_t one, const composed_t other) {
-            return bval_t(vland(one, other), last_operation::logic);
+        template<typename U>
+        bval_t operator&&(const U other) {
+            return bval_t(vland(*this, static_cast<bval_t>(other)), last_operation::logic);
         }
 
+//        friend bval_t operator!(const composed_t one) {
+//            return bval_t(vlneg(one), last_operation::logic);
+//        }
+//
+//        friend bval_t operator||(const composed_t one, const composed_t other) {
+//            return bval_t(vlor(one, other), last_operation::logic);
+//        }
+//
+//        friend bval_t operator&&(const composed_t one, const composed_t other) {
+//            return bval_t(vland(one, other), last_operation::logic);
+//        }
 
-        CONVERSION2(||, bval_t);
 
-        CONVERSION2(&&, bval_t);
+        //CONVERSION2(||, bval_t);
+
+        //CONVERSION2(&&, bval_t);
     };
 }}
