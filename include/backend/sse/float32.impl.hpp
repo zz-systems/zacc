@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/numeric.hpp"
-#include "traits/logical.hpp"
 #include "traits/io.hpp"
-#include "traits/equatable.hpp"
 #include "traits/conditional.hpp"
-#include "traits/math.hpp"
-#include "traits/bitwise.hpp"
+#include "traits/numeric.hpp"
 #include "traits/comparable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/logical.hpp"
+#include "traits/equatable.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/math.hpp"
 
 /**
  * @brief float32 implementation for the sse target
@@ -248,7 +248,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse - 
              */
-            constexpr __impl(__m128 value) : base_t(value)  {
+            constexpr __impl(zval_t value) : base_t(value)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS()");
 
@@ -260,31 +260,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse - 
              */
-            constexpr __impl(__m128d value) : base_t(_mm_castpd_ps(value))  {
-
-                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction  branch
-             * @relates float32
-             * @remark sse - 
-             */
-            constexpr __impl(__m128i value) : base_t(_mm_castsi128_ps(value))  {
-
-                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction  branch
-             * @relates float32
-             * @remark sse - 
-             */
-            constexpr __impl(composed_t one, last_operation last_op) : base_t(one, last_op)  {
+            constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS()");
 

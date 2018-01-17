@@ -4,8 +4,8 @@ set(template.schema ".hpp.yml")
 set(impl.schema ".impl.hpp")
 set(test.schema ".test.cpp")
 
-set(type_template "codegen/templates/type.impl.jinja")
-set(test_template "codegen/templates/type.test.jinja")
+set(type_template "codegen/templates/type.impl.jinja2")
+set(test_template "codegen/templates/type.test.jinja2")
 
 set(codegen.cmd "${PYTHON_DIR}/Scripts/yasha.exe")
 
@@ -14,10 +14,15 @@ if(EXISTS "${codegen.cmd}")
 else()
     set(codegen.cmd "yasha")
 endif()
-set(codegen.ext "codegen/engine/codegen.py")
+set(codegen.ext "${CMAKE_CURRENT_LIST_DIR}/codegen/codegen.py")
+
+#file(GLOB_RECURSE codegen.deps    RELATIVE ${CMAKE_SOURCE_DIR}    "codegen/*.py")
 
 set(codegen.deps
-        "${codegen.ext}"
+        ${codegen.ext}
+        ${CMAKE_CURRENT_LIST_DIR}/codegen/lexer.py
+        ${CMAKE_CURRENT_LIST_DIR}/codegen/parser.py
+        ${CMAKE_CURRENT_LIST_DIR}/codegen/renderer.py
         "codegen/config/type.test.yml"
         ${type_template}
         ${test_template}
@@ -80,8 +85,8 @@ macro (generate branch templates)
         list(APPEND generated_types ${PROJECT_SOURCE_DIR}/${impl_output})
 
         # generate test files
-        generate_file(${test_output} ${template} ${test_template})
-        list(APPEND generated_tests ${PROJECT_SOURCE_DIR}/${test_output})
+        #generate_file(${test_output} ${template} ${test_template})
+        #list(APPEND generated_tests ${PROJECT_SOURCE_DIR}/${test_output})
     endforeach()
 
     list(APPEND zacc.codegen.types ${generated_types})

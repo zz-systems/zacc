@@ -2,6 +2,7 @@ from codegen.lexer import Lexer, Tokens
 from codegen.ast import *
 from codegen.common import wrap, IllegalArgumentError
 
+import pprint
 
 class SyntaxError(ValueError):
     pass
@@ -15,8 +16,8 @@ def expect(data, token):
 
     return data[token]
 
-def accept(data, token):
-    return data.get(token, None)
+def accept(data, token, default = None):
+    return (data or {}).get(token, default)
 
 def accept_except(data, tokens):
     return { k:v for k,v in data.items() if k not in wrap(tokens) }
@@ -30,59 +31,84 @@ class Parser():
         data = self._lexer.lex(data)
 
         type_ = expect(data, Tokens.TYPE)
-        return {
-            "type"      : self.type_descriptor(type_),
-            "traits"    : self.traits(expect(type_, Tokens.TRAITS)),
-            "modules"   : self.modules(expect(data, Tokens.MODULES))
-        }
+        traits = self.traits(expect(type_, Tokens.TRAITS))
+
+        return AstRoot(
+            type=   self.type_descriptor(type_),
+            traits= traits,
+            modules=self.modules(traits, expect(data, Tokens.MODULES))
+        )
 
 
     def type_descriptor(self, data) -> TypeDescriptorNode:
-        return TypeDescriptorNode(type=             expect(data, Tokens.TYPE),
-                                  target=           expect(data, Tokens.TARGET),
-                                  vector_type=      expect(data, Tokens.VECTOR),
-                                  mask_type=        expect(data, Tokens.MASK),
-                                  scalar_type=      expect(data, Tokens.SCALAR),
-                                  size=             expect(data, Tokens.SIZE),
-                                  alignment=        expect(data, Tokens.ALIGN),
-                                  traits=           self.traits(expect(data, Tokens.TRAITS)))
+        return TypeDescriptorNode(name=expect(data, Tokens.TYPE), target=expect(data, Tokens.TARGET),
+                                  vector_type=expect(data, Tokens.VECTOR), mask_type=expect(data, Tokens.MASK),
+                                  scalar_type=expect(data, Tokens.SCALAR), size=expect(data, Tokens.SIZE),
+                                  alignment=expect(data, Tokens.ALIGN), traits=self.traits(expect(data, Tokens.TRAITS)))
 
     def traits(self, data) -> TraitsNode:
-        return TraitsNode(shared=         accept(data, Tokens.SHARED),
+        return TraitsNode(shared=         accept(data, Tokens.SHARED, []),
                           default=        expect(data, Tokens.DEFAULT),
-                          boolean=        accept(data, Tokens.BOOLEAN),
-                          unsigned=       accept(data, Tokens.UNSIGNED))
+                          boolean=        accept(data, Tokens.BOOLEAN, []),
+                          unsigned=       accept(data, Tokens.UNSIGNED, []))
 
-    def modules(self, data) -> ModulesNode:
-        return ModulesNode(initializer= [self.initializer_module(k, v) for k,v in expect(data, Tokens.INIT).items()],
-                           modules=     [self.module(k, v) for k,v in accept_except(data, Tokens.INIT).items()]
-                           )
+    def modules(self, traits, data) -> ModulesNode:
 
-    def module(self, name, data) -> ModuleNode:
+        initializers = expect(data, Tokens.INIT)
+        modules = accept_except(data, Tokens.INIT)
+
+        def make_modules(func, data, traits, type=None):
+            if isinstance(traits, list):
+                return [func(name, type, data[name]) for name in traits]
+            return \
+                make_modules(func, data, traits.default, ModuleTypes.DEFAULT) + \
+                make_modules(func, data, traits.boolean, ModuleTypes.BOOLEAN) + \
+                make_modules(func, data, traits.unsigned, ModuleTypes.UNSIGNED)
+
+        return ModulesNode(
+            initializers=make_modules(self.initializer_module, initializers, self.traits({ k:[k] for k,v in initializers.items() })),
+            modules=make_modules(self.module, modules, traits))
+
+    def module(self, name, type, data) -> ModuleNode:
         return ModuleNode(name=name,
-                          mangling=accept(data, Tokens.MANGLING),
+                          mangling=False,#accept(data, Tokens.MANGLING),
                           functions = [self.function(data, k, v) for k,v in accept_except(data, Tokens.MANGLING).items()],
-                          type_prefix="z",
-                          module_prefix="")
+                          type=type)
 
-    def initializer_module(self, name, data) -> InitializerModuleNode:
-        return InitializerModuleNode(name=name,
-                                     functions=[self.initializer(data, entry) for entry in data],
-                                     type_prefix="z",
-                                     module_prefix="")
+    def initializer_module(self, name, type, data) -> ModuleNode:
+        # add default constructor
+        initializers = [{Tokens.ARGS : { Tokens.RAW : "", Tokens.TYPE : " "}, Tokens.INIT : ""}] + data
 
-    def initializer(self, module_data, data):
+        module = ModuleNode(name="construction",#self._lexer.unlex(name),
+                          mangling=False,#accept(data, Tokens.MANGLING),
+                          functions=[self.initializer(entry) for entry in initializers],
+                          type=type)
+
+        #default_cons = [] if any(cons.signature.arguments == [] for cons in module.functions) else [self.initializer({'args': 'void ', 'init': ''})]
+        #module.functions = default_cons + module.functions
+
+        return module
+
+    def initializer(self, data):
         data = self._lexer.lex(data)
 
         args = self.arguments(expect(data, Tokens.ARGS))
-        init = self.instructions(args, expect(data, Tokens.INIT))
-        body = self.instructions(args, accept(data, Tokens.BODY))
+        body = expect(data, Tokens.INIT)
+
+        init_data = {
+            Tokens.BODY: body[Tokens.BODY] if isinstance(body, dict) else body,
+            Tokens.ARGS: body[Tokens.ARGS] if isinstance(body, dict) else expect(data, Tokens.ARGS)
+        }
+
+        init = self.function(None, None, init_data).bodies[0].instructions
+        body = self.instructions(None, args, accept(data, Tokens.BODY))
 
         prefix = accept(data, Tokens.PREFIX)
         suffix = accept(data, Tokens.SUFFIX)
 
-        return InitializerNode(signature    = InitializerSignatureNode(prefix=prefix, suffix=suffix, arguments=args, initializer=init),
-                               body         = InitializerBodyNode(args, body))
+        return InitializerNode(signature    = InitializerSignatureNode(prefix=prefix, suffix=suffix, arguments=args, initializer  = init),
+                            initializer  = init,
+                            body         = InitializerBodyNode(args, body))
 
     def function(self, module_data, name, data) -> FunctionNode:
 
@@ -107,6 +133,7 @@ class Parser():
 
         # inject outer arguments and return type into bodies
         for k, v in body.items():
+            body[k][Tokens.TARGET]  = k
             body[k][Tokens.RETURNS] = accept(data, Tokens.RETURNS)
             body[k][Tokens.ARGS] = accept(data, Tokens.ARGS)
 
@@ -130,14 +157,16 @@ class Parser():
 
     def function_body(self, data):
         if isinstance(data, dict):
+            arguments   = self.arguments(expect(data, Tokens.ARGS))
+            target      = expect(data, Tokens.TARGET)
             selector    = expect(data, Tokens.REQUIRES)
             return_type = expect(data, Tokens.RETURNS)
-            instructions= self.instructions(expect(data, Tokens.ARGS), expect(data, Tokens.BODY))
+            instructions= self.instructions(return_type, arguments, expect(data, Tokens.BODY))
 
-            return FunctionBodyNode(selector=selector, return_type=return_type, instructions=instructions)
+            return FunctionBodyNode(target=target, selector=selector, return_type=return_type, instructions=instructions)
 
-    def instructions(self, arguments, data):
-        return InstructionsNode(arguments, data)
+    def instructions(self, return_type, arguments, data):
+        return InstructionsNode(return_type, arguments, data)
 
 
     def arguments(self, data):
@@ -153,7 +182,7 @@ class Parser():
         if isinstance(data, dict):
             from_, to   = expect(data, Tokens.FROM), expect(data, Tokens.TO)
 
-            prefix      = accept(data, Tokens.PREFIX) or ""
+            prefix      = accept(data, Tokens.PREFIX) or "_"
             type_       = accept(data, Tokens.TYPE)
 
             if None in [from_, to] or from_ < 0 or to < 0:
@@ -164,4 +193,4 @@ class Parser():
 
 
     def argument(self, name, type=None):
-        return ArgumentNode(type, name)
+        return ArgumentNode(name, type or "composed_t")

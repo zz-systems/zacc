@@ -262,6 +262,19 @@ namespace zacc {
         const last_operation _last_op;
     };
 
+
+    template<typename T>
+    constexpr std::enable_if_t<is_zval<T>::value, typename zval_traits<T>::bval_t> make_bval(T value, last_operation last_op = last_operation::undefined)
+    {
+        return typename zval_traits<T>::bval_t {value, last_op};
+    }
+
+    template<typename T>
+    constexpr std::enable_if_t<!is_zval<T>::value, typename zval_traits<T>::bval_t> make_bval(T value, last_operation)
+    {
+        return static_cast<typename zval_traits<T>::bval_t>(value);
+    }
+
     template<typename _ZVal>
     constexpr auto make_boolean(const _ZVal& value)
     {

@@ -65,58 +65,8 @@ namespace zacc { namespace traits {
          * @param other
          * @return one + other
          */
-        composed_t operator+(const composed_t other) {
-            return vadd(*this, other);
-        }
-
-        /**
-         * @brief addition operator
-         * @param one
-         * @param other
-         * @return one + other
-         */
-        composed_t &operator+=(const composed_t other) {
-            return *this = *this + other;
-        }
-
-        /**
-         * @brief addition operator
-         * @param one
-         * @param other
-         * @return one + other
-         */
-        composed_t &operator-=(const composed_t other) {
-            return *this = *this - other;
-        }
-
-        /**
-         * @brief addition operator
-         * @param one
-         * @param other
-         * @return one + other
-         */
-        composed_t &operator*=(const composed_t other) {
-            return *this = *this * other;
-        }
-
-        /**
-         * @brief addition operator
-         * @param one
-         * @param other
-         * @return one + other
-         */
-        composed_t &operator/=(const composed_t other) {
-            return *this = *this / other;
-        }
-
-        /**
-         * @brief addition operator
-         * @param one
-         * @param other
-         * @return one + other
-         */
-        composed_t &operator%=(const composed_t other) {
-            return *this = *this % other;
+        friend composed_t operator+(const composed_t one,const composed_t other) {
+            return vadd(one, other);
         }
 
         /**
@@ -125,8 +75,8 @@ namespace zacc { namespace traits {
          * @param other
          * @return one - other
          */
-        composed_t operator-(const composed_t other) {
-            return vsub(*this, other);
+        friend composed_t operator-(const composed_t one,const composed_t other) {
+            return vsub(one, other);
         }
 
         /**
@@ -135,8 +85,8 @@ namespace zacc { namespace traits {
          * @param other
          * @return one * other
          */
-        composed_t operator*(const composed_t other) {
-            return vmul(*this, other);
+        friend composed_t operator*(const composed_t one,const composed_t other) {
+            return vmul(one, other);
         }
 
         /**
@@ -145,8 +95,8 @@ namespace zacc { namespace traits {
          * @param other
          * @return one / other
          */
-        composed_t operator/(const composed_t other) {
-            return vdiv(*this, other);
+        friend composed_t operator/(const composed_t one,const composed_t other) {
+            return vdiv(one, other);
         }
 
         /**
@@ -155,10 +105,113 @@ namespace zacc { namespace traits {
          * @param other
          * @return one % other
          */
-        composed_t operator%(const composed_t other) {
-            return vmod(*this, other);
+        friend composed_t operator%(const composed_t one, const composed_t other) {
+            return vmod(one, other);
         }
 
+//        /**
+//         * @brief addition operator
+//         * @param one
+//         * @param other
+//         * @return one + other
+//         */
+//        composed_t operator+(const composed_t other) {
+//            return vadd(*this, other);
+//        }
+//
+//        /**
+//         * @brief subtration operator
+//         * @param one
+//         * @param other
+//         * @return one - other
+//         */
+//        composed_t operator-(const composed_t other) {
+//            return vsub(*this, other);
+//        }
+//
+//        /**
+//         * @brief multiplication operator
+//         * @param one
+//         * @param other
+//         * @return one * other
+//         */
+//        composed_t operator*(const composed_t other) {
+//            return vmul(*this, other);
+//        }
+//
+//        /**
+//         * @brief division operator
+//         * @param one
+//         * @param other
+//         * @return one / other
+//         */
+//        composed_t operator/(const composed_t other) {
+//            return vdiv(*this, other);
+//        }
+//
+//        /**
+//         * @brief modulus operator
+//         * @param one
+//         * @param other
+//         * @return one % other
+//         */
+//        composed_t operator%(const composed_t other) {
+//            return vmod(*this, other);
+//        }
+
+
+
+//        /**
+//         * @brief addition operator
+//         * @param one
+//         * @param other
+//         * @return one + other
+//         */
+//        composed_t &operator+=(const composed_t other) {
+//            return *this = *this + other;
+//        }
+//
+//        /**
+//         * @brief addition operator
+//         * @param one
+//         * @param other
+//         * @return one + other
+//         */
+//        composed_t &operator-=(const composed_t other) {
+//            *this = *this - other;
+//
+//            return *this;
+//        }
+//
+//        /**
+//         * @brief addition operator
+//         * @param one
+//         * @param other
+//         * @return one + other
+//         */
+//        composed_t &operator*=(const composed_t other) {
+//            return *this = *this * other;
+//        }
+//
+//        /**
+//         * @brief addition operator
+//         * @param one
+//         * @param other
+//         * @return one + other
+//         */
+//        composed_t &operator/=(const composed_t other) {
+//            return *this = *this / other;
+//        }
+//
+//        /**
+//         * @brief addition operator
+//         * @param one
+//         * @param other
+//         * @return one + other
+//         */
+//        composed_t &operator%=(const composed_t other) {
+//            return *this = *this % other;
+//        }
 
         /**
          * @brief prefix increment
@@ -201,15 +254,15 @@ namespace zacc { namespace traits {
         }
 
         CONVERSION(+);
-        //ASSIGNMENT(+);
+        ASSIGNMENT(+);
 
         CONVERSION(-);
-        //ASSIGNMENT(-);
+        ASSIGNMENT(-);
 
         CONVERSION(*);
-        //ASSIGNMENT(*);
+        ASSIGNMENT(*);
 
         CONVERSION(/);
-        //ASSIGNMENT(/);
+        ASSIGNMENT(/);
     };
 }}

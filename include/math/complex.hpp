@@ -288,7 +288,7 @@ namespace zacc { namespace math {
                 if (base_t::is_vector)
                     ss << "[ ";
 
-                for(auto i = 0; i < base_t::element_t::size(); i++)
+                for(size_t i = 0; i < base_t::element_t::size(); i++)
                 {
                     ss << "( " << re[i] << ", " << im[i] << "i ) ";
                 }
@@ -453,7 +453,7 @@ namespace zacc { namespace math {
              * @relates float32
              * @remark avx2 - default
              */
-            friend bval_t vsel(composed_t condition, composed_t if_value, composed_t else_value) noexcept {
+            friend composed_t vsel(bval_t condition, composed_t if_value, composed_t else_value) noexcept {
 
                 return
                 {
@@ -483,7 +483,7 @@ namespace zacc { namespace math {
          * @remark avx2
          */
         template<typename base_t>
-        using impl = traits::conditional<__impl<base_t>, bcomplex<typename zval_traits<typename base_t::element_t>::bval_t>>;
+        using impl = traits::conditional<__impl<base_t>, zcomplex<typename base_t::element_t>>;
 
     };
 
@@ -513,7 +513,7 @@ namespace zacc { namespace math {
         struct impl : public composition_t
         {
             using zval_t = zcomplex<T>;
-            using bval_t = zcomplex<typename T::bval_t>;
+            using bval_t = bcomplex<T>;
 
             FORWARD2(impl, composition_t);
         };
@@ -523,7 +523,7 @@ namespace zacc { namespace math {
     struct zcomplex : public __zcomplex<T>::impl
     {
         using zval_t = zcomplex<T>;
-        using bval_t = zcomplex<typename T::bval_t>;
+        using bval_t = bcomplex<T>;
 
         FORWARD2(zcomplex, __zcomplex<T>::impl);
     };
@@ -541,8 +541,6 @@ namespace zacc { namespace math {
             complex_printable::impl,
             iteratable::impl,
 
-            complex_io<impl>::template impl,
-            complex_arithmetic<impl>::template impl,
             complex_conditional<impl>::template impl,
             complex_construction<impl>::template impl,
 
@@ -552,7 +550,7 @@ namespace zacc { namespace math {
         struct impl : public composition_t
         {
             using zval_t = zcomplex<T>;
-            using bval_t = zcomplex<typename T::bval_t>;
+            using bval_t = bcomplex<T>;
 
             FORWARD2(impl, composition_t);
         };
@@ -562,7 +560,7 @@ namespace zacc { namespace math {
     struct bcomplex : public __bcomplex<T>::impl
     {
         using zval_t = zcomplex<T>;
-        using bval_t = zcomplex<typename T::bval_t>;
+        using bval_t = bcomplex<T>;
 
         //FORWARD2(bcomplex, __bcomplex<T>::impl);
 
@@ -574,8 +572,8 @@ namespace zacc { namespace math {
 
         //template<typename U, typename enable = std::enable_if_t<zacc::is_zval<U>::value && std::is_convertible<U, typename zval_traits<T>::vector_t>::value>>
         constexpr bcomplex(const zcomplex<typename zval_traits<T>::zval_t>& other, last_operation last_op = last_operation::undefined)
-                //: __bcomplex<T>::impl (static_cast<T>(other.real()),
-                //                       static_cast<T>(other.imag()))
+                : __bcomplex<T>::impl (make_bval<T>(other.real(), last_op),
+                                       make_bval<T>(other.imag(), last_op))
         {
             static_assert(is_zval<decltype(other.imag())>::value, "kebab");
         }

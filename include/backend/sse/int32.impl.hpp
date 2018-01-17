@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/comparable.hpp"
-#include "traits/logical.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/conditional.hpp"
-#include "traits/math.hpp"
 #include "traits/equatable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/numeric.hpp"
+#include "traits/math.hpp"
+#include "traits/logical.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/conditional.hpp"
+#include "traits/comparable.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/io.hpp"
-#include "traits/numeric.hpp"
 
 /**
  * @brief int32 implementation for the sse target
@@ -249,7 +249,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - 
              */
-            constexpr __impl(__m128 value) : base_t(_mm_castps_si128(value))  {
+            constexpr __impl(zval_t value) : base_t(value)  {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "int32(int32_t[4])", "", "CONS()");
 
@@ -261,31 +261,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int32
              * @remark sse - 
              */
-            constexpr __impl(__m128d value) : base_t(_mm_castpd_si128(value))  {
-
-                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "int32(int32_t[4])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction  branch
-             * @relates int32
-             * @remark sse - 
-             */
-            constexpr __impl(__m128i value) : base_t(value)  {
-
-                ZTRACE_BACKEND("sse.int32.impl", __LINE__, "int32(int32_t[4])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction  branch
-             * @relates int32
-             * @remark sse - 
-             */
-            constexpr __impl(composed_t one, last_operation last_op) : base_t(one, last_op)  {
+            constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "int32(int32_t[4])", "", "CONS()");
 

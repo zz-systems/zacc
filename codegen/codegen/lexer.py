@@ -34,12 +34,19 @@ class Tokens(Enum):
 class Lexer:
     def __init__(self, mapping):
         self._mapping = mapping
+        self._inv_mapping = {v: k for k, v in mapping.items()}
 
     def lex(self, data):
         if isinstance(data, dict):
             return { self._mapping.get(k, k): self.lex(v) for k,v in data.items()}
         else:
             return data
+
+    def unlex(self, data):
+        if isinstance(data, dict):
+            return { self._inv_mapping.get(k, k): self.unlex(v) for k,v in data.items()}
+        else:
+            return self._inv_mapping.get(data, data)
 
 
 class LexerV1(Lexer):

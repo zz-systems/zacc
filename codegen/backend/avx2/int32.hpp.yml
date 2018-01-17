@@ -8,11 +8,11 @@ type:
   alignment: 32
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-    external:
+    shared:
       - printable
       - iteratable
       - convertable
-    internal:
+    default:
       - io
       - math
       - numeric
@@ -25,39 +25,44 @@ type:
       - conditional
 
     boolean:
-      - boolean_io
+      - io
+      - bitwise
       - logical
       - equatable
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
-  construction:
-    - args: __m256 value
-      init: _mm256_cvttps_epi32(value)
+  init:
+    default:
+      - args: __m256 value
+        init: _mm256_cvttps_epi32(value)
 
-    - args: __m256d value
-      init: _mm256_castsi128_si256(_mm256_cvttpd_epi32(value))
+      - args: __m256d value
+        init: _mm256_castsi128_si256(_mm256_cvttpd_epi32(value))
 
-    - args: __m256i value
-      init: value
+      - args: __m256i value
+        init: value
 
-    - args: [[*scalar_t, value]]
-      init: _mm256_set1_epi32(value)
+      - args: [[*scalar_t, value]]
+        init: _mm256_set1_epi32(value)
 
-    - args: "std::array<typename base_t::element_t, base_t::size()> value"
-      init: _mm256_loadu_si256((__m256i*)value.data())
+      - args: "std::array<typename base_t::element_t, base_t::size()> value"
+        init: _mm256_loadu_si256((__m256i*)value.data())
 
-    - args: { from: *vec_size, to: 0, type: *scalar_t }
-      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi32 }
+      - args: { from: *vec_size, to: 0, type: *scalar_t }
+        init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi32 }
 
-  boolean_construction:
-    - args: __m256 value
-      init: _mm256_castps_si256(value)
+    boolean:
+      - args: __m256 value
+        init: _mm256_castps_si256(value)
 
-    - args: __m256d value
-      init: _mm256_castpd_si256(value)
+      - args: __m256d value
+        init: _mm256_castpd_si256(value)
 
-    - args: __m256i value
-      init: value
+      - args: __m256i value
+        init: value
+
+      - args: composed_t one, last_operation last_op
+        init: one, last_op
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

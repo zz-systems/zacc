@@ -1,21 +1,61 @@
+import inspect
+from enum import *
+
+
+class IndentingRepr:
+    _level = -1
+
+    @property
+    def level(self):
+        return type(self)._level
+
+    @level.setter
+    def level(self, val):
+        type(self)._level = val
+
+    def render(self, obj):
+        def indent(level = 0):
+            return "\t" * (self.level + level)
+
+        def render(val):
+            if isinstance(val, list):
+                items = "".join([f"\n{indent(2)}{v}" for v in val])
+                return f"[{items}\n{indent(1)}]"
+
+            if isinstance(val, dict):
+                items = "".join([f"\n{indent(2)}{k} = {v}" for k,v in val])
+                return f"{{{items}\n{indent(1)}}}"
+
+            return f"{val}"
+
+        all_attributes = inspect.getmembers(obj, lambda a:not(inspect.isroutine(a)))
+        attributes = [ (k,v) for k,v in all_attributes if not(k.startswith('__') and k.endswith('__')) ]
+        try:
+            self.level += 1
+            attributes = "\n".join([ f"{indent(1)}{k} = {render(v)}" for k,v in attributes])
+        except:
+            attributes = "Error"
+        finally:
+            result = f"{obj.__class__.__name__}:\n{attributes}"
+            self.level -= 1
+
+        return result
 
 class AstNode:
-    def __init__(self, indent_level):
-        self._indent_level = indent_level
-
     def __repr__(self):
-        indent = "\t" * self._indent_level
-        return f"\n{indent}{self.__class__.__name__}"
+        return IndentingRepr().render(self)
 
-class Ast:
-    def __init__(self, type, modules):
+class AstRoot(AstNode):
+    def __init__(self, type, traits, modules):
         self.type = type
+        self.traits = traits
         self.modules = modules
 
 
-class TypeDescriptorNode:
-    def __init__(self, type, target, vector_type, mask_type, scalar_type, size, alignment, traits):
-        self.type = type
+class TypeDescriptorNode(AstNode):
+    def __init__(self, name, target, vector_type, mask_type, scalar_type, size, alignment, traits):
+
+        self.name = name
         self.target = target
         self.vector_type = vector_type
         self.mask_type = mask_type
@@ -24,7 +64,9 @@ class TypeDescriptorNode:
         self.alignment = alignment
         self.traits = traits
 
-class TraitsNode:
+
+
+class TraitsNode(AstNode):
     def __init__(self, shared, default, boolean, unsigned):
 
         self.shared = shared
@@ -32,77 +74,54 @@ class TraitsNode:
         self.boolean = boolean
         self.unsigned = unsigned
 
-    def __repr__(self):
-        return f"{self.__class__.__name__} shared: {self.shared} default: {self.default} boolean: {self.boolean} unsigned: {self.unsigned}"
+        self.all = default + boolean + unsigned
 
-class ModulesNode:
-    def __init__(self, initializer, modules):
-        self.initializer = initializer
+class ModulesNode(AstNode):
+    def __init__(self, initializers, modules):
+        self.initializers = initializers
         self.modules = modules
 
-    def __repr__(self):
-        return f"{self.__class__.__name__} initializer: {self.initializer} modules: {self.modules}"
 
-class ModuleNode:
-    def __init__(self, name, mangling, type_prefix, module_prefix, functions):
+class ModuleTypes(Enum):
+    DEFAULT = auto()
+    BOOLEAN = auto()
+    UNSIGNED = auto()
+    SHARED = auto()
+
+class ModuleNode(AstNode):
+    def __init__(self, name, mangling, type, functions):
         self.name = name
         self.mangling = mangling
-        self.type_prefix = type_prefix
-        self.module_prefix = module_prefix
+        self.type = type
         self.functions = functions
 
-    def __repr__(self):
-        return f"\n\t{self.__class__.__name__} name: {self.name} mangling: {self.mangling} type_prefix: {self.type_prefix} module_prefix: {self.module_prefix} functions: {self.functions}"
-
-class InitializerModuleNode:
-    def __init__(self, name, type_prefix, module_prefix, functions):
-        self.name = name
-        self.type_prefix = type_prefix
-        self.module_prefix = module_prefix
-        self.functions = functions
-
-    def __repr__(self):
-        return f"\n\t{self.__class__.__name__} name: {self.name} type_prefix: {self.type_prefix} module_prefix: {self.module_prefix} functions: {self.functions}"
-
-class InitializerNode:
-    def __init__(self, signature, body):
+class InitializerNode(AstNode):
+    def __init__(self, signature, initializer, body):
         self.signature      = signature
-        self.body           = body
+        self.initializer    = initializer
+        self.bodies         = [body]
 
-class InitializerSignatureNode:
+class InitializerSignatureNode(AstNode):
     def __init__(self, prefix, suffix, arguments, initializer):
         self.prefix         = prefix
         self.suffix         = suffix
         self.arguments      = arguments
         self.initializer    = initializer
 
-    def render(self):
-        return "{prefix} {name}({args}) : {initializer} {suffix}".format(prefix=self.prefix,
-                                                                   name="__impl",
-                                                                   args = ", ".format([f"{arg.type} {arg.name}" for arg in self.arguments]),
-                                                                   initializer=f"base_t({self.initializer.render()})",
-                                                                   suffix = self.suffix)
-
-class InitializerBodyNode:
-    def __init__(self, arguments, body):
+class InitializerBodyNode(AstNode):
+    def __init__(self, arguments, instructions):
         self.arguments      = arguments
-        self.body           = body
+        self.instructions   = instructions
 
-    def render(self):
-        return self.body.render()
-
-class FunctionNode:
+class FunctionNode(AstNode):
     def __init__(self, signature, bodies):
         self.signature  = signature
         self.bodies     = bodies
 
-    def __repr__(self):
-        return f"\n\t\t{self.__class__.__name__} signature: '{self.signature}' bodies: {self.bodies}"
-
     def render(self):
         pass
 
-class FunctionSignatureNode:
+class FunctionSignatureNode(AstNode):
     def __init__(self, name, mangling, prefix, suffix, return_type, arguments):
         self.name = name
         self.mangling = mangling
@@ -111,67 +130,30 @@ class FunctionSignatureNode:
         self.return_type = return_type
         self.arguments = arguments
 
-    def __repr__(self):
-        return f"\n\t\t\t{self.__class__.__name__} name: '{self.name}' mangling: {self.mangling} prefix: '{self.prefix}' return_type: '{self.return_type}' arguments: {self.arguments}"
-
-    def render(self):
-        return "{prefix} {returns} {name}({args}) {suffix}".format(prefix=self.prefix,
-                                                                   returns=self.return_type,
-                                                                   name=self.name,
-                                                                   args = ", ".format([f"{arg.type} {arg.name}" for arg in self.arguments]),
-                                                                   suffix = self.suffix)
-
-class FunctionBodyNode:
-    def __init__(self, selector, return_type, instructions):
+class FunctionBodyNode(AstNode):
+    def __init__(self, target, selector, return_type, instructions):
+        self.target         = target
         self.selector       = selector
         self.return_type    = return_type
         self.instructions   = instructions
 
-    def __repr__(self):
-        return f"\n\t\t\t{self.__class__.__name__} selector: {self.selector} instructions: {self.instructions}"
-
-    def render(self):
-        body = self.instructions.render()
-
-        if body[-1].find("return") == -1\
-                and self.return_type.find("void") == -1:
-            body[-1] = "return " + body[-1]
-
-        return body
-
-class InstructionsNode:
-    def __init__(self, arguments, body):
+class InstructionsNode(AstNode):
+    def __init__(self, return_type, arguments, body):
+        self.return_type = return_type
         self.arguments = arguments
         self.body = body
 
-
-    def __repr__(self):
-        return f"\n\t\t\t\t{self.__class__.__name__} arguments: {self.arguments} body: {self.body}"
-
-    def render(self):
-        arguments   = ", ".join([arg.name for arg in self.arguments])
-        body        = self.body
-
-        if len(body) == 1 and body[0].find('(') == -1:
-            body[0] = "{}({})".format(body[0], arguments)
-
-        return [b + ';' if not b.rstrip().endswith(';') else b for b in body]
-
-class ArgumentNode:
-    default_type = "composed_t"
-    def __init__(self, type, name):
+class ArgumentNode(AstNode):
+    def __init__(self, name, type):
 
         if isinstance(name, list) and len(name) == 2:
             self.type = name[0]
             self.name = name[1]
         else:
             # allow patterns like ('typename test::test', 'variable')
-            parts = [type or self.default_type] + name.split()
+            parts = [type] + name.split()
 
             # set offset to ignore default_type
             offset = len(parts) > 2
             self.type = " ".join(parts[offset:-1])
             self.name = parts[-1]
-
-    def __repr__(self):
-        return f"\n\t\t\t\t{self.__class__.__name__} type: {self.type} name: {self.name}"

@@ -37,7 +37,7 @@ namespace zacc { namespace test {
         TYPED_TEST_P(comparison_test, equals)
         {
             TypeParam value = 5;
-            TypeParam actual= value == 5;
+            auto actual= value == 5;
 
             VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
@@ -49,7 +49,7 @@ namespace zacc { namespace test {
         TYPED_TEST_P(comparison_test, not_equals)
         {
             TypeParam value = 5;
-            TypeParam actual= value != 5;
+            auto actual= value != 5;
 
             VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
 
@@ -61,7 +61,7 @@ namespace zacc { namespace test {
         TYPED_TEST_P(comparison_test, greater_than)
         {
             TypeParam value = 5;
-            TypeParam actual= value > 4;
+            auto actual= value > 4;
 
             VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
@@ -77,7 +77,7 @@ namespace zacc { namespace test {
         TYPED_TEST_P(comparison_test, greater_than_equal)
         {
             TypeParam value = 5;
-            TypeParam actual= value >= 4;
+            auto actual= value >= 4;
 
             VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
@@ -93,7 +93,7 @@ namespace zacc { namespace test {
         TYPED_TEST_P(comparison_test, less_than)
         {
             TypeParam value = 5;
-            TypeParam actual= value < 4;
+            auto actual= value < 4;
 
             VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
 
@@ -109,7 +109,7 @@ namespace zacc { namespace test {
         TYPED_TEST_P(comparison_test, less_than_equal)
         {
             TypeParam value = 5;
-            TypeParam actual= value <= 4;
+            auto actual= value <= 4;
 
             VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
 

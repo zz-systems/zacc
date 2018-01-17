@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/conditional.hpp"
-#include "traits/logical.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/bitwise_shift.hpp"
 #include "traits/equatable.hpp"
-#include "traits/numeric.hpp"
-#include "traits/io.hpp"
 #include "traits/comparable.hpp"
+#include "traits/conditional.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/math.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/io.hpp"
+#include "traits/logical.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/numeric.hpp"
 
 /**
  * @brief int16 implementation for the sse target
@@ -225,7 +225,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int16
              * @remark sse - 
              */
-            constexpr __impl(__m128 value) : base_t(_mm_castps_si128(value))  {
+            constexpr __impl(zval_t value) : base_t(value)  {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS()");
 
@@ -237,31 +237,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int16
              * @remark sse - 
              */
-            constexpr __impl(__m128d value) : base_t(_mm_castpd_si128(value))  {
-
-                ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction  branch
-             * @relates int16
-             * @remark sse - 
-             */
-            constexpr __impl(__m128i value) : base_t(value)  {
-
-                ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction  branch
-             * @relates int16
-             * @remark sse - 
-             */
-            constexpr __impl(composed_t one, last_operation last_op) : base_t(one, last_op)  {
+            constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS()");
 

@@ -8,11 +8,11 @@ type:
   alignment: 16
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-    external:
+    shared:
       - printable
       - iteratable
       - convertable
-    internal:
+    default:
       - io
       - math
       - numeric
@@ -25,30 +25,35 @@ type:
 
     boolean:
       - io
+      - bitwise
       - logical
       - equatable
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
-  construction:
-    - args: [[*scalar_t, value]]
-      init: value
+  init:
+    default:
+      - args: [[*scalar_t, value]]
+        init: value
 
-    - prefix: "template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>"
-      args: "const T &value"
-      init: value.value()
+      - prefix: "template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>"
+        args: "const T &value"
+        init: value.value()
 
-    - args: "std::array<typename base_t::element_t, base_t::size()> value"
-      init: "value[0]"
+      - args: "std::array<typename base_t::element_t, base_t::size()> value"
+        init: "value[0]"
 
-  boolean_construction:
-    - args: float value
-      init: value != 0
+    boolean:
+      - args: float value
+        init: value != 0
 
-    - args: double value
-      init: value != 0
+      - args: double value
+        init: value != 0
 
-    - args: int value
-      init: value != 0
+      - args: int value
+        init: value != 0
+
+      - args: composed_t one, last_operation last_op
+        init: one, last_op
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

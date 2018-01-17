@@ -68,8 +68,8 @@ namespace zacc { namespace traits {
 //        }
 
 
-        //CONVERSION2(||, bval_t);
-
-        //CONVERSION2(&&, bval_t);
+//        CONVERSION2(||, bval_t);
+//
+//        CONVERSION2(&&, bval_t);
     };
 }}

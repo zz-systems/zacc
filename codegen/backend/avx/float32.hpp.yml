@@ -8,11 +8,11 @@ type:
   alignment: 32
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-     external:
+     shared:
       - printable
       - iteratable
       - convertable
-     internal:
+     default:
        - io
        - math
        - numeric
@@ -23,27 +23,28 @@ type:
        - conditional
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
-  construction:
-    - args: __m256 value
-      init: value
+  init:
+    default:
+      - args: __m256 value
+        init: value
 
-    - args: __m256d value
-      init: _mm256_castps128_ps256(_mm256_cvtpd_ps(value))
+      - args: __m256d value
+        init: _mm256_castps128_ps256(_mm256_cvtpd_ps(value))
 
-    - args: __m256i value
-      init: _mm256_cvtepi32_ps(value)
+      - args: __m256i value
+        init: _mm256_cvtepi32_ps(value)
 
-    - args: [[*scalar_t, value]]
-      init: _mm256_set1_ps(value)
+      - args: [[*scalar_t, value]]
+        init: _mm256_set1_ps(value)
 
-    - args: "std::array<typename base_t::element_t, base_t::size()> value"
-      init: _mm256_loadu_ps(value.data())
+      - args: "std::array<typename base_t::element_t, base_t::size()> value"
+        init: _mm256_loadu_ps(value.data())
 
-    - args: "std::array<sse::zint32<base_t::capability>, 2> value"
-      init: _mm256_set_m128(_mm_cvtepi32_ps(value[1]), _mm_cvtepi32_ps(value[0]))
+      - args: "std::array<sse::zint32<base_t::capability>, 2> value"
+        init: _mm256_set_m128(_mm_cvtepi32_ps(value[1]), _mm_cvtepi32_ps(value[0]))
 
-    - args: { from: *vec_size, to: 0, type: *scalar_t }
-      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_ps }
+      - args: { from: *vec_size, to: 0, type: *scalar_t }
+        init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_ps }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
