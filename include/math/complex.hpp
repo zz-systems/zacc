@@ -578,6 +578,23 @@ namespace zacc { namespace math {
             static_assert(is_zval<decltype(other.imag())>::value, "kebab");
         }
 
+        template<typename U, typename enable = std::enable_if_t<is_zval<U>::value || is_bval<U>::value>>
+        constexpr bcomplex(U one)
+                : __bcomplex<T>::impl (make_bval<T>(one),
+                                       make_bval<T>(one))
+        {
+        }
+
+        template<typename U, typename enable = std::enable_if_t<is_zval<U>::value || is_bval<U>::value>>
+        constexpr bcomplex(T one, T other)
+                : __bcomplex<T>::impl (make_bval<T>(one),
+                                       make_bval<T>(other))
+        {
+        }
+
+        bcomplex(bool one) = delete;
+
+
 //        template<typename U, typename enable = std::enable_if_t<zacc::is_zval<U>::value && std::is_convertible<U, T>::value>>
 //        constexpr bcomplex(const U& other, last_operation last_op = last_operation::undefined)
 //                : __bcomplex<T>::impl (typename zval_traits<T>::bval_t(static_cast<T>(other, last_op)),

@@ -231,10 +231,6 @@ namespace zacc {
         //    return value();
        // }
 
-        constexpr operator bool()
-        {
-            return is_set(_value);
-        }
 //        template <typename size = std::integral_constant<size_t, _Size>, typename enable = typename std::enable_if<(size::value > 1), _Vector>::type>
 //        constexpr operator _Vector()
 //        {

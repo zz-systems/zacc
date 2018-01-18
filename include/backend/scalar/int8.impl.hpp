@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/math.hpp"
-#include "traits/logical.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/comparable.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/equatable.hpp"
 #include "traits/numeric.hpp"
-#include "traits/arithmetic.hpp"
 #include "traits/io.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/math.hpp"
+#include "traits/logical.hpp"
+#include "traits/arithmetic.hpp"
 #include "traits/conditional.hpp"
 
 /**
@@ -213,7 +213,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int8
              * @remark scalar - 
              */
-            constexpr __impl(float value) : base_t(value != 0)  {
+            constexpr __impl(zval_t value) : base_t(value.value() != 0)  {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "int8(int8_t[1])", "", "CONS()");
 
@@ -225,31 +225,7 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int8
              * @remark scalar - 
              */
-            constexpr __impl(double value) : base_t(value != 0)  {
-
-                ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "int8(int8_t[1])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction  branch
-             * @relates int8
-             * @remark scalar - 
-             */
-            constexpr __impl(int value) : base_t(value != 0)  {
-
-                ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "int8(int8_t[1])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction  branch
-             * @relates int8
-             * @remark scalar - 
-             */
-            constexpr __impl(composed_t one, last_operation last_op) : base_t(one, last_op)  {
+            constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "int8(int8_t[1])", "", "CONS()");
 
@@ -1141,11 +1117,11 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates int8
              * @remark scalar - Tokens.DEFAULT
              */
-            friend zint8<base_t::features> vsel(composed_t condition, composed_t if_value, composed_t else_value)  {
+            friend zint8<base_t::features> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
                 ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "int8(int8_t[1])", "Tokens.DEFAULT", "");
 
-                return (condition.value() != 0 ? if_value : else_value);
+                return (condition.value() ? if_value : else_value);
             }
 
         };

@@ -55,7 +55,11 @@ namespace zacc { namespace traits {
             return vbxor(one, other);
         }
 
-        bool is_set() const { return is_set(*this); }
+//        template<typename U = bool>
+//        constexpr operator std::enable_if_t<is_bval<composed_t>::value, U >() const
+//        {
+//            return is_set(*this);
+//        }
 
         CONVERSION(|);
         ASSIGNMENT(|);

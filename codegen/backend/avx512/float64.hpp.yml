@@ -97,7 +97,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: [condition, if_value, else_value]
+      args: [bval_t condition, if_value, else_value]
       mangling: false
       body:
           _mm512_or_pd(_mm512_andnot_pd(condition, else_value), _mm512_and_pd(condition, if_value))

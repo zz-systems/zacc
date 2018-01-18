@@ -124,6 +124,6 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: [condition, if_value, else_value]
+      args: [bval_t condition, if_value, else_value]
       mangling: false
       body: return zint16<base_t::capability> ({ vsel(condition.value()[1], if_value.value()[1], else_value.value()[1]), vsel(condition.value()[0], if_value.value()[0], else_value.value()[0]) });

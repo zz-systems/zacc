@@ -26,6 +26,7 @@ type:
 
     boolean:
       - io
+      - bitwise
       - logical
       - equatable
 #-----------------------------------------------------------------------------------------------------------------------
@@ -204,7 +205,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: [condition, if_value, else_value]
+      args: [bval_t condition, if_value, else_value]
       mangling: false
       body:
         sse4:

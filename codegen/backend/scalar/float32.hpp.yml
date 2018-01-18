@@ -43,17 +43,11 @@ modules:
         init: "value[0]"
 
     boolean:
-      - args: float value
-        init: value != 0
+      - args: zval_t value
+        init: value.value() != 0
 
-      - args: double value
-        init: value != 0
-
-      - args: int value
-        init: value != 0
-
-      - args: composed_t one, last_operation last_op
-        init: one, last_op
+      - args: bval_t value, last_operation last_op
+        init: value, last_op
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -169,7 +163,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: [condition, if_value, else_value]
+      args: [bval_t condition, if_value, else_value]
       mangling: false
-      body: "(condition.value() != 0 ? if_value : else_value)"
+      body: "(condition.value() ? if_value : else_value)"
 #-----------------------------------------------------------------------------------------------------------------------

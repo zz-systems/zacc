@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/equatable.hpp"
-#include "traits/comparable.hpp"
-#include "traits/conditional.hpp"
-#include "traits/arithmetic.hpp"
+#include "traits/logical.hpp"
 #include "traits/math.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/conditional.hpp"
 #include "traits/bitwise_shift.hpp"
 #include "traits/io.hpp"
-#include "traits/logical.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/numeric.hpp"
+#include "traits/comparable.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/equatable.hpp"
 
 /**
  * @brief int16 implementation for the sse target
@@ -1189,7 +1189,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int16
              * @remark sse - sse4
              */
-            template<typename T = zint16<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  {
+            template<typename T = zint16<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "sse4", "");
 
@@ -1203,7 +1203,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int16
              * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = zint16<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vsel(composed_t condition, composed_t if_value, composed_t else_value)  {
+            template<typename T = zint16<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "Tokens.DEFAULT", "");
 

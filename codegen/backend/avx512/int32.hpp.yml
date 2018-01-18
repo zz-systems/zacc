@@ -100,6 +100,6 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: [condition, if_value, else_value]
+      args: [bval_t condition, if_value, else_value]
       mangling: false
       body: _mm512_or_si128(_mm512_andnot_si128(condition, else_value), _mm512_and_si128(condition, if_value))

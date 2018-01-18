@@ -10,6 +10,6 @@ class TestParser(TestCase):
     def test_lex(self):
         with open("int32.hpp.yml", 'r') as stream:
             try:
-                pprint.pprint(dict(Parser(LexerV1()).parse(yaml.load(stream))))
+                pprint.pprint(Parser(LexerV1()).parse(yaml.load(stream)))
             except yaml.YAMLError as exc:
                 print(exc)

@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/logical.hpp"
-#include "traits/math.hpp"
-#include "traits/equatable.hpp"
-#include "traits/io.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/conditional.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/comparable.hpp"
+#include "traits/math.hpp"
+#include "traits/logical.hpp"
 #include "traits/numeric.hpp"
+#include "traits/equatable.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/io.hpp"
+#include "traits/conditional.hpp"
 
 /**
  * @brief int16 implementation for the avx2 target
@@ -225,7 +225,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int16
              * @remark avx2 - 
              */
-            constexpr __impl(__m256 value) : base_t(_mm256_castps_si256(value))  {
+            constexpr __impl(zval_t value) : base_t(value)  {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
 
@@ -237,31 +237,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int16
              * @remark avx2 - 
              */
-            constexpr __impl(__m256d value) : base_t(_mm256_castpd_si256(value))  {
-
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction  branch
-             * @relates int16
-             * @remark avx2 - 
-             */
-            constexpr __impl(__m256i value) : base_t(value)  {
-
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction  branch
-             * @relates int16
-             * @remark avx2 - 
-             */
-            constexpr __impl(composed_t one, last_operation last_op) : base_t(one, last_op)  {
+            constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
 
@@ -1159,7 +1135,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int16
              * @remark avx2 - Tokens.DEFAULT
              */
-            friend zint16<base_t::features> vsel(composed_t condition, composed_t if_value, composed_t else_value)  {
+            friend zint16<base_t::features> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
 

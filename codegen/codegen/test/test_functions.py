@@ -5,9 +5,6 @@ from unittest.mock import patch
 from codegen.functions import *
 
 class TestFunctionBody(TestCase):
-
-
-
     @patch("codegen.modules.Module")
     def test_declaration(self, m):
         pass

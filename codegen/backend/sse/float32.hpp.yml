@@ -58,9 +58,6 @@ modules:
       - args: zval_t value
         init: value
 
-      #- args: bval_t value
-      #  init: value
-
       - args: bval_t value, last_operation last_op
         init: value, last_op
 #-----------------------------------------------------------------------------------------------------------------------
