@@ -549,10 +549,10 @@ SORT_BY_SCOPE_NAME     = NO
 
 # If the STRICT_PROTO_MATCHING option is enabled and doxygen fails to do proper
 # type resolution of all parameters of a function it will reject a match between
-# the prototype and the implementation of a member function even if there is
+# the self and the implementation of a member function even if there is
 # only one candidate or it is obvious which candidate to choose by doing a
 # simple string match. By disabling STRICT_PROTO_MATCHING doxygen will still
-# accept a match between prototype and implementation in such cases.
+# accept a match between self and implementation in such cases.
 # The default value is: NO.
 
 STRICT_PROTO_MATCHING  = NO
@@ -927,7 +927,7 @@ REFERENCES_RELATION    = NO
 REFERENCES_LINK_SOURCE = YES
 
 # If SOURCE_TOOLTIPS is enabled (the default) then hovering a hyperlink in the
-# source code will show a tooltip with additional information such as prototype,
+# source code will show a tooltip with additional information such as self,
 # brief description and links to the definition and documentation. Since this
 # will make the HTML file larger and loading of large files a bit slower, you
 # can opt to disable this feature.
