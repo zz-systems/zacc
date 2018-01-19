@@ -241,6 +241,7 @@ namespace zacc {
          * @brief
          * @return
          */
+        template <typename size = std::integral_constant<size_t, _Size>, typename enable = typename std::enable_if<(size::value > 1), _MaskVector>::type>
         constexpr operator _MaskVector() const {
             return value();
         }

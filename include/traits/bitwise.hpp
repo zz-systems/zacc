@@ -56,7 +56,7 @@ namespace zacc { namespace traits {
         }
 
 //        template<typename U = bool>
-//        constexpr operator std::enable_if_t<is_bval<composed_t>::value, U >() const
+//        explicit constexpr operator std::enable_if_t<is_bval<composed_t>::value, U >() const
 //        {
 //            return is_set(*this);
 //        }

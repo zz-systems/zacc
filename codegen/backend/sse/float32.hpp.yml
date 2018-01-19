@@ -226,7 +226,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: ["mask_vector_t condition", if_value, else_value]
+      args: ["bval_t condition", if_value, else_value]
       mangling: false
       body:
         sse4:
@@ -237,5 +237,6 @@ modules:
         default:
           requires: [not SSE41]
           body:
-            - auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition)
+            #- "auto mask = condition.last_op() == last_operation::logic || condition.last_op() == last_operation::comparison ? condition.value() : _mm_cmpeq_ps(_mm_setzero_ps(), condition)"
+            - auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition);
             - return _mm_xor_ps(if_value, _mm_and_ps( mask, _mm_xor_ps(else_value, if_value)))

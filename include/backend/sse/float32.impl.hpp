@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/equatable.hpp"
 #include "traits/logical.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/numeric.hpp"
 #include "traits/io.hpp"
 #include "traits/conditional.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/numeric.hpp"
 #include "traits/math.hpp"
 #include "traits/comparable.hpp"
+#include "traits/equatable.hpp"
 
 /**
  * @brief float32 implementation for the sse target
@@ -1255,7 +1255,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse - sse4
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vsel(mask_vector_t condition, composed_t if_value, composed_t else_value)  {
+            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "sse4", "");
 
@@ -1269,7 +1269,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vsel(mask_vector_t condition, composed_t if_value, composed_t else_value)  {
+            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "Tokens.DEFAULT", "");
 

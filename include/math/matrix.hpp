@@ -52,9 +52,19 @@ namespace zacc { namespace math {
         return make_vec<_Vec>::impl(index % width, index / width);
     }
 
+    template<typename T>
+    constexpr std::tuple<T, T> reshape_i_xy(T index, T width) {
+        return make_vec<std::tuple<T, T>>::impl(index % width, index / width);
+    }
+
     template<typename _Vec, typename T>
     constexpr auto reshape_i_xyz(T index, T width, T height) {
         return make_vec<_Vec>::impl(index % width, (index / width) % height, index / (width * height));
+    }
+
+    template<typename T>
+    constexpr std::tuple<T, T> reshape_i_xyz(T index, T width, T height) {
+        return make_vec<std::tuple<T, T>>::impl(index % width, (index / width) % height, index / (width * height));
     }
 
     template<typename T>
