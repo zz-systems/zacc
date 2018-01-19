@@ -34,9 +34,25 @@ namespace zacc { namespace test {
         TYPED_TEST_CASE_P(conditional_test);
 
 
+        TYPED_TEST_P(conditional_test, if_then_else_simple)
+        {
+            TypeParam a = 10;
+            TypeParam b = 20;
+
+            TypeParam c0 = 0;
+            auto actual0 = a.when(c0).otherwise(b);
+            VASSERT_EQ(actual0, b);
+
+            TypeParam c1 = 1;
+            auto actual1 = a.when(c1).otherwise(b);
+            VASSERT_EQ(actual1, a);
+        }
+
         TYPED_TEST_P(conditional_test, if_then_else)
         {
-            constexpr auto size = 8;
+            const size_t size   = 8;
+            auto max_size       = std::min(TypeParam::size(), size);
+
             using data_t = typename std::array<typename TypeParam::element_t, size>;
 
             data_t  _one        {{  1,  2,  3,  4,  5,  6,  7,  8 }},
@@ -47,26 +63,33 @@ namespace zacc { namespace test {
 
             typename TypeParam::extracted_t __one, __other, __condition, __expected;
 
-            for(size_t i = 0; i < TypeParam::size(); i+= size)
+            for (size_t i = 0; i < TypeParam::size(); i += size)
             {
-                std::copy(std::begin(_condition), std::begin(_condition) + size, std::begin(__condition) + i);
-                std::copy(std::begin(_expected), std::begin(_expected) + size, std::begin(__expected) + i);
+                std::copy(std::begin(_condition), std::begin(_condition) + max_size, std::begin(__condition) + i);
+                std::copy(std::begin(_expected), std::begin(_expected) + max_size, std::begin(__expected) + i);
 
-                std::copy(std::begin(_one), std::begin(_one) + size, std::begin(__one) + i);
-                std::copy(std::begin(_other), std::begin(_other) + size, std::begin(__other) + i);
+                std::copy(std::begin(_one), std::begin(_one) + max_size, std::begin(__one) + i);
+                std::copy(std::begin(_other), std::begin(_other) + max_size, std::begin(__other) + i);
             }
 
             TypeParam one(__one), other(__other), condition(__condition), expected(__expected);
-
             VASSERT_EQ(one.when(condition).otherwise(other), expected);
 
-            //condition= value != 5;
+            TypeParam a = 10;
+            TypeParam b = 20;
 
-            //VASSERT_EQ(one.when(condition).otherwise(other), 2);
+            TypeParam c0 = 0;
+            auto actual0 = a.when(c0).otherwise(b);
+            VASSERT_EQ(actual0, b);
+
+            TypeParam c1 = 1;
+            auto actual1 = a.when(c1).otherwise(b);
+            VASSERT_EQ(actual1, a);
         }
 
 
         REGISTER_TYPED_TEST_CASE_P(conditional_test,
+                                   if_then_else_simple,
                                    if_then_else);
 
         typedef ::testing::Types<zfloat, zdouble, zint8, zint16, zint32> conditional_test_types;

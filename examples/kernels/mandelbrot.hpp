@@ -38,12 +38,11 @@ namespace zacc { namespace examples {
 
     using namespace math;
 
-    DISPATCHED
-    struct alignas(branch::alignment) mandelbrot_kernel : kernel<mandelbrot>
+    DISPATCHED struct mandelbrot_kernel : kernel<mandelbrot>
     {
-        alignas(branch::alignment) vec2<zint> _dim;
-        alignas(branch::alignment) vec2<zfloat> _cmin;
-        alignas(branch::alignment) vec2<zfloat> _cmax;
+        vec2<zint> _dim;
+        vec2<zfloat> _cmin;
+        vec2<zfloat> _cmax;
 
         size_t _max_iterations;
 
@@ -61,21 +60,21 @@ namespace zacc { namespace examples {
         {
             zacc::generate<zint>(std::begin(output), std::end(output), [this](auto i) {
                 zint ix, iy;
-                std::tie(ix, iy) = reshape_i_xy<std::tuple<zint, zint>>(make_index<zint>(zint(i)), _dim.x);
+                std::tie(ix, iy) = reshape_i_xy(make_index<zint>(zint(i)), _dim.x);
 
 
                 zcomplex<zfloat> c(_cmin.x + zfloat(ix) / zfloat(_dim.x - 1.0f) * zfloat(_cmax.x - _cmin.x),
                                    _cmin.y + zfloat(iy) / zfloat(_dim.y - 1.0f) * zfloat(_cmax.y - _cmin.x));
                 zcomplex<zfloat> z = 0;
 
-                zfloat done = 0;
+                bfloat done = false;
                 zint iterations;
 
-                for (auto j = 0; j < _max_iterations; ++j) {
+                for (size_t j = 0; j < _max_iterations; ++j) {
                     done = done || z.magnitude() >= 2.0;
 
                     z = z
-                           .when({done, done})
+                           .when(done)
                            .otherwise(z * z + c);
 
                     iterations = iterations

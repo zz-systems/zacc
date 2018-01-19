@@ -8,11 +8,11 @@ type:
   alignment: 16
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-    external:
+    shared:
       - printable
       - iteratable
       - convertable
-    internal:
+    default:
       - io
       - math
       - numeric
@@ -22,47 +22,44 @@ type:
       - logical
       - equatable
       - conditional
-
-      - numeric
     boolean:
       - io
+      - bitwise
       - logical
       - equatable
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
-  construction:
+  init:
+    default:
 
-    - args: __m128 value
-      init: _mm_cvtps_pd(value)
+      - args: __m128 value
+        init: _mm_cvtps_pd(value)
 
-    - args: __m128d value
-      init: value
+      - args: __m128d value
+        init: value
 
-    - args: __m128i value
-      init: _mm_cvtepi32_pd(_mm_shuffle_epi32(value, _MM_SHUFFLE(0,2,0,0)))
+      - args: __m128i value
+        init: _mm_cvtepi32_pd(_mm_shuffle_epi32(value, _MM_SHUFFLE(0,2,0,0)))
 
-    - args: [[*scalar_t, value]]
-      init: _mm_set1_pd(value)
+      - args: [[*scalar_t, value]]
+        init: _mm_set1_pd(value)
 
-    #- args: T value #[[*scalar_t, value]]
-    #  prefix: "template<typename T, typename = typename std::enable_if_t<std::is_convertible<T, double>::value>>"
-    #  init: _mm_set1_pd((double)value)
+      #- args: T value #[[*scalar_t, value]]
+      #  prefix: "template<typename T, typename = typename std::enable_if_t<std::is_convertible<T, double>::value>>"
+      #  init: _mm_set1_pd((double)value)
 
-    - args: "std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> value"
-      init: _mm_load_pd(value.data())
+      - args: "std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> value"
+        init: _mm_load_pd(value.data())
 
-    - args: { from: *vec_size, to: 0, type: *scalar_t }
-      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_pd }
+      - args: { from: *vec_size, to: 0, type: *scalar_t }
+        init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_pd }
 
-  boolean_construction:
-    - args: __m128 value
-      init: _mm_castps_pd(value)
+    boolean:
+      - args: zval_t value
+        init: value
 
-    - args: __m128d value
-      init: value
-
-    - args: __m128i value
-      init: _mm_castsi128_pd(value)
+      - args: bval_t value, last_operation last_op
+        init: value, last_op
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

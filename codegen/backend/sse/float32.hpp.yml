@@ -8,11 +8,11 @@ type:
   alignment: 16
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-    external:
+    shared:
       - printable
       - iteratable
       - convertable
-    internal:
+    default:
       - io
       - math
       - numeric
@@ -25,42 +25,41 @@ type:
 
     boolean:
       - io
+      - bitwise
       - logical
       - equatable
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
-  construction:
-    - args: __m128 value
-      init: value
+  init:
+    default:
+      - args: __m128 value
+        init: value
 
-    - args: __m128d value
-      init: _mm_cvtpd_ps(value)
+      - args: __m128d value
+        init: _mm_cvtpd_ps(value)
 
-    - args: __m128i value
-      init: _mm_cvtepi32_ps(value)
+      - args: __m128i value
+        init: _mm_cvtepi32_ps(value)
 
-    - args: [[*scalar_t, value]]
-      init: _mm_set1_ps(value)
+      - args: [[*scalar_t, value]]
+        init: _mm_set1_ps(value)
 
-    #- args: T value #[[*scalar_t, value]]
-    #  prefix: "template<typename T, typename = typename std::enable_if_t<std::is_convertible<T, float>::value>>"
-    #  init: _mm_set1_ps((float)value)
+      #- args: T value #[[*scalar_t, value]]
+      #  prefix: "template<typename T, typename = typename std::enable_if_t<std::is_convertible<T, float>::value>>"
+      #  init: _mm_set1_ps((float)value)
 
-    - args: "std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> value"
-      init: _mm_load_ps(value.data())
+      - args: "std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> value"
+        init: _mm_load_ps(value.data())
 
-    - args: { from: *vec_size, to: 0, type: *scalar_t }
-      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_ps }
+      - args: { from: *vec_size, to: 0, type: *scalar_t }
+        init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_ps }
 
-  boolean_construction:
-    - args: __m128 value
-      init: value
+    boolean:
+      - args: zval_t value
+        init: value
 
-    - args: __m128d value
-      init: _mm_castpd_ps(value)
-
-    - args: __m128i value
-      init: _mm_castsi128_ps(value)
+      - args: bval_t value, last_operation last_op
+        init: value, last_op
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -227,7 +226,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: ["mask_vector_t condition", if_value, else_value]
+      args: ["bval_t condition", if_value, else_value]
       mangling: false
       body:
         sse4:
@@ -238,5 +237,6 @@ modules:
         default:
           requires: [not SSE41]
           body:
-            - auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition)
+            #- "auto mask = condition.last_op() == last_operation::logic || condition.last_op() == last_operation::comparison ? condition.value() : _mm_cmpeq_ps(_mm_setzero_ps(), condition)"
+            - auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition);
             - return _mm_xor_ps(if_value, _mm_and_ps( mask, _mm_xor_ps(else_value, if_value)))

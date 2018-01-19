@@ -33,7 +33,7 @@
 
 namespace zacc { namespace test {
 
-    {% for module in type.get_modules() %}
+    {% for module in ast.initializers + ast.modules %}
         {% if module.has_tests() %}
 // =====================================================================================================================
         {% endif %}

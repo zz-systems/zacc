@@ -211,7 +211,7 @@ namespace zacc {
             static constexpr bool has_floating_types = true;
 
             /// AVX 1 does not provide operations on integer types
-            static constexpr bool has_integer_types = !is_set(capabilities::AVX1);
+            static constexpr bool has_integer_types = !is_set(capabilities::AVX1) || is_set(capabilities::AVX2);
 
             /// fast (lower precision) float enabled?
             static constexpr bool use_fast_float = is_set(capabilities::FASTFLOAT);
@@ -224,10 +224,13 @@ namespace zacc {
 
 
     template<typename T, capabilities feature>
-    constexpr bool is_eligible_v = capability::dispatcher<zval_traits<T>::features>::is_set(feature);
+    constexpr bool has_feature_v = capability::dispatcher<zval_traits<T>::features>::is_set(feature);
 
     template<typename T>
-    constexpr bool has_integer_types = capability::dispatcher<zval_traits<T>::features>::has_floating_types;
+    constexpr bool has_integer_types_v = capability::dispatcher<zval_traits<T>::features>::has_integer_types;
+
+    template<typename T>
+    constexpr bool has_floating_types_v = capability::dispatcher<zval_traits<T>::features>::has_floating_types;
 
     template <typename T, typename... TList>
     static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, capability::flag_t>

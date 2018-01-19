@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-// 
+//
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -101,7 +101,7 @@ namespace zacc { namespace test {
         math::zcomplex<zfloat>  expected2 { -2, -2 };
 
         VASSERT_EQ(actual2.real(), expected2.real());
-        VASSERT_EQ(actual2.imag(), expected2.imag());*//*
+        VASSERT_EQ(actual2.imag(), expected2.imag());
     }
 
     TEST(zfloat32_complex, mul) {
@@ -117,7 +117,7 @@ namespace zacc { namespace test {
 
         VASSERT_EQ(actual1.real(), expected1.real());
         VASSERT_EQ(actual1.imag(), expected1.imag());
-/*
+
         auto c = 3 + 4if;
         auto d = 5 + 6if;
 
@@ -160,10 +160,29 @@ namespace zacc { namespace test {
         math::zcomplex<zfloat> a { 1, 2 };
         math::zcomplex<zfloat> b { 3, 4 };
 
-        auto actual1 = a.when({0, 0}).otherwise(b);
+        math::zcomplex<zfloat> c00 {0, 0};
+        auto actual00 = a.when(c00).otherwise(b);
 
-        VASSERT_EQ(actual1.real(), b.real());
-        VASSERT_EQ(actual1.imag(), b.imag());
+        VASSERT_EQ(actual00.real(), b.real());
+        VASSERT_EQ(actual00.imag(), b.imag());
+
+        math::zcomplex<zfloat> c01 {0, 1};
+        auto actual01 = a.when(c01).otherwise(b);
+
+        VASSERT_EQ(actual01.real(), b.real());
+        VASSERT_EQ(actual01.imag(), a.imag());
+
+        math::zcomplex<zfloat> c10 {1, 0};
+        auto actual10 = a.when(c10).otherwise(b);
+
+        VASSERT_EQ(actual10.real(), a.real());
+        VASSERT_EQ(actual10.imag(), b.imag());
+
+        math::zcomplex<zfloat> c11 {1, 1};
+        auto actual11 = a.when(c11).otherwise(b);
+
+        VASSERT_EQ(actual11.real(), a.real());
+        VASSERT_EQ(actual11.imag(), a.imag());
     }
 //    TEST(float64_complex, sin) {
 //        REQUIRES(ZACC_ARCH);

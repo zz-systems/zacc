@@ -169,7 +169,8 @@ namespace zacc {
     template<typename _Vector, typename _MaskVector, size_t _Size, size_t _Alignment, uint64_t _Features>
     struct bval : zval_base<_Vector, _MaskVector, bool, bval_tag, _Size, _Alignment, _Features>
     {
-        constexpr bval() = default;
+        constexpr bval() : _last_op(last_operation::undefined)
+        {}
 
         template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
         constexpr bval(const T& other, last_operation last_op = last_operation::undefined)
@@ -187,7 +188,7 @@ namespace zacc {
         //template<typename T, typename enable = std::enable_if_t<!is_zval<T>::value && !is_bval<T>::value>>
         template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
         constexpr bval(T&& value)
-                : _value(std::move(value))
+                : _value(std::move(value)), _last_op(last_operation::undefined)
         {}
 
         template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
@@ -198,7 +199,7 @@ namespace zacc {
         }
 
         constexpr bval(const bval& other, last_operation last_op = last_operation::undefined)
-                : _value (other._value), _last_op(other._last_op)
+                : _value (other._value), _last_op(last_op)
         {}
 
         constexpr bval& operator=(const bval& other)
@@ -208,7 +209,7 @@ namespace zacc {
         }
 
         constexpr bval(bval&& other) noexcept
-                : _value(std::move(other._value))
+                : _value(std::move(other._value)), _last_op(other.last_op())
         {}
 
         constexpr bval& operator=(bval&& other) noexcept
@@ -230,14 +231,17 @@ namespace zacc {
         //    return value();
        // }
 
-        constexpr operator bool()
-        {
-            return is_set(_value);
-        }
+//        template <typename size = std::integral_constant<size_t, _Size>, typename enable = typename std::enable_if<(size::value > 1), _Vector>::type>
+//        constexpr operator _Vector()
+//        {
+//            return _value;
+//        }
+
         /**
          * @brief
          * @return
          */
+        template <typename size = std::integral_constant<size_t, _Size>, typename enable = typename std::enable_if<(size::value > 1), _MaskVector>::type>
         constexpr operator _MaskVector() const {
             return value();
         }
@@ -255,6 +259,19 @@ namespace zacc {
         const last_operation _last_op;
     };
 
+
+    template<typename T>
+    constexpr std::enable_if_t<is_zval<T>::value, typename zval_traits<T>::bval_t> make_bval(T value, last_operation last_op = last_operation::undefined)
+    {
+        return typename zval_traits<T>::bval_t {value, last_op};
+    }
+
+    template<typename T>
+    constexpr std::enable_if_t<!is_zval<T>::value, typename zval_traits<T>::bval_t> make_bval(T value, last_operation)
+    {
+        return static_cast<typename zval_traits<T>::bval_t>(value);
+    }
+
     template<typename _ZVal>
     constexpr auto make_boolean(const _ZVal& value)
     {
@@ -268,6 +285,9 @@ namespace zacc {
                 public base_t,
                 public terminator
         {
+            using zval_t = typename base_t::zval_t;
+            using bval_t = typename base_t::bval_t;
+
             FORWARD(type);
         };
     };

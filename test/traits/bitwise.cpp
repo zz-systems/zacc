@@ -115,8 +115,6 @@ namespace zacc { namespace test {
             TypeParam value = 5;
             TypeParam actual= value ^ 121;
 
-            std::cerr << "kebab: " << bitsof(10.0f) << std::endl;
-
             twiddler<float> expected;
             expected.f = 5;
             expected.i ^= twiddler<float> { .f = 121 }.i;
@@ -145,8 +143,6 @@ namespace zacc { namespace test {
             expected.f = 5;
 
             expected.i |= twiddler<double> { .f = 10 }.i;
-
-            std::cerr << 5 << " | " << 10 << " = " << expected.f << "; " << twiddler<double> { .f = 10 }.i  << std::endl;
 
             VASSERT_EQ(actual, expected.f);
         }

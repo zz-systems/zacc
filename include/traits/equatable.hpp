@@ -49,8 +49,16 @@ namespace zacc { namespace traits {
             return bval_t(vneq(one, other), last_operation::comparison);
         }
 
-        CONVERSION(==);
+//        bval_t operator==(const bval_t other) {
+//            return bval_t(veq(*this, other), last_operation::comparison);
+//        }
+//
+//        bval_t operator!=(const bval_t other) {
+//            return bval_t(vneq(*this, other), last_operation::comparison);
+//        }
 
-        CONVERSION(!=);
+        //CONVERSION(==);
+
+        //CONVERSION(!=);
     };
 }}

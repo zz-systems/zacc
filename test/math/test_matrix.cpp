@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-// 
+//
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -43,7 +43,7 @@ namespace zacc { namespace test {
         VASSERT_EQ(v(1), 3);
         VASSERT_EQ(v(2), 4);
     }
-    
+
     TEST(matrix, load)
     {
         REQUIRES(ZACC_ARCH);
@@ -79,7 +79,7 @@ namespace zacc { namespace test {
         VASSERT_EQ(v(2, 1), 8);
         VASSERT_EQ(v(2, 2), 9);
     }
-    
+
     TEST(vector, sqr_magnitude)
     {
         REQUIRES(ZACC_ARCH);
@@ -91,7 +91,7 @@ namespace zacc { namespace test {
         /// 2 * 2 + 3 * 3 + 4 * 4 = 29
         VASSERT_EQ(sqr_magnitude, 29);
     }
-    
+
 
     TEST(vector, magnitude)
     {
@@ -142,8 +142,8 @@ namespace zacc { namespace test {
         VASSERT_EQ(result(1), 7);
         VASSERT_EQ(result(2), 7);
     }
-    
-    
+
+
     TEST(vector, sub)
     {
         REQUIRES(ZACC_ARCH);
@@ -156,7 +156,7 @@ namespace zacc { namespace test {
         VASSERT_EQ(result(1), -3);
         VASSERT_EQ(result(2), -1);
     }
-    
+
     TEST(vector, scale)
     {
         REQUIRES(ZACC_ARCH);
@@ -169,7 +169,7 @@ namespace zacc { namespace test {
         VASSERT_EQ(result(1), 4);
         VASSERT_EQ(result(2), 6);
     }
-    
+
     TEST(vector, reciproc_scale)
     {
         REQUIRES(ZACC_ARCH);
@@ -182,7 +182,7 @@ namespace zacc { namespace test {
         VASSERT_EQ(result(1), 1);
         VASSERT_EQ(result(2), 1);
     }
-    
+
     TEST(vector, row_vector_mul_col_vector)
     {
         REQUIRES(ZACC_ARCH);
@@ -199,7 +199,7 @@ namespace zacc { namespace test {
         zint32 t = result(0);
         VASSERT_EQ(t, 12);
     }
-    
+
     TEST(vector, col_vector_mul_row_vector)
     {
         REQUIRES(ZACC_ARCH);
@@ -226,7 +226,7 @@ namespace zacc { namespace test {
             VASSERT_EQ(result(2, 1), 48);
             VASSERT_EQ(result(2, 2), 72);
         }
-    
+
         //SECTION("3 elem row vector * 2 elem col vector should yield a 3x2 matrix")
         {
             mat<zint32, 3, 1> m1{2, 4, 8};
@@ -247,8 +247,8 @@ namespace zacc { namespace test {
             VASSERT_EQ(result(2, 1), 48);
         }
     }
-    
-    
+
+
     TEST(matrix, matrix_2x3_mul_3x2)
     {
         REQUIRES(ZACC_ARCH);
@@ -298,7 +298,7 @@ namespace zacc { namespace test {
             { 70, 80, 90 },
             { 100, 110, 120 }
         };
-    
+
         auto result = m1 * m2;
 
         VASSERT_EQ(result.rows(), 5);
@@ -325,8 +325,8 @@ namespace zacc { namespace test {
         VASSERT_EQ(result(4, 2), 5700);
     }
 
-    
-    
+
+
     TEST(vector, vector_implicit_init_and_cast)
     {
         REQUIRES(ZACC_ARCH);
@@ -342,7 +342,7 @@ namespace zacc { namespace test {
         VASSERT_EQ(result(1), 2);
         VASSERT_EQ(result(2), 2);
     }
-    
+
     TEST(vector, dot_product)
     {
         REQUIRES(ZACC_ARCH);
@@ -353,7 +353,7 @@ namespace zacc { namespace test {
 
         VASSERT_EQ(result, 14);
     }
-    
+
     TEST(vector, dot_product_float)
     {
         REQUIRES(ZACC_ARCH);

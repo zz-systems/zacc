@@ -8,11 +8,11 @@ type:
   alignment: 64
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-    external:
+    shared:
       - printable
       - iteratable
       - convertable
-    internal:
+    default:
       - io
       - math
       - numeric
@@ -25,29 +25,31 @@ type:
 
     boolean:
       - io
+      - bitwise
       - logical
       - equatable
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
-  construction:
+  init:
+    default:
 
-    - args: __m512 value
-      init: _mm512_cvtps_pd(value)
+      - args: __m512 value
+        init: _mm512_cvtps_pd(value)
 
-    - args: __m512d value
-      init: value
+      - args: __m512d value
+        init: value
 
-    - args: __m512i value
-      init: _mm512_cvtepi32_pd(value)
+      - args: __m512i value
+        init: _mm512_cvtepi32_pd(value)
 
-    - args: [[*scalar_t, value]]
-      init: _mm512_set1_pd(value)
+      - args: [[*scalar_t, value]]
+        init: _mm512_set1_pd(value)
 
-    - args: "std::array<typename base_t::element_t, base_t::size()> value"
-      init: _mm512_load_pd(value.data())
+      - args: "std::array<typename base_t::element_t, base_t::size()> value"
+        init: _mm512_load_pd(value.data())
 
-    - args: { from: *vec_size, to: 0, type: *scalar_t }
-      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm512_set_pd }
+      - args: { from: *vec_size, to: 0, type: *scalar_t }
+        init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm512_set_pd }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -95,7 +97,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: [condition, if_value, else_value]
+      args: [bval_t condition, if_value, else_value]
       mangling: false
       body:
           _mm512_or_pd(_mm512_andnot_pd(condition, else_value), _mm512_and_pd(condition, if_value))

@@ -9,11 +9,11 @@ type:
   alignment: 32
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-     external:
+     shared:
       - printable
       - iteratable
       - convertable
-     internal:
+     default:
        - io
        - math
        - numeric
@@ -25,22 +25,23 @@ type:
        - conditional
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
-  construction:
+  init:
+    default:
 
-    - args: "std::array<sse::zint8<base_t::capability>, 2> value"
-      init: value
+      - args: "std::array<sse::zint8<base_t::capability>, 2> value"
+        init: value
 
-    - args: "sse::zint8<base_t::capability> hi, sse::zint8<base_t::capability> lo"
-      init: "std::array<sse::zint8<base_t::capability>, 2>({ hi, lo })"
+      - args: "sse::zint8<base_t::capability> hi, sse::zint8<base_t::capability> lo"
+        init: "std::array<sse::zint8<base_t::capability>, 2>({ hi, lo })"
 
-    - args: [[*scalar_t, "value"]]
-      init: "std::array<sse::zint8<base_t::capability>, 2>({ _mm_set1_epi8(value), _mm_set1_epi8(value) })"
+      - args: [[*scalar_t, "value"]]
+        init: "std::array<sse::zint8<base_t::capability>, 2>({ _mm_set1_epi8(value), _mm_set1_epi8(value) })"
 
-    - args: "std::array<typename base_t::element_t, base_t::size()> value"
-      init: "std::array<sse::zint8<base_t::capability>, 2>({ _mm_loadu_si128((__m128i*)value.data()), _mm_loadu_si128((__m128i*)(value.data() + 4)) })"
+      - args: "std::array<typename base_t::element_t, base_t::size()> value"
+        init: "std::array<sse::zint8<base_t::capability>, 2>({ _mm_loadu_si128((__m128i*)value.data()), _mm_loadu_si128((__m128i*)(value.data() + 4)) })"
 
-    #- args: { from: *vec_size, to: 0, type: *scalar_t }
-    #  init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_ps }
+      #- args: { from: *vec_size, to: 0, type: *scalar_t }
+      #  init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_ps }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -123,6 +124,6 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: [condition, if_value, else_value]
+      args: [bval_t condition, if_value, else_value]
       mangling: false
       body: return zint8<base_t::capability> ({ vsel(condition.value()[1], if_value.value()[1], else_value.value()[1]), vsel(condition.value()[0], if_value.value()[0], else_value.value()[0]) });

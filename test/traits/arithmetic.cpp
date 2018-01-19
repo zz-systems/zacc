@@ -57,7 +57,7 @@ namespace zacc { namespace test {
     TYPED_TEST_P(arithmetic_test, subtract)
     {
         TypeParam value = 5;
-        TypeParam actual= value - 10;
+        TypeParam actual= value - 10.0;
 
         VASSERT_EQ(actual, -5);
     }

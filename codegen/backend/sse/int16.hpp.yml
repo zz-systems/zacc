@@ -8,11 +8,11 @@ type:
   alignment: 16
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-    external:
+    shared:
       - printable
       - iteratable
       - convertable
-    internal:
+    default:
       - io
       - math
       - numeric
@@ -26,32 +26,31 @@ type:
 
     boolean:
       - io
+      - bitwise
       - logical
       - equatable
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
-  construction:
-    - args: __m128i value
-      init: value
+  init:
+    default:
+      - args: __m128i value
+        init: value
 
-    - args: short value
-      init: _mm_set1_epi16(value)
+      - args: short value
+        init: _mm_set1_epi16(value)
 
-    - args: "const std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> &value"
-      init: _mm_loadu_si128((__m128i *) value.data())
+      - args: "const std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> &value"
+        init: _mm_loadu_si128((__m128i *) value.data())
 
-    - args: { from: *vec_size, to: 0, type: *scalar_t }
-      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi16 }
+      - args: { from: *vec_size, to: 0, type: *scalar_t }
+        init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi16 }
 
-  boolean_construction:
-    - args: __m128 value
-      init: _mm_castps_si128(value)
+    boolean:
+      - args: zval_t value
+        init: value
 
-    - args: __m128d value
-      init: _mm_castpd_si128(value)
-
-    - args: __m128i value
-      init: value
+      - args: bval_t value, last_operation last_op
+        init: value, last_op
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -108,7 +107,7 @@ modules:
         - auto dividend = one.data();
         - auto divisor = other.data();
         - typename composed_t::extracted_t result;
-        - for (auto i = 0; i < composed_t::size(); i++) { result[i] = dividend[i] / divisor[i]; }
+        - for (size_t i = 0; i < composed_t::size(); i++) { result[i] = dividend[i] / divisor[i]; }
         - return result;
     vmod: vsub(one, vmul(other, vdiv(one, other)))
 #-----------------------------------------------------------------------------------------------------------------------
@@ -172,7 +171,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: [condition, if_value, else_value]
+      args: [bval_t condition, if_value, else_value]
       mangling: false
       body:
         sse4:

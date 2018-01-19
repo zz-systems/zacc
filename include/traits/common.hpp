@@ -63,24 +63,24 @@ namespace zacc {
             using zval_t = typename base_t::zval_t;
             using bval_t = typename base_t::bval_t;
 
-//            using iterator = typename zval_traits<base_t>::extracted_t::iterator;
-//
-//            /**
-//             * @brief create a snapshot of current value
-//             * @return snapshot's begin iterator
-//             */
-//            iterator begin() const {
-//                _snapshot = base_t::data();
-//                return _snapshot.begin();
-//            }
-//
-//            /**
-//             * @return snapshot's end iterator
-//             */
-//            iterator end() const { return _snapshot.end()simple_; }
-//
-//        private:
-//            mutable typename base_t::extracted_t _snapshot;
+            //using iterator = typename zval_traits<base_t>::extracted_t::iterator;
+
+            /**
+             * @brief create a snapshot of current value
+             * @return snapshot's begin iterator
+             */
+            auto begin() const {
+                _snapshot = base_t::data();
+                return _snapshot.begin();
+            }
+
+            /**
+             * @return snapshot's end iterator
+             */
+            auto end() const { return _snapshot.end(); }
+
+        private:
+            mutable typename base_t::extracted_t _snapshot;
         };
     };
 

@@ -7,11 +7,11 @@ type:
   alignment: 32
 #-----------------------------------------------------------------------------------------------------------------------
   traits:
-     external:
+     shared:
       - printable
       - iteratable
       - convertable
-     internal:
+     default:
        - io
        - math
        - numeric
@@ -22,27 +22,28 @@ type:
        - conditional
 #-----------------------------------------------------------------------------------------------------------------------
 modules:
-  construction:
-    - args: { raw: "const __m256 &value" }
-      init: _mm256_cvtps_pd(_mm256_castps256_ps128(value))
+  init:
+    default:
+      - args: { raw: "const __m256 &value" }
+        init: _mm256_cvtps_pd(_mm256_castps256_ps128(value))
 
-    - args: { raw: "const __m256d &value" }
-      init: value
+      - args: { raw: "const __m256d &value" }
+        init: value
 
-    - args: { raw: "const __m256i &value" }
-      init: _mm256_cvtepi32_pd(_mm256_castsi256_si128(value))
+      - args: { raw: "const __m256i &value" }
+        init: _mm256_cvtepi32_pd(_mm256_castsi256_si128(value))
 
-    - args: [[*scalar_t, value]]
-      init: _mm256_set1_pd(value)
+      - args: [[*scalar_t, value]]
+        init: _mm256_set1_pd(value)
 
-    - args: "std::array<typename base_t::element_t, base_t::size()> value"
-      init: _mm256_loadu_pd(value.data())
+      - args: "std::array<typename base_t::element_t, base_t::size()> value"
+        init: _mm256_loadu_pd(value.data())
 
-    - args: "std::array<sse::zint32<base_t::capability>, 2> value"
-      init: _mm256_set_m128(_mm_cvtepi32_pd(value[1]), _mm_cvtepi32_pd(value[0]))
+      - args: "std::array<sse::zint32<base_t::capability>, 2> value"
+        init: _mm256_set_m128(_mm_cvtepi32_pd(value[1]), _mm_cvtepi32_pd(value[0]))
 
-    - args: { from: *vec_size, to: 0, type: *scalar_t }
-      init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_pd }
+      - args: { from: *vec_size, to: 0, type: *scalar_t }
+        init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_pd }
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -165,7 +166,7 @@ modules:
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
-      args: [condition, if_value, else_value]
+      args: [bval_t condition, if_value, else_value]
       mangling: false
       body:
         - auto mask = _mm256_cmp_pd(_mm256_setzero_pd(), condition, _CMP_EQ_OQ);

@@ -37,7 +37,7 @@ namespace zacc { namespace test {
         TYPED_TEST_P(logical_test, negate)
         {
             TypeParam value = 5;
-            TypeParam actual= !value;
+            auto actual= !value;
 
             VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) false));
 
@@ -49,7 +49,7 @@ namespace zacc { namespace test {
         TYPED_TEST_P(logical_test, or_operation)
         {
             TypeParam value = 5;
-            TypeParam actual= value || (value >= 2);
+            auto actual= value || (value >= 2);
 
             VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 
@@ -69,7 +69,7 @@ namespace zacc { namespace test {
         TYPED_TEST_P(logical_test, and_operation)
         {
             TypeParam value = 5;
-            TypeParam actual= value && (value >= 2);
+            auto actual= value && (value >= 2);
 
             VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_t) true));
 

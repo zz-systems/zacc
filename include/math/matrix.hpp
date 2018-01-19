@@ -52,9 +52,19 @@ namespace zacc { namespace math {
         return make_vec<_Vec>::impl(index % width, index / width);
     }
 
+    template<typename T>
+    constexpr std::tuple<T, T> reshape_i_xy(T index, T width) {
+        return make_vec<std::tuple<T, T>>::impl(index % width, index / width);
+    }
+
     template<typename _Vec, typename T>
     constexpr auto reshape_i_xyz(T index, T width, T height) {
         return make_vec<_Vec>::impl(index % width, (index / width) % height, index / (width * height));
+    }
+
+    template<typename T>
+    constexpr std::tuple<T, T> reshape_i_xyz(T index, T width, T height) {
+        return make_vec<std::tuple<T, T>>::impl(index % width, (index / width) % height, index / (width * height));
     }
 
     template<typename T>
@@ -142,13 +152,13 @@ namespace zacc { namespace math {
             }
         }
 
-        constexpr auto& operator()(size_t i)       { return data[i]; }
-        constexpr auto& operator()(size_t i) const { return data[i]; }
+        constexpr T& operator()(size_t i)       { return data[i]; }
+        constexpr const T& operator()(size_t i) const { return data[i]; }
 
-        constexpr auto& operator()(size_t y, size_t x)       { return data[reshape_xy_i(x, y, _Cols)]; }
-        constexpr auto& operator()(size_t y, size_t x) const { return data[reshape_xy_i(x, y, _Cols)]; }
+        constexpr T& operator()(size_t y, size_t x)       { return data[reshape_xy_i(x, y, _Cols)]; }
+        constexpr const T& operator()(size_t y, size_t x) const { return data[reshape_xy_i(x, y, _Cols)]; }
 
-        constexpr auto at(size_t x, size_t y)
+        constexpr T& at(size_t x, size_t y)
         {
             if (x >= _Cols || y >= _Rows)
                 throw std::out_of_range("mat::at");
@@ -156,7 +166,7 @@ namespace zacc { namespace math {
             return data[reshape_xy_i(x, y, _Cols)];
         }
 
-        constexpr auto at(size_t x, size_t y) const
+        constexpr const T& at(size_t x, size_t y) const
         {
             if (x >= _Cols || y >= _Rows)
                 throw std::out_of_range("mat::at");
@@ -225,13 +235,13 @@ namespace zacc { namespace math {
         }
 
 
-        constexpr auto& operator()(size_t)       { return data[0]; }
-        constexpr auto& operator()(size_t) const { return data[0]; }
+        constexpr T& operator()(size_t)       { return data[0]; }
+        constexpr const T& operator()(size_t) const { return data[0]; }
 
-        constexpr auto& operator()(size_t, size_t)       { return data[0]; }
-        constexpr auto& operator()(size_t, size_t) const { return data[0]; }
+        constexpr T& operator()(size_t, size_t)       { return data[0]; }
+        constexpr const T& operator()(size_t, size_t) const { return data[0]; }
 
-        constexpr auto at(size_t i)
+        constexpr T& at(size_t i)
         {
             if (i >= 1)
                 throw std::out_of_range("mat::at");
@@ -239,7 +249,7 @@ namespace zacc { namespace math {
             return data[i];
         }
 
-        constexpr auto at(size_t i) const
+        constexpr const T& at(size_t i) const
         {
             if (i >= 1)
                 throw std::out_of_range("mat::at");
@@ -304,13 +314,13 @@ namespace zacc { namespace math {
         }
 
 
-        constexpr auto& operator()(size_t i)       { return data[i]; }
-        constexpr auto& operator()(size_t i) const { return data[i]; }
+        constexpr T& operator()(size_t i)       { return data[i]; }
+        constexpr const T& operator()(size_t i) const { return data[i]; }
 
-        constexpr auto& operator()(size_t y, size_t)       { return data[y]; }
-        constexpr auto& operator()(size_t y, size_t) const { return data[y]; }
+        constexpr T& operator()(size_t y, size_t)       { return data[y]; }
+        constexpr const T& operator()(size_t y, size_t) const { return data[y]; }
 
-        constexpr auto at(size_t i)
+        constexpr T& at(size_t i)
         {
             if (i >= 3)
                 throw std::out_of_range("mat::at");
@@ -318,7 +328,7 @@ namespace zacc { namespace math {
             return data[i];
         }
 
-        constexpr auto at(size_t i) const
+        constexpr const T& at(size_t i) const
         {
             if (i >= 3)
                 throw std::out_of_range("mat::at");
@@ -382,11 +392,11 @@ namespace zacc { namespace math {
             std::copy(std::begin(init_list), std::end(init_list), std::begin(data));
         }
 
-        constexpr auto& operator()(size_t i)       { return data[i]; }
-        constexpr auto& operator()(size_t i) const { return data[i]; }
+        constexpr T& operator()(size_t i)       { return data[i]; }
+        constexpr const T& operator()(size_t i) const { return data[i]; }
 
-        constexpr auto& operator()(size_t y, size_t)       { return data[y]; }
-        constexpr auto& operator()(size_t y, size_t) const { return data[y]; }
+        constexpr T& operator()(size_t y, size_t)       { return data[y]; }
+        constexpr const T& operator()(size_t y, size_t) const { return data[y]; }
 
         constexpr T& at(size_t i)
         {
@@ -396,7 +406,7 @@ namespace zacc { namespace math {
             return data[i];
         }
 
-        constexpr T& at(size_t i) const
+        constexpr const T& at(size_t i) const
         {
             if (i >= 3)
                 throw std::out_of_range("mat::at");
@@ -637,9 +647,9 @@ namespace zacc { namespace math {
 
     template<typename T, typename U, size_t N, size_t M>
     //__attribute__((optimize("unroll-loops")))
-    inline mat<T, N, M>	operator <(const mat<T, N, M>& a, const mat<U, N, M>& b)
+    inline mat<typename zval_traits<T>::bval_t, N, M>	operator <(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
-        mat<T, N, M> result;
+        mat<typename zval_traits<T>::bval_t, N, M> result;
 
         for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) < b(i);
@@ -649,9 +659,9 @@ namespace zacc { namespace math {
 
     template<typename T, typename U, size_t N, size_t M>
     //__attribute__((optimize("unroll-loops")))
-    inline mat<T, N, M>	operator <=(const mat<T, N, M>& a, const mat<U, N, M>& b)
+    inline mat<typename zval_traits<T>::bval_t, N, M>	operator <=(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
-        mat<T, N, M> result;
+        mat<typename zval_traits<T>::bval_t, N, M> result;
 
         for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) <= b(i);
@@ -661,9 +671,9 @@ namespace zacc { namespace math {
 
     template<typename T, typename U, size_t N, size_t M>
     //__attribute__((optimize("unroll-loops")))
-    inline mat<T, N, M>	operator >(const mat<T, N, M>& a, const mat<U, N, M>& b)
+    inline mat<typename zval_traits<T>::bval_t, N, M>	operator >(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
-        mat<T, N, M> result;
+        mat<typename zval_traits<T>::bval_t, N, M> result;
 
         for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) > b(i);
@@ -673,9 +683,9 @@ namespace zacc { namespace math {
 
     template<typename T, typename U, size_t N, size_t M>
     //__attribute__((optimize("unroll-loops")))
-    inline mat<T, N, M>	operator >=(const mat<T, N, M>& a, const mat<U, N, M>& b)
+    inline mat<typename zval_traits<T>::bval_t, N, M>	operator >=(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
-        mat<T, N, M> result;
+        mat<typename zval_traits<T>::bval_t, N, M> result;
 
         for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) >= b(i);
@@ -685,9 +695,9 @@ namespace zacc { namespace math {
 
     template<typename T, typename U, size_t N, size_t M>
     //__attribute__((optimize("unroll-loops")))
-    inline mat<T, N, M>	operator ==(const mat<T, N, M>& a, const mat<U, N, M>& b)
+    inline mat<typename zval_traits<T>::bval_t, N, M>	operator ==(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
-        mat<T, N, M> result;
+        mat<typename zval_traits<T>::bval_t, N, M> result;
 
         for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) == b(i);
@@ -697,9 +707,9 @@ namespace zacc { namespace math {
 
     template<typename T, typename U, size_t N, size_t M>
     //__attribute__((optimize("unroll-loops")))
-    inline mat<T, N, M>	operator !=(const mat<T, N, M>& a, const mat<U, N, M>& b)
+    inline mat<typename zval_traits<T>::bval_t, N, M>	operator !=(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
-        mat<T, N, M> result;
+        mat<typename zval_traits<T>::bval_t, N, M> result;
 
         for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) != b(i);
