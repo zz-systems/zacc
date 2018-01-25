@@ -51,6 +51,9 @@ modules:
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_ps }
 
     boolean:
+      #- args: "zval_t value, last_operation last_op = last_operation::undefined"
+      #  init: "last_op == last_operation::undefined ? _mm256_cmp_ps(_mm256_setzero_ps(), value, _CMP_EQ_OQ) : value.value()"
+
       - args: zval_t value
         init: value
 
@@ -150,23 +153,24 @@ modules:
   logical:
     vlneg:
       args: one
-      body: _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ);
-    vlor:   _mm256_or_ps
-    vland:  _mm256_and_ps
+      body: "{ _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ), last_operation::logic }"
+    vlor:   "{ _mm256_or_ps(one, other), last_operation::logic }"
+    vland:  "{ _mm256_and_ps(one, other), last_operation::logic }"
 #-----------------------------------------------------------------------------------------------------------------------
   equatable:
-    veq:   _mm256_cmp_ps(one, other, _CMP_EQ_OQ)
-    vneq:  _mm256_cmp_ps(one, other, _CMP_NEQ_OQ)
+    veq:   "{ _mm256_cmp_ps(one, other, _CMP_EQ_OQ), last_operation::comparison }"
+    vneq:  "{ _mm256_cmp_ps(one, other, _CMP_NEQ_OQ), last_operation::comparison }"
   comparable:
-    vgt:   _mm256_cmp_ps(one, other, _CMP_GT_OQ)
-    vlt:   _mm256_cmp_ps(one, other, _CMP_LT_OQ)
-    vge:   _mm256_cmp_ps(one, other, _CMP_GE_OQ)
-    vle:   _mm256_cmp_ps(one, other, _CMP_LE_OQ)
+    vgt:   "{ _mm256_cmp_ps(one, other, _CMP_GT_OQ), last_operation::comparison }"
+    vlt:   "{ _mm256_cmp_ps(one, other, _CMP_LT_OQ), last_operation::comparison }"
+    vge:   "{ _mm256_cmp_ps(one, other, _CMP_GE_OQ), last_operation::comparison }"
+    vle:   "{ _mm256_cmp_ps(one, other, _CMP_LE_OQ), last_operation::comparison }"
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
       args: [bval_t condition, if_value, else_value]
       mangling: false
       body:
-        - auto mask = _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ);
+        #- auto mask = _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ);
+        - "auto mask = condition.last_op() == last_operation::undefined ? _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ) : condition.value()"
         - return _mm256_blendv_ps(if_value, else_value, mask);

@@ -46,7 +46,7 @@ namespace zacc { namespace traits {
 
         private:
             else_branch(const bval_t& condition, const composed_t& if_value)
-                    : _if_value(if_value), _condition(condition) {}
+                    : _if_value(if_value), _condition(condition) {} // condition.last_op() == last_operation::undefined ? (zval_t(condition.value()) != 0) : condition
 
             composed_t _if_value;
             bval_t _condition;

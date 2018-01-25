@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/io.hpp"
 #include "traits/comparable.hpp"
 #include "traits/conditional.hpp"
 #include "traits/equatable.hpp"
-#include "traits/numeric.hpp"
+#include "traits/logical.hpp"
 #include "traits/math.hpp"
 #include "traits/arithmetic.hpp"
+#include "traits/numeric.hpp"
+#include "traits/io.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/logical.hpp"
 
 /**
  * @brief float32 implementation for the avx2 target
@@ -913,7 +913,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_cmp_ps(one, other, _CMP_GT_OQ);
+                return { _mm256_cmp_ps(one, other, _CMP_GT_OQ), last_operation::comparison };
             }
 
 
@@ -926,7 +926,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_cmp_ps(one, other, _CMP_LT_OQ);
+                return { _mm256_cmp_ps(one, other, _CMP_LT_OQ), last_operation::comparison };
             }
 
 
@@ -939,7 +939,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_cmp_ps(one, other, _CMP_GE_OQ);
+                return { _mm256_cmp_ps(one, other, _CMP_GE_OQ), last_operation::comparison };
             }
 
 
@@ -952,7 +952,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_cmp_ps(one, other, _CMP_LE_OQ);
+                return { _mm256_cmp_ps(one, other, _CMP_LE_OQ), last_operation::comparison };
             }
 
         };
@@ -1014,7 +1014,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ);
+                return { _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ), last_operation::logic };
             }
 
 
@@ -1027,7 +1027,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_or_ps(one, other);
+                return { _mm256_or_ps(one, other), last_operation::logic };
             }
 
 
@@ -1040,7 +1040,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_and_ps(one, other);
+                return { _mm256_and_ps(one, other), last_operation::logic };
             }
 
         };
@@ -1102,7 +1102,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_cmp_ps(one, other, _CMP_EQ_OQ);
+                return { _mm256_cmp_ps(one, other, _CMP_EQ_OQ), last_operation::comparison };
             }
 
 
@@ -1115,7 +1115,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_cmp_ps(one, other, _CMP_NEQ_OQ);
+                return { _mm256_cmp_ps(one, other, _CMP_NEQ_OQ) , last_operation::comparison };
             }
 
         };
@@ -1177,7 +1177,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                auto mask = _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ);
+                auto mask = condition.last_op() == last_operation::undefined ? _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ) : condition.value();
                 return _mm256_blendv_ps(if_value, else_value, mask);
             }
 
@@ -1460,7 +1460,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ);
+                return { _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ), last_operation::logic };
             }
 
 
@@ -1473,7 +1473,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_or_ps(one, other);
+                return { _mm256_or_ps(one, other), last_operation::logic };
             }
 
 
@@ -1486,7 +1486,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_and_ps(one, other);
+                return { _mm256_and_ps(one, other), last_operation::logic };
             }
 
         };
@@ -1548,7 +1548,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_cmp_ps(one, other, _CMP_EQ_OQ);
+                return { _mm256_cmp_ps(one, other, _CMP_EQ_OQ), last_operation::comparison };
             }
 
 
@@ -1561,7 +1561,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_cmp_ps(one, other, _CMP_NEQ_OQ);
+                return { _mm256_cmp_ps(one, other, _CMP_NEQ_OQ) , last_operation::comparison };
             }
 
         };

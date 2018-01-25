@@ -156,7 +156,7 @@ namespace zacc { namespace examples
                 auto t = zacc::make_shared<std::vector<int>>(dim.x * dim.y);
 
                 sysinfo->reload();
-                //sysinfo->set(capabilities::AVX2, false);
+                sysinfo->set(capabilities::AVX2, false);
                 //sysinfo->set(capabilities::AVX1, false);
                 //sysinfo->set(capabilities::FMA3, false);
 

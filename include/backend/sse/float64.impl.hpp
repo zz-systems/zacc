@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/numeric.hpp"
 #include "traits/math.hpp"
-#include "traits/equatable.hpp"
-#include "traits/io.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/comparable.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/logical.hpp"
 #include "traits/conditional.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/equatable.hpp"
+#include "traits/logical.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/numeric.hpp"
+#include "traits/io.hpp"
+#include "traits/comparable.hpp"
 
 /**
  * @brief float64 implementation for the sse target
@@ -1230,7 +1230,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "sse4", "");
 
-                auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
+                auto mask = condition.last_op() == last_operation::undefined ? _mm_cmpeq_pd(_mm_setzero_pd(), condition) : condition.value();
                 return _mm_blendv_pd(if_value, else_value, mask);
             }
 
@@ -1244,8 +1244,8 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
-                auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
-                return _mm_xor_pd(if_value, _mm_and_pd( mask, _mm_xor_pd(else_value, if_value)));
+                auto mask = condition.last_op() == last_operation::undefined ? _mm_cmpeq_pd(_mm_setzero_pd(), condition) : condition.value();
+                return _mm_xor_pd(if_value, _mm_and_pd(mask, _mm_xor_pd(else_value, if_value)));
             }
 
         };

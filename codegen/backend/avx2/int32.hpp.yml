@@ -52,6 +52,9 @@ modules:
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi32 }
 
     boolean:
+      #- args: "zval_t value, last_operation last_op = last_operation::undefined"
+      #  init: "last_op == last_operation::undefined ? _mm256_cmpeq_epi32(_mm256_setzero_si256(), value) : value.value()"
+
       - args: zval_t value
         init: value
 
@@ -139,16 +142,16 @@ modules:
   logical:
     vlneg:
       args: one
-      body: _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
-    vlor:   _mm256_or_si256
-    vland:  _mm256_and_si256
+      body: "{ _mm256_cmpeq_epi32(one, _mm256_setzero_si256()), last_operation::logic }"
+    vlor:   "{ _mm256_or_si256(one, other), last_operation::logic }"
+    vland:  "{ _mm256_and_si256(one, other), last_operation::logic }"
 #-----------------------------------------------------------------------------------------------------------------------
   equatable:
-    veq:   _mm256_cmpeq_epi32
+    veq:   "{ _mm256_cmpeq_epi32(one, other), last_operation::comparison }"
     vneq:  "!(one == other)"
   comparable:
-    vgt:   _mm256_cmpgt_epi32
-    vlt:   _mm256_cmpgt_epi32(other, one)
+    vgt:   "{ _mm256_cmpgt_epi32(one, other), last_operation::comparison }"
+    vlt:   "{ _mm256_cmpgt_epi32(other, one), last_operation::comparison }"
     vge:   "!(one < other)"
     vle:   "!(one > other)"
 #-----------------------------------------------------------------------------------------------------------------------
@@ -157,6 +160,8 @@ modules:
       args: [bval_t condition, if_value, else_value]
       mangling: false
       body:
-        - auto mask = _mm256_cmpeq_epi32(_mm256_setzero_si256(), condition);
+        #- auto mask = _mm256_cmpeq_epi32(_mm256_setzero_si256(), condition);
+        #- std::cerr << condition << std::endl;
+        - "auto mask = condition.last_op() == last_operation::undefined ? _mm256_cmpeq_epi32(_mm256_setzero_si256(), condition) : condition.value()"
         - _mm256_blendv_epi8(if_value, else_value, mask);
         #- _mm256_blendv_epi8(else_value, if_value, condition);

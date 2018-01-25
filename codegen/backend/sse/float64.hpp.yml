@@ -210,10 +210,12 @@ modules:
         sse4:
           requires: [SSE41]
           body:
-            - auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
+            #- auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition);
+            - "auto mask = condition.last_op() == last_operation::undefined ? _mm_cmpeq_pd(_mm_setzero_pd(), condition) : condition.value()"
             - return _mm_blendv_pd(if_value, else_value, mask);
         default:
           requires: [not SSE41]
           body:
-            - auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition)
-            - return _mm_xor_pd(if_value, _mm_and_pd( mask, _mm_xor_pd(else_value, if_value)))
+            #- auto mask = _mm_cmpeq_pd(_mm_setzero_pd(), condition)
+            - "auto mask = condition.last_op() == last_operation::undefined ? _mm_cmpeq_pd(_mm_setzero_pd(), condition) : condition.value()"
+            - return _mm_xor_pd(if_value, _mm_and_pd(mask, _mm_xor_pd(else_value, if_value)))

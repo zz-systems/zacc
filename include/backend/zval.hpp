@@ -175,7 +175,17 @@ namespace zacc {
         template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
         constexpr bval(const T& other, last_operation last_op = last_operation::undefined)
                 : _value (other), _last_op(last_op)
-        {}
+        {
+        }
+
+//        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+//        constexpr bval(const T& other, last_operation last_op = last_operation::undefined)
+//        {
+//            if(zacc::is_bval<T>::value && last_op != last_operation::undefined)
+//                _value = other;
+//            else
+//                _value = other != 0;
+//        }
 
 
         template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
@@ -199,8 +209,16 @@ namespace zacc {
         }
 
         constexpr bval(const bval& other, last_operation last_op = last_operation::undefined)
-                : _value (other._value), _last_op(last_op)
+                : _value (other._value), _last_op(other.last_op())
         {}
+
+//        constexpr bval(const bval& other, last_operation last_op = last_operation::undefined)
+//        {
+//            if(last_op != last_operation::undefined)
+//                _value = other.value();
+//            else
+//                _value = other.value();
+//        }
 
         constexpr bval& operator=(const bval& other)
         {
@@ -211,6 +229,11 @@ namespace zacc {
         constexpr bval(bval&& other) noexcept
                 : _value(std::move(other._value)), _last_op(other.last_op())
         {}
+
+//        constexpr bval(bval&& other) noexcept
+//                : _value(std::move(other._value))
+//        {
+//        }
 
         constexpr bval& operator=(bval&& other) noexcept
         {

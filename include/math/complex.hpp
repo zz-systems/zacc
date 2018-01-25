@@ -573,27 +573,32 @@ namespace zacc { namespace math {
         //template<typename U, typename enable = std::enable_if_t<zacc::is_zval<U>::value && std::is_convertible<U, typename zval_traits<T>::vector_t>::value>>
         constexpr bcomplex(const zcomplex<typename zval_traits<T>::zval_t>& other, last_operation last_op = last_operation::undefined)
                 : __bcomplex<T>::impl (make_bval<T>(other.real(), last_op),
-                                       make_bval<T>(other.imag(), last_op))
+                                       make_bval<T>(other.imag(), last_op)), _last_op(last_op)
         {
-            static_assert(is_zval<decltype(other.imag())>::value, "kebab");
         }
 
         template<typename U, typename enable = std::enable_if_t<is_zval<U>::value || is_bval<U>::value>>
         constexpr bcomplex(U one)
                 : __bcomplex<T>::impl (make_bval<T>(one),
-                                       make_bval<T>(one))
+                                       make_bval<T>(one)), _last_op(last_operation::undefined)
         {
         }
 
         template<typename U, typename enable = std::enable_if_t<is_zval<U>::value || is_bval<U>::value>>
         constexpr bcomplex(T one, T other)
                 : __bcomplex<T>::impl (make_bval<T>(one),
-                                       make_bval<T>(other))
+                                       make_bval<T>(other)), _last_op(last_operation::undefined)
         {
         }
 
         bcomplex(bool one) = delete;
 
+        constexpr last_operation last_op() const {
+            return _last_op;
+        }
+
+    private:
+        const last_operation _last_op;
 
 //        template<typename U, typename enable = std::enable_if_t<zacc::is_zval<U>::value && std::is_convertible<U, T>::value>>
 //        constexpr bcomplex(const U& other, last_operation last_op = last_operation::undefined)

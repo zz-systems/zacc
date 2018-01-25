@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/numeric.hpp"
-#include "traits/io.hpp"
-#include "traits/equatable.hpp"
 #include "traits/math.hpp"
 #include "traits/comparable.hpp"
 #include "traits/conditional.hpp"
-#include "traits/logical.hpp"
+#include "traits/equatable.hpp"
 #include "traits/arithmetic.hpp"
+#include "traits/numeric.hpp"
+#include "traits/logical.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/io.hpp"
 #include "traits/bitwise.hpp"
 
 /**
@@ -1255,7 +1255,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "int32(int32_t[4])", "sse4", "");
 
-                auto mask = _mm_cmpeq_epi32(_mm_setzero_si128(), condition);
+                auto mask = condition.last_op() == last_operation::undefined ? _mm_cmpeq_epi32(_mm_setzero_si128(), condition) : condition.value();
                 return _mm_blendv_epi8(if_value, else_value, mask);
             }
 
@@ -1269,7 +1269,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int32.impl", __LINE__, "int32(int32_t[4])", "Tokens.DEFAULT", "");
 
-                auto mask = _mm_cmpeq_epi32(_mm_setzero_si128(), condition);
+                auto mask = condition.last_op() == last_operation::undefined ? _mm_cmpeq_epi32(_mm_setzero_si128(), condition) : condition.value();
                 return _mm_or_si128(_mm_andnot_si128(mask, if_value), _mm_and_si128(mask, else_value));
             }
 

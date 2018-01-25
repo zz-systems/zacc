@@ -182,10 +182,12 @@ modules:
         sse4:
           requires: [SSE41]
           body:
-            - auto mask = _mm_cmpeq_epi8(_mm_setzero_si128(), condition);
+            #- auto mask = _mm_cmpeq_epi8(_mm_setzero_si128(), condition);
+            - "auto mask = condition.last_op() == last_operation::undefined ? _mm_cmpeq_epi8(_mm_setzero_si128(), condition) : condition.value()"
             - return _mm_blendv_epi8(if_value, else_value, mask);
         default:
           requires: [not SSE41]
           body:
-            - auto mask = _mm_cmpeq_epi8(_mm_setzero_si128(), condition);
+            #- auto mask = _mm_cmpeq_epi8(_mm_setzero_si128(), condition);
+            - "auto mask = condition.last_op() == last_operation::undefined ? _mm_cmpeq_epi8(_mm_setzero_si128(), condition) : condition.value()"
             - return _mm_or_si128(_mm_andnot_si128(mask, if_value), _mm_and_si128(mask, else_value))
