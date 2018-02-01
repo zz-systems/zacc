@@ -95,8 +95,13 @@ install:
       mkdir cmake && travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
       export PATH=${DEPS_DIR}/cmake/bin:${PATH}
     fi
-  - travis_retry pip install --user pyopenssl ndg-httpsclient pyasn1
-  - travis_retry pip install --user yasha
+  - if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      travis_retry pip install --user pyopenssl ndg-httpsclient pyasn1
+      travis_retry pip install --user yasha
+    else
+      travis_retry pip install pyopenssl ndg-httpsclient pyasn1
+      travis_retry pip install yasha
+    fi
 
 before_script:
   - cd ${TRAVIS_BUILD_DIR}

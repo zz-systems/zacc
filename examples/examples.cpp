@@ -27,7 +27,7 @@
 #include "hosts/julia.hpp"
 #include "hosts/mandelbrot.hpp"
 
-int main(int argc, char** argv)
+int main(int, char**)
 {
     zacc::examples::mandelbrot_host host;
     host.run();
