@@ -25,48 +25,28 @@
 
 #pragma once
 
-// @file perlin_engine.hpp
+#include <vector>
 
 #include "zacc.hpp"
+#include "math/matrix.hpp"
+#include "util/algorithm.hpp"
+#include "system/branch_entrypoint.hpp"
+#include "system/kernel_interface.hpp"
 
-DISPATCHED class perlin_engine
-{
-    void run(const vec3<float> &origin, float *target)
+namespace zacc { namespace examples {
+
+    using namespace math;
+
+    struct __mandelbrot
     {
-        const size_t real_size = 1024; // length of target
+        using output_container_t = std::vector<int>;
+        using input_container_t  = std::vector<int>;
 
-        const int octaves = 5;
-        const int seed = 1337;
-        const double frequency = 1.0;
-        const float lacunarity = 1.0;
-        const float persistence = 0.5;
+        static constexpr auto kernel_name() { return "mandelbrot"; }
 
-        int cur_octave = 0;
+        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
+        virtual void run(output_container_t &output) = 0;
+    };
 
-        zfloat value = 0, currentPersistence = 1;
-
-        // Generate values
-        zacc::generate<zfloat>(target, target + real_size, [this](auto i)
-        {
-            zfloat	value = 0,
-                    currentPersistence = 1;
-
-            vec3<zfloat> origin { i, i, i };
-
-            auto _coords = origin / real_size * frequency;
-
-            for (int curOctave = 0; cur_octave < octaves; cur_octave++)
-            {
-                value += currentPersistence * noisegen<branch>::gradient_coherent_3d(
-                        clamp_int32<zfloat>(_coords),
-                        seed + cur_octave,
-                        quality);
-
-                // Prepare the next octave.
-                _coords *= lacunarity;
-                currentPersistence *= persistence;
-            }
-            return value;
-        });
-    }
-}
+    using mandelbrot = system::kernel_interface<__mandelbrot>;
+}}

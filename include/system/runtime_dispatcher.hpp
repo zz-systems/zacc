@@ -77,7 +77,7 @@ namespace zacc { namespace system {
         template<typename ...Args>
         void dispatch(bool select_one, Args&&... args)
         {
-            auto p = &platform::instance();
+            auto p = &platform::global();
 
 #if defined(ZACC_OPENCL)
             if(p->is_set(capabilities::OPENCL))
@@ -194,7 +194,7 @@ namespace zacc { namespace system {
         template<typename branch> void log_branch() const
         {
             std::cout << "Dispatching: " << branch::branch_name()
-                      << " [" << join(platform::instance().make_capabilities(branch::value), ", ") << "]"
+                      << " [" << join(platform::global().make_capabilities(branch::value), ", ") << "]"
                       << std::endl;
         }
 
@@ -204,7 +204,7 @@ namespace zacc { namespace system {
         template<typename branch> void log_branch_end() const
         {
             std::cout << "Dispatched: " << branch::branch_name()
-                      << " [" << join(platform::instance().make_capabilities(branch::value), ", ") << "]"
+                      << " [" << join(platform::global().make_capabilities(branch::value), ", ") << "]"
                       << std::endl;
         }
     };

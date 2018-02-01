@@ -25,14 +25,28 @@
 
 #pragma once
 
-// @file mandelbrot_engine.hpp
+#include <vector>
 
 #include "zacc.hpp"
+#include "math/matrix.hpp"
+#include "util/algorithm.hpp"
 #include "system/branch_entrypoint.hpp"
+#include "system/kernel_interface.hpp"
 
 namespace zacc { namespace examples {
 
-    template<typename _KernelDesc>
-    struct kernel : public _KernelDesc, public zacc::system::entrypoint
-    {};
+    using namespace math;
+
+    struct __julia
+    {
+        using output_container_t = std::vector<int>;
+        using input_container_t  = std::vector<int>;
+
+        static constexpr auto kernel_name() { return "julia"; }
+
+        virtual void configure(vec2<int> dim, vec2<float> offset, vec2<float> c, float zoom, size_t max_iterations) = 0;
+        virtual void run(output_container_t &output) = 0;
+    };
+
+    using julia = system::kernel_interface<__julia>;
 }}

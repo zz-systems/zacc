@@ -28,9 +28,15 @@
 
 #include "math/matrix.hpp"
 
-#include "kernels/mandelbrot_scheme.hpp"
-#include "dispatcher.hpp"
+#include "interfaces/mandelbrot.hpp"
+#include "interfaces/julia.hpp"
+#include "system/kernel_dispatcher.hpp"
+
 #include "util/color.hpp"
+
+#include "hosts/julia.hpp"
+#include "hosts/mandelbrot.hpp"
+
 namespace zacc { namespace examples
 {
     using namespace util;
@@ -43,13 +49,10 @@ namespace zacc { namespace examples
             using namespace std;
             using namespace chrono;
 
-
-            size_t max_iterations = 2048;
-
             //PreFetchCacheLine()
 #ifndef PROFILE
             auto sisd_t1 = high_resolution_clock::now();
-            auto result2 = *scalar_algorithm();
+            auto sisd_result = *scalar_algorithm();
             //vector<float> result2(512 * 512 * 1);
             auto sisd_t2 = high_resolution_clock::now();
             auto sisd_duration = duration_cast<milliseconds>(sisd_t2 - sisd_t1).count();
@@ -58,7 +61,7 @@ namespace zacc { namespace examples
 #endif
             auto simd_t1 = high_resolution_clock::now();
 
-            auto result1 = *vector_algorithm();
+            auto simd_result = *vector_algorithm();
 
             auto simd_t2 = high_resolution_clock::now();
             auto simd_duration = duration_cast<milliseconds>(simd_t2 - simd_t1).count();
@@ -67,30 +70,32 @@ namespace zacc { namespace examples
 #ifndef PROFILE
             cout << "Speedup : " << (double)sisd_duration / simd_duration << endl << endl;
 #endif
-            cout << "Minval SIMD: " << *min_element(begin(result1), end(result1)) << endl << endl;
-            cout << "Maxval SIMD: " << *max_element(begin(result1), end(result1)) << endl << endl;
+            cout << "Minval SIMD: " << *min_element(begin(simd_result), end(simd_result)) << endl << endl;
+            cout << "Maxval SIMD: " << *max_element(begin(simd_result), end(simd_result)) << endl << endl;
 
 #ifndef PROFILE
-            cout << "Minval SISD: " << *min_element(begin(result2), end(result2)) << endl << endl;
-            cout << "Maxval SISD: " << *max_element(begin(result2), end(result2)) << endl << endl;
+            cout << "Minval SISD: " << *min_element(begin(sisd_result), end(sisd_result)) << endl << endl;
+            cout << "Maxval SISD: " << *max_element(begin(sisd_result), end(sisd_result)) << endl << endl;
 
 #ifndef CACOPHONY_EXAMPLES_HEADLESS
             cimg_library::CImg<uint8_t> img1(w, h, 1, 3), img2(w, h, 1, 3);
 
-            //async::parallel_for(async::irange(0, w * h), [&](const auto i)
-#pragma omp parallel for
+            //async::parallel_for(async::irange(0, w * h), [&](const auto i
+
+            size_t max_iterations = 2048;
+
             for (int i = 0; i < w * h; i++)
             {
                 vec2<int> pos = math::reshape_i_xy<vec2<int>>(i, w);
 
                 int x = pos.x, y = pos.y;
-                auto color1 = gradient.getColor(result1[i]);
+                auto color1 = gradient.getColor(simd_result[i] % max_iterations);
 
                 img1(x, y, 0) = color1.r;
                 img1(x, y, 1) = color1.g;
                 img1(x, y, 2) = color1.b;
 
-                auto color2 = gradient.getColor(result2[i]);
+                auto color2 = gradient.getColor(sisd_result[i] % max_iterations);
 
                 img2(x, y, 0) = color2.r;
                 img2(x, y, 1) = color2.g;
@@ -117,7 +122,7 @@ namespace zacc { namespace examples
 
         void run()
         {
-            auto sysinfo = &zacc::platform::instance();
+            auto sysinfo = &zacc::platform::global();
             std::cout << *sysinfo;
 
             //platform e;
@@ -141,14 +146,27 @@ namespace zacc { namespace examples
 
 
 
-            auto mandelbrot_dispatcher = make_dispatcher<mandelbrot>();
+//            auto dispatcher = system::make_dispatcher<mandelbrot>();
+//
+//            vec2<int>   dim  = {4096, 4096};
+//            //vec2<int>   dim  = {128, 128};
+//            vec2<float> cmin = {-2, -2};
+//            vec2<float> cmax = {2, 2};
+//
+//            size_t max_iterations = 2048;
+//
+//            dispatcher.dispatch_some(dim, cmin, cmax, max_iterations);
 
-            vec2<int>   dim  = {2048, 2048};
-            vec2<float> cmin = {-2, -2};
-            vec2<float> cmax = {2, 2};
-            size_t max_iterations = 2048;
 
-            mandelbrot_dispatcher.dispatch_some(dim, cmin, cmax, max_iterations);
+            auto dispatcher = system::make_dispatcher<julia>();
+
+            vec2<int> dim = { 2048, 2048 };
+            vec2<float> offset = { 0, 0 };
+            vec2<float> c = { -0.7, 0.27015 };
+            float zoom = 1;
+            size_t max_iterations = 255;
+
+            dispatcher.dispatch_some(dim, offset, c, zoom, max_iterations);
 
 
             auto f1 = [&]()
@@ -160,7 +178,7 @@ namespace zacc { namespace examples
                 //sysinfo->set(capabilities::AVX1, false);
                 //sysinfo->set(capabilities::FMA3, false);
 
-                mandelbrot_dispatcher.dispatch_one(*t);
+                dispatcher.dispatch_one(*t);
 
                 return t;
             };
@@ -171,7 +189,7 @@ namespace zacc { namespace examples
 
                 sysinfo->set(0);
 
-                mandelbrot_dispatcher.dispatch_one(*t);
+                dispatcher.dispatch_one(*t);
 
                 return t;
             };
@@ -205,7 +223,8 @@ namespace zacc { namespace examples
 
 int main(int argc, char** argv)
 {
-    zacc::examples::run();
+    zacc::examples::mandelbrot_host host;
+    host.run();
 
     return 0;
 }

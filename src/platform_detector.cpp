@@ -36,7 +36,7 @@ using namespace zacc;
 int main(int argc, char** argv) {
 
     option_parser parser(argc, argv);
-    auto platform = &platform::instance();
+    auto platform = &platform::global();
 
     if(parser.has_option("CMAKE_OUTPUT"))
     {

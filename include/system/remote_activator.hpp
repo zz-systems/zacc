@@ -104,7 +104,6 @@ namespace zacc { namespace system {
         template<typename branch, typename concrete_type, template<class> class kernel, typename ...Args>
         std::shared_ptr<concrete_type> create_instance(Args&&... args)
         {
-            std::cerr << "Acquiring instance" << std::endl;
             auto loader  = this->branch_library<branch>();
 
             assert(loader != nullptr);
@@ -119,11 +118,7 @@ namespace zacc { namespace system {
             //std:: cerr << creator(std::forward<Args>(args)...) << std::endl;
             auto ptr = std::shared_ptr<entrypoint>(creator(std::forward<Args>(args)...), deleter);
 
-            auto result = std::static_pointer_cast<concrete_type>(std::static_pointer_cast<kernel<concrete_type>>(ptr));
-
-            std::cerr << "Acquired instance" << std::endl;
-
-            return result;
+            return std::static_pointer_cast<concrete_type>(std::static_pointer_cast<kernel<concrete_type>>(ptr));
         }
 
         /**
@@ -137,7 +132,6 @@ namespace zacc { namespace system {
         template<typename branch, typename concrete_type, typename ...Args>
         std::shared_ptr<concrete_type> create_instance(Args&&... args)
         {
-            std::cerr << "Acquiring instance" << std::endl;
             auto loader  = this->branch_library<branch>();
 
             assert(loader != nullptr);
@@ -150,11 +144,7 @@ namespace zacc { namespace system {
 
             auto ptr = std::shared_ptr<entrypoint>(creator(std::forward<Args>(args)...), deleter);
 
-            auto result = std::static_pointer_cast<concrete_type>(ptr);
-
-            std::cerr << "Acquired instance" << std::endl;
-
-            return result;
+            return std::static_pointer_cast<concrete_type>(ptr);
         }
     };
 }}

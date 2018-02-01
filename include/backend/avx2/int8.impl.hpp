@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/conditional.hpp"
-#include "traits/equatable.hpp"
-#include "traits/math.hpp"
-#include "traits/io.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/comparable.hpp"
-#include "traits/logical.hpp"
+#include "traits/io.hpp"
+#include "traits/equatable.hpp"
 #include "traits/numeric.hpp"
 #include "traits/bitwise.hpp"
+#include "traits/comparable.hpp"
+#include "traits/conditional.hpp"
+#include "traits/logical.hpp"
+#include "traits/math.hpp"
 
 /**
  * @brief int8 implementation for the avx2 target
@@ -236,7 +236,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int8
              * @remark avx2 - 
              */
-            constexpr __impl(bval_t value, last_operation last_op) : base_t(last_op == last_operation::undefined ? _mm256_cmpeq_epi8(_mm256_setzero_si256(), value) : value.value())  {
+            constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS()");
 
@@ -1040,7 +1040,7 @@ namespace zacc { namespace backend { namespace avx2 {
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "Tokens.DEFAULT", "");
 
                 auto mask = condition.last_op() == last_operation::undefined ? _mm256_cmpeq_epi8(_mm256_setzero_si256(), condition) : condition.value();
-                return _mm256_blendv_epi8(if_value, else_value, mask);
+                return _mm256_blendv_epi8(else_value, if_value, condition);
             }
 
         };

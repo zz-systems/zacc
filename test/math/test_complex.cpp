@@ -33,7 +33,7 @@ namespace zacc { namespace test {
     using namespace math;
 
     TEST(zfloat32_complex, add) {
-        REQUIRES(ZACC_ARCH);
+            REQUIRES(ZACC_ARCH);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
@@ -81,7 +81,7 @@ namespace zacc { namespace test {
     VASSERT_EQ(actual2.imag(), expected2.imag());*/
     }
     TEST(zfloat32_complex, sub) {
-        REQUIRES(ZACC_ARCH);
+            REQUIRES(ZACC_ARCH);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
@@ -129,7 +129,7 @@ namespace zacc { namespace test {
     }
 
     TEST(zfloat32_complex, div) {
-        REQUIRES(ZACC_ARCH);
+            REQUIRES(ZACC_ARCH);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
@@ -152,8 +152,53 @@ namespace zacc { namespace test {
         VASSERT_EQ(actual2.imag(), expected2.imag());*/
     }
 
+    TEST(zfloat32_complex, init) {
+            REQUIRES(ZACC_ARCH);
+        _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+        _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+
+        vec2<zfloat> avec = 123;
+        vec2<float> bvec = 123;
+
+        math::zcomplex<zfloat> a = avec;
+
+        math::zcomplex<zfloat> b = static_cast<vec2<zfloat>>(bvec);
+
+        math::zcomplex<zfloat> c = 123;
+
+        math::zcomplex<zfloat> d = c;
+
+//        math::zcomplex<zfloat> d = 123 + 456_i;
+
+
+        VASSERT_EQ(a.real(), 123);
+        VASSERT_EQ(a.imag(), 123);
+
+        VASSERT_EQ(b.real(), 123);
+        VASSERT_EQ(b.imag(), 123);
+
+        VASSERT_EQ(c.real(), 123);
+        VASSERT_EQ(c.imag(), 0);
+
+        VASSERT_EQ(d.real(), 123);
+        VASSERT_EQ(d.imag(), 0);
+
+//        VASSERT_EQ(d.real(), 123);
+//        VASSERT_EQ(d.imag(), 456);
+    /*
+        auto c = 3 + 4if;
+        auto d = 5 + 6if;
+
+        auto actual2 = c / d;
+        math::zcomplex<zfloat>  expected2 { (39.0 / 61), (2.0/61) };
+
+        VASSERT_EQ(actual2.real(), expected2.real());
+        VASSERT_EQ(actual2.imag(), expected2.imag());*/
+    }
+
     TEST(zfloat32_complex, condition) {
-        REQUIRES(ZACC_ARCH);
+            REQUIRES(ZACC_ARCH);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
@@ -161,6 +206,7 @@ namespace zacc { namespace test {
         math::zcomplex<zfloat> b { 3, 4 };
 
         math::zcomplex<zfloat> c00 {0, 0};
+        static_assert(is_cval<math::zcomplex<zfloat>>::value, "is_cval failed for math::zcomplex<zfloat>");
         auto actual00 = a.when(c00).otherwise(b);
 
         VASSERT_EQ(actual00.real(), b.real());
@@ -184,6 +230,8 @@ namespace zacc { namespace test {
         VASSERT_EQ(actual11.real(), a.real());
         VASSERT_EQ(actual11.imag(), a.imag());
     }
+
+
 //    TEST(float64_complex, sin) {
 //        REQUIRES(ZACC_ARCH);
 //        _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);

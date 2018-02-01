@@ -57,7 +57,7 @@ namespace zacc {
                : disable(capability);
     }
 
-    platform &platform::set(uint64_t raw_value) {
+    platform &platform::set(raw_t raw_value) {
         _flags = raw_value;
 
         return *this;
@@ -190,7 +190,7 @@ namespace zacc {
         return *this;
     }
 
-    platform &platform::instance() {
+    platform &platform::global() {
         static platform instance;
 
         return instance;

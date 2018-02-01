@@ -234,7 +234,7 @@ modules:
           body:
             #- auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition);
             - "auto mask = condition.last_op() == last_operation::undefined ?_mm_cmpeq_ps(_mm_setzero_ps(), condition) : condition.value()"
-            - return _mm_blendv_ps(if_value, else_value, mask);
+            - return _mm_blendv_ps(else_value, if_value, condition);
         default:
           requires: [not SSE41]
           body:

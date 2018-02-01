@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-// 
+//
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,37 +22,42 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-#include "gtest/gtest.h"
-#include "system/branch.hpp"
-#include "util/algorithm.hpp"
 
-#include <cmath>
-#include "util/testing/gtest_ext.hpp"
+#pragma once
 
-namespace zacc { namespace test {
+// @file mandelbrot_engine.hpp
 
-        TEST(type_traits_test, is_iterable_trait) {
-            REQUIRES(ZACC_ARCH);
+#include "zacc.hpp"
+#include "system/branch_entrypoint.hpp"
 
-                EXPECT_TRUE((is<measurable, std::array<int, 10>>));
-                EXPECT_FALSE((is<measurable, int>));
+namespace zacc { namespace system {
 
-                EXPECT_TRUE((is<iterable, std::array<int, 10>>));
-                EXPECT_FALSE((is<iterable, int>));
+    template<typename _KernelInterface>
+    struct kernel_interface : virtual _KernelInterface
+    {
+        using output_container_t = std::remove_reference_t<typename _KernelInterface::output_container_t>;
+        using input_container_t  = std::remove_reference_t<typename _KernelInterface::input_container_t>;
 
-                EXPECT_FALSE((is<resizable, std::array<int, 10>>));
-                EXPECT_FALSE((is<resizable, int>));
-                EXPECT_TRUE((is<resizable, std::vector<int>>));
+        template<typename... Args>
+        void operator()(Args&&... args)
+        {
+            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
-                EXPECT_FALSE((all<measurable, std::array<int, 10>, std::vector<float>, double>));
-                EXPECT_TRUE((all<measurable, std::array<int, 10>, std::vector<float>>));
-
-                EXPECT_TRUE((any<measurable, std::array<int, 10>, std::vector<float>, double>));
-
-                EXPECT_TRUE((is<swappable, std::tuple<int, float>>));
+            this->configure(std::forward<Args>(args)...);
         }
 
+        void operator()(const input_container_t &input, output_container_t &output)
+        {
+            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
+            this->run(input, output);
+        }
 
+        void operator()(output_container_t &output)
+        {
+            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
+            this->run(output);
+        }
+    };
 }}

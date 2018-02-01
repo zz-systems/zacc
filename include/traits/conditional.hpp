@@ -41,12 +41,24 @@ namespace zacc { namespace traits {
         using zval_t = typename base_t::zval_t;
         using bval_t = typename base_t::bval_t;
 
-        struct else_branch {
-            composed_t otherwise(const composed_t& else_value) const { return vsel(_condition, _if_value, else_value); }
+        struct else_branch
+        {
+            constexpr composed_t otherwise(const composed_t& else_value) const
+            {
+                return vsel(_condition, _if_value, else_value);
+            }
 
         private:
-            else_branch(const bval_t& condition, const composed_t& if_value)
-                    : _if_value(if_value), _condition(condition) {} // condition.last_op() == last_operation::undefined ? (zval_t(condition.value()) != 0) : condition
+
+            constexpr else_branch(const bval_t& condition, const composed_t& if_value, std::false_type)
+                    : _if_value(if_value), _condition(condition.last_op() == last_operation::undefined ? (zval_t(condition.value()) != 0) : condition)
+            {
+            }
+
+            constexpr else_branch(const bval_t& condition, const composed_t& if_value, std::true_type)
+                    : _if_value(if_value), _condition(condition)
+            {
+            }
 
             composed_t _if_value;
             bval_t _condition;
@@ -55,8 +67,8 @@ namespace zacc { namespace traits {
         };
 
 
-        else_branch when(const bval_t& condition) const {
-            return else_branch(condition, *this);
+        constexpr else_branch when(const bval_t& condition) const {
+            return else_branch(condition, *this, is_cval<bval_t>{});
         }
     };
 

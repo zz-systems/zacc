@@ -50,7 +50,7 @@ modules:
         init: value
 
       - args: bval_t value, last_operation last_op
-        init: "last_op == last_operation::undefined ? _mm256_cmpeq_epi8(_mm256_setzero_si256(), value) : value.value()"
+        init: value, last_op
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -146,4 +146,4 @@ modules:
       body:
           #- auto mask = _mm256_cmpeq_epi8(_mm256_setzero_si256(), condition);
           - "auto mask = condition.last_op() == last_operation::undefined ? _mm256_cmpeq_epi8(_mm256_setzero_si256(), condition) : condition.value()"
-          - return _mm256_blendv_epi8(if_value, else_value, mask);
+          - return _mm256_blendv_epi8(else_value, if_value, condition);

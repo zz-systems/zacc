@@ -62,17 +62,24 @@ namespace zacc {
         {}
 
         template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+        constexpr zval(T&& value)
+                : _value(std::forward<T>(value))
+        {}
+
+        constexpr zval(const zval& other)
+                : _value (other._value)
+        {}
+
+        constexpr zval(zval&& other) noexcept
+                : _value(std::move(other._value))
+        {}
+
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
         constexpr zval& operator=(const T& other)
         {
             _value = other;
             return *this;
         }
-
-        //template<typename T, typename enable = std::enable_if_t<!is_zval<T>::value && !is_bval<T>::value>>
-        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
-        constexpr zval(T&& value)
-                : _value(std::forward<T>(value))
-        {}
 
         template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
         constexpr zval& operator=(T&& other) noexcept
@@ -81,19 +88,11 @@ namespace zacc {
             return *this;
         }
 
-        constexpr zval(const zval& other)
-                : _value (other._value)
-        {}
-
         constexpr zval& operator=(const zval& other)
         {
             _value = other._value;
             return *this;
         }
-
-        constexpr zval(zval&& other) noexcept
-                : _value(std::move(other._value))
-        {}
 
         constexpr zval& operator=(zval&& other) noexcept
         {
@@ -105,34 +104,6 @@ namespace zacc {
         {
             std::swap(_value, other._value);
         }
-
-//        /**
-//             * @brief non-zval constructor
-//             * @tparam T
-//             * @tparam enable
-//             * @param value
-//             */
-//        template<typename T, typename enable = std::enable_if_t<!is_zval<T>::value && !is_bval<T>::value>>
-//        constexpr zval(T value) : _value(value) {}
-//
-//        /**
-//         * @brief zval copy constructor
-//         * @tparam T
-//         * @tparam enable
-//         * @param value
-//         */
-//        //template<typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>
-//        constexpr zval(const zval& value) : _value(value._value) {}
-//
-//        /**
-//         * @brief construct from mask
-//         * @param value
-//         */
-//        constexpr zval(const _MaskVector value) : _value(value) {}
-//        /**
-//         * @brief cast to underlying vector type
-//         * @return raw value
-//         */
 
         template <typename size = std::integral_constant<size_t, _Size>, typename enable = typename std::enable_if<(size::value > 1), _Vector>::type>
         constexpr operator _Vector() const {
@@ -170,95 +141,83 @@ namespace zacc {
     struct bval : zval_base<_Vector, _MaskVector, bool, bval_tag, _Size, _Alignment, _Features>
     {
         constexpr bval() : _last_op(last_operation::undefined)
-        {}
+        {
+        }
 
         template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
-        constexpr bval(const T& other, last_operation last_op = last_operation::undefined)
+        constexpr bval(const T& other)
+                : _value (other), _last_op(other.last_op())
+        {
+        }
+
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+        constexpr bval(const T& other, last_operation last_op)
                 : _value (other), _last_op(last_op)
         {
         }
 
-//        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
-//        constexpr bval(const T& other, last_operation last_op = last_operation::undefined)
-//        {
-//            if(zacc::is_bval<T>::value && last_op != last_operation::undefined)
-//                _value = other;
-//            else
-//                _value = other != 0;
-//        }
-
-
         template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
-        constexpr bval& operator=(const T& other)
+        constexpr bval(T&& other)
+                : _value(std::move(other)), _last_op(last_operation::undefined)
         {
-            _value = other;
-            return *this;
         }
 
-        //template<typename T, typename enable = std::enable_if_t<!is_zval<T>::value && !is_bval<T>::value>>
-        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
-        constexpr bval(T&& value)
-                : _value(std::move(value)), _last_op(last_operation::undefined)
-        {}
-
-        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
-        constexpr bval& operator=(T&& other) noexcept
-        {
-            _value = std::move(other);
-            return *this;
-        }
-
-        constexpr bval(const bval& other, last_operation last_op = last_operation::undefined)
+        constexpr bval(const bval& other)
                 : _value (other._value), _last_op(other.last_op())
-        {}
-
-//        constexpr bval(const bval& other, last_operation last_op = last_operation::undefined)
-//        {
-//            if(last_op != last_operation::undefined)
-//                _value = other.value();
-//            else
-//                _value = other.value();
-//        }
-
-        constexpr bval& operator=(const bval& other)
         {
-            _value = other._value;
-            return *this;
+        }
+
+        constexpr bval(const bval& other, last_operation last_op)
+                : _value (other._value), _last_op(last_op)
+        {
         }
 
         constexpr bval(bval&& other) noexcept
                 : _value(std::move(other._value)), _last_op(other.last_op())
-        {}
+        {
+        }
 
-//        constexpr bval(bval&& other) noexcept
-//                : _value(std::move(other._value))
-//        {
-//        }
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+        constexpr bval& operator=(const T& other) noexcept
+        {
+            _value = other.value();
+            _last_op = other.last_op();
+
+            return *this;
+        };
+
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Vector>::value>>
+        constexpr bval& operator=(T&& other) noexcept
+        {
+            _value = std::move(other.value());
+            _last_op = std::move(other.last_op());
+
+            return *this;
+        };
+
+
+        constexpr bval& operator=(const bval& other) noexcept
+        {
+            _value = other.value();
+            _last_op = other.last_op();
+
+            return *this;
+        };
+
 
         constexpr bval& operator=(bval&& other) noexcept
         {
-            _value = std::move(other._value);
+            _value = std::move(other.value());
+            _last_op = std::move(other.last_op());
+
             return *this;
-        }
+        };
 
         void swap(bval& other) noexcept
         {
             std::swap(_value, other._value);
+            std::swap(_last_op, other._last_op);
         }
-
-        /**
-         * @brief
-         * @return
-         */
-        ////constexpr operator zval() const {
-        //    return value();
-       // }
-
-//        template <typename size = std::integral_constant<size_t, _Size>, typename enable = typename std::enable_if<(size::value > 1), _Vector>::type>
-//        constexpr operator _Vector()
-//        {
-//            return _value;
-//        }
 
         /**
          * @brief
@@ -279,7 +238,7 @@ namespace zacc {
 
     private:
         alignas(_Alignment) _MaskVector _value;
-        const last_operation _last_op;
+        last_operation _last_op;
     };
 
 
@@ -288,6 +247,7 @@ namespace zacc {
     {
         return typename zval_traits<T>::bval_t {value, last_op};
     }
+
 
     template<typename T>
     constexpr std::enable_if_t<!is_zval<T>::value, typename zval_traits<T>::bval_t> make_bval(T value, last_operation)

@@ -52,9 +52,6 @@ modules:
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi32 }
 
     boolean:
-      #- args: "zval_t value, last_operation last_op = last_operation::undefined"
-      #  init: "last_op == last_operation::undefined ? _mm256_cmpeq_epi32(_mm256_setzero_si256(), value) : value.value()"
-
       - args: zval_t value
         init: value
 
@@ -163,5 +160,5 @@ modules:
         #- auto mask = _mm256_cmpeq_epi32(_mm256_setzero_si256(), condition);
         #- std::cerr << condition << std::endl;
         - "auto mask = condition.last_op() == last_operation::undefined ? _mm256_cmpeq_epi32(_mm256_setzero_si256(), condition) : condition.value()"
-        - _mm256_blendv_epi8(if_value, else_value, mask);
+        - _mm256_blendv_epi8(else_value, if_value, condition);
         #- _mm256_blendv_epi8(else_value, if_value, condition);

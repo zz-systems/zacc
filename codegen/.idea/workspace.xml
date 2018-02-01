@@ -39,9 +39,7 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="180">
                   <caret line="12" column="18" lean-forward="false" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
-                  <folding>
-                    <marker date="1515359234000" expanded="true" signature="1620:1655" ph="boolean_construction: &lt;3 items&gt;" />
-                  </folding>
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -62,10 +60,8 @@
             <entry file="file://$PROJECT_DIR$/backend/sse/int32.hpp.yml">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="2745">
-                  <caret line="183" column="38" lean-forward="false" selection-start-line="181" selection-start-column="4" selection-end-line="183" selection-end-column="38" />
-                  <folding>
-                    <marker date="1515353980000" expanded="true" signature="1489:1506" ph="boolean_construction: &lt;3 items&gt;" />
-                  </folding>
+                  <caret line="183" column="10" lean-forward="false" selection-start-line="181" selection-start-column="4" selection-end-line="183" selection-end-column="10" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -85,9 +81,7 @@
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="750">
                   <caret line="50" column="19" lean-forward="false" selection-start-line="50" selection-start-column="19" selection-end-line="50" selection-end-column="19" />
-                  <folding>
-                    <marker date="1515026105000" expanded="true" signature="1066:1154" ph="construction: &lt;4 items&gt;" />
-                  </folding>
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -150,18 +144,6 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="types.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/codegen/types.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="255">
-                  <caret line="24" column="30" lean-forward="false" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
-                  <folding>
-                    <element signature="e#0#11#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
           <file leaf-file-name="common.py" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/codegen/common.py">
               <provider selected="true" editor-type-id="text-editor">
@@ -178,30 +160,6 @@
                 <state relative-caret-position="225">
                   <caret line="15" column="20" lean-forward="false" selection-start-line="12" selection-start-column="4" selection-end-line="15" selection-end-column="20" />
                   <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="codegen_old.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/engine/codegen_old.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="6315">
-                  <caret line="427" column="26" lean-forward="false" selection-start-line="427" selection-start-column="26" selection-end-line="427" selection-end-column="26" />
-                  <folding>
-                    <element signature="e#0#12#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="codegen_old.py" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/codegen/codegen_old.py">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="14730">
-                  <caret line="987" column="1" lean-forward="false" selection-start-line="987" selection-start-column="1" selection-end-line="987" selection-end-column="1" />
-                  <folding>
-                    <element signature="e#0#12#0" expanded="true" />
-                  </folding>
                 </state>
               </provider>
             </entry>
@@ -288,7 +246,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="y" value="77" />
+    <option name="x" value="1281" />
+    <option name="y" value="75" />
     <option name="width" value="1920" />
     <option name="height" value="2054" />
   </component>
@@ -330,11 +289,6 @@
               <item name="codegen" type="b2602c69:ProjectViewProjectNode" />
               <item name="codegen" type="462c0819:PsiDirectoryNode" />
               <item name="config" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="codegen" type="b2602c69:ProjectViewProjectNode" />
-              <item name="codegen" type="462c0819:PsiDirectoryNode" />
-              <item name="engine" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="codegen" type="b2602c69:ProjectViewProjectNode" />
@@ -672,28 +626,29 @@
     </history-entry>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="77" width="1920" height="2054" extended-state="0" />
+    <frame x="1281" y="75" width="1920" height="2054" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1359375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946518" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946518" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1359375" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="SciView" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3997986" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32946518" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32996973" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3997986" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -725,44 +680,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/arguments.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2310">
-          <caret line="158" column="1" lean-forward="false" selection-start-line="158" selection-start-column="1" selection-end-line="158" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2430">
-          <caret line="162" column="105" lean-forward="false" selection-start-line="162" selection-start-column="105" selection-end-line="162" selection-end-column="105" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/modules.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="27" column="8" lean-forward="false" selection-start-line="27" selection-start-column="8" selection-end-line="27" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/types.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="14" column="25" lean-forward="true" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/codegen/arguments.py" />
+    <entry file="file://$PROJECT_DIR$/codegen/functions.py" />
+    <entry file="file://$PROJECT_DIR$/codegen/modules.py" />
+    <entry file="file://$PROJECT_DIR$/codegen/types.py" />
     <entry file="file://$PROJECT_DIR$/backend/sse/int32.hpp.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2805">
           <caret line="187" column="54" lean-forward="true" selection-start-line="187" selection-start-column="12" selection-end-line="187" selection-end-column="54" />
-          <folding>
-            <marker date="1515353980000" expanded="true" signature="1489:1506" ph="boolean_construction: &lt;3 items&gt;" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -770,9 +696,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1515359234000" expanded="true" signature="1620:1655" ph="boolean_construction: &lt;3 items&gt;" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -799,44 +723,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/arguments.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2310">
-          <caret line="158" column="1" lean-forward="false" selection-start-line="158" selection-start-column="1" selection-end-line="158" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2430">
-          <caret line="162" column="105" lean-forward="false" selection-start-line="162" selection-start-column="105" selection-end-line="162" selection-end-column="105" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/modules.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="27" column="8" lean-forward="false" selection-start-line="27" selection-start-column="8" selection-end-line="27" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/types.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="14" column="25" lean-forward="true" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/codegen/arguments.py" />
+    <entry file="file://$PROJECT_DIR$/codegen/functions.py" />
+    <entry file="file://$PROJECT_DIR$/codegen/modules.py" />
+    <entry file="file://$PROJECT_DIR$/codegen/types.py" />
     <entry file="file://$PROJECT_DIR$/backend/sse/int32.hpp.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2805">
           <caret line="187" column="54" lean-forward="true" selection-start-line="187" selection-start-column="12" selection-end-line="187" selection-end-column="54" />
-          <folding>
-            <marker date="1515353980000" expanded="true" signature="1489:1506" ph="boolean_construction: &lt;3 items&gt;" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -878,13 +773,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2017.1/python_stubs/-1645354321/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="388">
-          <caret line="4037" column="8" lean-forward="false" selection-start-line="4037" selection-start-column="8" selection-end-line="4037" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2017.1/python_stubs/-1645354321/builtins.py" />
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -896,9 +785,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="750">
           <caret line="50" column="19" lean-forward="false" selection-start-line="50" selection-start-column="19" selection-end-line="50" selection-end-column="19" />
-          <folding>
-            <marker date="1515026105000" expanded="true" signature="1066:1154" ph="construction: &lt;4 items&gt;" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -906,19 +793,15 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="180">
           <caret line="12" column="18" lean-forward="false" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
-          <folding>
-            <marker date="1515359234000" expanded="true" signature="1620:1655" ph="boolean_construction: &lt;3 items&gt;" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/backend/sse/int32.hpp.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2745">
-          <caret line="183" column="38" lean-forward="false" selection-start-line="181" selection-start-column="4" selection-end-line="183" selection-end-column="38" />
-          <folding>
-            <marker date="1515353980000" expanded="true" signature="1489:1506" ph="boolean_construction: &lt;3 items&gt;" />
-          </folding>
+          <caret line="183" column="10" lean-forward="false" selection-start-line="181" selection-start-column="4" selection-end-line="183" selection-end-column="10" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -929,39 +812,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/modules.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="441">
-          <caret line="35" column="59" lean-forward="false" selection-start-line="35" selection-start-column="59" selection-end-line="35" selection-end-column="59" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1335">
-          <caret line="176" column="86" lean-forward="false" selection-start-line="176" selection-start-column="36" selection-end-line="176" selection-end-column="86" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/codegen/modules.py" />
+    <entry file="file://$PROJECT_DIR$/codegen/functions.py" />
     <entry file="file://$PROJECT_DIR$/engine/codegen.py" />
-    <entry file="file://$PROJECT_DIR$/codegen/types.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="24" column="30" lean-forward="false" selection-start-line="24" selection-start-column="30" selection-end-line="24" selection-end-column="30" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/templates/type.test.jinja2">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="36" column="30" lean-forward="false" selection-start-line="36" selection-start-column="21" selection-end-line="36" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/codegen/types.py" />
     <entry file="file://$PROJECT_DIR$/codegen/test/test_parser.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="90">
@@ -972,23 +826,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/engine/codegen_old.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6315">
-          <caret line="427" column="26" lean-forward="false" selection-start-line="427" selection-start-column="26" selection-end-line="427" selection-end-column="26" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/arguments.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="934">
-          <caret line="162" column="0" lean-forward="false" selection-start-line="162" selection-start-column="0" selection-end-line="162" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/engine/codegen_old.py" />
+    <entry file="file://$PROJECT_DIR$/codegen/arguments.py" />
     <entry file="file://$PROJECT_DIR$/codegen/test/test_arguments.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="469">
@@ -1010,39 +849,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/codegen_old.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14730">
-          <caret line="987" column="1" lean-forward="false" selection-start-line="987" selection-start-column="1" selection-end-line="987" selection-end-column="1" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2017.3/python_stubs/-1645354321/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7">
-          <caret line="4713" column="8" lean-forward="false" selection-start-line="4713" selection-start-column="8" selection-end-line="4713" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/common.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="660">
-          <caret line="44" column="13" lean-forward="false" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/lexer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="20" lean-forward="false" selection-start-line="12" selection-start-column="4" selection-end-line="15" selection-end-column="20" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/codegen/codegen_old.py" />
+    <entry file="file://$USER_HOME$/Library/Caches/PyCharm2017.3/python_stubs/-1645354321/builtins.py" />
     <entry file="file://$PROJECT_DIR$/codegen/test/int32.hpp.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="465">
@@ -1051,11 +859,13 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/codegen.py">
+    <entry file="file://$PROJECT_DIR$/codegen/renderer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="825">
-          <caret line="56" column="38" lean-forward="false" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
-          <folding />
+        <state relative-caret-position="944">
+          <caret line="82" column="23" lean-forward="false" selection-start-line="82" selection-start-column="23" selection-end-line="82" selection-end-column="23" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1079,13 +889,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/codegen/renderer.py">
+    <entry file="file://$PROJECT_DIR$/codegen/codegen.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="944">
-          <caret line="82" column="23" lean-forward="false" selection-start-line="82" selection-start-column="23" selection-end-line="82" selection-end-column="23" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="825">
+          <caret line="56" column="38" lean-forward="false" selection-start-line="56" selection-start-column="38" selection-end-line="56" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/type.test.jinja2">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="540">
+          <caret line="36" column="30" lean-forward="false" selection-start-line="36" selection-start-column="21" selection-end-line="36" selection-end-column="30" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/codegen/common.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="44" column="13" lean-forward="false" selection-start-line="44" selection-start-column="13" selection-end-line="44" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/codegen/lexer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="15" column="20" lean-forward="false" selection-start-line="12" selection-start-column="4" selection-end-line="15" selection-end-column="20" />
+          <folding />
         </state>
       </provider>
     </entry>

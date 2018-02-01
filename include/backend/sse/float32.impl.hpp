@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
+#include "traits/conditional.hpp"
 #include "traits/logical.hpp"
+#include "traits/numeric.hpp"
 #include "traits/comparable.hpp"
-#include "traits/math.hpp"
 #include "traits/equatable.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/conditional.hpp"
-#include "traits/numeric.hpp"
 #include "traits/io.hpp"
 #include "traits/arithmetic.hpp"
+#include "traits/math.hpp"
 
 /**
  * @brief float32 implementation for the sse target
@@ -1260,7 +1260,7 @@ namespace zacc { namespace backend { namespace sse {
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "sse4", "");
 
                 auto mask = condition.last_op() == last_operation::undefined ?_mm_cmpeq_ps(_mm_setzero_ps(), condition) : condition.value();
-                return _mm_blendv_ps(if_value, else_value, mask);
+                return _mm_blendv_ps(else_value, if_value, condition);
             }
 
 

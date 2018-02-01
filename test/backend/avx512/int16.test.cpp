@@ -36,7 +36,7 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(avx512_int16_arithmetic, vneg_default)
     {
-        REQUIRES(ZACC_ARCH);
+REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -56,7 +56,7 @@ namespace zacc { namespace test {
 
     TEST(avx512_int16_arithmetic, vadd_default)
     {
-        REQUIRES(ZACC_ARCH);
+REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -76,7 +76,7 @@ namespace zacc { namespace test {
 
     TEST(avx512_int16_arithmetic, vsub_default)
     {
-        REQUIRES(ZACC_ARCH);
+REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -98,7 +98,7 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(avx512_int16_comparison, veq_default)
     {
-        REQUIRES(ZACC_ARCH);
+REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -118,7 +118,7 @@ namespace zacc { namespace test {
 
     TEST(avx512_int16_comparison, vneq_default)
     {
-        REQUIRES(ZACC_ARCH);
+REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -138,7 +138,7 @@ namespace zacc { namespace test {
 
     TEST(avx512_int16_comparison, vgt_default)
     {
-        REQUIRES(ZACC_ARCH);
+REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -158,7 +158,7 @@ namespace zacc { namespace test {
 
     TEST(avx512_int16_comparison, vlt_default)
     {
-        REQUIRES(ZACC_ARCH);
+REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -178,7 +178,7 @@ namespace zacc { namespace test {
 
     TEST(avx512_int16_comparison, vge_default)
     {
-        REQUIRES(ZACC_ARCH);
+REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -198,7 +198,7 @@ namespace zacc { namespace test {
 
     TEST(avx512_int16_comparison, vle_default)
     {
-        REQUIRES(ZACC_ARCH);
+REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);
@@ -220,7 +220,7 @@ namespace zacc { namespace test {
 // =====================================================================================================================
     TEST(avx512_int16_conditional, vsel_default)
     {
-        REQUIRES(ZACC_ARCH);
+REQUIRES(ZACC_ARCH);
 
         std::default_random_engine generator;
         std::uniform_int_distribution<int> distribution1(1, 3);

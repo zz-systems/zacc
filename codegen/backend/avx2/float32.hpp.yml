@@ -51,9 +51,6 @@ modules:
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_ps }
 
     boolean:
-      #- args: "zval_t value, last_operation last_op = last_operation::undefined"
-      #  init: "last_op == last_operation::undefined ? _mm256_cmp_ps(_mm256_setzero_ps(), value, _CMP_EQ_OQ) : value.value()"
-
       - args: zval_t value
         init: value
 
@@ -172,5 +169,6 @@ modules:
       mangling: false
       body:
         #- auto mask = _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ);
-        - "auto mask = condition.last_op() == last_operation::undefined ? _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ) : condition.value()"
-        - return _mm256_blendv_ps(if_value, else_value, mask);
+        #- "auto mask = condition.last_op() == last_operation::undefined ? _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ) : condition.value()"
+        #- return _mm256_blendv_ps(else_value, if_value, condition);
+        - return _mm256_blendv_ps(else_value, if_value, condition);

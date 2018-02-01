@@ -42,14 +42,14 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/conditional.hpp"
-#include "traits/numeric.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/math.hpp"
-#include "traits/logical.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/comparable.hpp"
 #include "traits/equatable.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/logical.hpp"
+#include "traits/numeric.hpp"
+#include "traits/comparable.hpp"
+#include "traits/conditional.hpp"
 #include "traits/io.hpp"
 
 /**
@@ -260,7 +260,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float64
              * @remark avx2 - 
              */
-            constexpr __impl(bval_t value, last_operation last_op) : base_t(last_op == last_operation::undefined ? _mm256_cmp_pd(_mm256_setzero_pd(), value, _CMP_EQ_OQ) : value.value())  {
+            constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
                 ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS()");
 
@@ -1178,8 +1178,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
 
-                auto mask = condition.last_op() == last_operation::undefined ? _mm256_cmp_pd(_mm256_setzero_pd(), condition, _CMP_EQ_OQ) : condition.value();
-                return _mm256_blendv_pd(if_value, else_value, mask);
+                return _mm256_blendv_pd(else_value, if_value, condition);
             }
 
         };

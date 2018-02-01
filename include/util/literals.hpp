@@ -25,45 +25,40 @@
 
 #pragma once
 
-// @file mandelbrot_engine.hpp
+#include <cstdint>
 
-#include "zacc.hpp"
-#include "math/matrix.hpp"
-#include "util/algorithm.hpp"
-#include "system/branch_entrypoint.hpp"
+constexpr std::int8_t operator "" _int8(unsigned long long v)
+{ return static_cast<std::int8_t>(v); }
 
-namespace zacc { namespace examples {
+constexpr std::uint8_t operator "" _uint8(unsigned long long v)
+{ return static_cast<std::uint8_t>(v); }
 
-    using namespace math;
+constexpr std::int16_t operator "" _int16(unsigned long long v)
+{ return static_cast<std::int16_t>(v); }
 
-    template<typename _Kernel>
-    struct kernel_traits
-    {
-        using output_container_t = std::vector<int>&;
-        using input_container_t  = std::vector<int>;
+constexpr std::uint16_t operator "" _uint16(unsigned long long v)
+{ return static_cast<std::uint16_t>(v); }
 
-        static constexpr auto kernel_name() { return _Kernel::kernel_name(); }
-    };
+constexpr std::int32_t operator "" _int32(unsigned long long v)
+{ return static_cast<std::int32_t>(v); }
 
+constexpr std::uint32_t operator "" _uint32(unsigned long long v)
+{ return static_cast<std::uint32_t>(v); }
 
-    struct mandelbrot
-    {
-        using output_container_t = kernel_traits<mandelbrot>::output_container_t;
+constexpr std::int64_t operator "" _int64(unsigned long long v)
+{ return static_cast<std::int64_t>(v); }
 
-        static constexpr auto kernel_name() { return "mandelbrot"; }
+constexpr std::uint64_t operator "" _uint64(unsigned long long v)
+{ return static_cast<std::uint64_t>(v); }
 
-        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
-        virtual void run(output_container_t output) = 0;
+constexpr std::int_fast8_t operator "" _int_fast8(unsigned long long v)
+{ return static_cast<std::int_fast8_t>(v); }
 
-        virtual void operator()(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations)
-        {
-            configure(dim, cmin, cmax, max_iterations);
-        }
+constexpr std::uint_fast8_t operator "" _uint_fast8(unsigned long long v)
+{ return static_cast<std::uint_fast8_t>(v); }
 
-        virtual void operator()(output_container_t output)
-        {
-            run(output);
-        }
-    };
+constexpr std::int_fast16_t operator "" _int_fast16(unsigned long long v)
+{ return static_cast<std::int_fast16_t>(v); }
 
-}}
+constexpr std::uint_fast16_t operator "" _uint_fast16(unsigned long long v)
+{ return static_cast<std::uint_fast16_t>(v); }

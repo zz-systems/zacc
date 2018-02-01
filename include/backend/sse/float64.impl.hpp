@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/math.hpp"
-#include "traits/conditional.hpp"
-#include "traits/arithmetic.hpp"
 #include "traits/equatable.hpp"
+#include "traits/conditional.hpp"
+#include "traits/comparable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/math.hpp"
+#include "traits/io.hpp"
 #include "traits/logical.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/numeric.hpp"
-#include "traits/io.hpp"
-#include "traits/comparable.hpp"
 
 /**
  * @brief float64 implementation for the sse target
@@ -1226,12 +1226,12 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - sse4
              */
-            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vsel(mask_vector_t condition, composed_t if_value, composed_t else_value)  {
+            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "sse4", "");
 
                 auto mask = condition.last_op() == last_operation::undefined ? _mm_cmpeq_pd(_mm_setzero_pd(), condition) : condition.value();
-                return _mm_blendv_pd(if_value, else_value, mask);
+                return _mm_blendv_pd(else_value, if_value, condition);
             }
 
 
@@ -1240,7 +1240,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float64
              * @remark sse - Tokens.DEFAULT
              */
-            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vsel(mask_vector_t condition, composed_t if_value, composed_t else_value)  {
+            template<typename T = zfloat64<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "Tokens.DEFAULT", "");
 
