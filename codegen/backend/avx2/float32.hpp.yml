@@ -168,7 +168,4 @@ modules:
       args: [bval_t condition, if_value, else_value]
       mangling: false
       body:
-        #- auto mask = _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ);
-        #- "auto mask = condition.last_op() == last_operation::undefined ? _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ) : condition.value()"
-        #- return _mm256_blendv_ps(else_value, if_value, condition);
         - return _mm256_blendv_ps(else_value, if_value, condition);

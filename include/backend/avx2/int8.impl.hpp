@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/io.hpp"
-#include "traits/equatable.hpp"
 #include "traits/numeric.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/comparable.hpp"
 #include "traits/conditional.hpp"
-#include "traits/logical.hpp"
+#include "traits/comparable.hpp"
+#include "traits/equatable.hpp"
+#include "traits/io.hpp"
 #include "traits/math.hpp"
+#include "traits/logical.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/bitwise.hpp"
 
 /**
  * @brief int8 implementation for the avx2 target
@@ -1039,7 +1039,6 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "Tokens.DEFAULT", "");
 
-                auto mask = condition.last_op() == last_operation::undefined ? _mm256_cmpeq_epi8(_mm256_setzero_si256(), condition) : condition.value();
                 return _mm256_blendv_epi8(else_value, if_value, condition);
             }
 
