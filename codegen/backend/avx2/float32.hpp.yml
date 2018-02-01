@@ -62,15 +62,15 @@ modules:
       prefix: "template<typename OutputIt> friend"
       args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm256_storeu_ps(result, input)
+      body: _mm256_storeu_ps(&(*result), input)
     vstream:
       <<: *io_store
-      body: _mm256_stream_ps(result, input)
+      body: _mm256_stream_ps(&(*result), input)
 
     vgather:
       prefix: "template<typename RandomIt> friend"
       args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
-      body: _mm256_i32gather_ps(input, index, 4)
+      body: _mm256_i32gather_ps(&(*input), index, 4)
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------

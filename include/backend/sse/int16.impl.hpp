@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/io.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/bitwise_shift.hpp"
 #include "traits/equatable.hpp"
-#include "traits/math.hpp"
-#include "traits/logical.hpp"
-#include "traits/comparable.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/io.hpp"
 #include "traits/conditional.hpp"
 #include "traits/numeric.hpp"
+#include "traits/logical.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/math.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/comparable.hpp"
 
 /**
  * @brief int16 implementation for the sse target
@@ -302,7 +302,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "Tokens.DEFAULT", "");
 
-                _mm_storeu_si128((__m128i*)result, input);
+                _mm_storeu_si128((__m128i*)&(*result), input);
             }
 
 
@@ -315,7 +315,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "Tokens.DEFAULT", "");
 
-                _mm_stream_si128((__m128i*)result, input);
+                _mm_stream_si128((__m128i*)&(*result), input);
             }
 
         };
@@ -1268,7 +1268,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "Tokens.DEFAULT", "");
 
-                _mm_storeu_si128((__m128i*)result, input);
+                _mm_storeu_si128((__m128i*)&(*result), input);
             }
 
 
@@ -1281,7 +1281,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "Tokens.DEFAULT", "");
 
-                _mm_stream_si128((__m128i*)result, input);
+                _mm_stream_si128((__m128i*)&(*result), input);
             }
 
         };

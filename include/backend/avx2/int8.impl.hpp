@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
+#include "traits/comparable.hpp"
+#include "traits/math.hpp"
+#include "traits/numeric.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/logical.hpp"
-#include "traits/io.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/equatable.hpp"
-#include "traits/numeric.hpp"
-#include "traits/comparable.hpp"
 #include "traits/conditional.hpp"
-#include "traits/math.hpp"
+#include "traits/io.hpp"
+#include "traits/equatable.hpp"
 
 /**
  * @brief int8 implementation for the avx2 target
@@ -301,7 +301,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "Tokens.DEFAULT", "");
 
-                _mm256_storeu_si256((__m256i*)result, input);
+                _mm256_storeu_si256((__m256i*)&(*result), input);
             }
 
 
@@ -314,7 +314,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "Tokens.DEFAULT", "");
 
-                _mm256_stream_si256((__m256i*)result, input);
+                _mm256_stream_si256((__m256i*)&(*result), input);
             }
 
         };
@@ -1101,7 +1101,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "Tokens.DEFAULT", "");
 
-                _mm256_storeu_si256((__m256i*)result, input);
+                _mm256_storeu_si256((__m256i*)&(*result), input);
             }
 
 
@@ -1114,7 +1114,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "Tokens.DEFAULT", "");
 
-                _mm256_stream_si256((__m256i*)result, input);
+                _mm256_stream_si256((__m256i*)&(*result), input);
             }
 
         };

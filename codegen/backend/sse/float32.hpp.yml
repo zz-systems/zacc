@@ -66,10 +66,10 @@ modules:
       prefix: "template<typename OutputIt> friend"
       args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm_storeu_ps(result, input)
+      body: _mm_storeu_ps(&(*result), input)
     vstream:
       <<: *io_store
-      body:  _mm_stream_ps(result, input)
+      body:  _mm_stream_ps(&(*result), input)
 
     vgather:
       prefix: "template<typename RandomIt> friend"

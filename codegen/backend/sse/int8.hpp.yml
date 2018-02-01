@@ -57,10 +57,10 @@ modules:
       prefix: "template<typename OutputIt> friend"
       args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm_storeu_si128((__m128i*)result, input)
+      body: _mm_storeu_si128((__m128i*)&(*result), input)
     vstream:
       <<: *io_store
-      body:  _mm_stream_si128((__m128i*)result, input)
+      body:  _mm_stream_si128((__m128i*)&(*result), input)
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------

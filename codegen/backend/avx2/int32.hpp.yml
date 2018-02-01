@@ -63,23 +63,23 @@ modules:
       prefix: "template<typename OutputIt> friend"
       args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm256_storeu_si256((__m256i*)result, input);
+      body: _mm256_storeu_si256((__m256i*)&(*result), input);
     vstream:
       <<: *io_store
-      body: _mm256_stream_si256((__m256i*)result, input);
+      body: _mm256_stream_si256((__m256i*)&(*result), input);
 
 
     vgather:
       prefix: "template<typename RandomIt> friend"
       args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
-      body: _mm256_i32gather_epi32(input, index, 4)
+      body: _mm256_i32gather_epi32((__m256i*)&(*input), index, 4)
 
   boolean_io:
     vstore:
       prefix: "template<typename OutputIt> friend"
       args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm256_storeu_si256((__m256i*)result, input);
+      body: _mm256_storeu_si256((__m256i*)&(*result), input);
 
     vmask: _mm256_movemask_epi8
 

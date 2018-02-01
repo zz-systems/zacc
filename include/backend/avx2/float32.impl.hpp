@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/io.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/logical.hpp"
-#include "traits/math.hpp"
-#include "traits/comparable.hpp"
-#include "traits/equatable.hpp"
-#include "traits/conditional.hpp"
 #include "traits/bitwise.hpp"
+#include "traits/comparable.hpp"
+#include "traits/io.hpp"
+#include "traits/math.hpp"
+#include "traits/logical.hpp"
+#include "traits/equatable.hpp"
+#include "traits/arithmetic.hpp"
 #include "traits/numeric.hpp"
+#include "traits/conditional.hpp"
 
 /**
  * @brief float32 implementation for the avx2 target
@@ -325,7 +325,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                _mm256_storeu_ps(result, input);
+                _mm256_storeu_ps(&(*result), input);
             }
 
 
@@ -338,7 +338,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                _mm256_stream_ps(result, input);
+                _mm256_stream_ps(&(*result), input);
             }
 
 
@@ -351,7 +351,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_i32gather_ps(input, index, 4);
+                return _mm256_i32gather_ps(&(*input), index, 4);
             }
 
         };
@@ -1239,7 +1239,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                _mm256_storeu_ps(result, input);
+                _mm256_storeu_ps(&(*result), input);
             }
 
 
@@ -1252,7 +1252,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                _mm256_stream_ps(result, input);
+                _mm256_stream_ps(&(*result), input);
             }
 
 
@@ -1265,7 +1265,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "Tokens.DEFAULT", "");
 
-                return _mm256_i32gather_ps(input, index, 4);
+                return _mm256_i32gather_ps(&(*input), index, 4);
             }
 
         };

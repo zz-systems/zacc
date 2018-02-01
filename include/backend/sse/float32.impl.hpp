@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/equatable.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/comparable.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/logical.hpp"
-#include "traits/conditional.hpp"
 #include "traits/numeric.hpp"
-#include "traits/math.hpp"
+#include "traits/logical.hpp"
+#include "traits/equatable.hpp"
 #include "traits/io.hpp"
+#include "traits/conditional.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/math.hpp"
+#include "traits/bitwise.hpp"
 
 /**
  * @brief float32 implementation for the sse target
@@ -325,7 +325,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "Tokens.DEFAULT", "");
 
-                _mm_storeu_ps(result, input);
+                _mm_storeu_ps(&(*result), input);
             }
 
 
@@ -338,7 +338,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "Tokens.DEFAULT", "");
 
-                _mm_stream_ps(result, input);
+                _mm_stream_ps(&(*result), input);
             }
 
 
@@ -1334,7 +1334,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "Tokens.DEFAULT", "");
 
-                _mm_storeu_ps(result, input);
+                _mm_storeu_ps(&(*result), input);
             }
 
 
@@ -1347,7 +1347,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "Tokens.DEFAULT", "");
 
-                _mm_stream_ps(result, input);
+                _mm_stream_ps(&(*result), input);
             }
 
 
