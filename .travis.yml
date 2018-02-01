@@ -49,17 +49,17 @@ matrix:
             - llvm-toolchain-trusty-4.0
             - ubuntu-toolchain-r-test
           packages:
-            - clang-3.9
             - clang-4.0
+            #- clang-5.0
             - g++-5
             - g++-6
             - g++-7
-      env: COMPILER=clang++-3.9 BUILD_TYPE='Release' CXX=clang++-3.9 CC=clang-3.9
-
-    - os: linux
-      compiler: clang
-      addons: *addons
       env: COMPILER=clang++-4.0 BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
+
+#    - os: linux
+#      compiler: clang
+#      addons: *addons
+#      env: COMPILER=clang++-5.0 BUILD_TYPE='Release' CXX=clang++-5.0 CC=clang-5.0
 
     # Linux GCC Builds
     - os: linux

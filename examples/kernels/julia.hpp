@@ -60,13 +60,15 @@ namespace zacc { namespace examples {
 
         virtual void run(mandelbrot::output_container &output) override
         {
-            zacc::generate<zint>(std::begin(output), std::end(output), [this](auto i)
+            vec2<zfloat> center = _dim / 2.0;
+
+            zacc::generate<zint>(std::begin(output), std::end(output), [this, center](auto i)
             {
                 // compute 2D-position from 1D-index
                 auto pos = reshape<vec2<zfloat>>(make_index<zint>(zint(i)), _dim);
 
-                zcomplex<zfloat> z(1.5 * (pos.x - zfloat(_dim.x) / 2.0f) / (0.5f * _zoom * zfloat(_dim.x)) + _offset.x,
-                                   1.0 * (pos.y - zfloat(_dim.y) / 2.0f) / (0.5f * _zoom * zfloat(_dim.y)) + _offset.y);
+                zcomplex<zfloat> z(1.5 * (pos.x - center.x) / (_zoom * center.x) + _offset.x,
+                                   1.0 * (pos.y - center.y) / (_zoom * center.y) + _offset.y);
 
                 bfloat done = false;
                 zint iterations = 0;

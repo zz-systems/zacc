@@ -42,7 +42,6 @@ void mandelbrot_delete_instance(zacc::system::entrypoint* instance)
 
 zacc::system::entrypoint *julia_create_instance()
 {
-    std::cerr << "kebab" << std::endl;
     return new zacc::examples::julia_kernel<zacc::arch::types>();
 }
 
