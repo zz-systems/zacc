@@ -36,7 +36,7 @@ namespace zacc { namespace test {
         REQUIRES(ZACC_ARCH);
         _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
         _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
-        for (int i = -180; i <= 180; i+= 180)
+        for (int i = -180; i <= 180; i++)
         {
             auto actual     = math::vsin(zfloat(i / 180.0f * M_PI));
             zfloat expected   = std::sin(i / 180.0f * M_PI);

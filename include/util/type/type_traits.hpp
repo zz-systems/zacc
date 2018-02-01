@@ -166,6 +166,26 @@ namespace zacc {
     {};
 
 
+    template<typename val_t, typename enable_t = void>
+    struct is_scalar
+            : public std::false_type
+    {};
+
+    template<typename val_t>
+    struct is_scalar<val_t, std::enable_if_t<!val_t::is_vector>>
+            : public std::true_type
+    {};
+
+    template<typename val_t, typename enable_t = void>
+    struct is_vector
+            : public std::false_type
+    {};
+
+    template<typename val_t>
+    struct is_vector<val_t, std::enable_if_t<val_t::is_vector>>
+            : public std::true_type
+    {};
+
     template<typename T>
     using resolve_uint_t = std::conditional_t<
             sizeof(T) == 8,
