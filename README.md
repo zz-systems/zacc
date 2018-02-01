@@ -380,8 +380,11 @@ zacc_add_dispatched_tests(cacophony.tests
 |-----------|---|--------------|
 | GCC 5 | :white_check_mark: |  |
 | GCC 6 | :white_check_mark: |  |
-| Clang 3.9 | :white_check_mark: |  |
+| GCC 7 | :white_check_mark: |  |
+| Clang 3.9 | :no_entry: | Not compilable |
 | Clang 4.0 | :white_check_mark: |  |
+| LLVM version 8.1.0 | :no_entry: | Not compilable |
+| LLVM version 9.0.0 | :white_check_mark: |  |
 | Clang-cl | :white_check_mark: |  |
 | MSVC | :no_entry: | Not supported* |
 
