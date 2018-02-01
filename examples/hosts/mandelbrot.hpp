@@ -93,7 +93,7 @@ namespace zacc { namespace examples {
 
             virtual util::color_rgb map_value(typename output_container::value_type value) override
             {
-                return _gradient.getColor(value % 17 -1);
+                return _gradient.getColor(value % 32);
             }
 
         private:

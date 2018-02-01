@@ -27,11 +27,11 @@ matrix:
   include:
 
     # OSX Clang Builds
-    - os: osx
-      osx_image: xcode8.3
-      compiler: clang
-      language: generic
-      env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc
+#    - os: osx
+#      osx_image: xcode8.3
+#      compiler: clang
+#      language: generic
+#      env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc
 
     - os: osx
       osx_image: xcode9
