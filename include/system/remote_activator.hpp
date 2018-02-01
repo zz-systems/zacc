@@ -31,7 +31,7 @@
 
 #include "system/capabilities.hpp"
 #include "system/managed_library.hpp"
-#include "system/branch_entrypoint.hpp"
+#include "system/entrypoint.hpp"
 
 namespace zacc { namespace system {
 

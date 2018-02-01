@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "system/branch.hpp"
+#include "system/arch.hpp"
 
 namespace zacc { namespace math {
 

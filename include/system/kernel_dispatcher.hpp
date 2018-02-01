@@ -28,7 +28,7 @@
 
 
 #include "zacc.hpp"
-#include "branch_entrypoint.hpp"
+#include "entrypoint.hpp"
 #include "remote_activator.hpp"
 #include "runtime_dispatcher.hpp"
 #include "kernel.hpp"

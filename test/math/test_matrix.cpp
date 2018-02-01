@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "system/branch.hpp"
+#include "system/arch.hpp"
 #include "util/testing/gtest_ext.hpp"
 #include "math/matrix.hpp"
 

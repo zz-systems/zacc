@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "system/branch.hpp"
+#include "system/arch.hpp"
 #include "math/complex.hpp"
 
 #include <cmath>

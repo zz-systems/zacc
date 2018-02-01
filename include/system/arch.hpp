@@ -34,7 +34,7 @@ namespace zacc {
     /**
      * @brief provides all necessary types for the current branch at compile time
      */
-    struct dispatched_branch
+    struct arch
     {
         /// fast float enabled? used for faster and less precise computations
         static const constexpr bool use_fast_float = ZACC_FAST_FLOAT;
@@ -43,22 +43,22 @@ namespace zacc {
         using types = ZACC_MAJOR_ARCH::types<branches::ZACC_ARCH>;
     };
 
-    using zint8      = typename dispatched_branch::types::zint8;
-    using zint16     = typename dispatched_branch::types::zint16;
-    using zint32     = typename dispatched_branch::types::zint32;
-    using zfloat32   = typename dispatched_branch::types::zfloat32;
-    using zfloat64   = typename dispatched_branch::types::zfloat64;
+    using zint8      = typename arch::types::zint8;
+    using zint16     = typename arch::types::zint16;
+    using zint32     = typename arch::types::zint32;
+    using zfloat32   = typename arch::types::zfloat32;
+    using zfloat64   = typename arch::types::zfloat64;
     using zbyte      = zint8;
     using zshort     = zint16;
     using zint       = zint32;
     using zfloat     = zfloat32;
     using zdouble    = zfloat64;
 
-    using bint8      = typename dispatched_branch::types::bint8;
-    using bint16     = typename dispatched_branch::types::bint16;
-    using bint32     = typename dispatched_branch::types::bint32;
-    using bfloat32   = typename dispatched_branch::types::bfloat32;
-    using bfloat64   = typename dispatched_branch::types::bfloat64;
+    using bint8      = typename arch::types::bint8;
+    using bint16     = typename arch::types::bint16;
+    using bint32     = typename arch::types::bint32;
+    using bfloat32   = typename arch::types::bfloat32;
+    using bfloat64   = typename arch::types::bfloat64;
     using bbyte      = bint8;
     using bshort     = bint16;
     using bint       = bint32;

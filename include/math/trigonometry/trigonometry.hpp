@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "system/branch.hpp"
+#include "system/arch.hpp"
 #include "math/common.hpp"
 #include "math/fundamental.hpp"
 
@@ -66,7 +66,7 @@ namespace zacc { namespace math {
         zint iq = q;
 
         // when performance > precision
-        if(dispatched_branch::use_fast_float)
+        if(arch::use_fast_float)
         {
             val = vfmadd(q, Z_PI, val);
         }
@@ -138,7 +138,7 @@ namespace zacc { namespace math {
         zint iq = q;
 
         // when performance > precision
-        if(dispatched_branch::use_fast_float)
+        if(arch::use_fast_float)
         {
             val -= q * Z_PI_2;
         }
@@ -210,7 +210,7 @@ namespace zacc { namespace math {
         zint iq = q;
 
         // when performance > precision
-        if(dispatched_branch::use_fast_float)
+        if(arch::use_fast_float)
         {
             val -= q * Z_PI_2;
         }

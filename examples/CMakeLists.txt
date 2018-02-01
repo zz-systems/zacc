@@ -12,7 +12,7 @@ zacc_add_dispatched_executable(zacc_examples
         INCLUDES
             ${PROJECT_SOURCE_DIR}/include
         ENTRYPOINT
-            ${PROJECT_SOURCE_DIR}/branch_entrypoint.cpp
+            ${PROJECT_SOURCE_DIR}/entrypoint.cpp
         SOURCES
             ${PROJECT_SOURCE_DIR}/examples.cpp
         )
