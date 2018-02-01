@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/comparable.hpp"
-#include "traits/io.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/numeric.hpp"
-#include "traits/math.hpp"
 #include "traits/equatable.hpp"
-#include "traits/logical.hpp"
 #include "traits/bitwise.hpp"
+#include "traits/logical.hpp"
 #include "traits/conditional.hpp"
+#include "traits/comparable.hpp"
+#include "traits/numeric.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/math.hpp"
+#include "traits/io.hpp"
 
 /**
  * @brief float32 implementation for the sse target
@@ -1272,7 +1272,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "Tokens.DEFAULT", "");
 
-                return _mm_or_ps(_mm_andnot_ps(condition, if_value), _mm_and_ps(condition, else_value));
+                return _mm_or_ps(_mm_andnot_ps(condition, else_value), _mm_and_ps(condition, if_value));
             }
 
         };

@@ -181,4 +181,4 @@ modules:
         default:
           requires: [not SSE41]
           body:
-            - return _mm_or_si128(_mm_andnot_si128(condition, if_value), _mm_and_si128(condition, else_value))
+            - return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value))

@@ -214,4 +214,5 @@ modules:
         default:
           requires: [not SSE41]
           body:
-            - return _mm_or_pd(_mm_andnot_pd(condition, if_value), _mm_and_pd(condition, else_value))
+            - return _mm_or_pd(_mm_andnot_pd(condition, else_value), _mm_and_pd(condition, if_value))
+            #- return _mm_xor_pd(if_value, _mm_and_pd(condition, _mm_xor_pd(else_value, if_value)))
