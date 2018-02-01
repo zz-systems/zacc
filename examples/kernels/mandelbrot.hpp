@@ -32,6 +32,7 @@
 #include "math/matrix.hpp"
 #include "util/algorithm.hpp"
 #include "system/kernel.hpp"
+
 #include "../interfaces/mandelbrot.hpp"
 
 namespace zacc { namespace examples {
@@ -56,8 +57,9 @@ namespace zacc { namespace examples {
         }
 
 
-        virtual void run(mandelbrot::output_container_t &output) override
+        virtual void run(mandelbrot::output_container &output) override
         {
+            // populate output container 
             zacc::generate<zint>(std::begin(output), std::end(output), [this](auto i)
             {
                 // compute 2D-position from 1D-index

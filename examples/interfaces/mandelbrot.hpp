@@ -39,13 +39,13 @@ namespace zacc { namespace examples {
 
     struct __mandelbrot
     {
-        using output_container_t = std::vector<int>;
-        using input_container_t  = std::vector<int>;
+        using output_container = std::vector<int>;
+        using input_container  = std::vector<int>;
 
         static constexpr auto kernel_name() { return "mandelbrot"; }
 
         virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
-        virtual void run(output_container_t &output) = 0;
+        virtual void run(output_container &output) = 0;
     };
 
     using mandelbrot = system::kernel_interface<__mandelbrot>;

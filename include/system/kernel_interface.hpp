@@ -35,8 +35,8 @@ namespace zacc { namespace system {
     template<typename _KernelInterface>
     struct kernel_interface : virtual _KernelInterface
     {
-        using output_container_t = std::remove_reference_t<typename _KernelInterface::output_container_t>;
-        using input_container_t  = std::remove_reference_t<typename _KernelInterface::input_container_t>;
+        using output_container = std::remove_reference_t<typename _KernelInterface::output_container>;
+        using input_container  = std::remove_reference_t<typename _KernelInterface::input_container>;
 
         template<typename... Args>
         void operator()(Args&&... args)
@@ -46,14 +46,14 @@ namespace zacc { namespace system {
             this->configure(std::forward<Args>(args)...);
         }
 
-        void operator()(const input_container_t &input, output_container_t &output)
+        void operator()(const input_container &input, output_container &output)
         {
             _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
             this->run(input, output);
         }
 
-        void operator()(output_container_t &output)
+        void operator()(output_container &output)
         {
             _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 

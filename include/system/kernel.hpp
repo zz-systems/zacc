@@ -35,8 +35,8 @@ namespace zacc { namespace system {
     template<typename _KernelInterface>
     struct kernel_traits
     {
-        using output_container_t = std::remove_reference_t<typename _KernelInterface::output_container_t>;
-        using input_container_t  = std::remove_reference_t<typename _KernelInterface::input_container_t>;
+        using output_container = std::remove_reference_t<typename _KernelInterface::output_container>;
+        using input_container  = std::remove_reference_t<typename _KernelInterface::input_container>;
 
         static constexpr auto kernel_name() { return _KernelInterface::kernel_name(); }
     };

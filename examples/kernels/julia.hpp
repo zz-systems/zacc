@@ -58,7 +58,7 @@ namespace zacc { namespace examples {
         }
 
 
-        virtual void run(mandelbrot::output_container_t &output) override
+        virtual void run(mandelbrot::output_container &output) override
         {
             zacc::generate<zint>(std::begin(output), std::end(output), [this](auto i)
             {

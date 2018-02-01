@@ -63,136 +63,206 @@ If you decide for the submodule way, simply add it via ```git submodule add http
 
 CMake is required in your project to be able to use ZACC and ZACC build system.
 
-## Examples
+## Usage
 
-### Implementation
+To execute an accelerated algorithm, you need a kernel interface, a kernel implementation and an entrypoint.
 
-Your algorithm may look like below and be able to use SSE2, SSE3, SSE4, FMA, AVX, AVX2 features of the host processor.
+### Mandelbrot kernel interface
+The kernel interface is the connection between the vectorized code in satellite assemblies and the main application.
+The separation is necessary, because the kernel implementation uses vector types, which **must not** appear in the main application and are hidden in satellite assemblies.
+
+The vital function mapping for the dispatcher is provided by ```system::kernel_interface<_KernelInterface>``` (The dispatcher relies on ```operator()(...)``` overloads).
+
+3 methods are already mapped, you have to declare them in the interface and implement in the kernel:
+- ```run(output_container_t &output)```
+- ```run(const input_container &input, output_container &output)```
+- ```configure(any argument...)```
+
+You can extend or change the mappings with your custom implementation.
+Also, you need to specify the input and output container types and provide a name for the kernel.
+
+Below is an exemplary mandelbrot kernel interface - available in the examples.
+
+
+```cpp
+#include <vector>
+
+#include "zacc.hpp"
+#include "math/matrix.hpp"
+#include "util/algorithm.hpp"
+#include "system/entrypoint.hpp"
+#include "system/kernel_interface.hpp"
+
+using namespace zacc;
+using namespace math;
+
+struct __mandelbrot
+{
+    using output_container = std::vector<int>;
+    using input_container  = std::vector<int>;
+
+    static constexpr auto kernel_name() { return "mandelbrot"; }
+
+    virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
+    virtual void run(output_container_t &output) = 0;
+};
+
+using mandelbrot = system::kernel_interface<__mandelbrot>;
+```
+
+### Mandelbrot kernel implementation
+
+Now that you have specified the kernel interface, you may want to write the implementation.
+Please have in mind, that C++ own if/else won't work with vector types. You need to rethink and use branchless arithmetic.
+Nonetheless, the implementation does not differ much from the canonical Mandelbrot [implementation](https://rosettacode.org/wiki/Mandelbrot_set#C.2B.2B) and is able to use SSE2, SSE3, SSE4, FMA, AVX, AVX2 features of the host processor.
+And all that without having to touch intrinsics like [here](https://github.com/PolarNick239/FPGABenchmarks/blob/c36b213bed3fbf6c714f3a819e820d3d393c9711/benchmarks/mandelbrot/src/mandelbrot_cpu_sse.cpp#L20-L81)
+
 *Write once, run faster everywhere :)*
 
 ```cpp
-// @file perlin_engine.hpp
-
 #include "zacc.hpp"
+#include "math/complex.hpp"
+#include "math/matrix.hpp"
+#include "util/algorithm.hpp"
+#include "system/kernel.hpp"
 
-DISPATCHED class perlin_engine
+#include "../interfaces/mandelbrot.hpp"
+
+using namespace zacc;
+using namespace math;
+
+DISPATCHED struct mandelbrot_kernel : system::kernel<mandelbrot>
 {
-    void run(const vec3<float> &origin, float *target)
+    vec2<zint> _dim;
+    vec2<zfloat> _cmin;
+    vec2<zfloat> _cmax;
+
+    size_t _max_iterations;
+
+    virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) override
     {
-        const size_t real_size = 1024; // length of target
-        
-        const int octaves = 5;
-        const int seed = 1337;
-        const double frequency = 1.0;
-        const float lacunarity = 1.0;
-        const float persistence = 0.5;
-        
-        int cur_octave = 0;
-        
-        zfloat value = 0, currentPersistence = 1;
-        
-        // Generate values
-        zacc::generate<zfloat>(target, target + real_size, [this](auto i)
+        _dim = dim;
+        _cmax = cmax;
+        _cmin = cmin;
+
+        _max_iterations = max_iterations;
+    }
+
+
+    virtual void run(mandelbrot::output_container &output) override
+    {
+        // populate output container
+        zacc::generate<zint>(std::begin(output), std::end(output), [this](auto i)
         {
-            zfloat	value = 0,
-                    currentPersistence = 1;
-           
-            vec3<zfloat> origin { i, i, i };
-        
-            auto _coords = origin / real_size * frequency;
-        
-            for (int curOctave = 0; cur_octave < octaves; cur_octave++)
+            // compute 2D-position from 1D-index
+            auto pos = reshape<vec2<zfloat>>(make_index<zint>(zint(i)), _dim);
+
+            zcomplex<zfloat> c(_cmin.x + pos.x / zfloat(_dim.x - 1) * (_cmax.x - _cmin.x),
+                               _cmin.y + pos.y / zfloat(_dim.y - 1) * (_cmax.y - _cmin.x));
+
+            zcomplex<zfloat> z = 0;
+
+            bfloat done = false;
+            zint iterations;
+
+            for (size_t j = 0; j < _max_iterations; j++)
             {
-                value += currentPersistence * noisegen<branch>::gradient_coherent_3d(
-                    clamp_int32<zfloat>(_coords),
-                    seed + cur_octave, 
-                    quality);
-        
-                // Prepare the next octave.
-                _coords *= lacunarity;
-                currentPersistence *= persistence;
+                // done when magnitude is >= 2 (or square magnitude is >= 4)
+                done = done || z.sqr_magnitude() >= 4.0;
+
+                // compute next complex if not done
+                z = z
+                       .when(done)
+                       .otherwise(z * z + c);
+
+                // increment if not done
+                iterations = iterations
+                        .when(done)
+                        .otherwise(iterations + 1);
+
+                // break if all elements are not zero
+                if (is_set(done))
+                    break;
             }
-            return value;
+
+            return iterations;
         });
     }
-}
+};
 ```
 
-To be able to run the implementation, you need some supporting infrastructure in the code.
-You'll need an entrypoint and a dispatcher which will select the proper entrypoint at runtime. 
-Fortunately, the dispatcher is already implemented and you only need to adapt it to fit your needs.
 
 ### Entrypoint
 
-The entrypoint is a template specialization outside of a header, you need to implement it in your project.
+The so-called entrypoint is the low-level interface between the main application and vectorized implementations.
+Over this interface, the kernels are created and destroyed.
 
+#### Header
 ```cpp
-// @file perlin_engine_entrypoint.cpp
-
-#include <memory>
-
-#include "system/branch.hpp"
-#include "system/entrypoint.hpp"
-#include "perlin_engine.hpp"
-
-template<>
-std::shared_ptr<zacc::entrypoint> zacc::system::resolve_entrypoint<zacc::dispatched_branch::types>()
-{
-    std::cout   << "Creating engine for " 
-                << zacc::dispatched_branch::types::major_branch_name() << std::endl;
-                
-    return std::static_pointer_cast<zacc::entrypoint>(
-            zacc::make_shared<perlin_engine<zacc::dispatched_branch::types>>()
-    );
-}
-
-```
-
-### Dispatcher
-The dispatcher only invokes the entrypoint function with fitting branch parameters. 
-
-```cpp
-// @file perlin_dispatcher.hpp
-
-#include <memory>
+#include "{your_application_name}_arch_export.hpp"
 #include "system/entrypoint.hpp"
 
-struct perlin_dispatcher
-{    
-    DISPATCHED void dispatch_impl(const vec3<float> &origin, float *target)
-    {
-        auto engine = std::static_pointer_cast<perlin_engine<branch>>(
-                        zacc::system::resolve_entrypoint<branch>()
-                );
-                
-        engine->run(origin, float);
-    }
-};
-
-using perlin_dispatcher = zacc::runtime_dispatcher<perlin_dispatcher>;
-```
-
-### Invocation
-And put it all together:
-
-```cpp
-// @file perlin_main.cpp
-
-#include <array>
-#include "perlin_dispatcher.hpp"
-
-int main(int argc, char** argv)
+extern "C"
 {
-    std::array<float, 1024> target;
-    perlin_dispatcher->run({0, 0, 0}, target.data());
-    
-    // display data
-    ...
-    
-    return 0;    
+    {your_application_name}_ARCH_EXPORT zacc::system::entrypoint *mandelbrot_create_instance();
+    {your_application_name}_ARCH_EXPORT void mandelbrot_delete_instance(zacc::system::entrypoint *instance);
 }
 ```
-## Build system 
+
+#### Source
+
+```cpp
+#include "entrypoint.hpp"
+
+#include "system/arch.hpp"
+#include "kernels/mandelbrot.hpp"
+
+zacc::system::entrypoint *mandelbrot_create_instance()
+{
+    return new zacc::examples::mandelbrot_kernel<zacc::arch::types>();
+}
+
+void mandelbrot_delete_instance(zacc::system::entrypoint* instance)
+{
+    if(instance != nullptr)
+        delete instance;
+}
+```
+
+
+### 1.. 2.. 3.. GO!
+Put it all together:
+
+```cpp
+#include "../interfaces/mandelbrot.hpp"
+
+#include "system/kernel_dispatcher.hpp"
+#include "math/matrix.hpp"
+
+// mandelbrot config:
+vec2<int> dimensions = {2048, 2048};
+vec2<float> cmin = {-2, -2};
+vec2<float> cmax = { 2, 2 };
+
+size_t max_iterations = 2048;
+
+// get kernel dispatcher
+auto dispatcher = system::make_dispatcher<mandelbrot>();
+
+// configure kernel
+dispatcher.dispatch_some(_dim, cmin, cmax, max_iterations);
+
+// prepare output
+zacc::make_shared<std::vector<int>>(_dim.x * _dim.y);
+
+// run
+dispatcher.dispatch_one(*result);
+
+...
+
+```
+
+## Build system
 
 The basic setup looks like this:
 ```cmake
@@ -275,7 +345,7 @@ zacc_add_dispatched_tests(cacophony.tests
 
 ### Tested operation systems
 
-- Mac OS X Sierra
+- Mac OS X Sierra / High Sierra
 - Linux
 - Windows 10
 

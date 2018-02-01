@@ -38,10 +38,10 @@ namespace zacc { namespace examples {
     template<typename _KernelInterface>
     class host
     {
-        using input_container_t     = typename system::kernel_traits<_KernelInterface>::input_container_t;
-        using output_container_t    = typename system::kernel_traits<_KernelInterface>::output_container_t;
+        using input_container     = typename system::kernel_traits<_KernelInterface>::input_container;
+        using output_container    = typename system::kernel_traits<_KernelInterface>::output_container;
 
-        using kernel_result_t       = std::tuple<std::shared_ptr<output_container_t>, std::chrono::milliseconds>;
+        using kernel_result_t       = std::tuple<std::shared_ptr<output_container>, std::chrono::milliseconds>;
 
     public:
         host(math::vec2<int> dim)
@@ -122,7 +122,7 @@ namespace zacc { namespace examples {
             std::cout << platform::global() << std::endl;
 
             auto start = high_resolution_clock::now();
-            auto result = this->run_kernel(input_container_t{});
+            auto result = this->run_kernel(input_container{});
             auto end = high_resolution_clock::now();
 
             auto duration = duration_cast<milliseconds>(end - start);
@@ -132,8 +132,8 @@ namespace zacc { namespace examples {
 
 
         virtual void configure_kernel() = 0;
-        virtual std::shared_ptr<output_container_t> run_kernel(input_container_t input) = 0;
-        virtual util::color_rgb map_value(typename output_container_t::value_type value) = 0;
+        virtual std::shared_ptr<output_container> run_kernel(input_container input) = 0;
+        virtual util::color_rgb map_value(typename output_container::value_type value) = 0;
 
         math::vec2<int> _dim;
         system::runtime_dispatcher<system::kernel_dispatcher<_KernelInterface>> _dispatcher;

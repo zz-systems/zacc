@@ -39,13 +39,13 @@ namespace zacc { namespace examples {
 
     struct __julia
     {
-        using output_container_t = std::vector<int>;
-        using input_container_t  = std::vector<int>;
+        using output_container = std::vector<int>;
+        using input_container  = std::vector<int>;
 
         static constexpr auto kernel_name() { return "julia"; }
 
         virtual void configure(vec2<int> dim, vec2<float> offset, vec2<float> c, float zoom, size_t max_iterations) = 0;
-        virtual void run(output_container_t &output) = 0;
+        virtual void run(output_container &output) = 0;
     };
 
     using julia = system::kernel_interface<__julia>;

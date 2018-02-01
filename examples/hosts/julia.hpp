@@ -39,8 +39,8 @@ namespace zacc { namespace examples {
 
         class julia_host : public host<julia>
         {
-            using input_container_t     = typename system::kernel_traits<julia>::input_container_t;
-            using output_container_t    = typename system::kernel_traits<julia>::output_container_t;
+            using input_container     = typename system::kernel_traits<julia>::input_container;
+            using output_container    = typename system::kernel_traits<julia>::output_container;
 
         public:
 
@@ -72,7 +72,7 @@ namespace zacc { namespace examples {
                 _dispatcher.dispatch_some(_dim, offset, c, zoom, max_iterations);
             }
 
-            virtual std::shared_ptr<output_container_t> run_kernel(input_container_t) override
+            virtual std::shared_ptr<output_container> run_kernel(input_container) override
             {
                 auto result = zacc::make_shared<std::vector<int>>(_dim.x * _dim.y);
 
@@ -81,7 +81,7 @@ namespace zacc { namespace examples {
                 return result;
             }
 
-            virtual util::color_rgb map_value(typename output_container_t::value_type value) override
+            virtual util::color_rgb map_value(typename output_container::value_type value) override
             {
 //                return _gradient.getColor(value % 17 - 1);
                 return _gradient.getColor(value % 255);
