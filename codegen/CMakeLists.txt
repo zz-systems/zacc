@@ -58,7 +58,7 @@ function(generate_file output template template_data)
     add_custom_command(
             OUTPUT ${PROJECT_SOURCE_DIR}/${output}
             COMMAND ${CMAKE_COMMAND} -E make_directory ${output_dir}
-            COMMAND ${codegen.cmd} -o ${PROJECT_SOURCE_DIR}/${output}  -V ${template} ${template_data} -E ${codegen.ext}
+            COMMAND ${codegen.cmd} -o ${PROJECT_SOURCE_DIR}/${output}  -v ${template} ${template_data} -e ${codegen.ext}
             COMMAND ${CMAKE_COMMAND}  -E copy  ${PROJECT_SOURCE_DIR}/${output} ${PROJECT_BINARY_DIR}/${output}
             DEPENDS ${template} ${template_data} ${codegen.deps}
             WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}

@@ -1,4 +1,4 @@
-import yasha
+from yasha.parsers import PARSERS
 import os, sys
 
 
@@ -61,14 +61,9 @@ class Parsers:
     def parse(cls, data):
         return Parser(LexerV1()).parse(data)
 
-class YamlParser(yasha.YamlParser):
-    def parse(self, file):
-        #print(">>>Parsing template:", file.name)
-        #with open("codegen/config/type.test.yml", "rb") as f:
-        #    test_functions = yasha.YamlParser().parse(f)
-
-        data = yasha.YamlParser.parse(self, file)
-        ast = Parsers.parse(data)
+def wrapper(parse):
+    def postprocess(file):
+        data = parse(file)
 
         return {
             "ast"           : Parsers.parse(data),
@@ -78,3 +73,7 @@ class YamlParser(yasha.YamlParser):
             "Verifications" : Verifications(),
             "ModuleTypes"   : ModuleTypes
         }
+    return postprocess
+
+for name, function in PARSERS.items():
+    PARSERS[name] = wrapper(function)

@@ -44,11 +44,11 @@
 #include "traits/construction.hpp"
 #include "traits/equatable.hpp"
 #include "traits/bitwise.hpp"
+#include "traits/comparable.hpp"
+#include "traits/arithmetic.hpp"
 #include "traits/logical.hpp"
 #include "traits/conditional.hpp"
-#include "traits/comparable.hpp"
 #include "traits/numeric.hpp"
-#include "traits/arithmetic.hpp"
 #include "traits/math.hpp"
 #include "traits/io.hpp"
 

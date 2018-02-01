@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/logical.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/numeric.hpp"
-#include "traits/equatable.hpp"
 #include "traits/math.hpp"
-#include "traits/conditional.hpp"
-#include "traits/comparable.hpp"
 #include "traits/bitwise_shift.hpp"
 #include "traits/io.hpp"
+#include "traits/logical.hpp"
+#include "traits/numeric.hpp"
+#include "traits/comparable.hpp"
+#include "traits/equatable.hpp"
+#include "traits/conditional.hpp"
+#include "traits/bitwise.hpp"
 
 /**
  * @brief int16 implementation for the scalar target
