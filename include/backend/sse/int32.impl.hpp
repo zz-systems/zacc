@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/numeric.hpp"
-#include "traits/io.hpp"
-#include "traits/equatable.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/conditional.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/comparable.hpp"
-#include "traits/math.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/arithmetic.hpp"
 #include "traits/logical.hpp"
+#include "traits/numeric.hpp"
+#include "traits/equatable.hpp"
+#include "traits/math.hpp"
+#include "traits/io.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/conditional.hpp"
 
 /**
  * @brief int32 implementation for the sse target
