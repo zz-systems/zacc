@@ -12,20 +12,24 @@
 
 - [Abstract](#abstract)
 - [Design goals](#design-goals)
+- [Features](#features)
 - [Integration](#integration)
-- [Examples](#examples)
-    - [Implementation](#implementation)
+- [Usage](#usage)
+    - [Mandelbrot kernel interface](#mandelbrot-kernel-interface)
+    - [Mandelbrot kernel implementation](#mandelbrot-kernel-implementation)
     - [Entrypoint](#entrypoint)
-    - [Dispatcher](#dispatcher)
-    - [Invocation](#invocation)
+    - [Execution](#execution)
 - [Build system](#build-system)
+    - [Prequisites](#tested-hardware)
+    - [Library target](#library-target)
+    - [Executable target](#uxecutable-target)
+    - [Unit test target](#unit-test-target)
 - [Current state](#current-state)
     - [Tested hardware](#tested-hardware)
     - [Tested operating systems](#tested-operating-systems)
-    - [Supported hardware features](#supported-hardware-features)
-    - [Supported compilers](#supported-compilers)
+    - [Architecture support](#architecture-support)
+    - [Compiler support](#compiler-support)
     - [Supported data types](#supported-data-types)
-    - [Functionality](#functionality)
 - [License](#license)
 - [Execute unit tests](#execute-unit-tests)
 
@@ -80,7 +84,7 @@ The project is available as a direct submodule if you use git or [released here]
 
 If you decide for the submodule way, simply add it via ```git submodule add https://github.com/zz-systems/zacc.git```
 
-CMake is required in your project to be able to use ZACC and ZACC build system.
+CMake is required in your project to be able to use ZACC and [ZACC build system](#build-system).
 
 ## Usage
 
@@ -216,7 +220,11 @@ DISPATCHED struct mandelbrot_kernel : system::kernel<mandelbrot>
 The so-called entrypoint is the low-level interface between the main application and vectorized implementations.
 Over this interface, the kernels are created and destroyed.
 
-#### Header
+#### entrypoint.hpp
+
+Here you declare your available kernel 'constructors' and 'destructors'.
+The convention is ```{kernel_name}_create_instance()``` and ```{kernel_name}_delete_instance(entrypoint *)```.
+
 ```cpp
 #include "{your_application_name}_arch_export.hpp"
 #include "system/entrypoint.hpp"
@@ -228,7 +236,10 @@ extern "C"
 }
 ```
 
-#### Source
+#### entrypoint.cpp
+
+Here you implement your available kernel 'constructors' and 'destructors'.
+Usually, simply instantiating/deleting a kernel is sufficient, but a more complex logic can be introduced.
 
 ```cpp
 #include "entrypoint.hpp"
@@ -236,11 +247,13 @@ extern "C"
 #include "system/arch.hpp"
 #include "kernels/mandelbrot.hpp"
 
+// create mandelbrot kernel instance
 zacc::system::entrypoint *mandelbrot_create_instance()
 {
     return new zacc::examples::mandelbrot_kernel<zacc::arch::types>();
 }
 
+// destroy mandelbrot kernel instance
 void mandelbrot_delete_instance(zacc::system::entrypoint* instance)
 {
     if(instance != nullptr)
@@ -249,8 +262,14 @@ void mandelbrot_delete_instance(zacc::system::entrypoint* instance)
 ```
 
 
-### 1.. 2.. 3.. GO!
-Put it all together:
+### Execution
+
+Here you need to create a dispatcher for your kernel and configure / invoke the kernel.
+The kernel invocation happens inside the dispatcher, which acts as a proxy.
+The dispatcher offers the following methods
+- ```dispatch_some(...)``` - dispatch on all available architectures (e.g kernel configuration)
+- ```dispatch_one(...)``` - dispatch on the best available architecture (e.g kernel execution)
+
 
 ```cpp
 #include "../interfaces/mandelbrot.hpp"
@@ -272,10 +291,10 @@ auto dispatcher = system::make_dispatcher<mandelbrot>();
 dispatcher.dispatch_some(_dim, cmin, cmax, max_iterations);
 
 // prepare output
-zacc::make_shared<std::vector<int>>(_dim.x * _dim.y);
+std::vector<int>(_dim.x * _dim.y);
 
 // run
-dispatcher.dispatch_one(*result);
+dispatcher.dispatch_one(result);
 
 ...
 
@@ -283,7 +302,8 @@ dispatcher.dispatch_one(*result);
 
 ## Build system
 
-The basic setup looks like this:
+### Prequisites
+
 ```cmake
 # add zacc targets
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/zacc)
@@ -296,26 +316,58 @@ include_directories(
         ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/zacc/include
 )
 ```
-Now you may want to introduce your own logic to be accelerated:
+
+
+### Library target
+
+Defines a shared/dynamic library with dispatcher and kernel implementations in additional libraries.
+
 ```cmake
 # your shared library which aggregates the branches
-zacc_add_dispatched_library(_your_library_ 
-        # your accelerated logic
-        ENTRYPOINT ${CMAKE_SOURCE_DIR}/_your_library_branch_entrypoint.cpp
-        
-        # branches to build for
-        BRANCHES "${ZACC_CONFIGURED_BRANCHES}"
-        
-        # additional include directories
+zacc_add_dispatched_library(_your_library_
+
+        # your library entrypoint
+        ENTRYPOINT ${CMAKE_SOURCE_DIR}/_your_library_entrypoint.cpp
+
+        # additional includes
         INCLUDES ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/dependencies/zacc/include
-        
+
+        # branches to build for
+        BRANCHES "${branches}"
+
         # your main library source
         SOURCES 
             ${CMAKE_SOURCE_DIR}/_your_library_.cpp 
         )
 ```
 
-And you may want to test your implementation on all supported branches as well:
+### Executable target
+
+Defines a main application with dispatcher and kernel implementations in additional libraries.
+
+```cmake
+zacc_add_dispatched_executable(_your_application_
+
+        # branches to build for
+        BRANCHES "${branches}"
+
+        # additional includes
+        INCLUDES
+            ${PROJECT_SOURCE_DIR}/include
+
+        # your kernel entrypoint
+        ENTRYPOINT
+            ${PROJECT_SOURCE_DIR}/_your_application_entrypoint.cpp
+
+        # your main application sources
+        SOURCES
+            ${PROJECT_SOURCE_DIR}/_your_application_.cpp
+        )
+```
+
+### Unit test target
+
+Defines unit test targets using GoogleTest
 
 ```cmake
 # unit testing your implementation on all branches
@@ -325,7 +377,8 @@ file(GLOB ZACC_TEST_MAIN "${PROJECT_SOURCE_DIR}/*/zacc/*/test_main.cpp")
 # find the test entry point (you may provide your own implementation)
 file(GLOB ZACC_TEST_ENTRYPOINT "${PROJECT_SOURCE_DIR}/*/zacc/*/test_entry_point.cpp")
 
-zacc_add_dispatched_tests(cacophony.tests
+zacc_add_dispatched_tests(_your_tests_
+
         # test main. used to skip the tests if the processing unit is not 
         # capable of running a particular featureset
         TEST_MAIN ${ZACC_TEST_MAIN}
@@ -334,7 +387,7 @@ zacc_add_dispatched_tests(cacophony.tests
         TEST_ENTRYPOINT ${ZACC_TEST_ENTRYPOINT}
         
         # branches to build for
-        BRANCHES "${ZACC_CONFIGURED_BRANCHES}"
+        BRANCHES "${branches}"
         
         # additional include directories
         INCLUDES ${CMAKE_SOURCE_DIR}/include
@@ -346,9 +399,8 @@ zacc_add_dispatched_tests(cacophony.tests
 ```
 
 ## Current state
-* In development! 
-* Tests insufficent (Only two different CPU's tested)
-* Successfully used in [cacophony](https://github.com/zz-systems/cacophony) - a coherent noise library
+* In development!
+* Used in [cacophony](https://github.com/zz-systems/cacophony) - a coherent noise library
 
 ### Tested hardware:
 
@@ -357,8 +409,8 @@ zacc_add_dispatched_tests(cacophony.tests
 | AMD FX-8350 | AVX1 |
 | Intel Core i7 6500U | AVX2 + FMA |
 | Intel Core i7 7700K | AVX2 + FMA |
-| Intel Xeon E5-2697 v3 | AVX2 + FMA|
-| Intel Xeon E5-2680 v3 | AVX2 + FMA|
+| Intel Xeon E5-2697 v3 | AVX2 + FMA |
+| Intel Xeon E5-2680 v3 | AVX2 + FMA |
 | Intel Xeon E5-2680 v2 | AVX1 |
 | Intel Xeon X5570 | SSE4.1 |
 
@@ -368,7 +420,7 @@ zacc_add_dispatched_tests(cacophony.tests
 - Linux
 - Windows 10
 
-### Supported hardware features
+### Architecture support
 
 | Featureset | State |  |
 |-----------|---|--------------|
@@ -385,7 +437,7 @@ zacc_add_dispatched_tests(cacophony.tests
 | AVX512 | :no_entry: | in development, can't be tested yet* |
 | ARM NEON | :no_entry: | Not implemented yet |
 | GPGPU | :no_entry: | Not implemented yet** |
-| HDL | :no_entry: | Not implemented yet*** |
+| FPGA | :no_entry: | Not implemented yet*** |
 
 *For AVX512, access to a Xeon Phi accelerator or a modern Xeon CPU is necessary
 
@@ -394,7 +446,7 @@ zacc_add_dispatched_tests(cacophony.tests
 ***Same starting issues as for the GPGPU feature, the code generation is another topic.
 
 
-### Supported compilers
+### Compiler support
 | Compiler | State |  |
 |-----------|---|--------------|
 | GCC 5 | :white_check_mark: |  |
@@ -410,7 +462,7 @@ zacc_add_dispatched_tests(cacophony.tests
 *MSVC is not supported due to required fine granular compile options and non-conform C++ implementation. 
 Instead Clang-cl is used, which is binary compatible with MSVC ([work in progress](https://clang.llvm.org/docs/MSVCCompatibility.html)). 
 
-### Supported datatypes 
+### Supported data types
 | C++ scalar type | ZACC vector type | State |   |
 |-----------|---|---|--------------|
 | signed int8 | zint8, zbyte | :white_check_mark: |  Partially emulated.  |
