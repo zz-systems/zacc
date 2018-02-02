@@ -25,6 +25,7 @@ environment:
         BUILD_DIR: "build"
         PYTHON_VERSION: "3.6"
         BUILD_SANITIZE_MEMORY: 0
+        VERBOSE: ON
       
 
 install:
@@ -78,7 +79,7 @@ before_build:
 - set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
 - mkdir %BUILD_DIR% && cd %BUILD_DIR%
 # Generate
-- cmake .. -G"%BUILD_ENV%" -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe -DBUILD_SANITIZE_MEMORY=%BUILD_SANITIZE_MEMORY%
+- cmake .. -G"%BUILD_ENV%" -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe -DBUILD_SANITIZE_MEMORY=%BUILD_SANITIZE_MEMORY%  -DCMAKE_VERBOSE_MAKEFILE:BOOL=%VERBOSE%
 
 build_script:
   - cmake --build . --config %CONFIGURATION% --target zacc.system.detect -- -j 4
@@ -90,5 +91,5 @@ test_script:
 - .\bin\zacc.system.detect.exe
 - ctest --output-on-failure
 
-#on_finish:
-  #- ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
