@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/math.hpp"
-#include "traits/io.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/comparable.hpp"
-#include "traits/equatable.hpp"
 #include "traits/conditional.hpp"
+#include "traits/io.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/math.hpp"
 #include "traits/numeric.hpp"
+#include "traits/comparable.hpp"
 #include "traits/logical.hpp"
+#include "traits/equatable.hpp"
+#include "traits/bitwise.hpp"
 
 /**
  * @brief int32 implementation for the scalar target
@@ -97,7 +97,6 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
 
             /**
@@ -119,7 +118,7 @@ namespace zacc { namespace backend { namespace scalar {
              */
             constexpr __impl(int32_t value) : base_t(value)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS()");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS(int32_t)");
 
             }
 
@@ -131,7 +130,7 @@ namespace zacc { namespace backend { namespace scalar {
              */
             template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> __impl(const T &value) : base_t(value.value())  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS()");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS(const T)");
 
             }
 
@@ -143,7 +142,7 @@ namespace zacc { namespace backend { namespace scalar {
              */
             constexpr __impl(std::array<typename base_t::element_t, base_t::size()> value) : base_t(value[0])  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS()");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS(std::array<typename base_t::element_t, base_t::size()>)");
 
             }
 
@@ -193,7 +192,6 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
 
             /**
@@ -215,7 +213,7 @@ namespace zacc { namespace backend { namespace scalar {
              */
             constexpr __impl(zval_t value) : base_t(value.value() != 0)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS()");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS(zval_t)");
 
             }
 
@@ -227,7 +225,7 @@ namespace zacc { namespace backend { namespace scalar {
              */
             constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS()");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS(bval_t value, last_operation)");
 
             }
 
@@ -277,44 +275,43 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vstore");
 
                 result[0] = input.value();
             }
 
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vstream");
 
                 result[0] = input.value();
             }
 
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             template<typename RandomIt> friend zint32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vgather");
 
                 return input[index.value()];
             }
@@ -365,70 +362,69 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vabs(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vabs");
 
                 return std::abs(one.value());
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vmin(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vmin");
 
                 return std::min(one.value(), other.value());
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vmax(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vmax");
 
                 return std::max(one.value(), other.value());
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vclamp");
 
                 return vmin(to, vmax(from, self));
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vsqrt(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vsqrt");
 
                 return std::sqrt(one.value());
             }
@@ -479,7 +475,6 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
         };
@@ -528,83 +523,82 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vneg(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vneg");
 
                 return (-one.value());
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vadd(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vadd");
 
                 return (one.value() + other.value());
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vsub(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vsub");
 
                 return (one.value() - other.value());
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vmul(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vmul");
 
                 return (one.value() * other.value());
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vdiv(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vdiv");
 
                 return (one.value() / other.value());
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vmod(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vmod");
 
                 return (one.value() % other.value());
             }
@@ -655,70 +649,69 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vbneg(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbneg");
 
                 return (~one.value());
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vband(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vband");
 
                 return (one.value() & other.value());
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vbor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbor");
 
                 return (one.value() | other.value());
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vbxor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbxor");
 
                 return (one.value() ^ other.value());
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bool is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "is_set");
 
                 return one.value() != 0;
             }
@@ -769,57 +762,56 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief bitwise_shift Tokens.DEFAULT branch
+             * @brief bitwise_shift default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vbsll(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbsll");
 
                 return (one.value() << other.value());
             }
 
 
             /**
-             * @brief bitwise_shift Tokens.DEFAULT branch
+             * @brief bitwise_shift default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vbsrl(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbsrl");
 
                 return (one.value() >> other.value());
             }
 
 
             /**
-             * @brief bitwise_shift Tokens.DEFAULT branch
+             * @brief bitwise_shift default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vbslli(const composed_t one, const size_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbslli");
 
                 return (one.value() << other);
             }
 
 
             /**
-             * @brief bitwise_shift Tokens.DEFAULT branch
+             * @brief bitwise_shift default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vbsrli(const composed_t one, const size_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbsrli");
 
                 return (one.value() >> other);
             }
@@ -870,57 +862,56 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief comparable Tokens.DEFAULT branch
+             * @brief comparable default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vgt(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vgt");
 
                 return (one.value() > other.value());
             }
 
 
             /**
-             * @brief comparable Tokens.DEFAULT branch
+             * @brief comparable default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vlt(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vlt");
 
                 return (one.value() < other.value());
             }
 
 
             /**
-             * @brief comparable Tokens.DEFAULT branch
+             * @brief comparable default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vge(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vge");
 
                 return (one.value() >= other.value());
             }
 
 
             /**
-             * @brief comparable Tokens.DEFAULT branch
+             * @brief comparable default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vle(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vle");
 
                 return (one.value() <= other.value());
             }
@@ -971,44 +962,43 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vlneg(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vlneg");
 
                 return (!one.value());
             }
 
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vlor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vlor");
 
                 return (one.value() || other.value());
             }
 
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vland(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vland");
 
                 return (one.value() && other.value());
             }
@@ -1059,31 +1049,30 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief equatable Tokens.DEFAULT branch
+             * @brief equatable default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> veq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "veq");
 
                 return (one.value() == other.value());
             }
 
 
             /**
-             * @brief equatable Tokens.DEFAULT branch
+             * @brief equatable default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vneq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vneq");
 
                 return (one.value() != other.value());
             }
@@ -1134,18 +1123,17 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief conditional Tokens.DEFAULT branch
+             * @brief conditional default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend zint32<base_t::features> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vsel");
 
                 return (condition.value() ? if_value : else_value);
             }
@@ -1196,44 +1184,43 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vstore");
 
                 result[0] = input.value();
             }
 
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vstream");
 
                 result[0] = input.value();
             }
 
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             template<typename RandomIt> friend bint32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vgather");
 
                 return input[index.value()];
             }
@@ -1284,70 +1271,69 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vbneg(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbneg");
 
                 return (~one.value());
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vband(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vband");
 
                 return (one.value() & other.value());
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vbor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbor");
 
                 return (one.value() | other.value());
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vbxor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbxor");
 
                 return (one.value() ^ other.value());
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bool is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "is_set");
 
                 return one.value() != 0;
             }
@@ -1398,44 +1384,43 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vlneg(composed_t one)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vlneg");
 
                 return (!one.value());
             }
 
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vlor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vlor");
 
                 return (one.value() || other.value());
             }
 
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vland(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vland");
 
                 return (one.value() && other.value());
             }
@@ -1486,31 +1471,30 @@ namespace zacc { namespace backend { namespace scalar {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief equatable Tokens.DEFAULT branch
+             * @brief equatable default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> veq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "veq");
 
                 return (one.value() == other.value());
             }
 
 
             /**
-             * @brief equatable Tokens.DEFAULT branch
+             * @brief equatable default branch
              * @relates int32
-             * @remark scalar - Tokens.DEFAULT
+             * @remark scalar - default
              */
             friend bint32<base_t::features> vneq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vneq");
 
                 return (one.value() != other.value());
             }

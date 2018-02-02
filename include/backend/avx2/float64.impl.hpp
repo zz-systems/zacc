@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/io.hpp"
-#include "traits/math.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/equatable.hpp"
+#include "traits/io.hpp"
 #include "traits/numeric.hpp"
-#include "traits/comparable.hpp"
-#include "traits/logical.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/equatable.hpp"
 #include "traits/conditional.hpp"
+#include "traits/comparable.hpp"
+#include "traits/math.hpp"
+#include "traits/logical.hpp"
 
 /**
  * @brief float64 implementation for the avx2 target
@@ -96,7 +96,6 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
 
             /**
@@ -118,7 +117,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(__m256 value) : base_t(_mm256_cvtps_pd(_mm256_castps256_ps128(value)))  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS(__m256)");
 
             }
 
@@ -130,7 +129,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(__m256d value) : base_t(value)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS(__m256d)");
 
             }
 
@@ -142,7 +141,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(__m256i value) : base_t(_mm256_cvtepi32_pd(_mm256_castsi256_si128(value)))  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS(__m256i)");
 
             }
 
@@ -154,7 +153,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(double value) : base_t(_mm256_set1_pd(value))  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS(double)");
 
             }
 
@@ -166,7 +165,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(std::array<typename base_t::element_t, base_t::size()> value) : base_t(_mm256_loadu_pd(value.data()))  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS(std::array<typename base_t::element_t, base_t::size()>)");
 
             }
 
@@ -178,7 +177,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(double _3, double _2, double _1, double _0) : base_t(_mm256_set_pd(_0, _1, _2, _3))  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS(double, double, double, double)");
 
             }
 
@@ -228,7 +227,6 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
 
             /**
@@ -250,7 +248,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(zval_t value) : base_t(value)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS(zval_t)");
 
             }
 
@@ -262,7 +260,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "", "CONS(bval_t value, last_operation)");
 
             }
 
@@ -312,44 +310,43 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vstore");
 
                 _mm256_storeu_pd(&(*result), input);
             }
 
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vstream");
 
                 _mm256_stream_pd(&(*result), input);
             }
 
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             template<typename RandomIt> friend zfloat64<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vgather");
 
                 auto i = _mm256_extractf128_si256(index, 1);
                 return _mm256_i32gather_pd(&(*input), i, 8);
@@ -401,135 +398,134 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vabs(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vabs");
 
                 return _mm256_max_pd(one, -one);
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vmin(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vmin");
 
                 return _mm256_min_pd(one, other);
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vmax(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vmax");
 
                 return _mm256_max_pd(one, other);
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vclamp");
 
                 return vmin(to, vmax(from, self));
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vrcp(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vrcp");
 
                 return (1 / one);
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vtrunc(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vtrunc");
 
                 return _mm256_cvtepi32_pd(_mm256_cvttpd_epi32(one));
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vfloor(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vfloor");
 
                 return _mm256_floor_pd(one);
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vceil(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vceil");
 
                 return _mm256_ceil_pd(one);
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vround(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vround");
 
                 return _mm256_round_pd (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vsqrt(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vsqrt");
 
                 return _mm256_sqrt_pd(one);
             }
@@ -580,7 +576,6 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
         };
@@ -629,96 +624,95 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vneg(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vneg");
 
                 return _mm256_sub_pd(_mm256_setzero_pd(), one);
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vadd(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vadd");
 
                 return _mm256_add_pd(one, other);
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vsub(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vsub");
 
                 return _mm256_sub_pd(one, other);
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vmul(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vmul");
 
                 return _mm256_mul_pd(one, other);
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vdiv(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vdiv");
 
                 return _mm256_div_pd(one, other);
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vfmadd");
 
                 return _mm256_fmadd_pd(multiplicand, multiplier, addendum);
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vfmsub");
 
                 return _mm256_fmsub_pd(multiplicand, multiplier, addendum);
             }
@@ -769,18 +763,17 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vbneg(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vbneg");
 
                 auto zero = _mm256_setzero_pd();
                 auto ones = _mm256_cmp_pd(zero, zero, _CMP_EQ_OQ);
@@ -789,39 +782,39 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vband(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vband");
 
                 return _mm256_and_pd(one, other);
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vbor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vbor");
 
                 return _mm256_or_pd(one, other);
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vbxor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vbxor");
 
                 return _mm256_xor_pd(one, other);
             }
@@ -834,7 +827,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::AVX2>, T> is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "avx2", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "avx2", "is_set");
 
                 auto ival =  _mm256_castpd_si256(one);
                 return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
@@ -842,13 +835,13 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::AVX2>, T> is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "is_set");
 
                 auto hi = _mm_castpd_si128(_mm256_extractf128_pd(one, 1));
                 auto lo = _mm_castpd_si128(_mm256_extractf128_pd(one, 0));
@@ -901,57 +894,56 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief comparable Tokens.DEFAULT branch
+             * @brief comparable default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vgt(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vgt");
 
                 return _mm256_cmp_pd(one, other, _CMP_GT_OQ);
             }
 
 
             /**
-             * @brief comparable Tokens.DEFAULT branch
+             * @brief comparable default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vlt(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vlt");
 
                 return _mm256_cmp_pd(one, other, _CMP_LT_OQ);
             }
 
 
             /**
-             * @brief comparable Tokens.DEFAULT branch
+             * @brief comparable default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vge(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vge");
 
                 return _mm256_cmp_pd(one, other, _CMP_GE_OQ);
             }
 
 
             /**
-             * @brief comparable Tokens.DEFAULT branch
+             * @brief comparable default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vle(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vle");
 
                 return _mm256_cmp_pd(one, other, _CMP_LE_OQ);
             }
@@ -1002,44 +994,43 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vlneg(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vlneg");
 
                 return _mm256_cmp_pd(one, _mm256_setzero_pd(), _CMP_EQ_OQ);
             }
 
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vlor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vlor");
 
                 return _mm256_or_pd(one, other);
             }
 
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vland(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vland");
 
                 return _mm256_and_pd(one, other);
             }
@@ -1090,31 +1081,30 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief equatable Tokens.DEFAULT branch
+             * @brief equatable default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> veq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "veq");
 
                 return _mm256_cmp_pd(one, other, _CMP_EQ_OQ);
             }
 
 
             /**
-             * @brief equatable Tokens.DEFAULT branch
+             * @brief equatable default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vneq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vneq");
 
                 return _mm256_cmp_pd(one, other, _CMP_NEQ_OQ);
             }
@@ -1165,18 +1155,17 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief conditional Tokens.DEFAULT branch
+             * @brief conditional default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zfloat64<base_t::features> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vsel");
 
                 return _mm256_blendv_pd(else_value, if_value, condition);
             }
@@ -1227,44 +1216,43 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vstore");
 
                 _mm256_storeu_pd(&(*result), input);
             }
 
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vstream");
 
                 _mm256_stream_pd(&(*result), input);
             }
 
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             template<typename RandomIt> friend bfloat64<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vgather");
 
                 auto i = _mm256_extractf128_si256(index, 1);
                 return _mm256_i32gather_pd(&(*input), i, 8);
@@ -1316,18 +1304,17 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vbneg(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vbneg");
 
                 auto zero = _mm256_setzero_pd();
                 auto ones = _mm256_cmp_pd(zero, zero, _CMP_EQ_OQ);
@@ -1336,39 +1323,39 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vband(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vband");
 
                 return _mm256_and_pd(one, other);
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vbor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vbor");
 
                 return _mm256_or_pd(one, other);
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vbxor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vbxor");
 
                 return _mm256_xor_pd(one, other);
             }
@@ -1381,7 +1368,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::AVX2>, T> is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "avx2", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "avx2", "is_set");
 
                 auto ival =  _mm256_castpd_si256(one);
                 return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
@@ -1389,13 +1376,13 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::AVX2>, T> is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "is_set");
 
                 auto hi = _mm_castpd_si128(_mm256_extractf128_pd(one, 1));
                 auto lo = _mm_castpd_si128(_mm256_extractf128_pd(one, 0));
@@ -1448,44 +1435,43 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vlneg(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vlneg");
 
                 return _mm256_cmp_pd(one, _mm256_setzero_pd(), _CMP_EQ_OQ);
             }
 
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vlor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vlor");
 
                 return _mm256_or_pd(one, other);
             }
 
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vland(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vland");
 
                 return _mm256_and_pd(one, other);
             }
@@ -1536,31 +1522,30 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief equatable Tokens.DEFAULT branch
+             * @brief equatable default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> veq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "veq");
 
                 return _mm256_cmp_pd(one, other, _CMP_EQ_OQ);
             }
 
 
             /**
-             * @brief equatable Tokens.DEFAULT branch
+             * @brief equatable default branch
              * @relates float64
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bfloat64<base_t::features> vneq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.float64.impl", __LINE__, "float64(double[4])", "default", "vneq");
 
                 return _mm256_cmp_pd(one, other, _CMP_NEQ_OQ);
             }

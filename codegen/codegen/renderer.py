@@ -113,6 +113,9 @@ class FunctionSignatureRenderer(Renderable):
             args=", ".join([f"{arg.type} {arg.name}" for arg in node.arguments]),
             suffix=suffix)
 
+def render_args_signature(node: FunctionSignatureNode):
+    return ", ".join([f"{arg.type}" for arg in node.arguments])
+
 class InitializerBodyRenderer(Renderable):
     def render(self, renderer, node: FunctionBodyNode, params):
         return ""

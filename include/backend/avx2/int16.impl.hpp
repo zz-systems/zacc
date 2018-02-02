@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
+#include "traits/logical.hpp"
+#include "traits/comparable.hpp"
+#include "traits/io.hpp"
 #include "traits/equatable.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/numeric.hpp"
+#include "traits/bitwise_shift.hpp"
 #include "traits/conditional.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/logical.hpp"
-#include "traits/io.hpp"
-#include "traits/comparable.hpp"
 #include "traits/math.hpp"
-#include "traits/bitwise_shift.hpp"
 
 /**
  * @brief int16 implementation for the avx2 target
@@ -97,7 +97,6 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
 
             /**
@@ -119,7 +118,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(__m256i value) : base_t(value)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(__m256i)");
 
             }
 
@@ -131,7 +130,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(int16_t value) : base_t(_mm256_set1_epi16(value))  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(int16_t)");
 
             }
 
@@ -143,7 +142,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(std::array<typename base_t::element_t, base_t::size()> value) : base_t(_mm256_loadu_si256((__m256i*)value.data()))  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(std::array<typename base_t::element_t, base_t::size()>)");
 
             }
 
@@ -155,7 +154,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(int16_t _15, int16_t _14, int16_t _13, int16_t _12, int16_t _11, int16_t _10, int16_t _9, int16_t _8, int16_t _7, int16_t _6, int16_t _5, int16_t _4, int16_t _3, int16_t _2, int16_t _1, int16_t _0) : base_t(_mm256_set_epi16(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15))  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t)");
 
             }
 
@@ -205,7 +204,6 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
 
             /**
@@ -227,7 +225,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(zval_t value) : base_t(value)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(zval_t)");
 
             }
 
@@ -239,7 +237,7 @@ namespace zacc { namespace backend { namespace avx2 {
              */
             constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(bval_t value, last_operation)");
 
             }
 
@@ -289,31 +287,30 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vstore");
 
                 _mm256_storeu_si256((__m256i*)&(*result), input);
             }
 
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vstream");
 
                 _mm256_stream_si256((__m256i*)&(*result), input);
             }
@@ -364,57 +361,56 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vabs(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vabs");
 
                 return _mm256_abs_epi16(one);
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vmin(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vmin");
 
                 return _mm256_min_epi16(one, other);
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vmax(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vmax");
 
                 return _mm256_max_epi16(one, other);
             }
 
 
             /**
-             * @brief math Tokens.DEFAULT branch
+             * @brief math default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vclamp");
 
                 return vmin(to, vmax(from, self));
             }
@@ -465,7 +461,6 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
         };
@@ -514,70 +509,69 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vneg(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vneg");
 
                 return _mm256_sub_epi16(_mm256_setzero_si256(), one);
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vadd(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vadd");
 
                 return _mm256_add_epi16(one, other);
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vsub(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vsub");
 
                 return _mm256_sub_epi16(one, other);
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vmul(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vmul");
 
                 return _mm256_mullo_epi16(one, other);
             }
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vdiv(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vdiv");
 
                 auto dividend = one.data();
                 auto divisor = other.data();
@@ -588,13 +582,13 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief arithmetic Tokens.DEFAULT branch
+             * @brief arithmetic default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vmod(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vmod");
 
                 return vsub(one, vmul(other, vdiv(one, other)));
             }
@@ -645,18 +639,17 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vbneg(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbneg");
 
                 auto zero = _mm256_setzero_si256();
                 auto ones = _mm256_cmpeq_epi16(zero, zero);
@@ -665,52 +658,52 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vband(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vband");
 
                 return _mm256_and_si256(one, other);
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vbor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbor");
 
                 return _mm256_or_si256(one, other);
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vbxor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbxor");
 
                 return _mm256_xor_si256(one, other);
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bool is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "is_set");
 
                 return _mm256_testc_si256(one, _mm256_cmpeq_epi32(one,one));
             }
@@ -761,57 +754,56 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief bitwise_shift Tokens.DEFAULT branch
+             * @brief bitwise_shift default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vbsll(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbsll");
 
                 return _mm256_sll_epi16(one, other);
             }
 
 
             /**
-             * @brief bitwise_shift Tokens.DEFAULT branch
+             * @brief bitwise_shift default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vbsrl(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbsrl");
 
                 return _mm256_srl_epi16(one, other);
             }
 
 
             /**
-             * @brief bitwise_shift Tokens.DEFAULT branch
+             * @brief bitwise_shift default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vbslli(const composed_t one, const size_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbslli");
 
                 return _mm256_slli_epi16(one, other);
             }
 
 
             /**
-             * @brief bitwise_shift Tokens.DEFAULT branch
+             * @brief bitwise_shift default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vbsrli(const composed_t one, const size_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbsrli");
 
                 return _mm256_srli_epi16(one, other);
             }
@@ -862,57 +854,56 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief comparable Tokens.DEFAULT branch
+             * @brief comparable default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vgt(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vgt");
 
                 return _mm256_cmpgt_epi16(one, other);
             }
 
 
             /**
-             * @brief comparable Tokens.DEFAULT branch
+             * @brief comparable default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vlt(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vlt");
 
                 return _mm256_cmpgt_epi16(other, one);
             }
 
 
             /**
-             * @brief comparable Tokens.DEFAULT branch
+             * @brief comparable default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vge(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vge");
 
                 return !(one < other);
             }
 
 
             /**
-             * @brief comparable Tokens.DEFAULT branch
+             * @brief comparable default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vle(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vle");
 
                 return !(one > other);
             }
@@ -963,44 +954,43 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vlneg(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vlneg");
 
                 return _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
             }
 
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vlor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vlor");
 
                 return _mm256_or_si256(one, other);
             }
 
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vland(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vland");
 
                 return _mm256_and_si256(one, other);
             }
@@ -1051,31 +1041,30 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief equatable Tokens.DEFAULT branch
+             * @brief equatable default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> veq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "veq");
 
                 return _mm256_cmpeq_epi16(one, other);
             }
 
 
             /**
-             * @brief equatable Tokens.DEFAULT branch
+             * @brief equatable default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vneq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vneq");
 
                 return !(one == other);
             }
@@ -1126,18 +1115,17 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief conditional Tokens.DEFAULT branch
+             * @brief conditional default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend zint16<base_t::features> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vsel");
 
                 return _mm256_blendv_epi8(else_value, if_value, condition);
             }
@@ -1188,31 +1176,30 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vstore");
 
                 _mm256_storeu_si256((__m256i*)&(*result), input);
             }
 
 
             /**
-             * @brief io Tokens.DEFAULT branch
+             * @brief io default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vstream");
 
                 _mm256_stream_si256((__m256i*)&(*result), input);
             }
@@ -1263,18 +1250,17 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vbneg(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbneg");
 
                 auto zero = _mm256_setzero_si256();
                 auto ones = _mm256_cmpeq_epi16(zero, zero);
@@ -1283,52 +1269,52 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vband(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vband");
 
                 return _mm256_and_si256(one, other);
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vbor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbor");
 
                 return _mm256_or_si256(one, other);
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vbxor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbxor");
 
                 return _mm256_xor_si256(one, other);
             }
 
 
             /**
-             * @brief bitwise Tokens.DEFAULT branch
+             * @brief bitwise default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bool is_set(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "is_set");
 
                 return _mm256_testc_si256(one, _mm256_cmpeq_epi32(one,one));
             }
@@ -1379,44 +1365,43 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vlneg(composed_t one)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vlneg");
 
                 return _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
             }
 
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vlor(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vlor");
 
                 return _mm256_or_si256(one, other);
             }
 
 
             /**
-             * @brief logical Tokens.DEFAULT branch
+             * @brief logical default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vland(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vland");
 
                 return _mm256_and_si256(one, other);
             }
@@ -1467,31 +1452,30 @@ namespace zacc { namespace backend { namespace avx2 {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             FORWARD(__impl);
 
             /**
-             * @brief equatable Tokens.DEFAULT branch
+             * @brief equatable default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> veq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "veq");
 
                 return _mm256_cmpeq_epi16(one, other);
             }
 
 
             /**
-             * @brief equatable Tokens.DEFAULT branch
+             * @brief equatable default branch
              * @relates int16
-             * @remark avx2 - Tokens.DEFAULT
+             * @remark avx2 - default
              */
             friend bint16<base_t::features> vneq(composed_t one, composed_t other)  {
 
-                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
+                ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vneq");
 
                 return !(one == other);
             }

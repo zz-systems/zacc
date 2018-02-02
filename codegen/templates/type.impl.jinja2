@@ -91,7 +91,6 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
             using element_t     = typename zval_traits<base_t>::element_t;
             using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
             using extracted_t   = typename zval_traits<base_t>::extracted_t;
-            //FORWARD(__impl);
 
             {% if not module in ast.modules.initializers %}
             FORWARD(__impl);
@@ -107,9 +106,9 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
             {{ Functions.render(func.signature, (module, ast, body)) }} {
 
                 {% if not module in ast.modules.initializers  %}
-                ZTRACE_BACKEND("{{ ast.type.target }}.{{ast.type.name}}.impl", __LINE__, "{{ ast.type.name }}({{ ast.type.scalar_type }}[{{ast.type.size}}])", "{{body.target}}", "{{func.name}}");
+                ZTRACE_BACKEND("{{ ast.type.target }}.{{ast.type.name}}.impl", __LINE__, "{{ ast.type.name }}({{ ast.type.scalar_type }}[{{ast.type.size}}])", "{{body.target}}", "{{func.signature.name}}");
                 {% else %}
-                ZTRACE_BACKEND("{{ ast.type.target }}.{{ast.type.name}}.impl", __LINE__, "{{ ast.type.name }}({{ ast.type.scalar_type }}[{{ast.type.size}}])", "{{body.target}}", "CONS({{""}})");
+                ZTRACE_BACKEND("{{ ast.type.target }}.{{ast.type.name}}.impl", __LINE__, "{{ ast.type.name }}({{ ast.type.scalar_type }}[{{ast.type.size}}])", "{{body.target}}", "CONS({{Functions.render_args_signature(func.signature)}})");
                 {% endif %}
 
                     {% for instruction in Functions.render(body) %}

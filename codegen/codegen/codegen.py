@@ -30,6 +30,9 @@ class Functions:
     def render(cls, node, params=None):
         return Functions._renderer.render(node, params)
 
+    def render_args_signature(self, node: FunctionSignatureNode):
+        return render_args_signature(node)
+
 
 class Traits:
     _renderer = Renderer({

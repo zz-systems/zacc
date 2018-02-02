@@ -133,7 +133,7 @@ class Parser():
 
         # inject outer arguments and return type into bodies
         for k, v in body.items():
-            body[k][Tokens.TARGET]  = k
+            body[k][Tokens.TARGET]  = self._lexer.unlex(k)
             body[k][Tokens.RETURNS] = accept(data, Tokens.RETURNS)
             body[k][Tokens.ARGS] = accept(data, Tokens.ARGS)
 

@@ -5,7 +5,6 @@ set(impl.schema ".impl.hpp")
 set(test.schema ".test.cpp")
 
 set(type_template "codegen/templates/type.impl.jinja2")
-set(test_template "codegen/templates/type.test.jinja2")
 
 set(codegen.cmd "${PYTHON_DIR}/Scripts/yasha.exe")
 
@@ -23,9 +22,7 @@ set(codegen.deps
         ${CMAKE_CURRENT_LIST_DIR}/codegen/lexer.py
         ${CMAKE_CURRENT_LIST_DIR}/codegen/parser.py
         ${CMAKE_CURRENT_LIST_DIR}/codegen/renderer.py
-        "codegen/config/type.test.yml"
         ${type_template}
-        ${test_template}
         )
 
 function(preprocess_paths path type template)
@@ -83,10 +80,6 @@ macro (generate branch templates)
         # generate implementation files
         generate_file(${impl_output} ${template} ${type_template})
         list(APPEND generated_types ${PROJECT_SOURCE_DIR}/${impl_output})
-
-        # generate test files
-        #generate_file(${test_output} ${template} ${test_template})
-        #list(APPEND generated_tests ${PROJECT_SOURCE_DIR}/${test_output})
     endforeach()
 
     list(APPEND zacc.codegen.types ${generated_types})
