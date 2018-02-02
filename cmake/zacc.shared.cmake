@@ -44,6 +44,8 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 
         set(CMAKE_CXX_EXTENSIONS OFF)
 
+        set( gtest_force_shared_crt ON CACHE BOOL "Always use msvcrt.dll" FORCE)
+
         if(CMAKE_GENERATOR MATCHES "Visual Studio")
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /GX /wd4996")
         else()
@@ -361,7 +363,7 @@ function(zacc_add_dispatched_tests target_name)
 
         add_executable("${target_name}.${branch}" ${test_main})
 
-        target_compile_definitions(${target_name}.${branch} PRIVATE GTEST_LINKED_AS_SHARED_LIBRARY=1 ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
+        target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
 
         target_link_libraries("${target_name}.${branch}" ${target_libraries} zacc.system.info zacc.system.loader zacc.dispatch.${branch}.static)
         add_dependencies("${target_name}.${branch}" "${target_name}.${branch}.impl")
