@@ -12,6 +12,7 @@ option(BUILD_OPENCL_BRANCH "Build the OpenCL branch" OFF)
 # optimization =========================================================================================================
 
 option(BUILD_FAST_FLOAT "Build with relaxed IEEE754 options. Faster and less precise" Off)
+option(BUILD_AGGRESSIVE_OPTIMIZATION "Build with aggressive optimization" Off)
 option(BUILD_OPENMP "Build with OpenMP support" Off)
 
 # debug ================================================================================================================
@@ -19,6 +20,10 @@ option(BUILD_OPENMP "Build with OpenMP support" Off)
 option(BUILD_ENABLE_TRACE "Enable tracing (EXTREMELY SLOW!)" OFF)
 option(BUILD_SANITIZE_MEMORY "Build with clang memory sanitizer" Off)
 option(BUILD_SANITIZE_UNDEFINED "Build with clang undefined behavior sanitizer" Off)
+
+# profiling ============================================================================================================
+
+option(BUILD_ENABLE_INSTRUMENTATION "Enable instrumentation build")
 
 # testing ==============================================================================================================
 
@@ -61,6 +66,14 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 
         if(BUILD_SANITIZE_UNDEFINED)
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined")
+        endif()
+
+        if(BUILD_ENABLE_INSTRUMENTATION)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-instr-generate")
+        endif()
+
+        if(BUILD_AGGRESSIVE_OPTIMIZATION)
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstrict-vtable-pointers -flto")# -ffast-math")
         endif()
     endif()
 

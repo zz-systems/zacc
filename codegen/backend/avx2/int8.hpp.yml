@@ -57,10 +57,10 @@ modules:
       prefix: "template<typename OutputIt> friend"
       args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm256_storeu_si256((__m256i*)result, input);
+      body: _mm256_storeu_si256((__m256i*)&(*result), input);
     vstream:
       <<: *io_store
-      body: _mm256_stream_si256((__m256i*)result, input);
+      body: _mm256_stream_si256((__m256i*)&(*result), input);
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -144,5 +144,4 @@ modules:
       mangling: false
 
       body:
-          - auto mask = _mm256_cmpeq_epi8(_mm256_setzero_si256(), condition);
-          - return _mm256_blendv_epi8(if_value, else_value, mask);
+          - return _mm256_blendv_epi8(else_value, if_value, condition);

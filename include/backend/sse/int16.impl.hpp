@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
+#include "traits/equatable.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/io.hpp"
+#include "traits/conditional.hpp"
+#include "traits/numeric.hpp"
 #include "traits/logical.hpp"
+#include "traits/bitwise_shift.hpp"
 #include "traits/math.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/conditional.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/io.hpp"
-#include "traits/numeric.hpp"
 #include "traits/comparable.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/equatable.hpp"
 
 /**
  * @brief int16 implementation for the sse target
@@ -302,7 +302,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "Tokens.DEFAULT", "");
 
-                _mm_storeu_si128((__m128i*)result, input);
+                _mm_storeu_si128((__m128i*)&(*result), input);
             }
 
 
@@ -315,7 +315,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "Tokens.DEFAULT", "");
 
-                _mm_stream_si128((__m128i*)result, input);
+                _mm_stream_si128((__m128i*)&(*result), input);
             }
 
         };
@@ -1193,8 +1193,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "sse4", "");
 
-                auto mask = _mm_cmpeq_epi16(_mm_setzero_si128(), condition);
-                return _mm_blendv_epi8(if_value, else_value, mask);
+                return _mm_blendv_epi8(else_value, if_value, condition);
             }
 
 
@@ -1207,8 +1206,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "Tokens.DEFAULT", "");
 
-                auto mask = _mm_cmpeq_epi16(_mm_setzero_si128(), condition);
-                return _mm_or_si128(_mm_andnot_si128(mask, if_value), _mm_and_si128(mask, else_value));
+                return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value));
             }
 
         };
@@ -1270,7 +1268,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "Tokens.DEFAULT", "");
 
-                _mm_storeu_si128((__m128i*)result, input);
+                _mm_storeu_si128((__m128i*)&(*result), input);
             }
 
 
@@ -1283,7 +1281,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "Tokens.DEFAULT", "");
 
-                _mm_stream_si128((__m128i*)result, input);
+                _mm_stream_si128((__m128i*)&(*result), input);
             }
 
         };

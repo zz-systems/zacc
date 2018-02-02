@@ -33,7 +33,7 @@
 int main(int argc, char **argv) {
     std::cout << "Running main() from test_main.cpp" << std::endl;
 
-    auto c = zacc::platform::instance().match_capabilities(zacc::branches::ZACC_ARCH::value);
+    auto c = zacc::platform::global().match_capabilities(zacc::branches::ZACC_ARCH::value);
     std::string str;
 
     if(c.size() != 0) {

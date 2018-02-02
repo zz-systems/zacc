@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "system/branch.hpp"
+#include "system/arch.hpp"
 #include "util/algorithm.hpp"
 
 #include <cmath>
@@ -78,7 +78,7 @@ namespace zacc { namespace test {
 
 
     TEST(zip_iterator_test, verify_data_not_cloned) {
-        REQUIRES(ZACC_ARCH);
+            REQUIRES(ZACC_ARCH);
 
         std::array<int, 10> a_items {{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }};
         std::array<int, 10> b_items {{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }};
@@ -106,7 +106,7 @@ namespace zacc { namespace test {
     }
 
     TEST(zip_iterator_test, distance) {
-        REQUIRES(ZACC_ARCH);
+            REQUIRES(ZACC_ARCH);
 
         auto data = zip(a_items, b_items);
 
@@ -120,7 +120,7 @@ namespace zacc { namespace test {
     }
 
     TEST(zip_iterator_test, increment_simple) {
-        REQUIRES(ZACC_ARCH);
+            REQUIRES(ZACC_ARCH);
 
         auto data = zip(a_items, b_items);
 
@@ -136,7 +136,7 @@ namespace zacc { namespace test {
     }
 
     TEST(zip_iterator_test, increment) {
-        REQUIRES(ZACC_ARCH);
+            REQUIRES(ZACC_ARCH);
 
         auto data = zip(a_items, b_items);
 
@@ -171,7 +171,7 @@ namespace zacc { namespace test {
     }
 
     TEST(zip_iterator_test, zip_iterator) {
-        REQUIRES(ZACC_ARCH);
+            REQUIRES(ZACC_ARCH);
 
         auto data = zip(a_items, b_items);
 

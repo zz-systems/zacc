@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/math.hpp"
-#include "traits/conditional.hpp"
-#include "traits/io.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/equatable.hpp"
 #include "traits/comparable.hpp"
-#include "traits/numeric.hpp"
+#include "traits/io.hpp"
 #include "traits/logical.hpp"
+#include "traits/equatable.hpp"
+#include "traits/numeric.hpp"
+#include "traits/conditional.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/math.hpp"
+#include "traits/bitwise.hpp"
 
 /**
  * @brief float64 implementation for the scalar target
@@ -670,7 +670,7 @@ namespace zacc { namespace backend { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "Tokens.DEFAULT", "");
 
-                return std::fma(multiplicand.value(), multiplier.value(), addendum.value());
+                return multiplicand.value() * multiplier.value() + addendum.value();
             }
 
 
@@ -683,7 +683,7 @@ namespace zacc { namespace backend { namespace scalar {
 
                 ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "Tokens.DEFAULT", "");
 
-                return std::fma(multiplicand.value(), multiplier.value(), -addendum.value());
+                return multiplicand.value() * multiplier.value() - addendum.value();
             }
 
         };

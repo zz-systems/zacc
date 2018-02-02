@@ -57,20 +57,44 @@ namespace zacc {
          * @tparam base_t base type (e.g previous trait)
          */
         template<typename base_t>
-        struct impl : public base_t {
-            FORWARD(impl);
-
+        struct impl : public base_t
+        {
             using zval_t = typename base_t::zval_t;
             using bval_t = typename base_t::bval_t;
 
-            //using iterator = typename zval_traits<base_t>::extracted_t::iterator;
 
+            FORWARD(impl);
+
+#ifdef EXPERIMENTAL_SNAPSHOT_COPY
+            impl(const zval_t& other) : base_t(other), _has_snapshot(other._has_snapshot)
+            {
+                if(other._has_snapshot)
+                {
+                    _snapshot = other._snapshot;
+                }
+            }
+
+            impl(zval_t&& other) : base_t(std::move(other)), _snapshot(std::move(other._snapshot)), _has_snapshot(other._has_snapshot)
+            {
+            }
+#endif
             /**
              * @brief create a snapshot of current value
              * @return snapshot's begin iterator
              */
-            auto begin() const {
-                _snapshot = base_t::data();
+            auto begin() const
+            {
+#ifdef EXPERIMENTAL_SNAPSHOT_COPY
+                if(!_has_snapshot)
+                {
+#endif
+                    _snapshot = base_t::data();
+
+#ifdef EXPERIMENTAL_SNAPSHOT_COPY
+                    _has_snapshot = true;
+                }
+#endif
+
                 return _snapshot.begin();
             }
 
@@ -81,6 +105,9 @@ namespace zacc {
 
         private:
             mutable typename base_t::extracted_t _snapshot;
+#ifdef EXPERIMENTAL_SNAPSHOT_COPY
+            mutable bool _has_snapshot;
+#endif
         };
     };
 
@@ -150,7 +177,7 @@ namespace zacc {
                     ss << "[ ";
 
                 for (auto entry : base_t::data())
-                    ss << +entry << " ";
+                    ss << entry << " ";
 
                 if (base_t::is_vector)
                     ss << "]";
@@ -192,6 +219,8 @@ namespace zacc {
 
             auto as_bool() const noexcept
             {
+                //return make_bval(*this, last_operation::undefined);
+                //return *this != 0;
                 return make_boolean(*this);
             }
         };

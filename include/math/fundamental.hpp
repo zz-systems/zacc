@@ -66,7 +66,7 @@ namespace zacc { namespace math {
      * @return
      */
     template<class T>
-    const std::enable_if_t<std::is_fundamental<T>::value, T> vfmadd( const T& a, const T& b, const T& c )
+    constexpr std::enable_if_t<std::is_fundamental<T>::value, T> vfmadd( const T& a, const T& b, const T& c )
     {
         return a * b + c;
     }
@@ -80,7 +80,7 @@ namespace zacc { namespace math {
      * @return
      */
     template<class T>
-    const std::enable_if_t<std::is_fundamental<T>::value, T> vfmsub( const T& a, const T& b, const T& c )
+    constexpr std::enable_if_t<std::is_fundamental<T>::value, T> vfmsub( const T& a, const T& b, const T& c )
     {
         return a * b - c;
     }

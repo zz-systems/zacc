@@ -38,15 +38,7 @@ namespace zacc { namespace math {
             return _Vec {std::forward<Args>(arg)...};
         };
     };
-    /*template<typename... Args>
-    struct make_vec<std::tuple<Args...>>
-    {
-        template<typename... Args2 = Args...>
-        static constexpr auto impl(Args2&&... arg) {
-            return std::make_tuple(std::forward<Args2>(arg)...);
-        };
-    };
-*/
+
     template<typename _Vec, typename T>
     constexpr auto reshape_i_xy(T index, T width) {
         return make_vec<_Vec>::impl(index % width, index / width);
@@ -76,6 +68,9 @@ namespace zacc { namespace math {
     constexpr auto reshape_xyz_i(T x, T y, T z, T width, T height) {
         return x + width * y + width * height * z;
     }
+
+
+
 
     template<typename T, size_t _Rows, size_t _Cols>
     struct alignas(alignof(T)) __mat;
@@ -308,6 +303,7 @@ namespace zacc { namespace math {
                 : data(array_cast<T>(rhs.data))
         { }
 
+        //template<typename U, typename enable = std::enable_if_t<std::is_convertible<U, T>::value>>
         constexpr __mat(std::initializer_list<T> init_list)
         {
             std::copy(std::begin(init_list), std::end(init_list), std::begin(data));
@@ -464,6 +460,11 @@ namespace zacc { namespace math {
                 : base_t(init_list)
         {}
 
+        constexpr mat(const T &all)
+        {
+            std::fill(std::begin(data), std::end(data), all);
+        };
+
         /// @brief access
         /// @{        
 
@@ -481,11 +482,11 @@ namespace zacc { namespace math {
             return true;
         }
 
-        template<typename U = T>
-        constexpr operator typename std::enable_if<_Rows == 1 && _Cols == 1, U >::type () const
-        {
-            return base_t::operator()(0);
-        }
+//        template<typename U = T>
+//        constexpr operator typename std::enable_if<_Rows == 1 && _Cols == 1, U >::type () const
+//        {
+//            return base_t::operator()(0);
+//        }
 
         //__attribute__((optimize("unroll-loops")))
         constexpr auto transpose() const
@@ -587,6 +588,31 @@ namespace zacc { namespace math {
 
     /// @}
 
+    /// @name reshape specializations
+    /// @{
+
+    template<typename _Vec, typename T>
+    constexpr auto reshape(T index, vec2<T> dim) {
+        return reshape_i_xy<_Vec>(index, dim.x);
+    }
+
+    template<typename _Vec, typename T>
+    constexpr auto reshape(T index, vec3<T> dim) {
+        return reshape_i_xyz<_Vec>(index, dim.x, dim.y);
+    }
+
+    template<typename T>
+    constexpr auto reshape(vec2<T> pos, vec2<T> dim) {
+        return reshape_xy_i(pos.x, pos.y, dim.x);
+    }
+
+    template<typename T>
+    constexpr auto reshape(vec3<T> pos, vec3<T> dim) {
+        return reshape_xyz_i(pos.x, pos.y, pos.z, dim.x, dim.y);
+    }
+
+    /// @}
+
     /// @name operations
     /// @{
 
@@ -617,7 +643,7 @@ namespace zacc { namespace math {
     template<typename T>
     struct is_scalar
     {
-        static constexpr const bool value = is_zval<T>::value || std::is_floating_point<T>::value || std::is_integral<T>::value;
+        static constexpr const bool value = is_zval<T>::value || std::is_floating_point<T>::value || std::is_integral<T>::value || std::is_convertible<T, scalar<T>>::value;
     };
 
 

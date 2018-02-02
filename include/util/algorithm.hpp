@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include <functional>
 #include <algorithm>
 #include <string>
 #include <numeric>
@@ -146,10 +147,27 @@ namespace zacc {
      * @param container
      * @param unary_op
      */
-    template<class InputContainer, class OutputContainer = InputContainer, class UnaryOperation, typename = std::enable_if_t<all<iterable, InputContainer, OutputContainer>>>
+    template<class InputContainer, class OutputContainer, class UnaryOperation, typename = std::enable_if_t<all<iterable, InputContainer, OutputContainer>>>
     auto transform(const InputContainer& input, UnaryOperation func)
     {
         alignas(zval_traits<InputContainer>::alignment) OutputContainer output;
+
+        std::transform(std::begin(input), std::end(input), std::begin(output), func);
+
+        return output;
+    };
+
+    /**
+     * @brief
+     * @tparam Container
+     * @tparam UnaryOperation
+     * @param container
+     * @param unary_op
+     */
+    template<class InputContainer, class UnaryOperation, typename = std::enable_if_t<all<iterable, InputContainer>>>
+    auto transform(const InputContainer& input, UnaryOperation func)
+    {
+        alignas(zval_traits<InputContainer>::alignment) typename zval_traits<InputContainer>::extracted_t output;
 
         std::transform(std::begin(input), std::end(input), std::begin(output), func);
 

@@ -38,7 +38,7 @@ namespace zacc { namespace util {
 	{
 		uint8_t components[4];
 		uint32_t integral;
-		struct { uint8_t a, r, g, b; };
+		struct { uint8_t r, g, b, a; };
 
 		color_rgb(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 255)
 			: r(r), g(g), b(b), a(a)
@@ -60,6 +60,10 @@ namespace zacc { namespace util {
 		std::vector<std::pair<const float, color_rgb>> colors;
 
 		gradient1D() = default;
+
+		gradient1D(std::vector<std::pair<const float, color_rgb>> const &init) : colors(init)
+		{}
+
 		gradient1D(std::initializer_list<std::pair<const float, color_rgb>> init) : colors(init)
 		{}
 

@@ -26,7 +26,7 @@
 #pragma once
 
 #include "system/platform.hpp"
-#include "system/branch.hpp"
+#include "system/arch.hpp"
 #include "util/algorithm.hpp"
 #include "gtest/gtest.h"
 
@@ -35,7 +35,7 @@ namespace zacc { namespace test {
 #define ZTRACE_TEST_OUTPUT(cmd) //ZTRACE_INTERNAL(cmd)
 #define REQUIRES(raw) \
     do { \
-        auto c = zacc::platform::instance().match_capabilities(zacc::branches::raw::value); \
+        auto c = zacc::platform::global().match_capabilities(zacc::branches::raw::value); \
         std::string str; \
         \
         if(c.size() != 0) {\

@@ -28,18 +28,18 @@
 
 
 #include "zacc.hpp"
-#include "system/branch_entrypoint.hpp"
-#include "system/remote_activator.hpp"
-#include "system/runtime_dispatcher.hpp"
+#include "entrypoint.hpp"
+#include "remote_activator.hpp"
+#include "runtime_dispatcher.hpp"
 #include "kernel.hpp"
 
-namespace zacc { namespace examples {
+namespace zacc { namespace system {
 
-    template<typename _Kernel, typename _KernelTraits = kernel_traits<_Kernel>>
-    class dispatcher
+    template<typename _Kernel, typename _KernelTraits = system::kernel_traits<_Kernel>>
+    class kernel_dispatcher
     {
     public:
-        dispatcher() noexcept
+        kernel_dispatcher() noexcept
         {
             std::cerr << "loading: " << ZACC_DYLIBNAME << std::endl;
             _activator = std::make_unique<system::remote_activator>(ZACC_DYLIBNAME,
@@ -47,11 +47,12 @@ namespace zacc { namespace examples {
                                                                     std::string(_KernelTraits::kernel_name()) + "_delete_instance");
         }
     protected:
-        template<typename feature, typename... Args> void dispatch_impl(Args&&... arg)
+        template<typename feature, typename... Args>
+        void dispatch_impl(Args&&... arg)
         {
             log_has_kernel<feature>();
             if(_kernels.count(feature::value) == 0)
-                _kernels[feature::value] = _activator->create_instance<feature, _Kernel, kernel>(std::forward<Args>(arg)...);
+                _kernels[feature::value] = _activator->create_instance<feature, _Kernel, system::kernel>(std::forward<Args>(arg)...);
 
             log_has_kernel<feature>();
             _kernels[feature::value]->operator()(std::forward<Args>(arg)...);
@@ -59,7 +60,7 @@ namespace zacc { namespace examples {
 
     private:
         aligned_map<int, std::shared_ptr<_Kernel>> _kernels;
-        std::shared_ptr<system::remote_activator> _activator;
+        std::unique_ptr<system::remote_activator> _activator;
 
         template<typename feature> void log_has_kernel()
         {
@@ -72,7 +73,7 @@ namespace zacc { namespace examples {
     template<typename _KernelImpl>
     auto make_dispatcher()
     {
-        return system::runtime_dispatcher<dispatcher<_KernelImpl>>();
+        return system::runtime_dispatcher<kernel_dispatcher<_KernelImpl>>();
     };
 
 }}

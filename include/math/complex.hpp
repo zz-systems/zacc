@@ -28,6 +28,7 @@
 #include <array>
 #include <initializer_list>
 #include "traits/arithmetic.hpp"
+#include "math/matrix.hpp"
 #include <complex>
 
 namespace zacc { namespace math {
@@ -41,8 +42,8 @@ namespace zacc { namespace math {
     template<typename zval_t>
     using __cval = zval_base
     <
-        std::array<zval_t, 2>, //std::array<typename zval_traits<zval_t>::vector_t, 2>,
-        std::array<typename zval_traits<zval_t>::mask_vector_t, 2>,
+        vec2<zval_t>,
+        vec2<typename zval_traits<zval_t>::mask_vector_t>,
         zval_t,
         cval_tag,
         2,
@@ -66,10 +67,36 @@ namespace zacc { namespace math {
             using element_t = typename base_t::element_t;
             using vector_t = typename base_t::vector_t;
 
+            constexpr impl()
+            {}
 
-            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, vec2<_Element>>::value>>
             constexpr impl(const T& other)
                     : _value (other)
+            {}
+
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, vec2<_Element>>::value>>
+            constexpr impl(T&& value)
+                    : _value(std::move(value))
+            {}
+
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            constexpr impl(const vec2<T>& value)
+                    : _value(value)
+            {}
+
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            constexpr impl(vec2<T>&& value)
+                    : _value(std::move(value))
+            {}
+
+
+            constexpr impl(const impl& other)
+                    : _value (other._value)
+            {}
+
+            constexpr impl(impl&& other) noexcept
+                : _value(std::move(other._value))
             {}
 
             template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
@@ -79,12 +106,6 @@ namespace zacc { namespace math {
                 return *this;
             }
 
-            //template<typename T, typename enable = std::enable_if_t<!is_zval<T>::value && !is_bval<T>::value>>
-            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
-            constexpr impl(T&& value)
-                : _value(std::forward<T>(value))
-            {}
-
             template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
             constexpr impl& operator=(T&& other) noexcept
             {
@@ -92,19 +113,25 @@ namespace zacc { namespace math {
                 return *this;
             }
 
-            constexpr impl(const impl& other)
-                    : _value (other._value)
-            {}
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            constexpr impl& operator=(const vec2<T>& other)
+            {
+                _value = other;
+                return *this;
+            }
+
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            constexpr impl& operator=(vec2<T>&& other) noexcept
+            {
+                _value = std::move(other);
+                return *this;
+            }
 
             constexpr impl& operator=(const impl& other)
             {
                 _value = other._value;
                 return *this;
             }
-
-            constexpr impl(impl&& other) noexcept
-                : _value(std::move(other._value))
-            {}
 
             constexpr impl& operator=(impl&& other) noexcept
             {
@@ -113,24 +140,25 @@ namespace zacc { namespace math {
             }
 
 
-            constexpr _Element real() const
+            constexpr const _Element& real() const
             {
-                return _value[0];
+                return _value.x;
             }
 
-            void real(_Element value) { _value[0] = value; }
-
-            constexpr _Element imag() const
+            constexpr _Element& real()
             {
-                return _value[1];
-            }
-            void imag(_Element value) { _value[1] = value; }
-
-
-            constexpr operator vector_t() const {
-                return value();
+                return _value.x;
             }
 
+            constexpr const _Element& imag() const
+            {
+                return _value.y;
+            }
+
+            constexpr _Element& imag()
+            {
+                return _value.y;
+            }
 
             /**
              * @brief cast to underlying vector type
@@ -140,9 +168,17 @@ namespace zacc { namespace math {
                 return _value;
             }
 
-            _Element magnitude() { return (real() * real() + imag() * imag()).sqrt(); }
+            constexpr _Element magnitude() const
+            {
+                return _value.magnitude();
+            }
+
+            constexpr _Element sqr_magnitude() const
+            {
+                return _value.sqr_magnitude();
+            }
+
         private:
-            //alignas(base_t::alignment) std::array<T, 2> _value;
             alignas(base_t::alignment) vector_t _value;
         };
     };
@@ -179,9 +215,65 @@ namespace zacc { namespace math {
     //                    : base_t(array_cast<element_t>(rhs.value()))
     //            {}
 
-            constexpr __impl(const element_t& re = 0, const element_t& im = 0)
-                    : base_t(vector_t{{re, im}})
+//            constexpr __impl(const element_t& re, const element_t& im = 0)
+//                    : base_t(vector_t{{re, im}})
+//            {}
+
+            constexpr __impl()
+                    : base_t()
             {}
+
+
+//            template<typename U, typename enable = std::enable_if_t<std::is_convertible<U, element_t>::value>>
+//            constexpr __impl(const U& re)
+//                    : base_t(static_cast<vec2<element_t>>(re))
+//            {}
+//
+//            template<typename U, typename enable = std::enable_if_t<std::is_convertible<U, element_t>::value>>
+//            constexpr __impl(const U& re, const U& imag)
+//                    : base_t(vec2<element_t>(re, imag))
+//            {}
+
+            //template<typename U, typename enable = std::enable_if_t<std::is_convertible<U, element_t>::value>>
+            constexpr __impl(const element_t& re)
+                    : __impl(vec2<element_t>(re, 0))
+            {}
+
+            //template<typename U, typename enable = std::enable_if_t<std::is_convertible<U, element_t>::value>>
+            constexpr __impl(const element_t& re, const element_t& imag)
+                    : __impl(vec2<element_t>(re, imag))
+            {}
+
+            template<typename U, typename enable = std::enable_if_t<std::is_same<U, vec2<element_t>>::value>>// || std::is_same<U, zcomplex<element_t>>::value>>
+            constexpr __impl(const U& other)
+                    : base_t(other)
+            {}
+
+            template<typename U, typename enable = std::enable_if_t<std::is_same<U, vec2<element_t>>::value>>// || std::is_same<U, zcomplex<element_t>>::value>>
+            constexpr __impl(U&& other)
+                    : base_t(std::forward<U>(other))
+            {}
+
+//            template<template<class> class T, typename U, typename enable = std::enable_if_t<std::is_convertible<U, typename zval_traits<element_t>::element_t>::value &&  std::is_same<T<U>, vec2<U>>::value>>
+//            constexpr __impl(const T<U>& other)
+//                    : base_t()//vec2<element_t>(other.x, other.y))
+//            {}
+//
+//            template<template<class> class T, typename U, typename enable = std::enable_if_t<std::is_convertible<U, typename zval_traits<element_t>::element_t>::value &&  std::is_same<T<U>, vec2<U>>::value>>
+//            constexpr __impl(T<U>&& other)
+//                    : base_t()//vec2<element_t>(std::move(other.x), std::move(other.y)))
+//            {}
+
+//            template<typename U, typename enable = std::enable_if_t<std::is_convertible<U, vec2<typename zval_traits<element_t>::element_t>>::value>>
+//            constexpr __impl(const U& other)
+//                    : base_t(vec2<element_t>(other.x, other.y))
+//            {}
+
+//            template<typename U, typename enable = std::enable_if_t<std::is_convertible<U, vec2<typename zval_traits<element_t>::element_t>>::value>>
+//            constexpr __impl(U&& other)
+//                    : base_t(std::forward<U>(other))
+//            {}
+
 
             /*constexpr __impl(const vector_t& value)
                     : base_t(value)
@@ -337,13 +429,8 @@ namespace zacc { namespace math {
              * @param b
              * @return
              */
-            friend zcomplex<element_t> vadd(const composed_t &a, const composed_t &b) noexcept{
-                zcomplex<element_t> result = {
-                           a.real() + b.real(),
-                           a.imag() + b.imag()
-                       };
-
-                return result;
+            friend zcomplex<element_t> vadd(const zcomplex<element_t> &a, const zcomplex<element_t> &b) noexcept {
+                return a.value() + b.value();
             }
 
             /**
@@ -352,26 +439,22 @@ namespace zacc { namespace math {
              * @param b
              * @return
              */
-            friend zcomplex<element_t> vsub(const composed_t &a, const composed_t &b) noexcept {
-                zcomplex<element_t> result = {
-                           a.real() - b.real(),
-                           a.imag() - b.imag()
-                       };
-
-                return result;
+            friend zcomplex<element_t> vsub(const zcomplex<element_t> &a, const zcomplex<element_t> &b) noexcept {
+                return a.value() - b.value();
             }
 
-            /**
-             *
-             * @param a
-             * @param b
-             * @return
-             */
-            friend zcomplex<element_t> vmul(const composed_t &a, const composed_t &b) noexcept {
+          /**
+            *
+            * @param a
+            * @param b
+            * @return
+            */
+
+            friend zcomplex<element_t> vmul(const zcomplex<element_t> &a, const zcomplex<element_t> &b) noexcept {
                 return {
-                           (a.real() * b.real() - a.imag() * b.imag()),
-                           (a.imag() * b.real() + a.real() * b.imag())
-                       };
+                        vfmsub(a.real(), b.real(), a.imag() * b.imag()),
+                        vfmadd(a.imag(), b.real(), a.real() * b.imag())
+                };
             }
 
             /**
@@ -380,12 +463,41 @@ namespace zacc { namespace math {
              * @param b
              * @return
              */
-            friend zcomplex<element_t> vdiv(const composed_t &a, const composed_t &b) noexcept {
+
+            friend zcomplex<element_t> vdiv(const zcomplex<element_t> &a, const zcomplex<element_t> &b) noexcept {
+
                 return {
-                           ((a.real() * b.real() + a.imag() * b.imag()) / (b.real() * b.real() + b.imag() * b.imag())),
-                           ((a.imag() * b.real() - a.real() * b.imag()) / (b.real() * b.real() + b.imag() * b.imag()))
-                       };
+                        vfmadd(a.real(), b.real(), a.imag() * b.imag()) / vfmadd(b.real(), b.real(), b.imag() * b.imag()),
+                        vfmsub(a.imag(), b.real(), a.real() * b.imag()) / vfmadd(b.real(), b.real(), b.imag() * b.imag())
+                };
             }
+
+//            /**
+//             *
+//             * @param a
+//             * @param b
+//             * @return
+//             */
+//
+//            friend zcomplex<element_t> vmul(const zcomplex<element_t> &a, const zcomplex<element_t> &b) noexcept {
+//                return {
+//                        (a.real() * b.real() - a.imag() * b.imag()),
+//                        (a.imag() * b.real() + a.real() * b.imag())
+//                };
+//            }
+//
+//            /**
+//             *
+//             * @param a
+//             * @param b
+//             * @return
+//             */
+//            friend zcomplex<element_t> vdiv(const zcomplex<element_t> &a, const zcomplex<element_t> &b) noexcept {
+//                return {
+//                        ((a.real() * b.real() + a.imag() * b.imag()) / (b.real() * b.real() + b.imag() * b.imag())),
+//                        ((a.imag() * b.real() - a.real() * b.imag()) / (b.real() * b.real() + b.imag() * b.imag()))
+//                };
+//            }
 
             /**
              *
@@ -394,7 +506,7 @@ namespace zacc { namespace math {
              * @param addendum
              * @return
              */
-            friend zcomplex<element_t> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum) noexcept{
+            friend zcomplex<element_t> vfmadd(zcomplex<element_t> multiplicand, zcomplex<element_t> multiplier, zcomplex<element_t> addendum) noexcept{
                 return vadd(vmul(multiplicand, multiplier), addendum);
             }
 
@@ -405,7 +517,7 @@ namespace zacc { namespace math {
              * @param addendum
              * @return
              */
-            friend zcomplex<element_t> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum) noexcept{
+            friend zcomplex<element_t> vfmsub(zcomplex<element_t> multiplicand, zcomplex<element_t> multiplier, zcomplex<element_t> addendum) noexcept{
                 return vsub(vmul(multiplicand, multiplier), addendum);
             }
         };
@@ -526,6 +638,11 @@ namespace zacc { namespace math {
         using bval_t = bcomplex<T>;
 
         FORWARD2(zcomplex, __zcomplex<T>::impl);
+
+
+        static_assert(!is_zval<zcomplex<T>>::value, "is_zval for zcomplex<int> failed.");
+        static_assert(!is_bval<zcomplex<T>>::value, "is_bval for zcomplex<int> failed.");
+        static_assert(is_cval<zcomplex<T>>::value,  "is_cval for zcomplex<int> failed.");
     };
 
     template<typename T>
@@ -562,69 +679,107 @@ namespace zacc { namespace math {
         using zval_t = zcomplex<T>;
         using bval_t = bcomplex<T>;
 
-        //FORWARD2(bcomplex, __bcomplex<T>::impl);
 
-//        template<typename U, typename enable = std::enable_if_t<zacc::is_zval<U>::value && std::is_convertible<U, typename zval_traits<T>::vector_t>::value>>
-//        constexpr bcomplex(const zcomplex<U>& other, last_operation last_op = last_operation::undefined)
-//                : __bcomplex<T>::impl (typename zval_traits<T>::bval_t(static_cast<T>(other.real()), last_op),
-//                                       typename zval_traits<T>::bval_t(static_cast<T>(other.imag()), last_op))
-//        {}
+        constexpr bcomplex(const zcomplex<typename zval_traits<T>::zval_t>& other)
+                : __bcomplex<T>::impl (make_bval<T>(other.real(), last_operation::undefined),
+                                       make_bval<T>(other.imag(), last_operation::undefined))
+        {
+        }
 
-        //template<typename U, typename enable = std::enable_if_t<zacc::is_zval<U>::value && std::is_convertible<U, typename zval_traits<T>::vector_t>::value>>
-        constexpr bcomplex(const zcomplex<typename zval_traits<T>::zval_t>& other, last_operation last_op = last_operation::undefined)
+        constexpr bcomplex(const zcomplex<typename zval_traits<T>::zval_t>& other, last_operation last_op)
                 : __bcomplex<T>::impl (make_bval<T>(other.real(), last_op),
                                        make_bval<T>(other.imag(), last_op))
         {
-            static_assert(is_zval<decltype(other.imag())>::value, "kebab");
         }
 
+        constexpr bcomplex(zcomplex<typename zval_traits<T>::zval_t>&& other)
+                : __bcomplex<T>::impl (make_bval<T>(other.real(), last_operation::undefined),
+                                       make_bval<T>(other.imag(), last_operation::undefined))
+        {
+        }
+
+        constexpr bcomplex(zcomplex<typename zval_traits<T>::zval_t>&& other, last_operation last_op)
+                : __bcomplex<T>::impl (make_bval<T>(other.real(), last_op),
+                                       make_bval<T>(other.imag(), last_op))
+        {
+        }
+
+        constexpr bcomplex(const bcomplex& other)
+                : __bcomplex<T>::impl (make_bval<T>(other.real(), other.real().last_op()),
+                                       make_bval<T>(other.imag(), other.imag().last_op()))
+        {
+        }
+
+        constexpr bcomplex(bcomplex&& other)
+                : __bcomplex<T>::impl (make_bval<T>(other.real(), other.real().last_op()),
+                                       make_bval<T>(other.imag(), other.imag().last_op()))
+        {
+        }
+
+        constexpr bcomplex(const bcomplex& other, last_operation last_op)
+                : __bcomplex<T>::impl (make_bval<T>(other.real(), last_op),
+                                       make_bval<T>(other.imag(), last_op))
+        {
+        }
+
+        constexpr bcomplex(bcomplex&& other, last_operation last_op)
+                : __bcomplex<T>::impl (make_bval<T>(other.real(), last_op),
+                                       make_bval<T>(other.imag(), last_op))
+        {
+        }
+
+
         template<typename U, typename enable = std::enable_if_t<is_zval<U>::value || is_bval<U>::value>>
-        constexpr bcomplex(U one)
+        constexpr bcomplex(const U &one)
                 : __bcomplex<T>::impl (make_bval<T>(one),
                                        make_bval<T>(one))
         {
         }
 
         template<typename U, typename enable = std::enable_if_t<is_zval<U>::value || is_bval<U>::value>>
-        constexpr bcomplex(T one, T other)
+        constexpr bcomplex(U &&one)
+                : __bcomplex<T>::impl (make_bval<T>(one),
+                                       make_bval<T>(one))
+        {
+        }
+
+        constexpr bcomplex(const T& one, const T& other)
                 : __bcomplex<T>::impl (make_bval<T>(one),
                                        make_bval<T>(other))
         {
         }
 
+        constexpr bcomplex(T&& one, T&& other)
+                : __bcomplex<T>::impl (make_bval<T>(one),
+                                       make_bval<T>(other))
+        {
+        }
+
+        constexpr last_operation last_op() const { return last_operation::undefined; }
         bcomplex(bool one) = delete;
 
 
-//        template<typename U, typename enable = std::enable_if_t<zacc::is_zval<U>::value && std::is_convertible<U, T>::value>>
-//        constexpr bcomplex(const U& other, last_operation last_op = last_operation::undefined)
-//                : __bcomplex<T>::impl (typename zval_traits<T>::bval_t(static_cast<T>(other, last_op)),
-//                                       typename zval_traits<T>::bval_t(static_cast<T>(other, last_op)))
-//        {}
+        static_assert(!is_zval<bcomplex<T>>::value,     "is_zval for bcomplex<int> failed.");
+        static_assert(is_bval<bcomplex<T>>::value,      "is_bval for bcomplex<int> failed.");
+        static_assert(is_cval<bcomplex<T>>::value,      "is_cval for bcomplex<int> failed.");
 
-//        template<typename U, typename enable = std::enable_if_t<std::is_convertible<typename U::element_t, typename T::vector_t>::value>>
-//        constexpr bcomplex(const U& other, last_operation last_op = last_operation::undefined)
-//                : __bcomplex<T>::impl (typename U::element_t::bval_t(other.real(), last_op),
-//                                       typename U::element_t::bval_t(other.imag(), last_op))
-//        {}
     };
-
-/*
-    constexpr zcomplex<zdouble> operator""i(unsigned long long d)
+    constexpr zcomplex<zdouble> operator""_i(unsigned long long d)
     {
         return { 0.0, d };
     }
-    constexpr zcomplex<zdouble> operator""i(long double d)
+    constexpr zcomplex<zdouble> operator""_i(long double d)
     {
         return { 0.0, d };
     }
 
-    constexpr zcomplex<zfloat> operator""if(unsigned long long d)
+    constexpr zcomplex<zfloat> operator""_if(unsigned long long d)
     {
         return { 0.0, d };
     }
-    constexpr zcomplex<zfloat> operator""if(long double d)
+    constexpr zcomplex<zfloat> operator""_if(long double d)
     {
         return { 0.0, d };
     }
-    */
+
 }}

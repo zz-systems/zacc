@@ -62,15 +62,15 @@ modules:
       prefix: "template<typename OutputIt> friend"
       args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm256_storeu_ps(result, input)
+      body: _mm256_storeu_ps(&(*result), input)
     vstream:
       <<: *io_store
-      body: _mm256_stream_ps(result, input)
+      body: _mm256_stream_ps(&(*result), input)
 
     vgather:
       prefix: "template<typename RandomIt> friend"
       args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
-      body: _mm256_i32gather_ps(input, index, 4)
+      body: _mm256_i32gather_ps(&(*input), index, 4)
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------
@@ -150,23 +150,22 @@ modules:
   logical:
     vlneg:
       args: one
-      body: _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ);
-    vlor:   _mm256_or_ps
-    vland:  _mm256_and_ps
+      body: "{ _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ), last_operation::logic }"
+    vlor:   "{ _mm256_or_ps(one, other), last_operation::logic }"
+    vland:  "{ _mm256_and_ps(one, other), last_operation::logic }"
 #-----------------------------------------------------------------------------------------------------------------------
   equatable:
-    veq:   _mm256_cmp_ps(one, other, _CMP_EQ_OQ)
-    vneq:  _mm256_cmp_ps(one, other, _CMP_NEQ_OQ)
+    veq:   "{ _mm256_cmp_ps(one, other, _CMP_EQ_OQ), last_operation::comparison }"
+    vneq:  "{ _mm256_cmp_ps(one, other, _CMP_NEQ_OQ), last_operation::comparison }"
   comparable:
-    vgt:   _mm256_cmp_ps(one, other, _CMP_GT_OQ)
-    vlt:   _mm256_cmp_ps(one, other, _CMP_LT_OQ)
-    vge:   _mm256_cmp_ps(one, other, _CMP_GE_OQ)
-    vle:   _mm256_cmp_ps(one, other, _CMP_LE_OQ)
+    vgt:   "{ _mm256_cmp_ps(one, other, _CMP_GT_OQ), last_operation::comparison }"
+    vlt:   "{ _mm256_cmp_ps(one, other, _CMP_LT_OQ), last_operation::comparison }"
+    vge:   "{ _mm256_cmp_ps(one, other, _CMP_GE_OQ), last_operation::comparison }"
+    vle:   "{ _mm256_cmp_ps(one, other, _CMP_LE_OQ), last_operation::comparison }"
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
       args: [bval_t condition, if_value, else_value]
       mangling: false
       body:
-        - auto mask = _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ);
-        - return _mm256_blendv_ps(if_value, else_value, mask);
+        - return _mm256_blendv_ps(else_value, if_value, condition);

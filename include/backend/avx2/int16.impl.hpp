@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
+#include "traits/equatable.hpp"
 #include "traits/arithmetic.hpp"
+#include "traits/numeric.hpp"
+#include "traits/conditional.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/logical.hpp"
+#include "traits/io.hpp"
 #include "traits/comparable.hpp"
 #include "traits/math.hpp"
-#include "traits/logical.hpp"
-#include "traits/numeric.hpp"
-#include "traits/equatable.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/bitwise_shift.hpp"
-#include "traits/io.hpp"
-#include "traits/conditional.hpp"
 
 /**
  * @brief int16 implementation for the avx2 target
@@ -302,7 +302,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
 
-                _mm256_storeu_si256((__m256i*)result, input);
+                _mm256_storeu_si256((__m256i*)&(*result), input);
             }
 
 
@@ -315,7 +315,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
 
-                _mm256_stream_si256((__m256i*)result, input);
+                _mm256_stream_si256((__m256i*)&(*result), input);
             }
 
         };
@@ -1139,8 +1139,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
 
-                auto mask = _mm256_cmpeq_epi16(_mm256_setzero_si256(), condition);
-                return _mm256_blendv_epi8(if_value, else_value, mask);
+                return _mm256_blendv_epi8(else_value, if_value, condition);
             }
 
         };
@@ -1202,7 +1201,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
 
-                _mm256_storeu_si256((__m256i*)result, input);
+                _mm256_storeu_si256((__m256i*)&(*result), input);
             }
 
 
@@ -1215,7 +1214,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "Tokens.DEFAULT", "");
 
-                _mm256_stream_si256((__m256i*)result, input);
+                _mm256_stream_si256((__m256i*)&(*result), input);
             }
 
         };

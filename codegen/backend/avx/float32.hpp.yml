@@ -170,4 +170,4 @@ modules:
       mangling: false
       body:
         - auto mask = _mm256_cmp_ps(_mm256_setzero_ps(), condition, _CMP_EQ_OQ);
-        - return _mm256_blendv_ps(if_value, else_value, mask);
+        - return _mm256_blendv_ps(else_value, if_value, condition);

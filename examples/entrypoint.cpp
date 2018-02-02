@@ -23,38 +23,30 @@
 //
 
 
-#include "branch_entrypoint.hpp"
+#include "entrypoint.hpp"
 
-#include "system/branch.hpp"
+#include "system/arch.hpp"
 #include "kernels/mandelbrot.hpp"
-
-/*
-zacc::system::entrypoint *examples_perlin_create_instance()
-{
-    std::cout << "Creating engine for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
-    return new zacc::examples::perlin::perlin_engine<zacc::dispatched_branch::types>();
-}
-
-void examples_perlin_delete_instance(zacc::system::entrypoint* instance)
-{
-    if(instance != nullptr)
-        delete instance;
-}
-*/
+#include "kernels/julia.hpp"
 
 zacc::system::entrypoint *mandelbrot_create_instance()
 {
-    std::cout << "Creating instance for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
-    auto result =  new zacc::examples::mandelbrot_kernel<zacc::dispatched_branch::types>();
-    std::cout << "Created instance for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
-
-    return result;
+    return new zacc::examples::mandelbrot_kernel<zacc::arch::types>();
 }
 
 void mandelbrot_delete_instance(zacc::system::entrypoint* instance)
 {
-    std::cout << "Deleting instance for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
     if(instance != nullptr)
         delete instance;
-    std::cout << "Deleted instance for " << zacc::dispatched_branch::types::major_branch_name() << std::endl;
+}
+
+zacc::system::entrypoint *julia_create_instance()
+{
+    return new zacc::examples::julia_kernel<zacc::arch::types>();
+}
+
+void julia_delete_instance(zacc::system::entrypoint* instance)
+{
+    if(instance != nullptr)
+        delete instance;
 }

@@ -25,10 +25,13 @@
 #pragma once
 
 #include "zacc_examples_branch_export.hpp"
-#include "system/branch_entrypoint.hpp"
+#include "system/entrypoint.hpp"
 
 extern "C"
 {
 ZACC_EXAMPLES_BRANCH_EXPORT zacc::system::entrypoint *mandelbrot_create_instance();
 ZACC_EXAMPLES_BRANCH_EXPORT void mandelbrot_delete_instance(zacc::system::entrypoint *instance);
+
+ZACC_EXAMPLES_BRANCH_EXPORT zacc::system::entrypoint *julia_create_instance();
+ZACC_EXAMPLES_BRANCH_EXPORT void julia_delete_instance(zacc::system::entrypoint *instance);
 }

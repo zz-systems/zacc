@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-// 
+//
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,31 +23,30 @@
 //---------------------------------------------------------------------------------
 
 
-#include "system/platform.hpp"
-#include "util/commands.hpp"
+#pragma once
+
+#include <vector>
+
+#include "zacc.hpp"
+#include "math/matrix.hpp"
 #include "util/algorithm.hpp"
+#include "system/entrypoint.hpp"
+#include "system/kernel_interface.hpp"
 
-using namespace zacc;
+namespace zacc { namespace examples {
 
-#if defined(_MSC_VER)
-	#pragma comment(linker, "/SUBSYSTEM:CONSOLE")
-#endif
+    using namespace math;
 
-int main(int argc, char** argv) {
-
-    option_parser parser(argc, argv);
-    auto platform = &platform::global();
-
-    if(parser.has_option("CMAKE_OUTPUT"))
+    struct __mandelbrot
     {
-        auto c = platform->enabled_capabilities();
+        using output_container = std::vector<int>;
+        using input_container  = std::vector<int>;
 
-        std::cout << join(std::begin(c), std::end(c), ";");
-    }
-    else
-    {
-        std::cout << *platform;
-    }
+        static constexpr auto kernel_name() { return "mandelbrot"; }
 
-    return 0;
-}
+        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
+        virtual void run(output_container &output) = 0;
+    };
+
+    using mandelbrot = system::kernel_interface<__mandelbrot>;
+}}

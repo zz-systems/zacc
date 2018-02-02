@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "system/branch.hpp"
+#include "system/arch.hpp"
 #include "util/algorithm.hpp"
 
 #include <cmath>
@@ -32,7 +32,7 @@
 namespace zacc { namespace test {
 
         TEST(type_traits_test, is_iterable_trait) {
-                REQUIRES(ZACC_ARCH);
+            REQUIRES(ZACC_ARCH);
 
                 EXPECT_TRUE((is<measurable, std::array<int, 10>>));
                 EXPECT_FALSE((is<measurable, int>));

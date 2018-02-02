@@ -25,48 +25,40 @@
 
 #pragma once
 
-// @file perlin_engine.hpp
+#include <cstdint>
 
-#include "zacc.hpp"
+constexpr std::int8_t operator "" _int8(unsigned long long v)
+{ return static_cast<std::int8_t>(v); }
 
-DISPATCHED class perlin_engine
-{
-    void run(const vec3<float> &origin, float *target)
-    {
-        const size_t real_size = 1024; // length of target
+constexpr std::uint8_t operator "" _uint8(unsigned long long v)
+{ return static_cast<std::uint8_t>(v); }
 
-        const int octaves = 5;
-        const int seed = 1337;
-        const double frequency = 1.0;
-        const float lacunarity = 1.0;
-        const float persistence = 0.5;
+constexpr std::int16_t operator "" _int16(unsigned long long v)
+{ return static_cast<std::int16_t>(v); }
 
-        int cur_octave = 0;
+constexpr std::uint16_t operator "" _uint16(unsigned long long v)
+{ return static_cast<std::uint16_t>(v); }
 
-        zfloat value = 0, currentPersistence = 1;
+constexpr std::int32_t operator "" _int32(unsigned long long v)
+{ return static_cast<std::int32_t>(v); }
 
-        // Generate values
-        zacc::generate<zfloat>(target, target + real_size, [this](auto i)
-        {
-            zfloat	value = 0,
-                    currentPersistence = 1;
+constexpr std::uint32_t operator "" _uint32(unsigned long long v)
+{ return static_cast<std::uint32_t>(v); }
 
-            vec3<zfloat> origin { i, i, i };
+constexpr std::int64_t operator "" _int64(unsigned long long v)
+{ return static_cast<std::int64_t>(v); }
 
-            auto _coords = origin / real_size * frequency;
+constexpr std::uint64_t operator "" _uint64(unsigned long long v)
+{ return static_cast<std::uint64_t>(v); }
 
-            for (int curOctave = 0; cur_octave < octaves; cur_octave++)
-            {
-                value += currentPersistence * noisegen<branch>::gradient_coherent_3d(
-                        clamp_int32<zfloat>(_coords),
-                        seed + cur_octave,
-                        quality);
+constexpr std::int_fast8_t operator "" _int_fast8(unsigned long long v)
+{ return static_cast<std::int_fast8_t>(v); }
 
-                // Prepare the next octave.
-                _coords *= lacunarity;
-                currentPersistence *= persistence;
-            }
-            return value;
-        });
-    }
-}
+constexpr std::uint_fast8_t operator "" _uint_fast8(unsigned long long v)
+{ return static_cast<std::uint_fast8_t>(v); }
+
+constexpr std::int_fast16_t operator "" _int_fast16(unsigned long long v)
+{ return static_cast<std::int_fast16_t>(v); }
+
+constexpr std::uint_fast16_t operator "" _uint_fast16(unsigned long long v)
+{ return static_cast<std::uint_fast16_t>(v); }

@@ -105,6 +105,8 @@ namespace zacc {
             : public std::true_type
     {};
 
+
+
     template<typename val_t, typename enable_t = void>
     struct is_cval
             : public std::false_type
@@ -112,10 +114,14 @@ namespace zacc {
 
     template<typename val_t>
     struct is_cval<val_t, std::enable_if_t<std::is_same<typename val_t::tag, cval_tag>::value
-                                           && is_zval<typename val_t::element_t>::value>>
+                                           && (is_zval<typename val_t::element_t>::value || is_bval<typename val_t::element_t>::value)>>
             : public std::true_type
     {};
 
+    template<typename val_t>
+    struct is_bval<val_t, std::enable_if_t<is_cval<val_t>::value && is_bval<typename val_t::element_t>::value>>
+            : public std::true_type
+    {};
 
     template<typename val_t, typename enable_t = void>
     struct is_floating_point
@@ -159,6 +165,26 @@ namespace zacc {
             : public std::true_type
     {};
 
+
+    template<typename val_t, typename enable_t = void>
+    struct is_scalar
+            : public std::false_type
+    {};
+
+    template<typename val_t>
+    struct is_scalar<val_t, std::enable_if_t<!val_t::is_vector>>
+            : public std::true_type
+    {};
+
+    template<typename val_t, typename enable_t = void>
+    struct is_vector
+            : public std::false_type
+    {};
+
+    template<typename val_t>
+    struct is_vector<val_t, std::enable_if_t<val_t::is_vector>>
+            : public std::true_type
+    {};
 
     template<typename T>
     using resolve_uint_t = std::conditional_t<

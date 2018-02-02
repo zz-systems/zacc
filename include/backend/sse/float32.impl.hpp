@@ -42,15 +42,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
+#include "traits/comparable.hpp"
+#include "traits/numeric.hpp"
 #include "traits/logical.hpp"
+#include "traits/equatable.hpp"
 #include "traits/io.hpp"
 #include "traits/conditional.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/numeric.hpp"
 #include "traits/math.hpp"
-#include "traits/comparable.hpp"
-#include "traits/equatable.hpp"
+#include "traits/bitwise.hpp"
 
 /**
  * @brief float32 implementation for the sse target
@@ -325,7 +325,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "Tokens.DEFAULT", "");
 
-                _mm_storeu_ps(result, input);
+                _mm_storeu_ps(&(*result), input);
             }
 
 
@@ -338,7 +338,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "Tokens.DEFAULT", "");
 
-                _mm_stream_ps(result, input);
+                _mm_stream_ps(&(*result), input);
             }
 
 
@@ -1259,8 +1259,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "sse4", "");
 
-                auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition);
-                return _mm_blendv_ps(if_value, else_value, mask);
+                return _mm_blendv_ps(else_value, if_value, condition);
             }
 
 
@@ -1273,8 +1272,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "Tokens.DEFAULT", "");
 
-                auto mask = _mm_cmpeq_ps(_mm_setzero_ps(), condition);
-                return _mm_xor_ps(if_value, _mm_and_ps( mask, _mm_xor_ps(else_value, if_value)));
+                return _mm_or_ps(_mm_andnot_ps(condition, else_value), _mm_and_ps(condition, if_value));
             }
 
         };
@@ -1336,7 +1334,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "Tokens.DEFAULT", "");
 
-                _mm_storeu_ps(result, input);
+                _mm_storeu_ps(&(*result), input);
             }
 
 
@@ -1349,7 +1347,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "Tokens.DEFAULT", "");
 
-                _mm_stream_ps(result, input);
+                _mm_stream_ps(&(*result), input);
             }
 
 

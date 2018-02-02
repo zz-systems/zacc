@@ -105,10 +105,12 @@ modules:
     vdiv: (one.value() / other.value());
     vfmadd:
       args: [multiplicand, multiplier, addendum]
-      body: std::fma(multiplicand.value(), multiplier.value(), addendum.value())
+      #body: std::fma(multiplicand.value(), multiplier.value(), addendum.value())
+      body: multiplicand.value() * multiplier.value() + addendum.value()
     vfmsub:
       args: [multiplicand, multiplier, addendum]
-      body: std::fma(multiplicand.value(), multiplier.value(), -addendum.value())
+      #body: std::fma(multiplicand.value(), multiplier.value(), -addendum.value())
+      body: multiplicand.value() * multiplier.value() - addendum.value()
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg:

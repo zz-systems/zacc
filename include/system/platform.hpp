@@ -45,10 +45,12 @@ namespace zacc {
      */
     struct platform {
     private:
-        using raw_t = std::underlying_type_t<capabilities>;
         using capability_map_t = std::map<const capabilities, capability>;
 
     public:
+
+        using raw_t = std::underlying_type_t<capabilities>;
+
         /**
          * @brief Enable capability, fluent interface
          * @param capability
@@ -76,7 +78,7 @@ namespace zacc {
          * @param raw_value
          * @return self
          */
-        platform &set(uint64_t raw_value);
+        platform &set(raw_t raw_value);
 
         /**
          * @brief Checks if capability is set
@@ -147,15 +149,15 @@ namespace zacc {
         size_t num_threads();
 
         /**
-         * @brief returns the singleton instance
-         * @return singleton instance
-         */
-        static platform& instance();
-
-        /**
          * @brief copy constructor not available
          */
         platform(platform const&)        = delete;
+
+        /**
+         * @brief returns the global instance
+         * @return global instance
+         */
+        static platform& global();
 
         /**
          * @brief assignment operator not available
@@ -170,7 +172,7 @@ namespace zacc {
         static thread_local cpuid _cpuid;
 
         /**
-         * @brief private constructor for singleton instantiation.
+         * @brief constructor
          * Fetches system information and populates main capabilities
          */
         platform();

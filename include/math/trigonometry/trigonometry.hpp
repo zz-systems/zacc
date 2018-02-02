@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "system/branch.hpp"
+#include "system/arch.hpp"
 #include "math/common.hpp"
 #include "math/fundamental.hpp"
 
@@ -60,13 +60,13 @@ namespace zacc { namespace math {
      * @return [-1; 1]
      */
     template<typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vsin(vreal_t val)
+    std::enable_if_t<is_floating_point<vreal_t>::value && is_vector<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vsin(vreal_t val)
     {
         vreal_t q = (val * Z_1_PI).floor();
         zint iq = q;
 
         // when performance > precision
-        if(dispatched_branch::use_fast_float)
+        if(arch::use_fast_float)
         {
             val = vfmadd(q, Z_PI, val);
         }
@@ -132,13 +132,13 @@ namespace zacc { namespace math {
      * @return [-1; 1]
      */
     template<typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vcos(vreal_t val)
+    std::enable_if_t<is_floating_point<vreal_t>::value && is_vector<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vcos(vreal_t val)
     {
         vreal_t q = 2.0 * (val * Z_1_PI - 0.5).floor() + 1;
         zint iq = q;
 
         // when performance > precision
-        if(dispatched_branch::use_fast_float)
+        if(arch::use_fast_float)
         {
             val -= q * Z_PI_2;
         }
@@ -204,13 +204,13 @@ namespace zacc { namespace math {
      * @return [-1; 1]
      */
     template <typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vtan(vreal_t val)
+    std::enable_if_t<is_floating_point<vreal_t>::value && is_vector<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vtan(vreal_t val)
     {
         vreal_t q = (val * 2 * Z_1_PI).round();
         zint iq = q;
 
         // when performance > precision
-        if(dispatched_branch::use_fast_float)
+        if(arch::use_fast_float)
         {
             val -= q * Z_PI_2;
         }
@@ -289,7 +289,7 @@ namespace zacc { namespace math {
      * @return [-1; 1]
      */
     template<typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vatan2(vreal_t y, vreal_t x)
+    std::enable_if_t<is_floating_point<vreal_t>::value && is_vector<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vatan2(vreal_t y, vreal_t x)
     {
         auto q = vreal_t(2)
                 .when(x < 0)

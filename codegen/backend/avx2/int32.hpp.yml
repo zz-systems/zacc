@@ -63,23 +63,23 @@ modules:
       prefix: "template<typename OutputIt> friend"
       args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm256_storeu_si256((__m256i*)result, input);
+      body: _mm256_storeu_si256((__m256i*)&(*result), input);
     vstream:
       <<: *io_store
-      body: _mm256_stream_si256((__m256i*)result, input);
+      body: _mm256_stream_si256((__m256i*)&(*result), input);
 
 
     vgather:
       prefix: "template<typename RandomIt> friend"
       args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
-      body: _mm256_i32gather_epi32(input, index, 4)
+      body: _mm256_i32gather_epi32((__m256i*)&(*input), index, 4)
 
   boolean_io:
     vstore:
       prefix: "template<typename OutputIt> friend"
       args: "OutputIt result, composed_t input"
       returns: void
-      body: _mm256_storeu_si256((__m256i*)result, input);
+      body: _mm256_storeu_si256(&(*result), input);
 
     vmask: _mm256_movemask_epi8
 
@@ -139,16 +139,16 @@ modules:
   logical:
     vlneg:
       args: one
-      body: _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
-    vlor:   _mm256_or_si256
-    vland:  _mm256_and_si256
+      body: "{ _mm256_cmpeq_epi32(one, _mm256_setzero_si256()), last_operation::logic }"
+    vlor:   "{ _mm256_or_si256(one, other), last_operation::logic }"
+    vland:  "{ _mm256_and_si256(one, other), last_operation::logic }"
 #-----------------------------------------------------------------------------------------------------------------------
   equatable:
-    veq:   _mm256_cmpeq_epi32
+    veq:   "{ _mm256_cmpeq_epi32(one, other), last_operation::comparison }"
     vneq:  "!(one == other)"
   comparable:
-    vgt:   _mm256_cmpgt_epi32
-    vlt:   _mm256_cmpgt_epi32(other, one)
+    vgt:   "{ _mm256_cmpgt_epi32(one, other), last_operation::comparison }"
+    vlt:   "{ _mm256_cmpgt_epi32(other, one), last_operation::comparison }"
     vge:   "!(one < other)"
     vle:   "!(one > other)"
 #-----------------------------------------------------------------------------------------------------------------------
@@ -157,6 +157,4 @@ modules:
       args: [bval_t condition, if_value, else_value]
       mangling: false
       body:
-        - auto mask = _mm256_cmpeq_epi32(_mm256_setzero_si256(), condition);
-        - _mm256_blendv_epi8(if_value, else_value, mask);
-        #- _mm256_blendv_epi8(else_value, if_value, condition);
+        - _mm256_blendv_epi8(else_value, if_value, condition);

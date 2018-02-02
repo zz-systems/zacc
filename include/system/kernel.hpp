@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-// 
+//
 // Copyright (c) 2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,31 +23,29 @@
 //---------------------------------------------------------------------------------
 
 
-#include "system/platform.hpp"
-#include "util/commands.hpp"
-#include "util/algorithm.hpp"
+#pragma once
 
-using namespace zacc;
+// @file mandelbrot_engine.hpp
 
-#if defined(_MSC_VER)
-	#pragma comment(linker, "/SUBSYSTEM:CONSOLE")
-#endif
+#include "zacc.hpp"
+#include "system/entrypoint.hpp"
 
-int main(int argc, char** argv) {
+namespace zacc { namespace system {
 
-    option_parser parser(argc, argv);
-    auto platform = &platform::global();
-
-    if(parser.has_option("CMAKE_OUTPUT"))
+    template<typename _KernelInterface>
+    struct kernel_traits
     {
-        auto c = platform->enabled_capabilities();
+        using output_container = std::remove_reference_t<typename _KernelInterface::output_container>;
+        using input_container  = std::remove_reference_t<typename _KernelInterface::input_container>;
 
-        std::cout << join(std::begin(c), std::end(c), ";");
-    }
-    else
+        static constexpr auto kernel_name() { return _KernelInterface::kernel_name(); }
+    };
+
+
+
+    template<typename _KernelInterface>
+    struct kernel : public _KernelInterface, public zacc::system::entrypoint
     {
-        std::cout << *platform;
-    }
 
-    return 0;
-}
+    };
+}}

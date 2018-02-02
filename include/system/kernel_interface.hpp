@@ -28,42 +28,36 @@
 // @file mandelbrot_engine.hpp
 
 #include "zacc.hpp"
-#include "math/matrix.hpp"
-#include "util/algorithm.hpp"
-#include "system/branch_entrypoint.hpp"
+#include "system/entrypoint.hpp"
 
-namespace zacc { namespace examples {
+namespace zacc { namespace system {
 
-    using namespace math;
-
-    template<typename _Kernel>
-    struct kernel_traits
+    template<typename _KernelInterface>
+    struct kernel_interface : virtual _KernelInterface
     {
-        using output_container_t = std::vector<int>&;
-        using input_container_t  = std::vector<int>;
+        using output_container = std::remove_reference_t<typename _KernelInterface::output_container>;
+        using input_container  = std::remove_reference_t<typename _KernelInterface::input_container>;
 
-        static constexpr auto kernel_name() { return _Kernel::kernel_name(); }
-    };
-
-
-    struct mandelbrot
-    {
-        using output_container_t = kernel_traits<mandelbrot>::output_container_t;
-
-        static constexpr auto kernel_name() { return "mandelbrot"; }
-
-        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
-        virtual void run(output_container_t output) = 0;
-
-        virtual void operator()(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations)
+        template<typename... Args>
+        void operator()(Args&&... args)
         {
-            configure(dim, cmin, cmax, max_iterations);
+            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+            this->configure(std::forward<Args>(args)...);
         }
 
-        virtual void operator()(output_container_t output)
+        void operator()(const input_container &input, output_container &output)
         {
-            run(output);
+            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+            this->run(input, output);
+        }
+
+        void operator()(output_container &output)
+        {
+            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+            this->run(output);
         }
     };
-
 }}
