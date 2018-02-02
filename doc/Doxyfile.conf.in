@@ -1591,7 +1591,7 @@ PAPER_TYPE             = a4
 # The EXTRA_PACKAGES tag can be used to specify one or more LaTeX package names
 # that should be included in the LaTeX output. The package can be specified just
 # by its name or with the correct syntax as to be used with the LaTeX
-# \usepackage command. To get the times font for instance you can specify :
+# \usepackage command. To get the times font for global you can specify :
 # EXTRA_PACKAGES=times or EXTRA_PACKAGES={times}
 # To use the option intlimits with the amsmath package you can specify:
 # EXTRA_PACKAGES=[intlimits]{amsmath}
