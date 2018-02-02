@@ -1,7 +1,13 @@
 # ZACC
-[![Build Status](https://travis-ci.org/zz-systems/zacc.svg?branch=develop)](https://travis-ci.org/zz-systems/zacc)
-[![Build status](https://ci.appveyor.com/api/projects/status/j2pe355ld0pt60sq/branch/develop?svg=true)](https://ci.appveyor.com/project/zz-systems/zacc/branch/develop)
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+| Branch | Travis CI | AppVeyorCI |
+|-----------|------------|----|
+| Master | [![Build Status](https://travis-ci.org/zz-systems/zacc.svg?branch=master)](https://travis-ci.org/zz-systems/zacc) | [![Build status](https://ci.appveyor.com/api/projects/status/j2pe355ld0pt60sq/branch/master?svg=true)](https://ci.appveyor.com/project/zz-systems/zacc/branch/master) |
+| Develop | [![Build Status](https://travis-ci.org/zz-systems/zacc.svg?branch=develop)](https://travis-ci.org/zz-systems/zacc) | [![Build status](https://ci.appveyor.com/api/projects/status/j2pe355ld0pt60sq/branch/develop?svg=true)](https://ci.appveyor.com/project/zz-systems/zacc/branch/develop) |
+
+
 
 
 - [Abstract](#abstract)
@@ -37,7 +43,7 @@ Feel free to report issues and bugs to the [Issue tracker on GitHub](https://git
 
 ## Design goals
 
-There a few SIMD Libraries available, like Eigen or Agner Fog's vector class library, each of them following the same goal: accelerate your algorithms by using SIMD instructions.  
+There a few SIMD Libraries available, like [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) or [Agner Fog's vector class library](http://www.agner.org/optimize/#vectorclass), each of them following the same goal: accelerate your algorithms by using SIMD instructions.
 
 ZACC implementation had these goals:
 
@@ -53,6 +59,19 @@ ZACC implementation had these goals:
     ZACC accelerated projects should be able to run on any OS and any processor.
 - **Speed.**
     Although ZACC may be not the highest-optimized library in the world, speed combined with a great usability is a high priority.
+
+## Features
+* Linear algebra support
+* Arithmetic operations
+* Conditional operations
+* Rounding operations
+* Standard functions like abs, min, max, etc...
+* Trigonometric functions (sin, cos, tan)
+* Platform detection
+* Runtime dispatching
+* Kernel infrastructure
+* Extended algorithms (STL-compatible)
+* Uses vanilla C++14
 
 
 ## Integration
@@ -343,7 +362,7 @@ zacc_add_dispatched_tests(cacophony.tests
 | Intel Xeon E5-2680 v2 | AVX1 |
 | Intel Xeon X5570 | SSE4.1 |
 
-### Tested operation systems
+### Tested operating systems
 
 - Mac OS X Sierra / High Sierra
 - Linux
@@ -401,15 +420,6 @@ Instead Clang-cl is used, which is binary compatible with MSVC ([work in progres
 | float16 | zfloat16 | :no_entry: | Not implemented yet |
 | float32| zfloat, zfloat32 | :white_check_mark: |  |
 | float64 | zdouble, zfloat64 | :white_check_mark: | |
-
-
-### Functionality
-* Basic matrix / vector support
-* Basic arithmetics
-* Conditionals
-* Basic functions like abs, min, max, etc...
-* Rounding 
-* Trigonometry is in development
 
 
 ## License
