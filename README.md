@@ -480,7 +480,7 @@ Instead Clang-cl is used, which is binary compatible with MSVC ([work in progres
 
 The library is licensed under the [MIT License](http://opensource.org/licenses/MIT):
 
-Copyright &copy; 2015-2017 Sergej Zuyev
+Copyright &copy; 2015-2018 Sergej Zuyev
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
