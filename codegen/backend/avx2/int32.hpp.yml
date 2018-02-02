@@ -72,7 +72,7 @@ modules:
     vgather:
       prefix: "template<typename RandomIt> friend"
       args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
-      body: _mm256_i32gather_epi32((__m256i*)&(*input), index, 4)
+      body: _mm256_i32gather_epi32(&(*input), index, 4)
 
   boolean_io:
     vstore:
