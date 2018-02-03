@@ -293,3 +293,11 @@ fabric.properties
 *.pyc
 /__pycache__/
 *.DS_Store
+
+
+# documentation output
+docs/_build/
+docs/_static/
+docs/_templates/
+docs/api/
+docs/doxyoutput/
