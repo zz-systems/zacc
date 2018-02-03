@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
+#include "traits/logical.hpp"
+#include "traits/numeric.hpp"
+#include "traits/math.hpp"
 #include "traits/io.hpp"
-#include "traits/comparable.hpp"
+#include "traits/conditional.hpp"
+#include "traits/bitwise_shift.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/equatable.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/math.hpp"
-#include "traits/conditional.hpp"
-#include "traits/numeric.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/logical.hpp"
+#include "traits/comparable.hpp"
 
 /**
  * @brief int16 implementation for the sse target
@@ -100,9 +100,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int16
-             * @remark sse - 
+             * @remark sse 
              */
             constexpr __impl(  ) : base_t()  {
 
@@ -112,9 +112,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int16
-             * @remark sse - 
+             * @remark sse 
              */
             constexpr __impl(__m128i value) : base_t(value)  {
 
@@ -124,9 +124,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int16
-             * @remark sse - 
+             * @remark sse 
              */
             constexpr __impl(short value) : base_t(_mm_set1_epi16(value))  {
 
@@ -136,9 +136,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int16
-             * @remark sse - 
+             * @remark sse 
              */
             constexpr __impl(const std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> &value) : base_t(_mm_loadu_si128((__m128i *) value.data()))  {
 
@@ -148,9 +148,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int16
-             * @remark sse - 
+             * @remark sse 
              */
             constexpr __impl(int16_t _7, int16_t _6, int16_t _5, int16_t _4, int16_t _3, int16_t _2, int16_t _1, int16_t _0) : base_t(_mm_set_epi16(_0, _1, _2, _3, _4, _5, _6, _7))  {
 
@@ -207,9 +207,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int16
-             * @remark sse - 
+             * @remark sse 
              */
             constexpr __impl(  ) : base_t()  {
 
@@ -219,9 +219,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int16
-             * @remark sse - 
+             * @remark sse 
              */
             constexpr __impl(zval_t value) : base_t(value)  {
 
@@ -231,9 +231,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int16
-             * @remark sse - 
+             * @remark sse 
              */
             constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
@@ -291,9 +291,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
@@ -304,9 +304,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
@@ -365,9 +365,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief math sse4 branch
+             * @brief math sse4
              * @relates int16
-             * @remark sse - sse4
+             * @remark sse sse4
              */
             template<typename T = zint16<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE3>, T> vabs(composed_t one)  {
 
@@ -378,9 +378,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             template<typename T = zint16<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE3>, T> vabs(composed_t one)  {
 
@@ -391,9 +391,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief math sse4 branch
+             * @brief math sse4
              * @relates int16
-             * @remark sse - sse4
+             * @remark sse sse4
              */
             template<typename T = zint16<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vmin(composed_t one, composed_t other)  {
 
@@ -404,9 +404,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             template<typename T = zint16<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vmin(composed_t one, composed_t other)  {
 
@@ -417,9 +417,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief math sse4 branch
+             * @brief math sse4
              * @relates int16
-             * @remark sse - sse4
+             * @remark sse sse4
              */
             template<typename T = zint16<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vmax(composed_t one, composed_t other)  {
 
@@ -430,9 +430,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             template<typename T = zint16<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vmax(composed_t one, composed_t other)  {
 
@@ -443,9 +443,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  {
 
@@ -552,9 +552,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vneg(composed_t one)  {
 
@@ -565,9 +565,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vadd(composed_t one, composed_t other)  {
 
@@ -578,9 +578,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vsub(composed_t one, composed_t other)  {
 
@@ -591,9 +591,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vmul(composed_t one, composed_t other)  {
 
@@ -604,9 +604,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vdiv(composed_t one, composed_t other)  {
 
@@ -621,9 +621,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vmod(composed_t one, composed_t other)  {
 
@@ -682,9 +682,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vbneg(composed_t one)  {
 
@@ -697,9 +697,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vbor(composed_t one, composed_t other)  {
 
@@ -710,9 +710,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vband(composed_t one, composed_t other)  {
 
@@ -723,9 +723,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vbxor(composed_t one, composed_t other)  {
 
@@ -736,9 +736,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise sse4 branch
+             * @brief bitwise sse4
              * @relates int16
-             * @remark sse - sse4
+             * @remark sse sse4
              */
             template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
 
@@ -749,9 +749,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
 
@@ -812,9 +812,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief bitwise_shift default branch
+             * @brief bitwise_shift default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vbsll(composed_t one, composed_t other)  {
 
@@ -825,9 +825,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise_shift default branch
+             * @brief bitwise_shift default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vbsrl(composed_t one, composed_t other)  {
 
@@ -838,9 +838,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise_shift default branch
+             * @brief bitwise_shift default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vbslli(const composed_t one, const size_t other)  {
 
@@ -851,9 +851,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise_shift default branch
+             * @brief bitwise_shift default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend zint16<base_t::features> vbsrli(const composed_t one, const size_t other)  {
 
@@ -912,9 +912,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief comparable default branch
+             * @brief comparable default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vgt(composed_t one, composed_t other)  {
 
@@ -925,9 +925,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vlt(composed_t one, composed_t other)  {
 
@@ -938,9 +938,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vge(composed_t one, composed_t other)  {
 
@@ -951,9 +951,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vle(composed_t one, composed_t other)  {
 
@@ -1012,9 +1012,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vlneg(composed_t one)  {
 
@@ -1025,9 +1025,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vlor(composed_t one, composed_t other)  {
 
@@ -1038,9 +1038,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vland(composed_t one, composed_t other)  {
 
@@ -1099,9 +1099,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief equatable default branch
+             * @brief equatable default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> veq(composed_t one, composed_t other)  {
 
@@ -1112,9 +1112,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief equatable default branch
+             * @brief equatable default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vneq(composed_t one, composed_t other)  {
 
@@ -1173,9 +1173,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief conditional sse4 branch
+             * @brief conditional sse4
              * @relates int16
-             * @remark sse - sse4
+             * @remark sse sse4
              */
             template<typename T = zint16<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
@@ -1186,9 +1186,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief conditional default branch
+             * @brief conditional default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             template<typename T = zint16<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
@@ -1247,9 +1247,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
@@ -1260,9 +1260,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
@@ -1321,9 +1321,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vbneg(composed_t one)  {
 
@@ -1336,9 +1336,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vbor(composed_t one, composed_t other)  {
 
@@ -1349,9 +1349,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vband(composed_t one, composed_t other)  {
 
@@ -1362,9 +1362,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vbxor(composed_t one, composed_t other)  {
 
@@ -1375,9 +1375,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise sse4 branch
+             * @brief bitwise sse4
              * @relates int16
-             * @remark sse - sse4
+             * @remark sse sse4
              */
             template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
 
@@ -1388,9 +1388,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
 
@@ -1451,9 +1451,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vlneg(composed_t one)  {
 
@@ -1464,9 +1464,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vlor(composed_t one, composed_t other)  {
 
@@ -1477,9 +1477,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vland(composed_t one, composed_t other)  {
 
@@ -1538,9 +1538,9 @@ namespace zacc { namespace backend { namespace sse {
             FORWARD(__impl);
 
             /**
-             * @brief equatable default branch
+             * @brief equatable default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> veq(composed_t one, composed_t other)  {
 
@@ -1551,9 +1551,9 @@ namespace zacc { namespace backend { namespace sse {
 
 
             /**
-             * @brief equatable default branch
+             * @brief equatable default
              * @relates int16
-             * @remark sse - default
+             * @remark sse default
              */
             friend bint16<base_t::features> vneq(composed_t one, composed_t other)  {
 

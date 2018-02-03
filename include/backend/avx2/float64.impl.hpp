@@ -42,14 +42,14 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/math.hpp"
-#include "traits/io.hpp"
-#include "traits/logical.hpp"
-#include "traits/conditional.hpp"
 #include "traits/comparable.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/numeric.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/io.hpp"
+#include "traits/conditional.hpp"
+#include "traits/logical.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/math.hpp"
 #include "traits/equatable.hpp"
 
 /**
@@ -99,9 +99,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates float64
-             * @remark avx2 - 
+             * @remark avx2 
              */
             constexpr __impl(  ) : base_t()  {
 
@@ -111,9 +111,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates float64
-             * @remark avx2 - 
+             * @remark avx2 
              */
             constexpr __impl(__m256 value) : base_t(_mm256_cvtps_pd(_mm256_castps256_ps128(value)))  {
 
@@ -123,9 +123,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates float64
-             * @remark avx2 - 
+             * @remark avx2 
              */
             constexpr __impl(__m256d value) : base_t(value)  {
 
@@ -135,9 +135,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates float64
-             * @remark avx2 - 
+             * @remark avx2 
              */
             constexpr __impl(__m256i value) : base_t(_mm256_cvtepi32_pd(_mm256_castsi256_si128(value)))  {
 
@@ -147,9 +147,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates float64
-             * @remark avx2 - 
+             * @remark avx2 
              */
             constexpr __impl(double value) : base_t(_mm256_set1_pd(value))  {
 
@@ -159,9 +159,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates float64
-             * @remark avx2 - 
+             * @remark avx2 
              */
             constexpr __impl(std::array<typename base_t::element_t, base_t::size()> value) : base_t(_mm256_loadu_pd(value.data()))  {
 
@@ -171,9 +171,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates float64
-             * @remark avx2 - 
+             * @remark avx2 
              */
             constexpr __impl(double _3, double _2, double _1, double _0) : base_t(_mm256_set_pd(_0, _1, _2, _3))  {
 
@@ -230,9 +230,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates float64
-             * @remark avx2 - 
+             * @remark avx2 
              */
             constexpr __impl(  ) : base_t()  {
 
@@ -242,9 +242,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates float64
-             * @remark avx2 - 
+             * @remark avx2 
              */
             constexpr __impl(zval_t value) : base_t(value)  {
 
@@ -254,9 +254,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates float64
-             * @remark avx2 - 
+             * @remark avx2 
              */
             constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
@@ -314,9 +314,9 @@ namespace zacc { namespace backend { namespace avx2 {
             FORWARD(__impl);
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
@@ -327,9 +327,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
@@ -340,9 +340,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             template<typename RandomIt> friend zfloat64<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
 
@@ -402,9 +402,9 @@ namespace zacc { namespace backend { namespace avx2 {
             FORWARD(__impl);
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vabs(composed_t one)  {
 
@@ -415,9 +415,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vmin(composed_t one, composed_t other)  {
 
@@ -428,9 +428,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vmax(composed_t one, composed_t other)  {
 
@@ -441,9 +441,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  {
 
@@ -454,9 +454,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vrcp(composed_t one)  {
 
@@ -467,9 +467,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vtrunc(composed_t one)  {
 
@@ -480,9 +480,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vfloor(composed_t one)  {
 
@@ -493,9 +493,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vceil(composed_t one)  {
 
@@ -506,9 +506,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vround(composed_t one)  {
 
@@ -519,9 +519,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vsqrt(composed_t one)  {
 
@@ -628,9 +628,9 @@ namespace zacc { namespace backend { namespace avx2 {
             FORWARD(__impl);
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vneg(composed_t one)  {
 
@@ -641,9 +641,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vadd(composed_t one, composed_t other)  {
 
@@ -654,9 +654,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vsub(composed_t one, composed_t other)  {
 
@@ -667,9 +667,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vmul(composed_t one, composed_t other)  {
 
@@ -680,9 +680,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vdiv(composed_t one, composed_t other)  {
 
@@ -693,9 +693,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  {
 
@@ -706,9 +706,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  {
 
@@ -767,9 +767,9 @@ namespace zacc { namespace backend { namespace avx2 {
             FORWARD(__impl);
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vbneg(composed_t one)  {
 
@@ -782,9 +782,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vband(composed_t one, composed_t other)  {
 
@@ -795,9 +795,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vbor(composed_t one, composed_t other)  {
 
@@ -808,9 +808,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vbxor(composed_t one, composed_t other)  {
 
@@ -821,9 +821,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise avx2 branch
+             * @brief bitwise avx2
              * @relates float64
-             * @remark avx2 - avx2
+             * @remark avx2 avx2
              */
             template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::AVX2>, T> is_set(composed_t one)  {
 
@@ -835,9 +835,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::AVX2>, T> is_set(composed_t one)  {
 
@@ -898,9 +898,9 @@ namespace zacc { namespace backend { namespace avx2 {
             FORWARD(__impl);
 
             /**
-             * @brief comparable default branch
+             * @brief comparable default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vgt(composed_t one, composed_t other)  {
 
@@ -911,9 +911,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vlt(composed_t one, composed_t other)  {
 
@@ -924,9 +924,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vge(composed_t one, composed_t other)  {
 
@@ -937,9 +937,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vle(composed_t one, composed_t other)  {
 
@@ -998,9 +998,9 @@ namespace zacc { namespace backend { namespace avx2 {
             FORWARD(__impl);
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vlneg(composed_t one)  {
 
@@ -1011,9 +1011,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vlor(composed_t one, composed_t other)  {
 
@@ -1024,9 +1024,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vland(composed_t one, composed_t other)  {
 
@@ -1085,9 +1085,9 @@ namespace zacc { namespace backend { namespace avx2 {
             FORWARD(__impl);
 
             /**
-             * @brief equatable default branch
+             * @brief equatable default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> veq(composed_t one, composed_t other)  {
 
@@ -1098,9 +1098,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief equatable default branch
+             * @brief equatable default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vneq(composed_t one, composed_t other)  {
 
@@ -1159,9 +1159,9 @@ namespace zacc { namespace backend { namespace avx2 {
             FORWARD(__impl);
 
             /**
-             * @brief conditional default branch
+             * @brief conditional default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend zfloat64<base_t::features> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
@@ -1220,9 +1220,9 @@ namespace zacc { namespace backend { namespace avx2 {
             FORWARD(__impl);
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
@@ -1233,9 +1233,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
@@ -1246,9 +1246,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             template<typename RandomIt> friend bfloat64<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
 
@@ -1308,9 +1308,9 @@ namespace zacc { namespace backend { namespace avx2 {
             FORWARD(__impl);
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vbneg(composed_t one)  {
 
@@ -1323,9 +1323,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vband(composed_t one, composed_t other)  {
 
@@ -1336,9 +1336,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vbor(composed_t one, composed_t other)  {
 
@@ -1349,9 +1349,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vbxor(composed_t one, composed_t other)  {
 
@@ -1362,9 +1362,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise avx2 branch
+             * @brief bitwise avx2
              * @relates float64
-             * @remark avx2 - avx2
+             * @remark avx2 avx2
              */
             template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::AVX2>, T> is_set(composed_t one)  {
 
@@ -1376,9 +1376,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::AVX2>, T> is_set(composed_t one)  {
 
@@ -1439,9 +1439,9 @@ namespace zacc { namespace backend { namespace avx2 {
             FORWARD(__impl);
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vlneg(composed_t one)  {
 
@@ -1452,9 +1452,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vlor(composed_t one, composed_t other)  {
 
@@ -1465,9 +1465,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vland(composed_t one, composed_t other)  {
 
@@ -1526,9 +1526,9 @@ namespace zacc { namespace backend { namespace avx2 {
             FORWARD(__impl);
 
             /**
-             * @brief equatable default branch
+             * @brief equatable default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> veq(composed_t one, composed_t other)  {
 
@@ -1539,9 +1539,9 @@ namespace zacc { namespace backend { namespace avx2 {
 
 
             /**
-             * @brief equatable default branch
+             * @brief equatable default
              * @relates float64
-             * @remark avx2 - default
+             * @remark avx2 default
              */
             friend bfloat64<base_t::features> vneq(composed_t one, composed_t other)  {
 

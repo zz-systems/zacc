@@ -42,16 +42,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/equatable.hpp"
-#include "traits/comparable.hpp"
-#include "traits/math.hpp"
-#include "traits/numeric.hpp"
-#include "traits/conditional.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/io.hpp"
 #include "traits/arithmetic.hpp"
+#include "traits/numeric.hpp"
+#include "traits/math.hpp"
+#include "traits/comparable.hpp"
 #include "traits/logical.hpp"
 #include "traits/bitwise_shift.hpp"
+#include "traits/conditional.hpp"
+#include "traits/equatable.hpp"
 
 /**
  * @brief int32 implementation for the scalar target
@@ -100,9 +100,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int32
-             * @remark scalar - 
+             * @remark scalar 
              */
             constexpr __impl(  ) : base_t()  {
 
@@ -112,9 +112,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int32
-             * @remark scalar - 
+             * @remark scalar 
              */
             constexpr __impl(int32_t value) : base_t(value)  {
 
@@ -124,9 +124,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int32
-             * @remark scalar - 
+             * @remark scalar 
              */
             template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> __impl(const T &value) : base_t(value.value())  {
 
@@ -136,9 +136,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int32
-             * @remark scalar - 
+             * @remark scalar 
              */
             constexpr __impl(std::array<typename base_t::element_t, base_t::size()> value) : base_t(value[0])  {
 
@@ -195,9 +195,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int32
-             * @remark scalar - 
+             * @remark scalar 
              */
             constexpr __impl(  ) : base_t()  {
 
@@ -207,9 +207,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int32
-             * @remark scalar - 
+             * @remark scalar 
              */
             constexpr __impl(zval_t value) : base_t(value.value() != 0)  {
 
@@ -219,9 +219,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief construction  branch
+             * @brief construction 
              * @relates int32
-             * @remark scalar - 
+             * @remark scalar 
              */
             constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
 
@@ -279,9 +279,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
@@ -292,9 +292,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
@@ -305,9 +305,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             template<typename RandomIt> friend zint32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
 
@@ -366,9 +366,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vabs(composed_t one)  {
 
@@ -379,9 +379,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vmin(composed_t one, composed_t other)  {
 
@@ -392,9 +392,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vmax(composed_t one, composed_t other)  {
 
@@ -405,9 +405,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  {
 
@@ -418,9 +418,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief math default branch
+             * @brief math default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vsqrt(composed_t one)  {
 
@@ -527,9 +527,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vneg(composed_t one)  {
 
@@ -540,9 +540,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vadd(composed_t one, composed_t other)  {
 
@@ -553,9 +553,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vsub(composed_t one, composed_t other)  {
 
@@ -566,9 +566,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vmul(composed_t one, composed_t other)  {
 
@@ -579,9 +579,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vdiv(composed_t one, composed_t other)  {
 
@@ -592,9 +592,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vmod(composed_t one, composed_t other)  {
 
@@ -653,9 +653,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vbneg(composed_t one)  {
 
@@ -666,9 +666,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vband(composed_t one, composed_t other)  {
 
@@ -679,9 +679,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vbor(composed_t one, composed_t other)  {
 
@@ -692,9 +692,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vbxor(composed_t one, composed_t other)  {
 
@@ -705,9 +705,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bool is_set(composed_t one)  {
 
@@ -766,9 +766,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief bitwise_shift default branch
+             * @brief bitwise_shift default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vbsll(composed_t one, composed_t other)  {
 
@@ -779,9 +779,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise_shift default branch
+             * @brief bitwise_shift default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vbsrl(composed_t one, composed_t other)  {
 
@@ -792,9 +792,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise_shift default branch
+             * @brief bitwise_shift default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vbslli(const composed_t one, const size_t other)  {
 
@@ -805,9 +805,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise_shift default branch
+             * @brief bitwise_shift default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vbsrli(const composed_t one, const size_t other)  {
 
@@ -866,9 +866,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief comparable default branch
+             * @brief comparable default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vgt(composed_t one, composed_t other)  {
 
@@ -879,9 +879,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vlt(composed_t one, composed_t other)  {
 
@@ -892,9 +892,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vge(composed_t one, composed_t other)  {
 
@@ -905,9 +905,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief comparable default branch
+             * @brief comparable default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vle(composed_t one, composed_t other)  {
 
@@ -966,9 +966,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vlneg(composed_t one)  {
 
@@ -979,9 +979,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vlor(composed_t one, composed_t other)  {
 
@@ -992,9 +992,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vland(composed_t one, composed_t other)  {
 
@@ -1053,9 +1053,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief equatable default branch
+             * @brief equatable default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> veq(composed_t one, composed_t other)  {
 
@@ -1066,9 +1066,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief equatable default branch
+             * @brief equatable default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vneq(composed_t one, composed_t other)  {
 
@@ -1127,9 +1127,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief conditional default branch
+             * @brief conditional default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend zint32<base_t::features> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
 
@@ -1188,9 +1188,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
 
@@ -1201,9 +1201,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
 
@@ -1214,9 +1214,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief io default branch
+             * @brief io default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             template<typename RandomIt> friend bint32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
 
@@ -1275,9 +1275,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vbneg(composed_t one)  {
 
@@ -1288,9 +1288,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vband(composed_t one, composed_t other)  {
 
@@ -1301,9 +1301,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vbor(composed_t one, composed_t other)  {
 
@@ -1314,9 +1314,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vbxor(composed_t one, composed_t other)  {
 
@@ -1327,9 +1327,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bool is_set(composed_t one)  {
 
@@ -1388,9 +1388,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vlneg(composed_t one)  {
 
@@ -1401,9 +1401,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vlor(composed_t one, composed_t other)  {
 
@@ -1414,9 +1414,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vland(composed_t one, composed_t other)  {
 
@@ -1475,9 +1475,9 @@ namespace zacc { namespace backend { namespace scalar {
             FORWARD(__impl);
 
             /**
-             * @brief equatable default branch
+             * @brief equatable default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> veq(composed_t one, composed_t other)  {
 
@@ -1488,9 +1488,9 @@ namespace zacc { namespace backend { namespace scalar {
 
 
             /**
-             * @brief equatable default branch
+             * @brief equatable default
              * @relates int32
-             * @remark scalar - default
+             * @remark scalar default
              */
             friend bint32<base_t::features> vneq(composed_t one, composed_t other)  {
 

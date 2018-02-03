@@ -33,7 +33,7 @@
 #include <iterator>
 #include <utility>
 #include <iostream>
-#include "type/type_traits.hpp"
+#include "util/type/type_traits.hpp"
 
 namespace zacc {
 

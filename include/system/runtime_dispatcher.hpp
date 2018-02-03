@@ -35,7 +35,7 @@ namespace zacc { namespace system {
     /**
      * @brief Provides functionality to select a branch to run during runtime
      * Inject your own logic via subclassing (crtp) or simply using a type alias
-     * @example using engine_dispatcher = runtime_dispatcher<engine_dispatcher_impl>;
+     * @code using engine_dispatcher = runtime_dispatcher<engine_dispatcher_impl>;
      * @tparam _Impl
      */
     template<typename _Impl>

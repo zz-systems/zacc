@@ -99,9 +99,9 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
                 {% for body in func.bodies %}
 
             /**
-             * @brief {{ module.name }} {{ body.target }} branch
+             * @brief {{ module.name }} {{ body.target }}
              * @relates {{ ast.type.name }}
-             * @remark {{ ast.type.target }} - {{ body.target }}
+             * @remark {{ ast.type.target }} {{ body.target }}
              */
             {{ Functions.render(func.signature, (module, ast, body)) }} {
 
