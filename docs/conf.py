@@ -37,7 +37,8 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
-    #'sphinx.ext.githubpages',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.todo',
     'breathe',
     'exhale'
 ]
@@ -197,7 +198,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
     (master_doc, 'ZACC', 'ZACC Documentation',
-     author, 'ZACC', 'One line description of project.',
+     author, 'ZACC', 'SIMD Abstraction layer.',
      'Miscellaneous'),
 ]
 
