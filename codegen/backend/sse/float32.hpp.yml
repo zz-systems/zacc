@@ -48,7 +48,7 @@ modules:
       #  prefix: "template<typename T, typename = typename std::enable_if_t<std::is_convertible<T, float>::value>>"
       #  init: _mm_set1_ps((float)value)
 
-      - args: "std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> value"
+      - args: "std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size> value"
         init: _mm_load_ps(value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -64,7 +64,7 @@ modules:
   io:
     vstore: &io_store
       prefix: "template<typename OutputIt> friend"
-      args: "OutputIt result, composed_t input"
+      args: "OutputIt result, Composed input"
       returns: void
       body: _mm_storeu_ps(&(*result), input)
     vstream:
@@ -73,7 +73,7 @@ modules:
 
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
+      args:   "RandomIt input, const zint32<Base::features> &index, Composed"
       body:
         - auto i = index.data();
         - return _mm_set_ps(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
@@ -210,10 +210,10 @@ modules:
       body: _mm_cmpeq_ps(one, _mm_setzero_ps());
     vlor:
       body: _mm_or_ps
-      #returns: boolvec<composed_t>
+      #returns: boolvec<Composed>
     vland:
       body: _mm_and_ps
-      #returns: boolvec<composed_t>
+      #returns: boolvec<Composed>
 #-----------------------------------------------------------------------------------------------------------------------
   equatable:
     veq:   _mm_cmpeq_ps

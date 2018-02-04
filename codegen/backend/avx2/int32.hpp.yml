@@ -45,7 +45,7 @@ modules:
       - args: [[*scalar_t, value]]
         init: _mm256_set1_epi32(value)
 
-      - args: "std::array<typename base_t::element_t, base_t::size()> value"
+      - args: "std::array<typename Base::element_t, Base::size()> value"
         init: _mm256_loadu_si256((__m256i*)value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -61,7 +61,7 @@ modules:
   io:
     vstore: &io_store
       prefix: "template<typename OutputIt> friend"
-      args: "OutputIt result, composed_t input"
+      args: "OutputIt result, Composed input"
       returns: void
       body: _mm256_storeu_si256((__m256i*)&(*result), input);
     vstream:
@@ -71,13 +71,13 @@ modules:
 
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
+      args:   "RandomIt input, const zint32<Base::features> &index, Composed"
       body: _mm256_i32gather_epi32(&(*input), index, 4)
 
   boolean_io:
     vstore:
       prefix: "template<typename OutputIt> friend"
-      args: "OutputIt result, composed_t input"
+      args: "OutputIt result, Composed input"
       returns: void
       body: _mm256_storeu_si256(&(*result), input);
 
@@ -129,10 +129,10 @@ modules:
     vbsll:  _mm256_sll_epi32
     vbsrl:  _mm256_srl_epi32
     vbslli:
-      args: { raw: "const composed_t one, const size_t other" }
+      args: { raw: "const Composed one, const size_t other" }
       body: _mm256_slli_epi32(one, other)
     vbsrli:
-      args: { raw: "const composed_t one, const size_t other" }
+      args: { raw: "const Composed one, const size_t other" }
       body: _mm256_srli_epi32(one, other)
 #-----------------------------------------------------------------------------------------------------------------------
   logical:

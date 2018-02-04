@@ -31,15 +31,15 @@ namespace zacc { namespace traits {
 
     /**
      * @brief provides logical operator definitions
-     * @tparam base_t base type (e.g previous trait)
-     * @tparam composed_t final composed type (e.g zfloat32)
+     * @tparam Base base type (e.g previous trait)
+     * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename base_t, typename composed_t>
-    struct logical : public base_t {
+    template<typename Base, typename Composed>
+    struct logical : public Base {
         FORWARD(logical);
 
-        using zval_t = typename base_t::zval_t;
-        using bval_t = typename base_t::bval_t;
+        using zval_t = typename Base::zval_t;
+        using bval_t = typename Base::bval_t;
 
         bval_t operator!() {
             return bval_t(vlneg(*this), last_operation::logic);
@@ -55,15 +55,15 @@ namespace zacc { namespace traits {
             return bval_t(vland(*this, static_cast<bval_t>(other)), last_operation::logic);
         }
 
-//        friend bval_t operator!(const composed_t one) {
+//        friend bval_t operator!(const Composed one) {
 //            return bval_t(vlneg(one), last_operation::logic);
 //        }
 //
-//        friend bval_t operator||(const composed_t one, const composed_t other) {
+//        friend bval_t operator||(const Composed one, const Composed other) {
 //            return bval_t(vlor(one, other), last_operation::logic);
 //        }
 //
-//        friend bval_t operator&&(const composed_t one, const composed_t other) {
+//        friend bval_t operator&&(const Composed one, const Composed other) {
 //            return bval_t(vland(one, other), last_operation::logic);
 //        }
 

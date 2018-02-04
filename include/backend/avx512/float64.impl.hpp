@@ -74,7 +74,7 @@ namespace zacc { namespace backend { namespace avx512 {
      * @relates float64
      * @remark avx512
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct float64_construction
     {
 
@@ -83,10 +83,10 @@ namespace zacc { namespace backend { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
-            using mask_t = typename base_t::mask_t;
+            using mask_t = typename Base::mask_t;
 
 
 
@@ -95,7 +95,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            __impl() : base_t() {
+            __impl() : Base() {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS()");
 
@@ -107,7 +107,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            __impl(__m512 value) : base_t(_mm512_cvtps_pd(value)) {
+            __impl(__m512 value) : Base(_mm512_cvtps_pd(value)) {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(__m512 value)");
 
@@ -119,7 +119,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            __impl(__m512d value) : base_t(value) {
+            __impl(__m512d value) : Base(value) {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(__m512d value)");
 
@@ -131,7 +131,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            __impl(__m512i value) : base_t(_mm512_cvtepi32_pd(value)) {
+            __impl(__m512i value) : Base(_mm512_cvtepi32_pd(value)) {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(__m512i value)");
 
@@ -143,7 +143,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            __impl(double value) : base_t(_mm512_set1_pd(value)) {
+            __impl(double value) : Base(_mm512_set1_pd(value)) {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(double value)");
 
@@ -155,9 +155,9 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            __impl(std::array<typename base_t::scalar_t, base_t::dim> value) : base_t(_mm512_load_pd(value.data())) {
+            __impl(std::array<typename Base::scalar_t, Base::dim> value) : Base(_mm512_load_pd(value.data())) {
 
-                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(std::array<typename base_t::scal..)");
+                ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(std::array<typename Base::scal..)");
 
             }
 
@@ -167,7 +167,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            __impl(double arg7, double arg6, double arg5, double arg4, double arg3, double arg2, double arg1, double arg0) : base_t(_mm512_set_pd(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)) {
+            __impl(double arg7, double arg6, double arg5, double arg4, double arg3, double arg2, double arg1, double arg0) : Base(_mm512_set_pd(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7)) {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "CONS(double arg7, double arg6, double..)");
 
@@ -182,10 +182,10 @@ namespace zacc { namespace backend { namespace avx512 {
          */
 
 
-        template<typename base_t>
-        //using impl = traits::construction<__impl<base_t>, zfloat64<base_t::arch>>;
+        template<typename Base>
+        //using impl = traits::construction<__impl<Base>, zfloat64<Base::arch>>;
 
-        using impl = traits::construction<__impl<base_t>, zfloat64<base_t::arch>>;
+        using impl = traits::construction<__impl<Base>, zfloat64<Base::arch>>;
 
     };
 
@@ -203,7 +203,7 @@ namespace zacc { namespace backend { namespace avx512 {
      * @relates float64
      * @remark avx512
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct float64_io
     {
 
@@ -212,10 +212,10 @@ namespace zacc { namespace backend { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
-            using mask_t = typename base_t::mask_t;
+            using mask_t = typename Base::mask_t;
 
             FORWARD(__impl);
 
@@ -225,7 +225,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            void vstore(typename base_t::extracted_t &target, composed_t source) const noexcept {
+            void vstore(typename Base::extracted_t &target, Composed source) const noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vstore");
 
@@ -238,7 +238,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            void vstream(typename base_t::extracted_t &target, composed_t source) const noexcept {
+            void vstream(typename Base::extracted_t &target, Composed source) const noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vstream");
 
@@ -254,10 +254,10 @@ namespace zacc { namespace backend { namespace avx512 {
          */
 
 
-        template<typename base_t>
-        //using impl = traits::io<__impl<base_t>, zfloat64<base_t::arch>>;
+        template<typename Base>
+        //using impl = traits::io<__impl<Base>, zfloat64<Base::arch>>;
 
-        using impl = traits::io<__impl<base_t>, zfloat64<base_t::arch>>;
+        using impl = traits::io<__impl<Base>, zfloat64<Base::arch>>;
 
     };
 
@@ -275,7 +275,7 @@ namespace zacc { namespace backend { namespace avx512 {
      * @relates float64
      * @remark avx512
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct float64_arithmetic
     {
 
@@ -284,10 +284,10 @@ namespace zacc { namespace backend { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
-            using mask_t = typename base_t::mask_t;
+            using mask_t = typename Base::mask_t;
 
             FORWARD(__impl);
 
@@ -297,7 +297,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vneg(composed_t one)  noexcept {
+            friend zfloat64<Base::arch> vneg(Composed one)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vneg");
 
@@ -310,7 +310,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vadd(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> vadd(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vadd");
 
@@ -323,7 +323,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vsub(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> vsub(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vsub");
 
@@ -336,7 +336,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vmul(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> vmul(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vmul");
 
@@ -349,7 +349,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vdiv(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> vdiv(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vdiv");
 
@@ -365,10 +365,10 @@ namespace zacc { namespace backend { namespace avx512 {
          */
 
 
-        template<typename base_t>
-        //using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::arch>>;
+        template<typename Base>
+        //using impl = traits::arithmetic<__impl<Base>, zfloat64<Base::arch>>;
 
-        using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::arch>>;
+        using impl = traits::arithmetic<__impl<Base>, zfloat64<Base::arch>>;
 
     };
 
@@ -386,7 +386,7 @@ namespace zacc { namespace backend { namespace avx512 {
      * @relates float64
      * @remark avx512
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct float64_bitwise
     {
 
@@ -395,10 +395,10 @@ namespace zacc { namespace backend { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
-            using mask_t = typename base_t::mask_t;
+            using mask_t = typename Base::mask_t;
 
             FORWARD(__impl);
 
@@ -408,7 +408,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vneg(composed_t one)  noexcept {
+            friend zfloat64<Base::arch> vneg(Composed one)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vneg");
 
@@ -423,7 +423,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vand(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> vand(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vand");
 
@@ -436,7 +436,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> or(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> or(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "or");
 
@@ -449,7 +449,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> xor(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> xor(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "xor");
 
@@ -465,10 +465,10 @@ namespace zacc { namespace backend { namespace avx512 {
          */
 
 
-        template<typename base_t>
-        //using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::arch>>;
+        template<typename Base>
+        //using impl = traits::bitwise<__impl<Base>, zfloat64<Base::arch>>;
 
-        using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::arch>>;
+        using impl = traits::bitwise<__impl<Base>, zfloat64<Base::arch>>;
 
     };
 
@@ -486,7 +486,7 @@ namespace zacc { namespace backend { namespace avx512 {
      * @relates float64
      * @remark avx512
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct float64_logical
     {
 
@@ -495,10 +495,10 @@ namespace zacc { namespace backend { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
-            using mask_t = typename base_t::mask_t;
+            using mask_t = typename Base::mask_t;
 
             FORWARD(__impl);
 
@@ -508,7 +508,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vneg(composed_t one)  noexcept {
+            friend zfloat64<Base::arch> vneg(Composed one)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vneg");
 
@@ -523,7 +523,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> or(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> or(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "or");
 
@@ -536,7 +536,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vand(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> vand(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vand");
 
@@ -552,10 +552,10 @@ namespace zacc { namespace backend { namespace avx512 {
          */
 
 
-        template<typename base_t>
-        //using impl = traits::logical<__impl<base_t>, bfloat64<base_t::arch>>;
+        template<typename Base>
+        //using impl = traits::logical<__impl<Base>, bfloat64<Base::arch>>;
 
-        using impl = traits::logical<__impl<base_t>, zfloat64<base_t::arch>>;
+        using impl = traits::logical<__impl<Base>, zfloat64<Base::arch>>;
 
     };
 
@@ -573,7 +573,7 @@ namespace zacc { namespace backend { namespace avx512 {
      * @relates float64
      * @remark avx512
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct float64_comparison
     {
 
@@ -582,10 +582,10 @@ namespace zacc { namespace backend { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
-            using mask_t = typename base_t::mask_t;
+            using mask_t = typename Base::mask_t;
 
             FORWARD(__impl);
 
@@ -595,7 +595,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> veq(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> veq(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "veq");
 
@@ -608,7 +608,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vneq(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> vneq(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vneq");
 
@@ -621,7 +621,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vgt(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> vgt(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vgt");
 
@@ -634,7 +634,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vlt(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> vlt(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vlt");
 
@@ -647,7 +647,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vge(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> vge(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vge");
 
@@ -660,7 +660,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vle(composed_t one, composed_t other)  noexcept {
+            friend zfloat64<Base::arch> vle(Composed one, Composed other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vle");
 
@@ -676,10 +676,10 @@ namespace zacc { namespace backend { namespace avx512 {
          */
 
 
-        template<typename base_t>
-        //using impl = traits::comparable<__impl<base_t>, zfloat64<base_t::arch>>;
+        template<typename Base>
+        //using impl = traits::comparable<__impl<Base>, zfloat64<Base::arch>>;
 
-        using impl = traits::comparable<__impl<base_t>, zfloat64<base_t::arch>>;
+        using impl = traits::comparable<__impl<Base>, zfloat64<Base::arch>>;
 
     };
 
@@ -697,7 +697,7 @@ namespace zacc { namespace backend { namespace avx512 {
      * @relates float64
      * @remark avx512
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct float64_conditional
     {
 
@@ -706,10 +706,10 @@ namespace zacc { namespace backend { namespace avx512 {
          * @relates float64
          * @remark avx512
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
-            using mask_t = typename base_t::mask_t;
+            using mask_t = typename Base::mask_t;
 
             FORWARD(__impl);
 
@@ -719,7 +719,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float64
              * @remark avx512 - default
              */
-            friend zfloat64<base_t::arch> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            friend zfloat64<Base::arch> vsel(Composed condition, Composed if_value, Composed else_value)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float64.impl", __LINE__, "zfloat64(double[8])", "default", "vsel");
 
@@ -735,10 +735,10 @@ namespace zacc { namespace backend { namespace avx512 {
          */
 
 
-        template<typename base_t>
-        //using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::arch>>;
+        template<typename Base>
+        //using impl = traits::conditional<__impl<Base>, zfloat64<Base::arch>>;
 
-        using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::arch>>;
+        using impl = traits::conditional<__impl<Base>, zfloat64<Base::arch>>;
 
     };
 

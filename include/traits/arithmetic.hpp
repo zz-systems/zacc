@@ -31,22 +31,22 @@ namespace zacc { namespace traits {
 
     /**
      * @brief provides arithmetic operator definitions
-     * @tparam base_t base type (e.g previous trait)
-     * @tparam composed_t final composed type (e.g zfloat32)
+     * @tparam Base base type (e.g previous trait)
+     * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename base_t, typename composed_t>
-    struct arithmetic : public base_t {
+    template<typename Base, typename Composed>
+    struct arithmetic : public Base {
         FORWARD(arithmetic);
 
-        using zval_t = typename base_t::zval_t;
-        using bval_t = typename base_t::bval_t;
+        using zval_t = typename Base::zval_t;
+        using bval_t = typename Base::bval_t;
 
         /**
          * @brief promotion operator for symmetry sake
          * @param one
          * @return a copy of the argument
          */
-        composed_t operator+() {
+        Composed operator+() {
             return *this;
         }
 
@@ -55,7 +55,7 @@ namespace zacc { namespace traits {
          * @param one
          * @return negated value
          */
-        composed_t operator-() {
+        Composed operator-() {
             return vneg(*this);
         }
 
@@ -65,7 +65,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one + other
          */
-        friend composed_t operator+(const composed_t one,const composed_t other) {
+        friend Composed operator+(const Composed one,const Composed other) {
             return vadd(one, other);
         }
 
@@ -75,7 +75,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one - other
          */
-        friend composed_t operator-(const composed_t one,const composed_t other) {
+        friend Composed operator-(const Composed one,const Composed other) {
             return vsub(one, other);
         }
 
@@ -85,7 +85,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one * other
          */
-        friend composed_t operator*(const composed_t one,const composed_t other) {
+        friend Composed operator*(const Composed one,const Composed other) {
             return vmul(one, other);
         }
 
@@ -95,7 +95,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one / other
          */
-        friend composed_t operator/(const composed_t one,const composed_t other) {
+        friend Composed operator/(const Composed one,const Composed other) {
             return vdiv(one, other);
         }
 
@@ -105,7 +105,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one % other
          */
-        friend composed_t operator%(const composed_t one, const composed_t other) {
+        friend Composed operator%(const Composed one, const Composed other) {
             return vmod(one, other);
         }
 
@@ -115,7 +115,7 @@ namespace zacc { namespace traits {
 //         * @param other
 //         * @return one + other
 //         */
-//        composed_t operator+(const composed_t other) {
+//        Composed operator+(const Composed other) {
 //            return vadd(*this, other);
 //        }
 //
@@ -125,7 +125,7 @@ namespace zacc { namespace traits {
 //         * @param other
 //         * @return one - other
 //         */
-//        composed_t operator-(const composed_t other) {
+//        Composed operator-(const Composed other) {
 //            return vsub(*this, other);
 //        }
 //
@@ -135,7 +135,7 @@ namespace zacc { namespace traits {
 //         * @param other
 //         * @return one * other
 //         */
-//        composed_t operator*(const composed_t other) {
+//        Composed operator*(const Composed other) {
 //            return vmul(*this, other);
 //        }
 //
@@ -145,7 +145,7 @@ namespace zacc { namespace traits {
 //         * @param other
 //         * @return one / other
 //         */
-//        composed_t operator/(const composed_t other) {
+//        Composed operator/(const Composed other) {
 //            return vdiv(*this, other);
 //        }
 //
@@ -155,7 +155,7 @@ namespace zacc { namespace traits {
 //         * @param other
 //         * @return one % other
 //         */
-//        composed_t operator%(const composed_t other) {
+//        Composed operator%(const Composed other) {
 //            return vmod(*this, other);
 //        }
 
@@ -167,7 +167,7 @@ namespace zacc { namespace traits {
 //         * @param other
 //         * @return one + other
 //         */
-//        composed_t &operator+=(const composed_t other) {
+//        Composed &operator+=(const Composed other) {
 //            return *this = *this + other;
 //        }
 //
@@ -177,7 +177,7 @@ namespace zacc { namespace traits {
 //         * @param other
 //         * @return one + other
 //         */
-//        composed_t &operator-=(const composed_t other) {
+//        Composed &operator-=(const Composed other) {
 //            *this = *this - other;
 //
 //            return *this;
@@ -189,7 +189,7 @@ namespace zacc { namespace traits {
 //         * @param other
 //         * @return one + other
 //         */
-//        composed_t &operator*=(const composed_t other) {
+//        Composed &operator*=(const Composed other) {
 //            return *this = *this * other;
 //        }
 //
@@ -199,7 +199,7 @@ namespace zacc { namespace traits {
 //         * @param other
 //         * @return one + other
 //         */
-//        composed_t &operator/=(const composed_t other) {
+//        Composed &operator/=(const Composed other) {
 //            return *this = *this / other;
 //        }
 //
@@ -209,7 +209,7 @@ namespace zacc { namespace traits {
 //         * @param other
 //         * @return one + other
 //         */
-//        composed_t &operator%=(const composed_t other) {
+//        Composed &operator%=(const Composed other) {
 //            return *this = *this % other;
 //        }
 
@@ -217,7 +217,7 @@ namespace zacc { namespace traits {
          * @brief prefix increment
          * @return self + 1
          */
-        composed_t &operator++() {
+        Composed &operator++() {
             return vadd(*this, 1);
         }
 
@@ -225,7 +225,7 @@ namespace zacc { namespace traits {
          * @brief postfix increment
          * @return self
          */
-        composed_t operator++(int) {
+        Composed operator++(int) {
             auto temp = *this;
 
             ++(*this);
@@ -237,7 +237,7 @@ namespace zacc { namespace traits {
          * @brief prefix decrement
          * @return self - 1
          */
-        composed_t &operator--() {
+        Composed &operator--() {
             return vsub(*this, 1);
         }
 
@@ -245,7 +245,7 @@ namespace zacc { namespace traits {
          * @brief postfix decrement
          * @return self
          */
-        composed_t operator--(int) {
+        Composed operator--(int) {
             auto temp = *this;
 
             --(*this);

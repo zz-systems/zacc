@@ -32,19 +32,37 @@
 #include "util/macros.hpp"
 
 namespace zacc {
-    template<template<class> class ... policies>
-    struct compose;
 
-    template<template<class> class head,
-            template<class> class ... tail>
-    struct compose<head, tail...> : head<compose<tail...>>
+    /// @cond
+    template<template<class> class ... Policies>
+    struct compose;
+    /// @endcond
+
+    template<template<class> class Head,
+            template<class> class ... Tail>
+    struct compose<Head, Tail...> : Head<compose<Tail...>>
     {
         template<typename... Args>
-        constexpr compose(Args &&...args) : head<compose<tail...>>(std::forward<Args>(args)...)
+        constexpr compose(Args &&...args) : Head<compose<Tail...>>(std::forward<Args>(args)...)
         {}
     };
 
     template<>
     struct compose<>
     {};
+
+    template<typename Base>
+    struct composable
+    {
+        template<typename terminator>
+        struct type :
+                public Base,
+                public terminator
+        {
+            using zval_t = typename Base::zval_t;
+            using bval_t = typename Base::bval_t;
+
+            FORWARD(type);
+        };
+    };
 }

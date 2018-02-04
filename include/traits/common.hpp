@@ -54,19 +54,19 @@ namespace zacc {
     struct iteratable {
         /**
          * @brief iteratable trait implementation
-         * @tparam base_t base type (e.g previous trait)
+         * @tparam Base base type (e.g previous trait)
          */
-        template<typename base_t>
-        struct impl : public base_t
+        template<typename Base>
+        struct impl : public Base
         {
-            using zval_t = typename base_t::zval_t;
-            using bval_t = typename base_t::bval_t;
+            using zval_t = typename Base::zval_t;
+            using bval_t = typename Base::bval_t;
 
 
             FORWARD(impl);
 
 #ifdef EXPERIMENTAL_SNAPSHOT_COPY
-            impl(const zval_t& other) : base_t(other), _has_snapshot(other._has_snapshot)
+            impl(const zval_t& other) : Base(other), _has_snapshot(other._has_snapshot)
             {
                 if(other._has_snapshot)
                 {
@@ -74,7 +74,7 @@ namespace zacc {
                 }
             }
 
-            impl(zval_t&& other) : base_t(std::move(other)), _snapshot(std::move(other._snapshot)), _has_snapshot(other._has_snapshot)
+            impl(zval_t&& other) : Base(std::move(other)), _snapshot(std::move(other._snapshot)), _has_snapshot(other._has_snapshot)
             {
             }
 #endif
@@ -88,7 +88,7 @@ namespace zacc {
                 if(!_has_snapshot)
                 {
 #endif
-                    _snapshot = base_t::data();
+                    _snapshot = Base::data();
 
 #ifdef EXPERIMENTAL_SNAPSHOT_COPY
                     _has_snapshot = true;
@@ -104,7 +104,7 @@ namespace zacc {
             auto end() const { return _snapshot.end(); }
 
         private:
-            mutable typename base_t::extracted_t _snapshot;
+            mutable typename Base::extracted_t _snapshot;
 #ifdef EXPERIMENTAL_SNAPSHOT_COPY
             mutable bool _has_snapshot;
 #endif
@@ -157,14 +157,14 @@ namespace zacc {
     struct printable {
         /**
          * @brief printable trait implementation
-         * @tparam base_t base type (e.g previous trait)
+         * @tparam Base base type (e.g previous trait)
          */
-        template<typename base_t>
-        struct impl : public base_t {
+        template<typename Base>
+        struct impl : public Base {
             FORWARD(impl);
 
-            using zval_t = typename base_t::zval_t;
-            using bval_t = typename base_t::bval_t;
+            using zval_t = typename Base::zval_t;
+            using bval_t = typename Base::bval_t;
 
             /**
              * @brief converts current data to string representation
@@ -173,13 +173,13 @@ namespace zacc {
             std::string to_string() const {
                 std::stringstream ss;
 
-                if (base_t::is_vector)
+                if (Base::is_vector)
                     ss << "[ ";
 
-                for (auto entry : base_t::data())
+                for (auto entry : Base::data())
                     ss << entry << " ";
 
-                if (base_t::is_vector)
+                if (Base::is_vector)
                     ss << "]";
 
                 return ss.str();
@@ -208,14 +208,14 @@ namespace zacc {
 
         /**
          * @brief convertable trait implementation
-         * @tparam base_t base type (e.g previous trait)
+         * @tparam Base base type (e.g previous trait)
          */
-        template<typename base_t>
-        struct impl : public base_t {
+        template<typename Base>
+        struct impl : public Base {
             FORWARD(impl);
 
-            using zval_t = typename base_t::zval_t;
-            using bval_t = typename base_t::bval_t;
+            using zval_t = typename Base::zval_t;
+            using bval_t = typename Base::bval_t;
 
             auto as_bool() const noexcept
             {

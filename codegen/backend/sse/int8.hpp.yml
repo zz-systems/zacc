@@ -39,7 +39,7 @@ modules:
       - args: [[*scalar_t, value]]
         init: _mm_set1_epi8(value)
 
-      - args: "const std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> &value"
+      - args: "const std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size> &value"
         init: _mm_loadu_si128((__m128i*)value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -55,7 +55,7 @@ modules:
   io:
     vstore: &io_store
       prefix: "template<typename OutputIt> friend"
-      args: "OutputIt result, composed_t input"
+      args: "OutputIt result, Composed input"
       returns: void
       body: _mm_storeu_si128((__m128i*)&(*result), input)
     vstream:
@@ -111,8 +111,8 @@ modules:
       body:
         - auto dividend = one.data();
         - auto divisor = other.data();
-        - typename composed_t::extracted_t result;
-        - for (size_t i = 0; i < composed_t::size(); i++) { result[i] = dividend[i] / divisor[i]; }
+        - typename Composed::extracted_t result;
+        - for (size_t i = 0; i < Composed::size(); i++) { result[i] = dividend[i] / divisor[i]; }
         - return result;
     vmod: vsub(one, vmul(other, vdiv(one, other)))
 #-----------------------------------------------------------------------------------------------------------------------
@@ -148,10 +148,10 @@ modules:
 #    vsll:  _mm_sll_epi8
 #    vsrl:  _mm_srl_epi8
 #    vslli:
-#      args: { raw: "const composed_t one, const size_t other" }
+#      args: { raw: "const Composed one, const size_t other" }
 #      body: "_mm_slli_epi8(one, other)"
 #    vsrli:
-#      args: { raw: "const composed_t one, const size_t other" }
+#      args: { raw: "const Composed one, const size_t other" }
 #      body: "_mm_srli_epi8(one, other)"
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
@@ -160,10 +160,10 @@ modules:
       body: _mm_cmpeq_epi8(one, _mm_setzero_si128());
     vlor:
       <<: *bitwise_or
-      #returns: boolvec<composed_t>
+      #returns: boolvec<Composed>
     vland:
       <<: *bitwise_and
-      #returns: boolvec<composed_t>
+      #returns: boolvec<Composed>
 #-----------------------------------------------------------------------------------------------------------------------
   equatable:
     veq:   _mm_cmpeq_epi8

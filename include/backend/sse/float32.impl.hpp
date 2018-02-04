@@ -46,15 +46,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/equatable.hpp"
-#include "traits/conditional.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/math.hpp"
 #include "traits/logical.hpp"
-#include "traits/io.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/comparable.hpp"
+#include "traits/io.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/equatable.hpp"
 #include "traits/numeric.hpp"
+#include "traits/conditional.hpp"
+#include "traits/comparable.hpp"
 
 namespace zacc { namespace backend { namespace sse {
 
@@ -78,7 +78,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zfloat32_construction
     {
 
@@ -87,26 +87,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
 
             /**
@@ -114,7 +114,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse 
              */
-            constexpr __impl(  ) : base_t()  {
+            constexpr __impl(  ) : Base()  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS()");
 
@@ -126,7 +126,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse 
              */
-            constexpr __impl(__m128 value) : base_t(value)  {
+            constexpr __impl(__m128 value) : Base(value)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(__m128)");
 
@@ -138,7 +138,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse 
              */
-            constexpr __impl(__m128d value) : base_t(_mm_cvtpd_ps(value))  {
+            constexpr __impl(__m128d value) : Base(_mm_cvtpd_ps(value))  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(__m128d)");
 
@@ -150,7 +150,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse 
              */
-            constexpr __impl(__m128i value) : base_t(_mm_cvtepi32_ps(value))  {
+            constexpr __impl(__m128i value) : Base(_mm_cvtepi32_ps(value))  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(__m128i)");
 
@@ -162,7 +162,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse 
              */
-            constexpr __impl(float value) : base_t(_mm_set1_ps(value))  {
+            constexpr __impl(float value) : Base(_mm_set1_ps(value))  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(float)");
 
@@ -174,9 +174,9 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse 
              */
-            constexpr __impl(std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> value) : base_t(_mm_load_ps(value.data()))  {
+            constexpr __impl(std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size> value) : Base(_mm_load_ps(value.data()))  {
 
-                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size>)");
+                ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size>)");
 
             }
 
@@ -186,7 +186,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse 
              */
-            constexpr __impl(float _3, float _2, float _1, float _0) : base_t(_mm_set_ps(_0, _1, _2, _3))  {
+            constexpr __impl(float _3, float _2, float _1, float _0) : Base(_mm_set_ps(_0, _1, _2, _3))  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(float, float, float, float)");
 
@@ -218,7 +218,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct bfloat32_construction
     {
 
@@ -227,26 +227,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
 
             /**
@@ -254,7 +254,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse 
              */
-            constexpr __impl(  ) : base_t()  {
+            constexpr __impl(  ) : Base()  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS()");
 
@@ -266,7 +266,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse 
              */
-            constexpr __impl(zval_t value) : base_t(value)  {
+            constexpr __impl(zval_t value) : Base(value)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(zval_t)");
 
@@ -278,7 +278,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse 
              */
-            constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
+            constexpr __impl(bval_t value, last_operation last_op) : Base(value, last_op)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(bval_t value, last_operation)");
 
@@ -310,7 +310,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zfloat32_io
     {
 
@@ -319,26 +319,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -348,7 +348,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vstore");
 
@@ -361,7 +361,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vstream");
 
@@ -374,7 +374,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename RandomIt> friend zfloat32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
+            template<typename RandomIt> friend zfloat32<Base::features> vgather(RandomIt input, const zint32<Base::features> &index, Composed)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vgather");
 
@@ -408,7 +408,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zfloat32_math
     {
 
@@ -417,26 +417,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -446,7 +446,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vabs(composed_t one)  {
+            friend zfloat32<Base::features> vabs(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vabs");
 
@@ -459,7 +459,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vmin(composed_t one, composed_t other)  {
+            friend zfloat32<Base::features> vmin(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vmin");
 
@@ -472,7 +472,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vmax(composed_t one, composed_t other)  {
+            friend zfloat32<Base::features> vmax(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vmax");
 
@@ -485,7 +485,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  {
+            friend zfloat32<Base::features> vclamp(Composed self, Composed from, Composed to)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vclamp");
 
@@ -498,7 +498,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vrcp(composed_t one)  {
+            friend zfloat32<Base::features> vrcp(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vrcp");
 
@@ -511,7 +511,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vtrunc(composed_t one)  {
+            friend zfloat32<Base::features> vtrunc(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vtrunc");
 
@@ -524,7 +524,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse sse4
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vfloor(composed_t one)  {
+            template<typename T = zfloat32<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> vfloor(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "sse4", "vfloor");
 
@@ -537,7 +537,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vfloor(composed_t one)  {
+            template<typename T = zfloat32<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> vfloor(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vfloor");
 
@@ -553,7 +553,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse sse4
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vceil(composed_t one)  {
+            template<typename T = zfloat32<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> vceil(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "sse4", "vceil");
 
@@ -566,7 +566,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vceil(composed_t one)  {
+            template<typename T = zfloat32<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> vceil(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vceil");
 
@@ -582,7 +582,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse sse4
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vround(composed_t one)  {
+            template<typename T = zfloat32<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> vround(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "sse4", "vround");
 
@@ -595,7 +595,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vround(composed_t one)  {
+            template<typename T = zfloat32<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> vround(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vround");
 
@@ -619,7 +619,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vsqrt(composed_t one)  {
+            friend zfloat32<Base::features> vsqrt(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vsqrt");
 
@@ -652,7 +652,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zfloat32_numeric
     {
 
@@ -661,26 +661,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -710,7 +710,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zfloat32_arithmetic
     {
 
@@ -719,26 +719,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -748,7 +748,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vneg(composed_t one)  {
+            friend zfloat32<Base::features> vneg(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vneg");
 
@@ -761,7 +761,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vadd(composed_t one, composed_t other)  {
+            friend zfloat32<Base::features> vadd(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vadd");
 
@@ -774,7 +774,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vsub(composed_t one, composed_t other)  {
+            friend zfloat32<Base::features> vsub(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vsub");
 
@@ -787,7 +787,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vmul(composed_t one, composed_t other)  {
+            friend zfloat32<Base::features> vmul(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vmul");
 
@@ -800,7 +800,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vdiv(composed_t one, composed_t other)  {
+            friend zfloat32<Base::features> vdiv(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vdiv");
 
@@ -813,7 +813,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse fma
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::FMA3>, T> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  {
+            template<typename T = zfloat32<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::FMA3>, T> vfmadd(Composed multiplicand, Composed multiplier, Composed addendum)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "fma", "vfmadd");
 
@@ -826,7 +826,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::FMA3>, T> vfmadd(composed_t multiplicand, composed_t multiplier, composed_t addendum)  {
+            template<typename T = zfloat32<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::FMA3>, T> vfmadd(Composed multiplicand, Composed multiplier, Composed addendum)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vfmadd");
 
@@ -839,7 +839,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse fma
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::FMA3>, T> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  {
+            template<typename T = zfloat32<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::FMA3>, T> vfmsub(Composed multiplicand, Composed multiplier, Composed addendum)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "fma", "vfmsub");
 
@@ -852,7 +852,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::FMA3>, T> vfmsub(composed_t multiplicand, composed_t multiplier, composed_t addendum)  {
+            template<typename T = zfloat32<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::FMA3>, T> vfmsub(Composed multiplicand, Composed multiplier, Composed addendum)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vfmsub");
 
@@ -885,7 +885,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zfloat32_bitwise
     {
 
@@ -894,26 +894,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -923,7 +923,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vbneg(composed_t one)  {
+            friend zfloat32<Base::features> vbneg(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vbneg");
 
@@ -938,7 +938,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vband(composed_t one, composed_t other)  {
+            friend zfloat32<Base::features> vband(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vband");
 
@@ -951,7 +951,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vbor(composed_t one, composed_t other)  {
+            friend zfloat32<Base::features> vbor(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vbor");
 
@@ -964,7 +964,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend zfloat32<base_t::features> vbxor(composed_t one, composed_t other)  {
+            friend zfloat32<Base::features> vbxor(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vbxor");
 
@@ -977,7 +977,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse sse4
              */
-            template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
+            template<typename T = bool> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> is_set(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "sse4", "is_set");
 
@@ -990,7 +990,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
+            template<typename T = bool> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> is_set(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "is_set");
 
@@ -1025,7 +1025,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zfloat32_comparable
     {
 
@@ -1034,26 +1034,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1063,7 +1063,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vgt(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vgt(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vgt");
 
@@ -1076,7 +1076,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vlt(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vlt(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vlt");
 
@@ -1089,7 +1089,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vge(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vge(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vge");
 
@@ -1102,7 +1102,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vle(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vle(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vle");
 
@@ -1135,7 +1135,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zfloat32_logical
     {
 
@@ -1144,26 +1144,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1173,7 +1173,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vlneg(composed_t one)  {
+            friend bfloat32<Base::features> vlneg(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vlneg");
 
@@ -1186,7 +1186,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vlor(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vlor(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vlor");
 
@@ -1199,7 +1199,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vland(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vland(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vland");
 
@@ -1232,7 +1232,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zfloat32_equatable
     {
 
@@ -1241,26 +1241,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1270,7 +1270,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> veq(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> veq(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "veq");
 
@@ -1283,7 +1283,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vneq(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vneq(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vneq");
 
@@ -1316,7 +1316,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zfloat32_conditional
     {
 
@@ -1325,26 +1325,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1354,7 +1354,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse sse4
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
+            template<typename T = zfloat32<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> vsel(bval_t condition, Composed if_value, Composed else_value)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "sse4", "vsel");
 
@@ -1367,7 +1367,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename T = zfloat32<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
+            template<typename T = zfloat32<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> vsel(bval_t condition, Composed if_value, Composed else_value)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vsel");
 
@@ -1400,7 +1400,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct bfloat32_io
     {
 
@@ -1409,26 +1409,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1438,7 +1438,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vstore");
 
@@ -1451,7 +1451,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vstream");
 
@@ -1464,7 +1464,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename RandomIt> friend bfloat32<base_t::features> vgather(RandomIt input, const zint32<base_t::features> &index, composed_t)  {
+            template<typename RandomIt> friend bfloat32<Base::features> vgather(RandomIt input, const zint32<Base::features> &index, Composed)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vgather");
 
@@ -1498,7 +1498,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct bfloat32_bitwise
     {
 
@@ -1507,26 +1507,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1536,7 +1536,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vbneg(composed_t one)  {
+            friend bfloat32<Base::features> vbneg(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vbneg");
 
@@ -1551,7 +1551,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vband(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vband(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vband");
 
@@ -1564,7 +1564,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vbor(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vbor(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vbor");
 
@@ -1577,7 +1577,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vbxor(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vbxor(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vbxor");
 
@@ -1590,7 +1590,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse sse4
              */
-            template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
+            template<typename T = bool> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> is_set(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "sse4", "is_set");
 
@@ -1603,7 +1603,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
+            template<typename T = bool> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> is_set(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "is_set");
 
@@ -1638,7 +1638,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct bfloat32_logical
     {
 
@@ -1647,26 +1647,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1676,7 +1676,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vlneg(composed_t one)  {
+            friend bfloat32<Base::features> vlneg(Composed one)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vlneg");
 
@@ -1689,7 +1689,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vlor(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vlor(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vlor");
 
@@ -1702,7 +1702,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vland(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vland(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vland");
 
@@ -1735,7 +1735,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates float32
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct bfloat32_equatable
     {
 
@@ -1744,26 +1744,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zfloat32<base_t::features>;
+            using zval_t        = zfloat32<Base::features>;
             /// complete boolean vector
-            using bval_t        = bfloat32<base_t::features>;
+            using bval_t        = bfloat32<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1773,7 +1773,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> veq(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> veq(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "veq");
 
@@ -1786,7 +1786,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates float32
              * @remark sse default
              */
-            friend bfloat32<base_t::features> vneq(composed_t one, composed_t other)  {
+            friend bfloat32<Base::features> vneq(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "default", "vneq");
 

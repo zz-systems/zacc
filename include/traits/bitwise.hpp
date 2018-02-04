@@ -31,32 +31,32 @@ namespace zacc { namespace traits {
 
     /**
      * @brief provides bitwise operator definitions
-     * @tparam base_t base type (e.g previous trait)
-     * @tparam composed_t final composed type (e.g zint32)
+     * @tparam Base base type (e.g previous trait)
+     * @tparam Composed final composed type (e.g zint32)
      */
-    template<typename base_t, typename composed_t>
-    struct bitwise : public base_t {
+    template<typename Base, typename Composed>
+    struct bitwise : public Base {
         FORWARD(bitwise);
 
-        using zval_t = typename base_t::zval_t;
-        using bval_t = typename base_t::bval_t;
+        using zval_t = typename Base::zval_t;
+        using bval_t = typename Base::bval_t;
 
-        friend composed_t operator~(const composed_t one) { return vbneg(one); }
+        friend Composed operator~(const Composed one) { return vbneg(one); }
 
-        friend composed_t operator|(const composed_t one, const composed_t other) {
+        friend Composed operator|(const Composed one, const Composed other) {
             return vbor(one, other);
         }
 
-        friend composed_t operator&(const composed_t one, const composed_t other) {
+        friend Composed operator&(const Composed one, const Composed other) {
             return vband(one, other);
         }
 
-        friend composed_t operator^(const composed_t one, const composed_t other) {
+        friend Composed operator^(const Composed one, const Composed other) {
             return vbxor(one, other);
         }
 
 //        template<typename U = bool>
-//        explicit constexpr operator std::enable_if_t<is_bval<composed_t>::value, U >() const
+//        explicit constexpr operator std::enable_if_t<is_bval<Composed>::value, U >() const
 //        {
 //            return is_set(*this);
 //        }

@@ -46,8 +46,8 @@ namespace zacc {
     template<typename from_t, typename to_t>
     using enable_if_convertible = std::enable_if_t<std::is_convertible<from_t, to_t>::value, from_t>;
 
-    template<typename base_t, typename derived_t>
-    using enable_if_is_base_of = std::enable_if_t<std::is_base_of<base_t, derived_t>::value, derived_t>;
+    template<typename Base, typename derived_t>
+    using enable_if_is_base_of = std::enable_if_t<std::is_base_of<Base, derived_t>::value, derived_t>;
 
     template<typename one_t, typename other_t>
     using enable_if_not_same = std::enable_if_t<!std::is_same<one_t, other_t>::value, one_t>;
@@ -57,15 +57,15 @@ namespace zacc {
     template<bool... bs>
     using all_true = std::is_same<bool_pack<bs..., true>, bool_pack<true, bs...>>;
 
-    template<typename base_t, typename required_t>
+    template<typename Base, typename required_t>
     struct requires {
-        static_assert(std::is_base_of<required_t, base_t>::value, "Required feature not implemented.");
+        static_assert(std::is_base_of<required_t, Base>::value, "Required feature not implemented.");
 
-        using type = enable_if_is_base_of<required_t, base_t>;
+        using type = enable_if_is_base_of<required_t, Base>;
     };
 
-    template<typename base_t, typename required_t>
-    using requires_t = typename requires<base_t, required_t>::type;
+    template<typename Base, typename required_t>
+    using requires_t = typename requires<Base, required_t>::type;
 
 
     template<typename T>

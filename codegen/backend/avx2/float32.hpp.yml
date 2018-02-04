@@ -44,7 +44,7 @@ modules:
       - args: [[*scalar_t, value]]
         init: _mm256_set1_ps(value)
 
-      - args: "std::array<typename base_t::element_t, base_t::size()> value"
+      - args: "std::array<typename Base::element_t, Base::size()> value"
         init: _mm256_loadu_ps(value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -60,7 +60,7 @@ modules:
   io:
     vstore: &io_store
       prefix: "template<typename OutputIt> friend"
-      args: "OutputIt result, composed_t input"
+      args: "OutputIt result, Composed input"
       returns: void
       body: _mm256_storeu_ps(&(*result), input)
     vstream:
@@ -69,7 +69,7 @@ modules:
 
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
+      args:   "RandomIt input, const zint32<Base::features> &index, Composed"
       body: _mm256_i32gather_ps(&(*input), index, 4)
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy

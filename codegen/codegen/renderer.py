@@ -88,10 +88,10 @@ class FunctionSignatureRenderer(Renderable):
         # basic
         prefix = node.prefix or "friend"
         suffix = node.suffix or "const" if prefix.strip().find('friend') == -1 else ""
-        return_type = node.return_type or f"{make_typename(module, ast)}<base_t::features>"
+        return_type = node.return_type or f"{make_typename(module, ast)}<Base::features>"
 
         # dispatching
-        dispatcher = "{0}has_feature_v<base_t, capabilities::{1}>"
+        dispatcher = "{0}has_feature_v<Base, capabilities::{1}>"
 
         def map_requirement(requirement):
             requirement = cleanup(requirement)[0]
@@ -151,7 +151,7 @@ class InitializerSignatureRenderer(Renderable):
             prefix=node.prefix or "constexpr",
             name="__impl",
             args=", ".join([f"{arg.type} {arg.name}" for arg in node.arguments]),
-            initializer=f"base_t({renderer.render(node.initializer, { 'is_initializer' : True })})",
+            initializer=f"Base({renderer.render(node.initializer, { 'is_initializer' : True })})",
             suffix=node.suffix or "")
 
 class FloatVerificationRenderer(Renderable):

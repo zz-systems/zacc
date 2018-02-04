@@ -19,7 +19,7 @@ class TestArgumentList(TestCase):
         self.assertEqual(obj.declaration, "a a b, c d")
 
         obj = ArgumentList(m, { "from" : 0, "to" : 2})
-        self.assertEqual(obj.declaration, "composed_t arg0, composed_t arg1")
+        self.assertEqual(obj.declaration, "Composed arg0, Composed arg1")
 
         obj = ArgumentList(m, {"from": 0, "to": 2, "type" : "test"})
         self.assertEqual(obj.declaration, "test arg0, test arg1")
@@ -59,7 +59,7 @@ class TestArgument(TestCase):
     @patch("codegen.arguments.ArgumentList")
     def test_declaration(self, m):
         obj = Argument(m, "a")
-        self.assertEqual(obj.declaration, "composed_t a")
+        self.assertEqual(obj.declaration, "Composed a")
 
         obj = Argument(m, "a", "asdf")
         self.assertEqual(obj.declaration, "asdf a")

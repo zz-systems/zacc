@@ -46,15 +46,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/io.hpp"
 #include "traits/logical.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/comparable.hpp"
 #include "traits/equatable.hpp"
-#include "traits/bitwise.hpp"
+#include "traits/io.hpp"
+#include "traits/conditional.hpp"
+#include "traits/arithmetic.hpp"
 #include "traits/math.hpp"
 #include "traits/numeric.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/conditional.hpp"
 
 namespace zacc { namespace backend { namespace sse {
 
@@ -78,7 +78,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zint8_construction
     {
 
@@ -87,26 +87,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
 
             /**
@@ -114,7 +114,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse 
              */
-            constexpr __impl(  ) : base_t()  {
+            constexpr __impl(  ) : Base()  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS()");
 
@@ -126,7 +126,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse 
              */
-            constexpr __impl(__m128i value) : base_t(value)  {
+            constexpr __impl(__m128i value) : Base(value)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS(__m128i)");
 
@@ -138,7 +138,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse 
              */
-            constexpr __impl(int8_t value) : base_t(_mm_set1_epi8(value))  {
+            constexpr __impl(int8_t value) : Base(_mm_set1_epi8(value))  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS(int8_t)");
 
@@ -150,9 +150,9 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse 
              */
-            constexpr __impl(const std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> &value) : base_t(_mm_loadu_si128((__m128i*)value.data()))  {
+            constexpr __impl(const std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size> &value) : Base(_mm_loadu_si128((__m128i*)value.data()))  {
 
-                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS(const std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size>)");
+                ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS(const std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size>)");
 
             }
 
@@ -162,7 +162,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse 
              */
-            constexpr __impl(int8_t _15, int8_t _14, int8_t _13, int8_t _12, int8_t _11, int8_t _10, int8_t _9, int8_t _8, int8_t _7, int8_t _6, int8_t _5, int8_t _4, int8_t _3, int8_t _2, int8_t _1, int8_t _0) : base_t(_mm_set_epi8(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15))  {
+            constexpr __impl(int8_t _15, int8_t _14, int8_t _13, int8_t _12, int8_t _11, int8_t _10, int8_t _9, int8_t _8, int8_t _7, int8_t _6, int8_t _5, int8_t _4, int8_t _3, int8_t _2, int8_t _1, int8_t _0) : Base(_mm_set_epi8(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15))  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS(int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t)");
 
@@ -194,7 +194,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct bint8_construction
     {
 
@@ -203,26 +203,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
 
             /**
@@ -230,7 +230,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse 
              */
-            constexpr __impl(  ) : base_t()  {
+            constexpr __impl(  ) : Base()  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS()");
 
@@ -242,7 +242,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse 
              */
-            constexpr __impl(zval_t value) : base_t(value)  {
+            constexpr __impl(zval_t value) : Base(value)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS(zval_t)");
 
@@ -254,7 +254,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse 
              */
-            constexpr __impl(bval_t value, last_operation last_op) : base_t(value, last_op)  {
+            constexpr __impl(bval_t value, last_operation last_op) : Base(value, last_op)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "", "CONS(bval_t value, last_operation)");
 
@@ -286,7 +286,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zint8_io
     {
 
@@ -295,26 +295,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -324,7 +324,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vstore");
 
@@ -337,7 +337,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vstream");
 
@@ -370,7 +370,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zint8_math
     {
 
@@ -379,26 +379,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -408,7 +408,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse sse4
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE3>, T> vabs(composed_t one)  {
+            template<typename T = zint8<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE3>, T> vabs(Composed one)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "sse4", "vabs");
 
@@ -421,7 +421,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE3>, T> vabs(composed_t one)  {
+            template<typename T = zint8<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE3>, T> vabs(Composed one)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vabs");
 
@@ -434,7 +434,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse sse4
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vmin(composed_t one, composed_t other)  {
+            template<typename T = zint8<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> vmin(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "sse4", "vmin");
 
@@ -447,7 +447,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vmin(composed_t one, composed_t other)  {
+            template<typename T = zint8<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> vmin(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vmin");
 
@@ -460,7 +460,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse sse4
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vmax(composed_t one, composed_t other)  {
+            template<typename T = zint8<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> vmax(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "sse4", "vmax");
 
@@ -473,7 +473,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vmax(composed_t one, composed_t other)  {
+            template<typename T = zint8<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> vmax(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vmax");
 
@@ -486,7 +486,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend zint8<base_t::features> vclamp(composed_t self, composed_t from, composed_t to)  {
+            friend zint8<Base::features> vclamp(Composed self, Composed from, Composed to)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vclamp");
 
@@ -519,7 +519,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zint8_numeric
     {
 
@@ -528,26 +528,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -577,7 +577,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zint8_arithmetic
     {
 
@@ -586,26 +586,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -615,7 +615,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend zint8<base_t::features> vneg(composed_t one)  {
+            friend zint8<Base::features> vneg(Composed one)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vneg");
 
@@ -628,7 +628,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend zint8<base_t::features> vadd(composed_t one, composed_t other)  {
+            friend zint8<Base::features> vadd(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vadd");
 
@@ -641,7 +641,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend zint8<base_t::features> vsub(composed_t one, composed_t other)  {
+            friend zint8<Base::features> vsub(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vsub");
 
@@ -654,7 +654,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend zint8<base_t::features> vmul(composed_t one, composed_t other)  {
+            friend zint8<Base::features> vmul(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vmul");
 
@@ -670,14 +670,14 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend zint8<base_t::features> vdiv(composed_t one, composed_t other)  {
+            friend zint8<Base::features> vdiv(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vdiv");
 
                 auto dividend = one.data();
                 auto divisor = other.data();
-                typename composed_t::extracted_t result;
-                for (size_t i = 0; i < composed_t::size(); i++) { result[i] = dividend[i] / divisor[i]; };
+                typename Composed::extracted_t result;
+                for (size_t i = 0; i < Composed::size(); i++) { result[i] = dividend[i] / divisor[i]; };
                 return result;
             }
 
@@ -687,7 +687,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend zint8<base_t::features> vmod(composed_t one, composed_t other)  {
+            friend zint8<Base::features> vmod(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vmod");
 
@@ -720,7 +720,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zint8_bitwise
     {
 
@@ -729,26 +729,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -758,7 +758,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend zint8<base_t::features> vbneg(composed_t one)  {
+            friend zint8<Base::features> vbneg(Composed one)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vbneg");
 
@@ -773,7 +773,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend zint8<base_t::features> vbor(composed_t one, composed_t other)  {
+            friend zint8<Base::features> vbor(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vbor");
 
@@ -786,7 +786,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend zint8<base_t::features> vband(composed_t one, composed_t other)  {
+            friend zint8<Base::features> vband(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vband");
 
@@ -799,7 +799,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend zint8<base_t::features> vbxor(composed_t one, composed_t other)  {
+            friend zint8<Base::features> vbxor(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vbxor");
 
@@ -812,7 +812,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse sse4
              */
-            template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
+            template<typename T = bool> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> is_set(Composed one)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "sse4", "is_set");
 
@@ -825,7 +825,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
+            template<typename T = bool> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> is_set(Composed one)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "is_set");
 
@@ -860,7 +860,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zint8_comparable
     {
 
@@ -869,26 +869,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -898,7 +898,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vgt(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vgt(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vgt");
 
@@ -911,7 +911,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vlt(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vlt(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vlt");
 
@@ -924,7 +924,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vge(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vge(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vge");
 
@@ -937,7 +937,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vle(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vle(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vle");
 
@@ -970,7 +970,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zint8_logical
     {
 
@@ -979,26 +979,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1008,7 +1008,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vlneg(composed_t one)  {
+            friend bint8<Base::features> vlneg(Composed one)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vlneg");
 
@@ -1021,7 +1021,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vlor(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vlor(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vlor");
 
@@ -1034,7 +1034,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vland(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vland(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vland");
 
@@ -1067,7 +1067,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zint8_equatable
     {
 
@@ -1076,26 +1076,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1105,7 +1105,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> veq(composed_t one, composed_t other)  {
+            friend bint8<Base::features> veq(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "veq");
 
@@ -1118,7 +1118,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vneq(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vneq(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vneq");
 
@@ -1151,7 +1151,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct zint8_conditional
     {
 
@@ -1160,26 +1160,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1189,7 +1189,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse sse4
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
+            template<typename T = zint8<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> vsel(bval_t condition, Composed if_value, Composed else_value)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "sse4", "vsel");
 
@@ -1202,7 +1202,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            template<typename T = zint8<base_t::features>> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> vsel(bval_t condition, composed_t if_value, composed_t else_value)  {
+            template<typename T = zint8<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> vsel(bval_t condition, Composed if_value, Composed else_value)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vsel");
 
@@ -1235,7 +1235,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct bint8_io
     {
 
@@ -1244,26 +1244,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1273,7 +1273,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            template<typename OutputIt> friend void vstore(OutputIt result, composed_t input)  {
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vstore");
 
@@ -1286,7 +1286,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            template<typename OutputIt> friend void vstream(OutputIt result, composed_t input)  {
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vstream");
 
@@ -1319,7 +1319,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct bint8_bitwise
     {
 
@@ -1328,26 +1328,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1357,7 +1357,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vbneg(composed_t one)  {
+            friend bint8<Base::features> vbneg(Composed one)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vbneg");
 
@@ -1372,7 +1372,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vbor(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vbor(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vbor");
 
@@ -1385,7 +1385,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vband(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vband(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vband");
 
@@ -1398,7 +1398,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vbxor(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vbxor(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vbxor");
 
@@ -1411,7 +1411,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse sse4
              */
-            template<typename T = bool> friend std::enable_if_t<has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
+            template<typename T = bool> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> is_set(Composed one)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "sse4", "is_set");
 
@@ -1424,7 +1424,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            template<typename T = bool> friend std::enable_if_t<!has_feature_v<base_t, capabilities::SSE41>, T> is_set(composed_t one)  {
+            template<typename T = bool> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> is_set(Composed one)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "is_set");
 
@@ -1459,7 +1459,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct bint8_logical
     {
 
@@ -1468,26 +1468,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1497,7 +1497,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vlneg(composed_t one)  {
+            friend bint8<Base::features> vlneg(Composed one)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vlneg");
 
@@ -1510,7 +1510,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vlor(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vlor(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vlor");
 
@@ -1523,7 +1523,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vland(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vland(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vland");
 
@@ -1556,7 +1556,7 @@ namespace zacc { namespace backend { namespace sse {
      * @relates int8
      * @remark sse
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct bint8_equatable
     {
 
@@ -1565,26 +1565,26 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int8
          * @remark sse
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = zint8<base_t::features>;
+            using zval_t        = zint8<Base::features>;
             /// complete boolean vector
-            using bval_t        = bint8<base_t::features>;
+            using bval_t        = bint8<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             /// forward to base
             FORWARD(__impl);
@@ -1594,7 +1594,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> veq(composed_t one, composed_t other)  {
+            friend bint8<Base::features> veq(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "veq");
 
@@ -1607,7 +1607,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int8
              * @remark sse default
              */
-            friend bint8<base_t::features> vneq(composed_t one, composed_t other)  {
+            friend bint8<Base::features> vneq(Composed one, Composed other)  {
 
                 ZTRACE_BACKEND("sse.int8.impl", __LINE__, "int8(int8_t[16])", "default", "vneq");
 

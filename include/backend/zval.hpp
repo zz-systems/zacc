@@ -43,85 +43,122 @@ namespace zacc {
 
     /**
      * @brief base type for all zacc computation types
-     * @tparam _vector_t vector type, like __m128i for sse 4x integer vector
-     * @tparam _mask_t mask type for boolean operations
-     * @tparam _scalar_t scalar type, like int for sse 4x integer vector
-     * @tparam _dim vector size (1 - scalar, 4, 8, 16, ...)
-     * @tparam _alignment memory alignment
-     * @tparam Arch capabilities
+     * @tparam Vector vector type, like __m128i for sse 4x integer vector
+     * @tparam MaskVector mask type for boolean operations
+     * @tparam Element scalar type, like int for sse 4x integer vector
+     * @tparam Tag zval type tag
+     * @tparam Size vector size (1 - scalar, 4, 8, 16, ...)
+     * @tparam Alignment memory alignment
+     * @tparam Features capabilities
      */
     template<typename Vector, typename MaskVector, typename Element, typename Tag, size_t Size, size_t Alignment, uint64_t Features = 0xFFFF'FFFF'FFFF'FFFF>
     struct zval : zval_base<Vector, MaskVector, Element, Tag, Size, Alignment, Features>
     {
-        /// default constructor
-        constexpr zval() = default;
+        /**
+         * default constructor
+         */
+        constexpr zval() noexcept = default;
 
-        /// copy constructor
-        /// @requres T shall be convertable to Vector
-        /// @tparam T any type
+        /**
+         * copy constructor
+         * @tparam T any type convertable to Vector
+         * @param other
+         */
         template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
-        constexpr zval(const T& other)
+        constexpr zval(const T& other) noexcept
                 : _value (other)
         {}
 
-        /// move constructor
-        /// @requres T shall be convertable to Vector
-        /// @tparam T any type
+        /**
+         * move constructor
+         * @tparam T any type convertable to Vector
+         * @param other
+         */
         template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
-        constexpr zval(T&& value)
-                : _value(std::move(value))
+        constexpr zval(T&& other) noexcept
+                : _value(std::forward<T>(other))
         {}
 
-        /// copy constructor
-        constexpr zval(const zval& other)
+        /**
+         * copy constructor
+         * @param other
+         */
+        constexpr zval(const zval& other) noexcept
                 : _value (other._value)
         {}
 
-        /// move constructor
+        /**
+         * move constructor
+         * @param other
+         */
         constexpr zval(zval&& other) noexcept
                 : _value(std::move(other._value))
         {}
 
-        /// assignment operator
-        /// @requres T shall be convertable to Vector
-        /// @tparam T any type
-        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Vector>::value>>
-        constexpr zval& operator=(const T& other)
+         /**
+          * assignment operator
+          * @tparam T any type convertable to Vector
+          * @param other
+          * @returns self
+          */
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
+        constexpr zval& operator=(const T& other) noexcept
         {
             _value = other;
             return *this;
         }
 
-        /// moving assignment operator
-        /// @requres T shall be convertable to Vector
-        /// @tparam T any type
+        /**
+         * moving assignment operator
+         * @tparam T any type convertable to Vector
+         * @param other
+         * @returns self
+         */
         template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Vector>::value>>
         constexpr zval& operator=(T&& other) noexcept
         {
-            _value = std::move(other);
+            swap(other);
             return *this;
         }
 
-        /// assignment operator
-        constexpr zval& operator=(const zval& other)
+        /**
+         * assignment operator
+         * @param other
+         * @returns self
+         */
+        constexpr zval& operator=(const zval& other) noexcept
         {
             _value = other._value;
             return *this;
         }
 
-        /// moving assignment operator
+        /**
+         * moving assignment operator
+         * @param other
+         * @returns self
+         */
         constexpr zval& operator=(zval&& other) noexcept
         {
-            _value = std::move(other._value);
+            swap(other);
             return *this;
         }
 
+        /**
+         * swaps values
+         * @param other
+         */
         void swap(zval& other) noexcept
         {
             std::swap(_value, other._value);
         }
 
-        template <typename size = std::integral_constant<size_t, Size>, typename enable = typename std::enable_if<(size::value > 1), Vector>::type>
+        /**
+         * implicit cast operator to wrapped raw type (Vector)
+         * @remark valid only for vectors, not scalars (size has to be > 1, otherwise default C++ operators will apply for wrapped scalars)
+         * @tparam size current vector size as type
+         * @return raw value
+         */
+        template <typename size = std::integral_constant<size_t, Size>, typename = std::enable_if_t<(size::value > 1), Vector>>
         constexpr operator Vector() const {
             return value();
         }
@@ -138,35 +175,15 @@ namespace zacc {
         alignas(Alignment) Vector _value;
     };
 
+    /**
+     * swaps contents of zval instances
+     * @tparam Args zval parametrization
+     * @param one
+     * @param other
+     */
     template<typename... Args>
     void swap(zval<Args...>& one, zval<Args...>& other)
     {
         one.swap(other);
     }
-
-    enum class last_operation
-    {
-        undefined,
-        comparison,
-        logic,
-        bitwise
-    };
-
-    template<typename base_t>
-    struct composable {
-        template<typename terminator>
-        struct type :
-                public base_t,
-                public terminator
-        {
-            using zval_t = typename base_t::zval_t;
-            using bval_t = typename base_t::bval_t;
-
-            FORWARD(type);
-        };
-    };
-
-    template<typename T>
-    constexpr size_t dim() { return T::dim; }
-
 }

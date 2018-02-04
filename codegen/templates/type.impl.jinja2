@@ -73,7 +73,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
      * @relates {{ ast.type.name }}
      * @remark {{ ast.type.target }}
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct {{ Modules.render(module, ast) }}
     {
 
@@ -82,26 +82,26 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
          * @relates {{ ast.type.name }}
          * @remark {{ ast.type.target }}
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             /// complete vector
-            using zval_t        = z{{ ast.type.name }}<base_t::features>;
+            using zval_t        = z{{ ast.type.name }}<Base::features>;
             /// complete boolean vector
-            using bval_t        = b{{ ast.type.name }}<base_t::features>;
+            using bval_t        = b{{ ast.type.name }}<Base::features>;
             /// type tag
-            using tag           = typename base_t::tag;
+            using tag           = typename Base::tag;
 
             /// wrapped vector type
-            using vector_t      = typename zval_traits<base_t>::vector_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
             /// element type
-            using element_t     = typename zval_traits<base_t>::element_t;
+            using element_t     = typename zval_traits<Base>::element_t;
 
             /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
 
             /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             {% if not module in ast.modules.initializers %}
             /// forward to base

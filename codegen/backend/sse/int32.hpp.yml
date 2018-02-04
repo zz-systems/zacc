@@ -45,7 +45,7 @@ modules:
       - args: [[*scalar_t, "value"]]
         init: _mm_set1_epi32(value)
 
-      - args: "std::array<typename zval_traits<base_t>::element_t, zval_traits<base_t>::size> value"
+      - args: "std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size> value"
         init: _mm_loadu_si128((__m128i*)value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -61,7 +61,7 @@ modules:
   io:
     vstore: &io_store
       prefix: "template<typename OutputIt> friend"
-      args: "OutputIt result, composed_t input"
+      args: "OutputIt result, Composed input"
       returns: void
       body: _mm_storeu_si128((__m128i*)&(*result), input)
     vstream:
@@ -70,7 +70,7 @@ modules:
 
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args: { raw: "RandomIt input, const zint32<base_t::features> &index, composed_t" }
+      args: { raw: "RandomIt input, const zint32<Base::features> &index, Composed" }
       body:
         - auto i = index.data();
         - return _mm_set_epi32(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
@@ -137,8 +137,8 @@ modules:
             - return _mm_unpacklo_epi32(_mm_shuffle_epi32(tmp1, _MM_SHUFFLE (0,0,2,0)), _mm_shuffle_epi32(tmp2, _MM_SHUFFLE (0,0,2,0)));
             #- auto d0 = one.data();
             #- auto d1 = other.data();
-            #- alignas(base_t::alignment) typename base_t::extracted_t raw_result;
-            #- for(auto i = 0; i < zval_traits<base_t>::size; i++) raw_result[i] = d0[i] * d1[i];
+            #- alignas(Base::alignment) typename Base::extracted_t raw_result;
+            #- for(auto i = 0; i < zval_traits<Base>::size; i++) raw_result[i] = d0[i] * d1[i];
             #- return raw_result.data();
     vdiv: _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));
     vmod: vsub(one, vmul(other, vdiv(one, other)))
@@ -175,10 +175,10 @@ modules:
     vbsll:  _mm_sll_epi32
     vbsrl:  _mm_srl_epi32
     vbslli:
-      args: { raw: "const composed_t one, const size_t other" }
+      args: { raw: "const Composed one, const size_t other" }
       body: _mm_slli_epi32(one, other)
     vbsrli:
-      args: { raw: "const composed_t one, const size_t other" }
+      args: { raw: "const Composed one, const size_t other" }
       body: _mm_srli_epi32(one, other)
 #-----------------------------------------------------------------------------------------------------------------------
   logical:

@@ -26,6 +26,7 @@
 
 #include "intrin.hpp"
 #include "zval.hpp"
+#include "bval.hpp"
 
 #if defined(ZACC_AVX)
     #include "backend/avx/types.hpp"

@@ -57,15 +57,15 @@ namespace zacc { namespace math {
 
         struct impl : __cval<Element>
         {
-            using base_t = __cval<Element>;
+            using Base = __cval<Element>;
 
-            using base_t::size;
+            using Base::size;
 
             using zval_t = zcomplex<Element>;
             using bval_t = bcomplex<Element>;
 
-            using element_t = typename base_t::element_t;
-            using vector_t = typename base_t::vector_t;
+            using element_t = typename Base::element_t;
+            using vector_t = typename Base::vector_t;
 
             constexpr impl()
             {}
@@ -179,32 +179,32 @@ namespace zacc { namespace math {
             }
 
         private:
-            alignas(base_t::alignment) vector_t _value;
+            alignas(Base::alignment) vector_t _value;
         };
     };
 
     /**
      * @brief construction
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct complex_construction
     {
         /**
          * @brief construction basic interface implementation
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
 
-            using zval_t = typename base_t::zval_t;
-            using bval_t = typename base_t::bval_t;
+            using zval_t = typename Base::zval_t;
+            using bval_t = typename Base::bval_t;
 
-            using element_t = typename base_t::element_t;
-            using vector_t = typename base_t::vector_t;
+            using element_t = typename Base::element_t;
+            using vector_t = typename Base::vector_t;
 
             //FORWARD(__impl);
 
-            //constexpr __impl() : base_t()
+            //constexpr __impl() : Base()
             //{}
 
             //constexpr __impl(const impl& rhs) : _value(rhs._value)
@@ -212,26 +212,26 @@ namespace zacc { namespace math {
 
     //            template<typename T>
     //            constexpr __impl(const __impl& rhs)
-    //                    : base_t(array_cast<element_t>(rhs.value()))
+    //                    : Base(array_cast<element_t>(rhs.value()))
     //            {}
 
 //            constexpr __impl(const element_t& re, const element_t& im = 0)
-//                    : base_t(vector_t{{re, im}})
+//                    : Base(vector_t{{re, im}})
 //            {}
 
             constexpr __impl()
-                    : base_t()
+                    : Base()
             {}
 
 
 //            template<typename U, typename enable = std::enable_if_t<std::is_convertible<U, element_t>::value>>
 //            constexpr __impl(const U& re)
-//                    : base_t(static_cast<vec2<element_t>>(re))
+//                    : Base(static_cast<vec2<element_t>>(re))
 //            {}
 //
 //            template<typename U, typename enable = std::enable_if_t<std::is_convertible<U, element_t>::value>>
 //            constexpr __impl(const U& re, const U& imag)
-//                    : base_t(vec2<element_t>(re, imag))
+//                    : Base(vec2<element_t>(re, imag))
 //            {}
 
             //template<typename U, typename enable = std::enable_if_t<std::is_convertible<U, element_t>::value>>
@@ -246,50 +246,50 @@ namespace zacc { namespace math {
 
             template<typename U, typename enable = std::enable_if_t<std::is_same<U, vec2<element_t>>::value>>// || std::is_same<U, zcomplex<element_t>>::value>>
             constexpr __impl(const U& other)
-                    : base_t(other)
+                    : Base(other)
             {}
 
             template<typename U, typename enable = std::enable_if_t<std::is_same<U, vec2<element_t>>::value>>// || std::is_same<U, zcomplex<element_t>>::value>>
             constexpr __impl(U&& other)
-                    : base_t(std::forward<U>(other))
+                    : Base(std::forward<U>(other))
             {}
 
 //            template<template<class> class T, typename U, typename enable = std::enable_if_t<std::is_convertible<U, typename zval_traits<element_t>::element_t>::value &&  std::is_same<T<U>, vec2<U>>::value>>
 //            constexpr __impl(const T<U>& other)
-//                    : base_t()//vec2<element_t>(other.x, other.y))
+//                    : Base()//vec2<element_t>(other.x, other.y))
 //            {}
 //
 //            template<template<class> class T, typename U, typename enable = std::enable_if_t<std::is_convertible<U, typename zval_traits<element_t>::element_t>::value &&  std::is_same<T<U>, vec2<U>>::value>>
 //            constexpr __impl(T<U>&& other)
-//                    : base_t()//vec2<element_t>(std::move(other.x), std::move(other.y)))
+//                    : Base()//vec2<element_t>(std::move(other.x), std::move(other.y)))
 //            {}
 
 //            template<typename U, typename enable = std::enable_if_t<std::is_convertible<U, vec2<typename zval_traits<element_t>::element_t>>::value>>
 //            constexpr __impl(const U& other)
-//                    : base_t(vec2<element_t>(other.x, other.y))
+//                    : Base(vec2<element_t>(other.x, other.y))
 //            {}
 
 //            template<typename U, typename enable = std::enable_if_t<std::is_convertible<U, vec2<typename zval_traits<element_t>::element_t>>::value>>
 //            constexpr __impl(U&& other)
-//                    : base_t(std::forward<U>(other))
+//                    : Base(std::forward<U>(other))
 //            {}
 
 
             /*constexpr __impl(const vector_t& value)
-                    : base_t(value)
+                    : Base(value)
             {}*/
 /*
             constexpr __impl(const __impl& value)
-                    : base_t(vector_t{{value.real(), value.imag()}})
+                    : Base(vector_t{{value.real(), value.imag()}})
             {}
 */
             //template<typename T = element_t>
-            //constexpr __impl(const std::initializer_list<T>& list) : base_t(array_cast<element_t>(list)) {}
+            //constexpr __impl(const std::initializer_list<T>& list) : Base(array_cast<element_t>(list)) {}
 
         };
 
-        template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, zcomplex<typename base_t::element_t>>;
+        template<typename Base>
+        using impl = traits::construction<__impl<Base>, zcomplex<typename Base::element_t>>;
     };
 
         /**
@@ -297,7 +297,7 @@ namespace zacc { namespace math {
     * @relates float32
     * @remark avx
     */
-    template<typename composed_t>
+    template<typename Composed>
     struct complex_io
     {
 
@@ -306,12 +306,12 @@ namespace zacc { namespace math {
          * @relates float32
          * @remark avx
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
-            using extracted_t = typename zval_traits<base_t>::extracted_t;
-            using zval_t = typename base_t::zval_t;
-            using bval_t = typename base_t::bval_t;
+            using extracted_t = typename zval_traits<Base>::extracted_t;
+            using zval_t = typename Base::zval_t;
+            using bval_t = typename Base::bval_t;
 
             FORWARD(__impl);
 
@@ -320,7 +320,7 @@ namespace zacc { namespace math {
              * @relates float32
              * @remark avx - default
              */
-            friend void vstore(extracted_t &target, composed_t source)  noexcept {
+            friend void vstore(extracted_t &target, Composed source)  noexcept {
                 //std::copy(source.value().begin(), source.value().end(), target.begin());
                 target = source.value();
             }
@@ -331,7 +331,7 @@ namespace zacc { namespace math {
              * @relates float32
              * @remark avx - default
              */
-            friend void vstream(extracted_t &target, composed_t source)  noexcept {
+            friend void vstream(extracted_t &target, Composed source)  noexcept {
                 //std::copy(source.value().begin(), source.value().end(), target.begin());
                 target = source.value();
             }
@@ -345,8 +345,8 @@ namespace zacc { namespace math {
          */
 
 
-        template<typename base_t>
-        using impl = traits::io<__impl<base_t>, zcomplex<typename base_t::element_t>>;
+        template<typename Base>
+        using impl = traits::io<__impl<Base>, zcomplex<typename Base::element_t>>;
 
     };
 
@@ -356,13 +356,13 @@ namespace zacc { namespace math {
     struct complex_printable {
         /**
          * @brief printable trait implementation
-         * @tparam base_t base type (e.g previous trait)
+         * @tparam Base base type (e.g previous trait)
          */
-        template<typename base_t>
-        struct impl : base_t {
+        template<typename Base>
+        struct impl : Base {
 
-            using zval_t = typename base_t::zval_t;
-            using bval_t = typename base_t::bval_t;
+            using zval_t = typename Base::zval_t;
+            using bval_t = typename Base::bval_t;
 
             FORWARD(impl);
 
@@ -372,20 +372,20 @@ namespace zacc { namespace math {
              */
             std::string to_string() const {
 
-                auto re = base_t::real().data();
-                auto im = base_t::imag().data();
+                auto re = Base::real().data();
+                auto im = Base::imag().data();
 
                 std::stringstream ss;
 
-                if (base_t::is_vector)
+                if (Base::is_vector)
                     ss << "[ ";
 
-                for(size_t i = 0; i < base_t::element_t::size(); i++)
+                for(size_t i = 0; i < Base::element_t::size(); i++)
                 {
                     ss << "( " << re[i] << ", " << im[i] << "i ) ";
                 }
 
-                if (base_t::is_vector)
+                if (Base::is_vector)
                     ss << "]";
 
                 return ss.str();
@@ -407,21 +407,21 @@ namespace zacc { namespace math {
     /**
      * @brief arithmetic
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct complex_arithmetic
     {
         /**
          * @brief arithmetic basic interface implementation
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
             FORWARD(__impl);
 
-            using zval_t = typename base_t::zval_t;
-            using bval_t = typename base_t::bval_t;
+            using zval_t = typename Base::zval_t;
+            using bval_t = typename Base::bval_t;
 
-            using element_t = typename base_t::element_t;
+            using element_t = typename Base::element_t;
 
             /**
              *
@@ -522,8 +522,8 @@ namespace zacc { namespace math {
             }
         };
 
-        template<typename base_t>
-        using impl = traits::arithmetic<__impl<base_t>, zcomplex<typename base_t::element_t>>;
+        template<typename Base>
+        using impl = traits::arithmetic<__impl<Base>, zcomplex<typename Base::element_t>>;
     };
 
     // =================================================================================================================
@@ -537,7 +537,7 @@ namespace zacc { namespace math {
      * @relates float32
      * @remark avx2
      */
-    template<typename composed_t>
+    template<typename Composed>
     struct complex_conditional
     {
 
@@ -546,16 +546,16 @@ namespace zacc { namespace math {
          * @relates float32
          * @remark avx2
          */
-        template<typename base_t>
-        struct __impl : base_t
+        template<typename Base>
+        struct __impl : Base
         {
-            using zval_t = typename base_t::zval_t;
-            using bval_t = typename base_t::bval_t;
+            using zval_t = typename Base::zval_t;
+            using bval_t = typename Base::bval_t;
 
-            using vector_t      = typename zval_traits<base_t>::vector_t;
-            using element_t     = typename zval_traits<base_t>::element_t;
-            using mask_vector_t = typename zval_traits<base_t>::mask_vector_t;
-            using extracted_t   = typename zval_traits<base_t>::extracted_t;
+            using vector_t      = typename zval_traits<Base>::vector_t;
+            using element_t     = typename zval_traits<Base>::element_t;
+            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+            using extracted_t   = typename zval_traits<Base>::extracted_t;
 
             FORWARD(__impl);
 
@@ -565,7 +565,7 @@ namespace zacc { namespace math {
              * @relates float32
              * @remark avx2 - default
              */
-            friend composed_t vsel(bval_t condition, composed_t if_value, composed_t else_value) noexcept {
+            friend Composed vsel(bval_t condition, Composed if_value, Composed else_value) noexcept {
 
                 return
                 {
@@ -579,7 +579,7 @@ namespace zacc { namespace math {
 //             * @relates float32
 //             * @remark avx2 - default
 //             */
-//            friend bval_t vsel(bval_t condition, composed_t if_value, composed_t else_value) noexcept {
+//            friend bval_t vsel(bval_t condition, Composed if_value, Composed else_value) noexcept {
 //
 //                return
 //                        {
@@ -594,8 +594,8 @@ namespace zacc { namespace math {
          * @relates float32
          * @remark avx2
          */
-        template<typename base_t>
-        using impl = traits::conditional<__impl<base_t>, zcomplex<typename base_t::element_t>>;
+        template<typename Base>
+        using impl = traits::conditional<__impl<Base>, zcomplex<typename Base::element_t>>;
 
     };
 

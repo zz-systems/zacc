@@ -422,16 +422,16 @@ namespace zacc { namespace math {
 
 
         using self_t = mat<T, _Rows, _Cols>;
-        using base_t = __mat<T, _Rows, _Cols>;
+        using Base = __mat<T, _Rows, _Cols>;
         
-        using base_t::data;
+        using Base::data;
 
         static constexpr size_t rows()     { return _Rows; }
         static constexpr size_t cols()     { return _Cols; }
         static constexpr size_t size()     { return _Rows * _Cols; }
 
         /// default constructor
-        constexpr mat() : base_t()
+        constexpr mat() : Base()
         {}
 
         // Unusable in MSVC.
@@ -443,21 +443,21 @@ namespace zacc { namespace math {
         /// MEMO: NEVER use greedy Args&&... in combination with copy constructor
         template<typename... Args>
         constexpr  mat(Args&&... arg) noexcept
-                : base_t(std::forward<Args>(arg)...)
+                : Base(std::forward<Args>(arg)...)
         {}
 
         constexpr mat(std::initializer_list<T> init_list)
-                : base_t(init_list)
+                : Base(init_list)
         {}
 
         template<typename U = T>
         constexpr mat(std::initializer_list<std::initializer_list<U>> init_list)
-                : base_t(init_list)
+                : Base(init_list)
         {}
 
         template<typename U = T>
         constexpr mat(std::initializer_list<mat<U, _Cols, 1>> init_list)
-                : base_t(init_list)
+                : Base(init_list)
         {}
 
         constexpr mat(const T &all)
@@ -476,7 +476,7 @@ namespace zacc { namespace math {
         constexpr explicit operator bool() const
         {
             for(size_t i = 0; i < size(); i++)
-                if(!is_set(base_t::operator()(i)))
+                if(!is_set(Base::operator()(i)))
                     return false;
 
             return true;
@@ -485,7 +485,7 @@ namespace zacc { namespace math {
 //        template<typename U = T>
 //        constexpr operator typename std::enable_if<_Rows == 1 && _Cols == 1, U >::type () const
 //        {
-//            return base_t::operator()(0);
+//            return Base::operator()(0);
 //        }
 
         //__attribute__((optimize("unroll-loops")))
@@ -517,7 +517,7 @@ namespace zacc { namespace math {
         //__attribute__((optimize("unroll-loops")))
         constexpr auto sqr_magnitude() const
         {
-            T sum = base_t::data[0] * base_t::data[0];
+            T sum = Base::data[0] * Base::data[0];
 
             for(size_t i = 1; i < size(); i++)
                 sum = sum + data[i] * data[i];

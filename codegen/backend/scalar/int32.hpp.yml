@@ -40,7 +40,7 @@ modules:
         args: "const T &value"
         init: value.value()
 
-      - args: "std::array<typename base_t::element_t, base_t::size()> value"
+      - args: "std::array<typename Base::element_t, Base::size()> value"
         init: "value[0]"
 
     boolean:
@@ -53,13 +53,13 @@ modules:
   io:
     vstore: &io_store
       prefix: "template<typename OutputIt> friend"
-      args: "OutputIt result, composed_t input"
+      args: "OutputIt result, Composed input"
       returns: void
       body: result[0] = input.value();
     vstream: *io_store
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
+      args:   "RandomIt input, const zint32<Base::features> &index, Composed"
       body: return input[index.value()]
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
@@ -108,10 +108,10 @@ modules:
     vbsrl:  (one.value() >> other.value())
 
     vbslli:
-      args: { raw: "const composed_t one, const size_t other" }
+      args: { raw: "const Composed one, const size_t other" }
       body: (one.value() << other)
     vbsrli:
-      args: { raw: "const composed_t one, const size_t other" }
+      args: { raw: "const Composed one, const size_t other" }
       body: (one.value() >> other)
 #-----------------------------------------------------------------------------------------------------------------------
   logical:

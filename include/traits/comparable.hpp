@@ -31,29 +31,29 @@ namespace zacc { namespace traits {
 
     /**
      * @brief provides logical comparison operator definitions
-     * @tparam base_t base type (e.g previous trait)
-     * @tparam composed_t final composed type (e.g zfloat32)
+     * @tparam Base base type (e.g previous trait)
+     * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename base_t, typename composed_t>
-    struct comparable : public base_t {
+    template<typename Base, typename Composed>
+    struct comparable : public Base {
         FORWARD(comparable);
 
-        using zval_t = typename base_t::zval_t;
-        using bval_t = typename base_t::bval_t;
+        using zval_t = typename Base::zval_t;
+        using bval_t = typename Base::bval_t;
 
-        friend bval_t operator>(const composed_t one, const composed_t other) {
+        friend bval_t operator>(const Composed one, const Composed other) {
             return bval_t(vgt(one, other), last_operation::comparison);
         }
 
-        friend bval_t operator>=(const composed_t one, const composed_t other) {
+        friend bval_t operator>=(const Composed one, const Composed other) {
             return bval_t(vge(one, other), last_operation::comparison);
         }
 
-        friend bval_t operator<(const composed_t one, const composed_t other) {
+        friend bval_t operator<(const Composed one, const Composed other) {
             return bval_t(vlt(one, other), last_operation::comparison);
         }
 
-        friend bval_t operator<=(const composed_t one, const composed_t other) {
+        friend bval_t operator<=(const Composed one, const Composed other) {
             return bval_t(vle(one, other), last_operation::comparison);
         }
 

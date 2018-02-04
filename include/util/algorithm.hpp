@@ -346,7 +346,7 @@ namespace zacc {
     class zip_iterator :
             public tuple_iterator<Iterator...>
     {
-        using base_t = tuple_iterator<Iterator...>;
+        using Base = tuple_iterator<Iterator...>;
         using trait_t = typename std::iterator_traits<zip_iterator>;
 
         using value_type        = typename trait_t::value_type;

@@ -53,10 +53,10 @@ class TestFunction(TestCase):
         m.name = "test"
 
         obj = Function(m, "testfunc", "_mm512_and_epi32")
-        self.assertEqual(obj._arguments.declaration, "composed_t one, composed_t other")
+        self.assertEqual(obj._arguments.declaration, "Composed one, Composed other")
 
         obj = Function(m, "testfunc", { "args":["multiplicand", "multiplier", "addendum"], "body": "_mm512_and_epi32" })
-        self.assertEqual(obj._arguments.declaration, "composed_t multiplicand, composed_t multiplier, composed_t addendum")
+        self.assertEqual(obj._arguments.declaration, "Composed multiplicand, Composed multiplier, Composed addendum")
 
     @patch("codegen.modules.Module")
     def test_instructions(self, m):
@@ -111,7 +111,7 @@ class TestFunction(TestCase):
                          [["return _mm_fmsub_ps(multiplicand, multiplier, addendum);"], ["return vsub(vmul(multiplicand, multiplier), addendum);"]])
 
         self.assertEqual(obj.arguments.declaration,
-                         "composed_t multiplicand, composed_t multiplier, composed_t addendum")
+                         "Composed multiplicand, Composed multiplier, Composed addendum")
 
 
 

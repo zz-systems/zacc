@@ -36,10 +36,10 @@ modules:
       - args: [[*scalar_t, value]]
         init: _mm256_set1_pd(value)
 
-      - args: "std::array<typename base_t::element_t, base_t::size()> value"
+      - args: "std::array<typename Base::element_t, Base::size()> value"
         init: _mm256_loadu_pd(value.data())
 
-      - args: "std::array<sse::zint32<base_t::capability>, 2> value"
+      - args: "std::array<sse::zint32<Base::capability>, 2> value"
         init: _mm256_set_m128(_mm_cvtepi32_pd(value[1]), _mm_cvtepi32_pd(value[0]))
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -48,7 +48,7 @@ modules:
   io:
     vstore: &io_store
       prefix: "template<typename OutputIt> friend"
-      args: "OutputIt result, composed_t input"
+      args: "OutputIt result, Composed input"
       returns: void
       body: _mm256_store_pd(result, input)
     vstream:
@@ -57,8 +57,8 @@ modules:
 
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args:   "RandomIt input, const zint32<base_t::features> &index, composed_t"
-      body: _mm256_set_m128d(sse::zfloat64<base_t::capability>::gather(input, index.value()[1]), sse::zfloat64<base_t::capability>::gather(input, index.value()[0]))
+      args:   "RandomIt input, const zint32<Base::features> &index, Composed"
+      body: _mm256_set_m128d(sse::zfloat64<Base::capability>::gather(input, index.value()[1]), sse::zfloat64<Base::capability>::gather(input, index.value()[0]))
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------

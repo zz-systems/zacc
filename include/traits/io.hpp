@@ -32,25 +32,25 @@ namespace zacc { namespace traits {
 
     /**
      * @brief provides vector load/store definitions
-     * @tparam base_t base type (e.g previous trait)
-     * @tparam composed_t final composed type (e.g zfloat32)
+     * @tparam Base base type (e.g previous trait)
+     * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename base_t, typename composed_t>
-    struct io : public base_t {
+    template<typename Base, typename Composed>
+    struct io : public Base {
 
-        using zval_t = typename base_t::zval_t;
-        using bval_t = typename base_t::bval_t;
+        using zval_t = typename Base::zval_t;
+        using bval_t = typename Base::bval_t;
 
-        typedef typename zval_traits<base_t>::extracted_t extracted_t;
+        typedef typename zval_traits<Base>::extracted_t extracted_t;
 
         FORWARD(io);
 
         template<typename OutputIt>
         void store (OutputIt result, bval_tag) const
         {
-            typename zval_traits<typename composed_t::zval_t>::extracted_t data;
+            typename zval_traits<typename Composed::zval_t>::extracted_t data;
 
-            vstore(std::begin(data), static_cast<composed_t>(base_t::value()));
+            vstore(std::begin(data), static_cast<Composed>(Base::value()));
 
             for(auto i : data)
                 *(result++) = i != 0;
@@ -59,15 +59,15 @@ namespace zacc { namespace traits {
         template<typename OutputIt>
         void store (OutputIt result, zval_tag) const
         {
-            vstore(result, static_cast<composed_t>(base_t::value()));
+            vstore(result, static_cast<Composed>(Base::value()));
         }
 
         template<typename OutputIt>
         void stream (OutputIt result, bval_tag) const
         {
-            typename zval_traits<typename composed_t::zval_t>::extracted_t data;
+            typename zval_traits<typename Composed::zval_t>::extracted_t data;
 
-            vstore(std::begin(data), static_cast<composed_t>(base_t::value()));
+            vstore(std::begin(data), static_cast<Composed>(Base::value()));
 
             for(auto i : data)
                 *(result++) = i != 0;
@@ -76,21 +76,21 @@ namespace zacc { namespace traits {
         template<typename OutputIt>
         void stream (OutputIt result, zval_tag) const
         {
-            vstream(result, static_cast<composed_t>(base_t::value()));
+            vstream(result, static_cast<Composed>(Base::value()));
         }
 
         const extracted_t data() const {
-            alignas(base_t::alignment) extracted_t result;
+            alignas(Base::alignment) extracted_t result;
 
-            store(std::begin(result), typename base_t::tag());
+            store(std::begin(result), typename Base::tag());
 
             return result;
         }
 
         template<typename RandomIt, typename index_t>
-        static composed_t gather(RandomIt input, index_t index)
+        static Composed gather(RandomIt input, index_t index)
         {
-            return vgather(input, index, composed_t());
+            return vgather(input, index, Composed());
         }
     };
 

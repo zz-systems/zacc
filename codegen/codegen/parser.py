@@ -193,4 +193,4 @@ class Parser():
 
 
     def argument(self, name, type=None):
-        return ArgumentNode(name, type or "composed_t")
+        return ArgumentNode(name, type or "Composed")

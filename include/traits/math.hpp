@@ -31,33 +31,33 @@ namespace zacc { namespace traits {
 
     /**
      * @brief provides basic math function definitions, fluent interface
-     * @tparam base_t base type (e.g previous trait)
-     * @tparam composed_t final composed type (e.g zfloat32)
+     * @tparam Base base type (e.g previous trait)
+     * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename base_t, typename composed_t>
-    struct math : public base_t {
+    template<typename Base, typename Composed>
+    struct math : public Base {
         FORWARD(math);
 
-        using zval_t = typename base_t::zval_t;
-        using bval_t = typename base_t::bval_t;
+        using zval_t = typename Base::zval_t;
+        using bval_t = typename Base::bval_t;
 
         /**
          * @brief absoulute value
          * @return |value|
          */
-        composed_t abs() const noexcept {
+        Composed abs() const noexcept {
             return vabs(*this);
         }
 
-        composed_t max(const composed_t other) const noexcept {
+        Composed max(const Composed other) const noexcept {
             return vmax(*this, other);
         }
 
-        composed_t min(const composed_t other) const noexcept {
+        Composed min(const Composed other) const noexcept {
             return vmin(*this, other);
         }
 
-        composed_t clamp(const composed_t from, const composed_t to) const noexcept {
+        Composed clamp(const Composed from, const Composed to) const noexcept {
             return vclamp(*this, from, to);
         }
 
@@ -65,7 +65,7 @@ namespace zacc { namespace traits {
          * @brief inverse value
          * @return 1 / value
          */
-        composed_t rcp() const noexcept {
+        Composed rcp() const noexcept {
             return vrcp(*this);
         }
 
@@ -73,7 +73,7 @@ namespace zacc { namespace traits {
          * @brief truncated value (integer part of a floating value)
          * @return 1.654743 -> 1.0
          */
-        composed_t trunc() const noexcept {
+        Composed trunc() const noexcept {
             return vtrunc(*this);
         }
 
@@ -81,7 +81,7 @@ namespace zacc { namespace traits {
          * @brief round down
          * @return 1.6 -> 1.0
          */
-        composed_t floor() const noexcept {
+        Composed floor() const noexcept {
             return vfloor(*this);
         }
 
@@ -89,7 +89,7 @@ namespace zacc { namespace traits {
          * @brief round up
          * @return 1.4 -> 2.0
          */
-        composed_t ceil() const noexcept {
+        Composed ceil() const noexcept {
             return vceil(*this);
         }
 
@@ -97,7 +97,7 @@ namespace zacc { namespace traits {
          * @brief round to nearest integer
          * @return 1.6 -> 2.0; 1.4 -> 1.0
          */
-        composed_t round() const noexcept {
+        Composed round() const noexcept {
             return vround(*this);
         }
 
@@ -105,7 +105,7 @@ namespace zacc { namespace traits {
          * @brief pow
          * @return value ^ exponent
          */
-        composed_t pow(const composed_t exponent) const noexcept {
+        Composed pow(const Composed exponent) const noexcept {
             return vpow(*this, exponent);
         }
 
@@ -113,7 +113,7 @@ namespace zacc { namespace traits {
          * @brief square root
          * @return sqrt(value)
          */
-        composed_t sqrt() const noexcept {
+        Composed sqrt() const noexcept {
             return vsqrt(*this);
         }
     };

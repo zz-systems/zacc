@@ -40,79 +40,79 @@
 
 
 /**
- * @brief shortcut to write forwarding constructors with default base name 'base_t'
+ * @brief shortcut to write forwarding constructors with default base name 'Base'
  * @param name current type (constructor)
  */
-#define FORWARD(name) FORWARD2(name, base_t)
+#define FORWARD(name) FORWARD2(name, Base)
 
 /**
  * @brief shortcut for trait definition. Aggregated from base traits and provided traits
  * @param provides which trait is set
- * @param base_t base type
+ * @param Base base type
  */
-#define TRAIT2(provides, base_t) \
-    static const long long traits =  base_t::traits | static_cast<long long>(provides)
+#define TRAIT2(provides, Base) \
+    static const long long traits =  Base::traits | static_cast<long long>(provides)
 
 /**
- * @brief shortcut for trait definition. Aggregated from base traits and provided traits. 'base_t' as default base type
+ * @brief shortcut for trait definition. Aggregated from base traits and provided traits. 'Base' as default base type
  * @param provides which trait is set
  */
 #define TRAIT(provides) //\
-    //TRAIT2(provides, base_t)
+    //TRAIT2(provides, Base)
 
 #define REQUIRE(requirement) //\
-    //static_assert((base_t::traits & static_cast<long long>(requirement)) != 0, "Requirement not met: feature '" #requirement "' required.")
+    //static_assert((Base::traits & static_cast<long long>(requirement)) != 0, "Requirement not met: feature '" #requirement "' required.")
 
 //#define BASE() \
-//    base_t* base() { return static_cast<base_t*>(this); }
+//    Base* base() { return static_cast<Base*>(this); }
 
 /**
  * @brief provides converting binary operators, where one argument is of another type and has to be casted appropriately.
  * @param op operator
- * @param composed_t final composed type
+ * @param Composed final composed type
  */
-#define CONVERSION2(op, composed_t) \
+#define CONVERSION2(op, Composed) \
     /** \
     * @brief converting op operator \
     */ \
     template<typename other_t> \
-    friend composed_t operator op(const composed_t one, const enable_if_not_same<other_t, composed_t> other) { \
-        return one op static_cast<composed_t>(other); \
+    friend Composed operator op(const Composed one, const enable_if_not_same<other_t, Composed> other) { \
+        return one op static_cast<Composed>(other); \
     }; \
     /** \
     * @brief converting op operator \
     */ \
     template<typename other_t> \
-    friend composed_t operator op (const enable_if_not_same<other_t, composed_t> one, const composed_t other) { \
-        return static_cast<composed_t>(one) op other; \
+    friend Composed operator op (const enable_if_not_same<other_t, Composed> one, const Composed other) { \
+        return static_cast<Composed>(one) op other; \
     }
 
 /**
  * @brief provides converting binary operators, where one argument is of another type and has to be casted appropriately.
- * 'composed_t' used as default final composed type
+ * 'Composed' used as default final composed type
  * @param op operator
  */
-#define CONVERSION(op) CONVERSION2(op, composed_t)
+#define CONVERSION(op) CONVERSION2(op, Composed)
 
 /**
  * @brief provides assignment operators in form of +=, <<=, etc...
  * @param op operator
- * @param composed_t final composed type
+ * @param Composed final composed type
  */
-#define ASSIGNMENT2(op, composed_t) \
+#define ASSIGNMENT2(op, Composed) \
     /** \
     * @brief merged op - assignment operator \
     */ \
-    friend composed_t &operator op##=(composed_t &one, const composed_t other) { \
+    friend Composed &operator op##=(Composed &one, const Composed other) { \
         return one = one op other; \
     }
 
 /**
  * @brief provides assignment operators in form of +=, <<=, etc...
- * 'composed_t' used as default final composed type
+ * 'Composed' used as default final composed type
  * @param op operator
  */
-#define ASSIGNMENT(op) ASSIGNMENT2(op, composed_t)
+#define ASSIGNMENT(op) ASSIGNMENT2(op, Composed)
 
 
 #define STRINGIZE_DETAIL(x) #x

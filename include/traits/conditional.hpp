@@ -31,39 +31,39 @@ namespace zacc { namespace traits {
 
     /**
      * @brief provides conditional functionality
-     * @tparam base_t base type (e.g previous trait)
-     * @tparam composed_t final composed type (e.g zfloat32)
+     * @tparam Base base type (e.g previous trait)
+     * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename base_t, typename composed_t>
-    struct conditional : public base_t {
+    template<typename Base, typename Composed>
+    struct conditional : public Base {
         FORWARD(conditional);
 
-        using zval_t = typename base_t::zval_t;
-        using bval_t = typename base_t::bval_t;
+        using zval_t = typename Base::zval_t;
+        using bval_t = typename Base::bval_t;
 
         struct else_branch
         {
-            constexpr composed_t otherwise(const composed_t& else_value) const
+            constexpr Composed otherwise(const Composed& else_value) const
             {
                 return vsel(_condition, _if_value, else_value);
             }
 
         private:
 
-            constexpr else_branch(const bval_t& condition, const composed_t& if_value, std::false_type)
+            constexpr else_branch(const bval_t& condition, const Composed& if_value, std::false_type)
                     : _if_value(if_value), _condition(condition.last_op() == last_operation::undefined ? (zval_t(condition.value()) != 0) : condition)
             {
             }
 
-            constexpr else_branch(const bval_t& condition, const composed_t& if_value, std::true_type)
+            constexpr else_branch(const bval_t& condition, const Composed& if_value, std::true_type)
                     : _if_value(if_value), _condition(condition)
             {
             }
 
-            composed_t _if_value;
+            Composed _if_value;
             bval_t _condition;
 
-            friend struct conditional<base_t, composed_t>;
+            friend struct conditional<Base, Composed>;
         };
 
 

@@ -31,18 +31,18 @@ namespace zacc { namespace traits {
 
     /**
      * @brief provides constructor definitions
-     * @tparam base_t base type (e.g previous trait)
-     * @tparam composed_t final composed type (e.g zfloat32)
+     * @tparam Base base type (e.g previous trait)
+     * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename base_t, typename composed_t>
-    struct construction : public base_t {
+    template<typename Base, typename Composed>
+    struct construction : public Base {
         FORWARD(construction);
 
-        using zval_t = typename base_t::zval_t;
-        using bval_t = typename base_t::bval_t;
+        using zval_t = typename Base::zval_t;
+        using bval_t = typename Base::bval_t;
 
 // TODO
-//        static composed_t make_scalar(base_t::scalar_t value)
+//        static Composed make_scalar(Base::scalar_t value)
 //        {
 //            return from_scalar(value);
 //        }

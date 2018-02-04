@@ -32,43 +32,43 @@ namespace zacc { namespace traits {
 
     /**
      * @brief provides bitwise shift operator definitions
-     * @tparam base_t base type (e.g previous trait)
-     * @tparam composed_t final composed type (e.g zint32)
+     * @tparam Base base type (e.g previous trait)
+     * @tparam Composed final composed type (e.g zint32)
      */
-    template<typename base_t, typename composed_t>
-    struct bitwise_shift : public base_t {
+    template<typename Base, typename Composed>
+    struct bitwise_shift : public Base {
         FORWARD(bitwise_shift);
 
-        using zval_t = typename base_t::zval_t;
-        using bval_t = typename base_t::bval_t;
+        using zval_t = typename Base::zval_t;
+        using bval_t = typename Base::bval_t;
 
-        friend composed_t operator<<(const composed_t one, const size_t immediate) {
+        friend Composed operator<<(const Composed one, const size_t immediate) {
             return vbslli(one, immediate);
         }
 
-        friend composed_t operator>>(const composed_t one, const size_t immediate) {
+        friend Composed operator>>(const Composed one, const size_t immediate) {
             return vbsrli(one, immediate);
         }
 // TODO: Disabled for now.
-        /*friend composed_t operator<<(const composed_t one, const composed_t other) {
+        /*friend Composed operator<<(const Composed one, const Composed other) {
             return vbsll(one, other);
         }
 
-        friend composed_t operator>>(const composed_t one, const composed_t other) {
+        friend Composed operator>>(const Composed one, const Composed other) {
             return vbsrl(one, other);
         }*/
 
         /**
         * @brief merged << - assignment operator
         */
-        friend composed_t &operator <<=(composed_t &one, const size_t immediate) {
+        friend Composed &operator <<=(Composed &one, const size_t immediate) {
             return one = one << immediate;
         }
 
         /**
         * @brief merged >> - assignment operator
         */
-        friend composed_t &operator >>=(composed_t &one, const size_t immediate) {
+        friend Composed &operator >>=(Composed &one, const size_t immediate) {
             return one = one >> immediate;
         }
 

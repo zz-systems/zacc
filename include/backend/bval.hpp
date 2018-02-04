@@ -36,54 +36,78 @@
 
 namespace zacc {
 
+    /**
+     * last operation
+     */
     enum class last_operation
     {
-        undefined,
-        comparison,
-        logic,
-        bitwise
+        undefined,  ///< last operation is unknown (e.g initialization or arithmetic)
+        comparison, ///< last operation has been a comparison. Assume all-set mask of ones
+        logic,      ///< last operation has been a logic operation. Assume all-set mask of ones
+        bitwise     ///< last operation has been a comparison. Assume user knows what to do
     };
 
-    /// TODO: separate file, impl traits.
+    /**
+     * Base type for boolean vector types
+     * @tparam Vector vector type, like __m128i for sse 4x integer vector
+     * @tparam MaskVector mask type for boolean operations
+     * @tparam Size ector size (1 - scalar, 4, 8, 16, ...)
+     * @tparam Alignment memory alignment
+     * @tparam Features capabilities
+     */
     template<typename Vector, typename MaskVector, size_t Size, size_t Alignment, uint64_t Features>
     struct bval : zval_base<Vector, MaskVector, bool, bval_tag, Size, Alignment, Features>
     {
-        constexpr bval() : _last_op(last_operation::undefined)
-        {
-        }
+        /**
+         * default constructor
+         */
+        constexpr bval() noexcept
+                : _last_op(last_operation::undefined)
+        {}
 
-        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Vector>::value>>
-        constexpr bval(const T& other)
+        /**
+         * copy constructor
+         * @tparam T any type convertable to Vector
+         * @param other
+         */
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
+        constexpr bval(const T& other) noexcept
                 : _value (other), _last_op(other.last_op())
-        {
-        }
+        {}
 
-        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Vector>::value>>
-        constexpr bval(const T& other, last_operation last_op)
+        /**
+         * 'fake' copy constructor with last operation
+         * @tparam T any type convertable to Vector
+         * @param other
+         * @param last_op last operation
+         */
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
+        constexpr bval(const T& other, last_operation last_op) noexcept
                 : _value (other), _last_op(last_op)
-        {
-        }
+        {}
 
-        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Vector>::value>>
-        constexpr bval(T&& other)
-                : _value(std::move(other)), _last_op(last_operation::undefined)
-        {
-        }
+        /**
+         * move constructor
+         * @tparam T any type convertable to Vector
+         * @param other
+         */
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
+        constexpr bval(T&& other) noexcept
+                : _value(std::forward<T>(other)),
+                  _last_op(last_operation::undefined)
+        {}
 
-        constexpr bval(const bval& other)
+        constexpr bval(const bval& other) noexcept
                 : _value (other._value), _last_op(other.last_op())
-        {
-        }
+        {}
 
-        constexpr bval(const bval& other, last_operation last_op)
+        constexpr bval(const bval& other, last_operation last_op) noexcept
                 : _value (other._value), _last_op(last_op)
-        {
-        }
+        {}
 
         constexpr bval(bval&& other) noexcept
                 : _value(std::move(other._value)), _last_op(other.last_op())
-        {
-        }
+        {}
 
         template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Vector>::value>>
         constexpr bval& operator=(const T& other) noexcept
