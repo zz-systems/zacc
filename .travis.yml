@@ -79,10 +79,10 @@ matrix:
       env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7 DOC_BUILDER=1
 
 before_install:
-  - ./ci/setup-environment.sh
+  - travis_retry ./ci/setup-environment.sh
 install:
-  - ./ci/setup-dependencies.sh
-before_script:  .
+  - travis_retry ./ci/setup-dependencies.sh
+before_script:
   - /ci/prepare-build.sh
 script:
   - ./ci/run-build.sh
