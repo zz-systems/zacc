@@ -83,7 +83,7 @@ before_install:
 install:
   - travis_retry ./ci/setup-dependencies.sh
 before_script:
-  - /ci/prepare-build.sh
+  - ./ci/prepare-build.sh
 script:
   - ./ci/run-build.sh
   - ./ci/run-test.sh
