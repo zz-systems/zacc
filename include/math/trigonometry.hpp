@@ -60,13 +60,61 @@ namespace zacc { namespace math {
      * @return [-1; 1]
      */
     template<typename vreal_t>
+    std::enable_if_t<is_floating_point<vreal_t>::value && (!has_integer_types_v<vreal_t> || is_scalar<vreal_t>::value), vreal_t> vsin(vreal_t val)
+    {
+        return zacc::transform(val, [](auto i) { return std::sin(i); });
+    }
+
+    /**
+     * @brief  Cosine function. Algorithm taken from SLEEF 2.80 and vecmathlib
+     * @tparam type [zfloat, zdouble]
+     * @param val [-pi; pi] rad
+     * @return [-1; 1]
+     */
+    template<typename vreal_t>
+    std::enable_if_t<is_floating_point<vreal_t>::value && (!has_integer_types_v<vreal_t> || is_scalar<vreal_t>::value), vreal_t> vcos(vreal_t val)
+    {
+        return zacc::transform(val, [](auto i) { return std::cos(i); });
+    }
+
+    /**
+     * @brief  Tangens function. Algorithm taken from SLEEF 2.80 and vecmathlib
+     * @tparam type [zfloat, zdouble]
+     * @param val [-pi/2; pi/2] rad
+     * @return [-1; 1]
+     */
+    template <typename vreal_t>
+    std::enable_if_t<is_floating_point<vreal_t>::value && (!has_integer_types_v<vreal_t> || is_scalar<vreal_t>::value), vreal_t> vtan(vreal_t val)
+    {
+        return zacc::transform(val, [](auto i) { return std::tan(i); });
+    }
+
+    /**
+     * @brief  Cosine function. Algorithm taken from SLEEF 2.80 and vecmathlib
+     * @tparam type [zfloat, zdouble]
+     * @param val [-1; 1] rad
+     * @return [-1; 1]
+     */
+    template<typename vreal_t>
+    std::enable_if_t<is_floating_point<vreal_t>::value && (!has_integer_types_v<vreal_t> || is_scalar<vreal_t>::value), vreal_t> vatan2(vreal_t y, vreal_t x)
+    {
+        return zacc::transform(x, y, [](auto i, auto j) { return std::atan2(i, j); });
+    }
+
+    /**
+     * @brief  Sine function. Algorithm taken from SLEEF 2.80 and vecmathlib
+     * @tparam type [zfloat, zdouble]
+     * @param val [-pi; pi] rad
+     * @return [-1; 1]
+     */
+    template<typename vreal_t>
     std::enable_if_t<is_floating_point<vreal_t>::value && is_vector<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vsin(vreal_t val)
     {
         vreal_t q = (val * Z_1_PI).floor();
         zint iq = q;
 
         // when performance > precision
-        if(arch::use_fast_float)
+        if(dispatched_arch::use_fast_float)
         {
             val = vfmadd(q, Z_PI, val);
         }
@@ -138,7 +186,7 @@ namespace zacc { namespace math {
         zint iq = q;
 
         // when performance > precision
-        if(arch::use_fast_float)
+        if(dispatched_arch::use_fast_float)
         {
             val -= q * Z_PI_2;
         }
@@ -210,7 +258,7 @@ namespace zacc { namespace math {
         zint iq = q;
 
         // when performance > precision
-        if(arch::use_fast_float)
+        if(dispatched_arch::use_fast_float)
         {
             val -= q * Z_PI_2;
         }

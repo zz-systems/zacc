@@ -30,28 +30,3 @@
 #include "backend/avx512/int8.impl.hpp"
 #include "backend/avx512/int16.impl.hpp"
 #include "backend/avx512/int32.impl.hpp"
-
-namespace zacc { namespace avx512 {
-
-    template<typename _capability>
-    struct types
-    {
-        using capability = _capability;
-
-        using zfloat32  = zacc::backend::avx512::zfloat32<capability::value>;
-        using zfloat64  = zacc::backend::avx512::zfloat64<capability::value>;
-        using zint8     = zacc::backend::avx512::zint8<capability::value>;
-        using zint16    = zacc::backend::avx512::zint16<capability::value>;
-        using zint32    = zacc::backend::avx512::zint32<capability::value>;
-
-        using bfloat32  = zacc::backend::avx512::bfloat32<capability::value>;
-        using bfloat64  = zacc::backend::avx512::bfloat64<capability::value>;
-        using bint8     = zacc::backend::avx512::bint8<capability::value>;
-        using bint16    = zacc::backend::avx512::bint16<capability::value>;
-        using bint32    = zacc::backend::avx512::bint32<capability::value>;
-
-        static constexpr const size_t alignment = zint32::alignment;
-
-        static const std::string major_branch_name() { return "AVX512"; }
-    };
-}}

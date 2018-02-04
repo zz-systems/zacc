@@ -35,7 +35,7 @@ namespace zacc { namespace test {
 #define ZTRACE_TEST_OUTPUT(cmd) //ZTRACE_INTERNAL(cmd)
 #define REQUIRES(raw) \
     do { \
-        auto c = zacc::platform::global().match_capabilities(zacc::branches::raw::value); \
+        auto c = zacc::platform::global().match_capabilities(zacc::architectures::raw::value); \
         std::string str; \
         \
         if(c.size() != 0) {\

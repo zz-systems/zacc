@@ -31,7 +31,7 @@
 
 zacc::system::entrypoint *mandelbrot_create_instance()
 {
-    return new zacc::examples::mandelbrot_kernel<zacc::arch::types>();
+    return new zacc::examples::mandelbrot_kernel<zacc::dispatched_arch>();
 }
 
 void mandelbrot_delete_instance(zacc::system::entrypoint* instance)
@@ -42,7 +42,7 @@ void mandelbrot_delete_instance(zacc::system::entrypoint* instance)
 
 zacc::system::entrypoint *julia_create_instance()
 {
-    return new zacc::examples::julia_kernel<zacc::arch::types>();
+    return new zacc::examples::julia_kernel<zacc::dispatched_arch>();
 }
 
 void julia_delete_instance(zacc::system::entrypoint* instance)

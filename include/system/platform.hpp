@@ -45,33 +45,33 @@ namespace zacc {
      */
     struct platform {
     private:
-        using capability_map_t = std::map<const capabilities, capability>;
+        using capability_map_t = std::map<const capabilities, arch>;
 
     public:
 
         using raw_t = std::underlying_type_t<capabilities>;
 
         /**
-         * @brief Enable capability, fluent interface
-         * @param capability
+         * @brief Enable arch, fluent interface
+         * @param arch
          * @return self
          */
-        platform &enable(const capabilities capability);
+        platform &enable(const capabilities arch);
 
         /**
-         * @brief Disable capability, fluent interface
-         * @param capability
+         * @brief Disable arch, fluent interface
+         * @param arch
          * @return self
          */
-        platform &disable(const capabilities capability);
+        platform &disable(const capabilities arch);
 
         /**
-         * @brief Set capability, fluent interface
-         * @param capability
+         * @brief Set arch, fluent interface
+         * @param arch
          * @param enabled
          * @return self
          */
-        platform &set(const capabilities capability, bool enabled);
+        platform &set(const capabilities arch, bool enabled);
 
         /**
          * @brief Set capabilities from raw value, fluent interface
@@ -81,11 +81,11 @@ namespace zacc {
         platform &set(raw_t raw_value);
 
         /**
-         * @brief Checks if capability is set
-         * @param capability
+         * @brief Checks if arch is set
+         * @param arch
          * @return true if set, otherwise false
          */
-        bool is_set(const capabilities capability) const;
+        bool is_set(const capabilities arch) const;
 
         /**
          * @brief Get entire raw value with all capabilities
@@ -94,34 +94,34 @@ namespace zacc {
         raw_t raw();
 
         /**
-         * @brief Get enabled capability objects from raw representation
-         * @return array of capabilities for each enabled capability
+         * @brief Get enabled arch objects from raw representation
+         * @return array of capabilities for each enabled arch
          */
-        std::vector<capability> enabled_capabilities() const;
+        std::vector<arch> enabled_capabilities() const;
 
         /**
-         * @brief Get all capability objects from raw representation
-         * @return array of capabilities for each enabled capability
+         * @brief Get all arch objects from raw representation
+         * @return array of capabilities for each enabled arch
          */
-        std::vector<capability> all_capabilities() const;
+        std::vector<arch> all_capabilities() const;
 
         /**
          * @brief Match runtime capabilities with requirement list
          * @return array of missing capabilities. Empty if conditions met.
          */
-        std::vector<capability> match_capabilities(std::initializer_list<capabilities> required) const;
+        std::vector<arch> match_capabilities(std::initializer_list<capabilities> required) const;
 
         /**
          * @brief Match runtime capabilities with raw requirement list (integer reporesentation)
          * @return array of missing capabilities. Empty if conditions met.
          */
-        std::vector<capability> match_capabilities(raw_t required) const;
+        std::vector<arch> match_capabilities(raw_t required) const;
 
         /**
-         * @brief Get all capability objects from raw representation
-         * @return array of capabilities for each enabled capability
+         * @brief Get all arch objects from raw representation
+         * @return array of capabilities for each enabled arch
          */
-        std::vector<capability> make_capabilities(raw_t value) const;
+        std::vector<arch> make_capabilities(raw_t value) const;
 
         /**
          * @brief Resolves platform information and populates capabilities, fluent interface
@@ -136,8 +136,8 @@ namespace zacc {
         platform& register_capabilities();
 
         /**
-         * @brief registers a specified capability metadata, fluent interface
-         * @param cap capability
+         * @brief registers a specified arch metadata, fluent interface
+         * @param cap arch
          * @param str capabilitiy's string representation
          * @return self
          */
@@ -178,8 +178,8 @@ namespace zacc {
         platform();
 
         /**
-         * @brief if the capability is registered, set the availability flag, fluent interface
-         * @param cap capability
+         * @brief if the arch is registered, set the availability flag, fluent interface
+         * @param cap arch
          * @param enabled availability flag
          * @return self
          */

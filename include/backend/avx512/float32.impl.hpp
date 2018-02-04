@@ -56,10 +56,10 @@
 
 namespace zacc { namespace backend { namespace avx512 {
 
-    template<uint64_t capability>
+    template<uint64_t arch>
     struct bfloat32;
 
-    template<uint64_t capability>
+    template<uint64_t arch>
     struct zfloat32;
 
 
@@ -183,9 +183,9 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
         template<typename base_t>
-        //using impl = traits::construction<__impl<base_t>, zfloat32<base_t::capability>>;
+        //using impl = traits::construction<__impl<base_t>, zfloat32<base_t::arch>>;
 
-        using impl = traits::construction<__impl<base_t>, zfloat32<base_t::capability>>;
+        using impl = traits::construction<__impl<base_t>, zfloat32<base_t::arch>>;
 
     };
 
@@ -255,9 +255,9 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
         template<typename base_t>
-        //using impl = traits::io<__impl<base_t>, zfloat32<base_t::capability>>;
+        //using impl = traits::io<__impl<base_t>, zfloat32<base_t::arch>>;
 
-        using impl = traits::io<__impl<base_t>, zfloat32<base_t::capability>>;
+        using impl = traits::io<__impl<base_t>, zfloat32<base_t::arch>>;
 
     };
 
@@ -297,7 +297,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vneg(composed_t one)  noexcept {
+            friend zfloat32<base_t::arch> vneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vneg");
 
@@ -310,7 +310,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vadd(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> vadd(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vadd");
 
@@ -323,7 +323,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vsub(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> vsub(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vsub");
 
@@ -336,7 +336,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vmul(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> vmul(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vmul");
 
@@ -349,7 +349,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vdiv(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> vdiv(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vdiv");
 
@@ -366,9 +366,9 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
         template<typename base_t>
-        //using impl = traits::arithmetic<__impl<base_t>, zfloat32<base_t::capability>>;
+        //using impl = traits::arithmetic<__impl<base_t>, zfloat32<base_t::arch>>;
 
-        using impl = traits::arithmetic<__impl<base_t>, zfloat32<base_t::capability>>;
+        using impl = traits::arithmetic<__impl<base_t>, zfloat32<base_t::arch>>;
 
     };
 
@@ -408,7 +408,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vneg(composed_t one)  noexcept {
+            friend zfloat32<base_t::arch> vneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vneg");
 
@@ -423,7 +423,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vand(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> vand(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vand");
 
@@ -436,7 +436,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> or(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> or(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "or");
 
@@ -449,7 +449,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> xor(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> xor(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "xor");
 
@@ -466,9 +466,9 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
         template<typename base_t>
-        //using impl = traits::bitwise<__impl<base_t>, zfloat32<base_t::capability>>;
+        //using impl = traits::bitwise<__impl<base_t>, zfloat32<base_t::arch>>;
 
-        using impl = traits::bitwise<__impl<base_t>, zfloat32<base_t::capability>>;
+        using impl = traits::bitwise<__impl<base_t>, zfloat32<base_t::arch>>;
 
     };
 
@@ -508,7 +508,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vneg(composed_t one)  noexcept {
+            friend zfloat32<base_t::arch> vneg(composed_t one)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vneg");
 
@@ -523,7 +523,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> or(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> or(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "or");
 
@@ -536,7 +536,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vand(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> vand(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vand");
 
@@ -553,9 +553,9 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
         template<typename base_t>
-        //using impl = traits::logical<__impl<base_t>, bfloat32<base_t::capability>>;
+        //using impl = traits::logical<__impl<base_t>, bfloat32<base_t::arch>>;
 
-        using impl = traits::logical<__impl<base_t>, zfloat32<base_t::capability>>;
+        using impl = traits::logical<__impl<base_t>, zfloat32<base_t::arch>>;
 
     };
 
@@ -595,7 +595,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> veq(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> veq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "veq");
 
@@ -608,7 +608,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vneq(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> vneq(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vneq");
 
@@ -621,7 +621,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vgt(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> vgt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vgt");
 
@@ -634,7 +634,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vlt(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> vlt(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vlt");
 
@@ -647,7 +647,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vge(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> vge(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vge");
 
@@ -660,7 +660,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vle(composed_t one, composed_t other)  noexcept {
+            friend zfloat32<base_t::arch> vle(composed_t one, composed_t other)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vle");
 
@@ -677,9 +677,9 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
         template<typename base_t>
-        //using impl = traits::comparable<__impl<base_t>, zfloat32<base_t::capability>>;
+        //using impl = traits::comparable<__impl<base_t>, zfloat32<base_t::arch>>;
 
-        using impl = traits::comparable<__impl<base_t>, zfloat32<base_t::capability>>;
+        using impl = traits::comparable<__impl<base_t>, zfloat32<base_t::arch>>;
 
     };
 
@@ -719,7 +719,7 @@ namespace zacc { namespace backend { namespace avx512 {
              * @relates float32
              * @remark avx512 - default
              */
-            friend zfloat32<base_t::capability> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
+            friend zfloat32<base_t::arch> vsel(composed_t condition, composed_t if_value, composed_t else_value)  noexcept {
 
                 ZTRACE_BACKEND("avx512.float32.impl", __LINE__, "zfloat32(float[16])", "default", "vsel");
 
@@ -736,9 +736,9 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
         template<typename base_t>
-        //using impl = traits::conditional<__impl<base_t>, zfloat32<base_t::capability>>;
+        //using impl = traits::conditional<__impl<base_t>, zfloat32<base_t::arch>>;
 
-        using impl = traits::conditional<__impl<base_t>, zfloat32<base_t::capability>>;
+        using impl = traits::conditional<__impl<base_t>, zfloat32<base_t::arch>>;
 
     };
 
@@ -763,10 +763,10 @@ namespace zacc { namespace backend { namespace avx512 {
          * @relates float32
          * @remark avx512
          */
-        template<uint64_t capability>
+        template<uint64_t arch>
         struct __zval_float32
         {
-            using zval_t = zval<__m512, __mmask16, float, 16, 64, capability>;
+            using zval_t = zval<__m512, __mmask16, float, 16, 64, arch>;
 
             struct impl : public zval_t
             {
@@ -778,12 +778,12 @@ namespace zacc { namespace backend { namespace avx512 {
          * @relates float32
          * @remark avx512
          */
-        template<uint64_t capability>
+        template<uint64_t arch>
         struct __zfloat32
         {
             struct impl;
 
-            using zval_t = typename __zval_float32<capability>::impl;
+            using zval_t = typename __zval_float32<arch>::impl;
             using composition_t = compose
             <
                 printable::impl,
@@ -806,10 +806,10 @@ namespace zacc { namespace backend { namespace avx512 {
             };
         };
 
-        template<uint64_t capability>
+        template<uint64_t arch>
         struct __bfloat32
         {
-            using bval_t = bval<typename __zfloat32<capability>::impl, __mmask16>;
+            using bval_t = bval<typename __zfloat32<arch>::impl, __mmask16>;
             struct impl : public bval_t
             {
                 FORWARD2(impl, bval_t);
@@ -817,16 +817,16 @@ namespace zacc { namespace backend { namespace avx512 {
         };
     //}
 
-    template<uint64_t capability>
-    struct zfloat32 : public /*composition::*/__zfloat32<capability>::impl
+    template<uint64_t arch>
+    struct zfloat32 : public /*composition::*/__zfloat32<arch>::impl
     {
-        FORWARD2(zfloat32, /*composition::*/__zfloat32<capability>::impl);
+        FORWARD2(zfloat32, /*composition::*/__zfloat32<arch>::impl);
     };
 
-    template<uint64_t capability>
-    struct bfloat32 : public /*composition::*/__bfloat32<capability>::impl
+    template<uint64_t arch>
+    struct bfloat32 : public /*composition::*/__bfloat32<arch>::impl
     {
-        FORWARD2(bfloat32, /*composition::*/__bfloat32<capability>::impl);
+        FORWARD2(bfloat32, /*composition::*/__bfloat32<arch>::impl);
     };
 
     static_assert(is_zval<zfloat32<0>>::value, "is_zval for zfloat32 failed.");

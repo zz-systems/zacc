@@ -48,11 +48,11 @@ namespace zacc {
 
     // Aligned array: not working.
 
-//    template <class _Tp, size_t _Size, size_t _Align = alignof(_Tp)>
+//    template <class _Tp, size_t Size, size_t _Align = alignof(_Tp)>
 //    struct alignas( _Align ) aligned_array
-//            : public std::array<_Tp, _Size> {
+//            : public std::array<_Tp, Size> {
 //
-//        using std::array<_Tp, _Size>::__elems_;
+//        using std::array<_Tp, Size>::__elems_;
 //
 //        template<typename ...Args> \
 //        aligned_array(Args&&... args) : __elems_({ std::forward<Args>(args)... })
@@ -74,7 +74,7 @@ namespace zacc {
 //        typedef std::reverse_iterator<iterator>       reverse_iterator;
 //        typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 //
-//        alignas(_Align) std::array<_Tp, _Size> array;
+//        alignas(_Align) std::array<_Tp, Size> array;
 //
 //        // No explicit construct/copy/destroy for aggregate type
 //        void fill(const value_type& __u)
@@ -113,11 +113,11 @@ namespace zacc {
 //
 //        // capacity:
 //
-//        constexpr size_type size() const noexcept {return _Size;}
+//        constexpr size_type size() const noexcept {return Size;}
 //
-//        constexpr size_type max_size() const noexcept {return _Size;}
+//        constexpr size_type max_size() const noexcept {return Size;}
 //
-//        constexpr bool empty() const noexcept {return _Size == 0;}
+//        constexpr bool empty() const noexcept {return Size == 0;}
 //
 //        // element access:
 //        reference operator[](size_type __n)             {return array[__n];}

@@ -38,29 +38,3 @@
 
 #include "backend/avx2/float32.impl.hpp"
 #include "backend/avx2/float64.impl.hpp"
-
-namespace zacc { namespace avx2 {
-
-    template<typename _capability>
-    struct types
-    {
-        using capability = _capability;
-
-        using zfloat32  = zacc::backend::avx2::zfloat32<capability::value>;
-        using zfloat64  = zacc::backend::avx2::zfloat64<capability::value>;
-
-        using zint8     = zacc::backend::avx2::zint8<capability::value>;
-        using zint16    = zacc::backend::avx2::zint16<capability::value>;
-        using zint32    = zacc::backend::avx2::zint32<capability::value>;
-
-        using bfloat32  = zacc::backend::avx2::bfloat32<capability::value>;
-        using bfloat64  = zacc::backend::avx2::bfloat64<capability::value>;
-        using bint8     = zacc::backend::avx2::bint8<capability::value>;
-        using bint16    = zacc::backend::avx2::bint16<capability::value>;
-        using bint32    = zacc::backend::avx2::bint32<capability::value>;
-
-        static constexpr const size_t alignment = zint32::alignment;
-
-        static const std::string major_branch_name() { return "AVX2"; }
-    };
-}}

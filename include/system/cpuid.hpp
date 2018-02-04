@@ -32,7 +32,8 @@
 
 #include "util/type/type_casts.hpp"
 
-namespace zacc {
+namespace zacc 
+{
     struct cpuid
     {
         using reg_t         = std::bitset<32>;
@@ -111,8 +112,8 @@ namespace zacc {
         const data_t &ext_data()                    const;
 
         /**
-         * @brief
-         * @param index
+         * @brief get register at index
+         * @param index 
          * @return
          */
         const data_entry_t &reg(size_t index)       const;

@@ -61,7 +61,7 @@ namespace zacc {
     /**
      * @brief Provides metadata and typecasts to capabilities enum
      */
-    class capability
+    class arch
     {
         typedef const char* c_str_t;
 
@@ -70,13 +70,13 @@ namespace zacc {
         using flag_t = std::underlying_type_t<capabilities>;
 
         /**
-         * @brief constructs metadata with capability and string representation
-         * @param capability capability
+         * @brief constructs metadata with arch and string representation
+         * @param arch arch
          * @param str string representation
          * @param is_set availability flag
          */
-        constexpr capability(const capabilities capability, const char* str, bool is_set = false)
-                : _capability(capability), _c_str(str), _is_set(is_set)
+        constexpr arch(const capabilities arch, const char* str, bool is_set = false)
+                : Arch(arch), _c_str(str), _is_set(is_set)
         {}
 
         /**
@@ -89,26 +89,26 @@ namespace zacc {
         }
 
         /**
-         * @brief returns capability's string representation
+         * @brief returns arch's string representation
          * @return C-string representation
          */
         constexpr const char* c_str() const { return _c_str; }
 
         /**
-         * @brief implicit cast to capability's string representation
+         * @brief implicit cast to arch's string representation
          * @return C-string representation
          */
         constexpr operator const char*() const { return c_str(); };
 
         /**
-         * @brief returns capability enum value
-         * @return capability enum value
+         * @brief returns arch enum value
+         * @return arch enum value
          */
-        constexpr capabilities value() const { return _capability; }
+        constexpr capabilities value() const { return Arch; }
 
         /**
-         * @brief implicit cast to capability enum value
-         * @return raw capability enum value
+         * @brief implicit cast to arch enum value
+         * @return raw arch enum value
          */
         constexpr operator capabilities() const { return value(); };
 
@@ -116,7 +116,7 @@ namespace zacc {
          * @brief returns raw underlying value
          * @return raw underlying value
          */
-        constexpr flag_t raw_value() const { return static_cast<flag_t>(_capability); }
+        constexpr flag_t raw_value() const { return static_cast<flag_t>(Arch); }
 
         /**
          * @brief implicit cast to raw underlying value
@@ -125,38 +125,38 @@ namespace zacc {
         constexpr operator flag_t() const { return raw_value(); };
 
         /**
-         * @brief implicit cast to capability's string representation
+         * @brief implicit cast to arch's string representation
          * @return std::string representation
          */
         std::string str() const { return _c_str; }
 
         /**
          * @brief provides bitwise-or functionality
-         * @param other other capability
+         * @param other other arch
          * @return result of bitwise-or as raw underlying value
          */
-        constexpr flag_t operator |(const capability &other) { return raw_value() | other.raw_value(); }
+        constexpr flag_t operator |(const arch &other) { return raw_value() | other.raw_value(); }
 
         /**
          * @brief provides bitwise-and functionality
-         * @param other other capability
+         * @param other other arch
          * @return result of bitwise-and as raw underlying value
          */
-        constexpr flag_t operator &(const capability &other) { return raw_value() & other.raw_value(); }
+        constexpr flag_t operator &(const arch &other) { return raw_value() & other.raw_value(); }
 
         /**
-         * @brief returns true if this capability is available
-         * @return true if capability set, otherwise false
+         * @brief returns true if this arch is available
+         * @return true if arch set, otherwise false
          */
         bool is_set() { return _is_set; }
 
         /**
-         * @brief pretty-prints the current capability
+         * @brief pretty-prints the current arch
          * @param os target output stream
-         * @param cap capability object
+         * @param cap arch object
          * @return modified target output stream
          */
-        friend inline std::ostream& operator<<(std::ostream& os, const capability& cap) {
+        friend inline std::ostream& operator<<(std::ostream& os, const arch& cap) {
             using namespace std;
 
             const int w = 15;
@@ -168,12 +168,12 @@ namespace zacc {
 
         /**
          * @brief sets all capabilities to enabled until the given one and returns the raw value
-         * @param capability highest capability (inclusive)
+         * @param arch highest arch (inclusive)
          * @return raw value
          */
-        static constexpr flag_t fill_up_to(const capabilities capability)
+        static constexpr flag_t fill_up_to(const capabilities arch)
         {
-            auto value = to_underlying(capability);
+            auto value = to_underlying(arch);
             uint64_t result = 0;
 
             for(size_t i = 0; i < ntz(value); i++)
@@ -186,18 +186,18 @@ namespace zacc {
         }
 
         /**
-         * @brief capability dispatcher. from aggregated integer representation one can extract specific features
-         * @tparam capability aggregated integer representation
+         * @brief arch dispatcher. from aggregated integer representation one can extract specific features
+         * @tparam arch aggregated integer representation
          */
-        template<uint64_t capability = 0>
+        template<uint64_t arch = 0>
         struct dispatcher {
 
             using flag_t = std::make_unsigned_t<capabilities>;
 
             /**
-             * @brief checks if a particular capability is set
-             * @param flag capability to check
-             * @return true if capability is set
+             * @brief checks if a particular arch is set
+             * @param flag arch to check
+             * @return true if arch is set
              */
             static constexpr bool is_set(capabilities flag)
             {
@@ -205,7 +205,7 @@ namespace zacc {
             }
 
             /// current capabilities
-            static constexpr flag_t flags = capability;
+            static constexpr flag_t flags = arch;
 
             /// usually all branches provide floating types
             static constexpr bool has_floating_types = true;
@@ -217,89 +217,90 @@ namespace zacc {
             static constexpr bool use_fast_float = is_set(capabilities::FASTFLOAT);
         };
     private:
-        const capabilities _capability;
+        const capabilities Arch;
         const char* _c_str;
         bool _is_set;
     };
 
 
     template<typename T, capabilities feature>
-    constexpr bool has_feature_v = capability::dispatcher<zval_traits<T>::features>::is_set(feature);
+    constexpr bool has_feature_v = arch::dispatcher<zval_traits<T>::features>::is_set(feature);
 
     template<typename T>
-    constexpr bool has_integer_types_v = capability::dispatcher<zval_traits<T>::features>::has_integer_types;
+    constexpr bool has_integer_types_v = arch::dispatcher<zval_traits<T>::features>::has_integer_types;
 
     template<typename T>
-    constexpr bool has_floating_types_v = capability::dispatcher<zval_traits<T>::features>::has_floating_types;
+    constexpr bool has_floating_types_v = arch::dispatcher<zval_traits<T>::features>::has_floating_types;
 
     template <typename T, typename... TList>
-    static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, capability::flag_t>
-    make_flag(T && capability, TList &&... list) noexcept {
-        return static_cast<std::underlying_type_t<capabilities>>(capability) | make_flag(std::forward<TList>(list)...);
+    static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, arch::flag_t>
+    make_flag(T && arch, TList &&... list) noexcept {
+        return static_cast<std::underlying_type_t<capabilities>>(arch) | make_flag(std::forward<TList>(list)...);
     }
 
     template <typename T>
-    static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, capability::flag_t>
-    make_flag(T capability) noexcept {
-        return static_cast<std::underlying_type_t<capabilities>>(capability);
+    static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, arch::flag_t>
+    make_flag(T arch) noexcept {
+        return static_cast<std::underlying_type_t<capabilities>>(arch);
     }
 
-    struct branches {
+    struct architectures 
+    {
         using flag_t        = std::underlying_type_t<capabilities>;
 
         struct scalar       : public std::integral_constant<flag_t, make_flag(capabilities::SCALAR)>
         {
-            static const std::string branch_name() { return "scalar"; }
+            static const std::string name() { return "scalar"; }
         };
 
         struct sse2         : public std::integral_constant<flag_t, make_flag(capabilities::SSE2)>
         {
-            static const std::string branch_name() { return "sse.sse2"; }
+            static const std::string name() { return "sse.sse2"; }
         };
 
         struct sse3         : public std::integral_constant<flag_t, sse2::value | make_flag(capabilities::SSE3, capabilities::SSSE3)>
         {
-            static const std::string branch_name() { return "sse.sse3"; }
+            static const std::string name() { return "sse.sse3"; }
         };
 
         struct sse41        : public std::integral_constant<flag_t, sse3::value | make_flag(capabilities::SSE41)>
         {
-            static const std::string branch_name() { return "sse.sse41"; }
+            static const std::string name() { return "sse.sse41"; }
         };
 
         struct sse41_fma3   : public std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA3)>
         {
-            static const std::string branch_name() { return "sse.sse41.fma3"; }
+            static const std::string name() { return "sse.sse41.fma3"; }
         };
 
         struct sse41_fma4   : public std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA4)>
         {
-            static const std::string branch_name() { return "sse.sse41.fma4"; }
+            static const std::string name() { return "sse.sse41.fma4"; }
         };
 
         struct avx1         : public std::integral_constant<flag_t, make_flag(capabilities::AVX1)>
         {
-            static const std::string branch_name() { return "avx.avx1"; }
+            static const std::string name() { return "avx.avx1"; }
         };
 
         struct avx1_fma3     : public std::integral_constant<flag_t, make_flag(capabilities::FMA3, capabilities::AVX1)>
         {
-            static const std::string branch_name() { return "avx.avx1.fma3"; }
+            static const std::string name() { return "avx.avx1.fma3"; }
         };
 
         struct avx2         : public std::integral_constant<flag_t, avx1_fma3::value | make_flag(capabilities::AVX2)>
         {
-            static const std::string branch_name() { return "avx.avx2"; }
+            static const std::string name() { return "avx.avx2"; }
         };
 
         struct avx512       : public std::integral_constant<flag_t, make_flag(capabilities::AVX512)>
         {
-            static const std::string branch_name() { return "avx.avx512"; }
+            static const std::string name() { return "avx.avx512"; }
         };
 
         struct opencl       : public std::integral_constant<flag_t, make_flag(capabilities::OPENCL)>
         {
-            static const std::string branch_name() { return "gpgpu.opencl"; }
+            static const std::string name() { return "gpgpu.opencl"; }
         };
     };
 

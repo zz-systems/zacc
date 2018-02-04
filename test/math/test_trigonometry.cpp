@@ -24,8 +24,7 @@
 
 #include "gtest/gtest.h"
 #include "system/arch.hpp"
-#include "math/trigonometry/trigonometry.hpp"
-#include "math/trigonometry/emulated_trigonometry.hpp"
+#include "math/trigonometry.hpp"
 
 #include <cmath>
 #include "util/testing/gtest_ext.hpp"

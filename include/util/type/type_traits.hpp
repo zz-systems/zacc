@@ -112,11 +112,14 @@ namespace zacc {
             : public std::false_type
     {};
 
+    /// @cond
+    /// @struct is_cval<val_t, std::enable_if_t<is cval_tag && (zval || is_bval)>
     template<typename val_t>
     struct is_cval<val_t, std::enable_if_t<std::is_same<typename val_t::tag, cval_tag>::value
                                            && (is_zval<typename val_t::element_t>::value || is_bval<typename val_t::element_t>::value)>>
             : public std::true_type
     {};
+    /// @endcond
 
     template<typename val_t>
     struct is_bval<val_t, std::enable_if_t<is_cval<val_t>::value && is_bval<typename val_t::element_t>::value>>
@@ -215,35 +218,35 @@ namespace zacc
 {
 
 
-    template<typename _Vector, typename _MaskVector, typename _Element, typename _Tag, size_t _Size, size_t _Alignment, uint64_t _Features = 0xFFFF'FFFF'FFFF'FFFF>
+    template<typename Vector, typename MaskVector, typename Element, typename Tag, size_t Size, size_t Alignment, uint64_t Features = 0xFFFF'FFFF'FFFF'FFFF>
     struct zval_base
     {
         /// vector size (1 - scalar, 4, 8, 16, ...)
         static constexpr size_t size() noexcept
         {
-            return _Size;
+            return Size;
         }
 
         /// scalar type? vector type?
-        static constexpr bool is_vector = _Size > 1;
+        static constexpr bool is_vector = Size > 1;
 
         /// capabilities
-        static constexpr uint64_t features = _Features;
+        static constexpr uint64_t features = Features;
 
         /// memory alignment
-        static constexpr size_t alignment = _Alignment;
+        static constexpr size_t alignment = Alignment;
 
 
         /// vector type, like __m128i for sse 4x integer vector
-        using vector_t = _Vector;
+        using vector_t = Vector;
 
         /// scalar type, like int for sse 4x integer vector
-        using element_t = _Element;
+        using element_t = Element;
 
         /// mask type for boolean operations
-        using mask_vector_t = _MaskVector;
+        using mask_vector_t = MaskVector;
 
-        using tag = _Tag;
+        using tag = Tag;
     };
 
 

@@ -32,29 +32,29 @@
 
 
 namespace zacc {
-    platform &platform::enable(const capabilities capability) {
+    platform &platform::enable(const capabilities arch) {
 
-        set_capability_if_registered(capability, true);
+        set_capability_if_registered(arch, true);
 
-        _flags |= to_underlying(capability);
-
-        return *this;
-    }
-
-    platform &platform::disable(const capabilities capability) {
-
-        set_capability_if_registered(capability, false);
-
-        _flags &= ~to_underlying(capability);
+        _flags |= to_underlying(arch);
 
         return *this;
     }
 
-    platform &platform::set(const capabilities capability, bool enabled) {
+    platform &platform::disable(const capabilities arch) {
+
+        set_capability_if_registered(arch, false);
+
+        _flags &= ~to_underlying(arch);
+
+        return *this;
+    }
+
+    platform &platform::set(const capabilities arch, bool enabled) {
 
         return enabled
-               ? enable(capability)
-               : disable(capability);
+               ? enable(arch)
+               : disable(arch);
     }
 
     platform &platform::set(raw_t raw_value) {
@@ -63,16 +63,16 @@ namespace zacc {
         return *this;
     }
 
-    bool platform::is_set(const capabilities capability) const {
-        return 0 != (_flags & to_underlying(capability));
+    bool platform::is_set(const capabilities arch) const {
+        return 0 != (_flags & to_underlying(arch));
     }
 
     platform::raw_t platform::raw() {
         return _flags;
     }
 
-    std::vector<capability> platform::enabled_capabilities() const {
-        std::vector<capability> result;
+    std::vector<arch> platform::enabled_capabilities() const {
+        std::vector<arch> result;
 
         transform_if(_capabilities.begin(), _capabilities.end(),
                      std::back_inserter(result),
@@ -82,8 +82,8 @@ namespace zacc {
         return result;
     }
 
-    std::vector<capability> platform::all_capabilities() const {
-        std::vector<capability> result;
+    std::vector<arch> platform::all_capabilities() const {
+        std::vector<arch> result;
 
         transform(_capabilities.begin(), _capabilities.end(),
                   std::back_inserter(result),
@@ -92,8 +92,8 @@ namespace zacc {
         return result;
     }
 
-    std::vector<capability> platform::match_capabilities(std::initializer_list<capabilities> required) const {
-        std::vector<capability> result;
+    std::vector<arch> platform::match_capabilities(std::initializer_list<capabilities> required) const {
+        std::vector<arch> result;
 
         transform_if(required.begin(), required.end(),
                      std::back_inserter(result),
@@ -103,8 +103,8 @@ namespace zacc {
         return result;
     }
 
-    std::vector<capability> platform::match_capabilities(raw_t raw_value) const {
-        std::vector<capability> result;
+    std::vector<arch> platform::match_capabilities(raw_t raw_value) const {
+        std::vector<arch> result;
 
         transform_if(_capabilities.begin(), _capabilities.end(),
                      std::back_inserter(result),
@@ -114,8 +114,8 @@ namespace zacc {
         return result;
     }
 
-    std::vector<capability> platform::make_capabilities(platform::raw_t value) const {
-        std::vector<capability> result;
+    std::vector<arch> platform::make_capabilities(platform::raw_t value) const {
+        std::vector<arch> result;
 
         transform_if(_capabilities.begin(), _capabilities.end(),
                      std::back_inserter(result),
@@ -185,7 +185,7 @@ namespace zacc {
 
     platform &platform::register_capability(const capabilities cap, const char *str) {
         if (_capabilities.find(cap) == _capabilities.end())
-            _capabilities.insert(capability_map_t::value_type(cap, capability(cap, str, is_set(cap))));
+            _capabilities.insert(capability_map_t::value_type(cap, arch(cap, str, is_set(cap))));
 
         return *this;
     }
@@ -215,8 +215,8 @@ namespace zacc {
 
         os << cap._cpuid.vendor_str() << ", " << cap._cpuid.brand_str() << endl << endl;
 
-        for(auto capability : cap.all_capabilities())
-            os << capability;
+        for(auto arch : cap.all_capabilities())
+            os << arch;
 
         os << endl;
 

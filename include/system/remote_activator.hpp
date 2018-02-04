@@ -84,7 +84,7 @@ namespace zacc { namespace system {
                 auto filename   = path.substr(0, dot);
                 auto extension  = path.substr().substr(dot + 1);
 
-                path = filename + "." + branch::branch_name() + "." + extension;
+                path = filename + "." + branch::name() + "." + extension;
             }
 
             if(this->_loaded_libraries.count(branch::value) == 0)

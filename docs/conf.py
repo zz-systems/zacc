@@ -20,7 +20,7 @@
 # import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
-
+import textwrap
 
 # -- General configuration ------------------------------------------------
 
@@ -37,8 +37,8 @@ extensions = ['sphinx.ext.autodoc',
     'sphinx.ext.coverage',
     'sphinx.ext.mathjax',
     'sphinx.ext.viewcode',
-    'sphinx.ext.autodoc',
-    'sphinx.ext.todo',
+    #'sphinx.ext.autodoc',
+    #'sphinx.ext.todo',
     'breathe',
     'exhale'
 ]
@@ -61,7 +61,11 @@ exhale_args = {
     # TIP: if using the sphinx-bootstrap-theme, you need
     # "treeViewIsBootstrap": True,
     "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin":    "INPUT = ../include"
+    "exhaleDoxygenStdin":    textwrap.dedent('''
+        INPUT      = ../include
+        # Using `=` instead of `+=` overrides
+        #SHORT_NAMES = YES
+    ''')
 }
 
 # Tell sphinx what the primary language being documented is.

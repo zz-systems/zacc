@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-// 
+//
 // Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "platform.hpp"
-#include "capabilities.hpp"
+#include "system/platform.hpp"
+#include "system/capabilities.hpp"
 #include "backend/all.hpp"
 
 namespace zacc {
@@ -34,34 +34,80 @@ namespace zacc {
     /**
      * @brief provides all necessary types for the current branch at compile time
      */
-    struct arch
+    struct dispatched_arch
     {
-        /// fast float enabled? used for faster and less precise computations
-        static const constexpr bool use_fast_float = ZACC_FAST_FLOAT;
+        using arch = architectures::ZACC_ARCH;
 
-        /// type provider alias
-        using types = ZACC_MAJOR_ARCH::types<branches::ZACC_ARCH>;
+        /// fast float enabled? used for faster and less precise computations
+        static constexpr bool use_fast_float = ZACC_FAST_FLOAT;
+
+
+        /// exposed dispatched implementation of zfloat32
+        using zfloat32  = zacc::backend::ZACC_MAJOR_ARCH::zfloat32<arch::value>;
+        /// exposed dispatched implementation of zfloat64
+        using zfloat64  = zacc::backend::ZACC_MAJOR_ARCH::zfloat64<arch::value>;
+        /// exposed dispatched implementation of zint8
+        using zint8     = zacc::backend::ZACC_MAJOR_ARCH::zint8<arch::value>;
+        /// exposed dispatched implementation of zint16
+        using zint16    = zacc::backend::ZACC_MAJOR_ARCH::zint16<arch::value>;
+        /// exposed dispatched implementation of zint32
+        using zint32    = zacc::backend::ZACC_MAJOR_ARCH::zint32<arch::value>;
+
+        /// exposed dispatched implementation of boolean vector for zfloat32
+        using bfloat32  = zacc::backend::ZACC_MAJOR_ARCH::bfloat32<arch::value>;
+        /// exposed dispatched implementation of boolean vector for zfloat64
+        using bfloat64  = zacc::backend::ZACC_MAJOR_ARCH::bfloat64<arch::value>;
+        /// exposed dispatched implementation of boolean vector for zint8
+        using bint8     = zacc::backend::ZACC_MAJOR_ARCH::bint8<arch::value>;
+        /// exposed dispatched implementation of boolean vector for zint16
+        using bint16    = zacc::backend::ZACC_MAJOR_ARCH::bint16<arch::value>;
+        /// exposed dispatched implementation of boolean vector for zint32
+        using bint32    = zacc::backend::ZACC_MAJOR_ARCH::bint32<arch::value>;
+
+        static const std::string name() { return arch::name(); }
     };
 
-    using zint8      = typename arch::types::zint8;
-    using zint16     = typename arch::types::zint16;
-    using zint32     = typename arch::types::zint32;
-    using zfloat32   = typename arch::types::zfloat32;
-    using zfloat64   = typename arch::types::zfloat64;
-    using zbyte      = zint8;
-    using zshort     = zint16;
-    using zint       = zint32;
-    using zfloat     = zfloat32;
-    using zdouble    = zfloat64;
+    /// exposed dispatched implementation of zfloat32
+    using zfloat32   = typename dispatched_arch::zfloat32;
+    /// exposed dispatched implementation of zfloat64
+    using zfloat64   = typename dispatched_arch::zfloat64;
+    /// exposed dispatched implementation of zint8
+    using zint8      = typename dispatched_arch::zint8;
+    /// exposed dispatched implementation of zint16
+    using zint16     = typename dispatched_arch::zint16;
+    /// exposed dispatched implementation of zint32
+    using zint32     = typename dispatched_arch::zint32;
 
-    using bint8      = typename arch::types::bint8;
-    using bint16     = typename arch::types::bint16;
-    using bint32     = typename arch::types::bint32;
-    using bfloat32   = typename arch::types::bfloat32;
-    using bfloat64   = typename arch::types::bfloat64;
-    using bbyte      = bint8;
-    using bshort     = bint16;
-    using bint       = bint32;
+    /// alias for zfloat64
+    using zdouble    = zfloat64;
+    /// alias for zfloat32
+    using zfloat     = zfloat32;
+    /// alias for zint8
+    using zbyte      = zint8;
+    /// alias for zint16
+    using zshort     = zint16;
+    /// alias for zint32
+    using zint       = zint32;
+
+    /// exposed dispatched implementation of boolean vector for zfloat32
+    using bfloat32   = typename dispatched_arch::bfloat32;
+    /// exposed dispatched implementation of boolean vector for zfloat64
+    using bfloat64   = typename dispatched_arch::bfloat64;
+    /// exposed dispatched implementation of boolean vector for zint8
+    using bint8      = typename dispatched_arch::bint8;
+    /// exposed dispatched implementation of boolean vector for zint16
+    using bint16     = typename dispatched_arch::bint16;
+    /// exposed dispatched implementation of boolean vector for zint32
+    using bint32     = typename dispatched_arch::bint32;
+
+    /// alias for bfloat32
     using bfloat     = bfloat32;
+    /// alias for bfloat64
     using bdouble    = bfloat64;
+    /// alias for bint8
+    using bbyte      = bint8;
+    /// alias for bint16
+    using bshort     = bint16;
+    /// alias for bint32
+    using bint       = bint32;
 }

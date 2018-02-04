@@ -51,18 +51,18 @@ namespace zacc { namespace math {
         zval_traits<zval_t>::features
     >;
 
-    template<typename _Element>
+    template<typename Element>
     struct __zcomplex_base
     {
 
-        struct impl : __cval<_Element>
+        struct impl : __cval<Element>
         {
-            using base_t = __cval<_Element>;
+            using base_t = __cval<Element>;
 
             using base_t::size;
 
-            using zval_t = zcomplex<_Element>;
-            using bval_t = bcomplex<_Element>;
+            using zval_t = zcomplex<Element>;
+            using bval_t = bcomplex<Element>;
 
             using element_t = typename base_t::element_t;
             using vector_t = typename base_t::vector_t;
@@ -70,22 +70,22 @@ namespace zacc { namespace math {
             constexpr impl()
             {}
 
-            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, vec2<_Element>>::value>>
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, vec2<Element>>::value>>
             constexpr impl(const T& other)
                     : _value (other)
             {}
 
-            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, vec2<_Element>>::value>>
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, vec2<Element>>::value>>
             constexpr impl(T&& value)
                     : _value(std::move(value))
             {}
 
-            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Element>::value>>
             constexpr impl(const vec2<T>& value)
                     : _value(value)
             {}
 
-            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Element>::value>>
             constexpr impl(vec2<T>&& value)
                     : _value(std::move(value))
             {}
@@ -99,28 +99,28 @@ namespace zacc { namespace math {
                 : _value(std::move(other._value))
             {}
 
-            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Element>::value>>
             constexpr impl& operator=(const T& other)
             {
                 _value = other;
                 return *this;
             }
 
-            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Element>::value>>
             constexpr impl& operator=(T&& other) noexcept
             {
                 _value = std::move(other);
                 return *this;
             }
 
-            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Element>::value>>
             constexpr impl& operator=(const vec2<T>& other)
             {
                 _value = other;
                 return *this;
             }
 
-            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, _Element>::value>>
+            template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Element>::value>>
             constexpr impl& operator=(vec2<T>&& other) noexcept
             {
                 _value = std::move(other);
@@ -140,22 +140,22 @@ namespace zacc { namespace math {
             }
 
 
-            constexpr const _Element& real() const
+            constexpr const Element& real() const
             {
                 return _value.x;
             }
 
-            constexpr _Element& real()
+            constexpr Element& real()
             {
                 return _value.x;
             }
 
-            constexpr const _Element& imag() const
+            constexpr const Element& imag() const
             {
                 return _value.y;
             }
 
-            constexpr _Element& imag()
+            constexpr Element& imag()
             {
                 return _value.y;
             }
@@ -168,12 +168,12 @@ namespace zacc { namespace math {
                 return _value;
             }
 
-            constexpr _Element magnitude() const
+            constexpr Element magnitude() const
             {
                 return _value.magnitude();
             }
 
-            constexpr _Element sqr_magnitude() const
+            constexpr Element sqr_magnitude() const
             {
                 return _value.sqr_magnitude();
             }
