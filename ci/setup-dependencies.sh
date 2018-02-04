@@ -14,4 +14,4 @@ if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
     export PATH=${DEPS_DIR}/cmake/bin:${PATH}
 fi
 
-pip install --user -r requirements.txt
+pip install --user -r ${TRAVIS_BUILD_DIR}/ci/requirements.txt
