@@ -15,5 +15,5 @@ if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
 
     pip install --user ${PIP_BASE_PACKAGES} ${PIP_PACKAGES}
 else
-    pip install ${PIP_BASE_PACKAGES} ${PIP_PACKAGES}
+    sudo pip install ${PIP_BASE_PACKAGES} ${PIP_PACKAGES}
 fi
