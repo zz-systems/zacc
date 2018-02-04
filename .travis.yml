@@ -88,9 +88,9 @@ before_script:
 script:
   - ./ci/run-build.sh
   - ./ci/run-test.sh
-#after_success:
-#  - ./ci/run-build-documentation.sh
-#
+after_success:
+  - ./ci/run-build-documentation.sh
+
 #before_deploy:
 #  - ./ci/run-pack-documentation.sh
 #  - ./ci/run-pack-release.sh
