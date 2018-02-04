@@ -16,6 +16,7 @@ env:
     - CCACHE_MAXSIZE=200M
     - CCACHE_CPP2=1
     - BUILD_SANITIZE_MEMORY=0
+    - BUILD_DIR=Build
 git:
   depth: 1
 
@@ -38,7 +39,7 @@ matrix:
       osx_image: xcode9
       compiler: clang
       language: generic
-      env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc
+      env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc RELEASE_BUILDER=1
 
     # Linux Clang Builds
     - os: linux
@@ -76,7 +77,7 @@ matrix:
     - os: linux
       compiler: gcc
       addons: *addons
-      env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7 DOC_BUILDER=1
+      env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7 DOC_BUILDER=1 RELEASE_BUILDER=1
 
 before_install:
   - travis_retry ./ci/setup-environment.sh
@@ -111,6 +112,7 @@ script:
 #      on:
 #        branch: master
 #        tags: true
+#        condition: "RELEASE_BUILDER=1"
 #
 #  - provider: releases
 #      skip-cleanup: true
@@ -120,3 +122,4 @@ script:
 #      on:
 #        branch: develop
 #        tags: true
+#        condition: "RELEASE_BUILDER=1"
