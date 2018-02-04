@@ -35,8 +35,8 @@ namespace zacc {
 	 * @tparam base_t base type
 	 * @tparam concrete_t complete composed type
 	 */
-	template<typename base_t, typename concrete_t>
-	class cloneable : public base_t {
+	template<typename Base, typename Concrete>
+	class cloneable : public Base {
 	public:
 		FORWARD(cloneable);
 

@@ -100,23 +100,23 @@ namespace zacc {
 
 
     /**
-     * @brief
-     * @tparam ztype
-     * @tparam ForwardIt
-     * @tparam UnaryOperation
-     * @param first
-     * @param last
-     * @param unary_op
+     * @brief Applies a generator function to container
+     * @tparam T element type
+     * @tparam ForwardIt container iterator type
+     * @tparam Generator generator function type
+     * @param first first iterator
+     * @param last last iterator
+     * @param g generator
      */
-    template<class ztype, class ForwardIt, class Generator>
+    template<class T, class ForwardIt, class Generator>
     void generate(ForwardIt first, ForwardIt last, Generator g)
     {
-        auto dim        = ztype::size();
-        size_t real_size  = std::distance(first, last);
+        auto dim        = zval_traits<T>::size();
+        auto real_size  = std::distance(first, last);
         auto remainder  = real_size % dim;
         auto fake_size  = real_size + remainder;
 
-        for (size_t i = 0; i < fake_size; i += dim)
+        for (auto i = 0; i < fake_size; i += dim)
         {
             auto result = make_iterable(g(i));
 
@@ -126,11 +126,11 @@ namespace zacc {
     };
 
     /**
-     * @brief
-     * @tparam Container
-     * @tparam UnaryOperation
-     * @param container
-     * @param unary_op
+     * @brief Applies a generator function to container
+     * @tparam Container container type
+     * @tparam Generator generator function type
+     * @param container container
+     * @param g generator
      */
     template<class InputContainer, class Generator, typename = std::enable_if_t<is<iterable, InputContainer>>>
     void generate(const InputContainer &container, Generator g)
@@ -141,35 +141,39 @@ namespace zacc {
     };
 
     /**
-     * @brief
-     * @tparam Container
-     * @tparam UnaryOperation
-     * @param container
-     * @param unary_op
+     * @brief transform container
+     * @tparam InputContainer any iterable
+     * @tparam OutputContainer any iterable
+     * @tparam UnaryOperation unary function
+     * @param container input container
+     * @param unary_op unary function
+     * @returns transformed container
+     * @remark valid if @tparam OutputContainer is set
      */
     template<class InputContainer, class OutputContainer, class UnaryOperation, typename = std::enable_if_t<all<iterable, InputContainer, OutputContainer>>>
-    auto transform(const InputContainer& input, UnaryOperation func)
+    auto transform(const InputContainer& container, UnaryOperation unary_op)
     {
         alignas(zval_traits<InputContainer>::alignment) OutputContainer output;
 
-        std::transform(std::begin(input), std::end(input), std::begin(output), func);
+        std::transform(std::begin(container), std::end(container), std::begin(output), unary_op);
 
         return output;
     };
 
     /**
-     * @brief
-     * @tparam Container
-     * @tparam UnaryOperation
-     * @param container
-     * @param unary_op
+     * @brief transform container
+     * @tparam InputContainer any iterable
+     * @tparam UnaryOperation unary function
+     * @param container input container
+     * @param unary_op unary function
+     * @returns transformed container
      */
     template<class InputContainer, class UnaryOperation, typename = std::enable_if_t<all<iterable, InputContainer>>>
-    auto transform(const InputContainer& input, UnaryOperation func)
+    auto transform(const InputContainer& container, UnaryOperation func)
     {
         alignas(zval_traits<InputContainer>::alignment) typename zval_traits<InputContainer>::extracted_t output;
 
-        std::transform(std::begin(input), std::end(input), std::begin(output), func);
+        std::transform(std::begin(container), std::end(container), std::begin(output), func);
 
         return output;
     };

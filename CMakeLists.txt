@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.6)
 project(zacc)
 
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 include(cmake/zacc.shared.cmake)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -29,4 +31,4 @@ include(test/CMakeLists.txt)
 add_subdirectory(examples)
 
 # add documentation targets
-include(doc/CMakeLists.txt)
+include(docs/CMakeLists.txt)

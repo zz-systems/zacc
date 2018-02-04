@@ -55,94 +55,94 @@ namespace zacc { namespace math {
 
     /**
      * @brief  Sine function. Algorithm taken from SLEEF 2.80 and vecmathlib
-     * @tparam type [zfloat, zdouble]
-     * @param val [-pi; pi] rad
+     * @tparam Real [zfloat, zdouble]
+     * @param value [-pi; pi] rad
      * @return [-1; 1]
      */
-    template<typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value && (!has_integer_types_v<vreal_t> || is_scalar<vreal_t>::value), vreal_t> vsin(vreal_t val)
+    template<typename Real>
+    std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), Real> vsin(Real value)
     {
-        return zacc::transform(val, [](auto i) { return std::sin(i); });
+        return zacc::transform(value, [](auto i) { return std::sin(i); });
     }
 
     /**
      * @brief  Cosine function. Algorithm taken from SLEEF 2.80 and vecmathlib
-     * @tparam type [zfloat, zdouble]
-     * @param val [-pi; pi] rad
+     * @tparam Real [zfloat, zdouble]
+     * @param value [-pi; pi] rad
      * @return [-1; 1]
      */
-    template<typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value && (!has_integer_types_v<vreal_t> || is_scalar<vreal_t>::value), vreal_t> vcos(vreal_t val)
+    template<typename Real>
+    std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), Real> vcos(Real value)
     {
-        return zacc::transform(val, [](auto i) { return std::cos(i); });
+        return zacc::transform(value, [](auto i) { return std::cos(i); });
     }
 
     /**
      * @brief  Tangens function. Algorithm taken from SLEEF 2.80 and vecmathlib
-     * @tparam type [zfloat, zdouble]
-     * @param val [-pi/2; pi/2] rad
+     * @tparam Real [zfloat, zdouble]
+     * @param value [-pi/2; pi/2] rad
      * @return [-1; 1]
      */
-    template <typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value && (!has_integer_types_v<vreal_t> || is_scalar<vreal_t>::value), vreal_t> vtan(vreal_t val)
+    template <typename Real>
+    std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), Real> vtan(Real value)
     {
-        return zacc::transform(val, [](auto i) { return std::tan(i); });
+        return zacc::transform(value, [](auto i) { return std::tan(i); });
     }
 
     /**
      * @brief  Cosine function. Algorithm taken from SLEEF 2.80 and vecmathlib
-     * @tparam type [zfloat, zdouble]
-     * @param val [-1; 1] rad
+     * @tparam Real [zfloat, zdouble]
+     * @param value [-1; 1] rad
      * @return [-1; 1]
      */
-    template<typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value && (!has_integer_types_v<vreal_t> || is_scalar<vreal_t>::value), vreal_t> vatan2(vreal_t y, vreal_t x)
+    template<typename Real>
+    std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), Real> vatan2(Real y, Real x)
     {
         return zacc::transform(x, y, [](auto i, auto j) { return std::atan2(i, j); });
     }
 
     /**
      * @brief  Sine function. Algorithm taken from SLEEF 2.80 and vecmathlib
-     * @tparam type [zfloat, zdouble]
-     * @param val [-pi; pi] rad
+     * @tparam Real [zfloat, zdouble]
+     * @param value [-pi; pi] rad
      * @return [-1; 1]
      */
-    template<typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value && is_vector<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vsin(vreal_t val)
+    template<typename Real>
+    std::enable_if_t<is_floating_point<Real>::value && is_vector<Real>::value && has_integer_types_v<Real>, Real> vsin(Real value)
     {
-        vreal_t q = (val * Z_1_PI).floor();
+        Real q = (value * Z_1_PI).floor();
         zint iq = q;
 
         // when performance > precision
         if(dispatched_arch::use_fast_float)
         {
-            val = vfmadd(q, Z_PI, val);
+            value = vfmadd(q, Z_PI, value);
         }
-        else if(is_float<vreal_t>::value)
+        else if(is_float<Real>::value)
         {
-            val = vfmadd(q, -Z_PI4_A_F * 4, val);
-            val = vfmadd(q, -Z_PI4_B_F * 4, val);
-            val = vfmadd(q, -Z_PI4_C_F * 4, val);
-            val = vfmadd(q, -Z_PI4_D_F * 4, val);
+            value = vfmadd(q, -Z_PI4_A_F * 4, value);
+            value = vfmadd(q, -Z_PI4_B_F * 4, value);
+            value = vfmadd(q, -Z_PI4_C_F * 4, value);
+            value = vfmadd(q, -Z_PI4_D_F * 4, value);
         }
-        else if(is_double<vreal_t>::value)
+        else if(is_double<Real>::value)
         {
-            val = vfmadd(q, -Z_PI4_A_D * 4, val);
-            val = vfmadd(q, -Z_PI4_B_D * 4, val);
-            val = vfmadd(q, -Z_PI4_C_D * 4, val);
-            val = vfmadd(q, -Z_PI4_D_D * 4, val);
+            value = vfmadd(q, -Z_PI4_A_D * 4, value);
+            value = vfmadd(q, -Z_PI4_B_D * 4, value);
+            value = vfmadd(q, -Z_PI4_C_D * 4, value);
+            value = vfmadd(q, -Z_PI4_D_D * 4, value);
         }
 
-        vreal_t s = val * val;
+        Real s = value * value;
 
-        val = (-val)
+        value = (-value)
                 .when(iq & 1)
-                .otherwise(val);
+                .otherwise(value);
 
-        vreal_t u;
+        Real u;
 
         // for single precision
-        if(is_float<vreal_t>::value)
+        if(is_float<Real>::value)
         {
             u =              2.6083159809786593541503e-06f;
             u = vfmsub(u, s, 0.0001981069071916863322258f);
@@ -150,7 +150,7 @@ namespace zacc { namespace math {
             u = vfmsub(u, s, 0.166666597127914428710938f);
         }
         // for double precision
-        else if(is_double<vreal_t>::value)
+        else if(is_double<Real>::value)
         {
             u =            - 7.97255955009037868891952e-18;
             u = vfmadd(u, s, 2.81009972710863200091251e-15);
@@ -163,11 +163,11 @@ namespace zacc { namespace math {
             u = vfmsub(u, s, 0.166666666666666657414808);
         }
 
-//        u = s * u * val + val;
-        u = vfmadd(s, u * val, val);
+//        u = s * u * value + value;
+        u = vfmadd(s, u * value, value);
 
-        u = vreal_t::quiet_NaN()
-                .when(val.is_infinite())
+        u = Real::quiet_NaN()
+                .when(value.is_infinite())
                 .otherwise(u);
 
         return u;
@@ -175,46 +175,46 @@ namespace zacc { namespace math {
 
     /**
      * @brief  Cosine function. Algorithm taken from SLEEF 2.80 and vecmathlib
-     * @tparam type [zfloat, zdouble]
-     * @param val [-pi; pi] rad
+     * @tparam Real [zfloat, zdouble]
+     * @param value [-pi; pi] rad
      * @return [-1; 1]
      */
-    template<typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value && is_vector<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vcos(vreal_t val)
+    template<typename Real>
+    std::enable_if_t<is_floating_point<Real>::value && is_vector<Real>::value && has_integer_types_v<Real>, Real> vcos(Real value)
     {
-        vreal_t q = 2.0 * (val * Z_1_PI - 0.5).floor() + 1;
+        Real q = 2.0 * (value * Z_1_PI - 0.5).floor() + 1;
         zint iq = q;
 
         // when performance > precision
         if(dispatched_arch::use_fast_float)
         {
-            val -= q * Z_PI_2;
+            value -= q * Z_PI_2;
         }
-        else if(is_float<vreal_t>::value)
+        else if(is_float<Real>::value)
         {
-            val = vfmadd(q, -Z_PI4_A_F * 2, val);
-            val = vfmadd(q, -Z_PI4_B_F * 2, val);
-            val = vfmadd(q, -Z_PI4_C_F * 2, val);
-            val = vfmadd(q, -Z_PI4_D_F * 2, val);
+            value = vfmadd(q, -Z_PI4_A_F * 2, value);
+            value = vfmadd(q, -Z_PI4_B_F * 2, value);
+            value = vfmadd(q, -Z_PI4_C_F * 2, value);
+            value = vfmadd(q, -Z_PI4_D_F * 2, value);
         }
-        else if(is_double<vreal_t>::value)
+        else if(is_double<Real>::value)
         {
-            val = vfmadd(q, -Z_PI4_A_D * 2, val);
-            val = vfmadd(q, -Z_PI4_B_D * 2, val);
-            val = vfmadd(q, -Z_PI4_C_D * 2, val);
-            val = vfmadd(q, -Z_PI4_D_D * 2, val);
+            value = vfmadd(q, -Z_PI4_A_D * 2, value);
+            value = vfmadd(q, -Z_PI4_B_D * 2, value);
+            value = vfmadd(q, -Z_PI4_C_D * 2, value);
+            value = vfmadd(q, -Z_PI4_D_D * 2, value);
         }
 
-        vreal_t s = val * val;
+        Real s = value * value;
 
-        val = (val)
+        value = (value)
                 .when(iq & 2)
-                .otherwise(-val);
+                .otherwise(-value);
 
-        vreal_t u;
+        Real u;
 
         // for single precision
-        if(is_float<vreal_t>::value)
+        if(is_float<Real>::value)
         {
             u =              2.6083159809786593541503e-06f;
             u = vfmsub(u, s, 0.0001981069071916863322258f);
@@ -222,7 +222,7 @@ namespace zacc { namespace math {
             u = vfmsub(u, s, 0.166666597127914428710938f);
         }
         // for double precision
-        else if(is_double<vreal_t>::value)
+        else if(is_double<Real>::value)
         {
             u =            - 7.97255955009037868891952e-18;
             u = vfmadd(u, s, 2.81009972710863200091251e-15);
@@ -235,11 +235,11 @@ namespace zacc { namespace math {
             u = vfmsub(u, s, 0.166666666666666657414808);
         }
 
-        //u = s * u * val + val;
-        u = vfmadd(s, u * val, val);
+        //u = s * u * value + value;
+        u = vfmadd(s, u * value, value);
 
-        u = vreal_t::quiet_NaN()
-                .when(val.is_infinite())
+        u = Real::quiet_NaN()
+                .when(value.is_infinite())
                 .otherwise(u);
 
         return u;
@@ -247,47 +247,47 @@ namespace zacc { namespace math {
 
     /**
      * @brief  Tangens function. Algorithm taken from SLEEF 2.80 and vecmathlib
-     * @tparam type [zfloat, zdouble]
-     * @param val [-pi/2; pi/2] rad
+     * @tparam Real [zfloat, zdouble]
+     * @param value [-pi/2; pi/2] rad
      * @return [-1; 1]
      */
-    template <typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value && is_vector<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vtan(vreal_t val)
+    template <typename Real>
+    std::enable_if_t<is_floating_point<Real>::value && is_vector<Real>::value && has_integer_types_v<Real>, Real> vtan(Real value)
     {
-        vreal_t q = (val * 2 * Z_1_PI).round();
+        Real q = (value * 2 * Z_1_PI).round();
         zint iq = q;
 
         // when performance > precision
         if(dispatched_arch::use_fast_float)
         {
-            val -= q * Z_PI_2;
+            value -= q * Z_PI_2;
         }
-        else if(is_float<vreal_t>::value)
+        else if(is_float<Real>::value)
         {
-            val = vfmadd(q, -Z_PI4_A_F * 2, val);
-            val = vfmadd(q, -Z_PI4_B_F * 2, val);
-            val = vfmadd(q, -Z_PI4_C_F * 2, val);
-            val = vfmadd(q, -Z_PI4_D_F * 2, val);
+            value = vfmadd(q, -Z_PI4_A_F * 2, value);
+            value = vfmadd(q, -Z_PI4_B_F * 2, value);
+            value = vfmadd(q, -Z_PI4_C_F * 2, value);
+            value = vfmadd(q, -Z_PI4_D_F * 2, value);
         }
-        else if(is_double<vreal_t>::value)
+        else if(is_double<Real>::value)
         {
-            val = vfmadd(q, -Z_PI4_A_D * 4, val);
-            val = vfmadd(q, -Z_PI4_B_D * 2, val);
-            val = vfmadd(q, -Z_PI4_C_D * 2, val);
-            val = vfmadd(q, -Z_PI4_D_D * 2, val);
+            value = vfmadd(q, -Z_PI4_A_D * 4, value);
+            value = vfmadd(q, -Z_PI4_B_D * 2, value);
+            value = vfmadd(q, -Z_PI4_C_D * 2, value);
+            value = vfmadd(q, -Z_PI4_D_D * 2, value);
         }
 
-        auto x = val;
+        auto x = value;
         auto s = x * x;
 
         x = (-x)
                 .when(iq & 1)
                 .otherwise(x);
 
-        vreal_t u;
+        Real u;
 
         // for single precision
-        if(is_float<vreal_t>::value)
+        if(is_float<Real>::value)
         {
             u =              0.00927245803177356719970703f;
             u = vfmadd(u, s, 0.00331984995864331722259521f);
@@ -297,7 +297,7 @@ namespace zacc { namespace math {
             u = vfmadd(u, s, 0.333331853151321411132812f);
         }
         // for double precision
-        else if(is_double<vreal_t>::value)
+        else if(is_double<Real>::value)
         {
             u =              1.01419718511083373224408e-05;
             u = vfmsub(u, s, 2.59519791585924697698614e-05);
@@ -323,8 +323,8 @@ namespace zacc { namespace math {
                 .when(iq & 1)
                 .otherwise(u);
 
-        u = vreal_t::quiet_NaN()
-                .when(val.is_infinite())
+        u = Real::quiet_NaN()
+                .when(value.is_infinite())
                 .otherwise(u);
 
         return u;
@@ -332,14 +332,15 @@ namespace zacc { namespace math {
 
     /**
      * @brief  Cosine function. Algorithm taken from SLEEF 2.80 and vecmathlib
-     * @tparam type [zfloat, zdouble]
-     * @param val [-1; 1] rad
+     * @tparam Real [zfloat, zdouble]
+     * @param x [-1; 1] rad
+     * @param y [-1; 1] rad
      * @return [-1; 1]
      */
-    template<typename vreal_t>
-    std::enable_if_t<is_floating_point<vreal_t>::value && is_vector<vreal_t>::value && has_integer_types_v<vreal_t>, vreal_t> vatan2(vreal_t y, vreal_t x)
+    template<typename Real>
+    std::enable_if_t<is_floating_point<Real>::value && is_vector<Real>::value && has_integer_types_v<Real>, Real> vatan2(Real y, Real x)
     {
-        auto q = vreal_t(2)
+        auto q = Real(2)
                 .when(x < 0)
                 .otherwise(0);
 
@@ -350,15 +351,15 @@ namespace zacc { namespace math {
 
         x = y0.when(mask).otherwise(x0);
         y = (-x0).when(mask).otherwise(y0);
-        q += vreal_t(1.0).when(mask).otherwise(0);
+        q += Real(1.0).when(mask).otherwise(0);
 
         auto s = y / x;
         auto t = s * s;
 
-        vreal_t u;
+        Real u;
 
         // for single precision
-        if(is_float<vreal_t>::value)
+        if(is_float<Real>::value)
         {
             u =              0.00282363896258175373077393f;
             u = vfmsub(u, t, 0.0159569028764963150024414f);
@@ -370,7 +371,7 @@ namespace zacc { namespace math {
             u = vfmsub(u, t, 0.333331018686294555664062f);
         }
         // for double precision
-        else if(is_double<vreal_t>::value)
+        else if(is_double<Real>::value)
         {
             u =            - 1.88796008463073496563746e-05;
             u = vfmadd(u, t, 0.000209850076645816976906797);

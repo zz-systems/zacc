@@ -30,8 +30,8 @@ namespace zacc {
 
     /**
      * Array casting functionality @ Compiletime.
-     * @origin: http://stackoverflow.com/a/14280396
-     * http://loungecpp.wikidot.com/tips-and-tricks%3aindices
+     * @see: http://stackoverflow.com/a/14280396
+     * @see http://loungecpp.wikidot.com/tips-and-tricks%3aindices
      */
     namespace detail {
 

@@ -99,6 +99,6 @@ add_custom_target(zacc.codegen.tests.all ALL DEPENDS ${zacc.codegen.tests} WORKI
 add_custom_target(zacc.codegen.all ALL DEPENDS zacc.codegen.types.all zacc.codegen.tests.all)
 
 add_library(zacc.codegen INTERFACE)
-add_dependencies(zacc.codegen zacc.codegen.types.all zacc.codegen.tests.all)
+add_dependencies(zacc.codegen zacc.codegen.types.all)
 
 #add_custom_target(zacc.codegen.all DEPENDS zacc.codegen)
