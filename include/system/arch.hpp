@@ -32,7 +32,7 @@
 namespace zacc {
 
     /**
-     * @brief provides all necessary types for the current branch at compile time
+     * @brief provides all necessary types for the current arch at compile time
      */
     struct dispatched_arch
     {

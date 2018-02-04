@@ -33,19 +33,6 @@ namespace zacc { namespace system {
     template<typename KernelInterface>
     struct kernel : public KernelInterface, public zacc::system::entrypoint
     {
-//        static void *operator new(size_t nbytes)
-//        {
-//            if (void *p = Allocator::allocate(nbytes))
-//            {
-//                return p;
-//            }
-//
-//            throw std::bad_alloc();
-//        }
-//
-//        static void operator delete(void *p)
-//        {
-//            Allocator::deallocate(p, 0);
-//        }
+
     };
 }}

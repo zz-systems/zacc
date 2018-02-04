@@ -28,11 +28,11 @@
 namespace zacc { namespace system {
 
     /**
-     * @brief derive from this struct to mark a type as a branch entrypoint
+     * @brief derive from this struct to mark a type as a arch entrypoint
      */
     struct entrypoint
     {
-        //virtual ~entrypoint() {}
+        virtual ~entrypoint() = default;
     };
 
 }}

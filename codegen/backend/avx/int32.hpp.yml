@@ -44,7 +44,7 @@ modules:
         init: "std::array<sse::zint32<Base::capability>, 2> ({ _mm_set1_epi32(value), _mm_set1_epi32(value) })"
 
       - args: "const std::array<typename Base::element_t, Base::size()> &value"
-        init: "std::array<sse::zint32<Base::capability>, 2> ({ _mm_loadu_si128((__m128i*)value.data()), _mm_loadu_si128((__m128i*)(value.data() + 4)) })"
+        init: "std::array<sse::zint32<Base::capability>, 2> ({ _mm_load_si128((__m128i*)value.data()), _mm_load_si128((__m128i*)(value.data() + 4)) })"
 
       #- args: { from: *vec_size, to: 0, type: *scalar_t }
       #  init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_ps }

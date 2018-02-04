@@ -38,7 +38,8 @@ namespace zacc {
     /// @brief aligned allocator for std containers
     /// @see http://jmabille.github.io/blog/2014/12/06/aligned-memory-allocator/
     template<class T, int N>
-    class aligned_allocator {
+    struct aligned_allocator
+    {
 
     public:
 
@@ -51,36 +52,60 @@ namespace zacc {
         typedef std::ptrdiff_t difference_type;
 
         template<class U>
-        struct rebind {
+        struct rebind
+        {
             typedef aligned_allocator<U, N> other;
         };
 
-        inline aligned_allocator() throw() { }
+        constexpr aligned_allocator() noexcept = default;
 
-        inline aligned_allocator(const aligned_allocator &) throw() { }
+        constexpr aligned_allocator(const aligned_allocator &) noexcept = default;
 
         template<class U>
-        inline aligned_allocator(const aligned_allocator<U, N> &) throw() { }
+        constexpr explicit aligned_allocator(const aligned_allocator<U, N> &) noexcept { }
 
-        inline ~aligned_allocator() throw() { }
+        ~aligned_allocator() noexcept = default;
 
-        inline pointer address(reference r) { return &r; }
 
-        inline const_pointer address(const_reference r) const { return &r; }
 
-        pointer allocate(size_type n, typename std::allocator<void>::const_pointer hint = 0);
+        inline pointer address(reference r)
+        {
+            return &r;
+        }
 
-        inline void deallocate(pointer p, size_type);
+        inline const_pointer address(const_reference r) const
+        {
+            return &r;
+        }
 
-        inline void construct(pointer p, const_reference value) { new(p) value_type(value); }
+        pointer allocate(size_type n, typename std::allocator<void>::const_pointer hint = 0) const;
 
-        inline void destroy(pointer p) { p->~value_type(); }
+        inline void deallocate(pointer p, size_type) const;
 
-        inline size_type max_size() const throw() { return size_type(-1) / sizeof(T); }
+        inline void construct(pointer p, const_reference value) const
+        {
+            new(p) value_type(value);
+        }
 
-        inline bool operator==(const aligned_allocator &) { return true; }
+        inline void destroy(pointer p) const
+        {
+            p->~value_type();
+        }
 
-        inline bool operator!=(const aligned_allocator &rhs) { return !operator==(rhs); }
+        inline size_type max_size() const throw()
+        {
+            return size_type(-1) / sizeof(T);
+        }
+
+        inline bool operator==(const aligned_allocator &) const
+        {
+            return true;
+        }
+
+        inline bool operator!=(const aligned_allocator &rhs) const
+        {
+            return !operator==(rhs);
+        }
     };
 
     // TODO
@@ -146,7 +171,7 @@ namespace zacc {
 
     template <class T, int N>
     typename aligned_allocator<T,N>::pointer
-    aligned_allocator<T,N>::allocate(size_type n, typename std::allocator<void>::const_pointer)
+    aligned_allocator<T,N>::allocate(size_type n, typename std::allocator<void>::const_pointer) const
     {
         pointer res = reinterpret_cast<pointer>(aligned_malloc(sizeof(T)*n,N));
         if(res == 0)
@@ -156,7 +181,7 @@ namespace zacc {
 
     template <class T, int N>
     void
-    aligned_allocator<T,N>::deallocate(pointer p, size_type)
+    aligned_allocator<T,N>::deallocate(pointer p, size_type) const
     {
         aligned_free(p);
     }

@@ -33,7 +33,7 @@
 namespace zacc { namespace system {
 
     /**
-     * @brief Provides functionality to select a branch to run during runtime
+     * @brief Provides functionality to select a arch to run during runtime
      * Inject your own logic via subclassing (crtp) or simply using a type alias
      * @code using engine_dispatcher = runtime_dispatcher<engine_dispatcher_impl>;
      * @tparam _Impl
@@ -189,22 +189,22 @@ namespace zacc { namespace system {
 #endif
         }
         /**
-         * @brief displays the selected branch with extended information
+         * @brief displays the selected arch with extended information
          */
-        template<typename branch> void log_branch() const
+        template<typename arch> void log_branch() const
         {
-            std::cout << "Dispatching: " << branch::name()
-                      << " [" << join(platform::global().make_capabilities(branch::value), ", ") << "]"
+            std::cout << "Dispatching: " << arch::name()
+                      << " [" << join(platform::global().make_capabilities(arch::value), ", ") << "]"
                       << std::endl;
         }
 
         /**
-         * @brief displays the selected branch with extended information
+         * @brief displays the selected arch with extended information
          */
-        template<typename branch> void log_branch_end() const
+        template<typename arch> void log_branch_end() const
         {
-            std::cout << "Dispatched: " << branch::name()
-                      << " [" << join(platform::global().make_capabilities(branch::value), ", ") << "]"
+            std::cout << "Dispatched: " << arch::name()
+                      << " [" << join(platform::global().make_capabilities(arch::value), ", ") << "]"
                       << std::endl;
         }
     };

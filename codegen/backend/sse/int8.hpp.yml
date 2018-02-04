@@ -40,7 +40,7 @@ modules:
         init: _mm_set1_epi8(value)
 
       - args: "const std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size> &value"
-        init: _mm_loadu_si128((__m128i*)value.data())
+        init: _mm_load_si128((__m128i*)value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi8 }
@@ -57,7 +57,7 @@ modules:
       prefix: "template<typename OutputIt> friend"
       args: "OutputIt result, Composed input"
       returns: void
-      body: _mm_storeu_si128((__m128i*)&(*result), input)
+      body: _mm_store_si128((__m128i*)&(*result), input)
     vstream:
       <<: *io_store
       body:  _mm_stream_si128((__m128i*)&(*result), input)

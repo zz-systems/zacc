@@ -38,7 +38,8 @@ namespace zacc { namespace examples {
 
     using namespace math;
 
-    DISPATCHED struct julia_kernel : system::kernel<julia>
+    DISPATCHED struct julia_kernel : system::kernel<julia>,
+                                     allocatable<julia_kernel, arch>
     {
         vec2<zint> _dim;
         vec2<zfloat> _offset;

@@ -64,16 +64,12 @@ namespace zacc { namespace system {
         template<typename Arch, typename... Args>
         void dispatch_impl(Args&&... arg)
         {
-            std::cerr << "Dispatching: " << ZACC_DYLIBNAME << std::endl;
-
             log_has_kernel<Arch>();
             if(_kernels.count(Arch::value) == 0)
                 _kernels[Arch::value] = _activator->create_instance<Arch, Kernel, system::kernel>(std::forward<Args>(arg)...);
 
             log_has_kernel<Arch>();
             _kernels[Arch::value]->operator()(std::forward<Args>(arg)...);
-
-            std::cerr << "Dispatched: " << ZACC_DYLIBNAME << std::endl;
         }
 
     private:
@@ -88,10 +84,10 @@ namespace zacc { namespace system {
         }
     };
 
-    template<typename _KernelImpl>
+    template<typename KernelImpl>
     auto make_dispatcher()
     {
-        return system::runtime_dispatcher<kernel_dispatcher<_KernelImpl>>();
+        return system::runtime_dispatcher<kernel_dispatcher<KernelImpl>>();
     };
 
 }}

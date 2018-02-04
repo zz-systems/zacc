@@ -37,7 +37,7 @@ namespace zacc { namespace system {
 
         
     /**
-     * Instantiates and destroys an object in a different library.
+     * Instantiates and destroys a kernel remotely.
      */
     struct remote_activator
     {
@@ -54,12 +54,12 @@ namespace zacc { namespace system {
 
         /**
          * Instantiate a kernel
-         * @tparam Arch
-         * @tparam KernelImpl
-         * @tparam Kernel
+         * @tparam Arch selected architecture
+         * @tparam KernelImpl kernel implementation
+         * @tparam Kernel kernel
          * @tparam Args
          * @param args
-         * @return
+         * @return pointer to kernel instance
          */
         template<typename Arch, typename KernelImpl, template<class> class Kernel, typename ...Args>
         std::shared_ptr<KernelImpl> create_instance(Args&&... args)
@@ -80,12 +80,12 @@ namespace zacc { namespace system {
         }
 
         /**
-        *
-        * @tparam Arch
-        * @tparam KernelImpl
+        * Instantiate a kernel
+        * @tparam Arch selected architecture
+        * @tparam KernelImpl kernel implementation
         * @tparam Args
         * @param args
-        * @return
+        * @return pointer to kernel instance
         */
         template<typename Arch, typename KernelImpl, typename ...Args>
         std::shared_ptr<KernelImpl> create_instance(Args&&... args)

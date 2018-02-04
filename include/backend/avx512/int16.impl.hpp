@@ -50,7 +50,7 @@
 #include "traits/conditional.hpp"
 
 /**
- * @brief int16 implementation for the avx512 branch
+ * @brief int16 implementation for the avx512 arch
  * provides unified access to 32 'int16_t' values
  */
 
@@ -91,7 +91,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -103,7 +103,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -115,7 +115,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -127,7 +127,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -139,7 +139,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -197,7 +197,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief io default branch
+             * @brief io default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -210,7 +210,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief io default branch
+             * @brief io default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -269,7 +269,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -282,7 +282,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -295,7 +295,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -354,7 +354,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -369,7 +369,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -382,7 +382,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -395,7 +395,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -408,7 +408,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -421,7 +421,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -434,7 +434,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -447,7 +447,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -506,7 +506,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -521,7 +521,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -534,7 +534,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -593,7 +593,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief comparison default branch
+             * @brief comparison default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -606,7 +606,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief comparison default branch
+             * @brief comparison default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -619,7 +619,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief comparison default branch
+             * @brief comparison default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -632,7 +632,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief comparison default branch
+             * @brief comparison default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -645,7 +645,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief comparison default branch
+             * @brief comparison default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -658,7 +658,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief comparison default branch
+             * @brief comparison default arch
              * @relates int16
              * @remark avx512 - default
              */
@@ -717,7 +717,7 @@ namespace zacc { namespace backend { namespace avx512 {
 
 
             /**
-             * @brief conditional default branch
+             * @brief conditional default arch
              * @relates int16
              * @remark avx512 - default
              */

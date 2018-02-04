@@ -118,27 +118,27 @@
 #define STRINGIZE_DETAIL(x) #x
 #define STRINGIZE(x) STRINGIZE_DETAIL(x)
 
-#define TYPES typename branch, \
-    typename zint8      = typename branch::zint8, \
-    typename zint16     = typename branch::zint16, \
-    typename zint32     = typename branch::zint32, \
-    typename zfloat32   = typename branch::zfloat32, \
-    typename zfloat64   = typename branch::zfloat64, \
-    typename zbyte      = typename branch::zint8, \
-    typename zshort     = typename branch::zint16, \
-    typename zint       = typename branch::zint32, \
-    typename zfloat     = typename branch::zfloat32, \
-    typename zdouble    = typename branch::zfloat64, \
-    typename bint8      = typename branch::bint8, \
-    typename bint16     = typename branch::bint16, \
-    typename bint32     = typename branch::bint32, \
-    typename bfloat32   = typename branch::bfloat32, \
-    typename bfloat64   = typename branch::bfloat64, \
-    typename bbyte      = typename branch::bint8, \
-    typename bshort     = typename branch::bint16, \
-    typename bint       = typename branch::bint32, \
-    typename bfloat     = typename branch::bfloat32, \
-    typename bdouble    = typename branch::bfloat64
+#define TYPES typename arch, \
+    typename zint8      = typename arch::zint8, \
+    typename zint16     = typename arch::zint16, \
+    typename zint32     = typename arch::zint32, \
+    typename zfloat32   = typename arch::zfloat32, \
+    typename zfloat64   = typename arch::zfloat64, \
+    typename zbyte      = typename arch::zint8, \
+    typename zshort     = typename arch::zint16, \
+    typename zint       = typename arch::zint32, \
+    typename zfloat     = typename arch::zfloat32, \
+    typename zdouble    = typename arch::zfloat64, \
+    typename bint8      = typename arch::bint8, \
+    typename bint16     = typename arch::bint16, \
+    typename bint32     = typename arch::bint32, \
+    typename bfloat32   = typename arch::bfloat32, \
+    typename bfloat64   = typename arch::bfloat64, \
+    typename bbyte      = typename arch::bint8, \
+    typename bshort     = typename arch::bint16, \
+    typename bint       = typename arch::bint32, \
+    typename bfloat     = typename arch::bfloat32, \
+    typename bdouble    = typename arch::bfloat64
 
 //clash with POSIX....
 //#define KERNEL template<typename _Input, typename _Output, TYPES>
@@ -148,4 +148,4 @@
  */
 #define DISPATCHED template<TYPES>
 
-#define ALIGNED alignas(branch::alignment)
+#define ALIGNED alignas(arch::alignment)

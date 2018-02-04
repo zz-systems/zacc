@@ -52,7 +52,7 @@
 #include "traits/conditional.hpp"
 
 /**
- * @brief float64 implementation for the avx branch
+ * @brief float64 implementation for the avx arch
  * provides unified access to 4 'double' values
  */
 
@@ -93,7 +93,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates float64
              * @remark avx - default
              */
@@ -105,7 +105,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates float64
              * @remark avx - default
              */
@@ -117,7 +117,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates float64
              * @remark avx - default
              */
@@ -129,7 +129,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates float64
              * @remark avx - default
              */
@@ -141,7 +141,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates float64
              * @remark avx - default
              */
@@ -153,7 +153,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates float64
              * @remark avx - default
              */
@@ -165,7 +165,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates float64
              * @remark avx - default
              */
@@ -177,7 +177,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief construction default branch
+             * @brief construction default arch
              * @relates float64
              * @remark avx - default
              */
@@ -235,7 +235,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief io default branch
+             * @brief io default arch
              * @relates float64
              * @remark avx - default
              */
@@ -248,7 +248,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief io default branch
+             * @brief io default arch
              * @relates float64
              * @remark avx - default
              */
@@ -261,7 +261,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief io default branch
+             * @brief io default arch
              * @relates float64
              * @remark avx - default
              */
@@ -366,7 +366,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief math default branch
+             * @brief math default arch
              * @relates float64
              * @remark avx - default
              */
@@ -379,7 +379,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief math default branch
+             * @brief math default arch
              * @relates float64
              * @remark avx - default
              */
@@ -392,7 +392,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief math default branch
+             * @brief math default arch
              * @relates float64
              * @remark avx - default
              */
@@ -405,7 +405,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief math default branch
+             * @brief math default arch
              * @relates float64
              * @remark avx - default
              */
@@ -418,7 +418,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief math default branch
+             * @brief math default arch
              * @relates float64
              * @remark avx - default
              */
@@ -431,7 +431,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief math default branch
+             * @brief math default arch
              * @relates float64
              * @remark avx - default
              */
@@ -444,7 +444,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief math default branch
+             * @brief math default arch
              * @relates float64
              * @remark avx - default
              */
@@ -457,7 +457,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief math default branch
+             * @brief math default arch
              * @relates float64
              * @remark avx - default
              */
@@ -470,7 +470,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief math default branch
+             * @brief math default arch
              * @relates float64
              * @remark avx - default
              */
@@ -483,7 +483,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief math default branch
+             * @brief math default arch
              * @relates float64
              * @remark avx - default
              */
@@ -542,7 +542,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default arch
              * @relates float64
              * @remark avx - default
              */
@@ -555,7 +555,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default arch
              * @relates float64
              * @remark avx - default
              */
@@ -568,7 +568,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default arch
              * @relates float64
              * @remark avx - default
              */
@@ -581,7 +581,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default arch
              * @relates float64
              * @remark avx - default
              */
@@ -594,7 +594,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default arch
              * @relates float64
              * @remark avx - default
              */
@@ -607,7 +607,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief arithmetic fma branch
+             * @brief arithmetic fma arch
              * @relates float64
              * @remark avx - fma
              */
@@ -620,7 +620,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default arch
              * @relates float64
              * @remark avx - default
              */
@@ -633,7 +633,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief arithmetic fma branch
+             * @brief arithmetic fma arch
              * @relates float64
              * @remark avx - fma
              */
@@ -646,7 +646,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief arithmetic default branch
+             * @brief arithmetic default arch
              * @relates float64
              * @remark avx - default
              */
@@ -705,7 +705,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates float64
              * @remark avx - default
              */
@@ -720,7 +720,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates float64
              * @remark avx - default
              */
@@ -733,7 +733,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates float64
              * @remark avx - default
              */
@@ -746,7 +746,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates float64
              * @remark avx - default
              */
@@ -759,7 +759,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief bitwise avx2 branch
+             * @brief bitwise avx2 arch
              * @relates float64
              * @remark avx - avx2
              */
@@ -773,7 +773,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief bitwise default branch
+             * @brief bitwise default arch
              * @relates float64
              * @remark avx - default
              */
@@ -834,7 +834,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default arch
              * @relates float64
              * @remark avx - default
              */
@@ -847,7 +847,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default arch
              * @relates float64
              * @remark avx - default
              */
@@ -860,7 +860,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief logical default branch
+             * @brief logical default arch
              * @relates float64
              * @remark avx - default
              */
@@ -919,7 +919,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief comparison default branch
+             * @brief comparison default arch
              * @relates float64
              * @remark avx - default
              */
@@ -932,7 +932,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief comparison default branch
+             * @brief comparison default arch
              * @relates float64
              * @remark avx - default
              */
@@ -945,7 +945,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief comparison default branch
+             * @brief comparison default arch
              * @relates float64
              * @remark avx - default
              */
@@ -958,7 +958,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief comparison default branch
+             * @brief comparison default arch
              * @relates float64
              * @remark avx - default
              */
@@ -971,7 +971,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief comparison default branch
+             * @brief comparison default arch
              * @relates float64
              * @remark avx - default
              */
@@ -985,7 +985,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief comparison default branch
+             * @brief comparison default arch
              * @relates float64
              * @remark avx - default
              */
@@ -1044,7 +1044,7 @@ namespace zacc { namespace backend { namespace avx {
 
 
             /**
-             * @brief conditional default branch
+             * @brief conditional default arch
              * @relates float64
              * @remark avx - default
              */

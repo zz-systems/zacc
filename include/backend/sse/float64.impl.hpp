@@ -46,15 +46,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/logical.hpp"
-#include "traits/math.hpp"
-#include "traits/numeric.hpp"
-#include "traits/equatable.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/conditional.hpp"
 #include "traits/comparable.hpp"
+#include "traits/equatable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/numeric.hpp"
+#include "traits/conditional.hpp"
 #include "traits/io.hpp"
+#include "traits/math.hpp"
+#include "traits/logical.hpp"
 
 namespace zacc { namespace backend { namespace sse {
 
@@ -352,7 +352,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "default", "vstore");
 
-                _mm_storeu_pd(&(*result), input);
+                _mm_store_pd(&(*result), input);
             }
 
 
@@ -1413,7 +1413,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.float64.impl", __LINE__, "float64(double[2])", "default", "vstore");
 
-                _mm_storeu_pd(&(*result), input);
+                _mm_store_pd(&(*result), input);
             }
 
 

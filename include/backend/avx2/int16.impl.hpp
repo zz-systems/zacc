@@ -46,16 +46,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/math.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/numeric.hpp"
-#include "traits/io.hpp"
-#include "traits/bitwise_shift.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/comparable.hpp"
-#include "traits/equatable.hpp"
+#include "traits/math.hpp"
+#include "traits/io.hpp"
 #include "traits/logical.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/numeric.hpp"
+#include "traits/equatable.hpp"
 #include "traits/conditional.hpp"
+#include "traits/comparable.hpp"
+#include "traits/arithmetic.hpp"
 
 namespace zacc { namespace backend { namespace avx2 {
 
@@ -151,7 +151,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates int16
              * @remark avx2 
              */
-            constexpr __impl(std::array<typename Base::element_t, Base::size()> value) : Base(_mm256_loadu_si256((__m256i*)value.data()))  {
+            constexpr __impl(std::array<typename Base::element_t, Base::size()> value) : Base(_mm256_load_si256((__m256i*)value.data()))  {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(std::array<typename Base::element_t, Base::size()>)");
 
@@ -329,7 +329,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vstore");
 
-                _mm256_storeu_si256((__m256i*)&(*result), input);
+                _mm256_store_si256((__m256i*)&(*result), input);
             }
 
 
@@ -1318,7 +1318,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vstore");
 
-                _mm256_storeu_si256((__m256i*)&(*result), input);
+                _mm256_store_si256((__m256i*)&(*result), input);
             }
 
 

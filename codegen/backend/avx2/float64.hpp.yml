@@ -45,7 +45,7 @@ modules:
         init: _mm256_set1_pd(value)
 
       - args: "std::array<typename Base::element_t, Base::size()> value"
-        init: _mm256_loadu_pd(value.data())
+        init: _mm256_load_pd(value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_pd }
@@ -62,7 +62,7 @@ modules:
       prefix: "template<typename OutputIt> friend"
       args: "OutputIt result, Composed input"
       returns: void
-      body: _mm256_storeu_pd(&(*result), input)
+      body: _mm256_store_pd(&(*result), input)
     vstream:
       <<: *io_store
       body: _mm256_stream_pd(&(*result), input)

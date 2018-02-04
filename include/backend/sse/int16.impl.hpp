@@ -46,16 +46,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/conditional.hpp"
-#include "traits/comparable.hpp"
-#include "traits/io.hpp"
-#include "traits/logical.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/numeric.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/equatable.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/math.hpp"
+#include "traits/comparable.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/logical.hpp"
+#include "traits/equatable.hpp"
+#include "traits/conditional.hpp"
+#include "traits/io.hpp"
 
 namespace zacc { namespace backend { namespace sse {
 
@@ -151,7 +151,7 @@ namespace zacc { namespace backend { namespace sse {
              * @relates int16
              * @remark sse 
              */
-            constexpr __impl(const std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size> &value) : Base(_mm_loadu_si128((__m128i *) value.data()))  {
+            constexpr __impl(const std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size> &value) : Base(_mm_load_si128((__m128i *) value.data()))  {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS(const std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size>)");
 
@@ -329,7 +329,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vstore");
 
-                _mm_storeu_si128((__m128i*)&(*result), input);
+                _mm_store_si128((__m128i*)&(*result), input);
             }
 
 
@@ -1385,7 +1385,7 @@ namespace zacc { namespace backend { namespace sse {
 
                 ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vstore");
 
-                _mm_storeu_si128((__m128i*)&(*result), input);
+                _mm_store_si128((__m128i*)&(*result), input);
             }
 
 

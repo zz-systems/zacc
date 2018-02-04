@@ -29,7 +29,7 @@
 
 int main(int, char**)
 {
-    zacc::examples::julia_host host;
+    zacc::examples::mandelbrot_host host;
     host.run();
 
     return 0;

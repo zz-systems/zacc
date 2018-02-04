@@ -46,15 +46,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/math.hpp"
-#include "traits/numeric.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/io.hpp"
 #include "traits/arithmetic.hpp"
+#include "traits/logical.hpp"
+#include "traits/io.hpp"
+#include "traits/math.hpp"
+#include "traits/comparable.hpp"
 #include "traits/conditional.hpp"
 #include "traits/equatable.hpp"
-#include "traits/comparable.hpp"
-#include "traits/logical.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/numeric.hpp"
 
 namespace zacc { namespace backend { namespace avx2 {
 
@@ -174,7 +174,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @relates float32
              * @remark avx2 
              */
-            constexpr __impl(std::array<typename Base::element_t, Base::size()> value) : Base(_mm256_loadu_ps(value.data()))  {
+            constexpr __impl(std::array<typename Base::element_t, Base::size()> value) : Base(_mm256_load_ps(value.data()))  {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "", "CONS(std::array<typename Base::element_t, Base::size()>)");
 
@@ -352,7 +352,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vstore");
 
-                _mm256_storeu_ps(&(*result), input);
+                _mm256_store_ps(&(*result), input);
             }
 
 
@@ -1347,7 +1347,7 @@ namespace zacc { namespace backend { namespace avx2 {
 
                 ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vstore");
 
-                _mm256_storeu_ps(&(*result), input);
+                _mm256_store_ps(&(*result), input);
             }
 
 

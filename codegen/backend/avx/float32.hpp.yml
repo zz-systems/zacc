@@ -38,7 +38,7 @@ modules:
         init: _mm256_set1_ps(value)
 
       - args: "std::array<typename Base::element_t, Base::size()> value"
-        init: _mm256_loadu_ps(value.data())
+        init: _mm256_load_ps(value.data())
 
       - args: "std::array<sse::zint32<Base::capability>, 2> value"
         init: _mm256_set_m128(_mm_cvtepi32_ps(value[1]), _mm_cvtepi32_ps(value[0]))

@@ -31,53 +31,20 @@
 
 zacc::system::entrypoint *mandelbrot_create_instance()
 {
-    using namespace zacc;
-    using namespace zacc::examples;
-
-    auto alloc = zacc::aligned_allocator<mandelbrot_kernel<dispatched_arch>, dispatched_arch::alignment>();
-    auto ptr = alloc.allocate(sizeof(mandelbrot_kernel<dispatched_arch>));
-
-    auto result = new(ptr) mandelbrot_kernel<zacc::dispatched_arch>();
-
-    return result;
-    //return new zacc::examples::mandelbrot_kernel<zacc::dispatched_arch>();
+    return new zacc::examples::mandelbrot_kernel<zacc::dispatched_arch>();
 }
 
 void mandelbrot_delete_instance(zacc::system::entrypoint* instance)
 {
-    using namespace zacc;
-    using namespace zacc::examples;
-
-    auto alloc = zacc::aligned_allocator<mandelbrot_kernel<dispatched_arch>, dispatched_arch::alignment>();
-
-    if(instance != nullptr)
-        alloc.deallocate(static_cast<mandelbrot_kernel<dispatched_arch>*>(instance), 0);
+    delete instance;
 }
 
 zacc::system::entrypoint *julia_create_instance()
 {
-
-    using namespace zacc;
-    using namespace zacc::examples;
-
-
-    auto alloc = zacc::aligned_allocator<julia_kernel<dispatched_arch>, dispatched_arch::alignment>();
-    auto ptr = alloc.allocate(sizeof(julia_kernel<dispatched_arch>));
-
-    auto result = new(ptr) julia_kernel<zacc::dispatched_arch>();
-
-    return result;
-
-    //return new zacc::examples::julia_kernel<zacc::dispatched_arch>();
+    return new zacc::examples::julia_kernel<zacc::dispatched_arch>();
 }
 
 void julia_delete_instance(zacc::system::entrypoint* instance)
 {
-    using namespace zacc;
-    using namespace zacc::examples;
-
-    auto alloc = zacc::aligned_allocator<julia_kernel<dispatched_arch>, dispatched_arch::alignment>();
-
-    if(instance != nullptr)
-        alloc.deallocate(static_cast<julia_kernel<dispatched_arch>*>(instance), 0);
+    delete instance;
 }

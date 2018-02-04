@@ -316,7 +316,7 @@ namespace zacc { namespace math {
             FORWARD(__impl);
 
             /**
-             * @brief io default branch
+             * @brief io default arch
              * @relates float32
              * @remark avx - default
              */
@@ -327,7 +327,7 @@ namespace zacc { namespace math {
 
 
             /**
-             * @brief io default branch
+             * @brief io default arch
              * @relates float32
              * @remark avx - default
              */
@@ -561,7 +561,7 @@ namespace zacc { namespace math {
 
 
             /**
-             * @brief conditional default branch
+             * @brief conditional default arch
              * @relates float32
              * @remark avx2 - default
              */
@@ -575,7 +575,7 @@ namespace zacc { namespace math {
             }
 
 //            /**
-//             * @brief conditional default branch
+//             * @brief conditional default arch
 //             * @relates float32
 //             * @remark avx2 - default
 //             */

@@ -144,7 +144,7 @@ namespace zacc {
     #define ZTRACE_RAW(cmd)
 #endif
 
-#define ZTRACE_BACKEND(file, line, type, branch, func) ZTRACE_RAW(std::left << std::setw(32) << file << " line " STRINGIZE(line) ":" << std::left << std::setw(24) << " " << type << " " << std::left << std::setw(10) << branch << " " << func)
+#define ZTRACE_BACKEND(file, line, type, arch, func) ZTRACE_RAW(std::left << std::setw(32) << file << " line " STRINGIZE(line) ":" << std::left << std::setw(24) << " " << type << " " << std::left << std::setw(10) << arch << " " << func)
 
 #define ZTRACE(block, message) ZTRACE_RAW(">> " << std::left << std::setw(29) << block << " line " << __LINE__ << ": " << message)
 
