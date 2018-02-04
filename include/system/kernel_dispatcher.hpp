@@ -35,37 +35,55 @@
 
 namespace zacc { namespace system {
 
-    template<typename _Kernel, typename _KernelTraits = system::kernel_traits<_Kernel>>
+    /**
+     * Kernel dispatcher. Activates and dispatches a kernel
+     * @todo Activation policy / strategy
+     * @tparam Kernel
+     */
+    template<typename Kernel>
     class kernel_dispatcher
     {
     public:
-        kernel_dispatcher() noexcept
+        /**
+         * Constructor
+         */
+        constexpr kernel_dispatcher() noexcept
         {
             std::cerr << "loading: " << ZACC_DYLIBNAME << std::endl;
             _activator = std::make_unique<system::remote_activator>(ZACC_DYLIBNAME,
-                                                                    std::string(_KernelTraits::kernel_name()) + "_create_instance",
-                                                                    std::string(_KernelTraits::kernel_name()) + "_delete_instance");
+                                                                    std::string(kernel_traits<Kernel>::kernel_name()) + "_create_instance",
+                                                                    std::string(kernel_traits<Kernel>::kernel_name()) + "_delete_instance");
         }
     protected:
-        template<typename feature, typename... Args>
+        /**
+         * Instantiate a kernel if necessary and execute
+         * @tparam Arch Selected architecture
+         * @tparam Args any
+         * @param arg any
+         */
+        template<typename Arch, typename... Args>
         void dispatch_impl(Args&&... arg)
         {
-            log_has_kernel<feature>();
-            if(_kernels.count(feature::value) == 0)
-                _kernels[feature::value] = _activator->create_instance<feature, _Kernel, system::kernel>(std::forward<Args>(arg)...);
+            std::cerr << "Dispatching: " << ZACC_DYLIBNAME << std::endl;
 
-            log_has_kernel<feature>();
-            _kernels[feature::value]->operator()(std::forward<Args>(arg)...);
+            log_has_kernel<Arch>();
+            if(_kernels.count(Arch::value) == 0)
+                _kernels[Arch::value] = _activator->create_instance<Arch, Kernel, system::kernel>(std::forward<Args>(arg)...);
+
+            log_has_kernel<Arch>();
+            _kernels[Arch::value]->operator()(std::forward<Args>(arg)...);
+
+            std::cerr << "Dispatched: " << ZACC_DYLIBNAME << std::endl;
         }
 
     private:
-        aligned_map<int, std::shared_ptr<_Kernel>> _kernels;
+        aligned_map<int, std::shared_ptr<Kernel>> _kernels;
         std::unique_ptr<system::remote_activator> _activator;
 
-        template<typename feature> void log_has_kernel()
+        template<typename Arch> void log_has_kernel()
         {
             std::cout << "Has kernel: " << std::boolalpha
-                      << (_kernels.count(feature::value) != 0)
+                      << (_kernels.count(Arch::value) != 0)
                       << std::endl;
         }
     };

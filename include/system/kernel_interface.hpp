@@ -32,12 +32,40 @@
 
 namespace zacc { namespace system {
 
-    template<typename _KernelInterface>
-    struct kernel_interface : virtual _KernelInterface
+    /**
+     * Kernel traits - extract information from kernel
+     * @tparam KernelInterface
+     */
+    template<typename KernelInterface>
+    struct kernel_traits
     {
-        using output_container = std::remove_reference_t<typename _KernelInterface::output_container>;
-        using input_container  = std::remove_reference_t<typename _KernelInterface::input_container>;
+        /// Output container
+        using output_container = std::remove_reference_t<typename KernelInterface::output_container>;
+        /// Input container
+        using input_container  = std::remove_reference_t<typename KernelInterface::input_container>;
 
+        /// Kernel name
+        static constexpr auto kernel_name() { return KernelInterface::kernel_name(); }
+    };
+
+    /**
+     * Public kernel interface wrapper.
+     * Provides basic operator() implementations for the dispatcher
+     * @tparam KernelInterface
+     */
+    template<typename KernelInterface>
+    struct kernel_interface : KernelInterface
+    {
+        /// Output container
+        using output_container = typename kernel_traits<KernelInterface>::output_container;
+        /// Input container
+        using input_container  = typename kernel_traits<KernelInterface>::input_container;
+
+        /**
+         * Configure kernel (Any argument)
+         * @tparam Args any
+         * @param args any
+         */
         template<typename... Args>
         void operator()(Args&&... args)
         {
@@ -46,6 +74,11 @@ namespace zacc { namespace system {
             this->configure(std::forward<Args>(args)...);
         }
 
+        /**
+         * Process (process input, produce output)
+         * @param input
+         * @param output
+         */
         void operator()(const input_container &input, output_container &output)
         {
             _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
@@ -53,6 +86,10 @@ namespace zacc { namespace system {
             this->run(input, output);
         }
 
+        /**
+         * Generate (output only)
+         * @param output
+         */
         void operator()(output_container &output)
         {
             _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);

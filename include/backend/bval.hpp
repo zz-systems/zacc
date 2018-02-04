@@ -67,49 +67,68 @@ namespace zacc {
 
         /**
          * copy constructor
-         * @tparam T any type convertable to Vector
+         * @tparam T any type convertable to MaskVector
          * @param other
          */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, MaskVector>::value>>
         constexpr bval(const T& other) noexcept
                 : _value (other), _last_op(other.last_op())
         {}
 
         /**
          * 'fake' copy constructor with last operation
-         * @tparam T any type convertable to Vector
+         * @tparam T any type convertable to MaskVector
          * @param other
          * @param last_op last operation
          */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, MaskVector>::value>>
         constexpr bval(const T& other, last_operation last_op) noexcept
                 : _value (other), _last_op(last_op)
         {}
 
         /**
          * move constructor
-         * @tparam T any type convertable to Vector
+         * @tparam T any type convertable to MaskVector
          * @param other
          */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, MaskVector>::value>>
         constexpr bval(T&& other) noexcept
                 : _value(std::forward<T>(other)),
                   _last_op(last_operation::undefined)
         {}
 
+        /**
+         * copy constructor
+         * @param other
+         */
         constexpr bval(const bval& other) noexcept
                 : _value (other._value), _last_op(other.last_op())
         {}
 
+        /**
+         * 'fake' copy constructor with last operation
+         * @param other
+         * @param last_op last operation
+        */
         constexpr bval(const bval& other, last_operation last_op) noexcept
                 : _value (other._value), _last_op(last_op)
         {}
 
+        /**
+         * move constructor
+         * @param other
+         */
         constexpr bval(bval&& other) noexcept
                 : _value(std::move(other._value)), _last_op(other.last_op())
         {}
 
-        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Vector>::value>>
+        /**
+         * assignment operator
+         * @tparam T any type convertable to MaskVector
+         * @param other
+         * @return self
+         */
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, MaskVector>::value>>
         constexpr bval& operator=(const T& other) noexcept
         {
             _value = other.value();
@@ -118,7 +137,13 @@ namespace zacc {
             return *this;
         };
 
-        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Vector>::value>>
+        /**
+         * moving assignment operator
+         * @tparam T any type convertable to MaskVector
+         * @param other
+         * @return self
+         */
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, MaskVector>::value>>
         constexpr bval& operator=(T&& other) noexcept
         {
             _value = std::move(other.value());
@@ -127,7 +152,11 @@ namespace zacc {
             return *this;
         };
 
-
+        /**
+         * assignment operator
+         * @param other
+         * @return self
+         */
         constexpr bval& operator=(const bval& other) noexcept
         {
             _value = other.value();
@@ -136,7 +165,11 @@ namespace zacc {
             return *this;
         };
 
-
+        /**
+         * moving assignment operator
+         * @param other
+         * @return self
+         */
         constexpr bval& operator=(bval&& other) noexcept
         {
             _value = std::move(other.value());
@@ -145,6 +178,10 @@ namespace zacc {
             return *this;
         };
 
+        /**
+         * swaps values
+         * @param other
+         */
         void swap(bval& other) noexcept
         {
             std::swap(_value, other._value);
@@ -152,18 +189,27 @@ namespace zacc {
         }
 
         /**
-         * @brief
-         * @return
+         * implicit cast operator to wrapped raw type (MaskVector)
+         * @remark valid only for vectors, not scalars (size has to be > 1, otherwise default C++ operators will apply for wrapped scalars)
+         * @return raw value
          */
-        template <typename size = std::integral_constant<size_t, Size>, typename enable = typename std::enable_if<(size::value > 1), MaskVector>::type>
-        constexpr operator MaskVector() const {
+        template<typename T = bval>
+        constexpr operator std::enable_if_t<is_vector_v<T>, MaskVector>() const {
             return value();
         }
 
+        /**
+        * underlying vector
+        * @return raw value
+        */
         constexpr const MaskVector value() const {
             return _value;
         }
 
+        /**
+        * last operation
+        * @return last operation
+        */
         constexpr last_operation last_op() const {
             return _last_op;
         }
@@ -174,6 +220,13 @@ namespace zacc {
     };
 
 
+    /**
+     * construct a bval from arguments
+     * @tparam T any zval
+     * @param value
+     * @param last_op
+     * @return bval
+     */
     template<typename T>
     constexpr std::enable_if_t<is_zval<T>::value, typename zval_traits<T>::bval_t> make_bval(T value, last_operation last_op = last_operation::undefined)
     {
@@ -181,15 +234,16 @@ namespace zacc {
     }
 
 
+    /**
+     * construct a bval from arguments
+     * @tparam T any type not equal to zval
+     * @param value
+     * @param last_op
+     * @return bval
+     */
     template<typename T>
-    constexpr std::enable_if_t<!is_zval<T>::value, typename zval_traits<T>::bval_t> make_bval(T value, last_operation)
+    constexpr std::enable_if_t<!is_zval<T>::value, typename zval_traits<T>::bval_t> make_bval(T value)
     {
         return static_cast<typename zval_traits<T>::bval_t>(value);
-    }
-
-    template<typename _ZVal>
-    constexpr auto make_boolean(const _ZVal& value)
-    {
-        return typename _ZVal::bval_t(value);
     }
 }

@@ -221,7 +221,7 @@ namespace zacc {
             {
                 //return make_bval(*this, last_operation::undefined);
                 //return *this != 0;
-                return make_boolean(*this);
+                return make_bval(*this);
             }
         };
     };

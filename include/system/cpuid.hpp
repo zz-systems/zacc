@@ -41,25 +41,25 @@ namespace zacc
         using data_t        = std::vector<data_entry_t>;
 
         /**
-         * @brief
+         * Processor vendors
          */
         enum class vendors
         {
-            UNKNOWN,
-            VIRTUAL,
-            AMD,
-            INTEL
+            UNKNOWN,    ///< unknown processor
+            VIRTUAL,    ///< virtual machine (hypervisor)
+            AMD,        ///< AMD CPU
+            INTEL       ///< Intel CPU
         };
 
         /**
-         * @brief
+         * @brief x86 registers
          */
         enum regs
         {
-            EAX,
-            EBX,
-            ECX,
-            EDX
+            EAX,    ///< EAX
+            EBX,    ///< EBX
+            ECX,    ///< ECX
+            EDX     ///< EDX
         };
 
         /**
@@ -77,72 +77,65 @@ namespace zacc
         static data_entry_t get_cpuid(int function_id, int sub_function_id = 0);
 
         /**
-         * @brief
+         * constructor
          */
         cpuid();
 
         /**
-         * @brief
-         * @return
+         * Returns the vendor
          */
         vendors vendor()                            const;
 
         /**
-         * @brief
-         * @return
+         * Returns the vendor name
          */
         const std::string &vendor_str()             const;
 
         /**
-         * @brief
-         * @return
+         * Returns the brand string
          */
         const std::string &brand_str()              const;
 
         /**
-         * @brief
-         * @return
+         * Returns CPUID data
          */
         const data_t &data()                        const;
 
         /**
-         * @brief
-         * @return
+         * Returns CPUID extended data
          */
         const data_t &ext_data()                    const;
 
         /**
-         * @brief get register at index
-         * @param index 
-         * @return
+         * @brief gets register at index
+         * @param index
          */
         const data_entry_t &reg(size_t index)       const;
 
         /**
-         * @brief
+         * @brief gets extended register at index
          * @param index
-         * @return
          */
         const data_entry_t &ext_reg(size_t index)   const;
 
     private:
 
         /**
-         * @brief
-         * @param target
-         * @param reg
+         * @brief Appends string value in register to string
+         * @param target target string
+         * @param reg source register
          */
         void append(std::string &target, const reg_t& reg);
 
         /**
-         * @brief
-         * @tparam dim
-         * @param target
-         * @param data_entry
+         * @brief Appends string value in registers to string
+         * @tparam dim register count
+         * @param target target string
+         * @param regs source registers
          */
         template<size_t dim>
-        void append(std::string &target, const std::array<reg_t, dim>& data_entry){
-            for(auto reg : data_entry)
+        void append(std::string &target, const std::array<reg_t, dim>& regs){
+            for(auto reg : regs)
                 append(target, reg);
         }
 

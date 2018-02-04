@@ -189,6 +189,9 @@ namespace zacc {
             : public std::true_type
     {};
 
+    template<typename val_t>
+    constexpr bool is_vector_v = is_vector<val_t>::value;
+
     template<typename T>
     using resolve_uint_t = std::conditional_t<
             sizeof(T) == 8,

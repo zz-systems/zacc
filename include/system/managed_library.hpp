@@ -35,10 +35,17 @@
 
 namespace zacc { namespace system {
 
-    class managed_library
+    /**
+     * Wrapper around a dynamically loaded library with controlled lifetime
+     */
+    struct managed_library
     {
-    public:
-        managed_library(const std::string& library_path, size_t retry_policy = 3)
+        /**
+         * Construct from path with set retry policy
+         * @param library_path
+         * @param retry_policy
+         */
+        explicit managed_library(const std::string& library_path, size_t retry_policy = 3)
                 : _handle(nullptr), _library_name(library_path)
         {
             zacc_dlerror();
@@ -58,6 +65,9 @@ namespace zacc { namespace system {
             }
         }
 
+        /**
+         * Unload library, if possible
+         */
         ~managed_library()
         {
             if(_handle != nullptr)
@@ -71,6 +81,12 @@ namespace zacc { namespace system {
             }
         }
 
+        /**
+         * Resolves a symbol by its signature and function name
+         * @tparam Signature
+         * @param function_name
+         * @return
+         */
         template<typename Signature>
         std::function<Signature> resolve_symbol(const std::string& function_name) const
         {

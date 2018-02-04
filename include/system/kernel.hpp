@@ -25,27 +25,27 @@
 
 #pragma once
 
-// @file mandelbrot_engine.hpp
-
 #include "zacc.hpp"
 #include "system/entrypoint.hpp"
 
 namespace zacc { namespace system {
 
-    template<typename _KernelInterface>
-    struct kernel_traits
+    template<typename KernelInterface>
+    struct kernel : public KernelInterface, public zacc::system::entrypoint
     {
-        using output_container = std::remove_reference_t<typename _KernelInterface::output_container>;
-        using input_container  = std::remove_reference_t<typename _KernelInterface::input_container>;
-
-        static constexpr auto kernel_name() { return _KernelInterface::kernel_name(); }
-    };
-
-
-
-    template<typename _KernelInterface>
-    struct kernel : public _KernelInterface, public zacc::system::entrypoint
-    {
-
+//        static void *operator new(size_t nbytes)
+//        {
+//            if (void *p = Allocator::allocate(nbytes))
+//            {
+//                return p;
+//            }
+//
+//            throw std::bad_alloc();
+//        }
+//
+//        static void operator delete(void *p)
+//        {
+//            Allocator::deallocate(p, 0);
+//        }
     };
 }}

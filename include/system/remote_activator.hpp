@@ -35,29 +35,14 @@
 
 namespace zacc { namespace system {
 
-        template<typename F>
-        struct S;
-
-        template<typename R, typename... Args>
-        struct S<R(Args...)> {
-            using type = R(*)(Args...);
-        };
-
-
-        /**
-     *
+        
+    /**
+     * Instantiates and destroys an object in a different library.
      */
-    class remote_activator
+    struct remote_activator
     {
-        std::string _library_name;
-        std::string _create_instance;
-        std::string _delete_instance;
-
-        std::map<int, std::shared_ptr<managed_library>> _loaded_libraries;
-
-    public:
         /**
-         *
+         * Constructor.
          * @param library_name
          * @param create_instance
          * @param delete_instance
@@ -65,86 +50,92 @@ namespace zacc { namespace system {
         remote_activator(const std::string& library_name, const std::string& create_instance, const std::string& delete_instance)
             : _library_name(library_name), _create_instance(create_instance), _delete_instance(delete_instance)
         {
-
         }
 
         /**
-         *
-         * @tparam branch
+         * Instantiate a kernel
+         * @tparam Arch
+         * @tparam KernelImpl
+         * @tparam Kernel
+         * @tparam Args
+         * @param args
          * @return
          */
-        template<typename branch>
-        std::shared_ptr<managed_library> branch_library()
+        template<typename Arch, typename KernelImpl, template<class> class Kernel, typename ...Args>
+        std::shared_ptr<KernelImpl> create_instance(Args&&... args)
+        {
+            auto loader  = this->select_implementation<Arch>();
+
+            assert(loader != nullptr);
+            // Pitfall. loader->template ... is required
+            auto creator = loader->template resolve_symbol<entrypoint*(Args...)>(this->_create_instance);
+            auto deleter = loader->template resolve_symbol<void(entrypoint*)>(this->_delete_instance);
+
+            assert(creator != nullptr);
+            assert(deleter != nullptr);
+
+            auto ptr = std::shared_ptr<entrypoint>(creator(std::forward<Args>(args)...), deleter);
+
+            return std::static_pointer_cast<KernelImpl>(std::static_pointer_cast<Kernel<KernelImpl>>(ptr));
+        }
+
+        /**
+        *
+        * @tparam Arch
+        * @tparam KernelImpl
+        * @tparam Args
+        * @param args
+        * @return
+        */
+        template<typename Arch, typename KernelImpl, typename ...Args>
+        std::shared_ptr<KernelImpl> create_instance(Args&&... args)
+        {
+            auto loader  = this->select_implementation<Arch>();
+
+            assert(loader != nullptr);
+            // Pitfall. loader->template ... is required
+            auto creator = loader->template resolve_symbol<entrypoint*(Args...)>(this->_create_instance);
+            auto deleter = loader->template resolve_symbol<void(entrypoint*)>(this->_delete_instance);
+
+            assert(creator != nullptr);
+            assert(deleter != nullptr);
+
+            auto ptr = std::shared_ptr<entrypoint>(creator(std::forward<Args>(args)...), deleter);
+
+            return std::static_pointer_cast<KernelImpl>(ptr);
+        }
+
+    protected:
+        /**
+         *
+         * @tparam Arch
+         * @return
+         */
+        template<typename Arch>
+        std::shared_ptr<managed_library> select_implementation()
         {
             auto path = this->_library_name;
-            size_t dot = path.find_last_of(".");
+            size_t dot = path.find_last_of('.');
 
             if(dot != std::string::npos)
             {
                 auto filename   = path.substr(0, dot);
                 auto extension  = path.substr().substr(dot + 1);
 
-                path = filename + "." + branch::name() + "." + extension;
+                path = filename + "." + Arch::name() + "." + extension;
             }
 
-            if(this->_loaded_libraries.count(branch::value) == 0)
-                this->_loaded_libraries[branch::value] = std::make_shared<managed_library>(path);
+            if(this->_loaded_libraries.count(Arch::value) == 0)
+                this->_loaded_libraries[Arch::value] = std::make_shared<managed_library>(path);
 
-            return this->_loaded_libraries[branch::value];
+            return this->_loaded_libraries[Arch::value];
         }
 
-        /**
-         *
-         * @tparam branch
-         * @tparam concrete_type
-         * @tparam Args
-         * @param args
-         * @return
-         */
-        template<typename branch, typename concrete_type, template<class> class kernel, typename ...Args>
-        std::shared_ptr<concrete_type> create_instance(Args&&... args)
-        {
-            auto loader  = this->branch_library<branch>();
 
-            assert(loader != nullptr);
-            // Pitfall. loader->template ... is required
-            auto creator = loader->template resolve_symbol<entrypoint*(Args...)>(this->_create_instance);
-            auto deleter = loader->template resolve_symbol<void(entrypoint*)>(this->_delete_instance);
+        std::string _library_name;
+        std::string _create_instance;
+        std::string _delete_instance;
 
-            assert(creator != nullptr);
-            assert(deleter != nullptr);
-
-
-            //std:: cerr << creator(std::forward<Args>(args)...) << std::endl;
-            auto ptr = std::shared_ptr<entrypoint>(creator(std::forward<Args>(args)...), deleter);
-
-            return std::static_pointer_cast<concrete_type>(std::static_pointer_cast<kernel<concrete_type>>(ptr));
-        }
-
-        /**
-        *
-        * @tparam branch
-        * @tparam concrete_type
-        * @tparam Args
-        * @param args
-        * @return
-        */
-        template<typename branch, typename concrete_type, typename ...Args>
-        std::shared_ptr<concrete_type> create_instance(Args&&... args)
-        {
-            auto loader  = this->branch_library<branch>();
-
-            assert(loader != nullptr);
-            // Pitfall. loader->template ... is required
-            auto creator = loader->template resolve_symbol<entrypoint*(Args...)>(this->_create_instance);
-            auto deleter = loader->template resolve_symbol<void(entrypoint*)>(this->_delete_instance);
-
-            assert(creator != nullptr);
-            assert(deleter != nullptr);
-
-            auto ptr = std::shared_ptr<entrypoint>(creator(std::forward<Args>(args)...), deleter);
-
-            return std::static_pointer_cast<concrete_type>(ptr);
-        }
+        std::map<int, std::shared_ptr<managed_library>> _loaded_libraries;
     };
 }}

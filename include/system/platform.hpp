@@ -41,7 +41,8 @@
 namespace zacc {
 
     /**
-     * @brief
+     * System and platform information.
+     * Vital component of the dispatching mechanism
      */
     struct platform {
     private:

@@ -42,6 +42,7 @@ namespace zacc {
     /// @endcond
 
     /**
+     * @struct zval
      * @brief base type for all zacc computation types
      * @tparam Vector vector type, like __m128i for sse 4x integer vector
      * @tparam MaskVector mask type for boolean operations
@@ -114,7 +115,7 @@ namespace zacc {
          * @param other
          * @returns self
          */
-        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, Vector>::value>>
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
         constexpr zval& operator=(T&& other) noexcept
         {
             swap(other);
@@ -155,16 +156,15 @@ namespace zacc {
         /**
          * implicit cast operator to wrapped raw type (Vector)
          * @remark valid only for vectors, not scalars (size has to be > 1, otherwise default C++ operators will apply for wrapped scalars)
-         * @tparam size current vector size as type
          * @return raw value
          */
-        template <typename size = std::integral_constant<size_t, Size>, typename = std::enable_if_t<(size::value > 1), Vector>>
-        constexpr operator Vector() const {
+        template<typename T = zval>
+        constexpr operator std::enable_if_t<is_vector_v<T>, Vector>() const {
             return value();
         }
 
         /**
-         * @brief cast to underlying vector type
+         * @brief underlying vector
          * @return raw value
          */
         constexpr Vector value() const {
