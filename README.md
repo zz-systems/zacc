@@ -154,7 +154,8 @@ And all that without having to touch intrinsics like [here](https://github.com/P
 using namespace zacc;
 using namespace math;
 
-DISPATCHED struct mandelbrot_kernel : system::kernel<mandelbrot>
+DISPATCHED struct mandelbrot_kernel : system::kernel<mandelbrot>,
+                                      allocatable<mandelbrot_kernel, arch>
 {
     vec2<zint> _dim;
     vec2<zfloat> _cmin;
