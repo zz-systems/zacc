@@ -35,11 +35,11 @@
 
 namespace zacc { namespace examples {
 
-    template<typename _KernelInterface>
+    template<typename KernelInterface>
     class host
     {
-        using input_container     = typename system::kernel_traits<_KernelInterface>::input_container;
-        using output_container    = typename system::kernel_traits<_KernelInterface>::output_container;
+        using input_container     = typename system::kernel_traits<KernelInterface>::input_container;
+        using output_container    = typename system::kernel_traits<KernelInterface>::output_container;
 
         using kernel_result_t       = std::tuple<std::shared_ptr<output_container>, std::chrono::milliseconds>;
 
@@ -136,7 +136,7 @@ namespace zacc { namespace examples {
         virtual util::color_rgb map_value(typename output_container::value_type value) = 0;
 
         math::vec2<int> _dim;
-        system::runtime_dispatcher<system::kernel_dispatcher<_KernelInterface>> _dispatcher;
+        system::runtime_dispatcher<system::kernel_dispatcher<KernelInterface>> _dispatcher;
     };
 
 }}
