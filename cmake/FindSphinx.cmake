@@ -1,7 +1,11 @@
-find_program(SPHINX_EXECUTABLE NAMES sphinx-build
+find_program(SPHINX_EXECUTABLE
+        NAMES
+            sphinx-build
+            sphinx-build2
         HINTS
-        $ENV{SPHINX_DIR}
-        PATH_SUFFIXES bin
+            $ENV{SPHINX_DIR}
+        PATH_SUFFIXES
+            bin
         DOC "Sphinx documentation generator"
         )
 

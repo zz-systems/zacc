@@ -8,7 +8,7 @@ if(BUILD_DOCUMENTATION)
 
     find_package(Sphinx REQUIRED)
 
-    if(DOXYGEN_FOUND)
+    if((DOXYGEN_FOUND) AND (SPHINX_FOUND))
 
         if(NOT DEFINED SPHINX_THEME)
             set(SPHINX_THEME default) #alabaster
@@ -28,14 +28,13 @@ if(BUILD_DOCUMENTATION)
 
         # HTML output directory
         set(SPHINX_HTML_DIR "${CMAKE_CURRENT_BINARY_DIR}/docs/html")
-#
 
         set(CONTAINMENT_FOLDER "${BINARY_BUILD_DIR}/api")
 
         file(MAKE_DIRECTORY ${BINARY_BUILD_DIR})
         file(MAKE_DIRECTORY ${SPHINX_CACHE_DIR})
         file(MAKE_DIRECTORY ${SPHINX_HTML_DIR})
-#
+
         configure_file(
                 "${CMAKE_CURRENT_SOURCE_DIR}/docs/conf.py.in"
                 "${BINARY_BUILD_DIR}/conf.py"
@@ -57,5 +56,5 @@ if(BUILD_DOCUMENTATION)
                 DEPENDS ${doc.deps}
                 COMMENT "Building HTML documentation with Sphinx")
 
-    endif(DOXYGEN_FOUND)
+    endif()
 endif()
