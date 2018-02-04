@@ -6,5 +6,3 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     virtualenv venv -p python3
     source venv/bin/activate
 fi
-
-BUILD_DIR=Build

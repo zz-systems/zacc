@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR}"
+
 # set shared library path
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/lib
 
