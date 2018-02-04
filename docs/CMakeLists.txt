@@ -46,16 +46,6 @@ if(BUILD_DOCUMENTATION)
                 "${BINARY_BUILD_DIR}/index.rst"
                 @ONLY)
 
-#        add_custom_target(zacc.documentation ALL
-#                ${SPHINX_EXECUTABLE}
-#                -q -b html
-#                -c "${CMAKE_CURRENT_SOURCE_DIR}/docs"
-#                -d "${SPHINX_CACHE_DIR}"
-#                "${CMAKE_CURRENT_SOURCE_DIR}/docs"
-#                "${SPHINX_HTML_DIR}"
-#                DEPENDS ${doc.deps}
-#                COMMENT "Building HTML documentation with Sphinx")
-
         add_custom_target(zacc.documentation ALL
                 ${SPHINX_EXECUTABLE}
                 -b html
