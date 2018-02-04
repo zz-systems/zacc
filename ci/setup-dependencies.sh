@@ -13,7 +13,7 @@ if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
     mkdir cmake && travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
     export PATH=${DEPS_DIR}/cmake/bin:${PATH}
 
-    travis_retry pip install --user ${PIP_BASE_PACKAGES} ${PIP_PACKAGES}
+    pip install --user ${PIP_BASE_PACKAGES} ${PIP_PACKAGES}
 else
-    travis_retry pip install ${PIP_BASE_PACKAGES} ${PIP_PACKAGES}
+    pip install ${PIP_BASE_PACKAGES} ${PIP_PACKAGES}
 fi
