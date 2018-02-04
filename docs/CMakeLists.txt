@@ -5,8 +5,7 @@ set(doc.deps
 
 if(BUILD_DOCUMENTATION)
     find_package(Doxygen)
-
-    find_package(Sphinx REQUIRED)
+    find_package(Sphinx)
 
     if((DOXYGEN_FOUND) AND (SPHINX_FOUND))
 
