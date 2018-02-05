@@ -224,6 +224,7 @@ function(zacc_add_dispatched_library target_name)
     add_library(${target_name} SHARED  ${target_sources})
     target_link_libraries(${target_name} PUBLIC zacc.system.info zacc.system.loader ${target_libraries})
 
+    string(REPLACE "." "_" macro_target_name "${macro_target_name}")
     string(TOUPPER ${target_name} macro_target_name)
 
     generate_export_header(${target_name}
@@ -283,6 +284,7 @@ function(zacc_add_dispatched_executable target_name)
     add_executable(${target_name} ${target_sources})
     target_link_libraries(${target_name} PUBLIC zacc.system.info zacc.system.loader ${target_libraries} ${target_name}.impl)
 
+    string(REPLACE "." "_" macro_target_name "${macro_target_name}")
     string(TOUPPER ${target_name} macro_target_name)
 
     generate_export_header(${target_name}
@@ -341,6 +343,7 @@ function(zacc_add_dispatched_tests target_name)
     set(target_branches ${add_branch_test_BRANCHES})
     set(target_libraries ${add_branch_test_LIBRARIES})
 
+    string(REPLACE "." "_" macro_target_name "${macro_target_name}")
     string(TOUPPER ${target_name} macro_target_name)
 
     foreach(branch ${target_branches})
