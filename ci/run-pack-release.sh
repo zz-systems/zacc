@@ -25,7 +25,7 @@ cp ${TRAVIS_BUILD_DIR}/LICENSE ${RELEASE_NAME}/LICENSE
 cp ${TRAVIS_BUILD_DIR}/README.md ${RELEASE_NAME}/README.md
 
 # compress
-#zip -r release.zip ${RELEASE_NAME}
+zip -r release.zip ${RELEASE_NAME}
 
 
 
