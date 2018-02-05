@@ -23,7 +23,7 @@ if(WIN32)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin") # requires XQuartz
     target_link_libraries(zacc.examples PUBLIC X11)
 else()
-    target_link_libraries(zacc.examples PUBLIC X11 jpeg png)
+    target_link_libraries(zacc.examples PUBLIC X11 jpeg png m pthread)
 endif()
 
 
