@@ -105,22 +105,22 @@ deploy:
       #branch: master
       condition: "$DOC_BUILDER=1"
 
-#  - provider: releases
-#      skip-cleanup: true
-#      api_key:
-#          secure: "UGy0FpkUxiMw334ZMvCbreNCRbn1WuRyONTXJtAfGF2cX0HCJ/QHlqgwy5zBi+yUwi79IDtbb2Pr2tvObaK5WL/5NrTikdAoYebO0gzSSd2BIHmniyQsuHEzOciUC0AQxg4Q+TpZaKK8oTRS7NNMN+w7ks23fq7DH6aJOQtiBBHKLotNyKGVZeOgDcpzJD5F9pv39dbumQ9BsfmLn/PMgKHwppKp0E46DCSsSHYKr3XnZfC9SBZAAxICkSEQ1UPN3Dq8lUzry/yTXoLW77ftfK9sAqrCgti39oavJPsgbTEJ/pP0TugxjKwNTKGPdx19439sThsLVi0YQ3hu2vIHfiOUv/I9aN/JsJjkC+pO4kAItwAsVDfq3PVln2E03qn84jFUt8D1lhK36r49dj6bJ4KFXkY3Otr+FEHHE+pf0xugYVxQfbta7H0hTd3UsGrLMCGbzYB30fLKXRFDsGCpoCMcbnAAn3J7LixBMSFxiwZdcriNkbVTODMkOZehDooW6WDp4H1K0S/26Q5G3wjiy48Lwq0s6AbFR2tF33OiXQ00ysPOE36LSun+E278wympUe6BY7T0tzgCfMbivehNs9uyqGct4fDLMmjb4ak3NKnnV/ivORHFD6Gkrb4Uyq3iR2pEM854zjz+4fPI6uw6iZiDnceaox0KawCFMTKirn8="
-#      file: ${TRAVIS_BUILD_DIR}/release.zip
-#      on:
-#        branch: master
-#        tags: true
-#        condition: "RELEASE_BUILDER=1"
-#
-#  - provider: releases
-#      skip-cleanup: true
-#      api_key:
-#          secure: "UGy0FpkUxiMw334ZMvCbreNCRbn1WuRyONTXJtAfGF2cX0HCJ/QHlqgwy5zBi+yUwi79IDtbb2Pr2tvObaK5WL/5NrTikdAoYebO0gzSSd2BIHmniyQsuHEzOciUC0AQxg4Q+TpZaKK8oTRS7NNMN+w7ks23fq7DH6aJOQtiBBHKLotNyKGVZeOgDcpzJD5F9pv39dbumQ9BsfmLn/PMgKHwppKp0E46DCSsSHYKr3XnZfC9SBZAAxICkSEQ1UPN3Dq8lUzry/yTXoLW77ftfK9sAqrCgti39oavJPsgbTEJ/pP0TugxjKwNTKGPdx19439sThsLVi0YQ3hu2vIHfiOUv/I9aN/JsJjkC+pO4kAItwAsVDfq3PVln2E03qn84jFUt8D1lhK36r49dj6bJ4KFXkY3Otr+FEHHE+pf0xugYVxQfbta7H0hTd3UsGrLMCGbzYB30fLKXRFDsGCpoCMcbnAAn3J7LixBMSFxiwZdcriNkbVTODMkOZehDooW6WDp4H1K0S/26Q5G3wjiy48Lwq0s6AbFR2tF33OiXQ00ysPOE36LSun+E278wympUe6BY7T0tzgCfMbivehNs9uyqGct4fDLMmjb4ak3NKnnV/ivORHFD6Gkrb4Uyq3iR2pEM854zjz+4fPI6uw6iZiDnceaox0KawCFMTKirn8="
-#      file: ${TRAVIS_BUILD_DIR}/release.zip
-#      on:
-#        branch: develop
-#        tags: true
-#        condition: "RELEASE_BUILDER=1"
+  - provider: releases
+    skip-cleanup: true
+    api_key:
+        secure: "UGy0FpkUxiMw334ZMvCbreNCRbn1WuRyONTXJtAfGF2cX0HCJ/QHlqgwy5zBi+yUwi79IDtbb2Pr2tvObaK5WL/5NrTikdAoYebO0gzSSd2BIHmniyQsuHEzOciUC0AQxg4Q+TpZaKK8oTRS7NNMN+w7ks23fq7DH6aJOQtiBBHKLotNyKGVZeOgDcpzJD5F9pv39dbumQ9BsfmLn/PMgKHwppKp0E46DCSsSHYKr3XnZfC9SBZAAxICkSEQ1UPN3Dq8lUzry/yTXoLW77ftfK9sAqrCgti39oavJPsgbTEJ/pP0TugxjKwNTKGPdx19439sThsLVi0YQ3hu2vIHfiOUv/I9aN/JsJjkC+pO4kAItwAsVDfq3PVln2E03qn84jFUt8D1lhK36r49dj6bJ4KFXkY3Otr+FEHHE+pf0xugYVxQfbta7H0hTd3UsGrLMCGbzYB30fLKXRFDsGCpoCMcbnAAn3J7LixBMSFxiwZdcriNkbVTODMkOZehDooW6WDp4H1K0S/26Q5G3wjiy48Lwq0s6AbFR2tF33OiXQ00ysPOE36LSun+E278wympUe6BY7T0tzgCfMbivehNs9uyqGct4fDLMmjb4ak3NKnnV/ivORHFD6Gkrb4Uyq3iR2pEM854zjz+4fPI6uw6iZiDnceaox0KawCFMTKirn8="
+    file: ${TRAVIS_BUILD_DIR}/release.zip
+    on:
+      branch: master
+      tags: true
+      condition: "RELEASE_BUILDER=1"
+
+  - provider: releases
+    skip-cleanup: true
+    api_key:
+        secure: "UGy0FpkUxiMw334ZMvCbreNCRbn1WuRyONTXJtAfGF2cX0HCJ/QHlqgwy5zBi+yUwi79IDtbb2Pr2tvObaK5WL/5NrTikdAoYebO0gzSSd2BIHmniyQsuHEzOciUC0AQxg4Q+TpZaKK8oTRS7NNMN+w7ks23fq7DH6aJOQtiBBHKLotNyKGVZeOgDcpzJD5F9pv39dbumQ9BsfmLn/PMgKHwppKp0E46DCSsSHYKr3XnZfC9SBZAAxICkSEQ1UPN3Dq8lUzry/yTXoLW77ftfK9sAqrCgti39oavJPsgbTEJ/pP0TugxjKwNTKGPdx19439sThsLVi0YQ3hu2vIHfiOUv/I9aN/JsJjkC+pO4kAItwAsVDfq3PVln2E03qn84jFUt8D1lhK36r49dj6bJ4KFXkY3Otr+FEHHE+pf0xugYVxQfbta7H0hTd3UsGrLMCGbzYB30fLKXRFDsGCpoCMcbnAAn3J7LixBMSFxiwZdcriNkbVTODMkOZehDooW6WDp4H1K0S/26Q5G3wjiy48Lwq0s6AbFR2tF33OiXQ00ysPOE36LSun+E278wympUe6BY7T0tzgCfMbivehNs9uyqGct4fDLMmjb4ak3NKnnV/ivORHFD6Gkrb4Uyq3iR2pEM854zjz+4fPI6uw6iZiDnceaox0KawCFMTKirn8="
+    file: ${TRAVIS_BUILD_DIR}/release.zip
+    on:
+      branch: develop
+      tags: true
+      condition: "RELEASE_BUILDER=1"
