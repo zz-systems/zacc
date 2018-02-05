@@ -25,6 +25,7 @@
 
 #pragma once
 #include <type_traits>
+#include <array>
 
 namespace zacc {
 //    template<template<class> class T, class U>

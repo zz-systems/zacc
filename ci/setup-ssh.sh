@@ -7,7 +7,7 @@ declare -r SSH_FILE="$(mktemp -u $HOME/.ssh/travis_temp_ssh_key_XXXX)"
 openssl aes-256-cbc \
   -K $encrypted_49741826d9a9_key \
   -iv $encrypted_49741826d9a9_iv \
-  -in "${TRAVIS_BUILD_DIR}/ci/travis_deploy_key.enc" \
+  -in "${TRAVIS_BUILD_DIR}/ci/github_deploy_key.enc" \
   -out "$SSH_FILE" -d
 # Enable SSH authentication
 chmod 600 "$SSH_FILE" \
