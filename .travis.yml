@@ -90,7 +90,7 @@ script:
   - ./ci/run-test.sh
 after_success:
   - ./ci/run-build-documentation.sh
-  - ./ci/seutp-ssh.sh
+  - ./ci/setup-ssh.sh
 
 before_deploy:
   - ./ci/run-pack-documentation.sh
@@ -102,7 +102,7 @@ deploy:
     github-token: $GITHUB_TOKEN
     local-dir: ${TRAVIS_BUILD_DIR}/${BUILD_DIR}/docs/html
     on:
-      #branch: master
+      branch: master
       condition: "$DOC_BUILDER = 1"
 
   - provider: releases
