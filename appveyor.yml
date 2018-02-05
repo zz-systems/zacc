@@ -1,12 +1,95 @@
 version: '1.0.{build}'
 os: Visual Studio 2015
-init: []
-install: []
+
+# compiler: expands the build matrix to include multiple compilers (per os)
+platform:
+  - x64
+
+configuration:
+- Release
+
+# Only clone the top level commit; don't bother with history
+shallow_clone: false
+
+# environment: specifies additional global variables to define per row in build matrix
+environment:
+  global:
+        CLFFT_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\nmake\\release"
+        OPENCL_ROOT: "%APPVEYOR_BUILD_FOLDER%\\bin\\opencl"
+        OPENCL_REGISTRY: "https://www.khronos.org/registry/cl"    
+    
+  matrix:
+    -   VCVARSALL: C:\"Program Files (x86)"\"Microsoft Visual Studio 14.0"\VC\vcvarsall.bat %PLATFORM%
+        PYTHON: "C:/Python36/"
+        BUILD_ENV: "Ninja"
+        BUILD_DIR: "build"
+        PYTHON_VERSION: "3.6"
+        BUILD_SANITIZE_MEMORY: 0
+        VERBOSE: ON
+      
+
+install:
+# Install yasha
+- "%PYTHON%/python.exe -m pip install yasha"
+# Install Ninja
+- set NINJA_URL="https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-win.zip"
+- appveyor DownloadFile %NINJA_URL% -FileName ninja.zip
+- 7z x ninja.zip -oC:\projects\deps\ninja > nul
+- set PATH=C:\projects\deps\ninja;%PATH%
+- ninja --version
+
+
+# Install OpenCL
+#- echo Fetching source
+#- echo Installing OpenCL
+#- ps: mkdir $env:OPENCL_ROOT
+#- ps: pushd $env:OPENCL_ROOT
+#- ps: $opencl_registry = $env:OPENCL_REGISTRY
+# This downloads the source to the Khronos ICD library
+#- git clone --depth 1 https://github.com/KhronosGroup/OpenCL-ICD-Loader.git
+#- ps: mv ./OpenCL-ICD-Loader/* .
+# This downloads all the opencl header files
+# The cmake build files expect a directory called inc
+#- ps: mkdir inc/CL
+#- git clone --depth 1 https://github.com/KhronosGroup/OpenCL-Headers.git inc/CL
+#- ps: wget $opencl_registry/api/2.1/cl.hpp -OutFile inc/CL/cl.hpp
+# - ps: dir; if( $lastexitcode -eq 0 ){ dir include/CL } else { Write-Output boom }
+# Create the static import lib in a directory called lib, so findopencl() will find it
+#- ps: mkdir lib
+#- ps: pushd lib
+#- cmake -G "NMake Makefiles" ..
+#- nmake
+#- ps: popd
+## Switch to OpenCL 1.2 headers
+#- ps: pushd inc/CL
+#- git fetch origin opencl12:opencl12
+#- git checkout opencl12
+#- ps: popd
+# Rename the inc directory to include, so FindOpencl() will find it
+#- ps: ren inc include
+#- ps: popd
+
+# before_build is used to run configure steps
+before_build:
+# Refresh submodules
+- git submodule update --init --recursive
+# Setup env
+- call %VCVARSALL%
+- set PATH=c:\Program Files\LLVM\msbuild-bin\;%PATH%
+- set INCLUDE=c:\Program Files\LLVM\lib\clang\4.0.0\include\;%INCLUDE%
+- mkdir %BUILD_DIR% && cd %BUILD_DIR%
+# Generate
+- cmake .. -G"%BUILD_ENV%"  -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe -DBUILD_SANITIZE_MEMORY=%BUILD_SANITIZE_MEMORY%  -DCMAKE_VERBOSE_MAKEFILE:BOOL=%VERBOSE%
 
 build_script:
-- set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-- git submodule update --init --recursive
-- cmake . -G "Visual Studio 14 2015 Win64"
-- cmake --build . --config Release
+  - cmake --build . --config %CONFIGURATION% --target zacc.system.detect -- -j 4
+  - cmake --build . --config %CONFIGURATION% --target zacc.tests.all -- -j 4
+  
 test_script:
-- ctest -C Release -V
+- ls .\bin
+- ls .\lib
+- .\bin\zacc.system.detect.exe
+- ctest --output-on-failure
+
+#on_finish:
+#  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))

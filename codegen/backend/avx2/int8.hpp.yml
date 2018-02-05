@@ -1,0 +1,147 @@
+type:
+  type: int8
+  branch: avx2
+  vector_t: &vector_t __m256i
+  mask_t: &mask_t __m256i
+  scalar_t: &scalar_t int8_t
+  vec_size: &vec_size 32
+  alignment: 32
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+    shared:
+      - printable
+      - iteratable
+      - convertable
+    default:
+      - io
+      - math
+      - numeric
+      - arithmetic
+      - bitwise
+      #- bitwise_shift
+      - comparable
+      - logical
+      - equatable
+      - conditional
+
+    boolean:
+      - io
+      - bitwise
+      - logical
+      - equatable
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  init:
+    default:
+      - args: __m256i value
+        init: value
+
+      - args: [[*scalar_t, value]]
+        init: _mm256_set1_epi8(value)
+
+      - args: "std::array<typename Base::element_t, Base::size()> value"
+        init: _mm256_load_si256((__m256i*)value.data())
+
+      - args: { from: *vec_size, to: 0, type: *scalar_t }
+        init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi8 }
+
+    boolean:
+      - args: zval_t value
+        init: value
+
+      - args: bval_t value, last_operation last_op
+        init: value, last_op
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    vstore: &io_store
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, Composed input"
+      returns: void
+      body: _mm256_store_si256((__m256i*)&(*result), input);
+    vstream:
+      <<: *io_store
+      body: _mm256_stream_si256((__m256i*)&(*result), input);
+#-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: _mm256_abs_epi8(one)
+
+    vmin: _mm256_min_epi8
+    vmax: _mm256_max_epi8
+
+    vclamp:
+     args: [self, from, to]
+     body: vmin(to, vmax(from, self))
+#-----------------------------------------------------------------------------------------------------------------------
+  arithmetic:
+    vneg:
+      args: one
+      body: return _mm256_sub_epi8(_mm256_setzero_si256(), one)
+    vadd: _mm256_add_epi8
+    vsub: _mm256_sub_epi8
+    vmul:
+      body:
+        - auto even = _mm256_mullo_epi16(one, other);
+        - auto odd  = _mm256_mullo_epi16(_mm256_srli_epi16(one, 8),_mm256_srli_epi16(other, 8));
+        - return _mm256_or_si256(_mm256_slli_epi16(odd, 8), _mm256_and_si256(even, _mm256_set1_epi16(0xFF)));
+    vdiv:
+      body:
+        - auto dividend = one.data();
+        - auto divisor = other.data();
+        - typename Composed::extracted_t result;
+        - for (size_t i = 0; i < Composed::size(); i++) { result[i] = dividend[i] / divisor[i]; }
+        - return result;
+    vmod: vsub(one, vmul(other, vdiv(one, other)))
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    vbneg: &bitwise_negate
+      args: one
+      body:
+        - auto zero = _mm256_setzero_si256();
+        - auto ones = _mm256_cmpeq_epi8(zero, zero);
+        - return _mm256_xor_si256(one, ones);
+    vband:  _mm256_and_si256
+    vbor:   _mm256_or_si256
+    vbxor:  _mm256_xor_si256
+
+    is_set:
+      args: one
+      returns: bool
+      body: _mm256_testc_si256(one, _mm256_cmpeq_epi8(one,one));
+#-----------------------------------------------------------------------------------------------------------------------
+#  bitwise_shift:
+#    vsll:  _mm256_sll_epi8
+#    vsrl:  _mm256_srl_epi8
+#    vslli:
+#      args: { raw: "const Composed one, const size_t other" }
+#      body: _mm256_slli_epi8(one, other)
+#    vsrli:
+#      args: { raw: "const Composed one, const size_t other" }
+#      body: _mm256_srli_epi8(one, other)
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    vlneg:
+      args: one
+      body: _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
+    vlor:   _mm256_or_si256
+    vland:  _mm256_and_si256
+#-----------------------------------------------------------------------------------------------------------------------
+  equatable:
+    veq:   _mm256_cmpeq_epi8
+    vneq:  "!(one == other)"
+  comparable:
+    vgt:   _mm256_cmpgt_epi8
+    vlt:   _mm256_cmpgt_epi8(other, one)
+    vge:   "!(one < other)"
+    vle:   "!(one > other)"
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+    vsel:
+      args: [bval_t condition, if_value, else_value]
+      mangling: false
+
+      body:
+          - return _mm256_blendv_epi8(else_value, if_value, condition);

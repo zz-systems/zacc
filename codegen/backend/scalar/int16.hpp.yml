@@ -1,0 +1,128 @@
+type:
+  type: int16
+  branch: scalar
+  vector_t: &vector_t int16_t
+  mask_t: &mask_t bool
+  scalar_t: &scalar_t int16_t
+  vec_size: &vec_size 1
+  alignment: 16
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+    shared:
+      - printable
+      - iteratable
+      - convertable
+    default:
+      - io
+      - math
+      - numeric
+      - arithmetic
+      - bitwise
+      - bitwise_shift
+      - comparable
+      - logical
+      - equatable
+      - conditional
+
+    boolean:
+      - io
+      - bitwise
+      - logical
+      - equatable
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  init:
+    default:
+      - args: [[*scalar_t, value]]
+        init: value
+
+      - prefix: "template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>>"
+        args: "const T &value"
+        init: value.value()
+
+      - args: "std::array<typename Base::element_t, Base::size()> value"
+        init: "value[0]"
+
+    boolean:
+      - args: zval_t value
+        init: value.value() != 0
+
+      - args: bval_t value, last_operation last_op
+        init: value, last_op
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    vstore: &io_store
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, Composed input"
+      returns: void
+      body: result[0] = input.value();
+    vstream: *io_store
+#-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: std::abs(one.value());
+    vmin: std::min(one.value(), other.value());
+    vmax: std::max(one.value(), other.value());
+
+    vclamp:
+     args: [self, from, to]
+     body: vmin(to, vmax(from, self))
+#-----------------------------------------------------------------------------------------------------------------------
+  arithmetic:
+    vneg:
+      args: one
+      body: (-one.value());
+    vadd: (one.value() + other.value());
+    vsub: (one.value() - other.value());
+    vmul: (one.value() * other.value());
+    vdiv: (one.value() / other.value());
+    vmod: (one.value() % other.value());
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    vbneg:
+      args: one
+      body: (~one.value());
+    vband:  (one.value() & other.value());
+    vbor:   (one.value() | other.value());
+    vbxor:  (one.value() ^ other.value());
+
+    is_set:
+      args: one
+      returns: bool
+      body: one.value() != 0
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise_shift:
+    vbsll:  (one.value() << other.value())
+    vbsrl:  (one.value() >> other.value())
+
+    vbslli:
+      args: { raw: "const Composed one, const size_t other" }
+      body: (one.value() << other)
+    vbsrli:
+      args: { raw: "const Composed one, const size_t other" }
+      body: (one.value() >> other)
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    vlneg:
+      args: one
+      body: (!one.value())
+    vlor:  (one.value() || other.value());
+    vland: (one.value() && other.value());
+#-----------------------------------------------------------------------------------------------------------------------
+  equatable:
+    veq:   (one.value() == other.value());
+    vneq:  (one.value() != other.value());
+  comparable:
+    vgt:   (one.value() > other.value());
+    vlt:   (one.value() < other.value());
+    vge:   (one.value() >= other.value());
+    vle:   (one.value() <= other.value());
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+     vsel:
+        args: [bval_t condition, if_value, else_value]
+        mangling: false
+        body: "(condition.value() ? if_value : else_value)"

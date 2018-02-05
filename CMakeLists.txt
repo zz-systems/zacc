@@ -1,8 +1,34 @@
-cmake_minimum_required(VERSION 3.3.2)
-project(gorynych)
+cmake_minimum_required(VERSION 3.6)
+project(zacc)
 
-set(CMAKE_BUILD_TYPE Debug)
-include(CMakeCommons)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
+include(cmake/zacc.shared.cmake)
 
-add_subdirectory(gorynych-test)
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+enable_testing()
+
+# include branched code generation config
+add_subdirectory(codegen/backend)
+
+# fetch dependencies
+add_subdirectory(dependencies)
+
+# add codegen targets
+include(codegen/CMakeLists.txt)
+
+# add app targets
+include(src/CMakeLists.txt)
+
+# add test targets
+include(test/CMakeLists.txt)
+
+# add example targets
+add_subdirectory(examples)
+
+# add documentation targets
+include(docs/CMakeLists.txt)

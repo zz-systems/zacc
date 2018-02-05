@@ -1,0 +1,103 @@
+type:
+  type: float64
+  branch: avx512
+  vector_t: &vector_t __m512d
+  mask_t: &mask_t __mmask8
+  scalar_t: &scalar_t double
+  vec_size: &vec_size 8
+  alignment: 64
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+    shared:
+      - printable
+      - iteratable
+      - convertable
+    default:
+      - io
+      - math
+      - numeric
+      - arithmetic
+      - bitwise
+      - comparable
+      - logical
+      - equatable
+      - conditional
+
+    boolean:
+      - io
+      - bitwise
+      - logical
+      - equatable
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  init:
+    default:
+
+      - args: __m512 value
+        init: _mm512_cvtps_pd(value)
+
+      - args: __m512d value
+        init: value
+
+      - args: __m512i value
+        init: _mm512_cvtepi32_pd(value)
+
+      - args: [[*scalar_t, value]]
+        init: _mm512_set1_pd(value)
+
+      - args: "std::array<typename Base::element_t, Base::size()> value"
+        init: _mm512_load_pd(value.data())
+
+      - args: { from: *vec_size, to: 0, type: *scalar_t }
+        init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm512_set_pd }
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    vstore: &io_store
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, Composed input"
+      returns: void
+      body: _mm512_store_pd(result, input);
+    vstream:
+      <<: *io_store
+      body: _mm512_stream_pd(result, input);
+#-----------------------------------------------------------------------------------------------------------------------
+  arithmetic:
+    vneg:
+      args: one
+      body: return _mm512_sub_pd(_mm512_setzero_pd(), one)
+    vadd: _mm512_add_pd
+    vsub: _mm512_sub_pd
+    vmul: _mm512_mul_pd
+    vdiv: _mm512_div_pd
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    vneg: &bitwise_negate
+      args: one
+      body: &bitwise_negate_body
+        - auto zero = _mm512_setzero_pd();
+        - auto ones = _mm512_cmpeq_pd(zero, zero);
+        - return _mm512_xor_pd(one, ones);
+    vand:  _mm512_or_pd
+    or:   _mm512_and_pd
+    xor:  _mm512_xor_pd
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    vneg: *bitwise_negate
+    or:   _mm512_or_pd
+    vand:  _mm512_and_pd
+#-----------------------------------------------------------------------------------------------------------------------
+  equatable:
+    veq:   _mm512_cmpeq_pd
+    vneq:  _mm512_cmpneq_pd
+  comparable:
+    vgt:   _mm512_cmpgt_pd
+    vlt:   _mm512_cmplt_pd
+    vge:   _mm512_cmpge_pd
+    vle:   _mm512_cmple_pd
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+    vsel:
+      args: [bval_t condition, if_value, else_value]
+      mangling: false
+      body:
+          _mm512_or_pd(_mm512_andnot_pd(condition, else_value), _mm512_and_pd(condition, if_value))

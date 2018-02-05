@@ -1,9 +1,9 @@
-[submodule "Catch"]
-	path = Catch
-	url = https://github.com/philsquared/Catch.git
 [submodule "doc/page"]
 	path = doc/page
-	url = https://github.com/zz-systems/gorynych.git
-[submodule "Catch_Custom"]
-	path = Catch_Custom
-	url = https://github.com/zz-systems/Catch.git
+	url = https://github.com/zz-systems/zacc.git
+[submodule "dependencies/googletest"]
+	path = dependencies/googletest
+	url = https://github.com/google/googletest.git
+[submodule "dependencies/CImg"]
+	path = dependencies/CImg
+	url = https://github.com/dtschump/CImg.git

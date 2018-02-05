@@ -1,0 +1,173 @@
+type:
+  type: float64
+  branch: avx
+  vector_t: &vector_t __m256d
+  scalar_t: &scalar_t double
+  vec_size: &vec_size 4
+  alignment: 32
+#-----------------------------------------------------------------------------------------------------------------------
+  traits:
+     shared:
+      - printable
+      - iteratable
+      - convertable
+     default:
+       - io
+       - math
+       - numeric
+       - arithmetic
+       - bitwise
+       - logical
+       - comparison
+       - conditional
+#-----------------------------------------------------------------------------------------------------------------------
+modules:
+  init:
+    default:
+      - args: { raw: "const __m256 &value" }
+        init: _mm256_cvtps_pd(_mm256_castps256_ps128(value))
+
+      - args: { raw: "const __m256d &value" }
+        init: value
+
+      - args: { raw: "const __m256i &value" }
+        init: _mm256_cvtepi32_pd(_mm256_castsi256_si128(value))
+
+      - args: [[*scalar_t, value]]
+        init: _mm256_set1_pd(value)
+
+      - args: "std::array<typename Base::element_t, Base::size()> value"
+        init: _mm256_load_pd(value.data())
+
+      - args: "std::array<sse::zint32<Base::capability>, 2> value"
+        init: _mm256_set_m128(_mm_cvtepi32_pd(value[1]), _mm_cvtepi32_pd(value[0]))
+
+      - args: { from: *vec_size, to: 0, type: *scalar_t }
+        init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_pd }
+#-----------------------------------------------------------------------------------------------------------------------
+  io:
+    vstore: &io_store
+      prefix: "template<typename OutputIt> friend"
+      args: "OutputIt result, Composed input"
+      returns: void
+      body: _mm256_store_pd(result, input)
+    vstream:
+      <<: *io_store
+      body: _mm256_stream_pd(result, input)
+
+    vgather:
+      prefix: "template<typename RandomIt> friend"
+      args:   "RandomIt input, const zint32<Base::features> &index, Composed"
+      body: _mm256_set_m128d(sse::zfloat64<Base::capability>::gather(input, index.value()[1]), sse::zfloat64<Base::capability>::gather(input, index.value()[0]))
+#-----------------------------------------------------------------------------------------------------------------------
+  numeric: {} #dummy
+#-----------------------------------------------------------------------------------------------------------------------
+  math:
+    vabs:
+      args: one
+      body: _mm256_max_pd(one, -one)
+
+    vmin: _mm256_min_pd
+    vmax: _mm256_max_pd
+
+    vclamp:
+      args: [self, from, to]
+      body: vmin(to, vmax(from, self))
+    vrcp:
+      args: one
+      body: (1 / one);
+    vtrunc:
+      args: one
+      body: _mm256_cvtepi32_pd(_mm256_cvttpd_epi32(one))
+    vfloor:
+      args: one
+      body: _mm256_floor_pd
+    vceil:
+      args: one
+      body: _mm256_ceil_pd
+    vround:
+      args: one
+      body: _mm256_round_pd (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC)
+    vsqrt:
+      args: one
+      body: _mm256_sqrt_pd
+#-----------------------------------------------------------------------------------------------------------------------
+  arithmetic:
+    vneg:
+      args: one
+      body: _mm256_sub_pd(_mm256_setzero_pd(), one)
+    vadd: _mm256_add_pd
+    vsub: _mm256_sub_pd
+    vmul: _mm256_mul_pd
+    vdiv: _mm256_div_pd
+    vfmadd:
+      args: [multiplicand, multiplier, addendum]
+      body:
+        fma:
+          requires: [FMA3]
+          body: _mm256_fmadd_pd(multiplicand, multiplier, addendum)
+        default:
+          requires: [not FMA3]
+          body: vadd(vmul(multiplicand, multiplier), addendum)
+    vfmsub:
+      args: [multiplicand, multiplier, addendum]
+      body:
+        fma:
+          requires: [FMA3]
+          body: _mm256_fmsub_pd(multiplicand, multiplier, addendum)
+        default:
+          requires: [not FMA3]
+          body: vsub(vmul(multiplicand, multiplier), addendum)
+#-----------------------------------------------------------------------------------------------------------------------
+  bitwise:
+    vbneg: &bitwise_negate
+      args: one
+      body: &bitwise_negate_body
+        - auto zero = _mm256_setzero_pd();
+        - auto ones = _mm256_cmp_pd(zero, zero, _CMP_EQ_OQ);
+        - return _mm256_xor_pd(one, ones);
+    vband:  _mm256_or_pd
+    vbor:   _mm256_and_pd
+    vbxor:  _mm256_xor_pd
+
+    is_set:
+      args: one
+      returns: bool
+      body:
+        avx2:
+          requires: [AVX2]
+          body:
+            - auto ival =  _mm256_castpd_si256(one);
+            - return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
+        default:
+          requires: [not AVX2]
+          body:
+            - auto hi = _mm_castpd_si128(_mm256_extractf128_pd(one, 1));
+            - auto lo = _mm_castpd_si128(_mm256_extractf128_pd(one, 0));
+            - return _mm_test_all_ones(hi) != 0 && _mm_test_all_ones(lo) != 0;
+#-----------------------------------------------------------------------------------------------------------------------
+  logical:
+    vlneg:
+     args: one
+     body: _mm256_cmp_pd(one, _mm256_setzero_pd(), _CMP_EQ_OQ);
+    vlor:   _mm256_or_pd
+    vland:  _mm256_and_pd
+#-----------------------------------------------------------------------------------------------------------------------
+  comparison:
+    veq:   _mm256_cmp_pd(one, other, _CMP_EQ_OQ)
+    vneq:  _mm256_cmp_pd(one, other, _CMP_NEQ_OQ)
+    vgt:   _mm256_cmp_pd(one, other, _CMP_GT_OQ)
+    vlt:   _mm256_cmp_pd(one, other, _CMP_LT_OQ)
+    vge:
+      body:
+      - auto result = _mm256_cmp_pd(one, other, _CMP_GE_OQ);
+      - return result;
+    vle:   _mm256_cmp_pd(one, other, _CMP_LE_OQ)
+#-----------------------------------------------------------------------------------------------------------------------
+  conditional:
+    vsel:
+      args: [bval_t condition, if_value, else_value]
+      mangling: false
+      body:
+        - auto mask = _mm256_cmp_pd(_mm256_setzero_pd(), condition, _CMP_EQ_OQ);
+        - return _mm256_blendv_pd(else_value, if_value, condition);
