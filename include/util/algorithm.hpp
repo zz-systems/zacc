@@ -111,12 +111,12 @@ namespace zacc {
     template<class T, class ForwardIt, class Generator>
     void generate(ForwardIt first, ForwardIt last, Generator g)
     {
-        auto dim        = zval_traits<T>::size();
-        auto real_size  = std::distance(first, last);
-        auto remainder  = real_size % dim;
-        auto fake_size  = real_size + remainder;
+        auto dim        = T::size();
+        size_t real_size  = std::distance(first, last);
+        size_t remainder  = real_size % dim;
+        size_t fake_size  = real_size + remainder;
 
-        for (auto i = 0; i < fake_size; i += dim)
+        for (size_t i = 0; i < fake_size; i += dim)
         {
             auto result = make_iterable(g(i));
 

@@ -7,7 +7,7 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin") # requires XQuartz
     link_directories("/usr/X11/lib" "/usr/X11R6/lib")
 endif()
 
-zacc_add_dispatched_executable(zacc_examples
+zacc_add_dispatched_executable(zacc.examples
         BRANCHES "${branches}"
         INCLUDES
             ${PROJECT_SOURCE_DIR}/include
@@ -21,9 +21,9 @@ zacc_add_dispatched_executable(zacc_examples
 if(WIN32)
     #target_link_libraries(zacc_examples)
 elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin") # requires XQuartz
-    target_link_libraries(zacc_examples PUBLIC X11)
+    target_link_libraries(zacc.examples PUBLIC X11)
 else()
-    target_link_libraries(zacc_examples PUBLIC X11 jpeg png)
+    target_link_libraries(zacc.examples PUBLIC X11 jpeg png)
 endif()
 
 
