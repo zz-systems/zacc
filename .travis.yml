@@ -114,7 +114,7 @@ deploy:
     on:
       branch: master
       tags: true
-      condition: "RELEASE_BUILDER = 1"
+      condition: "$RELEASE_BUILDER = 1"
 
   - provider: releases
     skip-cleanup: true
@@ -124,4 +124,4 @@ deploy:
     file: ${TRAVIS_BUILD_DIR}/${RELEASE_NAME}/*
     on:
       branch: develop
-      condition: "RELEASE_BUILDER = 1"
+      condition: "$RELEASE_BUILDER = 1"
