@@ -46,7 +46,7 @@ if(BUILD_DOCUMENTATION)
 
         add_custom_target(zacc.documentation ALL
                 ${SPHINX_EXECUTABLE}
-                -b html
+                -q -b html
                 -c "${BINARY_BUILD_DIR}"
                 -d "${SPHINX_CACHE_DIR}"
                 "${BINARY_BUILD_DIR}"
