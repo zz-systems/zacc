@@ -1,5 +1,6 @@
 # ZACC
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/6dfcb89ed12b4d7b9288a5adb2e9ca96)](https://www.codacy.com/app/sergej-zuyev/zacc?utm_source=github.com&utm_medium=referral&utm_content=zz-systems/zacc&utm_campaign=badger)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ea9a6858d3e24f54b342a7baba064d3f)](https://www.codacy.com/app/sergej-zuyev/zacc?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zz-systems/zacc&amp;utm_campaign=Badge_Grade)
 
