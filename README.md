@@ -1,6 +1,7 @@
 # ZACC
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ea9a6858d3e24f54b342a7baba064d3f)](https://www.codacy.com/app/sergej-zuyev/zacc?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=zz-systems/zacc&amp;utm_campaign=Badge_Grade)
 
 | Branch | Travis CI | AppVeyorCI |
 |-----------|------------|----|

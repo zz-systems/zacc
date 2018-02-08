@@ -39,7 +39,7 @@ matrix:
       osx_image: xcode9
       compiler: clang
       language: generic
-      env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc RELEASE_BUILDER=1 DOC_BUILDER=1 RELEASE_NAME="$BRANCH_$TRAVIS_OS_NAME"
+      env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc RELEASE_BUILDER=1 DOC_BUILDER=1 RELEASE_NAME="${TRAVIS_BRANCH}_${TRAVIS_OS_NAME}"
 
     # Linux Clang Builds
     - os: linux
@@ -64,10 +64,10 @@ matrix:
 #      env: COMPILER=clang++-5.0 BUILD_TYPE='Release' CXX=clang++-5.0 CC=clang-5.0
 
     # Linux GCC Builds
-    - os: linux
-      compiler: gcc
-      addons: *addons
-      env: COMPILER=g++-5 BUILD_TYPE='Release' CXX=g++-5 CC=gcc-5
+#    - os: linux
+#      compiler: gcc
+#      addons: *addons
+#      env: COMPILER=g++-5 BUILD_TYPE='Release' CXX=g++-5 CC=gcc-5
 
     - os: linux
       compiler: gcc
@@ -77,7 +77,7 @@ matrix:
     - os: linux
       compiler: gcc
       addons: *addons
-      env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7 RELEASE_BUILDER=1 RELEASE_NAME="${BRANCH}_${TRAVIS_OS_NAME}"
+      env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7 RELEASE_BUILDER=1 RELEASE_NAME="${TRAVIS_BRANCH}_${TRAVIS_OS_NAME}"
 
 before_install:
   - travis_retry ./ci/setup-environment.sh
@@ -90,11 +90,11 @@ script:
   - ./ci/run-test.sh
 after_success:
   - ./ci/run-build-documentation.sh
-  - ./ci/setup-ssh.sh
 
 before_deploy:
-  - ./ci/run-pack-documentation.sh
-  - ./ci/run-pack-release.sh
+#  - ./ci/run-pack-documentation.sh
+#  - ./ci/run-pack-release.sh
+#  - export RELEASES=$(ls ${TRAVIS_BUILD_DIR}/*.zip)
 
 deploy:
   - provider: pages
@@ -105,23 +105,23 @@ deploy:
       branch: master
       condition: "$DOC_BUILDER = 1"
 
-  - provider: releases
-    skip-cleanup: true
-    api_key:
-      secure: "UGy0FpkUxiMw334ZMvCbreNCRbn1WuRyONTXJtAfGF2cX0HCJ/QHlqgwy5zBi+yUwi79IDtbb2Pr2tvObaK5WL/5NrTikdAoYebO0gzSSd2BIHmniyQsuHEzOciUC0AQxg4Q+TpZaKK8oTRS7NNMN+w7ks23fq7DH6aJOQtiBBHKLotNyKGVZeOgDcpzJD5F9pv39dbumQ9BsfmLn/PMgKHwppKp0E46DCSsSHYKr3XnZfC9SBZAAxICkSEQ1UPN3Dq8lUzry/yTXoLW77ftfK9sAqrCgti39oavJPsgbTEJ/pP0TugxjKwNTKGPdx19439sThsLVi0YQ3hu2vIHfiOUv/I9aN/JsJjkC+pO4kAItwAsVDfq3PVln2E03qn84jFUt8D1lhK36r49dj6bJ4KFXkY3Otr+FEHHE+pf0xugYVxQfbta7H0hTd3UsGrLMCGbzYB30fLKXRFDsGCpoCMcbnAAn3J7LixBMSFxiwZdcriNkbVTODMkOZehDooW6WDp4H1K0S/26Q5G3wjiy48Lwq0s6AbFR2tF33OiXQ00ysPOE36LSun+E278wympUe6BY7T0tzgCfMbivehNs9uyqGct4fDLMmjb4ak3NKnnV/ivORHFD6Gkrb4Uyq3iR2pEM854zjz+4fPI6uw6iZiDnceaox0KawCFMTKirn8="
-    file_glob: true
-    file: ${TRAVIS_BUILD_DIR}/${RELEASE_NAME}/*
-    on:
-      branch: master
-      tags: true
-      condition: "$RELEASE_BUILDER = 1"
-
-  - provider: releases
-    skip-cleanup: true
-    api_key:
-      secure: "UGy0FpkUxiMw334ZMvCbreNCRbn1WuRyONTXJtAfGF2cX0HCJ/QHlqgwy5zBi+yUwi79IDtbb2Pr2tvObaK5WL/5NrTikdAoYebO0gzSSd2BIHmniyQsuHEzOciUC0AQxg4Q+TpZaKK8oTRS7NNMN+w7ks23fq7DH6aJOQtiBBHKLotNyKGVZeOgDcpzJD5F9pv39dbumQ9BsfmLn/PMgKHwppKp0E46DCSsSHYKr3XnZfC9SBZAAxICkSEQ1UPN3Dq8lUzry/yTXoLW77ftfK9sAqrCgti39oavJPsgbTEJ/pP0TugxjKwNTKGPdx19439sThsLVi0YQ3hu2vIHfiOUv/I9aN/JsJjkC+pO4kAItwAsVDfq3PVln2E03qn84jFUt8D1lhK36r49dj6bJ4KFXkY3Otr+FEHHE+pf0xugYVxQfbta7H0hTd3UsGrLMCGbzYB30fLKXRFDsGCpoCMcbnAAn3J7LixBMSFxiwZdcriNkbVTODMkOZehDooW6WDp4H1K0S/26Q5G3wjiy48Lwq0s6AbFR2tF33OiXQ00ysPOE36LSun+E278wympUe6BY7T0tzgCfMbivehNs9uyqGct4fDLMmjb4ak3NKnnV/ivORHFD6Gkrb4Uyq3iR2pEM854zjz+4fPI6uw6iZiDnceaox0KawCFMTKirn8="
-    file_glob: true
-    file: ${TRAVIS_BUILD_DIR}/${RELEASE_NAME}/*
-    on:
-      branch: develop
-      condition: "$RELEASE_BUILDER = 1"
+#  - provider: releases
+#    skip-cleanup: true
+#    api_key: $GITHUB_TOKEN
+#    #secure: "UGy0FpkUxiMw334ZMvCbreNCRbn1WuRyONTXJtAfGF2cX0HCJ/QHlqgwy5zBi+yUwi79IDtbb2Pr2tvObaK5WL/5NrTikdAoYebO0gzSSd2BIHmniyQsuHEzOciUC0AQxg4Q+TpZaKK8oTRS7NNMN+w7ks23fq7DH6aJOQtiBBHKLotNyKGVZeOgDcpzJD5F9pv39dbumQ9BsfmLn/PMgKHwppKp0E46DCSsSHYKr3XnZfC9SBZAAxICkSEQ1UPN3Dq8lUzry/yTXoLW77ftfK9sAqrCgti39oavJPsgbTEJ/pP0TugxjKwNTKGPdx19439sThsLVi0YQ3hu2vIHfiOUv/I9aN/JsJjkC+pO4kAItwAsVDfq3PVln2E03qn84jFUt8D1lhK36r49dj6bJ4KFXkY3Otr+FEHHE+pf0xugYVxQfbta7H0hTd3UsGrLMCGbzYB30fLKXRFDsGCpoCMcbnAAn3J7LixBMSFxiwZdcriNkbVTODMkOZehDooW6WDp4H1K0S/26Q5G3wjiy48Lwq0s6AbFR2tF33OiXQ00ysPOE36LSun+E278wympUe6BY7T0tzgCfMbivehNs9uyqGct4fDLMmjb4ak3NKnnV/ivORHFD6Gkrb4Uyq3iR2pEM854zjz+4fPI6uw6iZiDnceaox0KawCFMTKirn8="
+#    file_glob: true
+#    file: ${TRAVIS_BUILD_DIR}/${RELEASE_NAME}.zip
+#    on:
+#      branch: master
+#      tags: true
+#      condition: "$RELEASE_BUILDER = 1"
+#
+#  - provider: releases
+#    skip-cleanup: true
+#    api_key: $GITHUB_TOKEN
+#    #  secure: "UGy0FpkUxiMw334ZMvCbreNCRbn1WuRyONTXJtAfGF2cX0HCJ/QHlqgwy5zBi+yUwi79IDtbb2Pr2tvObaK5WL/5NrTikdAoYebO0gzSSd2BIHmniyQsuHEzOciUC0AQxg4Q+TpZaKK8oTRS7NNMN+w7ks23fq7DH6aJOQtiBBHKLotNyKGVZeOgDcpzJD5F9pv39dbumQ9BsfmLn/PMgKHwppKp0E46DCSsSHYKr3XnZfC9SBZAAxICkSEQ1UPN3Dq8lUzry/yTXoLW77ftfK9sAqrCgti39oavJPsgbTEJ/pP0TugxjKwNTKGPdx19439sThsLVi0YQ3hu2vIHfiOUv/I9aN/JsJjkC+pO4kAItwAsVDfq3PVln2E03qn84jFUt8D1lhK36r49dj6bJ4KFXkY3Otr+FEHHE+pf0xugYVxQfbta7H0hTd3UsGrLMCGbzYB30fLKXRFDsGCpoCMcbnAAn3J7LixBMSFxiwZdcriNkbVTODMkOZehDooW6WDp4H1K0S/26Q5G3wjiy48Lwq0s6AbFR2tF33OiXQ00ysPOE36LSun+E278wympUe6BY7T0tzgCfMbivehNs9uyqGct4fDLMmjb4ak3NKnnV/ivORHFD6Gkrb4Uyq3iR2pEM854zjz+4fPI6uw6iZiDnceaox0KawCFMTKirn8="
+#    file_glob: true
+#    file: ${TRAVIS_BUILD_DIR}/${RELEASE_NAME}.zip
+#    on:
+#      branch: develop
+#      condition: "$RELEASE_BUILDER = 1"

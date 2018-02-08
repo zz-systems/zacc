@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "zacc_examples_branch_export.hpp"
+#include "zacc.examples_branch_export.hpp"
 #include "system/entrypoint.hpp"
 
 extern "C"
