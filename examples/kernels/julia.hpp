@@ -38,8 +38,7 @@ namespace zacc { namespace examples {
 
     using namespace math;
 
-    DISPATCHED struct julia_kernel : system::kernel<julia>,
-                                     allocatable<julia_kernel, arch>
+    DISPATCHED struct julia_kernel : julia, allocatable<julia_kernel, arch>
     {
         vec2<zint> _dim;
         vec2<zfloat> _offset;
@@ -59,7 +58,7 @@ namespace zacc { namespace examples {
         }
 
 
-        virtual void run(mandelbrot::output_container &output) override
+        virtual void run(std::vector<int> &output) override
         {
             vec2<zfloat> center = _dim / 2.0;
 

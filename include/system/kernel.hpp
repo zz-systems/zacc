@@ -30,9 +30,68 @@
 
 namespace zacc { namespace system {
 
+    /**
+    * Kernel traits - extract information from kernel
+    * @tparam KernelInterface
+    */
     template<typename KernelInterface>
-    struct kernel : public KernelInterface, public zacc::system::entrypoint
+    struct kernel_traits
     {
+        using traits = function_traits<decltype(&KernelInterface::run)>;
 
+        /// Output container
+        using output_container = std::remove_reference_t<typename traits::template argument<(traits::arity > 2 ? 2 : 1)>::type>;
+        /// Input container
+        using input_container  = std::remove_reference_t<typename traits::template argument<1>::type>;
+
+        /// Kernel name
+        static constexpr auto kernel_name() { return KernelInterface::name(); }
+    };
+
+    /**
+    * Public kernel interface wrapper.
+    * Provides basic operator() implementations for the dispatcher
+    * @tparam KernelInterface
+    */
+    template<typename KernelInterface>
+    struct kernel : public zacc::system::entrypoint
+    {
+        /**
+         * Configure kernel (Any argument)
+         * @tparam Args any
+         * @param args any
+         */
+        template<typename... Args>
+        void operator()(Args&&... args)
+        {
+            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+            static_cast<KernelInterface*>(this)->configure(std::forward<Args>(args)...);
+        }
+
+        /**
+         * Process (process input, produce output)
+         * @param input
+         * @param output
+         */
+        template<typename InputContainer, typename OutputContainer>
+        void operator()(const InputContainer &input, OutputContainer &output)
+        {
+            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+            static_cast<KernelInterface*>(this)->run(input, output);
+        }
+
+        /**
+         * Generate (output only)
+         * @param output
+         */
+        template<typename OutputContainer>
+        void operator()(OutputContainer &output)
+        {
+            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+
+            static_cast<KernelInterface*>(this)->run(output);
+        }
     };
 }}

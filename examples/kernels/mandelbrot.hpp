@@ -39,8 +39,7 @@ namespace zacc { namespace examples {
 
     using namespace math;
 
-    DISPATCHED struct mandelbrot_kernel : system::kernel<mandelbrot>,
-                                          allocatable<mandelbrot_kernel, arch>
+    DISPATCHED struct mandelbrot_kernel : mandelbrot, allocatable<mandelbrot_kernel, arch>
     {
         vec2<zint> _dim;
         vec2<zfloat> _cmin;
@@ -58,7 +57,7 @@ namespace zacc { namespace examples {
         }
 
 
-        virtual void run(mandelbrot::output_container &output) override
+        virtual void run(std::vector<int> &output) override
         {
             // populate output container 
             zacc::generate<zint>(std::begin(output), std::end(output), [this](auto i)
@@ -97,28 +96,6 @@ namespace zacc { namespace examples {
                 return iterations;
             });
         }
-
-//        static void *operator new(size_t nbytes)
-//        {
-//            auto alloc = zacc::aligned_allocator<mandelbrot_kernel, arch::alignment>();
-//            auto ptr = alloc.allocate(nbytes);
-//
-//            if(ptr != nullptr)
-//                return ::new(ptr) mandelbrot_kernel();
-//
-//            throw std::bad_alloc();
-//        }
-//
-//        static void operator delete(void *p)
-//        {
-//            auto alloc = zacc::aligned_allocator<mandelbrot_kernel, arch::alignment>();
-//
-//            if(p != nullptr)
-//            {
-//                alloc.destroy(static_cast<mandelbrot_kernel*>(p));
-//                alloc.deallocate(static_cast<mandelbrot_kernel*>(p), 0);
-//            }
-//        }
     };
 
 }}

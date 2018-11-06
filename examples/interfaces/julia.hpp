@@ -31,22 +31,18 @@
 #include "math/matrix.hpp"
 #include "util/algorithm.hpp"
 #include "system/entrypoint.hpp"
-#include "system/kernel_interface.hpp"
+#include "system/kernel.hpp"
 
 namespace zacc { namespace examples {
 
     using namespace math;
 
-    struct __julia
+    struct julia : system::kernel<julia>
     {
-        using output_container = std::vector<int>;
-        using input_container  = std::vector<int>;
-
-        static constexpr auto kernel_name() { return "julia"; }
+        static constexpr auto name() { return "julia"; }
 
         virtual void configure(vec2<int> dim, vec2<float> offset, vec2<float> c, float zoom, size_t max_iterations) = 0;
-        virtual void run(output_container &output) = 0;
+        virtual void run(std::vector<int> &output) = 0;
     };
 
-    using julia = system::kernel_interface<__julia>;
 }}

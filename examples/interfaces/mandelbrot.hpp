@@ -31,22 +31,19 @@
 #include "math/matrix.hpp"
 #include "util/algorithm.hpp"
 #include "system/entrypoint.hpp"
-#include "system/kernel_interface.hpp"
+#include "system/kernel.hpp"
+
+
 
 namespace zacc { namespace examples {
 
     using namespace math;
 
-    struct __mandelbrot
+    struct mandelbrot : system::kernel<mandelbrot>
     {
-        using output_container = std::vector<int>;
-        using input_container  = std::vector<int>;
-
-        static constexpr auto kernel_name() { return "mandelbrot"; }
+        static constexpr auto name() { return "mandelbrot"; }
 
         virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
-        virtual void run(output_container &output) = 0;
+        virtual void run(std::vector<int> &output) = 0;
     };
-
-    using mandelbrot = system::kernel_interface<__mandelbrot>;
 }}
