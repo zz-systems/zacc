@@ -46,16 +46,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/math.hpp"
 #include "traits/numeric.hpp"
-#include "traits/bitwise_shift.hpp"
+#include "traits/math.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/comparable.hpp"
 #include "traits/equatable.hpp"
-#include "traits/io.hpp"
+#include "traits/bitwise_shift.hpp"
 #include "traits/logical.hpp"
 #include "traits/conditional.hpp"
+#include "traits/io.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
 
 namespace zacc { namespace backend { namespace scalar {
 
@@ -1707,6 +1707,24 @@ namespace zacc { namespace backend { namespace scalar {
 
                 composable<zval_t>::template type
             >;
+
+//            struct composition_t :
+//            //                public printable::impl<zval_t>,
+//            //                public iteratable::impl<zval_t>,
+//            //                public convertable::impl<zval_t>,
+//            //                public zint16_io<impl>::template impl<zval_t>,
+//            //                public zint16_math<impl>::template impl<zval_t>,
+//            //                public zint16_numeric<impl>::template impl<zval_t>,
+//            //                public zint16_arithmetic<impl>::template impl<zval_t>,
+//            //                public zint16_bitwise<impl>::template impl<zval_t>,
+//            //                public zint16_bitwise_shift<impl>::template impl<zval_t>,
+//            //                public zint16_comparable<impl>::template impl<zval_t>,
+//            //                public zint16_logical<impl>::template impl<zval_t>,
+//            //                public zint16_equatable<impl>::template impl<zval_t>,
+//            //                public zint16_conditional<impl>::template impl<zval_t>,
+//            //                public zint16_construction<impl>::template impl<zval_t>,
+//            //                public zval_t
+//            {};
 
             /// implementation
             struct impl : public composition_t

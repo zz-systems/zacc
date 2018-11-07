@@ -208,6 +208,13 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
                 composable<zval_t>::template type
             >;
 
+//            struct composition_t :
+//            {% for trait in Traits.render(ast, ModuleTypes.DEFAULT) %}
+//                public {{ trait }}<zval_t>,
+//            {% endfor %}
+//                public zval_t
+//            {};
+
             /// implementation
             struct impl : public composition_t
             {

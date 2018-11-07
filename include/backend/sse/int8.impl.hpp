@@ -46,15 +46,15 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/comparable.hpp"
-#include "traits/math.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/logical.hpp"
 #include "traits/io.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/equatable.hpp"
+#include "traits/math.hpp"
+#include "traits/comparable.hpp"
 #include "traits/numeric.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/conditional.hpp"
-#include "traits/equatable.hpp"
+#include "traits/logical.hpp"
 
 namespace zacc { namespace backend { namespace sse {
 
@@ -1700,6 +1700,23 @@ namespace zacc { namespace backend { namespace sse {
 
                 composable<zval_t>::template type
             >;
+
+//            struct composition_t :
+//            //                public printable::impl<zval_t>,
+//            //                public iteratable::impl<zval_t>,
+//            //                public convertable::impl<zval_t>,
+//            //                public zint8_io<impl>::template impl<zval_t>,
+//            //                public zint8_math<impl>::template impl<zval_t>,
+//            //                public zint8_numeric<impl>::template impl<zval_t>,
+//            //                public zint8_arithmetic<impl>::template impl<zval_t>,
+//            //                public zint8_bitwise<impl>::template impl<zval_t>,
+//            //                public zint8_comparable<impl>::template impl<zval_t>,
+//            //                public zint8_logical<impl>::template impl<zval_t>,
+//            //                public zint8_equatable<impl>::template impl<zval_t>,
+//            //                public zint8_conditional<impl>::template impl<zval_t>,
+//            //                public zint8_construction<impl>::template impl<zval_t>,
+//            //                public zval_t
+//            {};
 
             /// implementation
             struct impl : public composition_t

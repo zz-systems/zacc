@@ -46,16 +46,16 @@
 
 #include "traits/common.hpp"
 #include "traits/construction.hpp"
-#include "traits/conditional.hpp"
 #include "traits/math.hpp"
 #include "traits/io.hpp"
 #include "traits/equatable.hpp"
 #include "traits/comparable.hpp"
-#include "traits/bitwise_shift.hpp"
 #include "traits/logical.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/numeric.hpp"
 #include "traits/arithmetic.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/numeric.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/conditional.hpp"
 
 namespace zacc { namespace backend { namespace sse {
 
@@ -1885,6 +1885,24 @@ namespace zacc { namespace backend { namespace sse {
 
                 composable<zval_t>::template type
             >;
+
+//            struct composition_t :
+//            //                public printable::impl<zval_t>,
+//            //                public iteratable::impl<zval_t>,
+//            //                public convertable::impl<zval_t>,
+//            //                public zint32_io<impl>::template impl<zval_t>,
+//            //                public zint32_math<impl>::template impl<zval_t>,
+//            //                public zint32_numeric<impl>::template impl<zval_t>,
+//            //                public zint32_arithmetic<impl>::template impl<zval_t>,
+//            //                public zint32_bitwise<impl>::template impl<zval_t>,
+//            //                public zint32_bitwise_shift<impl>::template impl<zval_t>,
+//            //                public zint32_comparable<impl>::template impl<zval_t>,
+//            //                public zint32_logical<impl>::template impl<zval_t>,
+//            //                public zint32_equatable<impl>::template impl<zval_t>,
+//            //                public zint32_conditional<impl>::template impl<zval_t>,
+//            //                public zint32_construction<impl>::template impl<zval_t>,
+//            //                public zval_t
+//            {};
 
             /// implementation
             struct impl : public composition_t
