@@ -9,7 +9,7 @@ type:
   traits:
      shared:
       - printable
-      - iteratable
+
       - convertable
      default:
        - io

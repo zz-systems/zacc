@@ -44,17 +44,18 @@
 #include "util/memory.hpp"
 #include "util/macros.hpp"
 
-#include "traits/common.hpp"
-#include "traits/construction.hpp"
-#include "traits/io.hpp"
-#include "traits/math.hpp"
-#include "traits/equatable.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/logical.hpp"
-#include "traits/comparable.hpp"
-#include "traits/conditional.hpp"
-#include "traits/arithmetic.hpp"
+#include "traits/constructable.hpp"
+#include "traits/convertable.hpp"
+#include "traits/printable.hpp"
 #include "traits/numeric.hpp"
+#include "traits/equatable.hpp"
+#include "traits/math.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/io.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/conditional.hpp"
+#include "traits/comparable.hpp"
+#include "traits/logical.hpp"
 
 namespace zacc { namespace backend { namespace scalar {
 
@@ -67,1646 +68,1604 @@ namespace zacc { namespace backend { namespace scalar {
     /// @endcond
 
 
-    // =================================================================================================================
-    /**
-     * @name construction modules
-     */
-    ///@{
+    namespace {
 
-    /**
-     * @brief construction
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct zfloat64_construction
-    {
-
+        // =================================================================================================================
         /**
-         * @brief construction basic interface implementation
+         * @name constructable modules
+         */
+        ///@{
+        /**
+         * @brief constructable
          * @relates float64
          * @remark scalar
          */
-        template<typename Base>
-        struct __impl : Base
+        template<typename Composed>
+        struct zfloat64_constructable
         {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
 
             /**
-             * @brief construction 
+             * @brief constructable basic interface implementation
              * @relates float64
-             * @remark scalar 
+             * @remark scalar
              */
-            constexpr __impl(  ) : Base()  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction 
-             * @relates float64
-             * @remark scalar 
-             */
-            constexpr __impl(double value) : Base(value)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(double)");
-
-            }
-
-
-            /**
-             * @brief construction 
-             * @relates float64
-             * @remark scalar 
-             */
-            template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> __impl(const T &value) : Base(value.value())  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(const T)");
-
-            }
-
-
-            /**
-             * @brief construction 
-             * @relates float64
-             * @remark scalar 
-             */
-            constexpr __impl(std::array<typename Base::element_t, Base::size()> value) : Base(value[0])  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(std::array<typename Base::element_t, Base::size()>)");
-
-            }
-
-        };
-
-        /**
-         * @brief construction public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, zfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name construction modules
-     */
-    ///@{
-
-    /**
-     * @brief construction
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct bfloat64_construction
-    {
-
-        /**
-         * @brief construction basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-
-            /**
-             * @brief construction 
-             * @relates float64
-             * @remark scalar 
-             */
-            constexpr __impl(  ) : Base()  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction 
-             * @relates float64
-             * @remark scalar 
-             */
-            constexpr __impl(zval_t value) : Base(value.value() != 0)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(zval_t)");
-
-            }
-
-
-            /**
-             * @brief construction 
-             * @relates float64
-             * @remark scalar 
-             */
-            constexpr __impl(bval_t value, last_operation last_op) : Base(value, last_op)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(bval_t value, last_operation)");
-
-            }
-
-        };
-
-        /**
-         * @brief construction public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, bfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name io modules
-     */
-    ///@{
-
-    /**
-     * @brief io
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct zfloat64_io
-    {
-
-        /**
-         * @brief io basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief io default
-             * @relates float64
-             * @remark scalar default
-             */
-            template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vstore");
-
-                result[0] = input.value();
-            }
-
-
-            /**
-             * @brief io default
-             * @relates float64
-             * @remark scalar default
-             */
-            template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vstream");
-
-                result[0] = input.value();
-            }
-
-
-            /**
-             * @brief io default
-             * @relates float64
-             * @remark scalar default
-             */
-            template<typename RandomIt> friend zfloat64<Base::features> vgather(RandomIt input, const zint32<Base::features> &index, Composed)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vgather");
-
-                return input[index.value()];
-            }
-
-        };
-
-        /**
-         * @brief io public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::io<__impl<base_t>, zfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name math modules
-     */
-    ///@{
-
-    /**
-     * @brief math
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct zfloat64_math
-    {
-
-        /**
-         * @brief math basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief math default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vabs(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vabs");
-
-                return std::abs(one.value());
-            }
-
-
-            /**
-             * @brief math default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vmin(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vmin");
-
-                return std::min(one.value(), other.value());
-            }
-
-
-            /**
-             * @brief math default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vmax(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vmax");
-
-                return std::max(one.value(), other.value());
-            }
-
-
-            /**
-             * @brief math default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vclamp(Composed self, Composed from, Composed to)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vclamp");
-
-                return vmin(to, vmax(from, self));
-            }
-
-
-            /**
-             * @brief math default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vrcp(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vrcp");
-
-                return (1 / one.value());
-            }
-
-
-            /**
-             * @brief math default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vtrunc(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vtrunc");
-
-                return std::trunc(one.value());
-            }
-
-
-            /**
-             * @brief math default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vfloor(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vfloor");
-
-                return std::floor(one.value());
-            }
-
-
-            /**
-             * @brief math default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vceil(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vceil");
-
-                return std::ceil(one.value());
-            }
-
-
-            /**
-             * @brief math default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vround(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vround");
-
-                return std::round(one.value());
-            }
-
-
-            /**
-             * @brief math default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vsqrt(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vsqrt");
-
-                return std::sqrt(one.value());
-            }
-
-        };
-
-        /**
-         * @brief math public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::math<__impl<base_t>, zfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name numeric modules
-     */
-    ///@{
-
-    /**
-     * @brief numeric
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct zfloat64_numeric
-    {
-
-        /**
-         * @brief numeric basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-        };
-
-        /**
-         * @brief numeric public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::numeric<__impl<base_t>, zfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name arithmetic modules
-     */
-    ///@{
-
-    /**
-     * @brief arithmetic
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct zfloat64_arithmetic
-    {
-
-        /**
-         * @brief arithmetic basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief arithmetic default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vneg(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vneg");
-
-                return (-one.value());
-            }
-
-
-            /**
-             * @brief arithmetic default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vadd(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vadd");
-
-                return (one.value() + other.value());
-            }
-
-
-            /**
-             * @brief arithmetic default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vsub(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vsub");
-
-                return (one.value() - other.value());
-            }
-
-
-            /**
-             * @brief arithmetic default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vmul(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vmul");
-
-                return (one.value() * other.value());
-            }
-
-
-            /**
-             * @brief arithmetic default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vdiv(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vdiv");
-
-                return (one.value() / other.value());
-            }
-
-
-            /**
-             * @brief arithmetic default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vfmadd(Composed multiplicand, Composed multiplier, Composed addendum)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vfmadd");
-
-                return multiplicand.value() * multiplier.value() + addendum.value();
-            }
-
-
-            /**
-             * @brief arithmetic default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vfmsub(Composed multiplicand, Composed multiplier, Composed addendum)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vfmsub");
-
-                return multiplicand.value() * multiplier.value() - addendum.value();
-            }
-
-        };
-
-        /**
-         * @brief arithmetic public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name bitwise modules
-     */
-    ///@{
-
-    /**
-     * @brief bitwise
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct zfloat64_bitwise
-    {
-
-        /**
-         * @brief bitwise basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief bitwise default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vbneg(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vbneg");
-
-                auto _one = one.value();
-                double result;
-                bitsof(result) = ~bitsof(_one);
-                return result;
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vband(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vband");
-
-                auto _one = one.value();
-                auto _other = other.value();
-                double result;
-                bitsof(result) = bitsof(_one) & bitsof(_other);
-                return result;
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vbor(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vbor");
-
-                auto _one = one.value();
-                auto _other = other.value();
-                double result;
-                bitsof(result) = bitsof(_one) | bitsof(_other);
-                return result;
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vbxor(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vbxor");
-
-                auto _one = one.value();
-                auto _other = other.value();
-                double result;
-                bitsof(result) = bitsof(_one) ^ bitsof(_other);
-                return result;
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bool is_set(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "is_set");
-
-                return one.value() != 0;
-            }
-
-        };
-
-        /**
-         * @brief bitwise public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name comparable modules
-     */
-    ///@{
-
-    /**
-     * @brief comparable
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct zfloat64_comparable
-    {
-
-        /**
-         * @brief comparable basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief comparable default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vgt(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vgt");
-
-                return (one.value() > other.value());
-            }
-
-
-            /**
-             * @brief comparable default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vlt(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vlt");
-
-                return (one.value() < other.value());
-            }
-
-
-            /**
-             * @brief comparable default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vge(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vge");
-
-                return (one.value() >= other.value());
-            }
-
-
-            /**
-             * @brief comparable default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vle(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vle");
-
-                return (one.value() <= other.value());
-            }
-
-        };
-
-        /**
-         * @brief comparable public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::comparable<__impl<base_t>, zfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name logical modules
-     */
-    ///@{
-
-    /**
-     * @brief logical
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct zfloat64_logical
-    {
-
-        /**
-         * @brief logical basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief logical default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vlneg(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vlneg");
-
-                return (!one.value());
-            }
-
-
-            /**
-             * @brief logical default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vlor(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vlor");
-
-                return (one.value() || other.value());
-            }
-
-
-            /**
-             * @brief logical default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vland(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vland");
-
-                return (one.value() && other.value());
-            }
-
-        };
-
-        /**
-         * @brief logical public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::logical<__impl<base_t>, zfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name equatable modules
-     */
-    ///@{
-
-    /**
-     * @brief equatable
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct zfloat64_equatable
-    {
-
-        /**
-         * @brief equatable basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief equatable default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> veq(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "veq");
-
-                return (one.value() == other.value());
-            }
-
-
-            /**
-             * @brief equatable default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vneq(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vneq");
-
-                return (one.value() != other.value());
-            }
-
-        };
-
-        /**
-         * @brief equatable public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::equatable<__impl<base_t>, zfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name conditional modules
-     */
-    ///@{
-
-    /**
-     * @brief conditional
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct zfloat64_conditional
-    {
-
-        /**
-         * @brief conditional basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief conditional default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend zfloat64<Base::features> vsel(bval_t condition, Composed if_value, Composed else_value)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vsel");
-
-                return (condition.value() ? if_value : else_value);
-            }
-
-        };
-
-        /**
-         * @brief conditional public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name io modules
-     */
-    ///@{
-
-    /**
-     * @brief io
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct bfloat64_io
-    {
-
-        /**
-         * @brief io basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief io default
-             * @relates float64
-             * @remark scalar default
-             */
-            template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vstore");
-
-                result[0] = input.value();
-            }
-
-
-            /**
-             * @brief io default
-             * @relates float64
-             * @remark scalar default
-             */
-            template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vstream");
-
-                result[0] = input.value();
-            }
-
-
-            /**
-             * @brief io default
-             * @relates float64
-             * @remark scalar default
-             */
-            template<typename RandomIt> friend bfloat64<Base::features> vgather(RandomIt input, const zint32<Base::features> &index, Composed)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vgather");
-
-                return input[index.value()];
-            }
-
-        };
-
-        /**
-         * @brief io public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::io<__impl<base_t>, bfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name bitwise modules
-     */
-    ///@{
-
-    /**
-     * @brief bitwise
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct bfloat64_bitwise
-    {
-
-        /**
-         * @brief bitwise basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief bitwise default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vbneg(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vbneg");
-
-                auto _one = one.value();
-                double result;
-                bitsof(result) = ~bitsof(_one);
-                return result;
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vband(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vband");
-
-                auto _one = one.value();
-                auto _other = other.value();
-                double result;
-                bitsof(result) = bitsof(_one) & bitsof(_other);
-                return result;
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vbor(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vbor");
-
-                auto _one = one.value();
-                auto _other = other.value();
-                double result;
-                bitsof(result) = bitsof(_one) | bitsof(_other);
-                return result;
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vbxor(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vbxor");
-
-                auto _one = one.value();
-                auto _other = other.value();
-                double result;
-                bitsof(result) = bitsof(_one) ^ bitsof(_other);
-                return result;
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bool is_set(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "is_set");
-
-                return one.value() != 0;
-            }
-
-        };
-
-        /**
-         * @brief bitwise public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::bitwise<__impl<base_t>, bfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name logical modules
-     */
-    ///@{
-
-    /**
-     * @brief logical
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct bfloat64_logical
-    {
-
-        /**
-         * @brief logical basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief logical default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vlneg(Composed one)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vlneg");
-
-                return (!one.value());
-            }
-
-
-            /**
-             * @brief logical default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vlor(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vlor");
-
-                return (one.value() || other.value());
-            }
-
-
-            /**
-             * @brief logical default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vland(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vland");
-
-                return (one.value() && other.value());
-            }
-
-        };
-
-        /**
-         * @brief logical public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::logical<__impl<base_t>, bfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name equatable modules
-     */
-    ///@{
-
-    /**
-     * @brief equatable
-     * @relates float64
-     * @remark scalar
-     */
-    template<typename Composed>
-    struct bfloat64_equatable
-    {
-
-        /**
-         * @brief equatable basic interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zfloat64<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bfloat64<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief equatable default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> veq(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "veq");
-
-                return (one.value() == other.value());
-            }
-
-
-            /**
-             * @brief equatable default
-             * @relates float64
-             * @remark scalar default
-             */
-            friend bfloat64<Base::features> vneq(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vneq");
-
-                return (one.value() != other.value());
-            }
-
-        };
-
-        /**
-         * @brief equatable public interface implementation
-         * @relates float64
-         * @remark scalar
-         */
-        template<typename base_t>
-        using impl = traits::equatable<__impl<base_t>, bfloat64<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // Type composition ================================================================================================
-
-    /**
-     * @name float64 composition
-     */
-    ///@{
-
-        /**
-         * @brief zval parametrization using
-         * - 'double' as underlying vector type
-         * - 'double' as scalar type
-         * - '1' as vector size
-         * - '16' as alignment
-         * @relates float64
-         * @remark scalar
-         */
-        template<uint64_t features>
-        struct __zval_float64
-        {
-            /// vector base
-            using zval_base_t = zval<double, bool, double, zval_tag, 1, 16, features>;
-            /// boolean vector base
-            using bval_base_t = bval<double, bool, 1, 16, features>;
-
-            /// implementation
-            struct impl : public zval_base_t
+            template<typename Base>
+            struct __impl : Base
             {
                 /// complete vector
-                using zval_t = zfloat64<features>;
+                using zval_t        = zfloat64<Base::features>;
                 /// complete boolean vector
-                using bval_t = bfloat64<features>;
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+
+                /**
+                 * @brief constructable 
+                 * @relates float64
+                 * @remark scalar 
+                 */
+                constexpr __impl(  ) : Base()  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS()");
+
+                }
+
+
+                /**
+                 * @brief constructable 
+                 * @relates float64
+                 * @remark scalar 
+                 */
+                constexpr __impl(double value) : Base(value)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(double)");
+
+                }
+
+
+                /**
+                 * @brief constructable 
+                 * @relates float64
+                 * @remark scalar 
+                 */
+                template <typename T, typename enable = std::enable_if_t<is_zval<T>::value || is_bval<T>::value>> __impl(const T &value) : Base(value.value())  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(const T)");
+
+                }
+
+
+                /**
+                 * @brief constructable 
+                 * @relates float64
+                 * @remark scalar 
+                 */
+                constexpr __impl(std::array<typename Base::element_t, Base::size()> value) : Base(value[0])  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(std::array<typename Base::element_t, Base::size()>)");
+
+                }
+
+            };
+
+            /**
+             * @brief constructable public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::constructable<__impl<base_t>, zfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name constructable modules
+         */
+        ///@{
+        /**
+         * @brief constructable
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct bfloat64_constructable
+        {
+
+            /**
+             * @brief constructable basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+
+                /**
+                 * @brief constructable 
+                 * @relates float64
+                 * @remark scalar 
+                 */
+                constexpr __impl(  ) : Base()  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS()");
+
+                }
+
+
+                /**
+                 * @brief constructable 
+                 * @relates float64
+                 * @remark scalar 
+                 */
+                constexpr __impl(zval_t value) : Base(value.value() != 0)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(zval_t)");
+
+                }
+
+
+                /**
+                 * @brief constructable 
+                 * @relates float64
+                 * @remark scalar 
+                 */
+                constexpr __impl(bval_t value, last_operation last_op) : Base(value, last_op)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(bval_t value, last_operation)");
+
+                }
+
+            };
+
+            /**
+             * @brief constructable public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::constructable<__impl<base_t>, bfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name io modules
+         */
+        ///@{
+        /**
+         * @brief io
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct zfloat64_io
+        {
+
+            /**
+             * @brief io basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
 
                 /// forward to base
-                FORWARD2(impl, zval_base_t);
+                FORWARD(__impl);
+
+                /**
+                 * @brief io default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vstore");
+
+                    result[0] = input.value();
+                }
+
+
+                /**
+                 * @brief io default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vstream");
+
+                    result[0] = input.value();
+                }
+
+
+                /**
+                 * @brief io default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                template<typename RandomIt> friend zfloat64<Base::features> vgather(RandomIt input, const zint32<Base::features> &index, Composed)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vgather");
+
+                    return input[index.value()];
+                }
+
             };
+
+            /**
+             * @brief io public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::io<__impl<base_t>, zfloat64<base_t::features>>;
+
         };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name math modules
+         */
+        ///@{
+        /**
+         * @brief math
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct zfloat64_math
+        {
+
+            /**
+             * @brief math basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief math default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vabs(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vabs");
+
+                    return std::abs(one.value());
+                }
+
+
+                /**
+                 * @brief math default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vmin(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vmin");
+
+                    return std::min(one.value(), other.value());
+                }
+
+
+                /**
+                 * @brief math default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vmax(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vmax");
+
+                    return std::max(one.value(), other.value());
+                }
+
+
+                /**
+                 * @brief math default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vclamp(Composed self, Composed from, Composed to)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vclamp");
+
+                    return vmin(to, vmax(from, self));
+                }
+
+
+                /**
+                 * @brief math default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vrcp(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vrcp");
+
+                    return (1 / one.value());
+                }
+
+
+                /**
+                 * @brief math default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vtrunc(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vtrunc");
+
+                    return std::trunc(one.value());
+                }
+
+
+                /**
+                 * @brief math default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vfloor(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vfloor");
+
+                    return std::floor(one.value());
+                }
+
+
+                /**
+                 * @brief math default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vceil(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vceil");
+
+                    return std::ceil(one.value());
+                }
+
+
+                /**
+                 * @brief math default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vround(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vround");
+
+                    return std::round(one.value());
+                }
+
+
+                /**
+                 * @brief math default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vsqrt(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vsqrt");
+
+                    return std::sqrt(one.value());
+                }
+
+            };
+
+            /**
+             * @brief math public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::math<__impl<base_t>, zfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name numeric modules
+         */
+        ///@{
+        /**
+         * @brief numeric
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct zfloat64_numeric
+        {
+
+            /**
+             * @brief numeric basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+            };
+
+            /**
+             * @brief numeric public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::numeric<__impl<base_t>, zfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name arithmetic modules
+         */
+        ///@{
+        /**
+         * @brief arithmetic
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct zfloat64_arithmetic
+        {
+
+            /**
+             * @brief arithmetic basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief arithmetic default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vneg(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vneg");
+
+                    return (-one.value());
+                }
+
+
+                /**
+                 * @brief arithmetic default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vadd(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vadd");
+
+                    return (one.value() + other.value());
+                }
+
+
+                /**
+                 * @brief arithmetic default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vsub(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vsub");
+
+                    return (one.value() - other.value());
+                }
+
+
+                /**
+                 * @brief arithmetic default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vmul(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vmul");
+
+                    return (one.value() * other.value());
+                }
+
+
+                /**
+                 * @brief arithmetic default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vdiv(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vdiv");
+
+                    return (one.value() / other.value());
+                }
+
+
+                /**
+                 * @brief arithmetic default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vfmadd(Composed multiplicand, Composed multiplier, Composed addendum)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vfmadd");
+
+                    return multiplicand.value() * multiplier.value() + addendum.value();
+                }
+
+
+                /**
+                 * @brief arithmetic default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vfmsub(Composed multiplicand, Composed multiplier, Composed addendum)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vfmsub");
+
+                    return multiplicand.value() * multiplier.value() - addendum.value();
+                }
+
+            };
+
+            /**
+             * @brief arithmetic public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name bitwise modules
+         */
+        ///@{
+        /**
+         * @brief bitwise
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct zfloat64_bitwise
+        {
+
+            /**
+             * @brief bitwise basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief bitwise default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vbneg(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vbneg");
+
+                    auto _one = one.value();
+                    double result;
+                    bitsof(result) = ~bitsof(_one);
+                    return result;
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vband(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vband");
+
+                    auto _one = one.value();
+                    auto _other = other.value();
+                    double result;
+                    bitsof(result) = bitsof(_one) & bitsof(_other);
+                    return result;
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vbor(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vbor");
+
+                    auto _one = one.value();
+                    auto _other = other.value();
+                    double result;
+                    bitsof(result) = bitsof(_one) | bitsof(_other);
+                    return result;
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vbxor(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vbxor");
+
+                    auto _one = one.value();
+                    auto _other = other.value();
+                    double result;
+                    bitsof(result) = bitsof(_one) ^ bitsof(_other);
+                    return result;
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bool is_set(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "is_set");
+
+                    return one.value() != 0;
+                }
+
+            };
+
+            /**
+             * @brief bitwise public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name comparable modules
+         */
+        ///@{
+        /**
+         * @brief comparable
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct zfloat64_comparable
+        {
+
+            /**
+             * @brief comparable basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief comparable default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vgt(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vgt");
+
+                    return (one.value() > other.value());
+                }
+
+
+                /**
+                 * @brief comparable default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vlt(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vlt");
+
+                    return (one.value() < other.value());
+                }
+
+
+                /**
+                 * @brief comparable default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vge(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vge");
+
+                    return (one.value() >= other.value());
+                }
+
+
+                /**
+                 * @brief comparable default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vle(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vle");
+
+                    return (one.value() <= other.value());
+                }
+
+            };
+
+            /**
+             * @brief comparable public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::comparable<__impl<base_t>, zfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name logical modules
+         */
+        ///@{
+        /**
+         * @brief logical
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct zfloat64_logical
+        {
+
+            /**
+             * @brief logical basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief logical default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vlneg(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vlneg");
+
+                    return (!one.value());
+                }
+
+
+                /**
+                 * @brief logical default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vlor(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vlor");
+
+                    return (one.value() || other.value());
+                }
+
+
+                /**
+                 * @brief logical default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vland(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vland");
+
+                    return (one.value() && other.value());
+                }
+
+            };
+
+            /**
+             * @brief logical public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::logical<__impl<base_t>, zfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name equatable modules
+         */
+        ///@{
+        /**
+         * @brief equatable
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct zfloat64_equatable
+        {
+
+            /**
+             * @brief equatable basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief equatable default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> veq(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "veq");
+
+                    return (one.value() == other.value());
+                }
+
+
+                /**
+                 * @brief equatable default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vneq(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vneq");
+
+                    return (one.value() != other.value());
+                }
+
+            };
+
+            /**
+             * @brief equatable public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::equatable<__impl<base_t>, zfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name conditional modules
+         */
+        ///@{
+        /**
+         * @brief conditional
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct zfloat64_conditional
+        {
+
+            /**
+             * @brief conditional basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief conditional default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend zfloat64<Base::features> vsel(bval_t condition, Composed if_value, Composed else_value)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vsel");
+
+                    return (condition.value() ? if_value : else_value);
+                }
+
+            };
+
+            /**
+             * @brief conditional public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name io modules
+         */
+        ///@{
+        /**
+         * @brief io
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct bfloat64_io
+        {
+
+            /**
+             * @brief io basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief io default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vstore");
+
+                    result[0] = input.value();
+                }
+
+
+                /**
+                 * @brief io default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vstream");
+
+                    result[0] = input.value();
+                }
+
+
+                /**
+                 * @brief io default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                template<typename RandomIt> friend bfloat64<Base::features> vgather(RandomIt input, const zint32<Base::features> &index, Composed)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vgather");
+
+                    return input[index.value()];
+                }
+
+            };
+
+            /**
+             * @brief io public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::io<__impl<base_t>, bfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name bitwise modules
+         */
+        ///@{
+        /**
+         * @brief bitwise
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct bfloat64_bitwise
+        {
+
+            /**
+             * @brief bitwise basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief bitwise default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vbneg(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vbneg");
+
+                    auto _one = one.value();
+                    double result;
+                    bitsof(result) = ~bitsof(_one);
+                    return result;
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vband(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vband");
+
+                    auto _one = one.value();
+                    auto _other = other.value();
+                    double result;
+                    bitsof(result) = bitsof(_one) & bitsof(_other);
+                    return result;
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vbor(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vbor");
+
+                    auto _one = one.value();
+                    auto _other = other.value();
+                    double result;
+                    bitsof(result) = bitsof(_one) | bitsof(_other);
+                    return result;
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vbxor(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vbxor");
+
+                    auto _one = one.value();
+                    auto _other = other.value();
+                    double result;
+                    bitsof(result) = bitsof(_one) ^ bitsof(_other);
+                    return result;
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bool is_set(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "is_set");
+
+                    return one.value() != 0;
+                }
+
+            };
+
+            /**
+             * @brief bitwise public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::bitwise<__impl<base_t>, bfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name logical modules
+         */
+        ///@{
+        /**
+         * @brief logical
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct bfloat64_logical
+        {
+
+            /**
+             * @brief logical basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief logical default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vlneg(Composed one)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vlneg");
+
+                    return (!one.value());
+                }
+
+
+                /**
+                 * @brief logical default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vlor(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vlor");
+
+                    return (one.value() || other.value());
+                }
+
+
+                /**
+                 * @brief logical default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vland(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vland");
+
+                    return (one.value() && other.value());
+                }
+
+            };
+
+            /**
+             * @brief logical public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::logical<__impl<base_t>, bfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name equatable modules
+         */
+        ///@{
+        /**
+         * @brief equatable
+         * @relates float64
+         * @remark scalar
+         */
+        template<typename Composed>
+        struct bfloat64_equatable
+        {
+
+            /**
+             * @brief equatable basic interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zfloat64<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bfloat64<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief equatable default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> veq(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "veq");
+
+                    return (one.value() == other.value());
+                }
+
+
+                /**
+                 * @brief equatable default
+                 * @relates float64
+                 * @remark scalar default
+                 */
+                friend bfloat64<Base::features> vneq(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vneq");
+
+                    return (one.value() != other.value());
+                }
+
+            };
+
+            /**
+             * @brief equatable public interface implementation
+             * @relates float64
+             * @remark scalar
+             */
+            template<typename base_t>
+            using impl = traits::equatable<__impl<base_t>, bfloat64<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // Type composition ================================================================================================
+
+        /**
+         * @name float64 composition
+         */
+        ///@{
+
         /**
          * @brief zval composition
          * @relates float64
@@ -1720,14 +1679,33 @@ namespace zacc { namespace backend { namespace scalar {
             struct impl;
             /// @endcond
 
+            /**
+            * @brief zval parametrization using
+            * - 'double' as underlying vector type
+            * - 'double' as scalar type
+            * - '1' as vector size
+            * - '16' as alignment
+            * @relates float64
+            * @remark scalar
+            */
+            using base = zval<double, bool, double, zval_tag, 1, 16, features>;
+
             /// parametrized zval base
-            using zval_t = typename __zval_float64<features>::impl;
+            struct composable_base : base
+            {
+                /// complete vector
+                using zval_t = zfloat64<features>;
+                /// complete boolean vector
+                using bval_t = bfloat64<features>;
+
+                /// forward to base
+                FORWARD2(composable_base, base);
+            };
 
             /// compose type from modules
-            using composition_t = compose
+            using composed = compose
             <
                 printable::impl,
-                iteratable::impl,
                 convertable::impl,
                 zfloat64_io<impl>::template impl,
                 zfloat64_math<impl>::template impl,
@@ -1738,30 +1716,13 @@ namespace zacc { namespace backend { namespace scalar {
                 zfloat64_logical<impl>::template impl,
                 zfloat64_equatable<impl>::template impl,
                 zfloat64_conditional<impl>::template impl,
-                zfloat64_construction<impl>::template impl,
+                zfloat64_constructable<impl>::template impl,
 
-                composable<zval_t>::template type
+                composable<composable_base>::template type
             >;
 
-//            struct composition_t :
-//            //                public printable::impl<zval_t>,
-//            //                public iteratable::impl<zval_t>,
-//            //                public convertable::impl<zval_t>,
-//            //                public zfloat64_io<impl>::template impl<zval_t>,
-//            //                public zfloat64_math<impl>::template impl<zval_t>,
-//            //                public zfloat64_numeric<impl>::template impl<zval_t>,
-//            //                public zfloat64_arithmetic<impl>::template impl<zval_t>,
-//            //                public zfloat64_bitwise<impl>::template impl<zval_t>,
-//            //                public zfloat64_comparable<impl>::template impl<zval_t>,
-//            //                public zfloat64_logical<impl>::template impl<zval_t>,
-//            //                public zfloat64_equatable<impl>::template impl<zval_t>,
-//            //                public zfloat64_conditional<impl>::template impl<zval_t>,
-//            //                public zfloat64_construction<impl>::template impl<zval_t>,
-//            //                public zval_t
-//            {};
-
             /// implementation
-            struct impl : public composition_t
+            struct impl : public composed
             {
                 /// complete vector
                 using zval_t = zfloat64<features>;
@@ -1769,38 +1730,7 @@ namespace zacc { namespace backend { namespace scalar {
                 using bval_t = bfloat64<features>;
 
                 /// forward to base
-                FORWARD2(impl, composition_t);
-            };
-        };
-
-        /**
-         * @brief bval parametrization using
-         * - 'double' as underlying vector type
-         * - 'double' as scalar type
-         * - '1' as vector size
-         * - '16' as alignment
-         * @relates float64
-         * @remark scalar
-         * @tparam features feature mask
-         */
-        template<uint64_t features>
-        struct __bval_float64
-        {
-            /// complete vector base
-            using zval_base_t = zval<double, bool, double, zval_tag, 1, 16, features>;
-            /// complete boolean vector base
-            using bval_base_t = bval<double, bool, 1, 16, features>;
-
-            /// implementation
-            struct impl : public bval_base_t
-            {
-                /// complete vector
-                using zval_t = zfloat64<features>;
-                /// complete boolean vector
-                using bval_t = bfloat64<features>;
-
-                /// forward to base
-                FORWARD2(impl, bval_base_t);
+                FORWARD2(impl, composed);
             };
         };
 
@@ -1813,25 +1743,19 @@ namespace zacc { namespace backend { namespace scalar {
             struct impl;
             /// @endcond
 
+            /**
+            * @brief bval parametrization using
+            * - 'double' as underlying vector type
+            * - 'double' as scalar type
+            * - '1' as vector size
+            * - '16' as alignment
+            * @relates float64
+            * @remark scalar
+            */
+            using base = bval<double, bool, 1, 16, features>;
+
             /// parametrized zval base
-            using bval_t = typename __bval_float64<features>::impl;
-            /// compose type from modules
-            using composition_t = compose
-            <
-                printable::impl,
-                iteratable::impl,
-                convertable::impl,
-                bfloat64_io<impl>::template impl,
-                bfloat64_bitwise<impl>::template impl,
-                bfloat64_logical<impl>::template impl,
-                bfloat64_equatable<impl>::template impl,
-                bfloat64_construction<impl>::template impl,
-
-                composable<bval_t>::template type
-            >;
-
-            /// implementation
-            struct impl : public composition_t
+            struct composable_base : base
             {
                 /// complete vector
                 using zval_t = zfloat64<features>;
@@ -1839,23 +1763,50 @@ namespace zacc { namespace backend { namespace scalar {
                 using bval_t = bfloat64<features>;
 
                 /// forward to base
-                FORWARD2(impl, composition_t);
+                FORWARD2(composable_base, base);
+            };
+
+            /// compose type from modules
+            using composed = compose
+            <
+                printable::impl,
+                convertable::impl,
+                bfloat64_io<impl>::template impl,
+                bfloat64_bitwise<impl>::template impl,
+                bfloat64_logical<impl>::template impl,
+                bfloat64_equatable<impl>::template impl,
+                bfloat64_constructable<impl>::template impl,
+
+                composable<composable_base>::template type
+            >;
+
+            /// implementation
+            struct impl : public composed
+            {
+                /// complete vector
+                using zval_t = zfloat64<features>;
+                /// complete boolean vector
+                using bval_t = bfloat64<features>;
+
+                /// forward to base
+                FORWARD2(impl, composed);
             };
         };
-    //}
+
+    } // end namespace
 
     /// public zfloat64 implementation
     /// @tparam features feature mask
     template<uint64_t features>
     struct zfloat64 : public __zfloat64<features>::impl
     {
-        /// complete vector
-        using zval_t = zfloat64<features>;
-        /// complete boolean vector
-        using bval_t = bfloat64<features>;
+            /// complete vector
+            using zval_t = zfloat64<features>;
+            /// complete boolean vector
+            using bval_t = bfloat64<features>;
 
-        /// forward to base
-        FORWARD2(zfloat64, __zfloat64<features>::impl);
+            /// forward to base
+            FORWARD2(zfloat64, __zfloat64<features>::impl);
     };
 
     /// public bfloat64 implementation

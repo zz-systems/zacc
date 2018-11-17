@@ -289,7 +289,7 @@ namespace zacc { namespace math {
         };
 
         template<typename Base>
-        using impl = traits::construction<__impl<Base>, zcomplex<typename Base::element_t>>;
+        using impl = traits::constructable<__impl<Base>, zcomplex<typename Base::element_t>>;
     };
 
         /**
@@ -612,7 +612,6 @@ namespace zacc { namespace math {
         using composition_t = compose
         <
             complex_printable::impl,
-            iteratable::impl,
 
             complex_io<impl>::template impl,
             complex_arithmetic<impl>::template impl,
@@ -656,7 +655,6 @@ namespace zacc { namespace math {
         using composition_t = compose
         <
             complex_printable::impl,
-            iteratable::impl,
 
             complex_conditional<impl>::template impl,
             complex_construction<impl>::template impl,

@@ -25,7 +25,6 @@
 
 #pragma once
 
-#include "common.hpp"
 #include "memory.h"
 
 namespace zacc { namespace traits {

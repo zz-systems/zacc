@@ -44,17 +44,18 @@
 #include "util/memory.hpp"
 #include "util/macros.hpp"
 
-#include "traits/common.hpp"
-#include "traits/construction.hpp"
+#include "traits/constructable.hpp"
+#include "traits/convertable.hpp"
+#include "traits/printable.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/logical.hpp"
+#include "traits/numeric.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/math.hpp"
 #include "traits/conditional.hpp"
 #include "traits/io.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/numeric.hpp"
 #include "traits/equatable.hpp"
-#include "traits/math.hpp"
 #include "traits/comparable.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/logical.hpp"
 
 namespace zacc { namespace backend { namespace avx2 {
 
@@ -67,1521 +68,1479 @@ namespace zacc { namespace backend { namespace avx2 {
     /// @endcond
 
 
-    // =================================================================================================================
-    /**
-     * @name construction modules
-     */
-    ///@{
+    namespace {
 
-    /**
-     * @brief construction
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct zint8_construction
-    {
-
+        // =================================================================================================================
         /**
-         * @brief construction basic interface implementation
+         * @name constructable modules
+         */
+        ///@{
+        /**
+         * @brief constructable
          * @relates int8
          * @remark avx2
          */
-        template<typename Base>
-        struct __impl : Base
+        template<typename Composed>
+        struct zint8_constructable
         {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
 
             /**
-             * @brief construction 
+             * @brief constructable basic interface implementation
              * @relates int8
-             * @remark avx2 
+             * @remark avx2
              */
-            constexpr __impl(  ) : Base()  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction 
-             * @relates int8
-             * @remark avx2 
-             */
-            constexpr __impl(__m256i value) : Base(value)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS(__m256i)");
-
-            }
-
-
-            /**
-             * @brief construction 
-             * @relates int8
-             * @remark avx2 
-             */
-            constexpr __impl(int8_t value) : Base(_mm256_set1_epi8(value))  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS(int8_t)");
-
-            }
-
-
-            /**
-             * @brief construction 
-             * @relates int8
-             * @remark avx2 
-             */
-            constexpr __impl(std::array<typename Base::element_t, Base::size()> value) : Base(_mm256_load_si256((__m256i*)value.data()))  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS(std::array<typename Base::element_t, Base::size()>)");
-
-            }
-
-
-            /**
-             * @brief construction 
-             * @relates int8
-             * @remark avx2 
-             */
-            constexpr __impl(int8_t _31, int8_t _30, int8_t _29, int8_t _28, int8_t _27, int8_t _26, int8_t _25, int8_t _24, int8_t _23, int8_t _22, int8_t _21, int8_t _20, int8_t _19, int8_t _18, int8_t _17, int8_t _16, int8_t _15, int8_t _14, int8_t _13, int8_t _12, int8_t _11, int8_t _10, int8_t _9, int8_t _8, int8_t _7, int8_t _6, int8_t _5, int8_t _4, int8_t _3, int8_t _2, int8_t _1, int8_t _0) : Base(_mm256_set_epi8(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31))  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS(int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t)");
-
-            }
-
-        };
-
-        /**
-         * @brief construction public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, zint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name construction modules
-     */
-    ///@{
-
-    /**
-     * @brief construction
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct bint8_construction
-    {
-
-        /**
-         * @brief construction basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-
-            /**
-             * @brief construction 
-             * @relates int8
-             * @remark avx2 
-             */
-            constexpr __impl(  ) : Base()  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS()");
-
-            }
-
-
-            /**
-             * @brief construction 
-             * @relates int8
-             * @remark avx2 
-             */
-            constexpr __impl(zval_t value) : Base(value)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS(zval_t)");
-
-            }
-
-
-            /**
-             * @brief construction 
-             * @relates int8
-             * @remark avx2 
-             */
-            constexpr __impl(bval_t value, last_operation last_op) : Base(value, last_op)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS(bval_t value, last_operation)");
-
-            }
-
-        };
-
-        /**
-         * @brief construction public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::construction<__impl<base_t>, bint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name io modules
-     */
-    ///@{
-
-    /**
-     * @brief io
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct zint8_io
-    {
-
-        /**
-         * @brief io basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief io default
-             * @relates int8
-             * @remark avx2 default
-             */
-            template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vstore");
-
-                _mm256_store_si256((__m256i*)&(*result), input);
-            }
-
-
-            /**
-             * @brief io default
-             * @relates int8
-             * @remark avx2 default
-             */
-            template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vstream");
-
-                _mm256_stream_si256((__m256i*)&(*result), input);
-            }
-
-        };
-
-        /**
-         * @brief io public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::io<__impl<base_t>, zint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name math modules
-     */
-    ///@{
-
-    /**
-     * @brief math
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct zint8_math
-    {
-
-        /**
-         * @brief math basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief math default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vabs(Composed one)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vabs");
-
-                return _mm256_abs_epi8(one);
-            }
-
-
-            /**
-             * @brief math default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vmin(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vmin");
-
-                return _mm256_min_epi8(one, other);
-            }
-
-
-            /**
-             * @brief math default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vmax(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vmax");
-
-                return _mm256_max_epi8(one, other);
-            }
-
-
-            /**
-             * @brief math default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vclamp(Composed self, Composed from, Composed to)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vclamp");
-
-                return vmin(to, vmax(from, self));
-            }
-
-        };
-
-        /**
-         * @brief math public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::math<__impl<base_t>, zint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name numeric modules
-     */
-    ///@{
-
-    /**
-     * @brief numeric
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct zint8_numeric
-    {
-
-        /**
-         * @brief numeric basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-        };
-
-        /**
-         * @brief numeric public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::numeric<__impl<base_t>, zint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name arithmetic modules
-     */
-    ///@{
-
-    /**
-     * @brief arithmetic
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct zint8_arithmetic
-    {
-
-        /**
-         * @brief arithmetic basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief arithmetic default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vneg(Composed one)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vneg");
-
-                return _mm256_sub_epi8(_mm256_setzero_si256(), one);
-            }
-
-
-            /**
-             * @brief arithmetic default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vadd(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vadd");
-
-                return _mm256_add_epi8(one, other);
-            }
-
-
-            /**
-             * @brief arithmetic default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vsub(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vsub");
-
-                return _mm256_sub_epi8(one, other);
-            }
-
-
-            /**
-             * @brief arithmetic default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vmul(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vmul");
-
-                auto even = _mm256_mullo_epi16(one, other);
-                auto odd  = _mm256_mullo_epi16(_mm256_srli_epi16(one, 8),_mm256_srli_epi16(other, 8));
-                return _mm256_or_si256(_mm256_slli_epi16(odd, 8), _mm256_and_si256(even, _mm256_set1_epi16(0xFF)));
-            }
-
-
-            /**
-             * @brief arithmetic default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vdiv(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vdiv");
-
-                auto dividend = one.data();
-                auto divisor = other.data();
-                typename Composed::extracted_t result;
-                for (size_t i = 0; i < Composed::size(); i++) { result[i] = dividend[i] / divisor[i]; };
-                return result;
-            }
-
-
-            /**
-             * @brief arithmetic default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vmod(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vmod");
-
-                return vsub(one, vmul(other, vdiv(one, other)));
-            }
-
-        };
-
-        /**
-         * @brief arithmetic public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::arithmetic<__impl<base_t>, zint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name bitwise modules
-     */
-    ///@{
-
-    /**
-     * @brief bitwise
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct zint8_bitwise
-    {
-
-        /**
-         * @brief bitwise basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief bitwise default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vbneg(Composed one)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vbneg");
-
-                auto zero = _mm256_setzero_si256();
-                auto ones = _mm256_cmpeq_epi8(zero, zero);
-                return _mm256_xor_si256(one, ones);
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vband(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vband");
-
-                return _mm256_and_si256(one, other);
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vbor(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vbor");
-
-                return _mm256_or_si256(one, other);
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vbxor(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vbxor");
-
-                return _mm256_xor_si256(one, other);
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bool is_set(Composed one)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "is_set");
-
-                return _mm256_testc_si256(one, _mm256_cmpeq_epi8(one,one));
-            }
-
-        };
-
-        /**
-         * @brief bitwise public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::bitwise<__impl<base_t>, zint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name comparable modules
-     */
-    ///@{
-
-    /**
-     * @brief comparable
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct zint8_comparable
-    {
-
-        /**
-         * @brief comparable basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief comparable default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vgt(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vgt");
-
-                return _mm256_cmpgt_epi8(one, other);
-            }
-
-
-            /**
-             * @brief comparable default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vlt(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vlt");
-
-                return _mm256_cmpgt_epi8(other, one);
-            }
-
-
-            /**
-             * @brief comparable default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vge(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vge");
-
-                return !(one < other);
-            }
-
-
-            /**
-             * @brief comparable default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vle(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vle");
-
-                return !(one > other);
-            }
-
-        };
-
-        /**
-         * @brief comparable public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::comparable<__impl<base_t>, zint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name logical modules
-     */
-    ///@{
-
-    /**
-     * @brief logical
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct zint8_logical
-    {
-
-        /**
-         * @brief logical basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief logical default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vlneg(Composed one)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vlneg");
-
-                return _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
-            }
-
-
-            /**
-             * @brief logical default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vlor(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vlor");
-
-                return _mm256_or_si256(one, other);
-            }
-
-
-            /**
-             * @brief logical default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vland(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vland");
-
-                return _mm256_and_si256(one, other);
-            }
-
-        };
-
-        /**
-         * @brief logical public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::logical<__impl<base_t>, zint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name equatable modules
-     */
-    ///@{
-
-    /**
-     * @brief equatable
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct zint8_equatable
-    {
-
-        /**
-         * @brief equatable basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief equatable default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> veq(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "veq");
-
-                return _mm256_cmpeq_epi8(one, other);
-            }
-
-
-            /**
-             * @brief equatable default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vneq(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vneq");
-
-                return !(one == other);
-            }
-
-        };
-
-        /**
-         * @brief equatable public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::equatable<__impl<base_t>, zint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name conditional modules
-     */
-    ///@{
-
-    /**
-     * @brief conditional
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct zint8_conditional
-    {
-
-        /**
-         * @brief conditional basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief conditional default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend zint8<Base::features> vsel(bval_t condition, Composed if_value, Composed else_value)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vsel");
-
-                return _mm256_blendv_epi8(else_value, if_value, condition);
-            }
-
-        };
-
-        /**
-         * @brief conditional public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::conditional<__impl<base_t>, zint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name io modules
-     */
-    ///@{
-
-    /**
-     * @brief io
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct bint8_io
-    {
-
-        /**
-         * @brief io basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief io default
-             * @relates int8
-             * @remark avx2 default
-             */
-            template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vstore");
-
-                _mm256_store_si256((__m256i*)&(*result), input);
-            }
-
-
-            /**
-             * @brief io default
-             * @relates int8
-             * @remark avx2 default
-             */
-            template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vstream");
-
-                _mm256_stream_si256((__m256i*)&(*result), input);
-            }
-
-        };
-
-        /**
-         * @brief io public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::io<__impl<base_t>, bint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name bitwise modules
-     */
-    ///@{
-
-    /**
-     * @brief bitwise
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct bint8_bitwise
-    {
-
-        /**
-         * @brief bitwise basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief bitwise default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vbneg(Composed one)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vbneg");
-
-                auto zero = _mm256_setzero_si256();
-                auto ones = _mm256_cmpeq_epi8(zero, zero);
-                return _mm256_xor_si256(one, ones);
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vband(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vband");
-
-                return _mm256_and_si256(one, other);
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vbor(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vbor");
-
-                return _mm256_or_si256(one, other);
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vbxor(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vbxor");
-
-                return _mm256_xor_si256(one, other);
-            }
-
-
-            /**
-             * @brief bitwise default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bool is_set(Composed one)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "is_set");
-
-                return _mm256_testc_si256(one, _mm256_cmpeq_epi8(one,one));
-            }
-
-        };
-
-        /**
-         * @brief bitwise public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::bitwise<__impl<base_t>, bint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name logical modules
-     */
-    ///@{
-
-    /**
-     * @brief logical
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct bint8_logical
-    {
-
-        /**
-         * @brief logical basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief logical default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vlneg(Composed one)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vlneg");
-
-                return _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
-            }
-
-
-            /**
-             * @brief logical default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vlor(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vlor");
-
-                return _mm256_or_si256(one, other);
-            }
-
-
-            /**
-             * @brief logical default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vland(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vland");
-
-                return _mm256_and_si256(one, other);
-            }
-
-        };
-
-        /**
-         * @brief logical public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::logical<__impl<base_t>, bint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // =================================================================================================================
-    /**
-     * @name equatable modules
-     */
-    ///@{
-
-    /**
-     * @brief equatable
-     * @relates int8
-     * @remark avx2
-     */
-    template<typename Composed>
-    struct bint8_equatable
-    {
-
-        /**
-         * @brief equatable basic interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename Base>
-        struct __impl : Base
-        {
-            /// complete vector
-            using zval_t        = zint8<Base::features>;
-            /// complete boolean vector
-            using bval_t        = bint8<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            /// forward to base
-            FORWARD(__impl);
-
-            /**
-             * @brief equatable default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> veq(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "veq");
-
-                return _mm256_cmpeq_epi8(one, other);
-            }
-
-
-            /**
-             * @brief equatable default
-             * @relates int8
-             * @remark avx2 default
-             */
-            friend bint8<Base::features> vneq(Composed one, Composed other)  {
-
-                ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vneq");
-
-                return !(one == other);
-            }
-
-        };
-
-        /**
-         * @brief equatable public interface implementation
-         * @relates int8
-         * @remark avx2
-         */
-        template<typename base_t>
-        using impl = traits::equatable<__impl<base_t>, bint8<base_t::features>>;
-
-    };
-
-    ///@}
-
-
-    // Type composition ================================================================================================
-
-    /**
-     * @name int8 composition
-     */
-    ///@{
-
-        /**
-         * @brief zval parametrization using
-         * - '__m256i' as underlying vector type
-         * - 'int8_t' as scalar type
-         * - '32' as vector size
-         * - '32' as alignment
-         * @relates int8
-         * @remark avx2
-         */
-        template<uint64_t features>
-        struct __zval_int8
-        {
-            /// vector base
-            using zval_base_t = zval<__m256i, __m256i, int8_t, zval_tag, 32, 32, features>;
-            /// boolean vector base
-            using bval_base_t = bval<__m256i, __m256i, 32, 32, features>;
-
-            /// implementation
-            struct impl : public zval_base_t
+            template<typename Base>
+            struct __impl : Base
             {
                 /// complete vector
-                using zval_t = zint8<features>;
+                using zval_t        = zint8<Base::features>;
                 /// complete boolean vector
-                using bval_t = bint8<features>;
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+
+                /**
+                 * @brief constructable 
+                 * @relates int8
+                 * @remark avx2 
+                 */
+                constexpr __impl(  ) : Base()  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS()");
+
+                }
+
+
+                /**
+                 * @brief constructable 
+                 * @relates int8
+                 * @remark avx2 
+                 */
+                constexpr __impl(__m256i value) : Base(value)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS(__m256i)");
+
+                }
+
+
+                /**
+                 * @brief constructable 
+                 * @relates int8
+                 * @remark avx2 
+                 */
+                constexpr __impl(int8_t value) : Base(_mm256_set1_epi8(value))  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS(int8_t)");
+
+                }
+
+
+                /**
+                 * @brief constructable 
+                 * @relates int8
+                 * @remark avx2 
+                 */
+                constexpr __impl(std::array<typename Base::element_t, Base::size()> value) : Base(_mm256_load_si256((__m256i*)value.data()))  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS(std::array<typename Base::element_t, Base::size()>)");
+
+                }
+
+
+                /**
+                 * @brief constructable 
+                 * @relates int8
+                 * @remark avx2 
+                 */
+                constexpr __impl(int8_t _31, int8_t _30, int8_t _29, int8_t _28, int8_t _27, int8_t _26, int8_t _25, int8_t _24, int8_t _23, int8_t _22, int8_t _21, int8_t _20, int8_t _19, int8_t _18, int8_t _17, int8_t _16, int8_t _15, int8_t _14, int8_t _13, int8_t _12, int8_t _11, int8_t _10, int8_t _9, int8_t _8, int8_t _7, int8_t _6, int8_t _5, int8_t _4, int8_t _3, int8_t _2, int8_t _1, int8_t _0) : Base(_mm256_set_epi8(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31))  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS(int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t, int8_t)");
+
+                }
+
+            };
+
+            /**
+             * @brief constructable public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::constructable<__impl<base_t>, zint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name constructable modules
+         */
+        ///@{
+        /**
+         * @brief constructable
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct bint8_constructable
+        {
+
+            /**
+             * @brief constructable basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+
+                /**
+                 * @brief constructable 
+                 * @relates int8
+                 * @remark avx2 
+                 */
+                constexpr __impl(  ) : Base()  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS()");
+
+                }
+
+
+                /**
+                 * @brief constructable 
+                 * @relates int8
+                 * @remark avx2 
+                 */
+                constexpr __impl(zval_t value) : Base(value)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS(zval_t)");
+
+                }
+
+
+                /**
+                 * @brief constructable 
+                 * @relates int8
+                 * @remark avx2 
+                 */
+                constexpr __impl(bval_t value, last_operation last_op) : Base(value, last_op)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "", "CONS(bval_t value, last_operation)");
+
+                }
+
+            };
+
+            /**
+             * @brief constructable public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::constructable<__impl<base_t>, bint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name io modules
+         */
+        ///@{
+        /**
+         * @brief io
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct zint8_io
+        {
+
+            /**
+             * @brief io basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
 
                 /// forward to base
-                FORWARD2(impl, zval_base_t);
+                FORWARD(__impl);
+
+                /**
+                 * @brief io default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vstore");
+
+                    _mm256_store_si256((__m256i*)&(*result), input);
+                }
+
+
+                /**
+                 * @brief io default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vstream");
+
+                    _mm256_stream_si256((__m256i*)&(*result), input);
+                }
+
             };
+
+            /**
+             * @brief io public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::io<__impl<base_t>, zint8<base_t::features>>;
+
         };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name math modules
+         */
+        ///@{
+        /**
+         * @brief math
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct zint8_math
+        {
+
+            /**
+             * @brief math basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief math default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vabs(Composed one)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vabs");
+
+                    return _mm256_abs_epi8(one);
+                }
+
+
+                /**
+                 * @brief math default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vmin(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vmin");
+
+                    return _mm256_min_epi8(one, other);
+                }
+
+
+                /**
+                 * @brief math default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vmax(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vmax");
+
+                    return _mm256_max_epi8(one, other);
+                }
+
+
+                /**
+                 * @brief math default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vclamp(Composed self, Composed from, Composed to)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vclamp");
+
+                    return vmin(to, vmax(from, self));
+                }
+
+            };
+
+            /**
+             * @brief math public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::math<__impl<base_t>, zint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name numeric modules
+         */
+        ///@{
+        /**
+         * @brief numeric
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct zint8_numeric
+        {
+
+            /**
+             * @brief numeric basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+            };
+
+            /**
+             * @brief numeric public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::numeric<__impl<base_t>, zint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name arithmetic modules
+         */
+        ///@{
+        /**
+         * @brief arithmetic
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct zint8_arithmetic
+        {
+
+            /**
+             * @brief arithmetic basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief arithmetic default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vneg(Composed one)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vneg");
+
+                    return _mm256_sub_epi8(_mm256_setzero_si256(), one);
+                }
+
+
+                /**
+                 * @brief arithmetic default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vadd(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vadd");
+
+                    return _mm256_add_epi8(one, other);
+                }
+
+
+                /**
+                 * @brief arithmetic default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vsub(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vsub");
+
+                    return _mm256_sub_epi8(one, other);
+                }
+
+
+                /**
+                 * @brief arithmetic default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vmul(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vmul");
+
+                    auto even = _mm256_mullo_epi16(one, other);
+                    auto odd  = _mm256_mullo_epi16(_mm256_srli_epi16(one, 8),_mm256_srli_epi16(other, 8));
+                    return _mm256_or_si256(_mm256_slli_epi16(odd, 8), _mm256_and_si256(even, _mm256_set1_epi16(0xFF)));
+                }
+
+
+                /**
+                 * @brief arithmetic default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vdiv(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vdiv");
+
+                    auto dividend = one.data();
+                    auto divisor = other.data();
+                    typename Composed::extracted_t result;
+                    for (size_t i = 0; i < Composed::size(); i++) { result[i] = dividend[i] / divisor[i]; };
+                    return result;
+                }
+
+
+                /**
+                 * @brief arithmetic default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vmod(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vmod");
+
+                    return vsub(one, vmul(other, vdiv(one, other)));
+                }
+
+            };
+
+            /**
+             * @brief arithmetic public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::arithmetic<__impl<base_t>, zint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name bitwise modules
+         */
+        ///@{
+        /**
+         * @brief bitwise
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct zint8_bitwise
+        {
+
+            /**
+             * @brief bitwise basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief bitwise default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vbneg(Composed one)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vbneg");
+
+                    auto zero = _mm256_setzero_si256();
+                    auto ones = _mm256_cmpeq_epi8(zero, zero);
+                    return _mm256_xor_si256(one, ones);
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vband(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vband");
+
+                    return _mm256_and_si256(one, other);
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vbor(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vbor");
+
+                    return _mm256_or_si256(one, other);
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vbxor(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vbxor");
+
+                    return _mm256_xor_si256(one, other);
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bool is_set(Composed one)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "is_set");
+
+                    return _mm256_testc_si256(one, _mm256_cmpeq_epi8(one,one));
+                }
+
+            };
+
+            /**
+             * @brief bitwise public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::bitwise<__impl<base_t>, zint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name comparable modules
+         */
+        ///@{
+        /**
+         * @brief comparable
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct zint8_comparable
+        {
+
+            /**
+             * @brief comparable basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief comparable default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vgt(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vgt");
+
+                    return _mm256_cmpgt_epi8(one, other);
+                }
+
+
+                /**
+                 * @brief comparable default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vlt(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vlt");
+
+                    return _mm256_cmpgt_epi8(other, one);
+                }
+
+
+                /**
+                 * @brief comparable default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vge(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vge");
+
+                    return !(one < other);
+                }
+
+
+                /**
+                 * @brief comparable default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vle(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vle");
+
+                    return !(one > other);
+                }
+
+            };
+
+            /**
+             * @brief comparable public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::comparable<__impl<base_t>, zint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name logical modules
+         */
+        ///@{
+        /**
+         * @brief logical
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct zint8_logical
+        {
+
+            /**
+             * @brief logical basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief logical default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vlneg(Composed one)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vlneg");
+
+                    return _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
+                }
+
+
+                /**
+                 * @brief logical default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vlor(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vlor");
+
+                    return _mm256_or_si256(one, other);
+                }
+
+
+                /**
+                 * @brief logical default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vland(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vland");
+
+                    return _mm256_and_si256(one, other);
+                }
+
+            };
+
+            /**
+             * @brief logical public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::logical<__impl<base_t>, zint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name equatable modules
+         */
+        ///@{
+        /**
+         * @brief equatable
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct zint8_equatable
+        {
+
+            /**
+             * @brief equatable basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief equatable default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> veq(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "veq");
+
+                    return _mm256_cmpeq_epi8(one, other);
+                }
+
+
+                /**
+                 * @brief equatable default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vneq(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vneq");
+
+                    return !(one == other);
+                }
+
+            };
+
+            /**
+             * @brief equatable public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::equatable<__impl<base_t>, zint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name conditional modules
+         */
+        ///@{
+        /**
+         * @brief conditional
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct zint8_conditional
+        {
+
+            /**
+             * @brief conditional basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief conditional default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend zint8<Base::features> vsel(bval_t condition, Composed if_value, Composed else_value)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vsel");
+
+                    return _mm256_blendv_epi8(else_value, if_value, condition);
+                }
+
+            };
+
+            /**
+             * @brief conditional public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::conditional<__impl<base_t>, zint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name io modules
+         */
+        ///@{
+        /**
+         * @brief io
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct bint8_io
+        {
+
+            /**
+             * @brief io basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief io default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vstore");
+
+                    _mm256_store_si256((__m256i*)&(*result), input);
+                }
+
+
+                /**
+                 * @brief io default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vstream");
+
+                    _mm256_stream_si256((__m256i*)&(*result), input);
+                }
+
+            };
+
+            /**
+             * @brief io public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::io<__impl<base_t>, bint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name bitwise modules
+         */
+        ///@{
+        /**
+         * @brief bitwise
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct bint8_bitwise
+        {
+
+            /**
+             * @brief bitwise basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief bitwise default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vbneg(Composed one)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vbneg");
+
+                    auto zero = _mm256_setzero_si256();
+                    auto ones = _mm256_cmpeq_epi8(zero, zero);
+                    return _mm256_xor_si256(one, ones);
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vband(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vband");
+
+                    return _mm256_and_si256(one, other);
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vbor(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vbor");
+
+                    return _mm256_or_si256(one, other);
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vbxor(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vbxor");
+
+                    return _mm256_xor_si256(one, other);
+                }
+
+
+                /**
+                 * @brief bitwise default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bool is_set(Composed one)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "is_set");
+
+                    return _mm256_testc_si256(one, _mm256_cmpeq_epi8(one,one));
+                }
+
+            };
+
+            /**
+             * @brief bitwise public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::bitwise<__impl<base_t>, bint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name logical modules
+         */
+        ///@{
+        /**
+         * @brief logical
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct bint8_logical
+        {
+
+            /**
+             * @brief logical basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief logical default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vlneg(Composed one)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vlneg");
+
+                    return _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
+                }
+
+
+                /**
+                 * @brief logical default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vlor(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vlor");
+
+                    return _mm256_or_si256(one, other);
+                }
+
+
+                /**
+                 * @brief logical default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vland(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vland");
+
+                    return _mm256_and_si256(one, other);
+                }
+
+            };
+
+            /**
+             * @brief logical public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::logical<__impl<base_t>, bint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // =================================================================================================================
+        /**
+         * @name equatable modules
+         */
+        ///@{
+        /**
+         * @brief equatable
+         * @relates int8
+         * @remark avx2
+         */
+        template<typename Composed>
+        struct bint8_equatable
+        {
+
+            /**
+             * @brief equatable basic interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename Base>
+            struct __impl : Base
+            {
+                /// complete vector
+                using zval_t        = zint8<Base::features>;
+                /// complete boolean vector
+                using bval_t        = bint8<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
+
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                /// forward to base
+                FORWARD(__impl);
+
+                /**
+                 * @brief equatable default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> veq(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "veq");
+
+                    return _mm256_cmpeq_epi8(one, other);
+                }
+
+
+                /**
+                 * @brief equatable default
+                 * @relates int8
+                 * @remark avx2 default
+                 */
+                friend bint8<Base::features> vneq(Composed one, Composed other)  {
+
+                    ZTRACE_BACKEND("avx2.int8.impl", __LINE__, "int8(int8_t[32])", "default", "vneq");
+
+                    return !(one == other);
+                }
+
+            };
+
+            /**
+             * @brief equatable public interface implementation
+             * @relates int8
+             * @remark avx2
+             */
+            template<typename base_t>
+            using impl = traits::equatable<__impl<base_t>, bint8<base_t::features>>;
+
+        };
+
+        ///@}
+
+
+        // Type composition ================================================================================================
+
+        /**
+         * @name int8 composition
+         */
+        ///@{
+
         /**
          * @brief zval composition
          * @relates int8
@@ -1595,14 +1554,33 @@ namespace zacc { namespace backend { namespace avx2 {
             struct impl;
             /// @endcond
 
+            /**
+            * @brief zval parametrization using
+            * - '__m256i' as underlying vector type
+            * - 'int8_t' as scalar type
+            * - '32' as vector size
+            * - '32' as alignment
+            * @relates int8
+            * @remark avx2
+            */
+            using base = zval<__m256i, __m256i, int8_t, zval_tag, 32, 32, features>;
+
             /// parametrized zval base
-            using zval_t = typename __zval_int8<features>::impl;
+            struct composable_base : base
+            {
+                /// complete vector
+                using zval_t = zint8<features>;
+                /// complete boolean vector
+                using bval_t = bint8<features>;
+
+                /// forward to base
+                FORWARD2(composable_base, base);
+            };
 
             /// compose type from modules
-            using composition_t = compose
+            using composed = compose
             <
                 printable::impl,
-                iteratable::impl,
                 convertable::impl,
                 zint8_io<impl>::template impl,
                 zint8_math<impl>::template impl,
@@ -1613,30 +1591,13 @@ namespace zacc { namespace backend { namespace avx2 {
                 zint8_logical<impl>::template impl,
                 zint8_equatable<impl>::template impl,
                 zint8_conditional<impl>::template impl,
-                zint8_construction<impl>::template impl,
+                zint8_constructable<impl>::template impl,
 
-                composable<zval_t>::template type
+                composable<composable_base>::template type
             >;
 
-//            struct composition_t :
-//            //                public printable::impl<zval_t>,
-//            //                public iteratable::impl<zval_t>,
-//            //                public convertable::impl<zval_t>,
-//            //                public zint8_io<impl>::template impl<zval_t>,
-//            //                public zint8_math<impl>::template impl<zval_t>,
-//            //                public zint8_numeric<impl>::template impl<zval_t>,
-//            //                public zint8_arithmetic<impl>::template impl<zval_t>,
-//            //                public zint8_bitwise<impl>::template impl<zval_t>,
-//            //                public zint8_comparable<impl>::template impl<zval_t>,
-//            //                public zint8_logical<impl>::template impl<zval_t>,
-//            //                public zint8_equatable<impl>::template impl<zval_t>,
-//            //                public zint8_conditional<impl>::template impl<zval_t>,
-//            //                public zint8_construction<impl>::template impl<zval_t>,
-//            //                public zval_t
-//            {};
-
             /// implementation
-            struct impl : public composition_t
+            struct impl : public composed
             {
                 /// complete vector
                 using zval_t = zint8<features>;
@@ -1644,38 +1605,7 @@ namespace zacc { namespace backend { namespace avx2 {
                 using bval_t = bint8<features>;
 
                 /// forward to base
-                FORWARD2(impl, composition_t);
-            };
-        };
-
-        /**
-         * @brief bval parametrization using
-         * - '__m256i' as underlying vector type
-         * - 'int8_t' as scalar type
-         * - '32' as vector size
-         * - '32' as alignment
-         * @relates int8
-         * @remark avx2
-         * @tparam features feature mask
-         */
-        template<uint64_t features>
-        struct __bval_int8
-        {
-            /// complete vector base
-            using zval_base_t = zval<__m256i, __m256i, int8_t, zval_tag, 32, 32, features>;
-            /// complete boolean vector base
-            using bval_base_t = bval<__m256i, __m256i, 32, 32, features>;
-
-            /// implementation
-            struct impl : public bval_base_t
-            {
-                /// complete vector
-                using zval_t = zint8<features>;
-                /// complete boolean vector
-                using bval_t = bint8<features>;
-
-                /// forward to base
-                FORWARD2(impl, bval_base_t);
+                FORWARD2(impl, composed);
             };
         };
 
@@ -1688,25 +1618,19 @@ namespace zacc { namespace backend { namespace avx2 {
             struct impl;
             /// @endcond
 
+            /**
+            * @brief bval parametrization using
+            * - '__m256i' as underlying vector type
+            * - 'int8_t' as scalar type
+            * - '32' as vector size
+            * - '32' as alignment
+            * @relates int8
+            * @remark avx2
+            */
+            using base = bval<__m256i, __m256i, 32, 32, features>;
+
             /// parametrized zval base
-            using bval_t = typename __bval_int8<features>::impl;
-            /// compose type from modules
-            using composition_t = compose
-            <
-                printable::impl,
-                iteratable::impl,
-                convertable::impl,
-                bint8_io<impl>::template impl,
-                bint8_bitwise<impl>::template impl,
-                bint8_logical<impl>::template impl,
-                bint8_equatable<impl>::template impl,
-                bint8_construction<impl>::template impl,
-
-                composable<bval_t>::template type
-            >;
-
-            /// implementation
-            struct impl : public composition_t
+            struct composable_base : base
             {
                 /// complete vector
                 using zval_t = zint8<features>;
@@ -1714,23 +1638,50 @@ namespace zacc { namespace backend { namespace avx2 {
                 using bval_t = bint8<features>;
 
                 /// forward to base
-                FORWARD2(impl, composition_t);
+                FORWARD2(composable_base, base);
+            };
+
+            /// compose type from modules
+            using composed = compose
+            <
+                printable::impl,
+                convertable::impl,
+                bint8_io<impl>::template impl,
+                bint8_bitwise<impl>::template impl,
+                bint8_logical<impl>::template impl,
+                bint8_equatable<impl>::template impl,
+                bint8_constructable<impl>::template impl,
+
+                composable<composable_base>::template type
+            >;
+
+            /// implementation
+            struct impl : public composed
+            {
+                /// complete vector
+                using zval_t = zint8<features>;
+                /// complete boolean vector
+                using bval_t = bint8<features>;
+
+                /// forward to base
+                FORWARD2(impl, composed);
             };
         };
-    //}
+
+    } // end namespace
 
     /// public zint8 implementation
     /// @tparam features feature mask
     template<uint64_t features>
     struct zint8 : public __zint8<features>::impl
     {
-        /// complete vector
-        using zval_t = zint8<features>;
-        /// complete boolean vector
-        using bval_t = bint8<features>;
+            /// complete vector
+            using zval_t = zint8<features>;
+            /// complete boolean vector
+            using bval_t = bint8<features>;
 
-        /// forward to base
-        FORWARD2(zint8, __zint8<features>::impl);
+            /// forward to base
+            FORWARD2(zint8, __zint8<features>::impl);
     };
 
     /// public bint8 implementation

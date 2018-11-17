@@ -33,6 +33,7 @@
 #include "util/algorithm.hpp"
 #include "system/kernel.hpp"
 
+#include "traits/allocatable.hpp"
 #include "../interfaces/mandelbrot.hpp"
 
 namespace zacc { namespace examples {

@@ -118,7 +118,7 @@ namespace zacc {
 
         for (size_t i = 0; i < fake_size; i += dim)
         {
-            auto result = make_iterable(g(i));
+            auto result = g(i).data();
 
             auto to_fetch = i < real_size - 1 ? dim : remainder;
             std::copy(std::begin(result), std::begin(result) + to_fetch, first + i);

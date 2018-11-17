@@ -41,7 +41,7 @@
 #include "util/macros.hpp"
 
 #include "traits/common.hpp"
-#include "traits/construction.hpp"
+#include "traits/constructable.hpp"
 #include "traits/io.hpp"
 #include "traits/numeric.hpp"
 #include "traits/math.hpp"

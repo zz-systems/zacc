@@ -25,8 +25,6 @@
 
 #pragma once
 
-#include "common.hpp"
-
 namespace zacc { namespace traits {
 
     /**
@@ -35,17 +33,11 @@ namespace zacc { namespace traits {
      * @tparam Composed final composed type (e.g zfloat32)
      */
     template<typename Base, typename Composed>
-    struct construction : public Base {
-        FORWARD(construction);
+    struct constructable : public Base {
+        FORWARD(constructable);
 
         using zval_t = typename Base::zval_t;
         using bval_t = typename Base::bval_t;
-
-// TODO
-//        static Composed make_scalar(Base::scalar_t value)
-//        {
-//            return from_scalar(value);
-//        }
     };
 
 }}

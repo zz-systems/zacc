@@ -79,7 +79,7 @@ class Parser():
         # add default constructor
         initializers = [{Tokens.ARGS : { Tokens.RAW : "", Tokens.TYPE : " "}, Tokens.INIT : ""}] + data
 
-        module = ModuleNode(name="construction",#self._lexer.unlex(name),
+        module = ModuleNode(name="constructable",#self._lexer.unlex(name),
                           mangling=False,#accept(data, Tokens.MANGLING),
                           functions=[self.initializer(entry) for entry in initializers],
                           type=type)

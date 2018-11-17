@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-// 
+//
 // Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,49 +25,33 @@
 
 #pragma once
 
-namespace zacc { namespace traits {
+
+#include <sstream>
+#include "util/macros.hpp"
+
+namespace zacc {
 
     /**
-     * @brief provides conditional functionality
-     * @tparam Base base type (e.g previous trait)
-     * @tparam Composed final composed type (e.g zfloat32)
+     * @brief provides basic conversion functionality
      */
-    template<typename Base, typename Composed>
-    struct conditional : public Base {
-        FORWARD(conditional);
+    struct convertable {
+        /**
+         * @brief convertable trait implementation
+         * @tparam Base base type (e.g previous trait)
+         */
+        template<typename Base>
+        struct impl : public Base {
+            FORWARD(impl);
 
-        using zval_t = typename Base::zval_t;
-        using bval_t = typename Base::bval_t;
+            using zval_t = typename Base::zval_t;
+            using bval_t = typename Base::bval_t;
 
-        struct else_branch
-        {
-            constexpr Composed otherwise(const Composed& else_value) const
+            auto as_bool() const noexcept
             {
-                return vsel(_condition, _if_value, else_value);
+                //return make_bval(*this, last_operation::undefined);
+                //return *this != 0;
+                return make_bval(*this);
             }
-
-        private:
-
-            constexpr else_branch(const bval_t& condition, const Composed& if_value, std::false_type)
-                    : _if_value(if_value), _condition(condition.last_op() == last_operation::undefined ? (zval_t(condition.value()) != 0) : condition)
-            {
-            }
-
-            constexpr else_branch(const bval_t& condition, const Composed& if_value, std::true_type)
-                    : _if_value(if_value), _condition(condition)
-            {
-            }
-
-            Composed _if_value;
-            bval_t _condition;
-
-            friend struct conditional<Base, Composed>;
         };
-
-
-        constexpr else_branch when(const bval_t& condition) const {
-            return else_branch(condition, *this, is_cval<bval_t>{});
-        }
     };
-
-}}
+}

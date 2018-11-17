@@ -25,7 +25,6 @@
 
 #pragma once
 
-#include "common.hpp"
 #include <type_traits>
 #include <limits>
 

@@ -44,8 +44,9 @@
 #include "util/memory.hpp"
 #include "util/macros.hpp"
 
-#include "traits/common.hpp"
-#include "traits/construction.hpp"
+#include "traits/constructable.hpp"
+#include "traits/convertable.hpp"
+#include "traits/printable.hpp"
 {% for module in Traits.render(ast.modules) %}
 #include "traits/{{ module }}.hpp"
 {% endfor %}
@@ -60,128 +61,100 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
     struct z{{ ast.type.name }};
     /// @endcond
 
-    {% for module in ast.modules.initializers + ast.modules.modules %}
 
-    // =================================================================================================================
-    /**
-     * @name {{ module.name }} modules
-     */
-    ///@{
+    namespace {
+        {% for module in ast.modules.initializers + ast.modules.modules %}
 
-    /**
-     * @brief {{ module.name }}
-     * @relates {{ ast.type.name }}
-     * @remark {{ ast.type.target }}
-     */
-    template<typename Composed>
-    struct {{ Modules.render(module, ast) }}
-    {
-
+        // =================================================================================================================
         /**
-         * @brief {{ module.name }} basic interface implementation
+         * @name {{ module.name }} modules
+         */
+        ///@{
+        /**
+         * @brief {{ module.name }}
          * @relates {{ ast.type.name }}
          * @remark {{ ast.type.target }}
          */
-        template<typename Base>
-        struct __impl : Base
+        template<typename Composed>
+        struct {{ Modules.render(module, ast) }}
         {
-            /// complete vector
-            using zval_t        = z{{ ast.type.name }}<Base::features>;
-            /// complete boolean vector
-            using bval_t        = b{{ ast.type.name }}<Base::features>;
-            /// type tag
-            using tag           = typename Base::tag;
-
-            /// wrapped vector type
-            using vector_t      = typename zval_traits<Base>::vector_t;
-            /// element type
-            using element_t     = typename zval_traits<Base>::element_t;
-
-            /// wrapped mask vector type
-            using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-            /// extracted type (for usage in scalar code)
-            using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-            {% if not module in ast.modules.initializers %}
-            /// forward to base
-            FORWARD(__impl);
-            {% endif  %}
-            {% for func in module.functions %}
-                {% for body in func.bodies %}
 
             /**
-             * @brief {{ module.name }} {{ body.target }}
+             * @brief {{ module.name }} basic interface implementation
              * @relates {{ ast.type.name }}
-             * @remark {{ ast.type.target }} {{ body.target }}
+             * @remark {{ ast.type.target }}
              */
-            {{ Functions.render(func.signature, (module, ast, body)) }} {
-
-                {% if not module in ast.modules.initializers  %}
-                ZTRACE_BACKEND("{{ ast.type.target }}.{{ast.type.name}}.impl", __LINE__, "{{ ast.type.name }}({{ ast.type.scalar_type }}[{{ast.type.size}}])", "{{body.target}}", "{{func.signature.name}}");
-                {% else %}
-                ZTRACE_BACKEND("{{ ast.type.target }}.{{ast.type.name}}.impl", __LINE__, "{{ ast.type.name }}({{ ast.type.scalar_type }}[{{ast.type.size}}])", "{{body.target}}", "CONS({{Functions.render_args_signature(func.signature)}})");
-                {% endif %}
-
-                    {% for instruction in Functions.render(body) %}
-                {{ instruction }}
-                    {% endfor %}
-            }
-
-                {% endfor %}
-            {% endfor %}
-        };
-
-        /**
-         * @brief {{ module.name }} public interface implementation
-         * @relates {{ ast.type.name }}
-         * @remark {{ ast.type.target }}
-         */
-        template<typename base_t>
-        using impl = traits::{{ module.name }}<__impl<base_t>, {{ Modules.render(module, ast)[0] }}{{ ast.type.name }}<base_t::features>>;
-
-    };
-
-    ///@}
-
-    {% endfor %}
-
-    // Type composition ================================================================================================
-
-    /**
-     * @name {{ ast.type.name }} composition
-     */
-    ///@{
-
-        /**
-         * @brief zval parametrization using
-         * - '{{ ast.type.vector_type }}' as underlying vector type
-         * - '{{ ast.type.scalar_type }}' as scalar type
-         * - '{{ ast.type.size }}' as vector size
-         * - '{{ ast.type.alignment }}' as alignment
-         * @relates {{ ast.type.name }}
-         * @remark {{ ast.type.target }}
-         */
-        template<uint64_t features>
-        struct __zval_{{ ast.type.name }}
-        {
-            /// vector base
-            using zval_base_t = zval<{{ ast.type.vector_type }}, {{ ast.type.mask_type }}, {{ ast.type.scalar_type }}, zval_tag, {{ ast.type.size }}, {{ ast.type.alignment }}, features>;
-            /// boolean vector base
-            using bval_base_t = bval<{{ ast.type.vector_type }}, {{ ast.type.mask_type }}, {{ ast.type.size }}, {{ ast.type.alignment }}, features>;
-
-            /// implementation
-            struct impl : public zval_base_t
+            template<typename Base>
+            struct __impl : Base
             {
                 /// complete vector
-                using zval_t = z{{ ast.type.name }}<features>;
+                using zval_t        = z{{ ast.type.name }}<Base::features>;
                 /// complete boolean vector
-                using bval_t = b{{ ast.type.name }}<features>;
+                using bval_t        = b{{ ast.type.name }}<Base::features>;
+                /// type tag
+                using tag           = typename Base::tag;
 
+                /// wrapped vector type
+                using vector_t      = typename zval_traits<Base>::vector_t;
+                /// element type
+                using element_t     = typename zval_traits<Base>::element_t;
+
+                /// wrapped mask vector type
+                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
+
+                /// extracted type (for usage in scalar code)
+                using extracted_t   = typename zval_traits<Base>::extracted_t;
+
+                {% if not module in ast.modules.initializers %}
                 /// forward to base
-                FORWARD2(impl, zval_base_t);
+                FORWARD(__impl);
+                {% endif  %}
+                {% for func in module.functions %}
+                    {% for body in func.bodies %}
+
+                /**
+                 * @brief {{ module.name }} {{ body.target }}
+                 * @relates {{ ast.type.name }}
+                 * @remark {{ ast.type.target }} {{ body.target }}
+                 */
+                {{ Functions.render(func.signature, (module, ast, body)) }} {
+
+                    {% if not module in ast.modules.initializers  %}
+                    ZTRACE_BACKEND("{{ ast.type.target }}.{{ast.type.name}}.impl", __LINE__, "{{ ast.type.name }}({{ ast.type.scalar_type }}[{{ast.type.size}}])", "{{body.target}}", "{{func.signature.name}}");
+                    {% else %}
+                    ZTRACE_BACKEND("{{ ast.type.target }}.{{ast.type.name}}.impl", __LINE__, "{{ ast.type.name }}({{ ast.type.scalar_type }}[{{ast.type.size}}])", "{{body.target}}", "CONS({{Functions.render_args_signature(func.signature)}})");
+                    {% endif %}
+
+                        {% for instruction in Functions.render(body) %}
+                    {{ instruction }}
+                        {% endfor %}
+                }
+
+                    {% endfor %}
+                {% endfor %}
             };
+
+            /**
+             * @brief {{ module.name }} public interface implementation
+             * @relates {{ ast.type.name }}
+             * @remark {{ ast.type.target }}
+             */
+            template<typename base_t>
+            using impl = traits::{{ module.name }}<__impl<base_t>, {{ Modules.render(module, ast)[0] }}{{ ast.type.name }}<base_t::features>>;
+
         };
+
+        ///@}
+
+        {% endfor %}
+
+        // Type composition ================================================================================================
+
+        /**
+         * @name {{ ast.type.name }} composition
+         */
+        ///@{
+
         /**
          * @brief zval composition
          * @relates {{ ast.type.name }}
@@ -195,28 +168,41 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
             struct impl;
             /// @endcond
 
+            /**
+            * @brief zval parametrization using
+            * - '{{ ast.type.vector_type }}' as underlying vector type
+            * - '{{ ast.type.scalar_type }}' as scalar type
+            * - '{{ ast.type.size }}' as vector size
+            * - '{{ ast.type.alignment }}' as alignment
+            * @relates {{ ast.type.name }}
+            * @remark {{ ast.type.target }}
+            */
+            using base = zval<{{ ast.type.vector_type }}, {{ ast.type.mask_type }}, {{ ast.type.scalar_type }}, zval_tag, {{ ast.type.size }}, {{ ast.type.alignment }}, features>;
+
             /// parametrized zval base
-            using zval_t = typename __zval_{{ ast.type.name }}<features>::impl;
+            struct composable_base : base
+            {
+                /// complete vector
+                using zval_t = z{{ ast.type.name }}<features>;
+                /// complete boolean vector
+                using bval_t = b{{ ast.type.name }}<features>;
+
+                /// forward to base
+                FORWARD2(composable_base, base);
+            };
 
             /// compose type from modules
-            using composition_t = compose
+            using composed = compose
             <
             {% for trait in Traits.render(ast, ModuleTypes.DEFAULT) %}
                 {{ trait }},
             {% endfor %}
 
-                composable<zval_t>::template type
+                composable<composable_base>::template type
             >;
 
-//            struct composition_t :
-//            {% for trait in Traits.render(ast, ModuleTypes.DEFAULT) %}
-//                public {{ trait }}<zval_t>,
-//            {% endfor %}
-//                public zval_t
-//            {};
-
             /// implementation
-            struct impl : public composition_t
+            struct impl : public composed
             {
                 /// complete vector
                 using zval_t = z{{ ast.type.name }}<features>;
@@ -224,38 +210,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
                 using bval_t = b{{ ast.type.name }}<features>;
 
                 /// forward to base
-                FORWARD2(impl, composition_t);
-            };
-        };
-
-        /**
-         * @brief bval parametrization using
-         * - '{{ ast.type.vector_type }}' as underlying vector type
-         * - '{{ ast.type.scalar_type }}' as scalar type
-         * - '{{ ast.type.size }}' as vector size
-         * - '{{ ast.type.alignment }}' as alignment
-         * @relates {{ ast.type.name }}
-         * @remark {{ ast.type.target }}
-         * @tparam features feature mask
-         */
-        template<uint64_t features>
-        struct __bval_{{ ast.type.name }}
-        {
-            /// complete vector base
-            using zval_base_t = zval<{{ ast.type.vector_type }}, {{ ast.type.mask_type }}, {{ ast.type.scalar_type }}, zval_tag, {{ ast.type.size }}, {{ ast.type.alignment }}, features>;
-            /// complete boolean vector base
-            using bval_base_t = bval<{{ ast.type.vector_type }}, {{ ast.type.mask_type }}, {{ ast.type.size }}, {{ ast.type.alignment }}, features>;
-
-            /// implementation
-            struct impl : public bval_base_t
-            {
-                /// complete vector
-                using zval_t = z{{ ast.type.name }}<features>;
-                /// complete boolean vector
-                using bval_t = b{{ ast.type.name }}<features>;
-
-                /// forward to base
-                FORWARD2(impl, bval_base_t);
+                FORWARD2(impl, composed);
             };
         };
 
@@ -268,20 +223,19 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
             struct impl;
             /// @endcond
 
+            /**
+            * @brief bval parametrization using
+            * - '{{ ast.type.vector_type }}' as underlying vector type
+            * - '{{ ast.type.scalar_type }}' as scalar type
+            * - '{{ ast.type.size }}' as vector size
+            * - '{{ ast.type.alignment }}' as alignment
+            * @relates {{ ast.type.name }}
+            * @remark {{ ast.type.target }}
+            */
+            using base = bval<{{ ast.type.vector_type }}, {{ ast.type.mask_type }}, {{ ast.type.size }}, {{ ast.type.alignment }}, features>;
+
             /// parametrized zval base
-            using bval_t = typename __bval_{{ ast.type.name }}<features>::impl;
-            /// compose type from modules
-            using composition_t = compose
-            <
-            {% for trait in Traits.render(ast, ModuleTypes.BOOLEAN) %}
-                {{ trait }},
-            {% endfor %}
-
-                composable<bval_t>::template type
-            >;
-
-            /// implementation
-            struct impl : public composition_t
+            struct composable_base : base
             {
                 /// complete vector
                 using zval_t = z{{ ast.type.name }}<features>;
@@ -289,23 +243,46 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
                 using bval_t = b{{ ast.type.name }}<features>;
 
                 /// forward to base
-                FORWARD2(impl, composition_t);
+                FORWARD2(composable_base, base);
+            };
+
+            /// compose type from modules
+            using composed = compose
+            <
+            {% for trait in Traits.render(ast, ModuleTypes.BOOLEAN) %}
+                {{ trait }},
+            {% endfor %}
+
+                composable<composable_base>::template type
+            >;
+
+            /// implementation
+            struct impl : public composed
+            {
+                /// complete vector
+                using zval_t = z{{ ast.type.name }}<features>;
+                /// complete boolean vector
+                using bval_t = b{{ ast.type.name }}<features>;
+
+                /// forward to base
+                FORWARD2(impl, composed);
             };
         };
-    //}
+
+    } // end namespace
 
     /// public z{{ ast.type.name }} implementation
     /// @tparam features feature mask
     template<uint64_t features>
     struct z{{ ast.type.name }} : public __z{{ ast.type.name }}<features>::impl
     {
-        /// complete vector
-        using zval_t = z{{ ast.type.name }}<features>;
-        /// complete boolean vector
-        using bval_t = b{{ ast.type.name }}<features>;
+            /// complete vector
+            using zval_t = z{{ ast.type.name }}<features>;
+            /// complete boolean vector
+            using bval_t = b{{ ast.type.name }}<features>;
 
-        /// forward to base
-        FORWARD2(z{{ ast.type.name }}, __z{{ ast.type.name }}<features>::impl);
+            /// forward to base
+            FORWARD2(z{{ ast.type.name }}, __z{{ ast.type.name }}<features>::impl);
     };
 
     /// public b{{ ast.type.name }} implementation

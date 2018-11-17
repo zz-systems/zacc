@@ -26,8 +26,6 @@
 
 #pragma once
 
-#include "common.hpp"
-
 namespace zacc { namespace traits {
 
     /**
