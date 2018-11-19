@@ -102,42 +102,37 @@ The vital function mapping for the dispatcher is provided by ```system::kernel_i
 - ```run(const input_container &input, output_container &output)```
 - ```configure(any argument...)```
 
-You can extend or change the mappings with your custom implementation.
-Also, you need to specify the input and output container types and provide a name for the kernel.
+The system is able to determine input and output containers automatically as long as you follow the convention:
+- ```run(output_container_t &output)```
+- ```run(const input_container &input, output_container &output)```
 
 Below is an exemplary mandelbrot kernel interface - available in the examples.
-
 
 ```cpp
 #include <vector>
 
 #include "zacc.hpp"
 #include "math/matrix.hpp"
-#include "util/algorithm.hpp"
-#include "system/entrypoint.hpp"
-#include "system/kernel_interface.hpp"
+#include "system/kernel.hpp"
 
-using namespace zacc;
-using namespace math;
+namespace zacc { namespace examples {
 
-struct __mandelbrot
-{
-    using output_container = std::vector<int>;
-    using input_container  = std::vector<int>;
+    using namespace math;
 
-    static constexpr auto kernel_name() { return "mandelbrot"; }
+    struct mandelbrot : system::kernel<mandelbrot>
+    {
+        static constexpr auto name() { return "mandelbrot"; }
 
-    virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
-    virtual void run(output_container_t &output) = 0;
-};
-
-using mandelbrot = system::kernel_interface<__mandelbrot>;
+        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
+        virtual void run(std::vector<int> &output) = 0;
+    };
+}}
 ```
 
 ### Mandelbrot kernel implementation
 
 Now that you have specified the kernel interface, you may want to write the implementation.
-Please have in mind, that C++ own if/else won't work with vector types. You need to rethink and use branchless arithmetic.
+Please have in mind, that C++ own if/else won't work with vector types. You need to rethink and use branchless arithmetic. A short introduction is avaliable [here](https://hbfs.wordpress.com/2008/08/05/branchless-equivalents-of-simple-functions/).
 Nonetheless, the implementation does not differ much from the canonical Mandelbrot [implementation](https://rosettacode.org/wiki/Mandelbrot_set#C.2B.2B) and is able to use SSE2, SSE3, SSE4, FMA, AVX, AVX2 features of the host processor.
 And all that without having to touch intrinsics like [here](https://github.com/PolarNick239/FPGABenchmarks/blob/c36b213bed3fbf6c714f3a819e820d3d393c9711/benchmarks/mandelbrot/src/mandelbrot_cpu_sse.cpp#L20-L81)
 
@@ -145,124 +140,105 @@ And all that without having to touch intrinsics like [here](https://github.com/P
 
 ```cpp
 #include "zacc.hpp"
+
+#include "system/arch.hpp"
+
 #include "math/complex.hpp"
 #include "math/matrix.hpp"
 #include "util/algorithm.hpp"
-#include "system/kernel.hpp"
 
 #include "../interfaces/mandelbrot.hpp"
 
-using namespace zacc;
-using namespace math;
+namespace zacc { namespace examples {
 
-DISPATCHED struct mandelbrot_kernel : system::kernel<mandelbrot>,
-                                      allocatable<mandelbrot_kernel, arch>
-{
-    vec2<zint> _dim;
-    vec2<zfloat> _cmin;
-    vec2<zfloat> _cmax;
+    using namespace math;
 
-    size_t _max_iterations;
-
-    virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) override
+    KERNEL_IMPL(mandelbrot)
     {
-        _dim = dim;
-        _cmax = cmax;
-        _cmin = cmin;
+        vec2<zint> _dim;
+        vec2<zfloat> _cmin;
+        vec2<zfloat> _cmax;
 
-        _max_iterations = max_iterations;
-    }
+        size_t _max_iterations;
 
-
-    virtual void run(mandelbrot::output_container &output) override
-    {
-        // populate output container
-        zacc::generate<zint>(std::begin(output), std::end(output), [this](auto i)
+        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) override
         {
-            // compute 2D-position from 1D-index
-            auto pos = reshape<vec2<zfloat>>(make_index<zint>(zint(i)), _dim);
+            _dim = dim;
+            _cmax = cmax;
+            _cmin = cmin;
 
-            zcomplex<zfloat> c(_cmin.x + pos.x / zfloat(_dim.x - 1) * (_cmax.x - _cmin.x),
-                               _cmin.y + pos.y / zfloat(_dim.y - 1) * (_cmax.y - _cmin.x));
+            _max_iterations = max_iterations;
+        }
 
-            zcomplex<zfloat> z = 0;
-
-            bfloat done = false;
-            zint iterations;
-
-            for (size_t j = 0; j < _max_iterations; j++)
+        virtual void run(std::vector<int> &output) override
+        {
+            // populate output container
+            zacc::generate<zint>(std::begin(output), std::end(output), [this](auto i)
             {
-                // done when magnitude is >= 2 (or square magnitude is >= 4)
-                done = done || z.sqr_magnitude() >= 4.0;
+                // compute 2D-position from 1D-index
+                auto pos = reshape<vec2<zfloat>>(make_index<zint>(zint(i)), _dim);
 
-                // compute next complex if not done
-                z = z
-                       .when(done)
-                       .otherwise(z * z + c);
+                zcomplex<zfloat> c(_cmin.x + pos.x / zfloat(_dim.x - 1) * (_cmax.x - _cmin.x),
+                                   _cmin.y + pos.y / zfloat(_dim.y - 1) * (_cmax.y - _cmin.x));
 
-                // increment if not done
-                iterations = iterations
-                        .when(done)
-                        .otherwise(iterations + 1);
+                zcomplex<zfloat> z = 0;
 
-                // break if all elements are not zero
-                if (is_set(done))
-                    break;
-            }
+                bfloat done = false;
+                zint iterations;
 
-            return iterations;
-        });
-    }
-};
+                for (size_t j = 0; j < _max_iterations; j++)
+                {
+                    // done when magnitude is >= 2 (or square magnitude is >= 4)
+                    done = done || z.sqr_magnitude() >= 4.0;
+
+                    // compute next complex if not done
+                    z = z
+                           .when(done)
+                           .otherwise(z * z + c);
+
+                    // increment if not done
+                    iterations = iterations
+                            .when(done)
+                            .otherwise(iterations + 1);
+
+                    // break if all elements are not zero
+                    if (is_set(done))
+                        break;
+                }
+
+                return iterations;
+            });
+        }
+    };
+
+    /// implement shared library factory methods
+    REGISTER_KERNEL(mandelbrot);
+}}
 ```
 
 
-### Entrypoint
+### Kernels list
 
-The so-called entrypoint is the low-level interface between the main application and vectorized implementations.
-Over this interface, the kernels are created and destroyed.
-
-#### entrypoint.hpp
-
-Here you declare your available kernel 'constructors' and 'destructors'.
-The convention is ```{kernel_name}_create_instance()``` and ```{kernel_name}_delete_instance(entrypoint *)```.
+The kernel list file is a C source file including all your kernel implementations.
+This file us used for compile-time and runtime dispatching. A simple include of the kernel implementation header suffices:
 
 ```cpp
-#include "{your_application_name}_arch_export.hpp"
-#include "system/entrypoint.hpp"
-
-extern "C"
-{
-    {your_application_name}_ARCH_EXPORT zacc::system::entrypoint *mandelbrot_create_instance();
-    {your_application_name}_ARCH_EXPORT void mandelbrot_delete_instance(zacc::system::entrypoint *instance);
-}
-```
-
-#### entrypoint.cpp
-
-Here you implement your available kernel 'constructors' and 'destructors'.
-Usually, simply instantiating/deleting a kernel is sufficient, but a more complex logic can be introduced.
-
-```cpp
-#include "entrypoint.hpp"
-
-#include "system/arch.hpp"
 #include "kernels/mandelbrot.hpp"
-
-// create mandelbrot kernel instance
-zacc::system::entrypoint *mandelbrot_create_instance()
-{
-    return new zacc::examples::mandelbrot_kernel<zacc::arch::types>();
-}
-
-// destroy mandelbrot kernel instance
-void mandelbrot_delete_instance(zacc::system::entrypoint* instance)
-{
-    if(instance != nullptr)
-        delete instance;
-}
 ```
 
+You need the specify this file (or files) to the build system through the KERNELS parameter:
+
+```cmake
+zacc_add_dispatched_executable(zacc.examples
+        BRANCHES "${branches}"
+        INCLUDES
+            ${PROJECT_SOURCE_DIR}/include
+        KERNELS
+            ${PROJECT_SOURCE_DIR}/kernels.cpp
+        SOURCES
+            ${PROJECT_SOURCE_DIR}/examples.cpp
+        )
+```
 
 ### Execution
 

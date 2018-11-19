@@ -47,15 +47,15 @@
 #include "traits/constructable.hpp"
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/conditional.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/io.hpp"
-#include "traits/equatable.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/math.hpp"
-#include "traits/numeric.hpp"
-#include "traits/comparable.hpp"
 #include "traits/logical.hpp"
+#include "traits/equatable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/conditional.hpp"
+#include "traits/numeric.hpp"
+#include "traits/math.hpp"
+#include "traits/io.hpp"
+#include "traits/comparable.hpp"
+#include "traits/bitwise.hpp"
 
 namespace zacc { namespace backend { namespace sse {
 

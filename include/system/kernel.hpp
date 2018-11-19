@@ -64,8 +64,6 @@ namespace zacc { namespace system {
         template<typename... Args>
         void operator()(Args&&... args)
         {
-            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
-
             static_cast<KernelInterface*>(this)->configure(std::forward<Args>(args)...);
         }
 
@@ -77,8 +75,6 @@ namespace zacc { namespace system {
         template<typename InputContainer, typename OutputContainer>
         void operator()(const InputContainer &input, OutputContainer &output)
         {
-            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
-
             static_cast<KernelInterface*>(this)->run(input, output);
         }
 
@@ -89,8 +85,6 @@ namespace zacc { namespace system {
         template<typename OutputContainer>
         void operator()(OutputContainer &output)
         {
-            _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
-
             static_cast<KernelInterface*>(this)->run(output);
         }
     };

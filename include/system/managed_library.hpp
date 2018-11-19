@@ -31,7 +31,7 @@
 #include <thread>
 
 #include "system/capabilities.hpp"
-#include "system/runtime_loader.hpp"
+#include "system/dlloader.hpp"
 
 namespace zacc { namespace system {
 
@@ -63,6 +63,8 @@ namespace zacc { namespace system {
             {
                 throw std::logic_error("can't load library named \"" + library_path + "\": " + error);
             }
+
+            std::cerr << "loaded library: " << _library_name << std::endl;
         }
 
         /**

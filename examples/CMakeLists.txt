@@ -11,8 +11,8 @@ zacc_add_dispatched_executable(zacc.examples
         BRANCHES "${branches}"
         INCLUDES
             ${PROJECT_SOURCE_DIR}/include
-        ENTRYPOINT
-            ${PROJECT_SOURCE_DIR}/entrypoint.cpp
+        KERNELS
+            ${PROJECT_SOURCE_DIR}/kernels.cpp
         SOURCES
             ${PROJECT_SOURCE_DIR}/examples.cpp
         )

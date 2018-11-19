@@ -22,29 +22,5 @@
 // Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 
-
-#include "entrypoint.hpp"
-
-#include "system/arch.hpp"
 #include "kernels/mandelbrot.hpp"
 #include "kernels/julia.hpp"
-
-zacc::system::entrypoint *mandelbrot_create_instance()
-{
-    return new zacc::examples::mandelbrot_kernel<zacc::dispatched_arch>();
-}
-
-void mandelbrot_delete_instance(zacc::system::entrypoint* instance)
-{
-    delete instance;
-}
-
-zacc::system::entrypoint *julia_create_instance()
-{
-    return new zacc::examples::julia_kernel<zacc::dispatched_arch>();
-}
-
-void julia_delete_instance(zacc::system::entrypoint* instance)
-{
-    delete instance;
-}

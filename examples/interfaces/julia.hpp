@@ -29,8 +29,6 @@
 
 #include "zacc.hpp"
 #include "math/matrix.hpp"
-#include "util/algorithm.hpp"
-#include "system/entrypoint.hpp"
 #include "system/kernel.hpp"
 
 namespace zacc { namespace examples {

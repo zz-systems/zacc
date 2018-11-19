@@ -58,7 +58,10 @@ namespace zacc { namespace examples {
             this->configure_kernel();
             auto reference  = this->run_kernel();
 
-            platform::global().reload().set(capabilities::AVX2, true).set(capabilities::FMA3, true);
+            platform::global().reload()
+                    .set(capabilities::AVX2, true)
+                    .set(capabilities::SSE41, true)
+                    .set(capabilities::FMA3, true);
 
             this->configure_kernel();
             auto vectorized = this->run_kernel();
@@ -136,7 +139,7 @@ namespace zacc { namespace examples {
         virtual util::color_rgb map_value(typename output_container::value_type value) = 0;
 
         math::vec2<int> _dim;
-        system::runtime_dispatcher<system::kernel_dispatcher<KernelInterface>> _dispatcher;
+        system::dispatcher<system::kernel_dispatcher<KernelInterface>> _dispatcher;
     };
 
 }}

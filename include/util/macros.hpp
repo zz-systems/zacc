@@ -140,6 +140,28 @@
     typename bfloat     = typename arch::bfloat32, \
     typename bdouble    = typename arch::bfloat64
 
+#define TYPES2 typename arch, \
+    typename zint8, \
+    typename zint16, \
+    typename zint32, \
+    typename zfloat32, \
+    typename zfloat64, \
+    typename zbyte, \
+    typename zshort, \
+    typename zint, \
+    typename zfloat, \
+    typename zdouble, \
+    typename bint8, \
+    typename bint16, \
+    typename bint32, \
+    typename bfloat32, \
+    typename bfloat64, \
+    typename bbyte, \
+    typename bshort6, \
+    typename bint, \
+    typename bfloat, \
+    typename bdouble
+
 //clash with POSIX....
 //#define KERNEL template<typename _Input, typename _Output, TYPES>
 
@@ -149,3 +171,23 @@
 #define DISPATCHED template<TYPES>
 
 #define ALIGNED alignas(arch::alignment)
+
+
+#define KERNEL_IMPL(Kernel) \
+    DISPATCHED struct Kernel ## _kernel : Kernel, allocatable<Kernel ## _kernel, arch>
+
+#define REGISTER_KERNEL(Kernel) \
+    extern "C" \
+    { \
+        zacc::system::entrypoint *Kernel ## _create_instance() \
+        { \
+            return new Kernel ## _kernel<zacc::dispatched_arch>(); \
+        } \
+        \
+        void Kernel ## _delete_instance(zacc::system::entrypoint* instance) \
+        { \
+            delete instance; \
+        } \
+    }
+
+

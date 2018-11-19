@@ -34,11 +34,16 @@ namespace zacc {
     template<template<class...> class T, typename Arch, typename Alloc = aligned_allocator<T<Arch>, Arch::alignment>>
     struct allocatable
     {
-        static constexpr auto alloc = Alloc();
+        static Alloc& alloc()
+        {
+            static Alloc _alloc;
+
+            return _alloc;
+        }
 
         static void *operator new(size_t nbytes)
         {
-            auto ptr = alloc.allocate(nbytes);
+            auto ptr = alloc().allocate(nbytes);
 
             if(ptr != nullptr)
                 return ::new(ptr) T<Arch>();
@@ -50,8 +55,8 @@ namespace zacc {
         {
             if(p != nullptr)
             {
-                alloc.destroy(static_cast<T<Arch>*>(p));
-                alloc.deallocate(static_cast<T<Arch>*>(p), 0);
+                alloc().destroy(static_cast<T<Arch>*>(p));
+                alloc().deallocate(static_cast<T<Arch>*>(p), 0);
             }
         }
     };

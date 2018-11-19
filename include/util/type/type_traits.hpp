@@ -429,6 +429,7 @@ namespace zacc
     template<typename T>
     using element_type_t = typename element_type<T>::type;
 
+    /// @brief trait system for function pointer-like objects
     /// @see https://functionalcpp.wordpress.com/2013/08/05/function-traits/
     template<class F>
     struct function_traits;

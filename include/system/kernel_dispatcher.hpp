@@ -29,8 +29,8 @@
 
 #include "zacc.hpp"
 #include "entrypoint.hpp"
-#include "remote_activator.hpp"
-#include "runtime_dispatcher.hpp"
+#include "kernel_activator.hpp"
+#include "dispatcher.hpp"
 #include "kernel.hpp"
 
 namespace zacc { namespace system {
@@ -50,7 +50,9 @@ namespace zacc { namespace system {
         constexpr kernel_dispatcher() noexcept
         {
             std::cerr << "loading: " << ZACC_DYLIBNAME << std::endl;
-            _activator = std::make_unique<system::remote_activator>(ZACC_DYLIBNAME,
+            _activator = std::make_unique<system::kernel_activator>(ZACC_DYLIBNAME,
+                                                                    //"create_kernel",
+                                                                    //"destroy_kernel");
                                                                     std::string(kernel_traits<Kernel>::kernel_name()) + "_create_instance",
                                                                     std::string(kernel_traits<Kernel>::kernel_name()) + "_delete_instance");
         }
@@ -65,20 +67,23 @@ namespace zacc { namespace system {
         void dispatch_impl(Args&&... arg)
         {
             log_has_kernel<Arch>();
-            if(_kernels.count(Arch::value) == 0)
-                _kernels[Arch::value] = _activator->create_instance<Arch, Kernel, system::kernel>(std::forward<Args>(arg)...);
 
+            if(_kernels.count(Arch::value) == 0) {
+                //auto name = std::string(kernel_traits<Kernel>::kernel_name()) + "_" + Arch::name();
+                //std::cerr << "creating kernel: " << name << std::endl;
+                _kernels[Arch::value] = _activator->create_instance<Arch, Kernel, system::kernel>(/*name.c_str(),*/ std::forward<Args>(arg)...);
+            }
             log_has_kernel<Arch>();
             _kernels[Arch::value]->operator()(std::forward<Args>(arg)...);
         }
 
     private:
         aligned_map<int, std::shared_ptr<Kernel>> _kernels;
-        std::unique_ptr<system::remote_activator> _activator;
+        std::unique_ptr<system::kernel_activator> _activator;
 
         template<typename Arch> void log_has_kernel()
         {
-            std::cout << "Has kernel: " << std::boolalpha
+            std::cout << "Has kernel for arch " << Arch::name() << ": " << std::boolalpha
                       << (_kernels.count(Arch::value) != 0)
                       << std::endl;
         }
@@ -87,7 +92,7 @@ namespace zacc { namespace system {
     template<typename KernelImpl>
     auto make_dispatcher()
     {
-        return system::runtime_dispatcher<kernel_dispatcher<KernelImpl>>();
+        return system::dispatcher<kernel_dispatcher<KernelImpl>>();
     };
 
 }}

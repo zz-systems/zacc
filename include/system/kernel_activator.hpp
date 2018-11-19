@@ -39,7 +39,7 @@ namespace zacc { namespace system {
     /**
      * Instantiates and destroys a kernel remotely.
      */
-    struct remote_activator
+    struct kernel_activator
     {
         /**
          * Constructor.
@@ -47,7 +47,7 @@ namespace zacc { namespace system {
          * @param create_instance
          * @param delete_instance
          */
-        remote_activator(const std::string& library_name, const std::string& create_instance, const std::string& delete_instance)
+        kernel_activator(const std::string& library_name, const std::string& create_instance, const std::string& delete_instance)
             : _library_name(library_name), _create_instance(create_instance), _delete_instance(delete_instance)
         {
         }
@@ -124,6 +124,8 @@ namespace zacc { namespace system {
 
                 path = filename + "." + Arch::name() + "." + extension;
             }
+
+            std::cerr << "loading impl for: " << Arch::name() << std::endl;
 
             if(this->_loaded_libraries.count(Arch::value) == 0)
                 this->_loaded_libraries[Arch::value] = std::make_shared<managed_library>(path);

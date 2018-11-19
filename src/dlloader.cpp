@@ -22,7 +22,7 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-#include "system/runtime_loader.hpp"
+#include "system/dlloader.hpp"
 
 #ifdef WIN32
 #include <windows.h>

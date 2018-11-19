@@ -49,13 +49,13 @@
 #include "traits/printable.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/logical.hpp"
-#include "traits/numeric.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/math.hpp"
 #include "traits/conditional.hpp"
 #include "traits/io.hpp"
-#include "traits/equatable.hpp"
 #include "traits/comparable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/equatable.hpp"
+#include "traits/numeric.hpp"
+#include "traits/math.hpp"
 
 namespace zacc { namespace backend { namespace avx2 {
 

@@ -25,22 +25,23 @@
 
 #pragma once
 
-// @file mandelbrot_engine.hpp
+// @file mandelbrot.hpp
 
 #include "zacc.hpp"
+
+#include "system/arch.hpp"
+
 #include "math/complex.hpp"
 #include "math/matrix.hpp"
 #include "util/algorithm.hpp"
-#include "system/kernel.hpp"
 
-#include "traits/allocatable.hpp"
 #include "../interfaces/mandelbrot.hpp"
 
 namespace zacc { namespace examples {
 
     using namespace math;
 
-    DISPATCHED struct mandelbrot_kernel : mandelbrot, allocatable<mandelbrot_kernel, arch>
+    KERNEL_IMPL(mandelbrot)
     {
         vec2<zint> _dim;
         vec2<zfloat> _cmin;
@@ -56,7 +57,6 @@ namespace zacc { namespace examples {
 
             _max_iterations = max_iterations;
         }
-
 
         virtual void run(std::vector<int> &output) override
         {
@@ -99,4 +99,6 @@ namespace zacc { namespace examples {
         }
     };
 
+    /// implement shared library factory methods
+    REGISTER_KERNEL(mandelbrot);
 }}

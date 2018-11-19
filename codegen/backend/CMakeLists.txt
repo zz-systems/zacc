@@ -66,6 +66,7 @@ function(dispatchable_target_interface target)
         INTERFACE
             ZACC_MAJOR_ARCH=${arch}
             ZACC_ARCH=${capability}
+            ZACC_HAS_VECTORS=1
             ${create_branch_interface_BRANCH_DEFS}
     )
 

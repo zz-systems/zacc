@@ -208,14 +208,13 @@ include_directories(${CMAKE_BINARY_DIR}/exports)
 
 function(zacc_add_dispatched_library target_name)
     set(options OPTIONAL ZACC_FAST_FLOAT)
-    set(oneValueArgs ENTRYPOINT)
-    set(multiValueArgs INCLUDES SOURCES LIBRARIES BRANCHES)
+    set(multiValueArgs INCLUDES KERNELS SOURCES LIBRARIES BRANCHES)
 
     cmake_parse_arguments(add_dispatched_vectorized_target "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
     #set(target_name ${add_dispatched_vectorized_target_TARGET})
     set(target_includes ${add_dispatched_vectorized_target_INCLUDES})
-    set(target_entrypoints ${add_dispatched_vectorized_target_ENTRYPOINT})
+    set(target_kernels ${add_dispatched_vectorized_target_KERNELS})
     set(target_sources ${add_dispatched_vectorized_target_SOURCES})
     set(target_branches ${add_dispatched_vectorized_target_BRANCHES})
     set(target_libraries ${add_dispatched_vectorized_target_LIBRARIES})
@@ -239,7 +238,7 @@ function(zacc_add_dispatched_library target_name)
     foreach(branch ${target_branches})
         message(STATUS "Adding dispatched vectorized branch ${target_name}.${branch}")
 
-        add_library("${target_name}.${branch}" SHARED ${target_entrypoints})
+        add_library("${target_name}.${branch}" SHARED ${target_kernels})
         target_link_libraries("${target_name}.${branch}" PRIVATE zacc.system.info zacc.dispatch.${branch})
         target_link_libraries("${target_name}.${branch}" PUBLIC zacc.dispatch.${branch}.dynamic)
 
@@ -268,14 +267,13 @@ endfunction()
 function(zacc_add_dispatched_executable target_name)
 
     set(options OPTIONAL ZACC_FAST_FLOAT)
-    set(oneValueArgs ENTRYPOINT)
-    set(multiValueArgs INCLUDES SOURCES LIBRARIES BRANCHES)
+    set(multiValueArgs INCLUDES KERNELS SOURCES LIBRARIES BRANCHES)
 
     cmake_parse_arguments(add_dispatched_vectorized_target "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
     #set(target_name ${add_dispatched_vectorized_target_TARGET})
     set(target_includes ${add_dispatched_vectorized_target_INCLUDES})
-    set(target_entrypoints ${add_dispatched_vectorized_target_ENTRYPOINT})
+    set(target_kernels ${add_dispatched_vectorized_target_KERNELS})
     set(target_sources ${add_dispatched_vectorized_target_SOURCES})
     set(target_branches ${add_dispatched_vectorized_target_BRANCHES})
     set(target_libraries ${add_dispatched_vectorized_target_LIBRARIES})
@@ -299,7 +297,7 @@ function(zacc_add_dispatched_executable target_name)
     foreach(branch ${target_branches})
         message(STATUS "Adding dispatched vectorized branch ${target_name}.${branch}")
 
-        add_library("${target_name}.impl.${branch}" SHARED ${target_entrypoints})
+        add_library("${target_name}.impl.${branch}" SHARED ${target_kernels})
         target_link_libraries("${target_name}.impl.${branch}" PRIVATE zacc.system.info zacc.dispatch.${branch})
         target_link_libraries("${target_name}.impl.${branch}" PUBLIC zacc.dispatch.${branch}.dynamic)
 

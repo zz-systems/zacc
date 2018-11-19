@@ -25,20 +25,23 @@
 
 #pragma once
 
-// @file mandelbrot_engine.hpp
+// @file julia.hpp
 
 #include "zacc.hpp"
+#include "system/arch.hpp"
+
 #include "math/complex.hpp"
 #include "math/matrix.hpp"
 #include "util/algorithm.hpp"
-#include "system/kernel.hpp"
+
 #include "../interfaces/julia.hpp"
+
 
 namespace zacc { namespace examples {
 
     using namespace math;
 
-    DISPATCHED struct julia_kernel : julia, allocatable<julia_kernel, arch>
+    KERNEL_IMPL(julia)
     {
         vec2<zint> _dim;
         vec2<zfloat> _offset;
@@ -56,7 +59,6 @@ namespace zacc { namespace examples {
 
             _max_iterations = max_iterations;
         }
-
 
         virtual void run(std::vector<int> &output) override
         {
@@ -80,8 +82,8 @@ namespace zacc { namespace examples {
 
                     // compute next complex if not done
                     z = z
-                           .when(done)
-                           .otherwise(z * z + _c);
+                            .when(done)
+                            .otherwise(z * z + _c);
 
                     // increment if not done
                     iterations = iterations
@@ -98,4 +100,6 @@ namespace zacc { namespace examples {
         }
     };
 
+    /// implement shared library factory methods
+    REGISTER_KERNEL(julia);
 }}

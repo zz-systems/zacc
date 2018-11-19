@@ -3,7 +3,7 @@ add_library(zacc.system.info STATIC
         "${CMAKE_CURRENT_LIST_DIR}/cpuid.cpp")
 
 add_library(zacc.system.loader SHARED
-        "${CMAKE_CURRENT_LIST_DIR}/runtime_loader.cpp")
+        "${CMAKE_CURRENT_LIST_DIR}/dlloader.cpp")
 
 generate_export_header(zacc.system.loader
         BASE_NAME zacc.system.loader

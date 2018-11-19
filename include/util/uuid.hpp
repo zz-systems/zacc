@@ -26,8 +26,7 @@
 #include <string>
 #include <algorithm>
 
-// http://stackoverflow.com/questions/543306/platform-independent-guid-generation-in-c
-
+/// @see http://stackoverflow.com/questions/543306/platform-independent-guid-generation-in-c
 extern "C"
 {
 #ifdef WIN32
