@@ -47,15 +47,15 @@
 #include "traits/constructable.hpp"
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
+#include "traits/equatable.hpp"
 #include "traits/math.hpp"
 #include "traits/numeric.hpp"
-#include "traits/logical.hpp"
-#include "traits/equatable.hpp"
 #include "traits/comparable.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/conditional.hpp"
 #include "traits/io.hpp"
+#include "traits/logical.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/conditional.hpp"
+#include "traits/bitwise.hpp"
 
 namespace zacc { namespace backend { namespace avx2 {
 
@@ -68,7 +68,7 @@ namespace zacc { namespace backend { namespace avx2 {
     /// @endcond
 
 
-    namespace {
+    namespace detail {
 
         // =================================================================================================================
         /**
@@ -1840,7 +1840,7 @@ namespace zacc { namespace backend { namespace avx2 {
     /// public zfloat32 implementation
     /// @tparam features feature mask
     template<uint64_t features>
-    struct zfloat32 : public __zfloat32<features>::impl
+    struct zfloat32 : public detail::__zfloat32<features>::impl
     {
             /// complete vector
             using zval_t = zfloat32<features>;
@@ -1848,13 +1848,13 @@ namespace zacc { namespace backend { namespace avx2 {
             using bval_t = bfloat32<features>;
 
             /// forward to base
-            FORWARD2(zfloat32, __zfloat32<features>::impl);
+            FORWARD2(zfloat32, detail::__zfloat32<features>::impl);
     };
 
     /// public bfloat32 implementation
     /// @tparam features feature mask
     template<uint64_t features>
-    struct bfloat32 : public __bfloat32<features>::impl
+    struct bfloat32 : public detail::__bfloat32<features>::impl
     {
         /// complete vector
         using zval_t = zfloat32<features>;
@@ -1862,7 +1862,7 @@ namespace zacc { namespace backend { namespace avx2 {
         using bval_t = bfloat32<features>;
 
         /// forward to base
-        FORWARD2(bfloat32, __bfloat32<features>::impl);
+        FORWARD2(bfloat32, detail::__bfloat32<features>::impl);
     };
 
     static_assert(is_zval<zfloat32<0>>::value, "is_zval for zfloat32 failed.");

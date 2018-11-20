@@ -48,13 +48,11 @@ namespace zacc { namespace system {
          * Constructor
          */
         constexpr kernel_dispatcher() noexcept
+            : _activator(std::make_unique<system::kernel_activator>(ZACC_DYLIBNAME,
+                                                                      std::string(kernel_traits<Kernel>::kernel_name()) + "_create_instance",
+                                                                      std::string(kernel_traits<Kernel>::kernel_name()) + "_delete_instance"))
         {
             std::cerr << "loading: " << ZACC_DYLIBNAME << std::endl;
-            _activator = std::make_unique<system::kernel_activator>(ZACC_DYLIBNAME,
-                                                                    //"create_kernel",
-                                                                    //"destroy_kernel");
-                                                                    std::string(kernel_traits<Kernel>::kernel_name()) + "_create_instance",
-                                                                    std::string(kernel_traits<Kernel>::kernel_name()) + "_delete_instance");
         }
     protected:
         /**

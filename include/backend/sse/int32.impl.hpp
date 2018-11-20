@@ -47,16 +47,16 @@
 #include "traits/constructable.hpp"
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/math.hpp"
+#include "traits/comparable.hpp"
 #include "traits/bitwise_shift.hpp"
-#include "traits/conditional.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/io.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/numeric.hpp"
-#include "traits/comparable.hpp"
-#include "traits/logical.hpp"
+#include "traits/math.hpp"
+#include "traits/conditional.hpp"
+#include "traits/io.hpp"
 #include "traits/equatable.hpp"
+#include "traits/logical.hpp"
 
 namespace zacc { namespace backend { namespace sse {
 
@@ -69,7 +69,7 @@ namespace zacc { namespace backend { namespace sse {
     /// @endcond
 
 
-    namespace {
+    namespace detail {
 
         // =================================================================================================================
         /**
@@ -1940,7 +1940,7 @@ namespace zacc { namespace backend { namespace sse {
     /// public zint32 implementation
     /// @tparam features feature mask
     template<uint64_t features>
-    struct zint32 : public __zint32<features>::impl
+    struct zint32 : public detail::__zint32<features>::impl
     {
             /// complete vector
             using zval_t = zint32<features>;
@@ -1948,13 +1948,13 @@ namespace zacc { namespace backend { namespace sse {
             using bval_t = bint32<features>;
 
             /// forward to base
-            FORWARD2(zint32, __zint32<features>::impl);
+            FORWARD2(zint32, detail::__zint32<features>::impl);
     };
 
     /// public bint32 implementation
     /// @tparam features feature mask
     template<uint64_t features>
-    struct bint32 : public __bint32<features>::impl
+    struct bint32 : public detail::__bint32<features>::impl
     {
         /// complete vector
         using zval_t = zint32<features>;
@@ -1962,7 +1962,7 @@ namespace zacc { namespace backend { namespace sse {
         using bval_t = bint32<features>;
 
         /// forward to base
-        FORWARD2(bint32, __bint32<features>::impl);
+        FORWARD2(bint32, detail::__bint32<features>::impl);
     };
 
     static_assert(is_zval<zint32<0>>::value, "is_zval for zint32 failed.");

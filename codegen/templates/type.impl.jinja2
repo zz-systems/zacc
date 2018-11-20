@@ -62,7 +62,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
     /// @endcond
 
 
-    namespace {
+    namespace detail {
         {% for module in ast.modules.initializers + ast.modules.modules %}
 
         // =================================================================================================================
@@ -274,7 +274,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
     /// public z{{ ast.type.name }} implementation
     /// @tparam features feature mask
     template<uint64_t features>
-    struct z{{ ast.type.name }} : public __z{{ ast.type.name }}<features>::impl
+    struct z{{ ast.type.name }} : public detail::__z{{ ast.type.name }}<features>::impl
     {
             /// complete vector
             using zval_t = z{{ ast.type.name }}<features>;
@@ -282,13 +282,13 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
             using bval_t = b{{ ast.type.name }}<features>;
 
             /// forward to base
-            FORWARD2(z{{ ast.type.name }}, __z{{ ast.type.name }}<features>::impl);
+            FORWARD2(z{{ ast.type.name }}, detail::__z{{ ast.type.name }}<features>::impl);
     };
 
     /// public b{{ ast.type.name }} implementation
     /// @tparam features feature mask
     template<uint64_t features>
-    struct b{{ ast.type.name }} : public __b{{ ast.type.name }}<features>::impl
+    struct b{{ ast.type.name }} : public detail::__b{{ ast.type.name }}<features>::impl
     {
         /// complete vector
         using zval_t = z{{ ast.type.name }}<features>;
@@ -296,7 +296,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
         using bval_t = b{{ ast.type.name }}<features>;
 
         /// forward to base
-        FORWARD2(b{{ ast.type.name }}, __b{{ ast.type.name }}<features>::impl);
+        FORWARD2(b{{ ast.type.name }}, detail::__b{{ ast.type.name }}<features>::impl);
     };
 
     static_assert(is_zval<z{{ ast.type.name }}<0>>::value, "is_zval for z{{ ast.type.name }} failed.");

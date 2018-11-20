@@ -61,10 +61,12 @@ namespace zacc { namespace util {
 
 		gradient1D() = default;
 
-		gradient1D(std::vector<std::pair<const float, color_rgb>> const &init) : colors(init)
+		gradient1D(std::vector<std::pair<const float, color_rgb>> init)
+			: colors(std::move(init))
 		{}
 
-		gradient1D(std::initializer_list<std::pair<const float, color_rgb>> init) : colors(init)
+		gradient1D(const std::initializer_list<std::pair<const float, color_rgb>>& init)
+			: colors(init)
 		{}
 
 		color_rgb getColor(const float value) const

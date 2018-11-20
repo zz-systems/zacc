@@ -486,17 +486,17 @@ namespace zacc { namespace math {
                 : Base(std::forward<Args>(arg)...)
         {}
 
-        constexpr mat(std::initializer_list<T> init_list)
+        constexpr mat(const std::initializer_list<T>& init_list)
                 : Base(init_list)
         {}
 
         template<typename U = T>
-        constexpr mat(std::initializer_list<std::initializer_list<U>> init_list)
+        constexpr mat(const std::initializer_list<std::initializer_list<U>>& init_list)
                 : Base(init_list)
         {}
 
         template<typename U = T>
-        constexpr mat(std::initializer_list<mat<U, _Cols, 1>> init_list)
+        constexpr mat(const std::initializer_list<mat<U, _Cols, 1>>& init_list)
                 : Base(init_list)
         {}
 
