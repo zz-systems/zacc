@@ -98,13 +98,13 @@ The separation is necessary, because the kernel implementation uses vector types
 The vital function mapping for the dispatcher is provided by ```system::kernel_interface<_KernelInterface>``` (The dispatcher relies on ```operator()(...)``` overloads).
 
 3 methods are already mapped, you have to declare them in the interface and implement in the kernel:
-- ```run(output_container_t &output)```
-- ```run(const input_container &input, output_container &output)```
+- ```run(output_container &output)```
+- ```run(coutput_container &output, const input_container &input)```
 - ```configure(any argument...)```
 
 The system is able to determine input and output containers automatically as long as you follow the convention:
-- ```run(output_container_t &output)```
-- ```run(const input_container &input, output_container &output)```
+- ```run(output_container &output)```
+- ```run(output_container &output, const input_container &input)```
 
 Below is an exemplary mandelbrot kernel interface - available in the examples.
 
@@ -226,7 +226,7 @@ This file us used for compile-time and runtime dispatching. A simple include of 
 #include "kernels/mandelbrot.hpp"
 ```
 
-You need the specify this file (or files) to the build system through the KERNELS parameter:
+You need the specify this file (or files) to the build system through the KERNELS parameter, like shown below for the **zacc.examples** project:
 
 ```cmake
 zacc_add_dispatched_executable(zacc.examples
@@ -305,7 +305,7 @@ Defines a shared/dynamic library with dispatcher and kernel implementations in a
 zacc_add_dispatched_library(_your_library_
 
         # your library entrypoint
-        ENTRYPOINT ${CMAKE_SOURCE_DIR}/_your_library_entrypoint.cpp
+        KERNELS ${CMAKE_SOURCE_DIR}/_your_kernels.cpp
 
         # additional includes
         INCLUDES ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/dependencies/zacc/include
@@ -333,9 +333,9 @@ zacc_add_dispatched_executable(_your_application_
         INCLUDES
             ${PROJECT_SOURCE_DIR}/include
 
-        # your kernel entrypoint
-        ENTRYPOINT
-            ${PROJECT_SOURCE_DIR}/_your_application_entrypoint.cpp
+        # your kernels
+        KERNELS
+            ${PROJECT_SOURCE_DIR}/_your_kernels.cpp
 
         # your main application sources
         SOURCES

@@ -40,9 +40,9 @@ namespace zacc { namespace system {
         using traits = function_traits<decltype(&KernelInterface::run)>;
 
         /// Output container
-        using output_container = std::remove_reference_t<typename traits::template argument<(traits::arity > 2 ? 2 : 1)>::type>;
-        /// Input container
-        using input_container  = std::remove_reference_t<typename traits::template argument<1>::type>;
+        using output_container = std::remove_reference_t<typename traits::template argument<1>::type>;
+        /// Input container (same as output container if not specified)
+        using input_container  = std::remove_reference_t<typename traits::template argument<(traits::arity > 2 ? 2 : 1)>::type>;
 
         /// Kernel name
         static constexpr auto kernel_name() { return KernelInterface::name(); }
@@ -73,9 +73,9 @@ namespace zacc { namespace system {
          * @param output
          */
         template<typename InputContainer, typename OutputContainer>
-        void operator()(const InputContainer &input, OutputContainer &output)
+        void operator()(OutputContainer &output, const InputContainer &input)
         {
-            static_cast<KernelInterface*>(this)->run(input, output);
+            static_cast<KernelInterface*>(this)->run(output, input);
         }
 
         /**
