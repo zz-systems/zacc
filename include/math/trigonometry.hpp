@@ -28,6 +28,7 @@
 #include "system/arch.hpp"
 #include "math/constants.hpp"
 #include "math/fundamental.hpp"
+#include "util/algorithm.hpp"
 
 namespace zacc { namespace math {
 
@@ -62,7 +63,7 @@ namespace zacc { namespace math {
     template<typename Real>
     std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), Real> vsin(Real value)
     {
-        return zacc::transform(value, [](auto i) { return std::sin(i); });
+        return zacc::transform(value.data(), [](auto i) { return std::sin(i); });
     }
 
     /**
@@ -74,7 +75,7 @@ namespace zacc { namespace math {
     template<typename Real>
     std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), Real> vcos(Real value)
     {
-        return zacc::transform(value, [](auto i) { return std::cos(i); });
+        return zacc::transform(value.data(), [](auto i) { return std::cos(i); });
     }
 
     /**
@@ -86,7 +87,7 @@ namespace zacc { namespace math {
     template <typename Real>
     std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), Real> vtan(Real value)
     {
-        return zacc::transform(value, [](auto i) { return std::tan(i); });
+        return zacc::transform(value.data(), [](auto i) { return std::tan(i); });
     }
 
     /**
@@ -98,7 +99,7 @@ namespace zacc { namespace math {
     template<typename Real>
     std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), Real> vatan2(Real y, Real x)
     {
-        return zacc::transform(x, y, [](auto i, auto j) { return std::atan2(i, j); });
+        return zacc::transform(x.data(), y.data(), [](auto i, auto j) { return std::atan2(i, j); });
     }
 
     /**

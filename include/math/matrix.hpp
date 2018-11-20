@@ -178,6 +178,16 @@ namespace zacc { namespace math {
 
             return result;
         }
+
+        constexpr auto begin()
+        {
+            return data.begin();
+        }
+
+        constexpr auto end()
+        {
+            return data.end();
+        }
     };
 
     // @struct mat
@@ -250,6 +260,16 @@ namespace zacc { namespace math {
                 throw std::out_of_range("mat::at");
 
             return data[i];
+        }
+
+        constexpr auto begin()
+        {
+            return data.begin();
+        }
+
+        constexpr auto end()
+        {
+            return data.end();
         }
     };
 
@@ -331,6 +351,16 @@ namespace zacc { namespace math {
 
             return data[i];
         }
+
+        constexpr auto begin()
+        {
+            return data.begin();
+        }
+
+        constexpr auto end()
+        {
+            return data.end();
+        }
     };
 
     // @struct mat
@@ -408,6 +438,16 @@ namespace zacc { namespace math {
                 throw std::out_of_range("mat::at");
 
             return data[i];
+        }
+
+        constexpr auto begin()
+        {
+            return data.begin();
+        }
+
+        constexpr auto end()
+        {
+            return data.end();
         }
     };
 

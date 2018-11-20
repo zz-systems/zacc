@@ -47,8 +47,8 @@ namespace zacc {
 		 * @brief thread safe clone wrapper
 		 * @return base pointer to new instance
 		 */
-		virtual std::shared_ptr<base_t> clone() const {
-            return zacc::make_shared<concrete_t>(static_cast<concrete_t const &>(*this));
+		virtual std::shared_ptr<Base> clone() const {
+            return zacc::make_shared<Concrete>(static_cast<Concrete const &>(*this));
 		}
 	};
 }

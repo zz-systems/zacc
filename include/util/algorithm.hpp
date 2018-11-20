@@ -280,14 +280,15 @@ namespace zacc {
 
 
 
-    template<class InputTuple, class UnaryOperation, typename = std::enable_if_t<tuple_size<InputTuple>::value != 0>>
+    template<class InputTuple, class UnaryOperation, typename = std::enable_if_t<(tuple_size<InputTuple>::value > 1)
+    >>
     void for_each(InputTuple&& input, UnaryOperation&& func)
     {
         for_each_impl(std::forward<InputTuple>(input), std::forward<UnaryOperation>(func),
                       make_tuple_index<InputTuple>());
     };
 
-    template<class InputTuple1, class InputTuple2, class BinaryOperation, typename = std::enable_if_t<tuple_size<InputTuple1>::value != 0 && tuple_size<InputTuple2>::value != 0>>
+    template<class InputTuple1, class InputTuple2, class BinaryOperation, typename = std::enable_if_t<(tuple_size<InputTuple1>::value > 1) && (tuple_size<InputTuple2>::value > 1)>>
     void for_each(InputTuple1&& input1, InputTuple2&& input2, BinaryOperation&& func)
     {
         for_each_impl(std::forward<InputTuple1>(input1), std::forward<InputTuple2>(input2),
@@ -309,28 +310,28 @@ namespace zacc {
 //                              make_tuple_index<InputTuple1>());
 //    };
 
-    template<class InputTuple, class UnaryOperation, typename = std::enable_if_t<tuple_size<InputTuple>::value != 0>>
+    template<class InputTuple, class UnaryOperation, typename = std::enable_if_t<(tuple_size<InputTuple>::value > 1)>>
     auto transform(InputTuple&& input, UnaryOperation&& func)
     {
         return transform_impl(std::forward<InputTuple>(input), std::forward<UnaryOperation>(func),
                               make_tuple_index<InputTuple>());
     };
 
-    template<class InputTuple1, class InputTuple2, class BinaryOperation, typename = std::enable_if_t<tuple_size<InputTuple1>::value != 0 && tuple_size<InputTuple2>::value != 0>>
+    template<class InputTuple1, class InputTuple2, class BinaryOperation, typename = std::enable_if_t<(tuple_size<InputTuple1>::value > 1) && (tuple_size<InputTuple2>::value > 1)>>
     auto transform(InputTuple1&& input1, InputTuple2&& input2, BinaryOperation&& func)
     {
         return transform_impl(std::forward<InputTuple1>(input1), std::forward<InputTuple2>(input2),
                               std::forward<BinaryOperation>(func), make_tuple_index<InputTuple1>());
     };
 
-    template<class InputTuple, class Acc, class BinaryOperation, typename = std::enable_if_t<tuple_size<InputTuple>::value != 0>>
+    template<class InputTuple, class Acc, class BinaryOperation, typename = std::enable_if_t<(tuple_size<InputTuple>::value > 1)>>
     Acc accumulate(InputTuple&& input, Acc accumulator, BinaryOperation&& func)
     {
         return accumulate_impl(std::forward<InputTuple>(input), std::forward<Acc>(accumulator),
                                std::forward<BinaryOperation>(func), make_tuple_index<InputTuple>());
     };
 
-    template<class InputTuple1, class InputTuple2, class Acc, class TernaryOperation, typename = std::enable_if_t<tuple_size<InputTuple1>::value != 0 && tuple_size<InputTuple2>::value != 0>>
+    template<class InputTuple1, class InputTuple2, class Acc, class TernaryOperation, typename = std::enable_if_t<(tuple_size<InputTuple1>::value > 1) && (tuple_size<InputTuple2>::value > 1)>>
     Acc accumulate(InputTuple1&& input1, InputTuple2&& input2, Acc accumulator, TernaryOperation&& func)
     {
         return accumulate_impl(std::forward<InputTuple1>(input1), std::forward<InputTuple2>(input2),
