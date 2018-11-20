@@ -135,14 +135,14 @@ namespace zacc {
          * @param other other arch
          * @return result of bitwise-or as raw underlying value
          */
-        constexpr flag_t operator |(const arch &other) { return raw_value() | other.raw_value(); }
+        constexpr flag_t operator |(const arch &other) const { return raw_value() | other.raw_value(); }
 
         /**
          * @brief provides bitwise-and functionality
          * @param other other arch
          * @return result of bitwise-and as raw underlying value
          */
-        constexpr flag_t operator &(const arch &other) { return raw_value() & other.raw_value(); }
+        constexpr flag_t operator &(const arch &other) const { return raw_value() & other.raw_value(); }
 
         /**
          * @brief returns true if this arch is available
@@ -166,24 +166,24 @@ namespace zacc {
             return os;
         }
 
-        /**
-         * @brief sets all capabilities to enabled until the given one and returns the raw value
-         * @param arch highest arch (inclusive)
-         * @return raw value
-         */
-        static constexpr flag_t fill_up_to(const capabilities arch)
-        {
-            auto value = to_underlying(arch);
-            uint64_t result = 0;
-
-            for(size_t i = 0; i < ntz(value); i++)
-            {
-                result |= 1;
-                result <<= 1;
-            }
-
-            return result;
-        }
+//        /**
+//         * @brief sets all capabilities to enabled until the given one and returns the raw value
+//         * @param arch highest arch (inclusive)
+//         * @return raw value
+//         */
+//        static constexpr flag_t fill_up_to(const capabilities arch)
+//        {
+//            auto value = to_underlying(arch);
+//            uint64_t result = 0;
+//
+//            for(size_t i = 0; i < ntz(value); i++)
+//            {
+//                result |= 1;
+//                result <<= 1;
+//            }
+//
+//            return result;
+//        }
 
         /**
          * @brief arch dispatcher. from aggregated integer representation one can extract specific features
