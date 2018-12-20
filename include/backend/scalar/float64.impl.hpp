@@ -47,18 +47,18 @@
 #include "traits/constructable.hpp"
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/logical.hpp"
-#include "traits/equatable.hpp"
-#include "traits/conditional.hpp"
-#include "traits/math.hpp"
-#include "traits/arithmetic.hpp"
+#include "traits/io.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/comparable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/equatable.hpp"
 #include "traits/numeric.hpp"
-#include "traits/io.hpp"
+#include "traits/logical.hpp"
+#include "traits/conditional.hpp"
+#include "traits/math.hpp"
 
-namespace zacc { namespace backend { namespace scalar {
-
+namespace zacc { namespace backend { namespace scalar
+{
     /// @cond
     template<uint64_t features>
     struct bfloat64;
@@ -67,8 +67,89 @@ namespace zacc { namespace backend { namespace scalar {
     struct zfloat64;
     /// @endcond
 
+    namespace float64_detail
+    {
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static constexpr size_t size = 1;
 
-    namespace detail {
+        /// memory alignment
+        static constexpr size_t alignment = 16;
+
+        /// scalar type? vector type?
+        static constexpr bool is_vector = size > 1;
+
+        /// vector type, like __m128i for sse 4x integer vector
+        using vector_t = double;
+
+        /// scalar type, like int for sse 4x integer vector
+        using element_t = double;
+
+        /// mask type for boolean operations
+        using mask_vector_t = bool;
+
+        /// extracted std::array of (dim) scalar values
+        using extracted_t = std::array<element_t, size>;
+
+
+        template<uint64_t Features>
+        using zval_base = zval<double, bool, double, zval_tag, 1, 16, Features>;
+
+        template<uint64_t Features>
+        using bval_base = bval<double, bool, double, 1, 16, Features>;
+
+        template<typename T>
+        using zval_is_base_of = std::is_base_of<zval_base<T::features>, T>;
+
+        template<typename T>
+        using bval_is_base_of = std::is_base_of<bval_base<T::features>, T>;
+    }
+
+}}}
+
+namespace zacc {
+
+    template<typename T>
+    struct ztraits<T, std::enable_if_t<
+            std::is_base_of<backend::scalar::float64_detail::zval_base<T::features>, T>::value
+            || std::is_base_of<backend::scalar::float64_detail::bval_base<T::features>, T>::value>>
+    {
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static constexpr size_t size = 1;
+
+        /// capabilities
+        static constexpr uint64_t features = T::features;
+
+        /// memory alignment
+        static constexpr size_t alignment = 16;
+
+        /// scalar type? vector type?
+        static constexpr bool is_vector = size > 1;
+
+        /// vector type, like __m128i for sse 4x integer vector
+        using vector_t = double;
+
+        /// scalar type, like int for sse 4x integer vector
+        using element_t = double;
+
+        /// mask type for boolean operations
+        using mask_vector_t = bool;
+
+        /// extracted std::array of (dim) scalar values
+        using extracted_t = std::array<element_t, size>;
+
+        using zval_t = backend::scalar::zfloat64<T::features>;
+        using bval_t = backend::scalar::bfloat64<T::features>;
+
+        using tag = select_t<
+                when<std::is_base_of<backend::scalar::float64_detail::zval_base<T::features>, T>::value, zval_tag>,
+                when<std::is_base_of<backend::scalar::float64_detail::bval_base<T::features>, T>::value, bval_tag>>;
+    };
+}
+
+namespace zacc { namespace backend { namespace scalar {
+
+    namespace float64_detail {
+
 
         // =================================================================================================================
         /**
@@ -92,24 +173,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
 
                 /**
                  * @brief constructable 
@@ -152,9 +215,9 @@ namespace zacc { namespace backend { namespace scalar {
                  * @relates float64
                  * @remark scalar 
                  */
-                constexpr __impl(std::array<typename Base::element_t, Base::size()> value) : Base(value[0])  {
+                constexpr __impl(extracted_t value) : Base(value[0])  {
 
-                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(std::array<typename Base::element_t, Base::size()>)");
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(extracted_t)");
 
                 }
 
@@ -165,8 +228,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::constructable<__impl<base_t>, zfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::constructable<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -195,24 +258,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
 
                 /**
                  * @brief constructable 
@@ -231,7 +276,7 @@ namespace zacc { namespace backend { namespace scalar {
                  * @relates float64
                  * @remark scalar 
                  */
-                constexpr __impl(zval_t value) : Base(value.value() != 0)  {
+                constexpr __impl(zfloat64<Base::features> value) : Base(value.value() != 0)  {
 
                     ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(zval_t)");
 
@@ -243,9 +288,9 @@ namespace zacc { namespace backend { namespace scalar {
                  * @relates float64
                  * @remark scalar 
                  */
-                constexpr __impl(bval_t value, last_operation last_op) : Base(value, last_op)  {
+                constexpr __impl(bfloat64<Base::features> value, last_operation last_op) : Base(value, last_op)  {
 
-                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(bval_t value, last_operation)");
+                    ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "", "CONS(bval_t, last_operation)");
 
                 }
 
@@ -256,8 +301,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::constructable<__impl<base_t>, bfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::constructable<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -286,24 +331,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
 
@@ -338,7 +365,7 @@ namespace zacc { namespace backend { namespace scalar {
                  * @relates float64
                  * @remark scalar default
                  */
-                template<typename RandomIt> friend zfloat64<Base::features> vgather(RandomIt input, const zint32<Base::features> &index, Composed)  {
+                template<typename RandomIt> friend zfloat64<Base::features> vgather(RandomIt input, const zint32<Base::features> &index,  Composed)  {
 
                     ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vgather");
 
@@ -352,8 +379,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::io<__impl<base_t>, zfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::io<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -382,24 +409,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
 
@@ -539,8 +548,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::math<__impl<base_t>, zfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::math<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -569,24 +578,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
             };
@@ -596,8 +587,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::numeric<__impl<base_t>, zfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::numeric<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -626,24 +617,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
 
@@ -744,8 +717,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::arithmetic<__impl<base_t>, zfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::arithmetic<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -774,24 +747,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
 
@@ -881,8 +836,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::bitwise<__impl<base_t>, zfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::bitwise<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -911,24 +866,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
 
@@ -990,8 +927,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::comparable<__impl<base_t>, zfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::comparable<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -1020,24 +957,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
 
@@ -1086,8 +1005,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::logical<__impl<base_t>, zfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::logical<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -1116,24 +1035,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
 
@@ -1169,8 +1070,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::equatable<__impl<base_t>, zfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::equatable<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -1199,24 +1100,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
 
@@ -1225,7 +1108,7 @@ namespace zacc { namespace backend { namespace scalar {
                  * @relates float64
                  * @remark scalar default
                  */
-                friend zfloat64<Base::features> vsel(bval_t condition, Composed if_value, Composed else_value)  {
+                friend zfloat64<Base::features> vsel(bfloat64<Base::features> condition, Composed if_value, Composed else_value)  {
 
                     ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vsel");
 
@@ -1239,8 +1122,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::conditional<__impl<base_t>, zfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::conditional<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -1269,24 +1152,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
 
@@ -1321,7 +1186,7 @@ namespace zacc { namespace backend { namespace scalar {
                  * @relates float64
                  * @remark scalar default
                  */
-                template<typename RandomIt> friend bfloat64<Base::features> vgather(RandomIt input, const zint32<Base::features> &index, Composed)  {
+                template<typename RandomIt> friend bfloat64<Base::features> vgather(RandomIt input, const zint32<Base::features> &index,  Composed)  {
 
                     ZTRACE_BACKEND("scalar.float64.impl", __LINE__, "float64(double[1])", "default", "vgather");
 
@@ -1335,8 +1200,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::io<__impl<base_t>, bfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::io<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -1365,24 +1230,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
 
@@ -1472,8 +1319,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::bitwise<__impl<base_t>, bfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::bitwise<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -1502,24 +1349,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
 
@@ -1568,8 +1397,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::logical<__impl<base_t>, bfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::logical<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -1598,24 +1427,6 @@ namespace zacc { namespace backend { namespace scalar {
             template<typename Base>
             struct __impl : Base
             {
-                /// complete vector
-                using zval_t        = zfloat64<Base::features>;
-                /// complete boolean vector
-                using bval_t        = bfloat64<Base::features>;
-                /// type tag
-                using tag           = typename Base::tag;
-
-                /// wrapped vector type
-                using vector_t      = typename zval_traits<Base>::vector_t;
-                /// element type
-                using element_t     = typename zval_traits<Base>::element_t;
-
-                /// wrapped mask vector type
-                using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-
-                /// extracted type (for usage in scalar code)
-                using extracted_t   = typename zval_traits<Base>::extracted_t;
-
                 /// forward to base
                 FORWARD(__impl);
 
@@ -1651,8 +1462,8 @@ namespace zacc { namespace backend { namespace scalar {
              * @relates float64
              * @remark scalar
              */
-            template<typename base_t>
-            using impl = traits::equatable<__impl<base_t>, bfloat64<base_t::features>>;
+            template<typename Base>
+            using impl = traits::equatable<__impl<Base>, Composed, bfloat64<Base::features>>;
 
         };
 
@@ -1693,11 +1504,6 @@ namespace zacc { namespace backend { namespace scalar {
             /// parametrized zval base
             struct composable_base : base
             {
-                /// complete vector
-                using zval_t = zfloat64<features>;
-                /// complete boolean vector
-                using bval_t = bfloat64<features>;
-
                 /// forward to base
                 FORWARD2(composable_base, base);
             };
@@ -1705,18 +1511,18 @@ namespace zacc { namespace backend { namespace scalar {
             /// compose type from modules
             using composed = compose
             <
-                printable::impl,
-                convertable::impl,
-                zfloat64_io<impl>::template impl,
-                zfloat64_math<impl>::template impl,
-                zfloat64_numeric<impl>::template impl,
-                zfloat64_arithmetic<impl>::template impl,
-                zfloat64_bitwise<impl>::template impl,
-                zfloat64_comparable<impl>::template impl,
-                zfloat64_logical<impl>::template impl,
-                zfloat64_equatable<impl>::template impl,
-                zfloat64_conditional<impl>::template impl,
-                zfloat64_constructable<impl>::template impl,
+                printable<zfloat64<features>>::template impl,
+                convertable<zfloat64<features>>::template impl,
+                zfloat64_io<zfloat64<features>>::template impl,
+                zfloat64_math<zfloat64<features>>::template impl,
+                zfloat64_numeric<zfloat64<features>>::template impl,
+                zfloat64_arithmetic<zfloat64<features>>::template impl,
+                zfloat64_bitwise<zfloat64<features>>::template impl,
+                zfloat64_comparable<zfloat64<features>>::template impl,
+                zfloat64_logical<zfloat64<features>>::template impl,
+                zfloat64_equatable<zfloat64<features>>::template impl,
+                zfloat64_conditional<zfloat64<features>>::template impl,
+                zfloat64_constructable<zfloat64<features>>::template impl,
 
                 composable<composable_base>::template type
             >;
@@ -1728,6 +1534,19 @@ namespace zacc { namespace backend { namespace scalar {
                 using zval_t = zfloat64<features>;
                 /// complete boolean vector
                 using bval_t = bfloat64<features>;
+
+                using tag = zval_tag;
+
+                using element_t = double;
+
+                /// vector size (1 - scalar, 4, 8, 16, ...)
+                static constexpr size_t size() { return float64_detail::size; }
+
+                /// scalar type? vector type?
+                static constexpr bool is_vector = float64_detail::is_vector;
+
+                /// memory alignment
+                static constexpr size_t alignment = float64_detail::alignment;
 
                 /// forward to base
                 FORWARD2(impl, composed);
@@ -1752,16 +1571,11 @@ namespace zacc { namespace backend { namespace scalar {
             * @relates float64
             * @remark scalar
             */
-            using base = bval<double, bool, 1, 16, features>;
+            using base = bval<double, bool, double, 1, 16, features>;
 
             /// parametrized zval base
             struct composable_base : base
             {
-                /// complete vector
-                using zval_t = zfloat64<features>;
-                /// complete boolean vector
-                using bval_t = bfloat64<features>;
-
                 /// forward to base
                 FORWARD2(composable_base, base);
             };
@@ -1769,13 +1583,13 @@ namespace zacc { namespace backend { namespace scalar {
             /// compose type from modules
             using composed = compose
             <
-                printable::impl,
-                convertable::impl,
-                bfloat64_io<impl>::template impl,
-                bfloat64_bitwise<impl>::template impl,
-                bfloat64_logical<impl>::template impl,
-                bfloat64_equatable<impl>::template impl,
-                bfloat64_constructable<impl>::template impl,
+                printable<bfloat64<features>>::template impl,
+                convertable<bfloat64<features>>::template impl,
+                bfloat64_io<bfloat64<features>>::template impl,
+                bfloat64_bitwise<bfloat64<features>>::template impl,
+                bfloat64_logical<bfloat64<features>>::template impl,
+                bfloat64_equatable<bfloat64<features>>::template impl,
+                bfloat64_constructable<bfloat64<features>>::template impl,
 
                 composable<composable_base>::template type
             >;
@@ -1788,6 +1602,19 @@ namespace zacc { namespace backend { namespace scalar {
                 /// complete boolean vector
                 using bval_t = bfloat64<features>;
 
+                using tag = bval_tag;
+
+                using element_t = bool;
+
+                /// vector size (1 - scalar, 4, 8, 16, ...)
+                static constexpr size_t size() { return float64_detail::size; }
+
+                /// scalar type? vector type?
+                static constexpr bool is_vector = float64_detail::is_vector;
+
+                /// memory alignment
+                static constexpr size_t alignment = float64_detail::alignment;
+
                 /// forward to base
                 FORWARD2(impl, composed);
             };
@@ -1798,29 +1625,56 @@ namespace zacc { namespace backend { namespace scalar {
     /// public zfloat64 implementation
     /// @tparam features feature mask
     template<uint64_t features>
-    struct zfloat64 : public detail::__zfloat64<features>::impl
+    struct zfloat64 : public float64_detail::__zfloat64<features>::impl
     {
             /// complete vector
             using zval_t = zfloat64<features>;
             /// complete boolean vector
             using bval_t = bfloat64<features>;
 
+            using tag = zval_tag;
+
+            using element_t = double;
+
+            /// vector size (1 - scalar, 4, 8, 16, ...)
+            static constexpr size_t size() { return float64_detail::size; }
+
+            /// scalar type? vector type?
+            static constexpr bool is_vector = float64_detail::is_vector;
+
+            /// memory alignment
+            static constexpr size_t alignment = float64_detail::alignment;
+
+
             /// forward to base
-            FORWARD2(zfloat64, detail::__zfloat64<features>::impl);
+            FORWARD2(zfloat64, float64_detail::__zfloat64<features>::impl);
     };
 
     /// public bfloat64 implementation
     /// @tparam features feature mask
     template<uint64_t features>
-    struct bfloat64 : public detail::__bfloat64<features>::impl
+    struct bfloat64 : public float64_detail::__bfloat64<features>::impl
     {
         /// complete vector
         using zval_t = zfloat64<features>;
         /// complete boolean vector
         using bval_t = bfloat64<features>;
 
+        using tag = bval_tag;
+
+        using element_t = bool;
+
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static constexpr size_t size() { return float64_detail::size; }
+
+        /// scalar type? vector type?
+        static constexpr bool is_vector = float64_detail::is_vector;
+
+        /// memory alignment
+        static constexpr size_t alignment = float64_detail::alignment;
+
         /// forward to base
-        FORWARD2(bfloat64, detail::__bfloat64<features>::impl);
+        FORWARD2(bfloat64, float64_detail::__bfloat64<features>::impl);
     };
 
     static_assert(is_zval<zfloat64<0>>::value, "is_zval for zfloat64 failed.");

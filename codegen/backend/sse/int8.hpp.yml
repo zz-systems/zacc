@@ -38,7 +38,7 @@ modules:
       - args: [[*scalar_t, value]]
         init: _mm_set1_epi8(value)
 
-      - args: "const std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size> &value"
+      - args: "const extracted_t &value"
         init: _mm_load_si128((__m128i*)value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }

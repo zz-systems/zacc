@@ -47,7 +47,7 @@ modules:
       #  prefix: "template<typename T, typename = typename std::enable_if_t<std::is_convertible<T, double>::value>>"
       #  init: _mm_set1_pd((double)value)
 
-      - args: "std::array<typename zval_traits<Base>::element_t, zval_traits<Base>::size> value"
+      - args: "extracted_t value"
         init: _mm_load_pd(value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }

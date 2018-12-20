@@ -713,9 +713,9 @@ namespace zacc { namespace math {
 
     template<typename T, typename U, size_t N, size_t M>
     //__attribute__((optimize("unroll-loops")))
-    inline mat<typename zval_traits<T>::bval_t, N, M>	operator <(const mat<T, N, M>& a, const mat<U, N, M>& b)
+    inline mat<typename ztraits<T>::bval_t, N, M>	operator <(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
-        mat<typename zval_traits<T>::bval_t, N, M> result;
+        mat<typename ztraits<T>::bval_t, N, M> result;
 
         for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) < b(i);
@@ -725,9 +725,9 @@ namespace zacc { namespace math {
 
     template<typename T, typename U, size_t N, size_t M>
     //__attribute__((optimize("unroll-loops")))
-    inline mat<typename zval_traits<T>::bval_t, N, M>	operator <=(const mat<T, N, M>& a, const mat<U, N, M>& b)
+    inline mat<typename ztraits<T>::bval_t, N, M>	operator <=(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
-        mat<typename zval_traits<T>::bval_t, N, M> result;
+        mat<typename ztraits<T>::bval_t, N, M> result;
 
         for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) <= b(i);
@@ -737,9 +737,9 @@ namespace zacc { namespace math {
 
     template<typename T, typename U, size_t N, size_t M>
     //__attribute__((optimize("unroll-loops")))
-    inline mat<typename zval_traits<T>::bval_t, N, M>	operator >(const mat<T, N, M>& a, const mat<U, N, M>& b)
+    inline mat<typename ztraits<T>::bval_t, N, M>	operator >(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
-        mat<typename zval_traits<T>::bval_t, N, M> result;
+        mat<typename ztraits<T>::bval_t, N, M> result;
 
         for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) > b(i);
@@ -749,9 +749,9 @@ namespace zacc { namespace math {
 
     template<typename T, typename U, size_t N, size_t M>
     //__attribute__((optimize("unroll-loops")))
-    inline mat<typename zval_traits<T>::bval_t, N, M>	operator >=(const mat<T, N, M>& a, const mat<U, N, M>& b)
+    inline mat<typename ztraits<T>::bval_t, N, M>	operator >=(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
-        mat<typename zval_traits<T>::bval_t, N, M> result;
+        mat<typename ztraits<T>::bval_t, N, M> result;
 
         for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) >= b(i);
@@ -761,9 +761,9 @@ namespace zacc { namespace math {
 
     template<typename T, typename U, size_t N, size_t M>
     //__attribute__((optimize("unroll-loops")))
-    inline mat<typename zval_traits<T>::bval_t, N, M>	operator ==(const mat<T, N, M>& a, const mat<U, N, M>& b)
+    inline mat<typename ztraits<T>::bval_t, N, M>	operator ==(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
-        mat<typename zval_traits<T>::bval_t, N, M> result;
+        mat<typename ztraits<T>::bval_t, N, M> result;
 
         for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) == b(i);
@@ -773,9 +773,9 @@ namespace zacc { namespace math {
 
     template<typename T, typename U, size_t N, size_t M>
     //__attribute__((optimize("unroll-loops")))
-    inline mat<typename zval_traits<T>::bval_t, N, M>	operator !=(const mat<T, N, M>& a, const mat<U, N, M>& b)
+    inline mat<typename ztraits<T>::bval_t, N, M>	operator !=(const mat<T, N, M>& a, const mat<U, N, M>& b)
     {
-        mat<typename zval_traits<T>::bval_t, N, M> result;
+        mat<typename ztraits<T>::bval_t, N, M> result;
 
         for(size_t i = 0; i < N * M; i++)
             result(i) = a(i) != b(i);

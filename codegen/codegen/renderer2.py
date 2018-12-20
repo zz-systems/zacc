@@ -24,9 +24,9 @@ class Renderer:
 
     def render(self, node, params=None):
         #try:
-            return self._mapping[type(node)].render(self, node, params)
-        #except KeyError:
-        #    print(">> MAPPING: ", self._mapping, "key: ", type(node))
+        return self._mapping[type(node)].render(self, node, params)
+    #except KeyError:
+    #    print(">> MAPPING: ", self._mapping, "key: ", type(node))
 
 
 class Renderable(ABC):
@@ -57,11 +57,13 @@ def remapArgType(module, ast, arg):
         return f"{prefixes[moduleType]}{typeName}<Interface::features>"
 
     arg_map = {
-        #"Composed": format(module.type, ast.type.name),
-        "bval_t": f"b{ast.type.name}<Base::features>",
-        "zval_t": f"z{ast.type.name}<Base::features>",
+        "Composed": format(module.type, ast.type.name),
+        "bval_t": format(ModuleTypes.BOOLEAN, ast.type.name),
+        "zval_t": format(ModuleTypes.DEFAULT, ast.type.name),
     }
+    print(arg_map.get(arg.type) + "\n")
     return arg_map.get(arg.type) or arg.type
+
 
 class ModuleMangledNameRenderer(Renderable):
     def render(self, renderer: Renderer, node: ModuleNode, ast):
@@ -81,21 +83,13 @@ class TraitCompositionRenderer(Renderable):
             ModuleTypes.SHARED: node.traits.shared
         }
 
-        prefixes = {
-            ModuleTypes.DEFAULT: "z",
-            ModuleTypes.BOOLEAN: "b",
-            ModuleTypes.UNSIGNED: "u",
-            ModuleTypes.SHARED: ""
-        }
-
         shared_traits   = node.traits.shared
         initializers    = { m.name:renderer.render(m, node) for m in node.modules.initializers if m.type == type }
         modules         = { m.name:renderer.render(m, node) for m in node.modules.modules if m.type == type }
 
-        impl = f"{prefixes[type]}{node.type.name}<features>"
-        return [f"{trait}<{impl}>::template impl" for trait in shared_traits] + \
-               [f"{modules[trait]}<{impl}>::template impl" for trait in traits[type]] +\
-               [f"{initializer}<{impl}>::template impl" for initializer in initializers.values()]
+        return [f"{trait}" for trait in shared_traits] + \
+               [f"{modules[trait]}::template impl" for trait in traits[type]]# +\
+        #[f"{initializer}" for initializer in initializers.values()]
 
 class FunctionSignatureRenderer(Renderable):
     def render(self, renderer, node: FunctionSignatureNode, params):
@@ -115,10 +109,10 @@ class FunctionSignatureRenderer(Renderable):
         # basic
         prefix = node.prefix or "friend"
         suffix = node.suffix or "const" if prefix.strip().find('friend') == -1 else ""
-        return_type = node.return_type or f"{make_typename(module, ast)}<Base::features>"
+        return_type = node.return_type or f"{make_typename(module, ast)}<Interface::features>"
 
         # dispatching
-        dispatcher = "{0}has_feature_v<Base, capabilities::{1}>"
+        dispatcher = "{0}has_feature_v<Interface, capabilities::{1}>"
 
         def map_requirement(requirement):
             requirement = cleanup(requirement)[0]
@@ -172,6 +166,8 @@ class InstructionsRenderer(Renderable):
 
         return [b + ';' if not b.rstrip().endswith(';') else b for b in body]
 
+
+
 class InitializerSignatureRenderer(Renderable):
     def render(self, renderer, node: InitializerSignatureNode, params):
         module, ast, body = copy.deepcopy(params)
@@ -180,9 +176,9 @@ class InitializerSignatureRenderer(Renderable):
 
         return "{prefix} {name}({args}) : {initializer} {suffix}".format(
             prefix=node.prefix or "constexpr",
-            name=f"__impl",
+            name=f"impl",
             args=args,
-            initializer=f"Base({renderer.render(node.initializer, { 'is_initializer' : True })})",
+            initializer=f"Interface({renderer.render(node.initializer, { 'is_initializer' : True })})",
             suffix=node.suffix or "")
 
 class FloatVerificationRenderer(Renderable):

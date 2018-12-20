@@ -34,20 +34,15 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Base, typename Composed>
+    template<typename Base, typename Composed, typename Boolean>
     struct io : public Base {
-
-        using zval_t = typename Base::zval_t;
-        using bval_t = typename Base::bval_t;
-
-        typedef typename zval_traits<Base>::extracted_t extracted_t;
 
         FORWARD(io);
 
         template<typename OutputIt>
         void store (OutputIt result, bval_tag) const
         {
-            typename zval_traits<typename Composed::zval_t>::extracted_t data;
+            typename Base::original_extracted_t data;
 
             vstore(std::begin(data), static_cast<Composed>(Base::value()));
 
@@ -64,7 +59,7 @@ namespace zacc { namespace traits {
         template<typename OutputIt>
         void stream (OutputIt result, bval_tag) const
         {
-            typename zval_traits<typename Composed::zval_t>::extracted_t data;
+            typename Base::original_extracted_t data;
 
             vstore(std::begin(data), static_cast<Composed>(Base::value()));
 
@@ -78,8 +73,8 @@ namespace zacc { namespace traits {
             vstream(result, static_cast<Composed>(Base::value()));
         }
 
-        const extracted_t data() const {
-            alignas(Base::alignment) extracted_t result;
+        const typename Base::extracted_t data() const {
+            alignas(Base::alignment) typename Base::extracted_t result;
 
             store(std::begin(result), typename Base::tag());
 

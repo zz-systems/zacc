@@ -9,6 +9,8 @@ from codegen.parser import *
 from codegen.renderer import *
 from codegen.ast import ModuleTypes
 
+import pprint
+
 class Modules:
     _renderer = Renderer({
         ModuleNode : ModuleMangledNameRenderer()
@@ -68,14 +70,23 @@ def wrapper(parse):
     def postprocess(file):
         data = parse(file)
 
+        parsed = None
+
+        try:
+            parsed = Parsers.parse(data)
+        except Exception as e:
+            print(f"FUCK OFF: {e}")
+
         return {
-            "ast"           : Parsers.parse(data),
+            "ast"           : parsed,
             "Modules"       : Modules(),
             "Functions"     : Functions(),
             "Traits"        : Traits(),
             "Verifications" : Verifications(),
             "ModuleTypes"   : ModuleTypes
         }
+
+    #print("FUCK FUCK FUCK")
     return postprocess
 
 for name, function in PARSERS.items():

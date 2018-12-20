@@ -153,7 +153,7 @@ namespace zacc {
     template<class InputContainer, class OutputContainer, class UnaryOperation, typename = std::enable_if_t<all<iterable, InputContainer, OutputContainer>>>
     auto transform(const InputContainer& container, UnaryOperation unary_op)
     {
-        alignas(zval_traits<InputContainer>::alignment) OutputContainer output;
+        alignas(ztraits<InputContainer>::alignment) OutputContainer output;
 
         std::transform(std::begin(container), std::end(container), std::begin(output), unary_op);
 
@@ -171,7 +171,9 @@ namespace zacc {
     template<class InputContainer, class UnaryOperation, typename = std::enable_if_t<all<iterable, InputContainer>>>
     auto transform(const InputContainer& container, UnaryOperation func)
     {
-        alignas(zval_traits<InputContainer>::alignment) typename zval_traits<InputContainer>::extracted_t output;
+        //alignas(ztraits<InputContainer>::alignment) typename ztraits<InputContainer>::extracted_t output;
+
+        InputContainer output;
 
         std::transform(std::begin(container), std::end(container), std::begin(output), func);
 
@@ -188,13 +190,13 @@ namespace zacc {
     }
 
     template<typename T>
-    constexpr std::enable_if_t<zval_traits<T>::is_vector, T> make_index(T index)
+    constexpr std::enable_if_t<ztraits<T>::is_vector, T> make_index(T index)
     {
-        return make_index_impl(index, std::make_integer_sequence<size_t, zval_traits<T>::size>());
+        return make_index_impl(index, std::make_integer_sequence<size_t, ztraits<T>::size>());
     }
 
     template<typename T>
-    constexpr std::enable_if_t<!zval_traits<T>::is_vector, T> make_index(T index)
+    constexpr std::enable_if_t<!ztraits<T>::is_vector, T> make_index(T index)
     {
         return index;
     }

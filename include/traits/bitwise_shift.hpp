@@ -33,12 +33,9 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zint32)
      */
-    template<typename Base, typename Composed>
+    template<typename Base, typename Composed, typename Boolean>
     struct bitwise_shift : public Base {
         FORWARD(bitwise_shift);
-
-        using zval_t = typename Base::zval_t;
-        using bval_t = typename Base::bval_t;
 
         friend Composed operator<<(const Composed one, const size_t immediate) {
             return vbslli(one, immediate);

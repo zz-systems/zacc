@@ -32,27 +32,24 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Base, typename Composed>
+    template<typename Base, typename Composed, typename Boolean>
     struct comparable : public Base {
         FORWARD(comparable);
 
-        using zval_t = typename Base::zval_t;
-        using bval_t = typename Base::bval_t;
-
-        friend bval_t operator>(const Composed one, const Composed other) {
-            return bval_t(vgt(one, other), last_operation::comparison);
+        friend Boolean operator>(const Composed one, const Composed other) {
+            return Boolean(vgt(one, other), last_operation::comparison);
         }
 
-        friend bval_t operator>=(const Composed one, const Composed other) {
-            return bval_t(vge(one, other), last_operation::comparison);
+        friend Boolean operator>=(const Composed one, const Composed other) {
+            return Boolean(vge(one, other), last_operation::comparison);
         }
 
-        friend bval_t operator<(const Composed one, const Composed other) {
-            return bval_t(vlt(one, other), last_operation::comparison);
+        friend Boolean operator<(const Composed one, const Composed other) {
+            return Boolean(vlt(one, other), last_operation::comparison);
         }
 
-        friend bval_t operator<=(const Composed one, const Composed other) {
-            return bval_t(vle(one, other), last_operation::comparison);
+        friend Boolean operator<=(const Composed one, const Composed other) {
+            return Boolean(vle(one, other), last_operation::comparison);
         }
 
         CONVERSION(>);

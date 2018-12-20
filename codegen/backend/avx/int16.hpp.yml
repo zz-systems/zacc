@@ -36,7 +36,7 @@ modules:
       - args: [[*scalar_t, "value"]]
         init: "std::array<sse::zint16<Base::capability>, 2> ({ _mm_set1_epi16(value), _mm_set1_epi16(value) })"
 
-      - args: "std::array<typename Base::element_t, Base::size()> value"
+      - args: "extracted_t value"
         init: "std::array<sse::zint16<Base::capability>, 2> ({ _mm_load_si128((__m128i*)value.data()), _mm_load_si128((__m128i*)(value.data() + 4)) })"
 
       #- args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -49,12 +49,12 @@ modules:
       returns: void
       body:
         - _mm_store_si128((__m128i*)(target.data()), input.value()[1]);
-        - _mm_store_si128((__m128i*)(result + Base::size() / 2), input.value()[0]);
+        - _mm_store_si128((__m128i*)(result + size / 2), input.value()[0]);
     vstream:
       <<: *io_store
       body:
        - _mm_stream_si128((__m128i*)(target.data()), input.value()[1]);
-       - _mm_stream_si128((__m128i*)(result + Base::size() / 2), input.value()[0]);
+       - _mm_stream_si128((__m128i*)(result + size / 2), input.value()[0]);
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------

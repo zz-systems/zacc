@@ -37,7 +37,7 @@
 namespace zacc {
 
     /// @cond
-    template<typename Vector, typename MaskVector, size_t Size, size_t Alignment, uint64_t Features = 0xFFFF'FFFF'FFFF'FFFF>
+    template<typename Vector, typename MaskVector, typename Element, size_t Size, size_t Alignment, uint64_t Features = 0xFFFF'FFFF'FFFF'FFFF>
     struct bval;
     /// @endcond
 
@@ -53,8 +53,27 @@ namespace zacc {
      * @tparam Features capabilities
      */
     template<typename Vector, typename MaskVector, typename Element, typename Tag, size_t Size, size_t Alignment, uint64_t Features = 0xFFFF'FFFF'FFFF'FFFF>
-    struct zval : zval_base<Vector, MaskVector, Element, Tag, Size, Alignment, Features>
+    struct zval : zval_base //<Vector, MaskVector, Element, Tag, Size, Alignment, Features>
     {
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static constexpr size_t size = Size;
+
+        /// scalar type? vector type?
+        static constexpr bool is_vector = Size > 1;
+
+
+        static constexpr size_t features = Features;
+
+        /// memory alignment
+        static constexpr size_t alignment = Alignment;
+
+        //using original_extracted_t = std::array<Element, Size>;
+        using extracted_t = std::array<Element, Size>;
+
+        using tag = zval_tag;
+
+        using element_t = Element;
+
         /**
          * default constructor
          */

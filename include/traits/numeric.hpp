@@ -35,17 +35,8 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Base, typename Composed>
+    template<typename Base, typename Composed, typename Boolean>
     struct numeric : public Base {
-
-        using vector_t      = typename zval_traits<Base>::vector_t;
-        using element_t     = typename zval_traits<Base>::element_t;
-        using mask_vector_t = typename zval_traits<Base>::mask_vector_t;
-        using extracted_t   = typename zval_traits<Base>::extracted_t;
-
-        using zval_t = typename Base::zval_t;
-        using bval_t = typename Base::bval_t;
-
 
         FORWARD(numeric);
 
@@ -55,14 +46,14 @@ namespace zacc { namespace traits {
          * @return NaN
          */
         static constexpr Composed quiet_NaN() noexcept {
-            return std::numeric_limits<element_t>::quiet_NaN();
+            return std::numeric_limits<typename ztraits<Composed>::element_t>::quiet_NaN();
         };
 
         /**
          * @brief is the current value infinite?
          * @return true if infinite
          */
-        bval_t is_infinite() const noexcept {
+        Boolean is_infinite() const noexcept {
             return (*this) == infinity();
         };
 
@@ -72,7 +63,7 @@ namespace zacc { namespace traits {
          * @return infinity
          */
         static constexpr Composed infinity() noexcept {
-            return std::numeric_limits<element_t>::infinity();
+            return std::numeric_limits<typename ztraits<Composed>::element_t>::infinity();
         };
 
         /**
@@ -81,7 +72,7 @@ namespace zacc { namespace traits {
          * @return minimum value
          */
         static constexpr Composed min() noexcept {
-            return std::numeric_limits<element_t>::min();
+            return std::numeric_limits<typename ztraits<Composed>::element_t>::min();
         }
 
         /**
@@ -90,7 +81,7 @@ namespace zacc { namespace traits {
          * @return maximum value
          */
         static constexpr Composed max() noexcept {
-            return std::numeric_limits<element_t>::max();
+            return std::numeric_limits<typename ztraits<Composed>::element_t>::max();
         }
     };
 }}

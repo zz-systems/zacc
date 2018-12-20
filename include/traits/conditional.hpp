@@ -32,12 +32,9 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Base, typename Composed>
+    template<typename Base, typename Composed, typename Boolean>
     struct conditional : public Base {
         FORWARD(conditional);
-
-        using zval_t = typename Base::zval_t;
-        using bval_t = typename Base::bval_t;
 
         struct else_branch
         {
@@ -48,25 +45,25 @@ namespace zacc { namespace traits {
 
         private:
 
-            constexpr else_branch(const bval_t& condition, const Composed& if_value, std::false_type)
-                    : _if_value(if_value), _condition(condition.last_op() == last_operation::undefined ? (zval_t(condition.value()) != 0) : condition)
+            constexpr else_branch(const Boolean& condition, const Composed& if_value, std::false_type)
+                    : _if_value(if_value), _condition(condition.last_op() == last_operation::undefined ? (Composed(condition.value()) != 0) : condition)
             {
             }
 
-            constexpr else_branch(const bval_t& condition, const Composed& if_value, std::true_type)
+            constexpr else_branch(const Boolean& condition, const Composed& if_value, std::true_type)
                     : _if_value(if_value), _condition(condition)
             {
             }
 
             Composed _if_value;
-            bval_t _condition;
+            Boolean _condition;
 
-            friend struct conditional<Base, Composed>;
+            friend struct conditional<Base, Composed, Boolean>;
         };
 
 
-        constexpr else_branch when(const bval_t& condition) const {
-            return else_branch(condition, *this, is_cval<bval_t>{});
+        constexpr else_branch when(const Boolean& condition) const {
+            return else_branch(condition, *this, is_cval<Boolean>{});
         }
     };
 

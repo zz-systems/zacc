@@ -39,7 +39,7 @@ modules:
         args: "const T &value"
         init: value.value()
 
-      - args: "std::array<typename Base::element_t, Base::size()> value"
+      - args: "extracted_t value"
         init: "value[0]"
 
     boolean:

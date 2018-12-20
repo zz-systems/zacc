@@ -32,25 +32,22 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Base, typename Composed>
+    template<typename Base, typename Composed, typename Boolean>
     struct logical : public Base {
         FORWARD(logical);
 
-        using zval_t = typename Base::zval_t;
-        using bval_t = typename Base::bval_t;
-
-        bval_t operator!() {
-            return bval_t(vlneg(*this), last_operation::logic);
+        Boolean operator!() {
+            return Boolean(vlneg(static_cast<Boolean>(*this)), last_operation::logic);
         }
 
         template<typename U>
-        bval_t operator||(const U other) {
-            return bval_t(vlor(*this, static_cast<bval_t>(other)), last_operation::logic);
+        Boolean operator||(const U other) {
+            return Boolean(vlor(static_cast<Boolean>(*this), static_cast<Boolean>(other)), last_operation::logic);
         }
 
         template<typename U>
-        bval_t operator&&(const U other) {
-            return bval_t(vland(*this, static_cast<bval_t>(other)), last_operation::logic);
+        Boolean operator&&(const U other) {
+            return Boolean(vland(static_cast<Boolean>(*this), static_cast<Boolean>(other)), last_operation::logic);
         }
 
 //        friend bval_t operator!(const Composed one) {

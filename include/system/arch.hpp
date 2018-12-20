@@ -42,7 +42,7 @@ namespace zacc {
         static constexpr bool use_fast_float = ZACC_FAST_FLOAT;
 
         /// memory alignment
-        static constexpr size_t alignment = zval_traits<backend::ZACC_MAJOR_ARCH::zfloat32<arch::value>>::alignment;
+        static constexpr size_t alignment = ztraits<backend::ZACC_MAJOR_ARCH::zfloat32<arch::value>>::alignment;
 
         /// exposed dispatched implementation of zfloat32
         using zfloat32  = backend::ZACC_MAJOR_ARCH::zfloat32<arch::value>;

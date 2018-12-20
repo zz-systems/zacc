@@ -73,6 +73,7 @@ namespace zacc {
     /**
      * @brief provides pretty-print functionality for zacc types
      */
+    template<typename Composed>
     struct printable {
         /**
          * @brief printable trait implementation
@@ -82,9 +83,6 @@ namespace zacc {
         struct impl : public Base
         {
             FORWARD(impl);
-
-            using zval_t = typename Base::zval_t;
-            using bval_t = typename Base::bval_t;
 
             /**
              * @brief converts current data to string representation

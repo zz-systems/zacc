@@ -55,9 +55,31 @@ namespace zacc {
      * @tparam Alignment memory alignment
      * @tparam Features capabilities
      */
-    template<typename Vector, typename MaskVector, size_t Size, size_t Alignment, uint64_t Features>
-    struct bval : zval_base<Vector, MaskVector, bool, bval_tag, Size, Alignment, Features>
+    template<typename Vector, typename MaskVector, typename Element, size_t Size, size_t Alignment, uint64_t Features>
+    struct bval : bval_base //<Vector, MaskVector, bool, bval_tag, Size, Alignment, Features>
     {
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static constexpr size_t size = Size;
+
+        /// scalar type? vector type?
+        static constexpr bool is_vector = Size > 1;
+
+
+        static constexpr size_t features = Features;
+
+        /// memory alignment
+        static constexpr size_t alignment = Alignment;
+
+        using original_extracted_t = std::array<Element, Size>;
+
+        using extracted_t = std::array<bool, Size>;
+
+        using tag = bval_tag;
+
+        using original_element_t = Element;
+
+        using element_t = bool;
+
         /**
          * default constructor
          */
@@ -228,9 +250,9 @@ namespace zacc {
      * @return bval
      */
     template<typename T>
-    constexpr std::enable_if_t<is_zval<T>::value, typename zval_traits<T>::bval_t> make_bval(T value, last_operation last_op = last_operation::undefined)
+    constexpr std::enable_if_t<is_zval<T>::value, typename ztraits<T>::bval_t> make_bval(T value, last_operation last_op = last_operation::undefined)
     {
-        return typename zval_traits<T>::bval_t {value, last_op};
+        return typename ztraits<T>::bval_t {value, last_op};
     }
 
 
@@ -242,8 +264,35 @@ namespace zacc {
      * @return bval
      */
     template<typename T>
-    constexpr std::enable_if_t<!is_zval<T>::value, typename zval_traits<T>::bval_t> make_bval(T value)
+    constexpr std::enable_if_t<!is_zval<T>::value, typename ztraits<T>::bval_t> make_bval(T value)
     {
-        return static_cast<typename zval_traits<T>::bval_t>(value);
+        return static_cast<typename ztraits<T>::bval_t>(value);
+    }
+
+    /**
+     * construct a bval from arguments
+     * @tparam T any zval
+     * @param value
+     * @param last_op
+     * @return bval
+     */
+    template<typename T>
+    constexpr std::enable_if_t<is_zval<T>::value, typename T::bval_t> make_bval(T value, last_operation last_op = last_operation::undefined)
+    {
+        return typename ztraits<T>::bval_t {value, last_op};
+    }
+
+
+    /**
+     * construct a bval from arguments
+     * @tparam T any type not equal to zval
+     * @param value
+     * @param last_op
+     * @return bval
+     */
+    template<typename T>
+    constexpr std::enable_if_t<!is_zval<T>::value, typename T::bval_t> make_bval(T value)
+    {
+        return static_cast<typename T::bval_t>(value);
     }
 }

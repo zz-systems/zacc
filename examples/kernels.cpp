@@ -22,5 +22,5 @@
 // Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 
-#include "kernels/mandelbrot.hpp"
-#include "kernels/julia.hpp"
+//#include "kernels/mandelbrot.hpp"
+//#include "kernels/julia.hpp"

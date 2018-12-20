@@ -59,8 +59,8 @@ namespace zacc {
                 public Base,
                 public terminator
         {
-            using zval_t = typename Base::zval_t;
-            using bval_t = typename Base::bval_t;
+//            using zval_t = typename Base::zval_t;
+//            using bval_t = typename Base::bval_t;
 
             FORWARD(type);
         };

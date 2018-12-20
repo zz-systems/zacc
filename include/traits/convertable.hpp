@@ -34,6 +34,7 @@ namespace zacc {
     /**
      * @brief provides basic conversion functionality
      */
+    template<typename Composed>
     struct convertable {
         /**
          * @brief convertable trait implementation
@@ -43,14 +44,11 @@ namespace zacc {
         struct impl : public Base {
             FORWARD(impl);
 
-            using zval_t = typename Base::zval_t;
-            using bval_t = typename Base::bval_t;
-
             auto as_bool() const noexcept
             {
                 //return make_bval(*this, last_operation::undefined);
                 //return *this != 0;
-                return make_bval(*this);
+                return static_cast<typename Composed::bval_t>(static_cast<Composed>(*this));
             }
         };
     };

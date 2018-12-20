@@ -3,6 +3,7 @@ from codegen.ast import *
 from codegen.common import wrap, IllegalArgumentError
 
 import pprint
+import re
 
 class SyntaxError(ValueError):
     pass
@@ -170,11 +171,28 @@ class Parser():
 
 
     def arguments(self, data):
+        def mapArg(arg):
+            print(f"DEBUG ARG: {pprint.pprint(arg)} \n")
+
+            if isinstance(arg, list):
+                arr = arg
+            else:
+                arr = re.split('\s+', arg)
+
+            name = arr[-1] if arr[-1] != "Composed" else ""
+            type =  " ".join(arr[:-1]) if len(arr) > 1 else None
+
+            print(f"DEBUG ARG: NAME {name} TYPE {type}\n")
+
+            return self.argument(type=type, name=name)
+
         if isinstance(data, str):
-            data = { Tokens.RAW : data }
+            print(f"DEBUG STR: {data}\n")
+            data = [x.strip() for x in data.split(',')]
 
         if isinstance(data, list):
-            return [self.argument(name=arg) for arg in data]
+            print(f"DEBUG LIST: {data}\n")
+            return [mapArg(arg) for arg in data]
 
         if isinstance(data, dict) and peek(data, Tokens.RAW):
             return [self.argument(name = expect(data, Tokens.RAW), type=accept(data, Tokens.TYPE))]

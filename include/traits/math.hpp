@@ -32,12 +32,9 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Base, typename Composed>
+    template<typename Base, typename Composed, typename Boolean>
     struct math : public Base {
         FORWARD(math);
-
-        using zval_t = typename Base::zval_t;
-        using bval_t = typename Base::bval_t;
 
         /**
          * @brief absoulute value
