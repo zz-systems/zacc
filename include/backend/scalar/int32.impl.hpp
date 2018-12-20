@@ -48,15 +48,15 @@
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
 #include "traits/io.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/numeric.hpp"
 #include "traits/equatable.hpp"
-#include "traits/arithmetic.hpp"
 #include "traits/bitwise_shift.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/math.hpp"
-#include "traits/conditional.hpp"
 #include "traits/logical.hpp"
 #include "traits/comparable.hpp"
+#include "traits/math.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/conditional.hpp"
 
 namespace zacc { namespace backend { namespace scalar
 {
@@ -1462,7 +1462,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @tparam features feature mask
          */
         template<uint64_t features>
-        using __zint32 = compose
+        using __zint32 = compose_t
             <
             printable<zint32<features>>::template impl,
             convertable<zint32<features>>::template impl,
@@ -1484,7 +1484,7 @@ namespace zacc { namespace backend { namespace scalar {
         /// bint32 composition
         /// @tparam features feature mask
         template<uint64_t features>
-        using __bint32 = compose
+        using __bint32 = compose_t
             <
             printable<bint32<features>>::template impl,
             convertable<bint32<features>>::template impl,

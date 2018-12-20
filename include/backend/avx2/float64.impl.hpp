@@ -48,14 +48,14 @@
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
 #include "traits/numeric.hpp"
-#include "traits/comparable.hpp"
-#include "traits/logical.hpp"
-#include "traits/math.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/conditional.hpp"
+#include "traits/comparable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/logical.hpp"
 #include "traits/io.hpp"
 #include "traits/equatable.hpp"
-#include "traits/arithmetic.hpp"
+#include "traits/math.hpp"
+#include "traits/conditional.hpp"
 
 namespace zacc { namespace backend { namespace avx2
 {
@@ -1523,7 +1523,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @tparam features feature mask
          */
         template<uint64_t features>
-        using __zfloat64 = compose
+        using __zfloat64 = compose_t
             <
             printable<zfloat64<features>>::template impl,
             convertable<zfloat64<features>>::template impl,
@@ -1544,7 +1544,7 @@ namespace zacc { namespace backend { namespace avx2 {
         /// bfloat64 composition
         /// @tparam features feature mask
         template<uint64_t features>
-        using __bfloat64 = compose
+        using __bfloat64 = compose_t
             <
             printable<bfloat64<features>>::template impl,
             convertable<bfloat64<features>>::template impl,

@@ -47,16 +47,16 @@
 #include "traits/constructable.hpp"
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/logical.hpp"
-#include "traits/equatable.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/numeric.hpp"
 #include "traits/conditional.hpp"
-#include "traits/bitwise_shift.hpp"
 #include "traits/math.hpp"
-#include "traits/comparable.hpp"
 #include "traits/io.hpp"
+#include "traits/numeric.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/comparable.hpp"
+#include "traits/equatable.hpp"
+#include "traits/logical.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/arithmetic.hpp"
 
 namespace zacc { namespace backend { namespace scalar
 {
@@ -1423,7 +1423,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @tparam features feature mask
          */
         template<uint64_t features>
-        using __zint8 = compose
+        using __zint8 = compose_t
             <
             printable<zint8<features>>::template impl,
             convertable<zint8<features>>::template impl,
@@ -1445,7 +1445,7 @@ namespace zacc { namespace backend { namespace scalar {
         /// bint8 composition
         /// @tparam features feature mask
         template<uint64_t features>
-        using __bint8 = compose
+        using __bint8 = compose_t
             <
             printable<bint8<features>>::template impl,
             convertable<bint8<features>>::template impl,

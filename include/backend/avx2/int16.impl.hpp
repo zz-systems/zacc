@@ -47,14 +47,14 @@
 #include "traits/constructable.hpp"
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/comparable.hpp"
-#include "traits/logical.hpp"
 #include "traits/math.hpp"
-#include "traits/equatable.hpp"
-#include "traits/conditional.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/io.hpp"
+#include "traits/comparable.hpp"
+#include "traits/conditional.hpp"
 #include "traits/numeric.hpp"
+#include "traits/logical.hpp"
+#include "traits/equatable.hpp"
 #include "traits/bitwise_shift.hpp"
 #include "traits/arithmetic.hpp"
 
@@ -1443,7 +1443,7 @@ namespace zacc { namespace backend { namespace avx2 {
          * @tparam features feature mask
          */
         template<uint64_t features>
-        using __zint16 = compose
+        using __zint16 = compose_t
             <
             printable<zint16<features>>::template impl,
             convertable<zint16<features>>::template impl,
@@ -1465,7 +1465,7 @@ namespace zacc { namespace backend { namespace avx2 {
         /// bint16 composition
         /// @tparam features feature mask
         template<uint64_t features>
-        using __bint16 = compose
+        using __bint16 = compose_t
             <
             printable<bint16<features>>::template impl,
             convertable<bint16<features>>::template impl,

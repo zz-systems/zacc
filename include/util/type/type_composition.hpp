@@ -33,34 +33,32 @@
 
 namespace zacc {
 
-    /// @cond
-    template<template<class> class ... Policies>
-    struct compose;
-    /// @endcond
-
-    template<template<class> class Head,
-            template<class> class ... Tail>
-    struct compose<Head, Tail...> : Head<compose<Tail...>>
+    template<template<class> class Head, template<class> class... Tail>
+    struct compose
     {
-        template<typename... Args>
-        constexpr compose(Args &&...args) : Head<compose<Tail...>>(std::forward<Args>(args)...)
-        {}
+        using type = Head<typename compose<Tail...>::type>;
     };
 
-    template<>
-    struct compose<>
-    {};
+    template<template<class> class Tail>
+    struct compose<Tail>
+    {
+        struct terminator
+        {};
+
+        using type = Tail<terminator>;
+    };
+
+    template<template<class> class Head, template<class> class... Tail>
+    using compose_t = typename compose<Head, Tail...>::type;
 
     template<typename Base>
     struct composable
     {
-        template<typename terminator>
+        template<typename Terminator>
         struct type :
                 public Base,
-                public terminator
+                public Terminator
         {
-//            using zval_t = typename Base::zval_t;
-//            using bval_t = typename Base::bval_t;
 
             FORWARD(type);
         };

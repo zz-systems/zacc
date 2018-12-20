@@ -234,7 +234,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
          * @tparam features feature mask
          */
         template<uint64_t features>
-        using __z{{ ast.type.name }} = compose
+        using __z{{ ast.type.name }} = compose_t
             <
             {% for trait in Traits.render(ast, ModuleTypes.DEFAULT) %}
             {{ trait }},
@@ -246,7 +246,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
         /// b{{ ast.type.name }} composition
         /// @tparam features feature mask
         template<uint64_t features>
-        using __b{{ ast.type.name }} = compose
+        using __b{{ ast.type.name }} = compose_t
             <
             {% for trait in Traits.render(ast, ModuleTypes.BOOLEAN) %}
             {{ trait }},
