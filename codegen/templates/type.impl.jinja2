@@ -84,20 +84,30 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
         /// extracted std::array of (dim) scalar values
         using extracted_t = std::array<element_t, size>;
 
-
+        /**
+         * @brief zval parametrization using
+         * - '{{ ast.type.vector_type }}' as underlying vector type
+         * - '{{ ast.type.scalar_type }}' as scalar type
+         * - '{{ ast.type.size }}' as vector size
+         * - '{{ ast.type.alignment }}' as alignment
+         * @relates {{ ast.type.name }}
+         * @remark {{ ast.type.target }}
+         */
         template<uint64_t Features>
         using zval_base = zval<{{ ast.type.vector_type }}, {{ ast.type.mask_type }}, {{ ast.type.scalar_type }}, zval_tag, {{ ast.type.size }}, {{ ast.type.alignment }}, Features>;
 
+        /**
+         * @brief bval parametrization using
+         * - '{{ ast.type.vector_type }}' as underlying vector type
+         * - '{{ ast.type.scalar_type }}' as scalar type
+         * - '{{ ast.type.size }}' as vector size
+         * - '{{ ast.type.alignment }}' as alignment
+         * @relates {{ ast.type.name }}
+         * @remark {{ ast.type.target }}
+        */
         template<uint64_t Features>
         using bval_base = bval<{{ ast.type.vector_type }}, {{ ast.type.mask_type }}, {{ ast.type.scalar_type }}, {{ ast.type.size }}, {{ ast.type.alignment }}, Features>;
-
-        template<typename T>
-        using zval_is_base_of = std::is_base_of<zval_base<T::features>, T>;
-
-        template<typename T>
-        using bval_is_base_of = std::is_base_of<bval_base<T::features>, T>;
     }
-
 }}}
 
 namespace zacc {
@@ -224,168 +234,66 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
          * @tparam features feature mask
          */
         template<uint64_t features>
-        struct __z{{ ast.type.name }}
-        {
-            /// @cond
-            struct impl;
-            /// @endcond
-
-            /**
-            * @brief zval parametrization using
-            * - '{{ ast.type.vector_type }}' as underlying vector type
-            * - '{{ ast.type.scalar_type }}' as scalar type
-            * - '{{ ast.type.size }}' as vector size
-            * - '{{ ast.type.alignment }}' as alignment
-            * @relates {{ ast.type.name }}
-            * @remark {{ ast.type.target }}
-            */
-            using base = zval<{{ ast.type.vector_type }}, {{ ast.type.mask_type }}, {{ ast.type.scalar_type }}, zval_tag, {{ ast.type.size }}, {{ ast.type.alignment }}, features>;
-
-            /// parametrized zval base
-            struct composable_base : base
-            {
-                /// forward to base
-                FORWARD2(composable_base, base);
-            };
-
-            /// compose type from modules
-            using composed = compose
+        using __z{{ ast.type.name }} = compose
             <
             {% for trait in Traits.render(ast, ModuleTypes.DEFAULT) %}
-                {{ trait }},
+            {{ trait }},
             {% endfor %}
 
-                composable<composable_base>::template type
+            composable<zval_base<features>>::template type
             >;
-
-            /// implementation
-            struct impl : public composed
-            {
-                /// complete vector
-                using zval_t = z{{ ast.type.name }}<features>;
-                /// complete boolean vector
-                using bval_t = b{{ ast.type.name }}<features>;
-
-                using tag = zval_tag;
-
-                using element_t = {{ ast.type.scalar_type }};
-
-                /// vector size (1 - scalar, 4, 8, 16, ...)
-                static constexpr size_t size() { return {{ ast.type.name }}_detail::size; }
-
-                /// scalar type? vector type?
-                static constexpr bool is_vector = {{ ast.type.name }}_detail::is_vector;
-
-                /// memory alignment
-                static constexpr size_t alignment = {{ ast.type.name }}_detail::alignment;
-
-                /// forward to base
-                FORWARD2(impl, composed);
-            };
-        };
 
         /// b{{ ast.type.name }} composition
         /// @tparam features feature mask
         template<uint64_t features>
-        struct __b{{ ast.type.name }}
-        {
-            /// @cond
-            struct impl;
-            /// @endcond
-
-            /**
-            * @brief bval parametrization using
-            * - '{{ ast.type.vector_type }}' as underlying vector type
-            * - '{{ ast.type.scalar_type }}' as scalar type
-            * - '{{ ast.type.size }}' as vector size
-            * - '{{ ast.type.alignment }}' as alignment
-            * @relates {{ ast.type.name }}
-            * @remark {{ ast.type.target }}
-            */
-            using base = bval<{{ ast.type.vector_type }}, {{ ast.type.mask_type }}, {{ ast.type.scalar_type }}, {{ ast.type.size }}, {{ ast.type.alignment }}, features>;
-
-            /// parametrized zval base
-            struct composable_base : base
-            {
-                /// forward to base
-                FORWARD2(composable_base, base);
-            };
-
-            /// compose type from modules
-            using composed = compose
+        using __b{{ ast.type.name }} = compose
             <
             {% for trait in Traits.render(ast, ModuleTypes.BOOLEAN) %}
-                {{ trait }},
+            {{ trait }},
             {% endfor %}
 
-                composable<composable_base>::template type
+            composable<bval_base<features>>::template type
             >;
 
-            /// implementation
-            struct impl : public composed
-            {
-                /// complete vector
-                using zval_t = z{{ ast.type.name }}<features>;
-                /// complete boolean vector
-                using bval_t = b{{ ast.type.name }}<features>;
-
-                using tag = bval_tag;
-
-                using element_t = bool;
-
-                /// vector size (1 - scalar, 4, 8, 16, ...)
-                static constexpr size_t size() { return {{ ast.type.name }}_detail::size; }
-
-                /// scalar type? vector type?
-                static constexpr bool is_vector = {{ ast.type.name }}_detail::is_vector;
-
-                /// memory alignment
-                static constexpr size_t alignment = {{ ast.type.name }}_detail::alignment;
-
-                /// forward to base
-                FORWARD2(impl, composed);
-            };
-        };
-
+        ///@}
     } // end namespace
 
     /// public z{{ ast.type.name }} implementation
     /// @tparam features feature mask
-    template<uint64_t features>
-    struct z{{ ast.type.name }} : public {{ ast.type.name }}_detail::__z{{ ast.type.name }}<features>::impl
+    template<uint64_t Features>
+    struct z{{ ast.type.name }} : public {{ ast.type.name }}_detail::__z{{ ast.type.name }}<Features>
     {
-            /// complete vector
-            using zval_t = z{{ ast.type.name }}<features>;
-            /// complete boolean vector
-            using bval_t = b{{ ast.type.name }}<features>;
+        /// complete vector
+        using zval_t = z{{ ast.type.name }}<Features>;
+        /// complete boolean vector
+        using bval_t = b{{ ast.type.name }}<Features>;
 
-            using tag = zval_tag;
+        using tag = zval_tag;
 
-            using element_t = {{ ast.type.scalar_type }};
+        using element_t = {{ ast.type.scalar_type }};
 
-            /// vector size (1 - scalar, 4, 8, 16, ...)
-            static constexpr size_t size() { return {{ ast.type.name }}_detail::size; }
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static constexpr size_t size() { return {{ ast.type.name }}_detail::size; }
 
-            /// scalar type? vector type?
-            static constexpr bool is_vector = {{ ast.type.name }}_detail::is_vector;
+        /// scalar type? vector type?
+        static constexpr bool is_vector = {{ ast.type.name }}_detail::is_vector;
 
-            /// memory alignment
-            static constexpr size_t alignment = {{ ast.type.name }}_detail::alignment;
+        /// memory alignment
+        static constexpr size_t alignment = {{ ast.type.name }}_detail::alignment;
 
-
-            /// forward to base
-            FORWARD2(z{{ ast.type.name }}, {{ ast.type.name }}_detail::__z{{ ast.type.name }}<features>::impl);
+        /// forward to base
+        FORWARD2(z{{ ast.type.name }}, {{ ast.type.name }}_detail::__z{{ ast.type.name }}<Features>);
     };
 
     /// public b{{ ast.type.name }} implementation
-    /// @tparam features feature mask
-    template<uint64_t features>
-    struct b{{ ast.type.name }} : public {{ ast.type.name }}_detail::__b{{ ast.type.name }}<features>::impl
+    /// @tparam Features feature mask
+    template<uint64_t Features>
+    struct b{{ ast.type.name }} : public {{ ast.type.name }}_detail::__b{{ ast.type.name }}<Features>
     {
         /// complete vector
-        using zval_t = z{{ ast.type.name }}<features>;
+        using zval_t = z{{ ast.type.name }}<Features>;
         /// complete boolean vector
-        using bval_t = b{{ ast.type.name }}<features>;
+        using bval_t = b{{ ast.type.name }}<Features>;
 
         using tag = bval_tag;
 
@@ -401,7 +309,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }} {
         static constexpr size_t alignment = {{ ast.type.name }}_detail::alignment;
 
         /// forward to base
-        FORWARD2(b{{ ast.type.name }}, {{ ast.type.name }}_detail::__b{{ ast.type.name }}<features>::impl);
+        FORWARD2(b{{ ast.type.name }}, {{ ast.type.name }}_detail::__b{{ ast.type.name }}<Features>);
     };
 
     static_assert(is_zval<z{{ ast.type.name }}<0>>::value, "is_zval for z{{ ast.type.name }} failed.");

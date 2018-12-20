@@ -47,16 +47,16 @@
 #include "traits/constructable.hpp"
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/numeric.hpp"
-#include "traits/logical.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/comparable.hpp"
-#include "traits/arithmetic.hpp"
 #include "traits/io.hpp"
+#include "traits/numeric.hpp"
 #include "traits/equatable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/math.hpp"
 #include "traits/conditional.hpp"
-#include "traits/bitwise.hpp"
+#include "traits/logical.hpp"
+#include "traits/comparable.hpp"
 
 namespace zacc { namespace backend { namespace scalar
 {
@@ -91,20 +91,30 @@ namespace zacc { namespace backend { namespace scalar
         /// extracted std::array of (dim) scalar values
         using extracted_t = std::array<element_t, size>;
 
-
+        /**
+         * @brief zval parametrization using
+         * - 'int32_t' as underlying vector type
+         * - 'int32_t' as scalar type
+         * - '1' as vector size
+         * - '16' as alignment
+         * @relates int32
+         * @remark scalar
+         */
         template<uint64_t Features>
         using zval_base = zval<int32_t, bool, int32_t, zval_tag, 1, 16, Features>;
 
+        /**
+         * @brief bval parametrization using
+         * - 'int32_t' as underlying vector type
+         * - 'int32_t' as scalar type
+         * - '1' as vector size
+         * - '16' as alignment
+         * @relates int32
+         * @remark scalar
+        */
         template<uint64_t Features>
         using bval_base = bval<int32_t, bool, int32_t, 1, 16, Features>;
-
-        template<typename T>
-        using zval_is_base_of = std::is_base_of<zval_base<T::features>, T>;
-
-        template<typename T>
-        using bval_is_base_of = std::is_base_of<bval_base<T::features>, T>;
     }
-
 }}}
 
 namespace zacc {
@@ -150,7 +160,6 @@ namespace zacc {
 namespace zacc { namespace backend { namespace scalar {
 
     namespace int32_detail {
-
 
         // =================================================================================================================
         /**
@@ -236,7 +245,6 @@ namespace zacc { namespace backend { namespace scalar {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name constructable modules
@@ -308,7 +316,6 @@ namespace zacc { namespace backend { namespace scalar {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -386,7 +393,6 @@ namespace zacc { namespace backend { namespace scalar {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -491,7 +497,6 @@ namespace zacc { namespace backend { namespace scalar {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name numeric modules
@@ -529,7 +534,6 @@ namespace zacc { namespace backend { namespace scalar {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -647,7 +651,6 @@ namespace zacc { namespace backend { namespace scalar {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name bitwise modules
@@ -751,7 +754,6 @@ namespace zacc { namespace backend { namespace scalar {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name bitwise_shift modules
@@ -841,7 +843,6 @@ namespace zacc { namespace backend { namespace scalar {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -933,7 +934,6 @@ namespace zacc { namespace backend { namespace scalar {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name logical modules
@@ -1011,7 +1011,6 @@ namespace zacc { namespace backend { namespace scalar {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name equatable modules
@@ -1076,7 +1075,6 @@ namespace zacc { namespace backend { namespace scalar {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name conditional modules
@@ -1127,7 +1125,6 @@ namespace zacc { namespace backend { namespace scalar {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -1205,7 +1202,6 @@ namespace zacc { namespace backend { namespace scalar {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -1310,7 +1306,6 @@ namespace zacc { namespace backend { namespace scalar {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name logical modules
@@ -1387,7 +1382,6 @@ namespace zacc { namespace backend { namespace scalar {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -1468,182 +1462,80 @@ namespace zacc { namespace backend { namespace scalar {
          * @tparam features feature mask
          */
         template<uint64_t features>
-        struct __zint32
-        {
-            /// @cond
-            struct impl;
-            /// @endcond
-
-            /**
-            * @brief zval parametrization using
-            * - 'int32_t' as underlying vector type
-            * - 'int32_t' as scalar type
-            * - '1' as vector size
-            * - '16' as alignment
-            * @relates int32
-            * @remark scalar
-            */
-            using base = zval<int32_t, bool, int32_t, zval_tag, 1, 16, features>;
-
-            /// parametrized zval base
-            struct composable_base : base
-            {
-                /// forward to base
-                FORWARD2(composable_base, base);
-            };
-
-            /// compose type from modules
-            using composed = compose
+        using __zint32 = compose
             <
-                printable<zint32<features>>::template impl,
-                convertable<zint32<features>>::template impl,
-                zint32_io<zint32<features>>::template impl,
-                zint32_math<zint32<features>>::template impl,
-                zint32_numeric<zint32<features>>::template impl,
-                zint32_arithmetic<zint32<features>>::template impl,
-                zint32_bitwise<zint32<features>>::template impl,
-                zint32_bitwise_shift<zint32<features>>::template impl,
-                zint32_comparable<zint32<features>>::template impl,
-                zint32_logical<zint32<features>>::template impl,
-                zint32_equatable<zint32<features>>::template impl,
-                zint32_conditional<zint32<features>>::template impl,
-                zint32_constructable<zint32<features>>::template impl,
+            printable<zint32<features>>::template impl,
+            convertable<zint32<features>>::template impl,
+            zint32_io<zint32<features>>::template impl,
+            zint32_math<zint32<features>>::template impl,
+            zint32_numeric<zint32<features>>::template impl,
+            zint32_arithmetic<zint32<features>>::template impl,
+            zint32_bitwise<zint32<features>>::template impl,
+            zint32_bitwise_shift<zint32<features>>::template impl,
+            zint32_comparable<zint32<features>>::template impl,
+            zint32_logical<zint32<features>>::template impl,
+            zint32_equatable<zint32<features>>::template impl,
+            zint32_conditional<zint32<features>>::template impl,
+            zint32_constructable<zint32<features>>::template impl,
 
-                composable<composable_base>::template type
+            composable<zval_base<features>>::template type
             >;
-
-            /// implementation
-            struct impl : public composed
-            {
-                /// complete vector
-                using zval_t = zint32<features>;
-                /// complete boolean vector
-                using bval_t = bint32<features>;
-
-                using tag = zval_tag;
-
-                using element_t = int32_t;
-
-                /// vector size (1 - scalar, 4, 8, 16, ...)
-                static constexpr size_t size() { return int32_detail::size; }
-
-                /// scalar type? vector type?
-                static constexpr bool is_vector = int32_detail::is_vector;
-
-                /// memory alignment
-                static constexpr size_t alignment = int32_detail::alignment;
-
-                /// forward to base
-                FORWARD2(impl, composed);
-            };
-        };
 
         /// bint32 composition
         /// @tparam features feature mask
         template<uint64_t features>
-        struct __bint32
-        {
-            /// @cond
-            struct impl;
-            /// @endcond
-
-            /**
-            * @brief bval parametrization using
-            * - 'int32_t' as underlying vector type
-            * - 'int32_t' as scalar type
-            * - '1' as vector size
-            * - '16' as alignment
-            * @relates int32
-            * @remark scalar
-            */
-            using base = bval<int32_t, bool, int32_t, 1, 16, features>;
-
-            /// parametrized zval base
-            struct composable_base : base
-            {
-                /// forward to base
-                FORWARD2(composable_base, base);
-            };
-
-            /// compose type from modules
-            using composed = compose
+        using __bint32 = compose
             <
-                printable<bint32<features>>::template impl,
-                convertable<bint32<features>>::template impl,
-                bint32_io<bint32<features>>::template impl,
-                bint32_bitwise<bint32<features>>::template impl,
-                bint32_logical<bint32<features>>::template impl,
-                bint32_equatable<bint32<features>>::template impl,
-                bint32_constructable<bint32<features>>::template impl,
+            printable<bint32<features>>::template impl,
+            convertable<bint32<features>>::template impl,
+            bint32_io<bint32<features>>::template impl,
+            bint32_bitwise<bint32<features>>::template impl,
+            bint32_logical<bint32<features>>::template impl,
+            bint32_equatable<bint32<features>>::template impl,
+            bint32_constructable<bint32<features>>::template impl,
 
-                composable<composable_base>::template type
+            composable<bval_base<features>>::template type
             >;
 
-            /// implementation
-            struct impl : public composed
-            {
-                /// complete vector
-                using zval_t = zint32<features>;
-                /// complete boolean vector
-                using bval_t = bint32<features>;
-
-                using tag = bval_tag;
-
-                using element_t = bool;
-
-                /// vector size (1 - scalar, 4, 8, 16, ...)
-                static constexpr size_t size() { return int32_detail::size; }
-
-                /// scalar type? vector type?
-                static constexpr bool is_vector = int32_detail::is_vector;
-
-                /// memory alignment
-                static constexpr size_t alignment = int32_detail::alignment;
-
-                /// forward to base
-                FORWARD2(impl, composed);
-            };
-        };
-
+        ///@}
     } // end namespace
 
     /// public zint32 implementation
     /// @tparam features feature mask
-    template<uint64_t features>
-    struct zint32 : public int32_detail::__zint32<features>::impl
+    template<uint64_t Features>
+    struct zint32 : public int32_detail::__zint32<Features>
     {
-            /// complete vector
-            using zval_t = zint32<features>;
-            /// complete boolean vector
-            using bval_t = bint32<features>;
+        /// complete vector
+        using zval_t = zint32<Features>;
+        /// complete boolean vector
+        using bval_t = bint32<Features>;
 
-            using tag = zval_tag;
+        using tag = zval_tag;
 
-            using element_t = int32_t;
+        using element_t = int32_t;
 
-            /// vector size (1 - scalar, 4, 8, 16, ...)
-            static constexpr size_t size() { return int32_detail::size; }
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static constexpr size_t size() { return int32_detail::size; }
 
-            /// scalar type? vector type?
-            static constexpr bool is_vector = int32_detail::is_vector;
+        /// scalar type? vector type?
+        static constexpr bool is_vector = int32_detail::is_vector;
 
-            /// memory alignment
-            static constexpr size_t alignment = int32_detail::alignment;
+        /// memory alignment
+        static constexpr size_t alignment = int32_detail::alignment;
 
-
-            /// forward to base
-            FORWARD2(zint32, int32_detail::__zint32<features>::impl);
+        /// forward to base
+        FORWARD2(zint32, int32_detail::__zint32<Features>);
     };
 
     /// public bint32 implementation
-    /// @tparam features feature mask
-    template<uint64_t features>
-    struct bint32 : public int32_detail::__bint32<features>::impl
+    /// @tparam Features feature mask
+    template<uint64_t Features>
+    struct bint32 : public int32_detail::__bint32<Features>
     {
         /// complete vector
-        using zval_t = zint32<features>;
+        using zval_t = zint32<Features>;
         /// complete boolean vector
-        using bval_t = bint32<features>;
+        using bval_t = bint32<Features>;
 
         using tag = bval_tag;
 
@@ -1659,7 +1551,7 @@ namespace zacc { namespace backend { namespace scalar {
         static constexpr size_t alignment = int32_detail::alignment;
 
         /// forward to base
-        FORWARD2(bint32, int32_detail::__bint32<features>::impl);
+        FORWARD2(bint32, int32_detail::__bint32<Features>);
     };
 
     static_assert(is_zval<zint32<0>>::value, "is_zval for zint32 failed.");

@@ -47,15 +47,15 @@
 #include "traits/constructable.hpp"
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/equatable.hpp"
-#include "traits/comparable.hpp"
-#include "traits/io.hpp"
-#include "traits/logical.hpp"
-#include "traits/conditional.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/math.hpp"
+#include "traits/logical.hpp"
+#include "traits/comparable.hpp"
+#include "traits/equatable.hpp"
+#include "traits/io.hpp"
 #include "traits/numeric.hpp"
+#include "traits/conditional.hpp"
+#include "traits/math.hpp"
+#include "traits/arithmetic.hpp"
 
 namespace zacc { namespace backend { namespace avx2
 {
@@ -90,20 +90,30 @@ namespace zacc { namespace backend { namespace avx2
         /// extracted std::array of (dim) scalar values
         using extracted_t = std::array<element_t, size>;
 
-
+        /**
+         * @brief zval parametrization using
+         * - '__m256i' as underlying vector type
+         * - 'int8_t' as scalar type
+         * - '32' as vector size
+         * - '32' as alignment
+         * @relates int8
+         * @remark avx2
+         */
         template<uint64_t Features>
         using zval_base = zval<__m256i, __m256i, int8_t, zval_tag, 32, 32, Features>;
 
+        /**
+         * @brief bval parametrization using
+         * - '__m256i' as underlying vector type
+         * - 'int8_t' as scalar type
+         * - '32' as vector size
+         * - '32' as alignment
+         * @relates int8
+         * @remark avx2
+        */
         template<uint64_t Features>
         using bval_base = bval<__m256i, __m256i, int8_t, 32, 32, Features>;
-
-        template<typename T>
-        using zval_is_base_of = std::is_base_of<zval_base<T::features>, T>;
-
-        template<typename T>
-        using bval_is_base_of = std::is_base_of<bval_base<T::features>, T>;
     }
-
 }}}
 
 namespace zacc {
@@ -149,7 +159,6 @@ namespace zacc {
 namespace zacc { namespace backend { namespace avx2 {
 
     namespace int8_detail {
-
 
         // =================================================================================================================
         /**
@@ -247,7 +256,6 @@ namespace zacc { namespace backend { namespace avx2 {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name constructable modules
@@ -320,7 +328,6 @@ namespace zacc { namespace backend { namespace avx2 {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name io modules
@@ -384,7 +391,6 @@ namespace zacc { namespace backend { namespace avx2 {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -476,7 +482,6 @@ namespace zacc { namespace backend { namespace avx2 {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name numeric modules
@@ -514,7 +519,6 @@ namespace zacc { namespace backend { namespace avx2 {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -638,7 +642,6 @@ namespace zacc { namespace backend { namespace avx2 {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name bitwise modules
@@ -744,7 +747,6 @@ namespace zacc { namespace backend { namespace avx2 {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name comparable modules
@@ -835,7 +837,6 @@ namespace zacc { namespace backend { namespace avx2 {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name logical modules
@@ -913,7 +914,6 @@ namespace zacc { namespace backend { namespace avx2 {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name equatable modules
@@ -978,7 +978,6 @@ namespace zacc { namespace backend { namespace avx2 {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name conditional modules
@@ -1029,7 +1028,6 @@ namespace zacc { namespace backend { namespace avx2 {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -1094,7 +1092,6 @@ namespace zacc { namespace backend { namespace avx2 {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -1201,7 +1198,6 @@ namespace zacc { namespace backend { namespace avx2 {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name logical modules
@@ -1278,7 +1274,6 @@ namespace zacc { namespace backend { namespace avx2 {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -1359,181 +1354,79 @@ namespace zacc { namespace backend { namespace avx2 {
          * @tparam features feature mask
          */
         template<uint64_t features>
-        struct __zint8
-        {
-            /// @cond
-            struct impl;
-            /// @endcond
-
-            /**
-            * @brief zval parametrization using
-            * - '__m256i' as underlying vector type
-            * - 'int8_t' as scalar type
-            * - '32' as vector size
-            * - '32' as alignment
-            * @relates int8
-            * @remark avx2
-            */
-            using base = zval<__m256i, __m256i, int8_t, zval_tag, 32, 32, features>;
-
-            /// parametrized zval base
-            struct composable_base : base
-            {
-                /// forward to base
-                FORWARD2(composable_base, base);
-            };
-
-            /// compose type from modules
-            using composed = compose
+        using __zint8 = compose
             <
-                printable<zint8<features>>::template impl,
-                convertable<zint8<features>>::template impl,
-                zint8_io<zint8<features>>::template impl,
-                zint8_math<zint8<features>>::template impl,
-                zint8_numeric<zint8<features>>::template impl,
-                zint8_arithmetic<zint8<features>>::template impl,
-                zint8_bitwise<zint8<features>>::template impl,
-                zint8_comparable<zint8<features>>::template impl,
-                zint8_logical<zint8<features>>::template impl,
-                zint8_equatable<zint8<features>>::template impl,
-                zint8_conditional<zint8<features>>::template impl,
-                zint8_constructable<zint8<features>>::template impl,
+            printable<zint8<features>>::template impl,
+            convertable<zint8<features>>::template impl,
+            zint8_io<zint8<features>>::template impl,
+            zint8_math<zint8<features>>::template impl,
+            zint8_numeric<zint8<features>>::template impl,
+            zint8_arithmetic<zint8<features>>::template impl,
+            zint8_bitwise<zint8<features>>::template impl,
+            zint8_comparable<zint8<features>>::template impl,
+            zint8_logical<zint8<features>>::template impl,
+            zint8_equatable<zint8<features>>::template impl,
+            zint8_conditional<zint8<features>>::template impl,
+            zint8_constructable<zint8<features>>::template impl,
 
-                composable<composable_base>::template type
+            composable<zval_base<features>>::template type
             >;
-
-            /// implementation
-            struct impl : public composed
-            {
-                /// complete vector
-                using zval_t = zint8<features>;
-                /// complete boolean vector
-                using bval_t = bint8<features>;
-
-                using tag = zval_tag;
-
-                using element_t = int8_t;
-
-                /// vector size (1 - scalar, 4, 8, 16, ...)
-                static constexpr size_t size() { return int8_detail::size; }
-
-                /// scalar type? vector type?
-                static constexpr bool is_vector = int8_detail::is_vector;
-
-                /// memory alignment
-                static constexpr size_t alignment = int8_detail::alignment;
-
-                /// forward to base
-                FORWARD2(impl, composed);
-            };
-        };
 
         /// bint8 composition
         /// @tparam features feature mask
         template<uint64_t features>
-        struct __bint8
-        {
-            /// @cond
-            struct impl;
-            /// @endcond
-
-            /**
-            * @brief bval parametrization using
-            * - '__m256i' as underlying vector type
-            * - 'int8_t' as scalar type
-            * - '32' as vector size
-            * - '32' as alignment
-            * @relates int8
-            * @remark avx2
-            */
-            using base = bval<__m256i, __m256i, int8_t, 32, 32, features>;
-
-            /// parametrized zval base
-            struct composable_base : base
-            {
-                /// forward to base
-                FORWARD2(composable_base, base);
-            };
-
-            /// compose type from modules
-            using composed = compose
+        using __bint8 = compose
             <
-                printable<bint8<features>>::template impl,
-                convertable<bint8<features>>::template impl,
-                bint8_io<bint8<features>>::template impl,
-                bint8_bitwise<bint8<features>>::template impl,
-                bint8_logical<bint8<features>>::template impl,
-                bint8_equatable<bint8<features>>::template impl,
-                bint8_constructable<bint8<features>>::template impl,
+            printable<bint8<features>>::template impl,
+            convertable<bint8<features>>::template impl,
+            bint8_io<bint8<features>>::template impl,
+            bint8_bitwise<bint8<features>>::template impl,
+            bint8_logical<bint8<features>>::template impl,
+            bint8_equatable<bint8<features>>::template impl,
+            bint8_constructable<bint8<features>>::template impl,
 
-                composable<composable_base>::template type
+            composable<bval_base<features>>::template type
             >;
 
-            /// implementation
-            struct impl : public composed
-            {
-                /// complete vector
-                using zval_t = zint8<features>;
-                /// complete boolean vector
-                using bval_t = bint8<features>;
-
-                using tag = bval_tag;
-
-                using element_t = bool;
-
-                /// vector size (1 - scalar, 4, 8, 16, ...)
-                static constexpr size_t size() { return int8_detail::size; }
-
-                /// scalar type? vector type?
-                static constexpr bool is_vector = int8_detail::is_vector;
-
-                /// memory alignment
-                static constexpr size_t alignment = int8_detail::alignment;
-
-                /// forward to base
-                FORWARD2(impl, composed);
-            };
-        };
-
+        ///@}
     } // end namespace
 
     /// public zint8 implementation
     /// @tparam features feature mask
-    template<uint64_t features>
-    struct zint8 : public int8_detail::__zint8<features>::impl
+    template<uint64_t Features>
+    struct zint8 : public int8_detail::__zint8<Features>
     {
-            /// complete vector
-            using zval_t = zint8<features>;
-            /// complete boolean vector
-            using bval_t = bint8<features>;
+        /// complete vector
+        using zval_t = zint8<Features>;
+        /// complete boolean vector
+        using bval_t = bint8<Features>;
 
-            using tag = zval_tag;
+        using tag = zval_tag;
 
-            using element_t = int8_t;
+        using element_t = int8_t;
 
-            /// vector size (1 - scalar, 4, 8, 16, ...)
-            static constexpr size_t size() { return int8_detail::size; }
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static constexpr size_t size() { return int8_detail::size; }
 
-            /// scalar type? vector type?
-            static constexpr bool is_vector = int8_detail::is_vector;
+        /// scalar type? vector type?
+        static constexpr bool is_vector = int8_detail::is_vector;
 
-            /// memory alignment
-            static constexpr size_t alignment = int8_detail::alignment;
+        /// memory alignment
+        static constexpr size_t alignment = int8_detail::alignment;
 
-
-            /// forward to base
-            FORWARD2(zint8, int8_detail::__zint8<features>::impl);
+        /// forward to base
+        FORWARD2(zint8, int8_detail::__zint8<Features>);
     };
 
     /// public bint8 implementation
-    /// @tparam features feature mask
-    template<uint64_t features>
-    struct bint8 : public int8_detail::__bint8<features>::impl
+    /// @tparam Features feature mask
+    template<uint64_t Features>
+    struct bint8 : public int8_detail::__bint8<Features>
     {
         /// complete vector
-        using zval_t = zint8<features>;
+        using zval_t = zint8<Features>;
         /// complete boolean vector
-        using bval_t = bint8<features>;
+        using bval_t = bint8<Features>;
 
         using tag = bval_tag;
 
@@ -1549,7 +1442,7 @@ namespace zacc { namespace backend { namespace avx2 {
         static constexpr size_t alignment = int8_detail::alignment;
 
         /// forward to base
-        FORWARD2(bint8, int8_detail::__bint8<features>::impl);
+        FORWARD2(bint8, int8_detail::__bint8<Features>);
     };
 
     static_assert(is_zval<zint8<0>>::value, "is_zval for zint8 failed.");

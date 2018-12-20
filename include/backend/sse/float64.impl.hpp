@@ -47,15 +47,15 @@
 #include "traits/constructable.hpp"
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/equatable.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/numeric.hpp"
-#include "traits/comparable.hpp"
-#include "traits/logical.hpp"
 #include "traits/io.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/conditional.hpp"
+#include "traits/comparable.hpp"
+#include "traits/equatable.hpp"
 #include "traits/math.hpp"
+#include "traits/numeric.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/logical.hpp"
 
 namespace zacc { namespace backend { namespace sse
 {
@@ -90,20 +90,30 @@ namespace zacc { namespace backend { namespace sse
         /// extracted std::array of (dim) scalar values
         using extracted_t = std::array<element_t, size>;
 
-
+        /**
+         * @brief zval parametrization using
+         * - '__m128d' as underlying vector type
+         * - 'double' as scalar type
+         * - '2' as vector size
+         * - '16' as alignment
+         * @relates float64
+         * @remark sse
+         */
         template<uint64_t Features>
         using zval_base = zval<__m128d, __m128d, double, zval_tag, 2, 16, Features>;
 
+        /**
+         * @brief bval parametrization using
+         * - '__m128d' as underlying vector type
+         * - 'double' as scalar type
+         * - '2' as vector size
+         * - '16' as alignment
+         * @relates float64
+         * @remark sse
+        */
         template<uint64_t Features>
         using bval_base = bval<__m128d, __m128d, double, 2, 16, Features>;
-
-        template<typename T>
-        using zval_is_base_of = std::is_base_of<zval_base<T::features>, T>;
-
-        template<typename T>
-        using bval_is_base_of = std::is_base_of<bval_base<T::features>, T>;
     }
-
 }}}
 
 namespace zacc {
@@ -149,7 +159,6 @@ namespace zacc {
 namespace zacc { namespace backend { namespace sse {
 
     namespace float64_detail {
-
 
         // =================================================================================================================
         /**
@@ -271,7 +280,6 @@ namespace zacc { namespace backend { namespace sse {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name constructable modules
@@ -343,7 +351,6 @@ namespace zacc { namespace backend { namespace sse {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -422,7 +429,6 @@ namespace zacc { namespace backend { namespace sse {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -648,7 +654,6 @@ namespace zacc { namespace backend { namespace sse {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name numeric modules
@@ -686,7 +691,6 @@ namespace zacc { namespace backend { namespace sse {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -817,7 +821,6 @@ namespace zacc { namespace backend { namespace sse {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name bitwise modules
@@ -935,7 +938,6 @@ namespace zacc { namespace backend { namespace sse {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name comparable modules
@@ -1026,7 +1028,6 @@ namespace zacc { namespace backend { namespace sse {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name logical modules
@@ -1104,7 +1105,6 @@ namespace zacc { namespace backend { namespace sse {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name equatable modules
@@ -1169,7 +1169,6 @@ namespace zacc { namespace backend { namespace sse {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name conditional modules
@@ -1233,7 +1232,6 @@ namespace zacc { namespace backend { namespace sse {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -1312,7 +1310,6 @@ namespace zacc { namespace backend { namespace sse {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -1431,7 +1428,6 @@ namespace zacc { namespace backend { namespace sse {
 
         ///@}
 
-
         // =================================================================================================================
         /**
          * @name logical modules
@@ -1508,7 +1504,6 @@ namespace zacc { namespace backend { namespace sse {
         };
 
         ///@}
-
 
         // =================================================================================================================
         /**
@@ -1589,181 +1584,79 @@ namespace zacc { namespace backend { namespace sse {
          * @tparam features feature mask
          */
         template<uint64_t features>
-        struct __zfloat64
-        {
-            /// @cond
-            struct impl;
-            /// @endcond
-
-            /**
-            * @brief zval parametrization using
-            * - '__m128d' as underlying vector type
-            * - 'double' as scalar type
-            * - '2' as vector size
-            * - '16' as alignment
-            * @relates float64
-            * @remark sse
-            */
-            using base = zval<__m128d, __m128d, double, zval_tag, 2, 16, features>;
-
-            /// parametrized zval base
-            struct composable_base : base
-            {
-                /// forward to base
-                FORWARD2(composable_base, base);
-            };
-
-            /// compose type from modules
-            using composed = compose
+        using __zfloat64 = compose
             <
-                printable<zfloat64<features>>::template impl,
-                convertable<zfloat64<features>>::template impl,
-                zfloat64_io<zfloat64<features>>::template impl,
-                zfloat64_math<zfloat64<features>>::template impl,
-                zfloat64_numeric<zfloat64<features>>::template impl,
-                zfloat64_arithmetic<zfloat64<features>>::template impl,
-                zfloat64_bitwise<zfloat64<features>>::template impl,
-                zfloat64_comparable<zfloat64<features>>::template impl,
-                zfloat64_logical<zfloat64<features>>::template impl,
-                zfloat64_equatable<zfloat64<features>>::template impl,
-                zfloat64_conditional<zfloat64<features>>::template impl,
-                zfloat64_constructable<zfloat64<features>>::template impl,
+            printable<zfloat64<features>>::template impl,
+            convertable<zfloat64<features>>::template impl,
+            zfloat64_io<zfloat64<features>>::template impl,
+            zfloat64_math<zfloat64<features>>::template impl,
+            zfloat64_numeric<zfloat64<features>>::template impl,
+            zfloat64_arithmetic<zfloat64<features>>::template impl,
+            zfloat64_bitwise<zfloat64<features>>::template impl,
+            zfloat64_comparable<zfloat64<features>>::template impl,
+            zfloat64_logical<zfloat64<features>>::template impl,
+            zfloat64_equatable<zfloat64<features>>::template impl,
+            zfloat64_conditional<zfloat64<features>>::template impl,
+            zfloat64_constructable<zfloat64<features>>::template impl,
 
-                composable<composable_base>::template type
+            composable<zval_base<features>>::template type
             >;
-
-            /// implementation
-            struct impl : public composed
-            {
-                /// complete vector
-                using zval_t = zfloat64<features>;
-                /// complete boolean vector
-                using bval_t = bfloat64<features>;
-
-                using tag = zval_tag;
-
-                using element_t = double;
-
-                /// vector size (1 - scalar, 4, 8, 16, ...)
-                static constexpr size_t size() { return float64_detail::size; }
-
-                /// scalar type? vector type?
-                static constexpr bool is_vector = float64_detail::is_vector;
-
-                /// memory alignment
-                static constexpr size_t alignment = float64_detail::alignment;
-
-                /// forward to base
-                FORWARD2(impl, composed);
-            };
-        };
 
         /// bfloat64 composition
         /// @tparam features feature mask
         template<uint64_t features>
-        struct __bfloat64
-        {
-            /// @cond
-            struct impl;
-            /// @endcond
-
-            /**
-            * @brief bval parametrization using
-            * - '__m128d' as underlying vector type
-            * - 'double' as scalar type
-            * - '2' as vector size
-            * - '16' as alignment
-            * @relates float64
-            * @remark sse
-            */
-            using base = bval<__m128d, __m128d, double, 2, 16, features>;
-
-            /// parametrized zval base
-            struct composable_base : base
-            {
-                /// forward to base
-                FORWARD2(composable_base, base);
-            };
-
-            /// compose type from modules
-            using composed = compose
+        using __bfloat64 = compose
             <
-                printable<bfloat64<features>>::template impl,
-                convertable<bfloat64<features>>::template impl,
-                bfloat64_io<bfloat64<features>>::template impl,
-                bfloat64_bitwise<bfloat64<features>>::template impl,
-                bfloat64_logical<bfloat64<features>>::template impl,
-                bfloat64_equatable<bfloat64<features>>::template impl,
-                bfloat64_constructable<bfloat64<features>>::template impl,
+            printable<bfloat64<features>>::template impl,
+            convertable<bfloat64<features>>::template impl,
+            bfloat64_io<bfloat64<features>>::template impl,
+            bfloat64_bitwise<bfloat64<features>>::template impl,
+            bfloat64_logical<bfloat64<features>>::template impl,
+            bfloat64_equatable<bfloat64<features>>::template impl,
+            bfloat64_constructable<bfloat64<features>>::template impl,
 
-                composable<composable_base>::template type
+            composable<bval_base<features>>::template type
             >;
 
-            /// implementation
-            struct impl : public composed
-            {
-                /// complete vector
-                using zval_t = zfloat64<features>;
-                /// complete boolean vector
-                using bval_t = bfloat64<features>;
-
-                using tag = bval_tag;
-
-                using element_t = bool;
-
-                /// vector size (1 - scalar, 4, 8, 16, ...)
-                static constexpr size_t size() { return float64_detail::size; }
-
-                /// scalar type? vector type?
-                static constexpr bool is_vector = float64_detail::is_vector;
-
-                /// memory alignment
-                static constexpr size_t alignment = float64_detail::alignment;
-
-                /// forward to base
-                FORWARD2(impl, composed);
-            };
-        };
-
+        ///@}
     } // end namespace
 
     /// public zfloat64 implementation
     /// @tparam features feature mask
-    template<uint64_t features>
-    struct zfloat64 : public float64_detail::__zfloat64<features>::impl
+    template<uint64_t Features>
+    struct zfloat64 : public float64_detail::__zfloat64<Features>
     {
-            /// complete vector
-            using zval_t = zfloat64<features>;
-            /// complete boolean vector
-            using bval_t = bfloat64<features>;
+        /// complete vector
+        using zval_t = zfloat64<Features>;
+        /// complete boolean vector
+        using bval_t = bfloat64<Features>;
 
-            using tag = zval_tag;
+        using tag = zval_tag;
 
-            using element_t = double;
+        using element_t = double;
 
-            /// vector size (1 - scalar, 4, 8, 16, ...)
-            static constexpr size_t size() { return float64_detail::size; }
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static constexpr size_t size() { return float64_detail::size; }
 
-            /// scalar type? vector type?
-            static constexpr bool is_vector = float64_detail::is_vector;
+        /// scalar type? vector type?
+        static constexpr bool is_vector = float64_detail::is_vector;
 
-            /// memory alignment
-            static constexpr size_t alignment = float64_detail::alignment;
+        /// memory alignment
+        static constexpr size_t alignment = float64_detail::alignment;
 
-
-            /// forward to base
-            FORWARD2(zfloat64, float64_detail::__zfloat64<features>::impl);
+        /// forward to base
+        FORWARD2(zfloat64, float64_detail::__zfloat64<Features>);
     };
 
     /// public bfloat64 implementation
-    /// @tparam features feature mask
-    template<uint64_t features>
-    struct bfloat64 : public float64_detail::__bfloat64<features>::impl
+    /// @tparam Features feature mask
+    template<uint64_t Features>
+    struct bfloat64 : public float64_detail::__bfloat64<Features>
     {
         /// complete vector
-        using zval_t = zfloat64<features>;
+        using zval_t = zfloat64<Features>;
         /// complete boolean vector
-        using bval_t = bfloat64<features>;
+        using bval_t = bfloat64<Features>;
 
         using tag = bval_tag;
 
@@ -1779,7 +1672,7 @@ namespace zacc { namespace backend { namespace sse {
         static constexpr size_t alignment = float64_detail::alignment;
 
         /// forward to base
-        FORWARD2(bfloat64, float64_detail::__bfloat64<features>::impl);
+        FORWARD2(bfloat64, float64_detail::__bfloat64<Features>);
     };
 
     static_assert(is_zval<zfloat64<0>>::value, "is_zval for zfloat64 failed.");
