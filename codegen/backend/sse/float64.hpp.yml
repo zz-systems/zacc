@@ -43,22 +43,13 @@ modules:
       - args: [[*scalar_t, value]]
         init: _mm_set1_pd(value)
 
-      #- args: T value #[[*scalar_t, value]]
-      #  prefix: "template<typename T, typename = typename std::enable_if_t<std::is_convertible<T, double>::value>>"
-      #  init: _mm_set1_pd((double)value)
-
       - args: "extracted_t value"
         init: _mm_load_pd(value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_pd }
 
-    boolean:
-      - args: zval_t value
-        init: value
-
-      - args: bval_t value, last_operation last_op
-        init: value, last_op
+    boolean: []
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -72,7 +63,7 @@ modules:
 
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args: { raw: "RandomIt input, const zint32<Base::features> &index, Composed" }
+      args: { raw: "RandomIt input, const zint32<Interface::feature_mask> &index, Composed" }
       body:
         - auto i = index.data();
         - return _mm_set_pd(input[i[3]], input[i[1]]);

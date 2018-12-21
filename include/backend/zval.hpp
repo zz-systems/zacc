@@ -52,8 +52,8 @@ namespace zacc {
      * @tparam Alignment memory alignment
      * @tparam Features capabilities
      */
-    template<typename Vector, typename MaskVector, typename Element, typename Tag, size_t Size, size_t Alignment, uint64_t Features = 0xFFFF'FFFF'FFFF'FFFF>
-    struct zval : zval_base //<Vector, MaskVector, Element, Tag, Size, Alignment, Features>
+    template<typename Vector, typename MaskVector, typename Element, typename Tag, size_t Size, size_t Alignment, uint64_t FeatureMask = 0xFFFF'FFFF'FFFF'FFFF>
+    struct zval : zval_base
     {
         /// vector size (1 - scalar, 4, 8, 16, ...)
         static constexpr size_t size = Size;
@@ -61,8 +61,7 @@ namespace zacc {
         /// scalar type? vector type?
         static constexpr bool is_vector = Size > 1;
 
-
-        static constexpr size_t features = Features;
+        static constexpr size_t feature_mask = FeatureMask;
 
         /// memory alignment
         static constexpr size_t alignment = Alignment;
@@ -79,24 +78,20 @@ namespace zacc {
          */
         constexpr zval() noexcept = default;
 
-        /**
-         * copy constructor
-         * @tparam T any type convertable to Vector
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
-        constexpr zval(const T& other) noexcept
-                : _value (other)
+
+        template<typename T, typename std::enable_if<(Size > 1) && std::is_convertible<T, Vector>::value, void**>::type = nullptr>
+        constexpr zval(T value) noexcept
+            : _value(value)
         {}
 
-        /**
-         * move constructor
-         * @tparam T any type convertable to Vector
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
-        constexpr zval(T&& other) noexcept
-                : _value(std::forward<T>(other))
+        template<typename T, typename std::enable_if<(Size == 1) && std::is_convertible<T, Element>::value, void**>::type = nullptr>
+        constexpr zval(T value) noexcept
+            : _value {{ static_cast<Element>(value) }}
+        {}
+
+        template<typename T, typename std::enable_if<(Size == 1) && is_bval<T>::value, void**>::type = nullptr>
+        constexpr zval(T value) noexcept
+            : zval(value.value())
         {}
 
         /**
@@ -177,17 +172,28 @@ namespace zacc {
          * @remark valid only for vectors, not scalars (size has to be > 1, otherwise default C++ operators will apply for wrapped scalars)
          * @return raw value
          */
-        template<typename T = zval>
-        constexpr operator std::enable_if_t<is_vector_v<T>, Vector>() const {
+        //template <bool Cond = (Size > 1), typename std::enable_if<Cond, void**>::type = nullptr>
+        constexpr operator Vector() const {
             return value();
         }
+
+//        template<typename T = zval>
+//        constexpr operator std::enable_if_t<T::is_vector, Vector>() const {
+//            return value();
+//        }
 
         /**
          * @brief underlying vector
          * @return raw value
          */
+        template <bool Cond = (Size > 1), typename std::enable_if<Cond, void**>::type = nullptr>
         constexpr Vector value() const {
             return _value;
+        }
+
+        template <bool Cond = (Size == 1), typename std::enable_if<Cond, void**>::type = nullptr>
+        constexpr Element value() const {
+            return _value[0];
         }
 
     private:

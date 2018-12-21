@@ -18,6 +18,16 @@ def to_list(arg):
 def cleanup(strings) :
     return [str.strip(s) for s in to_list(strings)]
 
+def resolve_prefix(moduleType):
+    prefixes = {
+        ModuleTypes.DEFAULT: "z",
+        ModuleTypes.BOOLEAN: "b",
+        ModuleTypes.UNSIGNED: "u",
+        ModuleTypes.SHARED: ""
+    }
+
+    return prefixes[moduleType]
+
 class Renderer:
     def __init__(self, mapping = None):
         self._mapping = mapping
@@ -36,30 +46,21 @@ class Renderable(ABC):
 
 
 def make_typename(node, ast):
-    prefixes = {
-        ModuleTypes.DEFAULT: "z",
-        ModuleTypes.BOOLEAN: "b",
-        ModuleTypes.UNSIGNED: "u",
-        ModuleTypes.SHARED: ""
-    }
-
-    return f"{prefixes[node.type]}{ast.type.name}"
+    return f"{resolve_prefix(node.type)}{ast.type.name}"
 
 def remapArgType(module, ast, arg):
-    prefixes = {
-        ModuleTypes.DEFAULT: "z",
-        ModuleTypes.BOOLEAN: "b",
-        ModuleTypes.UNSIGNED: "u",
-        ModuleTypes.SHARED: ""
-    }
-
-    def format(moduleType, typeName):
-        return f"{prefixes[moduleType]}{typeName}<Interface::features>"
-
     arg_map = {
         #"Composed": format(module.type, ast.type.name),
-        "bval_t": f"b{ast.type.name}<Base::features>",
-        "zval_t": f"z{ast.type.name}<Base::features>",
+        "bval_t": f"b{ast.type.name}<Interface::feature_mask>",
+        "zval_t": f"z{ast.type.name}<Interface::feature_mask>",
+    }
+    return arg_map.get(arg.type) or arg.type
+
+def remapInitializerArgType(module, ast, arg):
+    arg_map = {
+        #"Composed": format(module.type, ast.type.name),
+        "bval_t": f"b{ast.type.name}<FeatureMask>",
+        "zval_t": f"z{ast.type.name}<FeatureMask>",
     }
     return arg_map.get(arg.type) or arg.type
 
@@ -81,21 +82,15 @@ class TraitCompositionRenderer(Renderable):
             ModuleTypes.SHARED: node.traits.shared
         }
 
-        prefixes = {
-            ModuleTypes.DEFAULT: "z",
-            ModuleTypes.BOOLEAN: "b",
-            ModuleTypes.UNSIGNED: "u",
-            ModuleTypes.SHARED: ""
-        }
-
         shared_traits   = node.traits.shared
         initializers    = { m.name:renderer.render(m, node) for m in node.modules.initializers if m.type == type }
         modules         = { m.name:renderer.render(m, node) for m in node.modules.modules if m.type == type }
 
-        impl = f"{prefixes[type]}{node.type.name}<features>"
-        return [f"{trait}<{impl}>::template impl" for trait in shared_traits] + \
-               [f"{modules[trait]}<{impl}>::template impl" for trait in traits[type]] +\
-               [f"{initializer}<{impl}>::template impl" for initializer in initializers.values()]
+        interface = f"{resolve_prefix(type)}val_base<FeatureMask>"
+        impl = f"{resolve_prefix(type)}{node.type.name}<FeatureMask>"
+        return [f"{trait}<{interface}, {impl}>::template impl" for trait in shared_traits] + \
+               [f"{modules[trait]}<{interface}, {impl}>::template impl" for trait in traits[type]]# +\
+               #[f"{initializer}<{impl}>::template impl" for initializer in initializers.values()]
 
 class FunctionSignatureRenderer(Renderable):
     def render(self, renderer, node: FunctionSignatureNode, params):
@@ -115,10 +110,10 @@ class FunctionSignatureRenderer(Renderable):
         # basic
         prefix = node.prefix or "friend"
         suffix = node.suffix or "const" if prefix.strip().find('friend') == -1 else ""
-        return_type = node.return_type or f"{make_typename(module, ast)}<Base::features>"
+        return_type = node.return_type or f"{make_typename(module, ast)}<Interface::feature_mask>"
 
         # dispatching
-        dispatcher = "{0}has_feature_v<Base, capabilities::{1}>"
+        dispatcher = "{0}has_feature_v<Interface, capabilities::{1}>"
 
         def map_requirement(requirement):
             requirement = cleanup(requirement)[0]
@@ -176,14 +171,14 @@ class InitializerSignatureRenderer(Renderable):
     def render(self, renderer, node: InitializerSignatureNode, params):
         module, ast, body = copy.deepcopy(params)
 
-        args = ", ".join([f"{remapArgType(module, ast, arg)} {arg.name}" for arg in node.arguments])
+        args = ", ".join([f"{remapInitializerArgType(module, ast, arg)} {arg.name}" for arg in node.arguments])
 
-        return "{prefix} {name}({args}) : {initializer} {suffix}".format(
+        return "{prefix} {name}({args}) {suffix} : {initializer}".format(
             prefix=node.prefix or "constexpr",
-            name=f"__impl",
+            name=f"{resolve_prefix(module.type)}{ast.type.name}",
             args=args,
-            initializer=f"Base({renderer.render(node.initializer, { 'is_initializer' : True })})",
-            suffix=node.suffix or "")
+            initializer=f"{ast.type.name}_detail::{resolve_prefix(module.type)}val_base<FeatureMask>({renderer.render(node.initializer, { 'is_initializer' : True })})",
+            suffix=node.suffix or "noexcept")
 
 class FloatVerificationRenderer(Renderable):
     def render(self, renderer: Renderer, node: AstRoot, params):

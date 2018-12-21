@@ -32,39 +32,45 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Base, typename Composed, typename Boolean>
-    struct logical : public Base {
-        FORWARD(logical);
+    template<typename Impl, typename Base, typename Interface, typename Composed, typename Boolean>
+    struct logical :
+        public Impl,
+        public Base
+    {
+        constexpr auto self()
+        {
+            return static_cast<Composed*>(this);
+        }
 
         Boolean operator!() {
-            return Boolean(vlneg(static_cast<Boolean>(*this)), last_operation::logic);
+            return Boolean(vlneg(*self()), last_operation::logic);
         }
 
         template<typename U>
         Boolean operator||(const U other) {
-            return Boolean(vlor(static_cast<Boolean>(*this), static_cast<Boolean>(other)), last_operation::logic);
+            return Boolean(vlor(*self(), static_cast<Composed>(other/*.value()*/)), last_operation::logic);
         }
 
         template<typename U>
         Boolean operator&&(const U other) {
-            return Boolean(vland(static_cast<Boolean>(*this), static_cast<Boolean>(other)), last_operation::logic);
+            return Boolean(vland(*self(), static_cast<Composed>(other/*.value()*/)), last_operation::logic);
         }
 
-//        friend bval_t operator!(const Composed one) {
-//            return bval_t(vlneg(one), last_operation::logic);
+//        friend Boolean operator!(const Composed one) {
+//            return Boolean(vlneg(one), last_operation::logic);
 //        }
 //
-//        friend bval_t operator||(const Composed one, const Composed other) {
-//            return bval_t(vlor(one, other), last_operation::logic);
+//        friend Boolean operator||(const Composed one, const Composed other) {
+//            return Boolean(vlor(one, other), last_operation::logic);
 //        }
 //
-//        friend bval_t operator&&(const Composed one, const Composed other) {
-//            return bval_t(vland(one, other), last_operation::logic);
+//        friend Boolean operator&&(const Composed one, const Composed other) {
+//            return Boolean(vland(one, other), last_operation::logic);
 //        }
-
-
-//        CONVERSION2(||, bval_t);
 //
-//        CONVERSION2(&&, bval_t);
+//
+//        CONVERSION2(||, Boolean);
+//
+//        CONVERSION2(&&, Boolean);
     };
 }}

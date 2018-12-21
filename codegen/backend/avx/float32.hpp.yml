@@ -39,7 +39,7 @@ modules:
       - args: "extracted_t value"
         init: _mm256_load_ps(value.data())
 
-      - args: "std::array<sse::zint32<Base::capability>, 2> value"
+      - args: "std::array<sse::zint32<Interface::capability>, 2> value"
         init: _mm256_set_m128(_mm_cvtepi32_ps(value[1]), _mm_cvtepi32_ps(value[0]))
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -57,8 +57,8 @@ modules:
 
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args:   "RandomIt input, const zint32<Base::features> &index, Composed"
-      body: _mm256_set_m128(sse::zfloat32<Base::capability>::gather(input, index.value()[1]), sse::zfloat32<Base::capability>::gather(input, index.value()[0]))
+      args:   "RandomIt input, const zint32<Interface::feature_mask> &index, Composed"
+      body: _mm256_set_m128(sse::zfloat32<Interface::capability>::gather(input, index.value()[1]), sse::zfloat32<Interface::capability>::gather(input, index.value()[0]))
 #-----------------------------------------------------------------------------------------------------------------------
   numeric: {} #dummy
 #-----------------------------------------------------------------------------------------------------------------------

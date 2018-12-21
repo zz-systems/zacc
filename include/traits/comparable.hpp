@@ -32,9 +32,11 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Base, typename Composed, typename Boolean>
-    struct comparable : public Base {
-        FORWARD(comparable);
+    template<typename Impl, typename Base, typename Interface, typename Composed, typename Boolean>
+    struct comparable :
+        public Impl,
+        public Base
+    {
 
         friend Boolean operator>(const Composed one, const Composed other) {
             return Boolean(vgt(one, other), last_operation::comparison);

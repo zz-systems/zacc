@@ -44,19 +44,18 @@
 #include "util/memory.hpp"
 #include "util/macros.hpp"
 
-#include "traits/constructable.hpp"
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/logical.hpp"
-#include "traits/conditional.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/math.hpp"
-#include "traits/equatable.hpp"
-#include "traits/comparable.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/numeric.hpp"
 #include "traits/io.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/math.hpp"
+#include "traits/conditional.hpp"
+#include "traits/logical.hpp"
+#include "traits/numeric.hpp"
+#include "traits/comparable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/equatable.hpp"
 
 namespace zacc { namespace backend { namespace sse
 {
@@ -121,14 +120,14 @@ namespace zacc {
 
     template<typename T>
     struct ztraits<T, std::enable_if_t<
-            std::is_base_of<backend::sse::int16_detail::zval_base<T::features>, T>::value
-            || std::is_base_of<backend::sse::int16_detail::bval_base<T::features>, T>::value>>
+            std::is_base_of<backend::sse::int16_detail::zval_base<T::feature_mask>, T>::value
+            || std::is_base_of<backend::sse::int16_detail::bval_base<T::feature_mask>, T>::value>>
     {
         /// vector size (1 - scalar, 4, 8, 16, ...)
         static constexpr size_t size = 8;
 
         /// capabilities
-        static constexpr uint64_t features = T::features;
+        static constexpr uint64_t feature_mask = T::feature_mask;
 
         /// memory alignment
         static constexpr size_t alignment = 16;
@@ -148,186 +147,18 @@ namespace zacc {
         /// extracted std::array of (dim) scalar values
         using extracted_t = std::array<element_t, size>;
 
-        using zval_t = backend::sse::zint16<T::features>;
-        using bval_t = backend::sse::bint16<T::features>;
+        using zval_t = backend::sse::zint16<T::feature_mask>;
+        using bval_t = backend::sse::bint16<T::feature_mask>;
 
         using tag = select_t<
-                when<std::is_base_of<backend::sse::int16_detail::zval_base<T::features>, T>::value, zval_tag>,
-                when<std::is_base_of<backend::sse::int16_detail::bval_base<T::features>, T>::value, bval_tag>>;
+                when<std::is_base_of<backend::sse::int16_detail::zval_base<T::feature_mask>, T>::value, zval_tag>,
+                when<std::is_base_of<backend::sse::int16_detail::bval_base<T::feature_mask>, T>::value, bval_tag>>;
     };
 }
 
 namespace zacc { namespace backend { namespace sse {
 
     namespace int16_detail {
-
-        // =================================================================================================================
-        /**
-         * @name constructable modules
-         */
-        ///@{
-        /**
-         * @brief constructable
-         * @relates int16
-         * @remark sse
-         */
-        template<typename Composed>
-        struct zint16_constructable
-        {
-
-            /**
-             * @brief constructable basic interface implementation
-             * @relates int16
-             * @remark sse
-             */
-            template<typename Base>
-            struct __impl : Base
-            {
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark sse 
-                 */
-                constexpr __impl(  ) : Base()  {
-
-                    ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS()");
-
-                }
-
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark sse 
-                 */
-                constexpr __impl(__m128i value) : Base(value)  {
-
-                    ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS(__m128i)");
-
-                }
-
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark sse 
-                 */
-                constexpr __impl(short value) : Base(_mm_set1_epi16(value))  {
-
-                    ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS(short)");
-
-                }
-
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark sse 
-                 */
-                constexpr __impl(const extracted_t &value) : Base(_mm_load_si128((__m128i *) value.data()))  {
-
-                    ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS(const extracted_t)");
-
-                }
-
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark sse 
-                 */
-                constexpr __impl(int16_t _7, int16_t _6, int16_t _5, int16_t _4, int16_t _3, int16_t _2, int16_t _1, int16_t _0) : Base(_mm_set_epi16(_0, _1, _2, _3, _4, _5, _6, _7))  {
-
-                    ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS(int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t)");
-
-                }
-
-            };
-
-            /**
-             * @brief constructable public interface implementation
-             * @relates int16
-             * @remark sse
-             */
-            template<typename Base>
-            using impl = traits::constructable<__impl<Base>, Composed, bint16<Base::features>>;
-
-        };
-
-        ///@}
-
-        // =================================================================================================================
-        /**
-         * @name constructable modules
-         */
-        ///@{
-        /**
-         * @brief constructable
-         * @relates int16
-         * @remark sse
-         */
-        template<typename Composed>
-        struct bint16_constructable
-        {
-
-            /**
-             * @brief constructable basic interface implementation
-             * @relates int16
-             * @remark sse
-             */
-            template<typename Base>
-            struct __impl : Base
-            {
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark sse 
-                 */
-                constexpr __impl(  ) : Base()  {
-
-                    ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS()");
-
-                }
-
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark sse 
-                 */
-                constexpr __impl(zint16<Base::features> value) : Base(value)  {
-
-                    ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS(zval_t)");
-
-                }
-
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark sse 
-                 */
-                constexpr __impl(bint16<Base::features> value, last_operation last_op) : Base(value, last_op)  {
-
-                    ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS(bval_t, last_operation)");
-
-                }
-
-            };
-
-            /**
-             * @brief constructable public interface implementation
-             * @relates int16
-             * @remark sse
-             */
-            template<typename Base>
-            using impl = traits::constructable<__impl<Base>, Composed, bint16<Base::features>>;
-
-        };
-
-        ///@}
 
         // =================================================================================================================
         /**
@@ -339,28 +170,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_io
         {
-
             /**
              * @brief io basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief io default
                  * @relates int16
                  * @remark sse default
                  */
-                template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
-
+                template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vstore");
 
                     _mm_store_si128((__m128i*)&(*result), input);
@@ -372,8 +199,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
-
+                template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vstream");
 
                     _mm_stream_si128((__m128i*)&(*result), input);
@@ -387,8 +214,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::io<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::io<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -403,28 +229,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_math
         {
-
             /**
              * @brief math basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief math sse4
                  * @relates int16
                  * @remark sse sse4
                  */
-                template<typename T = zint16<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE3>, T> vabs(Composed one)  {
-
+                template<typename T = zint16<Interface::feature_mask>> friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE3>, T> vabs(Composed one) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "sse4", "vabs");
 
                     return _mm_abs_epi16(one);
@@ -436,8 +258,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                template<typename T = zint16<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE3>, T> vabs(Composed one)  {
-
+                template<typename T = zint16<Interface::feature_mask>> friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE3>, T> vabs(Composed one) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vabs");
 
                     return vmax(one, -one);
@@ -449,8 +271,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse sse4
                  */
-                template<typename T = zint16<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> vmin(Composed one, Composed other)  {
-
+                template<typename T = zint16<Interface::feature_mask>> friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T> vmin(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "sse4", "vmin");
 
                     return _mm_min_epi16(one, other);
@@ -462,8 +284,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                template<typename T = zint16<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> vmin(Composed one, Composed other)  {
-
+                template<typename T = zint16<Interface::feature_mask>> friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T> vmin(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vmin");
 
                     return vsel(one < other, one, other);
@@ -475,8 +297,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse sse4
                  */
-                template<typename T = zint16<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> vmax(Composed one, Composed other)  {
-
+                template<typename T = zint16<Interface::feature_mask>> friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T> vmax(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "sse4", "vmax");
 
                     return _mm_max_epi16(one, other);
@@ -488,8 +310,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                template<typename T = zint16<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> vmax(Composed one, Composed other)  {
-
+                template<typename T = zint16<Interface::feature_mask>> friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T> vmax(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vmax");
 
                     return vsel(one > other, one, other);
@@ -501,8 +323,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vclamp(Composed self, Composed from, Composed to)  {
-
+                friend zint16<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vclamp");
 
                     return vmin(to, vmax(from, self));
@@ -516,8 +338,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::math<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::math<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -532,20 +353,16 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_numeric
         {
-
             /**
              * @brief numeric basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
             };
 
             /**
@@ -554,8 +371,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::numeric<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::numeric<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -570,28 +386,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_arithmetic
         {
-
             /**
              * @brief arithmetic basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief arithmetic default
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vneg(Composed one)  {
-
+                friend zint16<Interface::feature_mask> vneg(Composed one) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vneg");
 
                     return _mm_sub_epi16(_mm_setzero_si128(), one);
@@ -603,8 +415,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vadd(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vadd(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vadd");
 
                     return _mm_add_epi16(one, other);
@@ -616,8 +428,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vsub(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vsub(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vsub");
 
                     return _mm_sub_epi16(one, other);
@@ -629,8 +441,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vmul(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vmul(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vmul");
 
                     return _mm_mullo_epi16(one, other);
@@ -642,14 +454,14 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vdiv(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vdiv(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vdiv");
 
                     auto dividend = one.data();
                     auto divisor = other.data();
                     typename Composed::extracted_t result;
-                    for (size_t i = 0; i < Composed::size(); i++) { result[i] = dividend[i] / divisor[i]; };
+                    for (size_t i = 0; i < Composed::size; i++) { result[i] = dividend[i] / divisor[i]; };
                     return result;
                 }
 
@@ -659,8 +471,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vmod(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vmod(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vmod");
 
                     return vsub(one, vmul(other, vdiv(one, other)));
@@ -674,8 +486,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::arithmetic<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::arithmetic<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -690,28 +501,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_bitwise
         {
-
             /**
              * @brief bitwise basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief bitwise default
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vbneg(Composed one)  {
-
+                friend zint16<Interface::feature_mask> vbneg(Composed one) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vbneg");
 
                     auto zero = _mm_setzero_si128();
@@ -725,8 +532,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vbor(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vbor(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vbor");
 
                     return _mm_or_si128(one, other);
@@ -738,8 +545,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vband(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vband(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vband");
 
                     return _mm_and_si128(one, other);
@@ -751,8 +558,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vbxor(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vbxor(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vbxor");
 
                     return _mm_xor_si128(one, other);
@@ -764,8 +571,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse sse4
                  */
-                template<typename T = bool> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> is_set(Composed one)  {
-
+                template<typename T = bool> friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T> is_set(Composed one) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "sse4", "is_set");
 
                     return _mm_test_all_ones(one) != 0;
@@ -777,8 +584,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                template<typename T = bool> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> is_set(Composed one)  {
-
+                template<typename T = bool> friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T> is_set(Composed one) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "is_set");
 
                     auto zero = _mm_setzero_si128();
@@ -794,8 +601,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::bitwise<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::bitwise<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -810,28 +616,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_bitwise_shift
         {
-
             /**
              * @brief bitwise_shift basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief bitwise_shift default
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vbsll(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vbsll(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vbsll");
 
                     return _mm_sll_epi16(one, other);
@@ -843,8 +645,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vbsrl(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vbsrl(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vbsrl");
 
                     return _mm_srl_epi16(one, other);
@@ -856,8 +658,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vbslli(const Composed one, const size_t other)  {
-
+                friend zint16<Interface::feature_mask> vbslli(const Composed one, const size_t other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vbslli");
 
                     return _mm_slli_epi16(one, other);
@@ -869,8 +671,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend zint16<Base::features> vbsrli(const Composed one, const size_t other)  {
-
+                friend zint16<Interface::feature_mask> vbsrli(const Composed one, const size_t other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vbsrli");
 
                     return _mm_srli_epi16(one, other);
@@ -884,8 +686,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::bitwise_shift<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::bitwise_shift<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -900,28 +701,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_comparable
         {
-
             /**
              * @brief comparable basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief comparable default
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vgt(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vgt(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vgt");
 
                     return _mm_cmpgt_epi16(one, other);
@@ -933,8 +730,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vlt(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vlt(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vlt");
 
                     return _mm_cmplt_epi16(one, other);
@@ -946,8 +743,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vge(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vge(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vge");
 
                     return !(one < other);
@@ -959,8 +756,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vle(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vle(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vle");
 
                     return !(one > other);
@@ -974,8 +771,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::comparable<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::comparable<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -990,28 +786,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_logical
         {
-
             /**
              * @brief logical basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief logical default
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vlneg(Composed one)  {
-
+                friend bint16<Interface::feature_mask> vlneg(Composed one) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vlneg");
 
                     return _mm_cmpeq_epi16(one, _mm_setzero_si128());
@@ -1023,8 +815,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vlor(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vlor(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vlor");
 
                     return _mm_or_si128(one, other);
@@ -1036,8 +828,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vland(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vland(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vland");
 
                     return _mm_and_si128(one, other);
@@ -1051,8 +843,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::logical<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::logical<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1067,28 +858,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_equatable
         {
-
             /**
              * @brief equatable basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief equatable default
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> veq(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> veq(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "veq");
 
                     return _mm_cmpeq_epi16(one, other);
@@ -1100,8 +887,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vneq(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vneq(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vneq");
 
                     return !(one == other);
@@ -1115,8 +902,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::equatable<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::equatable<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1131,28 +917,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_conditional
         {
-
             /**
              * @brief conditional basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief conditional sse4
                  * @relates int16
                  * @remark sse sse4
                  */
-                template<typename T = zint16<Base::features>> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> vsel(bint16<Base::features> condition, Composed if_value, Composed else_value)  {
-
+                template<typename T = zint16<Interface::feature_mask>> friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T> vsel(bint16<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "sse4", "vsel");
 
                     return _mm_blendv_epi8(else_value, if_value, condition);
@@ -1164,8 +946,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                template<typename T = zint16<Base::features>> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> vsel(bint16<Base::features> condition, Composed if_value, Composed else_value)  {
-
+                template<typename T = zint16<Interface::feature_mask>> friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T> vsel(bint16<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vsel");
 
                     return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value));
@@ -1179,8 +961,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::conditional<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::conditional<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1195,28 +976,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct bint16_io
         {
-
             /**
              * @brief io basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief io default
                  * @relates int16
                  * @remark sse default
                  */
-                template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
-
+                template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vstore");
 
                     _mm_store_si128((__m128i*)&(*result), input);
@@ -1228,8 +1005,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
-
+                template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vstream");
 
                     _mm_stream_si128((__m128i*)&(*result), input);
@@ -1243,8 +1020,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::io<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::io<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1259,28 +1035,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct bint16_bitwise
         {
-
             /**
              * @brief bitwise basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief bitwise default
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vbneg(Composed one)  {
-
+                friend bint16<Interface::feature_mask> vbneg(Composed one) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vbneg");
 
                     auto zero = _mm_setzero_si128();
@@ -1294,8 +1066,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vbor(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vbor(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vbor");
 
                     return _mm_or_si128(one, other);
@@ -1307,8 +1079,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vband(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vband(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vband");
 
                     return _mm_and_si128(one, other);
@@ -1320,8 +1092,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vbxor(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vbxor(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vbxor");
 
                     return _mm_xor_si128(one, other);
@@ -1333,8 +1105,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse sse4
                  */
-                template<typename T = bool> friend std::enable_if_t<has_feature_v<Base, capabilities::SSE41>, T> is_set(Composed one)  {
-
+                template<typename T = bool> friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T> is_set(Composed one) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "sse4", "is_set");
 
                     return _mm_test_all_ones(one) != 0;
@@ -1346,8 +1118,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                template<typename T = bool> friend std::enable_if_t<!has_feature_v<Base, capabilities::SSE41>, T> is_set(Composed one)  {
-
+                template<typename T = bool> friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T> is_set(Composed one) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "is_set");
 
                     auto zero = _mm_setzero_si128();
@@ -1363,8 +1135,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::bitwise<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::bitwise<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1379,28 +1150,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct bint16_logical
         {
-
             /**
              * @brief logical basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief logical default
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vlneg(Composed one)  {
-
+                friend bint16<Interface::feature_mask> vlneg(Composed one) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vlneg");
 
                     return _mm_cmpeq_epi16(one, _mm_setzero_si128());
@@ -1412,8 +1179,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vlor(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vlor(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vlor");
 
                     return _mm_or_si128(one, other);
@@ -1425,8 +1192,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vland(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vland(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vland");
 
                     return _mm_and_si128(one, other);
@@ -1440,8 +1207,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::logical<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::logical<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1456,28 +1222,24 @@ namespace zacc { namespace backend { namespace sse {
          * @relates int16
          * @remark sse
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct bint16_equatable
         {
-
             /**
              * @brief equatable basic interface implementation
              * @relates int16
              * @remark sse
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief equatable default
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> veq(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> veq(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "veq");
 
                     return _mm_cmpeq_epi16(one, other);
@@ -1489,8 +1251,8 @@ namespace zacc { namespace backend { namespace sse {
                  * @relates int16
                  * @remark sse default
                  */
-                friend bint16<Base::features> vneq(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vneq(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "default", "vneq");
 
                     return !(one == other);
@@ -1504,8 +1266,7 @@ namespace zacc { namespace backend { namespace sse {
              * @remark sse
              */
             template<typename Base>
-            using impl = traits::equatable<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::equatable<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1524,97 +1285,218 @@ namespace zacc { namespace backend { namespace sse {
          * @remark sse
          * @tparam features feature mask
          */
-        template<uint64_t features>
+        template<uint64_t FeatureMask>
         using __zint16 = compose_t
-            <
-            printable<zint16<features>>::template impl,
-            convertable<zint16<features>>::template impl,
-            zint16_io<zint16<features>>::template impl,
-            zint16_math<zint16<features>>::template impl,
-            zint16_numeric<zint16<features>>::template impl,
-            zint16_arithmetic<zint16<features>>::template impl,
-            zint16_bitwise<zint16<features>>::template impl,
-            zint16_bitwise_shift<zint16<features>>::template impl,
-            zint16_comparable<zint16<features>>::template impl,
-            zint16_logical<zint16<features>>::template impl,
-            zint16_equatable<zint16<features>>::template impl,
-            zint16_conditional<zint16<features>>::template impl,
-            zint16_constructable<zint16<features>>::template impl,
-
-            composable<zval_base<features>>::template type
-            >;
+        <
+            printable<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            convertable<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_io<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_math<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_numeric<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_arithmetic<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_bitwise<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_bitwise_shift<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_comparable<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_logical<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_equatable<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_conditional<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl
+        >;
 
         /// bint16 composition
         /// @tparam features feature mask
-        template<uint64_t features>
+        template<uint64_t FeatureMask>
         using __bint16 = compose_t
-            <
-            printable<bint16<features>>::template impl,
-            convertable<bint16<features>>::template impl,
-            bint16_io<bint16<features>>::template impl,
-            bint16_bitwise<bint16<features>>::template impl,
-            bint16_logical<bint16<features>>::template impl,
-            bint16_equatable<bint16<features>>::template impl,
-            bint16_constructable<bint16<features>>::template impl,
-
-            composable<bval_base<features>>::template type
-            >;
+        <
+            printable<bval_base<FeatureMask>, bint16<FeatureMask>>::template impl,
+            convertable<bval_base<FeatureMask>, bint16<FeatureMask>>::template impl,
+            bint16_io<bval_base<FeatureMask>, bint16<FeatureMask>>::template impl,
+            bint16_bitwise<bval_base<FeatureMask>, bint16<FeatureMask>>::template impl,
+            bint16_logical<bval_base<FeatureMask>, bint16<FeatureMask>>::template impl,
+            bint16_equatable<bval_base<FeatureMask>, bint16<FeatureMask>>::template impl
+        >;
 
         ///@}
     } // end namespace
 
     /// public zint16 implementation
-    /// @tparam features feature mask
-    template<uint64_t Features>
-    struct zint16 : public int16_detail::__zint16<Features>
+    /// @tparam FeatureMask feature mask
+    template<uint64_t FeatureMask>
+    struct zint16 :
+            public int16_detail::__zint16<FeatureMask>,
+            public int16_detail::zval_base<FeatureMask>
     {
-        /// complete vector
-        using zval_t = zint16<Features>;
-        /// complete boolean vector
-        using bval_t = bint16<Features>;
-
+        /// type tag
         using tag = zval_tag;
 
-        using element_t = int16_t;
+        /// complete vector
+        using zval_t = zint16<FeatureMask>;
+
+        /// complete boolean vector
+        using bval_t = bint16<FeatureMask>;
 
         /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size() { return int16_detail::size; }
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = int16_detail::is_vector;
+        static constexpr size_t size = 8;
 
         /// memory alignment
-        static constexpr size_t alignment = int16_detail::alignment;
+        static constexpr size_t alignment = 16;
 
-        /// forward to base
-        FORWARD2(zint16, int16_detail::__zint16<Features>);
+        /// scalar type? vector type?
+        static constexpr bool is_vector = size > 1;
+
+        /// vector type, like __m128i for sse 4x integer vector
+        using vector_t = __m128i;
+
+        /// scalar type, like int for sse 4x integer vector
+        using element_t = int16_t;
+
+        /// mask type for boolean operations
+        using mask_vector_t = __m128i;
+
+        /// extracted std::array of (dim) scalar values
+        using extracted_t = std::array<element_t, size>;
+
+        /**
+         * copy constructor
+         * @tparam T any type convertable to Vector
+         * @param other
+         */
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, __m128i>::value>>// || std::is_convertible<T, int16_t>::value>>
+        constexpr zint16(const T& other) noexcept
+                : int16_detail::zval_base<FeatureMask>(other)
+        {}
+
+        /**
+         * move constructor
+         * @tparam T any type convertable to Vector
+         * @param other
+         */
+        template<typename T, typename = std::enable_if_t<(size > 1) && std::is_convertible<T, __m128i>::value>>
+        constexpr zint16(T&& other) noexcept
+            : int16_detail::zval_base<FeatureMask>(std::forward<T>(other))
+        {}
+
+        /**
+         * copy constructor
+         * @param other
+         */
+        constexpr zint16(const bint16<FeatureMask>& other) noexcept
+            : int16_detail::zval_base<FeatureMask>(other.value())
+        {}
+
+
+        /**
+         * @brief constructable 
+         * @relates int16
+         * @remark sse 
+         */
+        constexpr zint16(  ) noexcept : int16_detail::zval_base<FeatureMask>()
+        {
+            ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS()");
+
+        }
+
+
+        /**
+         * @brief constructable 
+         * @relates int16
+         * @remark sse 
+         */
+        constexpr zint16(__m128i value) noexcept : int16_detail::zval_base<FeatureMask>(value)
+        {
+            ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS(__m128i)");
+
+        }
+
+
+        /**
+         * @brief constructable 
+         * @relates int16
+         * @remark sse 
+         */
+        constexpr zint16(short value) noexcept : int16_detail::zval_base<FeatureMask>(_mm_set1_epi16(value))
+        {
+            ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS(short)");
+
+        }
+
+
+        /**
+         * @brief constructable 
+         * @relates int16
+         * @remark sse 
+         */
+        constexpr zint16(const extracted_t &value) noexcept : int16_detail::zval_base<FeatureMask>(_mm_load_si128((__m128i *) value.data()))
+        {
+            ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS(const extracted_t)");
+
+        }
+
+
+        /**
+         * @brief constructable 
+         * @relates int16
+         * @remark sse 
+         */
+        constexpr zint16(int16_t _7, int16_t _6, int16_t _5, int16_t _4, int16_t _3, int16_t _2, int16_t _1, int16_t _0) noexcept : int16_detail::zval_base<FeatureMask>(_mm_set_epi16(_0, _1, _2, _3, _4, _5, _6, _7))
+        {
+            ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS(int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t)");
+
+        }
+
     };
 
     /// public bint16 implementation
-    /// @tparam Features feature mask
-    template<uint64_t Features>
-    struct bint16 : public int16_detail::__bint16<Features>
+    /// @tparam FeatureMask feature mask
+    template<uint64_t FeatureMask>
+    struct bint16 :
+            public int16_detail::__bint16<FeatureMask>,
+            public int16_detail::bval_base<FeatureMask>
     {
-        /// complete vector
-        using zval_t = zint16<Features>;
-        /// complete boolean vector
-        using bval_t = bint16<Features>;
-
+        /// type tag
         using tag = bval_tag;
 
-        using element_t = bool;
+        /// complete vector
+        using zval_t = zint16<FeatureMask>;
+
+        /// complete boolean vector
+        using bval_t = bint16<FeatureMask>;
 
         /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size() { return int16_detail::size; }
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = int16_detail::is_vector;
+        static constexpr size_t size = 8;
 
         /// memory alignment
-        static constexpr size_t alignment = int16_detail::alignment;
+        static constexpr size_t alignment = 16;
 
-        /// forward to base
-        FORWARD2(bint16, int16_detail::__bint16<Features>);
+        /// scalar type? vector type?
+        static constexpr bool is_vector = size > 1;
+
+        /// vector type, like __m128i for sse 4x integer vector
+        using vector_t = __m128i;
+
+        /// scalar type, like int for sse 4x integer vector
+        using element_t = bool;
+
+        /// mask type for boolean operations
+        using mask_vector_t = __m128i;
+
+        /// extracted std::array of (dim) scalar values
+        using extracted_t = std::array<element_t, size>;
+
+        /// Forwarding constructor
+        FORWARD2(bint16, int16_detail::bval_base<FeatureMask>);
+
+
+        /**
+         * @brief constructable 
+         * @relates int16
+         * @remark sse 
+         */
+        constexpr bint16(  ) noexcept : int16_detail::bval_base<FeatureMask>()
+        {
+            ZTRACE_BACKEND("sse.int16.impl", __LINE__, "int16(int16_t[8])", "", "CONS()");
+
+        }
+
     };
 
     static_assert(is_zval<zint16<0>>::value, "is_zval for zint16 failed.");

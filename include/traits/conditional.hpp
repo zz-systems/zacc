@@ -32,9 +32,11 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Base, typename Composed, typename Boolean>
-    struct conditional : public Base {
-        FORWARD(conditional);
+    template<typename Impl, typename Base, typename Interface, typename Composed, typename Boolean>
+    struct conditional :
+        public Impl,
+        public Base
+    {
 
         struct else_branch
         {
@@ -58,12 +60,12 @@ namespace zacc { namespace traits {
             Composed _if_value;
             Boolean _condition;
 
-            friend struct conditional<Base, Composed, Boolean>;
+            friend struct conditional<Impl, Base, Interface, Composed, Boolean>;
         };
 
 
         constexpr else_branch when(const Boolean& condition) const {
-            return else_branch(condition, *this, is_cval<Boolean>{});
+            return else_branch(condition, *static_cast<const Composed*>(this), is_cval<Boolean>{});
         }
     };
 

@@ -1,7 +1,7 @@
 type:
   type: int8
   branch: avx
-  raw: &raw_t sse::zint8<Base::capability>
+  raw: &raw_t sse::zint8<Interface::capability>
   vector_t: &vector_t std::array<sse::zint8<capability>, 2>
   mask_t: &mask_t std::array<sse::zint8<capability>, 2>
   scalar_t: &scalar_t int8_t
@@ -27,17 +27,17 @@ modules:
   init:
     default:
 
-      - args: "std::array<sse::zint8<Base::capability>, 2> value"
+      - args: "std::array<sse::zint8<Interface::capability>, 2> value"
         init: value
 
-      - args: "sse::zint8<Base::capability> hi, sse::zint8<Base::capability> lo"
-        init: "std::array<sse::zint8<Base::capability>, 2>({ hi, lo })"
+      - args: "sse::zint8<Interface::capability> hi, sse::zint8<Interface::capability> lo"
+        init: "std::array<sse::zint8<Interface::capability>, 2>({ hi, lo })"
 
       - args: [[*scalar_t, "value"]]
-        init: "std::array<sse::zint8<Base::capability>, 2>({ _mm_set1_epi8(value), _mm_set1_epi8(value) })"
+        init: "std::array<sse::zint8<Interface::capability>, 2>({ _mm_set1_epi8(value), _mm_set1_epi8(value) })"
 
       - args: "extracted_t value"
-        init: "std::array<sse::zint8<Base::capability>, 2>({ _mm_load_si128((__m128i*)value.data()), _mm_load_si128((__m128i*)(value.data() + 4)) })"
+        init: "std::array<sse::zint8<Interface::capability>, 2>({ _mm_load_si128((__m128i*)value.data()), _mm_load_si128((__m128i*)(value.data() + 4)) })"
 
       #- args: { from: *vec_size, to: 0, type: *scalar_t }
       #  init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_ps }
@@ -61,35 +61,35 @@ modules:
   math:
     vabs:
       args: one
-      body: return zint8<Base::capability> ({ vabs(one.value()[1]), vabs(one.value()[0]) });
+      body: return zint8<Interface::capability> ({ vabs(one.value()[1]), vabs(one.value()[0]) });
 
-    vmin: return zint8<Base::capability> ({ vmin(one.value()[1], other.value()[1]), vmin(one.value()[0], other.value()[0]) });
-    vmax: return zint8<Base::capability> ({ vmax(one.value()[1], other.value()[1]), vmax(one.value()[0], other.value()[0]) });
+    vmin: return zint8<Interface::capability> ({ vmin(one.value()[1], other.value()[1]), vmin(one.value()[0], other.value()[0]) });
+    vmax: return zint8<Interface::capability> ({ vmax(one.value()[1], other.value()[1]), vmax(one.value()[0], other.value()[0]) });
 
     vclamp:
      args: [self, from, to]
-     body: return zint8<Base::capability> ({ vclamp(self.value()[1], from.value()[1], to.value()[1]), vclamp(self.value()[0], from.value()[0], to.value()[0]) });
+     body: return zint8<Interface::capability> ({ vclamp(self.value()[1], from.value()[1], to.value()[1]), vclamp(self.value()[0], from.value()[0], to.value()[0]) });
 #-----------------------------------------------------------------------------------------------------------------------
   arithmetic:
     vneg:
       args: one
-      body: return zint8<Base::capability> ({ -one.value()[1], -one.value()[0] });
-    vadd: return zint8<Base::capability> ({ one.value()[1] + other.value()[1], one.value()[0] + other.value()[0] });
-    vsub: return zint8<Base::capability> ({ one.value()[1] - other.value()[1], one.value()[0] - other.value()[0] });
-    vmul: return zint8<Base::capability> ({ one.value()[1] * other.value()[1], one.value()[0] * other.value()[0] });
-    vdiv: return zint8<Base::capability> ({ one.value()[1] / other.value()[1], one.value()[0] / other.value()[0] });
-    vmod: return zint8<Base::capability> ({ one.value()[1] % other.value()[1], one.value()[0] % other.value()[0] });
+      body: return zint8<Interface::capability> ({ -one.value()[1], -one.value()[0] });
+    vadd: return zint8<Interface::capability> ({ one.value()[1] + other.value()[1], one.value()[0] + other.value()[0] });
+    vsub: return zint8<Interface::capability> ({ one.value()[1] - other.value()[1], one.value()[0] - other.value()[0] });
+    vmul: return zint8<Interface::capability> ({ one.value()[1] * other.value()[1], one.value()[0] * other.value()[0] });
+    vdiv: return zint8<Interface::capability> ({ one.value()[1] / other.value()[1], one.value()[0] / other.value()[0] });
+    vmod: return zint8<Interface::capability> ({ one.value()[1] % other.value()[1], one.value()[0] % other.value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------
   bitwise:
     vbneg: &bitwise_negate
       args: one
-      body: return zint8<Base::capability> ({ ~one.value()[1], ~one.value()[1] });
+      body: return zint8<Interface::capability> ({ ~one.value()[1], ~one.value()[1] });
     vbor:   &bitwise_or
-      body: return zint8<Base::capability> ({ one.value()[1] | other.value()[1], one.value()[0] | other.value()[0] });
+      body: return zint8<Interface::capability> ({ one.value()[1] | other.value()[1], one.value()[0] | other.value()[0] });
     vband:  &bitwise_and
-      body: return zint8<Base::capability> ({ one.value()[1] & other.value()[1], one.value()[0] & other.value()[0] });
+      body: return zint8<Interface::capability> ({ one.value()[1] & other.value()[1], one.value()[0] & other.value()[0] });
     vbxor:  &bitwise_xor
-      body: return zint8<Base::capability> ({ one.value()[1] ^ other.value()[1], one.value()[0] ^ other.value()[0] });
+      body: return zint8<Interface::capability> ({ one.value()[1] ^ other.value()[1], one.value()[0] ^ other.value()[0] });
 
     is_set:
       args: one
@@ -97,32 +97,32 @@ modules:
       body: return is_set(one.value()[1]) && is_set(one.value()[0])
 #-----------------------------------------------------------------------------------------------------------------------
   #bitwise_shift:
-  #  vbsll:  return zint8<Base::capability> { one.value()[1] << other.value()[1], one.value()[0] << other.value()[0] };
-  #  vbsrl:  return zint8<Base::capability> { one.value()[1] >> other.value()[1], one.value()[0] >> other.value()[0] };
+  #  vbsll:  return zint8<Interface::capability> { one.value()[1] << other.value()[1], one.value()[0] << other.value()[0] };
+  #  vbsrl:  return zint8<Interface::capability> { one.value()[1] >> other.value()[1], one.value()[0] >> other.value()[0] };
   #  vbslli:
   #    args: { raw: "const Composed one, const size_t other" }
-  #    body: return zint8<Base::capability> { one.value()[1] << other, one.value()[0] << other };
+  #    body: return zint8<Interface::capability> { one.value()[1] << other, one.value()[0] << other };
   #  vbsrli:
   #    args: { raw: "const Composed one, const size_t other" }
-  #    body: return zint8<Base::capability> { one.value()[1] >> other, one.value()[0] >> other };
+  #    body: return zint8<Interface::capability> { one.value()[1] >> other, one.value()[0] >> other };
 #-----------------------------------------------------------------------------------------------------------------------
   logical:
     vlneg:
       args: one
-      body: return zint8<Base::capability> ({ !one.value()[1], !one.value()[1] });
-    vlor:   return zint8<Base::capability> ({ one.value()[1] || other.value()[1], one.value()[0] || other.value()[0] });
-    vland:  return zint8<Base::capability> ({ one.value()[1] && other.value()[1], one.value()[0] && other.value()[0] });
+      body: return zint8<Interface::capability> ({ !one.value()[1], !one.value()[1] });
+    vlor:   return zint8<Interface::capability> ({ one.value()[1] || other.value()[1], one.value()[0] || other.value()[0] });
+    vland:  return zint8<Interface::capability> ({ one.value()[1] && other.value()[1], one.value()[0] && other.value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------
   comparison:
-    veq:   return zint8<Base::capability> ({ one.value()[1] == other.value()[1], one.value()[0] == other.value()[0] });
-    vneq:  return zint8<Base::capability> ({ one.value()[1] != other.value()[1], one.value()[0] != other.value()[0] });
-    vgt:   return zint8<Base::capability> ({ one.value()[1] > other.value()[1], one.value()[0] > other.value()[0] });
-    vlt:   return zint8<Base::capability> ({ one.value()[1] < other.value()[1], one.value()[0] < other.value()[0] });
-    vge:   return zint8<Base::capability> ({ one.value()[1] >= other.value()[1], one.value()[0] >= other.value()[0] });
-    vle:   return zint8<Base::capability> ({ one.value()[1] <= other.value()[1], one.value()[0] <= other.value()[0] });
+    veq:   return zint8<Interface::capability> ({ one.value()[1] == other.value()[1], one.value()[0] == other.value()[0] });
+    vneq:  return zint8<Interface::capability> ({ one.value()[1] != other.value()[1], one.value()[0] != other.value()[0] });
+    vgt:   return zint8<Interface::capability> ({ one.value()[1] > other.value()[1], one.value()[0] > other.value()[0] });
+    vlt:   return zint8<Interface::capability> ({ one.value()[1] < other.value()[1], one.value()[0] < other.value()[0] });
+    vge:   return zint8<Interface::capability> ({ one.value()[1] >= other.value()[1], one.value()[0] >= other.value()[0] });
+    vle:   return zint8<Interface::capability> ({ one.value()[1] <= other.value()[1], one.value()[0] <= other.value()[0] });
 #-----------------------------------------------------------------------------------------------------------------------
   conditional:
     vsel:
       args: [bval_t condition, if_value, else_value]
       mangling: false
-      body: return zint8<Base::capability> ({ vsel(condition.value()[1], if_value.value()[1], else_value.value()[1]), vsel(condition.value()[0], if_value.value()[0], else_value.value()[0]) });
+      body: return zint8<Interface::capability> ({ vsel(condition.value()[1], if_value.value()[1], else_value.value()[1]), vsel(condition.value()[0], if_value.value()[0], else_value.value()[0]) });

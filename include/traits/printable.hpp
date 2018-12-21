@@ -32,88 +32,53 @@
 
 namespace zacc {
 
-//    /**
-//     * @brief printable trait implementation. Provides pretty-print functionality for zacc types
-//     */
-//    template<typename Composed, typename Interface>
-//    struct printable
-//    {
-//        /**
-//         * @brief converts current data to string representation
-//         * @return string, e.g [4, 5, 6, 7] for a 4x int vector
-//         */
-//        std::string to_string() const {
-//            std::stringstream ss;
-//
-//            if (Interface::is_vector)
-//                ss << "[ ";
-//
-//            for (auto entry : static_cast<Composed*>(this)->data())
-//                ss << entry << " ";
-//
-//            if (Interface::is_vector)
-//                ss << "]";
-//
-//            return ss.str();
-//        }
-//
-//        /**
-//         * @brief prints current value to target stream
-//         * @param os target stream
-//         * @param data printable trait
-//         * @return target stream
-//         */
-//        friend std::ostream &operator<<(std::ostream &os, const printable &data) {
-//            os << data.to_string();
-//
-//            return os;
-//        }
-//    };
+    /**
+     * @brief printable trait implementation
+     * @tparam Base base type (e.g previous trait)
+     */
+    template<typename Base, typename Interface, typename Composed>
+    struct __printable :
+            public Base
+    {
+        /**
+         * @brief converts current data to string representation
+         * @return string, e.g [4, 5, 6, 7] for a 4x int vector
+         */
+        std::string to_string() const {
+            std::stringstream ss;
+
+            if (Interface::is_vector)
+                ss << "[ ";
+
+            for (auto entry : static_cast<const Composed*>(this)->data())
+                ss << entry << " ";
+
+            if (Interface::is_vector)
+                ss << "]";
+
+            return ss.str();
+        }
+
+        /**
+         * @brief prints current value to target stream
+         * @param os target stream
+         * @param data printable trait
+         * @return target stream
+         */
+        friend std::ostream &operator<<(std::ostream &os, const Composed &data) {
+            os << data.to_string();
+
+            return os;
+        }
+    };
 
     /**
      * @brief provides pretty-print functionality for zacc types
      */
-    template<typename Composed>
+    template<typename Interface, typename Composed>
     struct printable {
-        /**
-         * @brief printable trait implementation
-         * @tparam Base base type (e.g previous trait)
-         */
+
         template<typename Base>
-        struct impl : public Base
-        {
-            FORWARD(impl);
-
-            /**
-             * @brief converts current data to string representation
-             * @return string, e.g [4, 5, 6, 7] for a 4x int vector
-             */
-            std::string to_string() const {
-                std::stringstream ss;
-
-                if (Base::is_vector)
-                    ss << "[ ";
-
-                for (auto entry : Base::data())
-                    ss << entry << " ";
-
-                if (Base::is_vector)
-                    ss << "]";
-
-                return ss.str();
-            }
-
-            /**
-             * @brief prints current value to target stream
-             * @param os target stream
-             * @param data printable trait
-             * @return target stream
-             */
-            friend std::ostream &operator<<(std::ostream &os, const impl &data) {
-                os << data.to_string();
-
-                return os;
-            }
-        };
+        using impl = __printable<Base, Interface, Composed>;
     };
 }

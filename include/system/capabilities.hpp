@@ -224,13 +224,13 @@ namespace zacc {
 
 
     template<typename T, capabilities feature>
-    constexpr bool has_feature_v = arch::dispatcher<T::features>::is_set(feature);
+    constexpr bool has_feature_v = arch::dispatcher<T::feature_mask>::is_set(feature);
 
     template<typename T>
-    constexpr bool has_integer_types_v = arch::dispatcher<T::features>::has_integer_types;
+    constexpr bool has_integer_types_v = arch::dispatcher<T::feature_mask>::has_integer_types;
 
     template<typename T>
-    constexpr bool has_floating_types_v = arch::dispatcher<T::features>::has_floating_types;
+    constexpr bool has_floating_types_v = arch::dispatcher<T::feature_mask>::has_floating_types;
 
     template <typename T, typename... TList>
     static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, arch::flag_t>

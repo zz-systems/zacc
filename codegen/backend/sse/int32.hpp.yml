@@ -50,12 +50,7 @@ modules:
       - args: { from: *vec_size, to: 0, type: *scalar_t }
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi32 }
 
-    boolean:
-      - args: zval_t value
-        init: value
-
-      - args: bval_t value, last_operation last_op
-        init: value, last_op
+    bboolean: []
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -69,7 +64,7 @@ modules:
 
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args: { raw: "RandomIt input, const zint32<Base::features> &index, Composed" }
+      args: { raw: "RandomIt input, const zint32<Interface::feature_mask> &index, Composed" }
       body:
         - auto i = index.data();
         - return _mm_set_epi32(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
@@ -136,7 +131,7 @@ modules:
             - return _mm_unpacklo_epi32(_mm_shuffle_epi32(tmp1, _MM_SHUFFLE (0,0,2,0)), _mm_shuffle_epi32(tmp2, _MM_SHUFFLE (0,0,2,0)));
             #- auto d0 = one.data();
             #- auto d1 = other.data();
-            #- alignas(Base::alignment) typename Base::extracted_t raw_result;
+            #- alignas(Interface::alignment) typename Interface::extracted_t raw_result;
             #- for(auto i = 0; i < ztraits<Base>::size; i++) raw_result[i] = d0[i] * d1[i];
             #- return raw_result.data();
     vdiv: _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));

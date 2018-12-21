@@ -34,17 +34,18 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Base, typename Composed, typename Boolean>
-    struct io : public Base {
-
-        FORWARD(io);
+    template<typename Impl, typename Base, typename Interface, typename Composed, typename Boolean>
+    struct io :
+        public Impl,
+        public Base
+    {
 
         template<typename OutputIt>
         void store (OutputIt result, bval_tag) const
         {
-            typename Base::original_extracted_t data;
+            typename Interface::original_extracted_t data;
 
-            vstore(std::begin(data), static_cast<Composed>(Base::value()));
+            vstore(std::begin(data), *static_cast<const Composed*>(this));
 
             for(auto i : data)
                 *(result++) = i != 0;
@@ -53,15 +54,15 @@ namespace zacc { namespace traits {
         template<typename OutputIt>
         void store (OutputIt result, zval_tag) const
         {
-            vstore(result, static_cast<Composed>(Base::value()));
+            vstore(result, *static_cast<const Composed*>(this));
         }
 
         template<typename OutputIt>
         void stream (OutputIt result, bval_tag) const
         {
-            typename Base::original_extracted_t data;
+            typename Interface::original_extracted_t data;
 
-            vstore(std::begin(data), static_cast<Composed>(Base::value()));
+            vstore(std::begin(data), *static_cast<const Composed*>(this));
 
             for(auto i : data)
                 *(result++) = i != 0;
@@ -70,13 +71,13 @@ namespace zacc { namespace traits {
         template<typename OutputIt>
         void stream (OutputIt result, zval_tag) const
         {
-            vstream(result, static_cast<Composed>(Base::value()));
+            vstream(result, *static_cast<const Composed*>(this));
         }
 
-        const typename Base::extracted_t data() const {
-            alignas(Base::alignment) typename Base::extracted_t result;
+        const typename Interface::extracted_t data() const {
+            alignas(Interface::alignment) typename Interface::extracted_t result;
 
-            store(std::begin(result), typename Base::tag());
+            store(std::begin(result), typename Interface::tag());
 
             return result;
         }

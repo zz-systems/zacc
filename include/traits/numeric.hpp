@@ -35,10 +35,16 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Base, typename Composed, typename Boolean>
-    struct numeric : public Base {
+    template<typename Impl, typename Base, typename Interface, typename Composed, typename Boolean>
+    struct numeric :
+        public Impl,
+        public Base
+    {
 
-        FORWARD(numeric);
+        constexpr auto self() const
+        {
+            return static_cast<const Composed*>(this);
+        }
 
         /**
          * @brief NaN value
@@ -54,7 +60,7 @@ namespace zacc { namespace traits {
          * @return true if infinite
          */
         Boolean is_infinite() const noexcept {
-            return (*this) == infinity();
+            return (*self()) == infinity();
         };
 
         /**

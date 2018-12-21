@@ -32,28 +32,34 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Base, typename Composed, typename Boolean>
-    struct math : public Base {
-        FORWARD(math);
+    template<typename Impl, typename Base, typename Interface, typename Composed, typename Boolean>
+    struct math :
+        public Impl,
+        public Base
+    {
+        constexpr auto self() const
+        {
+            return static_cast<const Composed*>(this);
+        }
 
         /**
          * @brief absoulute value
          * @return |value|
          */
         Composed abs() const noexcept {
-            return vabs(*this);
+            return vabs(*self());
         }
 
         Composed max(const Composed other) const noexcept {
-            return vmax(*this, other);
+            return vmax(*self(), other);
         }
 
         Composed min(const Composed other) const noexcept {
-            return vmin(*this, other);
+            return vmin(*self(), other);
         }
 
         Composed clamp(const Composed from, const Composed to) const noexcept {
-            return vclamp(*this, from, to);
+            return vclamp(*self(), from, to);
         }
 
         /**
@@ -61,7 +67,7 @@ namespace zacc { namespace traits {
          * @return 1 / value
          */
         Composed rcp() const noexcept {
-            return vrcp(*this);
+            return vrcp(*self());
         }
 
         /**
@@ -69,7 +75,7 @@ namespace zacc { namespace traits {
          * @return 1.654743 -> 1.0
          */
         Composed trunc() const noexcept {
-            return vtrunc(*this);
+            return vtrunc(*self());
         }
 
         /**
@@ -77,7 +83,7 @@ namespace zacc { namespace traits {
          * @return 1.6 -> 1.0
          */
         Composed floor() const noexcept {
-            return vfloor(*this);
+            return vfloor(*self());
         }
 
         /**
@@ -85,7 +91,7 @@ namespace zacc { namespace traits {
          * @return 1.4 -> 2.0
          */
         Composed ceil() const noexcept {
-            return vceil(*this);
+            return vceil(*self());
         }
 
         /**
@@ -93,7 +99,7 @@ namespace zacc { namespace traits {
          * @return 1.6 -> 2.0; 1.4 -> 1.0
          */
         Composed round() const noexcept {
-            return vround(*this);
+            return vround(*self());
         }
 
         /**
@@ -101,7 +107,7 @@ namespace zacc { namespace traits {
          * @return value ^ exponent
          */
         Composed pow(const Composed exponent) const noexcept {
-            return vpow(*this, exponent);
+            return vpow(*self(), exponent);
         }
 
         /**
@@ -109,7 +115,7 @@ namespace zacc { namespace traits {
          * @return sqrt(value)
          */
         Composed sqrt() const noexcept {
-            return vsqrt(*this);
+            return vsqrt(*self());
         }
     };
 }}

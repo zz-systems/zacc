@@ -172,8 +172,6 @@ class Parser():
 
     def arguments(self, data):
         def mapArg(arg):
-            print(f"DEBUG ARG: {pprint.pprint(arg)} \n")
-
             if isinstance(arg, list):
                 arr = arg
             else:
@@ -182,16 +180,12 @@ class Parser():
             name = arr[-1] if arr[-1] != "Composed" else ""
             type =  " ".join(arr[:-1]) if len(arr) > 1 else None
 
-            print(f"DEBUG ARG: NAME {name} TYPE {type}\n")
-
             return self.argument(type=type, name=name)
 
         if isinstance(data, str):
-            print(f"DEBUG STR: {data}\n")
             data = [x.strip() for x in data.split(',')]
 
         if isinstance(data, list):
-            print(f"DEBUG LIST: {data}\n")
             return [mapArg(arg) for arg in data]
 
         if isinstance(data, dict) and peek(data, Tokens.RAW):

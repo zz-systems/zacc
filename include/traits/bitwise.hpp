@@ -32,9 +32,11 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zint32)
      */
-    template<typename Base, typename Composed, typename Boolean>
-    struct bitwise : public Base {
-        FORWARD(bitwise);
+    template<typename Impl, typename Base, typename Interface, typename Composed, typename Boolean>
+    struct bitwise :
+        public Impl,
+        public Base
+    {
 
         friend Composed operator~(const Composed one) { return vbneg(one); }
 
@@ -49,12 +51,6 @@ namespace zacc { namespace traits {
         friend Composed operator^(const Composed one, const Composed other) {
             return vbxor(one, other);
         }
-
-//        template<typename U = bool>
-//        explicit constexpr operator std::enable_if_t<is_bval<Composed>::value, U >() const
-//        {
-//            return is_set(*this);
-//        }
 
         CONVERSION(|);
         ASSIGNMENT(|);

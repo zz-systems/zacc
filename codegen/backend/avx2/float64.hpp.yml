@@ -49,12 +49,7 @@ modules:
       - args: { from: *vec_size, to: 0, type: *scalar_t }
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_pd }
 
-    boolean:
-      - args: zval_t value
-        init: value
-
-      - args: bval_t value, last_operation last_op
-        init: value, last_op
+    boolean: []
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -68,7 +63,7 @@ modules:
 
     vgather:
       prefix: "template<typename RandomIt> friend"
-      args:   "RandomIt input, const zint32<Base::features> &index, Composed"
+      args:   "RandomIt input, const zint32<Interface::feature_mask> &index, Composed"
       body:
         - auto i = _mm256_extractf128_si256(index, 1);
         - _mm256_i32gather_pd(&(*input), i, 8)

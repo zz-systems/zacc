@@ -44,19 +44,18 @@
 #include "util/memory.hpp"
 #include "util/macros.hpp"
 
-#include "traits/constructable.hpp"
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/math.hpp"
+#include "traits/arithmetic.hpp"
 #include "traits/bitwise.hpp"
+#include "traits/bitwise_shift.hpp"
 #include "traits/io.hpp"
 #include "traits/comparable.hpp"
 #include "traits/conditional.hpp"
-#include "traits/numeric.hpp"
+#include "traits/math.hpp"
 #include "traits/logical.hpp"
 #include "traits/equatable.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/arithmetic.hpp"
+#include "traits/numeric.hpp"
 
 namespace zacc { namespace backend { namespace avx2
 {
@@ -121,14 +120,14 @@ namespace zacc {
 
     template<typename T>
     struct ztraits<T, std::enable_if_t<
-            std::is_base_of<backend::avx2::int16_detail::zval_base<T::features>, T>::value
-            || std::is_base_of<backend::avx2::int16_detail::bval_base<T::features>, T>::value>>
+            std::is_base_of<backend::avx2::int16_detail::zval_base<T::feature_mask>, T>::value
+            || std::is_base_of<backend::avx2::int16_detail::bval_base<T::feature_mask>, T>::value>>
     {
         /// vector size (1 - scalar, 4, 8, 16, ...)
         static constexpr size_t size = 16;
 
         /// capabilities
-        static constexpr uint64_t features = T::features;
+        static constexpr uint64_t feature_mask = T::feature_mask;
 
         /// memory alignment
         static constexpr size_t alignment = 32;
@@ -148,186 +147,18 @@ namespace zacc {
         /// extracted std::array of (dim) scalar values
         using extracted_t = std::array<element_t, size>;
 
-        using zval_t = backend::avx2::zint16<T::features>;
-        using bval_t = backend::avx2::bint16<T::features>;
+        using zval_t = backend::avx2::zint16<T::feature_mask>;
+        using bval_t = backend::avx2::bint16<T::feature_mask>;
 
         using tag = select_t<
-                when<std::is_base_of<backend::avx2::int16_detail::zval_base<T::features>, T>::value, zval_tag>,
-                when<std::is_base_of<backend::avx2::int16_detail::bval_base<T::features>, T>::value, bval_tag>>;
+                when<std::is_base_of<backend::avx2::int16_detail::zval_base<T::feature_mask>, T>::value, zval_tag>,
+                when<std::is_base_of<backend::avx2::int16_detail::bval_base<T::feature_mask>, T>::value, bval_tag>>;
     };
 }
 
 namespace zacc { namespace backend { namespace avx2 {
 
     namespace int16_detail {
-
-        // =================================================================================================================
-        /**
-         * @name constructable modules
-         */
-        ///@{
-        /**
-         * @brief constructable
-         * @relates int16
-         * @remark avx2
-         */
-        template<typename Composed>
-        struct zint16_constructable
-        {
-
-            /**
-             * @brief constructable basic interface implementation
-             * @relates int16
-             * @remark avx2
-             */
-            template<typename Base>
-            struct __impl : Base
-            {
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark avx2 
-                 */
-                constexpr __impl(  ) : Base()  {
-
-                    ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
-
-                }
-
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark avx2 
-                 */
-                constexpr __impl(__m256i value) : Base(value)  {
-
-                    ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(__m256i)");
-
-                }
-
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark avx2 
-                 */
-                constexpr __impl(int16_t value) : Base(_mm256_set1_epi16(value))  {
-
-                    ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(int16_t)");
-
-                }
-
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark avx2 
-                 */
-                constexpr __impl(extracted_t value) : Base(_mm256_load_si256((__m256i*)value.data()))  {
-
-                    ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(extracted_t)");
-
-                }
-
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark avx2 
-                 */
-                constexpr __impl(int16_t _15, int16_t _14, int16_t _13, int16_t _12, int16_t _11, int16_t _10, int16_t _9, int16_t _8, int16_t _7, int16_t _6, int16_t _5, int16_t _4, int16_t _3, int16_t _2, int16_t _1, int16_t _0) : Base(_mm256_set_epi16(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15))  {
-
-                    ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t)");
-
-                }
-
-            };
-
-            /**
-             * @brief constructable public interface implementation
-             * @relates int16
-             * @remark avx2
-             */
-            template<typename Base>
-            using impl = traits::constructable<__impl<Base>, Composed, bint16<Base::features>>;
-
-        };
-
-        ///@}
-
-        // =================================================================================================================
-        /**
-         * @name constructable modules
-         */
-        ///@{
-        /**
-         * @brief constructable
-         * @relates int16
-         * @remark avx2
-         */
-        template<typename Composed>
-        struct bint16_constructable
-        {
-
-            /**
-             * @brief constructable basic interface implementation
-             * @relates int16
-             * @remark avx2
-             */
-            template<typename Base>
-            struct __impl : Base
-            {
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark avx2 
-                 */
-                constexpr __impl(  ) : Base()  {
-
-                    ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
-
-                }
-
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark avx2 
-                 */
-                constexpr __impl(zint16<Base::features> value) : Base(value)  {
-
-                    ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(zval_t)");
-
-                }
-
-
-                /**
-                 * @brief constructable 
-                 * @relates int16
-                 * @remark avx2 
-                 */
-                constexpr __impl(bint16<Base::features> value, last_operation last_op) : Base(value, last_op)  {
-
-                    ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(bval_t, last_operation)");
-
-                }
-
-            };
-
-            /**
-             * @brief constructable public interface implementation
-             * @relates int16
-             * @remark avx2
-             */
-            template<typename Base>
-            using impl = traits::constructable<__impl<Base>, Composed, bint16<Base::features>>;
-
-        };
-
-        ///@}
 
         // =================================================================================================================
         /**
@@ -339,28 +170,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_io
         {
-
             /**
              * @brief io basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief io default
                  * @relates int16
                  * @remark avx2 default
                  */
-                template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
-
+                template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vstore");
 
                     _mm256_store_si256((__m256i*)&(*result), input);
@@ -372,8 +199,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
-
+                template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vstream");
 
                     _mm256_stream_si256((__m256i*)&(*result), input);
@@ -387,8 +214,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::io<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::io<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -403,28 +229,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_math
         {
-
             /**
              * @brief math basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief math default
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vabs(Composed one)  {
-
+                friend zint16<Interface::feature_mask> vabs(Composed one) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vabs");
 
                     return _mm256_abs_epi16(one);
@@ -436,8 +258,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vmin(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vmin(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vmin");
 
                     return _mm256_min_epi16(one, other);
@@ -449,8 +271,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vmax(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vmax(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vmax");
 
                     return _mm256_max_epi16(one, other);
@@ -462,8 +284,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vclamp(Composed self, Composed from, Composed to)  {
-
+                friend zint16<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vclamp");
 
                     return vmin(to, vmax(from, self));
@@ -477,8 +299,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::math<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::math<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -493,20 +314,16 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_numeric
         {
-
             /**
              * @brief numeric basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
             };
 
             /**
@@ -515,8 +332,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::numeric<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::numeric<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -531,28 +347,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_arithmetic
         {
-
             /**
              * @brief arithmetic basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief arithmetic default
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vneg(Composed one)  {
-
+                friend zint16<Interface::feature_mask> vneg(Composed one) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vneg");
 
                     return _mm256_sub_epi16(_mm256_setzero_si256(), one);
@@ -564,8 +376,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vadd(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vadd(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vadd");
 
                     return _mm256_add_epi16(one, other);
@@ -577,8 +389,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vsub(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vsub(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vsub");
 
                     return _mm256_sub_epi16(one, other);
@@ -590,8 +402,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vmul(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vmul(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vmul");
 
                     return _mm256_mullo_epi16(one, other);
@@ -603,14 +415,14 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vdiv(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vdiv(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vdiv");
 
                     auto dividend = one.data();
                     auto divisor = other.data();
                     typename Composed::extracted_t result;
-                    for (size_t i = 0; i < Composed::size(); i++) { result[i] = dividend[i] / divisor[i]; };
+                    for (size_t i = 0; i < Composed::size; i++) { result[i] = dividend[i] / divisor[i]; };
                     return result;
                 }
 
@@ -620,8 +432,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vmod(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vmod(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vmod");
 
                     return vsub(one, vmul(other, vdiv(one, other)));
@@ -635,8 +447,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::arithmetic<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::arithmetic<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -651,28 +462,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_bitwise
         {
-
             /**
              * @brief bitwise basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief bitwise default
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vbneg(Composed one)  {
-
+                friend zint16<Interface::feature_mask> vbneg(Composed one) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbneg");
 
                     auto zero = _mm256_setzero_si256();
@@ -686,8 +493,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vband(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vband(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vband");
 
                     return _mm256_and_si256(one, other);
@@ -699,8 +506,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vbor(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vbor(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbor");
 
                     return _mm256_or_si256(one, other);
@@ -712,8 +519,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vbxor(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vbxor(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbxor");
 
                     return _mm256_xor_si256(one, other);
@@ -725,8 +532,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bool is_set(Composed one)  {
-
+                friend bool is_set(Composed one) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "is_set");
 
                     return _mm256_testc_si256(one, _mm256_cmpeq_epi32(one,one));
@@ -740,8 +547,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::bitwise<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::bitwise<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -756,28 +562,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_bitwise_shift
         {
-
             /**
              * @brief bitwise_shift basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief bitwise_shift default
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vbsll(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vbsll(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbsll");
 
                     return _mm256_sll_epi16(one, other);
@@ -789,8 +591,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vbsrl(Composed one, Composed other)  {
-
+                friend zint16<Interface::feature_mask> vbsrl(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbsrl");
 
                     return _mm256_srl_epi16(one, other);
@@ -802,8 +604,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vbslli(const Composed one, const size_t other)  {
-
+                friend zint16<Interface::feature_mask> vbslli(const Composed one, const size_t other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbslli");
 
                     return _mm256_slli_epi16(one, other);
@@ -815,8 +617,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vbsrli(const Composed one, const size_t other)  {
-
+                friend zint16<Interface::feature_mask> vbsrli(const Composed one, const size_t other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbsrli");
 
                     return _mm256_srli_epi16(one, other);
@@ -830,8 +632,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::bitwise_shift<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::bitwise_shift<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -846,28 +647,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_comparable
         {
-
             /**
              * @brief comparable basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief comparable default
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vgt(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vgt(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vgt");
 
                     return _mm256_cmpgt_epi16(one, other);
@@ -879,8 +676,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vlt(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vlt(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vlt");
 
                     return _mm256_cmpgt_epi16(other, one);
@@ -892,8 +689,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vge(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vge(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vge");
 
                     return !(one < other);
@@ -905,8 +702,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vle(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vle(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vle");
 
                     return !(one > other);
@@ -920,8 +717,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::comparable<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::comparable<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -936,28 +732,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_logical
         {
-
             /**
              * @brief logical basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief logical default
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vlneg(Composed one)  {
-
+                friend bint16<Interface::feature_mask> vlneg(Composed one) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vlneg");
 
                     return _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
@@ -969,8 +761,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vlor(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vlor(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vlor");
 
                     return _mm256_or_si256(one, other);
@@ -982,8 +774,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vland(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vland(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vland");
 
                     return _mm256_and_si256(one, other);
@@ -997,8 +789,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::logical<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::logical<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1013,28 +804,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_equatable
         {
-
             /**
              * @brief equatable basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief equatable default
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> veq(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> veq(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "veq");
 
                     return _mm256_cmpeq_epi16(one, other);
@@ -1046,8 +833,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vneq(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vneq(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vneq");
 
                     return !(one == other);
@@ -1061,8 +848,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::equatable<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::equatable<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1077,28 +863,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct zint16_conditional
         {
-
             /**
              * @brief conditional basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief conditional default
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend zint16<Base::features> vsel(bint16<Base::features> condition, Composed if_value, Composed else_value)  {
-
+                friend zint16<Interface::feature_mask> vsel(bint16<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vsel");
 
                     return _mm256_blendv_epi8(else_value, if_value, condition);
@@ -1112,8 +894,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::conditional<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::conditional<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1128,28 +909,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct bint16_io
         {
-
             /**
              * @brief io basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief io default
                  * @relates int16
                  * @remark avx2 default
                  */
-                template<typename OutputIt> friend void vstore(OutputIt result, Composed input)  {
-
+                template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vstore");
 
                     _mm256_store_si256((__m256i*)&(*result), input);
@@ -1161,8 +938,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                template<typename OutputIt> friend void vstream(OutputIt result, Composed input)  {
-
+                template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vstream");
 
                     _mm256_stream_si256((__m256i*)&(*result), input);
@@ -1176,8 +953,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::io<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::io<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1192,28 +968,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct bint16_bitwise
         {
-
             /**
              * @brief bitwise basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief bitwise default
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vbneg(Composed one)  {
-
+                friend bint16<Interface::feature_mask> vbneg(Composed one) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbneg");
 
                     auto zero = _mm256_setzero_si256();
@@ -1227,8 +999,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vband(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vband(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vband");
 
                     return _mm256_and_si256(one, other);
@@ -1240,8 +1012,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vbor(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vbor(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbor");
 
                     return _mm256_or_si256(one, other);
@@ -1253,8 +1025,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vbxor(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vbxor(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vbxor");
 
                     return _mm256_xor_si256(one, other);
@@ -1266,8 +1038,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bool is_set(Composed one)  {
-
+                friend bool is_set(Composed one) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "is_set");
 
                     return _mm256_testc_si256(one, _mm256_cmpeq_epi32(one,one));
@@ -1281,8 +1053,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::bitwise<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::bitwise<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1297,28 +1068,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct bint16_logical
         {
-
             /**
              * @brief logical basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief logical default
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vlneg(Composed one)  {
-
+                friend bint16<Interface::feature_mask> vlneg(Composed one) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vlneg");
 
                     return _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
@@ -1330,8 +1097,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vlor(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vlor(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vlor");
 
                     return _mm256_or_si256(one, other);
@@ -1343,8 +1110,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vland(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vland(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vland");
 
                     return _mm256_and_si256(one, other);
@@ -1358,8 +1125,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::logical<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::logical<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1374,28 +1140,24 @@ namespace zacc { namespace backend { namespace avx2 {
          * @relates int16
          * @remark avx2
          */
-        template<typename Composed>
+        template<typename Interface, typename Composed>
         struct bint16_equatable
         {
-
             /**
              * @brief equatable basic interface implementation
              * @relates int16
              * @remark avx2
              */
-            template<typename Base>
-            struct __impl : Base
+            struct __impl
             {
-                /// forward to base
-                FORWARD(__impl);
 
                 /**
                  * @brief equatable default
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> veq(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> veq(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "veq");
 
                     return _mm256_cmpeq_epi16(one, other);
@@ -1407,8 +1169,8 @@ namespace zacc { namespace backend { namespace avx2 {
                  * @relates int16
                  * @remark avx2 default
                  */
-                friend bint16<Base::features> vneq(Composed one, Composed other)  {
-
+                friend bint16<Interface::feature_mask> vneq(Composed one, Composed other) 
+                {
                     ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "default", "vneq");
 
                     return !(one == other);
@@ -1422,8 +1184,7 @@ namespace zacc { namespace backend { namespace avx2 {
              * @remark avx2
              */
             template<typename Base>
-            using impl = traits::equatable<__impl<Base>, Composed, bint16<Base::features>>;
-
+            using impl = traits::equatable<__impl, Base, Interface, Composed, bint16<Interface::feature_mask>>;
         };
 
         ///@}
@@ -1442,97 +1203,218 @@ namespace zacc { namespace backend { namespace avx2 {
          * @remark avx2
          * @tparam features feature mask
          */
-        template<uint64_t features>
+        template<uint64_t FeatureMask>
         using __zint16 = compose_t
-            <
-            printable<zint16<features>>::template impl,
-            convertable<zint16<features>>::template impl,
-            zint16_io<zint16<features>>::template impl,
-            zint16_math<zint16<features>>::template impl,
-            zint16_numeric<zint16<features>>::template impl,
-            zint16_arithmetic<zint16<features>>::template impl,
-            zint16_bitwise<zint16<features>>::template impl,
-            zint16_bitwise_shift<zint16<features>>::template impl,
-            zint16_comparable<zint16<features>>::template impl,
-            zint16_logical<zint16<features>>::template impl,
-            zint16_equatable<zint16<features>>::template impl,
-            zint16_conditional<zint16<features>>::template impl,
-            zint16_constructable<zint16<features>>::template impl,
-
-            composable<zval_base<features>>::template type
-            >;
+        <
+            printable<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            convertable<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_io<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_math<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_numeric<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_arithmetic<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_bitwise<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_bitwise_shift<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_comparable<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_logical<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_equatable<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl,
+            zint16_conditional<zval_base<FeatureMask>, zint16<FeatureMask>>::template impl
+        >;
 
         /// bint16 composition
         /// @tparam features feature mask
-        template<uint64_t features>
+        template<uint64_t FeatureMask>
         using __bint16 = compose_t
-            <
-            printable<bint16<features>>::template impl,
-            convertable<bint16<features>>::template impl,
-            bint16_io<bint16<features>>::template impl,
-            bint16_bitwise<bint16<features>>::template impl,
-            bint16_logical<bint16<features>>::template impl,
-            bint16_equatable<bint16<features>>::template impl,
-            bint16_constructable<bint16<features>>::template impl,
-
-            composable<bval_base<features>>::template type
-            >;
+        <
+            printable<bval_base<FeatureMask>, bint16<FeatureMask>>::template impl,
+            convertable<bval_base<FeatureMask>, bint16<FeatureMask>>::template impl,
+            bint16_io<bval_base<FeatureMask>, bint16<FeatureMask>>::template impl,
+            bint16_bitwise<bval_base<FeatureMask>, bint16<FeatureMask>>::template impl,
+            bint16_logical<bval_base<FeatureMask>, bint16<FeatureMask>>::template impl,
+            bint16_equatable<bval_base<FeatureMask>, bint16<FeatureMask>>::template impl
+        >;
 
         ///@}
     } // end namespace
 
     /// public zint16 implementation
-    /// @tparam features feature mask
-    template<uint64_t Features>
-    struct zint16 : public int16_detail::__zint16<Features>
+    /// @tparam FeatureMask feature mask
+    template<uint64_t FeatureMask>
+    struct zint16 :
+            public int16_detail::__zint16<FeatureMask>,
+            public int16_detail::zval_base<FeatureMask>
     {
-        /// complete vector
-        using zval_t = zint16<Features>;
-        /// complete boolean vector
-        using bval_t = bint16<Features>;
-
+        /// type tag
         using tag = zval_tag;
 
-        using element_t = int16_t;
+        /// complete vector
+        using zval_t = zint16<FeatureMask>;
+
+        /// complete boolean vector
+        using bval_t = bint16<FeatureMask>;
 
         /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size() { return int16_detail::size; }
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = int16_detail::is_vector;
+        static constexpr size_t size = 16;
 
         /// memory alignment
-        static constexpr size_t alignment = int16_detail::alignment;
+        static constexpr size_t alignment = 32;
 
-        /// forward to base
-        FORWARD2(zint16, int16_detail::__zint16<Features>);
+        /// scalar type? vector type?
+        static constexpr bool is_vector = size > 1;
+
+        /// vector type, like __m128i for sse 4x integer vector
+        using vector_t = __m256i;
+
+        /// scalar type, like int for sse 4x integer vector
+        using element_t = int16_t;
+
+        /// mask type for boolean operations
+        using mask_vector_t = __m256i;
+
+        /// extracted std::array of (dim) scalar values
+        using extracted_t = std::array<element_t, size>;
+
+        /**
+         * copy constructor
+         * @tparam T any type convertable to Vector
+         * @param other
+         */
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, __m256i>::value>>// || std::is_convertible<T, int16_t>::value>>
+        constexpr zint16(const T& other) noexcept
+                : int16_detail::zval_base<FeatureMask>(other)
+        {}
+
+        /**
+         * move constructor
+         * @tparam T any type convertable to Vector
+         * @param other
+         */
+        template<typename T, typename = std::enable_if_t<(size > 1) && std::is_convertible<T, __m256i>::value>>
+        constexpr zint16(T&& other) noexcept
+            : int16_detail::zval_base<FeatureMask>(std::forward<T>(other))
+        {}
+
+        /**
+         * copy constructor
+         * @param other
+         */
+        constexpr zint16(const bint16<FeatureMask>& other) noexcept
+            : int16_detail::zval_base<FeatureMask>(other.value())
+        {}
+
+
+        /**
+         * @brief constructable 
+         * @relates int16
+         * @remark avx2 
+         */
+        constexpr zint16(  ) noexcept : int16_detail::zval_base<FeatureMask>()
+        {
+            ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
+
+        }
+
+
+        /**
+         * @brief constructable 
+         * @relates int16
+         * @remark avx2 
+         */
+        constexpr zint16(__m256i value) noexcept : int16_detail::zval_base<FeatureMask>(value)
+        {
+            ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(__m256i)");
+
+        }
+
+
+        /**
+         * @brief constructable 
+         * @relates int16
+         * @remark avx2 
+         */
+        constexpr zint16(int16_t value) noexcept : int16_detail::zval_base<FeatureMask>(_mm256_set1_epi16(value))
+        {
+            ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(int16_t)");
+
+        }
+
+
+        /**
+         * @brief constructable 
+         * @relates int16
+         * @remark avx2 
+         */
+        constexpr zint16(extracted_t value) noexcept : int16_detail::zval_base<FeatureMask>(_mm256_load_si256((__m256i*)value.data()))
+        {
+            ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(extracted_t)");
+
+        }
+
+
+        /**
+         * @brief constructable 
+         * @relates int16
+         * @remark avx2 
+         */
+        constexpr zint16(int16_t _15, int16_t _14, int16_t _13, int16_t _12, int16_t _11, int16_t _10, int16_t _9, int16_t _8, int16_t _7, int16_t _6, int16_t _5, int16_t _4, int16_t _3, int16_t _2, int16_t _1, int16_t _0) noexcept : int16_detail::zval_base<FeatureMask>(_mm256_set_epi16(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15))
+        {
+            ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS(int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t, int16_t)");
+
+        }
+
     };
 
     /// public bint16 implementation
-    /// @tparam Features feature mask
-    template<uint64_t Features>
-    struct bint16 : public int16_detail::__bint16<Features>
+    /// @tparam FeatureMask feature mask
+    template<uint64_t FeatureMask>
+    struct bint16 :
+            public int16_detail::__bint16<FeatureMask>,
+            public int16_detail::bval_base<FeatureMask>
     {
-        /// complete vector
-        using zval_t = zint16<Features>;
-        /// complete boolean vector
-        using bval_t = bint16<Features>;
-
+        /// type tag
         using tag = bval_tag;
 
-        using element_t = bool;
+        /// complete vector
+        using zval_t = zint16<FeatureMask>;
+
+        /// complete boolean vector
+        using bval_t = bint16<FeatureMask>;
 
         /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size() { return int16_detail::size; }
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = int16_detail::is_vector;
+        static constexpr size_t size = 16;
 
         /// memory alignment
-        static constexpr size_t alignment = int16_detail::alignment;
+        static constexpr size_t alignment = 32;
 
-        /// forward to base
-        FORWARD2(bint16, int16_detail::__bint16<Features>);
+        /// scalar type? vector type?
+        static constexpr bool is_vector = size > 1;
+
+        /// vector type, like __m128i for sse 4x integer vector
+        using vector_t = __m256i;
+
+        /// scalar type, like int for sse 4x integer vector
+        using element_t = bool;
+
+        /// mask type for boolean operations
+        using mask_vector_t = __m256i;
+
+        /// extracted std::array of (dim) scalar values
+        using extracted_t = std::array<element_t, size>;
+
+        /// Forwarding constructor
+        FORWARD2(bint16, int16_detail::bval_base<FeatureMask>);
+
+
+        /**
+         * @brief constructable 
+         * @relates int16
+         * @remark avx2 
+         */
+        constexpr bint16(  ) noexcept : int16_detail::bval_base<FeatureMask>()
+        {
+            ZTRACE_BACKEND("avx2.int16.impl", __LINE__, "int16(int16_t[16])", "", "CONS()");
+
+        }
+
     };
 
     static_assert(is_zval<zint16<0>>::value, "is_zval for zint16 failed.");
