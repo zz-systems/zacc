@@ -36,8 +36,10 @@
 
 namespace zacc {
 
+    struct zval_base {};
+
     /// @cond
-    template<typename Vector, typename MaskVector, typename Element, size_t Size, size_t Alignment, uint64_t Features = 0xFFFF'FFFF'FFFF'FFFF>
+    template<typename Interface>
     struct bval;
     /// @endcond
 
@@ -52,26 +54,10 @@ namespace zacc {
      * @tparam Alignment memory alignment
      * @tparam Features capabilities
      */
-    template<typename Vector, typename MaskVector, typename Element, typename Tag, size_t Size, size_t Alignment, uint64_t FeatureMask = 0xFFFF'FFFF'FFFF'FFFF>
-    struct zval : zval_base
+    template<typename Interface>
+    struct zval : Interface
     {
-        /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size = Size;
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = Size > 1;
-
-        static constexpr size_t feature_mask = FeatureMask;
-
-        /// memory alignment
-        static constexpr size_t alignment = Alignment;
-
-        //using original_extracted_t = std::array<Element, Size>;
-        using extracted_t = std::array<Element, Size>;
-
-        using tag = zval_tag;
-
-        using element_t = Element;
+        USING_ZTYPE(Interface);
 
         /**
          * default constructor
@@ -79,17 +65,17 @@ namespace zacc {
         constexpr zval() noexcept = default;
 
 
-        template<typename T, typename std::enable_if<(Size > 1) && std::is_convertible<T, Vector>::value, void**>::type = nullptr>
+        template<typename T, typename std::enable_if<(size > 1) && std::is_convertible<T, vector_type>::value, void**>::type = nullptr>
         constexpr zval(T value) noexcept
             : _value(value)
         {}
 
-        template<typename T, typename std::enable_if<(Size == 1) && std::is_convertible<T, Element>::value, void**>::type = nullptr>
+        template<typename T, typename std::enable_if<(size == 1) && std::is_convertible<T, element_type>::value, void**>::type = nullptr>
         constexpr zval(T value) noexcept
-            : _value {{ static_cast<Element>(value) }}
+            : _value {{ static_cast<element_type>(value) }}
         {}
 
-        template<typename T, typename std::enable_if<(Size == 1) && is_bval<T>::value, void**>::type = nullptr>
+        template<typename T, typename std::enable_if<(size == 1) && is_bval<T>::value, void**>::type = nullptr>
         constexpr zval(T value) noexcept
             : zval(value.value())
         {}
@@ -116,7 +102,7 @@ namespace zacc {
           * @param other
           * @returns self
           */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, vector_type>::value>>
         constexpr zval& operator=(const T& other) noexcept
         {
             _value = other;
@@ -129,7 +115,7 @@ namespace zacc {
          * @param other
          * @returns self
          */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, Vector>::value>>
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, vector_type>::value>>
         constexpr zval& operator=(T&& other) noexcept
         {
             swap(other);
@@ -173,7 +159,7 @@ namespace zacc {
          * @return raw value
          */
         //template <bool Cond = (Size > 1), typename std::enable_if<Cond, void**>::type = nullptr>
-        constexpr operator Vector() const {
+        constexpr operator vector_type() const {
             return value();
         }
 
@@ -186,18 +172,18 @@ namespace zacc {
          * @brief underlying vector
          * @return raw value
          */
-        template <bool Cond = (Size > 1), typename std::enable_if<Cond, void**>::type = nullptr>
-        constexpr Vector value() const {
+        template <bool Cond = (size > 1), typename std::enable_if<Cond, void**>::type = nullptr>
+        constexpr vector_type value() const {
             return _value;
         }
 
-        template <bool Cond = (Size == 1), typename std::enable_if<Cond, void**>::type = nullptr>
-        constexpr Element value() const {
+        template <bool Cond = (size == 1), typename std::enable_if<Cond, void**>::type = nullptr>
+        constexpr element_type value() const {
             return _value[0];
         }
 
     private:
-        alignas(Alignment) Vector _value;
+        alignas(alignment) vector_type _value;
     };
 
     /**

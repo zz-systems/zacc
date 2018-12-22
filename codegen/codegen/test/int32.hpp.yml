@@ -45,7 +45,7 @@ modules:
       - args: [[*scalar_t, "value"]]
         init: _mm_set1_epi32(value)
 
-      - args: "extracted_t value"
+      - args: "extracted_type value"
         init: _mm_load_si128((__m128i*)value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -140,7 +140,7 @@ modules:
             - return _mm_unpacklo_epi32(_mm_shuffle_epi32(tmp1, _MM_SHUFFLE (0,0,2,0)), _mm_shuffle_epi32(tmp2, _MM_SHUFFLE (0,0,2,0)));
             #- auto d0 = one.data();
             #- auto d1 = other.data();
-            #- alignas(Interface::alignment) typename Interface::extracted_t raw_result;
+            #- alignas(Interface::alignment) typename Interface::extracted_type raw_result;
             #- for(auto i = 0; i < ztraits<Base>::size; i++) raw_result[i] = d0[i] * d1[i];
             #- return raw_result.data();
     vdiv: _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));

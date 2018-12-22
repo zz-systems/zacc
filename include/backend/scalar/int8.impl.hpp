@@ -37,6 +37,7 @@
 
 #include "backend/intrin.hpp"
 #include "backend/zval.hpp"
+#include "backend/zval_interface.hpp"
 
 #include "util/type/type_composition.hpp"
 #include "util/type/type_traits.hpp"
@@ -46,16 +47,16 @@
 
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/io.hpp"
-#include "traits/equatable.hpp"
-#include "traits/conditional.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/bitwise_shift.hpp"
 #include "traits/numeric.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/comparable.hpp"
 #include "traits/logical.hpp"
-#include "traits/bitwise_shift.hpp"
+#include "traits/comparable.hpp"
+#include "traits/conditional.hpp"
+#include "traits/io.hpp"
 #include "traits/math.hpp"
+#include "traits/equatable.hpp"
 
 namespace zacc { namespace backend { namespace scalar
 {
@@ -66,6 +67,12 @@ namespace zacc { namespace backend { namespace scalar
     template<uint64_t features>
     struct zint8;
     /// @endcond
+
+    template<uint64_t FeatureMask>
+    using izint8 = ztype<zval_tag, std::array<int8_t, 1>, std::array<bool, 1>, int8_t, 1, 16, FeatureMask>;
+
+    template<uint64_t FeatureMask>
+    using ibint8 = ztype<bval_tag, std::array<int8_t, 1>, std::array<bool, 1>, int8_t, 1, 16, FeatureMask>;
 
     namespace int8_detail
     {
@@ -79,40 +86,16 @@ namespace zacc { namespace backend { namespace scalar
         static constexpr bool is_vector = size > 1;
 
         /// vector type, like __m128i for sse 4x integer vector
-        using vector_t = std::array<int8_t, 1>;
+        using vector_type = std::array<int8_t, 1>;
 
         /// scalar type, like int for sse 4x integer vector
-        using element_t = int8_t;
+        using element_type = int8_t;
 
         /// mask type for boolean operations
-        using mask_vector_t = std::array<bool, 1>;
+        using mask_vector_type = std::array<bool, 1>;
 
         /// extracted std::array of (dim) scalar values
-        using extracted_t = std::array<element_t, size>;
-
-        /**
-         * @brief zval parametrization using
-         * - 'std::array<int8_t, 1>' as underlying vector type
-         * - 'int8_t' as scalar type
-         * - '1' as vector size
-         * - '16' as alignment
-         * @relates int8
-         * @remark scalar
-         */
-        template<uint64_t Features>
-        using zval_base = zval<std::array<int8_t, 1>, std::array<bool, 1>, int8_t, zval_tag, 1, 16, Features>;
-
-        /**
-         * @brief bval parametrization using
-         * - 'std::array<int8_t, 1>' as underlying vector type
-         * - 'int8_t' as scalar type
-         * - '1' as vector size
-         * - '16' as alignment
-         * @relates int8
-         * @remark scalar
-        */
-        template<uint64_t Features>
-        using bval_base = bval<std::array<int8_t, 1>, std::array<bool, 1>, int8_t, 1, 16, Features>;
+        using extracted_type = std::array<element_type, size>;
     }
 }}}
 
@@ -120,8 +103,8 @@ namespace zacc {
 
     template<typename T>
     struct ztraits<T, std::enable_if_t<
-            std::is_base_of<backend::scalar::int8_detail::zval_base<T::feature_mask>, T>::value
-            || std::is_base_of<backend::scalar::int8_detail::bval_base<T::feature_mask>, T>::value>>
+            std::is_base_of<backend::scalar::izint8<T::feature_mask>, T>::value
+            || std::is_base_of<backend::scalar::ibint8<T::feature_mask>, T>::value>>
     {
         /// vector size (1 - scalar, 4, 8, 16, ...)
         static constexpr size_t size = 1;
@@ -136,29 +119,29 @@ namespace zacc {
         static constexpr bool is_vector = size > 1;
 
         /// vector type, like __m128i for sse 4x integer vector
-        using vector_t = std::array<int8_t, 1>;
+        using vector_type = std::array<int8_t, 1>;
 
         /// scalar type, like int for sse 4x integer vector
-        using element_t = int8_t;
+        using element_type = int8_t;
 
         /// mask type for boolean operations
-        using mask_vector_t = std::array<bool, 1>;
+        using mask_vector_type = std::array<bool, 1>;
 
         /// extracted std::array of (dim) scalar values
-        using extracted_t = std::array<element_t, size>;
+        using extracted_type = std::array<element_type, size>;
 
         using zval_t = backend::scalar::zint8<T::feature_mask>;
         using bval_t = backend::scalar::bint8<T::feature_mask>;
 
         using tag = select_t<
-                when<std::is_base_of<backend::scalar::int8_detail::zval_base<T::feature_mask>, T>::value, zval_tag>,
-                when<std::is_base_of<backend::scalar::int8_detail::bval_base<T::feature_mask>, T>::value, bval_tag>>;
+            when<std::is_base_of<backend::scalar::izint8<T::feature_mask>, T>::value, zval_tag>,
+            when<std::is_base_of<backend::scalar::ibint8<T::feature_mask>, T>::value, bval_tag>>;
     };
 }
 
 namespace zacc { namespace backend { namespace scalar {
 
-    namespace int8_detail {
+    namespace detail {
 
         // =================================================================================================================
         /**
@@ -1196,33 +1179,33 @@ namespace zacc { namespace backend { namespace scalar {
          * @tparam features feature mask
          */
         template<uint64_t FeatureMask>
-        using __zint8 = compose_t
+        using zint8_ops = compose_t
         <
-            printable<zval_base<FeatureMask>, zint8<FeatureMask>>::template impl,
-            convertable<zval_base<FeatureMask>, zint8<FeatureMask>>::template impl,
-            zint8_io<zval_base<FeatureMask>, zint8<FeatureMask>>::template impl,
-            zint8_math<zval_base<FeatureMask>, zint8<FeatureMask>>::template impl,
-            zint8_numeric<zval_base<FeatureMask>, zint8<FeatureMask>>::template impl,
-            zint8_arithmetic<zval_base<FeatureMask>, zint8<FeatureMask>>::template impl,
-            zint8_bitwise<zval_base<FeatureMask>, zint8<FeatureMask>>::template impl,
-            zint8_bitwise_shift<zval_base<FeatureMask>, zint8<FeatureMask>>::template impl,
-            zint8_comparable<zval_base<FeatureMask>, zint8<FeatureMask>>::template impl,
-            zint8_logical<zval_base<FeatureMask>, zint8<FeatureMask>>::template impl,
-            zint8_equatable<zval_base<FeatureMask>, zint8<FeatureMask>>::template impl,
-            zint8_conditional<zval_base<FeatureMask>, zint8<FeatureMask>>::template impl
+            printable<izint8<FeatureMask>, zint8<FeatureMask>>::template impl,
+            convertable<izint8<FeatureMask>, zint8<FeatureMask>>::template impl,
+            zint8_io<izint8<FeatureMask>, zint8<FeatureMask>>::template impl,
+            zint8_math<izint8<FeatureMask>, zint8<FeatureMask>>::template impl,
+            zint8_numeric<izint8<FeatureMask>, zint8<FeatureMask>>::template impl,
+            zint8_arithmetic<izint8<FeatureMask>, zint8<FeatureMask>>::template impl,
+            zint8_bitwise<izint8<FeatureMask>, zint8<FeatureMask>>::template impl,
+            zint8_bitwise_shift<izint8<FeatureMask>, zint8<FeatureMask>>::template impl,
+            zint8_comparable<izint8<FeatureMask>, zint8<FeatureMask>>::template impl,
+            zint8_logical<izint8<FeatureMask>, zint8<FeatureMask>>::template impl,
+            zint8_equatable<izint8<FeatureMask>, zint8<FeatureMask>>::template impl,
+            zint8_conditional<izint8<FeatureMask>, zint8<FeatureMask>>::template impl
         >;
 
         /// bint8 composition
         /// @tparam features feature mask
         template<uint64_t FeatureMask>
-        using __bint8 = compose_t
+        using bint8_ops = compose_t
         <
-            printable<bval_base<FeatureMask>, bint8<FeatureMask>>::template impl,
-            convertable<bval_base<FeatureMask>, bint8<FeatureMask>>::template impl,
-            bint8_io<bval_base<FeatureMask>, bint8<FeatureMask>>::template impl,
-            bint8_bitwise<bval_base<FeatureMask>, bint8<FeatureMask>>::template impl,
-            bint8_logical<bval_base<FeatureMask>, bint8<FeatureMask>>::template impl,
-            bint8_equatable<bval_base<FeatureMask>, bint8<FeatureMask>>::template impl
+            printable<ibint8<FeatureMask>, bint8<FeatureMask>>::template impl,
+            convertable<ibint8<FeatureMask>, bint8<FeatureMask>>::template impl,
+            bint8_io<ibint8<FeatureMask>, bint8<FeatureMask>>::template impl,
+            bint8_bitwise<ibint8<FeatureMask>, bint8<FeatureMask>>::template impl,
+            bint8_logical<ibint8<FeatureMask>, bint8<FeatureMask>>::template impl,
+            bint8_equatable<ibint8<FeatureMask>, bint8<FeatureMask>>::template impl
         >;
 
         ///@}
@@ -1232,38 +1215,16 @@ namespace zacc { namespace backend { namespace scalar {
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
     struct zint8 :
-            public int8_detail::__zint8<FeatureMask>,
-            public int8_detail::zval_base<FeatureMask>
+        public detail::zint8_ops<FeatureMask>,
+        public zval<izint8<FeatureMask>>
     {
-        /// type tag
-        using tag = zval_tag;
+        USING_ZTYPE(izint8<FeatureMask>);
 
         /// complete vector
         using zval_t = zint8<FeatureMask>;
 
         /// complete boolean vector
         using bval_t = bint8<FeatureMask>;
-
-        /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size = 1;
-
-        /// memory alignment
-        static constexpr size_t alignment = 16;
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = size > 1;
-
-        /// vector type, like __m128i for sse 4x integer vector
-        using vector_t = std::array<int8_t, 1>;
-
-        /// scalar type, like int for sse 4x integer vector
-        using element_t = int8_t;
-
-        /// mask type for boolean operations
-        using mask_vector_t = std::array<bool, 1>;
-
-        /// extracted std::array of (dim) scalar values
-        using extracted_t = std::array<element_t, size>;
 
         /**
          * copy constructor
@@ -1272,7 +1233,7 @@ namespace zacc { namespace backend { namespace scalar {
          */
         template<typename T, typename = std::enable_if_t<std::is_convertible<T, std::array<int8_t, 1>>::value>>// || std::is_convertible<T, int8_t>::value>>
         constexpr zint8(const T& other) noexcept
-                : int8_detail::zval_base<FeatureMask>(other)
+            : zval<izint8<FeatureMask>>(other)
         {}
 
         /**
@@ -1282,7 +1243,7 @@ namespace zacc { namespace backend { namespace scalar {
          */
         template<typename T, typename = std::enable_if_t<(size > 1) && std::is_convertible<T, std::array<int8_t, 1>>::value>>
         constexpr zint8(T&& other) noexcept
-            : int8_detail::zval_base<FeatureMask>(std::forward<T>(other))
+            : zval<izint8<FeatureMask>>(std::forward<T>(other))
         {}
 
         /**
@@ -1290,7 +1251,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @param other
          */
         constexpr zint8(const bint8<FeatureMask>& other) noexcept
-            : int8_detail::zval_base<FeatureMask>(other.value())
+            : zval<izint8<FeatureMask>>(other.value())
         {}
 
 
@@ -1299,7 +1260,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int8
          * @remark scalar 
          */
-        constexpr zint8(  ) noexcept : int8_detail::zval_base<FeatureMask>()
+        constexpr zint8(  ) noexcept : zval<izint8<FeatureMask>>()
         {
             ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "int8(int8_t[1])", "", "CONS()");
 
@@ -1311,7 +1272,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int8
          * @remark scalar 
          */
-        constexpr zint8(int8_t value) noexcept : int8_detail::zval_base<FeatureMask>(value)
+        constexpr zint8(int8_t value) noexcept : zval<izint8<FeatureMask>>(value)
         {
             ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "int8(int8_t[1])", "", "CONS(int8_t)");
 
@@ -1323,9 +1284,9 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int8
          * @remark scalar 
          */
-        constexpr zint8(extracted_t value) noexcept : int8_detail::zval_base<FeatureMask>(value[0])
+        constexpr zint8(extracted_type value) noexcept : zval<izint8<FeatureMask>>(value[0])
         {
-            ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "int8(int8_t[1])", "", "CONS(extracted_t)");
+            ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "int8(int8_t[1])", "", "CONS(extracted_type)");
 
         }
 
@@ -1335,11 +1296,10 @@ namespace zacc { namespace backend { namespace scalar {
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
     struct bint8 :
-            public int8_detail::__bint8<FeatureMask>,
-            public int8_detail::bval_base<FeatureMask>
+            public detail::bint8_ops<FeatureMask>,
+            public bval<ibint8<FeatureMask>>
     {
-        /// type tag
-        using tag = bval_tag;
+        USING_ZTYPE(ibint8<FeatureMask>);
 
         /// complete vector
         using zval_t = zint8<FeatureMask>;
@@ -1347,29 +1307,8 @@ namespace zacc { namespace backend { namespace scalar {
         /// complete boolean vector
         using bval_t = bint8<FeatureMask>;
 
-        /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size = 1;
-
-        /// memory alignment
-        static constexpr size_t alignment = 16;
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = size > 1;
-
-        /// vector type, like __m128i for sse 4x integer vector
-        using vector_t = std::array<int8_t, 1>;
-
-        /// scalar type, like int for sse 4x integer vector
-        using element_t = bool;
-
-        /// mask type for boolean operations
-        using mask_vector_t = std::array<bool, 1>;
-
-        /// extracted std::array of (dim) scalar values
-        using extracted_t = std::array<element_t, size>;
-
         /// Forwarding constructor
-        FORWARD2(bint8, int8_detail::bval_base<FeatureMask>);
+        FORWARD2(bint8, bval<ibint8<FeatureMask>>);
 
 
         /**
@@ -1377,7 +1316,7 @@ namespace zacc { namespace backend { namespace scalar {
          * @relates int8
          * @remark scalar 
          */
-        constexpr bint8(  ) noexcept : int8_detail::bval_base<FeatureMask>()
+        constexpr bint8(  ) noexcept : bval<ibint8<FeatureMask>>()
         {
             ZTRACE_BACKEND("scalar.int8.impl", __LINE__, "int8(int8_t[1])", "", "CONS()");
 
@@ -1385,14 +1324,129 @@ namespace zacc { namespace backend { namespace scalar {
 
     };
 
-    static_assert(is_zval<zint8<0>>::value, "is_zval for zint8 failed.");
-    static_assert(is_bval<bint8<0>>::value, "is_bval for bint8 failed.");
+    namespace {
+        using namespace scalar::int8_detail;
 
-    static_assert(!is_floating_point<zint8<0>>::value, "is_floating_point for zint8 failed.");
-    static_assert(is_integral<zint8<0>>::value, "is_integral for zint8 failed.");
+        static_assert(std::is_base_of<izint8 < 0>,
+                      izint8 < 0 >> ::value,
+                      "base_of<izint8> != izint8.");
+        static_assert(!std::is_base_of<ibint8 < 0>,
+                      izint8 < 0 >> ::value,
+                      "base_of<izint8> == ibint8.");
 
-    static_assert(!is_float<zint8<0>>::value, "is_float for zint8 failed.");
-    static_assert(!is_double<zint8<0>>::value, "is_double for zint8 failed.");
+        static_assert(is_zval < izint8 < 0 >> ::value,
+                      "is_zval<izint8> == false.");
+        static_assert(!is_bval < izint8 < 0 >> ::value,
+                      "is_bval<izint8> != false.");
 
+        static_assert(std::is_base_of<izint8 < 0>, zint8 < 0 >> ::value,
+                      "base_of<zint8> != izint8.");
+        static_assert(!std::is_base_of<ibint8 < 0>, zint8 < 0 >> ::value,
+                      "base_of<zint8> == ibint8.");
+
+        static_assert(zint8 < 0 > ::size == 1,
+                      "zint8::size != 1.");
+        static_assert(zint8 < 0 > ::alignment == 16,
+                      "zint8::alignment != 16.");
+        static_assert(zint8 < 0 > ::is_vector == (1 > 1),
+        "zint8::is_vector != (1 > 1).");
+
+        static_assert(std::is_same<zint8 < 0>::tag, zval_tag > ::value,
+                      "zint8::tag != zval_tag.");
+        static_assert(std::is_same<zint8 < 0>::vector_type, std::array<int8_t, 1> > ::value,
+                      "zint8::vector_type != std::array<int8_t, 1>.");
+        static_assert(std::is_same<zint8 < 0>::element_type, int8_t > ::value,
+                      "zint8::element_type != int8_t.");
+        static_assert(std::is_same<zint8 < 0>::mask_vector_type, std::array<bool, 1> > ::value,
+                      "zint8::mask_vector_type != std::array<bool, 1>.");
+        static_assert(std::is_same<zint8 < 0>::extracted_type,
+                      std::array<int8_t, 1>>::value,
+                      "zint8::extracted_type != std::array<int8_t, 1>.");
+
+
+        static_assert(std::is_same<typename ztraits<zint8 < 0>>::tag, zval_tag > ::value,
+                      "zint8::tag != zval_tag.");
+        static_assert(std::is_arithmetic<typename ztraits<zint8 < 0>>::element_type > ::value,
+                      "is_arithmetic<zint8::element_type> == false.");
+        static_assert(is_zval < zint8 < 0 >> ::value,
+                      "is_zval<zint8> == false.");
+        static_assert(!is_bval < zint8 < 0 >> ::value,
+                      "is_bval<zint8> != false.");
+
+
+        static_assert(std::is_base_of<izint8 < 0>,
+                      izint8 < 0 >> ::value,
+                      "base_of<izint8> != izint8.");
+        static_assert(!std::is_base_of<ibint8 < 0>,
+                      izint8 < 0 >> ::value,
+                      "base_of<izint8> == ibint8.");
+
+
+        static_assert(!is_zval < ibint8 < 0 >> ::value,
+                      "is_zval<ibint8> != false.");
+        static_assert(is_bval < ibint8 < 0 >> ::value,
+                      "is_bval<ibint8> == false.");
+
+        static_assert(std::is_base_of<ibint8 < 0>, bint8 < 0 >> ::value,
+                      "base_of<bint8> != ibint8.");
+        static_assert(!std::is_base_of<izint8 < 0>, bint8 < 0 >> ::value,
+                      "base_of<bint8> == izint8.");
+
+        static_assert(bint8 < 0 > ::size == 1,
+                      "bint8::size != 1.");
+        static_assert(bint8 < 0 > ::alignment == 16,
+                      "bint8::alignment != 16.");
+        static_assert(bint8 < 0 > ::is_vector == (1 > 1),
+        "bint8::is_vector != (1 > 1).");
+
+        static_assert(std::is_same<bint8 < 0>::tag, bval_tag > ::value,
+                      "bint8::tag != zval_tag.");
+        static_assert(std::is_same<bint8 < 0>::vector_type, std::array<int8_t, 1> > ::value,
+                      "bint8::vector_type != std::array<int8_t, 1>.");
+        static_assert(std::is_same<bint8 < 0>::element_type, int8_t > ::value,
+                      "bint8::element_type != int8_t.");
+        static_assert(std::is_same<bint8 < 0>::mask_vector_type, std::array<bool, 1> > ::value,
+                      "bint8::mask_vector_type != std::array<bool, 1>.");
+        static_assert(std::is_same<bint8 < 0>::extracted_type,
+                      std::array<int8_t, 1>>::value,
+        "bint8::extracted_type != std::array<int8_t, 1>.");
+
+        static_assert(std::is_same<typename ztraits<bint8 < 0>>::tag, bval_tag > ::value,
+                      "bint8::tag != bval_tag.");
+        static_assert(std::is_arithmetic<typename ztraits<bint8 < 0>>::element_type > ::value,
+                      "is_arithmetic<bint8::element_type> == false.");
+        static_assert(!is_zval < bint8 < 0 >> ::value,
+                      "is_zval<bint8> != false.");
+        static_assert(is_bval < bint8 < 0 >> ::value,
+                      "is_bval<bint8> == false.");
+
+        static_assert(!std::is_floating_point<int8_t>::value ||
+                      is_floating_point < zint8 < 0 >> ::value,
+                      "is_floating_point<zint8> == false. [scalar = int8_t]");
+        static_assert(!std::is_floating_point<int8_t>::value ||
+                      !is_integral < zint8 < 0 >> ::value,
+                      "is_integral<zint8> != false. [scalar = int8_t]");
+
+        static_assert(
+                !std::is_same<int8_t, float>::value || is_float < zint8 < 0 >> ::value,
+                "is_float<zint8> == false. [scalar = int8_t]");
+        static_assert(
+                !std::is_same<int8_t, float>::value || !is_double < zint8 < 0 >> ::value,
+                "is_double<zint8> != false. [scalar = int8_t]");
+
+        static_assert(
+                !std::is_same<int8_t, double>::value || is_double < zint8 < 0 >> ::value,
+                "is_double<zint8> == false. [scalar = int8_t]");
+        static_assert(
+                !std::is_same<int8_t, double>::value || !is_float < zint8 < 0 >> ::value,
+                "is_float<zint8> != false. [scalar = int8_t]");
+
+        static_assert(
+                !std::is_integral<int8_t>::value || is_integral < zint8 < 0 >> ::value,
+                "is_integral<zint8> == false. [scalar = int8_t]");
+        static_assert(!std::is_integral<int8_t>::value ||
+                      !is_floating_point < zint8 < 0 >> ::value,
+                      "is_floating_point<zint8> != false. [scalar = int8_t]");
+    }
     ///@}
 }}}

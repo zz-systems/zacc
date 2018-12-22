@@ -86,10 +86,12 @@ class TraitCompositionRenderer(Renderable):
         initializers    = { m.name:renderer.render(m, node) for m in node.modules.initializers if m.type == type }
         modules         = { m.name:renderer.render(m, node) for m in node.modules.modules if m.type == type }
 
-        interface = f"{resolve_prefix(type)}val_base<FeatureMask>"
-        impl = f"{resolve_prefix(type)}{node.type.name}<FeatureMask>"
-        return [f"{trait}<{interface}, {impl}>::template impl" for trait in shared_traits] + \
-               [f"{modules[trait]}<{interface}, {impl}>::template impl" for trait in traits[type]]# +\
+        #interface = f"{resolve_prefix(type)}val_base<FeatureMask>"
+        typename = f"{resolve_prefix(type)}{node.type.name}<FeatureMask>"
+        interface = f"i{typename}"
+
+        return [f"{trait}<{interface}, {typename}>::template impl" for trait in shared_traits] + \
+               [f"{modules[trait]}<{interface}, {typename}>::template impl" for trait in traits[type]]# +\
                #[f"{initializer}<{impl}>::template impl" for initializer in initializers.values()]
 
 class FunctionSignatureRenderer(Renderable):
@@ -172,26 +174,11 @@ class InitializerSignatureRenderer(Renderable):
         module, ast, body = copy.deepcopy(params)
 
         args = ", ".join([f"{remapInitializerArgType(module, ast, arg)} {arg.name}" for arg in node.arguments])
+        name = f"{resolve_prefix(module.type)}{ast.type.name}"
 
         return "{prefix} {name}({args}) {suffix} : {initializer}".format(
             prefix=node.prefix or "constexpr",
-            name=f"{resolve_prefix(module.type)}{ast.type.name}",
+            name=name,
             args=args,
-            initializer=f"{ast.type.name}_detail::{resolve_prefix(module.type)}val_base<FeatureMask>({renderer.render(node.initializer, { 'is_initializer' : True })})",
+            initializer=f"{resolve_prefix(module.type)}val<i{name}<FeatureMask>>({renderer.render(node.initializer, { 'is_initializer' : True })})",
             suffix=node.suffix or "noexcept")
-
-class FloatVerificationRenderer(Renderable):
-    def render(self, renderer: Renderer, node: AstRoot, params):
-        return "" if node.type.scalar_type == 'float' else "!"
-
-class DoubleVerificationRenderer(Renderable):
-    def render(self, renderer: Renderer, node: AstRoot, params):
-        return "" if node.type.scalar_type == 'double' else "!"
-
-class FpVerificationRenderer(Renderable):
-    def render(self, renderer: Renderer, node: AstRoot, params):
-        return "" if node.type.scalar_type == 'double' or node.type.scalar_type == 'float' else "!"
-
-class IntVerificationRenderer(Renderable):
-    def render(self, renderer: Renderer, node: AstRoot, params):
-        return "!" if node.type.scalar_type == 'double' or node.type.scalar_type == 'float' else ""

@@ -54,7 +54,7 @@ namespace zacc { namespace test {
     }
 
     template <typename T, typename U>
-    std::enable_if_t<is_integral<T>::value && !is_bval<T>::value/* && std::is_constructible<T, U>::value*/, ::testing::AssertionResult>
+    std::enable_if_t<is_zval<T>::value && is_integral<T>::value, ::testing::AssertionResult>
     vassert_eq(const char* actual_expr, const char* expected_expr, const T& actual, const U& expected)
     {
         auto dataset = zip(actual.data(), static_cast<T>(expected).data());
@@ -76,7 +76,7 @@ namespace zacc { namespace test {
     }
 
     template <typename T, typename U>
-    std::enable_if_t<is_zval<T>::value && is_floating_point<T>::value /*&& std::is_constructible<T, U>::value*/, ::testing::AssertionResult>
+    std::enable_if_t<is_zval<T>::value && is_floating_point<T>::value, ::testing::AssertionResult>
     vassert_eq(const char* actual_expr, const char* expected_expr, const T& actual, const U& expected)
     {
         auto dataset = zip(actual.data(), static_cast<T>(expected).data());

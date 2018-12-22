@@ -37,6 +37,7 @@
 
 #include "backend/intrin.hpp"
 #include "backend/zval.hpp"
+#include "backend/zval_interface.hpp"
 
 #include "util/type/type_composition.hpp"
 #include "util/type/type_traits.hpp"
@@ -46,15 +47,15 @@
 
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
+#include "traits/numeric.hpp"
+#include "traits/math.hpp"
+#include "traits/equatable.hpp"
+#include "traits/comparable.hpp"
 #include "traits/io.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/conditional.hpp"
 #include "traits/logical.hpp"
-#include "traits/equatable.hpp"
-#include "traits/numeric.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/math.hpp"
-#include "traits/comparable.hpp"
 
 namespace zacc { namespace backend { namespace sse
 {
@@ -65,6 +66,12 @@ namespace zacc { namespace backend { namespace sse
     template<uint64_t features>
     struct zfloat32;
     /// @endcond
+
+    template<uint64_t FeatureMask>
+    using izfloat32 = ztype<zval_tag, __m128, __m128, float, 4, 16, FeatureMask>;
+
+    template<uint64_t FeatureMask>
+    using ibfloat32 = ztype<bval_tag, __m128, __m128, float, 4, 16, FeatureMask>;
 
     namespace float32_detail
     {
@@ -78,40 +85,16 @@ namespace zacc { namespace backend { namespace sse
         static constexpr bool is_vector = size > 1;
 
         /// vector type, like __m128i for sse 4x integer vector
-        using vector_t = __m128;
+        using vector_type = __m128;
 
         /// scalar type, like int for sse 4x integer vector
-        using element_t = float;
+        using element_type = float;
 
         /// mask type for boolean operations
-        using mask_vector_t = __m128;
+        using mask_vector_type = __m128;
 
         /// extracted std::array of (dim) scalar values
-        using extracted_t = std::array<element_t, size>;
-
-        /**
-         * @brief zval parametrization using
-         * - '__m128' as underlying vector type
-         * - 'float' as scalar type
-         * - '4' as vector size
-         * - '16' as alignment
-         * @relates float32
-         * @remark sse
-         */
-        template<uint64_t Features>
-        using zval_base = zval<__m128, __m128, float, zval_tag, 4, 16, Features>;
-
-        /**
-         * @brief bval parametrization using
-         * - '__m128' as underlying vector type
-         * - 'float' as scalar type
-         * - '4' as vector size
-         * - '16' as alignment
-         * @relates float32
-         * @remark sse
-        */
-        template<uint64_t Features>
-        using bval_base = bval<__m128, __m128, float, 4, 16, Features>;
+        using extracted_type = std::array<element_type, size>;
     }
 }}}
 
@@ -119,8 +102,8 @@ namespace zacc {
 
     template<typename T>
     struct ztraits<T, std::enable_if_t<
-            std::is_base_of<backend::sse::float32_detail::zval_base<T::feature_mask>, T>::value
-            || std::is_base_of<backend::sse::float32_detail::bval_base<T::feature_mask>, T>::value>>
+            std::is_base_of<backend::sse::izfloat32<T::feature_mask>, T>::value
+            || std::is_base_of<backend::sse::ibfloat32<T::feature_mask>, T>::value>>
     {
         /// vector size (1 - scalar, 4, 8, 16, ...)
         static constexpr size_t size = 4;
@@ -135,29 +118,29 @@ namespace zacc {
         static constexpr bool is_vector = size > 1;
 
         /// vector type, like __m128i for sse 4x integer vector
-        using vector_t = __m128;
+        using vector_type = __m128;
 
         /// scalar type, like int for sse 4x integer vector
-        using element_t = float;
+        using element_type = float;
 
         /// mask type for boolean operations
-        using mask_vector_t = __m128;
+        using mask_vector_type = __m128;
 
         /// extracted std::array of (dim) scalar values
-        using extracted_t = std::array<element_t, size>;
+        using extracted_type = std::array<element_type, size>;
 
         using zval_t = backend::sse::zfloat32<T::feature_mask>;
         using bval_t = backend::sse::bfloat32<T::feature_mask>;
 
         using tag = select_t<
-                when<std::is_base_of<backend::sse::float32_detail::zval_base<T::feature_mask>, T>::value, zval_tag>,
-                when<std::is_base_of<backend::sse::float32_detail::bval_base<T::feature_mask>, T>::value, bval_tag>>;
+            when<std::is_base_of<backend::sse::izfloat32<T::feature_mask>, T>::value, zval_tag>,
+            when<std::is_base_of<backend::sse::ibfloat32<T::feature_mask>, T>::value, bval_tag>>;
     };
 }
 
 namespace zacc { namespace backend { namespace sse {
 
-    namespace float32_detail {
+    namespace detail {
 
         // =================================================================================================================
         /**
@@ -1358,32 +1341,32 @@ namespace zacc { namespace backend { namespace sse {
          * @tparam features feature mask
          */
         template<uint64_t FeatureMask>
-        using __zfloat32 = compose_t
+        using zfloat32_ops = compose_t
         <
-            printable<zval_base<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            convertable<zval_base<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_io<zval_base<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_math<zval_base<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_numeric<zval_base<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_arithmetic<zval_base<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_bitwise<zval_base<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_comparable<zval_base<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_logical<zval_base<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_equatable<zval_base<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_conditional<zval_base<FeatureMask>, zfloat32<FeatureMask>>::template impl
+            printable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
+            convertable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
+            zfloat32_io<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
+            zfloat32_math<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
+            zfloat32_numeric<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
+            zfloat32_arithmetic<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
+            zfloat32_bitwise<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
+            zfloat32_comparable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
+            zfloat32_logical<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
+            zfloat32_equatable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
+            zfloat32_conditional<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl
         >;
 
         /// bfloat32 composition
         /// @tparam features feature mask
         template<uint64_t FeatureMask>
-        using __bfloat32 = compose_t
+        using bfloat32_ops = compose_t
         <
-            printable<bval_base<FeatureMask>, bfloat32<FeatureMask>>::template impl,
-            convertable<bval_base<FeatureMask>, bfloat32<FeatureMask>>::template impl,
-            bfloat32_io<bval_base<FeatureMask>, bfloat32<FeatureMask>>::template impl,
-            bfloat32_bitwise<bval_base<FeatureMask>, bfloat32<FeatureMask>>::template impl,
-            bfloat32_logical<bval_base<FeatureMask>, bfloat32<FeatureMask>>::template impl,
-            bfloat32_equatable<bval_base<FeatureMask>, bfloat32<FeatureMask>>::template impl
+            printable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>::template impl,
+            convertable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>::template impl,
+            bfloat32_io<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>::template impl,
+            bfloat32_bitwise<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>::template impl,
+            bfloat32_logical<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>::template impl,
+            bfloat32_equatable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>::template impl
         >;
 
         ///@}
@@ -1393,38 +1376,16 @@ namespace zacc { namespace backend { namespace sse {
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
     struct zfloat32 :
-            public float32_detail::__zfloat32<FeatureMask>,
-            public float32_detail::zval_base<FeatureMask>
+        public detail::zfloat32_ops<FeatureMask>,
+        public zval<izfloat32<FeatureMask>>
     {
-        /// type tag
-        using tag = zval_tag;
+        USING_ZTYPE(izfloat32<FeatureMask>);
 
         /// complete vector
         using zval_t = zfloat32<FeatureMask>;
 
         /// complete boolean vector
         using bval_t = bfloat32<FeatureMask>;
-
-        /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size = 4;
-
-        /// memory alignment
-        static constexpr size_t alignment = 16;
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = size > 1;
-
-        /// vector type, like __m128i for sse 4x integer vector
-        using vector_t = __m128;
-
-        /// scalar type, like int for sse 4x integer vector
-        using element_t = float;
-
-        /// mask type for boolean operations
-        using mask_vector_t = __m128;
-
-        /// extracted std::array of (dim) scalar values
-        using extracted_t = std::array<element_t, size>;
 
         /**
          * copy constructor
@@ -1433,7 +1394,7 @@ namespace zacc { namespace backend { namespace sse {
          */
         template<typename T, typename = std::enable_if_t<std::is_convertible<T, __m128>::value>>// || std::is_convertible<T, float>::value>>
         constexpr zfloat32(const T& other) noexcept
-                : float32_detail::zval_base<FeatureMask>(other)
+            : zval<izfloat32<FeatureMask>>(other)
         {}
 
         /**
@@ -1443,7 +1404,7 @@ namespace zacc { namespace backend { namespace sse {
          */
         template<typename T, typename = std::enable_if_t<(size > 1) && std::is_convertible<T, __m128>::value>>
         constexpr zfloat32(T&& other) noexcept
-            : float32_detail::zval_base<FeatureMask>(std::forward<T>(other))
+            : zval<izfloat32<FeatureMask>>(std::forward<T>(other))
         {}
 
         /**
@@ -1451,7 +1412,7 @@ namespace zacc { namespace backend { namespace sse {
          * @param other
          */
         constexpr zfloat32(const bfloat32<FeatureMask>& other) noexcept
-            : float32_detail::zval_base<FeatureMask>(other.value())
+            : zval<izfloat32<FeatureMask>>(other.value())
         {}
 
 
@@ -1460,7 +1421,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse 
          */
-        constexpr zfloat32(  ) noexcept : float32_detail::zval_base<FeatureMask>()
+        constexpr zfloat32(  ) noexcept : zval<izfloat32<FeatureMask>>()
         {
             ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS()");
 
@@ -1472,7 +1433,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse 
          */
-        constexpr zfloat32(__m128 value) noexcept : float32_detail::zval_base<FeatureMask>(value)
+        constexpr zfloat32(__m128 value) noexcept : zval<izfloat32<FeatureMask>>(value)
         {
             ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(__m128)");
 
@@ -1484,7 +1445,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse 
          */
-        constexpr zfloat32(__m128d value) noexcept : float32_detail::zval_base<FeatureMask>(_mm_cvtpd_ps(value))
+        constexpr zfloat32(__m128d value) noexcept : zval<izfloat32<FeatureMask>>(_mm_cvtpd_ps(value))
         {
             ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(__m128d)");
 
@@ -1496,7 +1457,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse 
          */
-        constexpr zfloat32(__m128i value) noexcept : float32_detail::zval_base<FeatureMask>(_mm_cvtepi32_ps(value))
+        constexpr zfloat32(__m128i value) noexcept : zval<izfloat32<FeatureMask>>(_mm_cvtepi32_ps(value))
         {
             ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(__m128i)");
 
@@ -1508,7 +1469,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse 
          */
-        constexpr zfloat32(float value) noexcept : float32_detail::zval_base<FeatureMask>(_mm_set1_ps(value))
+        constexpr zfloat32(float value) noexcept : zval<izfloat32<FeatureMask>>(_mm_set1_ps(value))
         {
             ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(float)");
 
@@ -1520,9 +1481,9 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse 
          */
-        constexpr zfloat32(extracted_t value) noexcept : float32_detail::zval_base<FeatureMask>(_mm_load_ps(value.data()))
+        constexpr zfloat32(extracted_type value) noexcept : zval<izfloat32<FeatureMask>>(_mm_load_ps(value.data()))
         {
-            ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(extracted_t)");
+            ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(extracted_type)");
 
         }
 
@@ -1532,7 +1493,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse 
          */
-        constexpr zfloat32(float _3, float _2, float _1, float _0) noexcept : float32_detail::zval_base<FeatureMask>(_mm_set_ps(_0, _1, _2, _3))
+        constexpr zfloat32(float _3, float _2, float _1, float _0) noexcept : zval<izfloat32<FeatureMask>>(_mm_set_ps(_0, _1, _2, _3))
         {
             ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS(float, float, float, float)");
 
@@ -1544,11 +1505,10 @@ namespace zacc { namespace backend { namespace sse {
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
     struct bfloat32 :
-            public float32_detail::__bfloat32<FeatureMask>,
-            public float32_detail::bval_base<FeatureMask>
+            public detail::bfloat32_ops<FeatureMask>,
+            public bval<ibfloat32<FeatureMask>>
     {
-        /// type tag
-        using tag = bval_tag;
+        USING_ZTYPE(ibfloat32<FeatureMask>);
 
         /// complete vector
         using zval_t = zfloat32<FeatureMask>;
@@ -1556,29 +1516,8 @@ namespace zacc { namespace backend { namespace sse {
         /// complete boolean vector
         using bval_t = bfloat32<FeatureMask>;
 
-        /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size = 4;
-
-        /// memory alignment
-        static constexpr size_t alignment = 16;
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = size > 1;
-
-        /// vector type, like __m128i for sse 4x integer vector
-        using vector_t = __m128;
-
-        /// scalar type, like int for sse 4x integer vector
-        using element_t = bool;
-
-        /// mask type for boolean operations
-        using mask_vector_t = __m128;
-
-        /// extracted std::array of (dim) scalar values
-        using extracted_t = std::array<element_t, size>;
-
         /// Forwarding constructor
-        FORWARD2(bfloat32, float32_detail::bval_base<FeatureMask>);
+        FORWARD2(bfloat32, bval<ibfloat32<FeatureMask>>);
 
 
         /**
@@ -1586,7 +1525,7 @@ namespace zacc { namespace backend { namespace sse {
          * @relates float32
          * @remark sse 
          */
-        constexpr bfloat32(  ) noexcept : float32_detail::bval_base<FeatureMask>()
+        constexpr bfloat32(  ) noexcept : bval<ibfloat32<FeatureMask>>()
         {
             ZTRACE_BACKEND("sse.float32.impl", __LINE__, "float32(float[4])", "", "CONS()");
 
@@ -1594,14 +1533,129 @@ namespace zacc { namespace backend { namespace sse {
 
     };
 
-    static_assert(is_zval<zfloat32<0>>::value, "is_zval for zfloat32 failed.");
-    static_assert(is_bval<bfloat32<0>>::value, "is_bval for bfloat32 failed.");
+    namespace {
+        using namespace sse::float32_detail;
 
-    static_assert(is_floating_point<zfloat32<0>>::value, "is_floating_point for zfloat32 failed.");
-    static_assert(!is_integral<zfloat32<0>>::value, "is_integral for zfloat32 failed.");
+        static_assert(std::is_base_of<izfloat32 < 0>,
+                      izfloat32 < 0 >> ::value,
+                      "base_of<izfloat32> != izfloat32.");
+        static_assert(!std::is_base_of<ibfloat32 < 0>,
+                      izfloat32 < 0 >> ::value,
+                      "base_of<izfloat32> == ibfloat32.");
 
-    static_assert(is_float<zfloat32<0>>::value, "is_float for zfloat32 failed.");
-    static_assert(!is_double<zfloat32<0>>::value, "is_double for zfloat32 failed.");
+        static_assert(is_zval < izfloat32 < 0 >> ::value,
+                      "is_zval<izfloat32> == false.");
+        static_assert(!is_bval < izfloat32 < 0 >> ::value,
+                      "is_bval<izfloat32> != false.");
 
+        static_assert(std::is_base_of<izfloat32 < 0>, zfloat32 < 0 >> ::value,
+                      "base_of<zfloat32> != izfloat32.");
+        static_assert(!std::is_base_of<ibfloat32 < 0>, zfloat32 < 0 >> ::value,
+                      "base_of<zfloat32> == ibfloat32.");
+
+        static_assert(zfloat32 < 0 > ::size == 4,
+                      "zfloat32::size != 4.");
+        static_assert(zfloat32 < 0 > ::alignment == 16,
+                      "zfloat32::alignment != 16.");
+        static_assert(zfloat32 < 0 > ::is_vector == (4 > 1),
+        "zfloat32::is_vector != (4 > 1).");
+
+        static_assert(std::is_same<zfloat32 < 0>::tag, zval_tag > ::value,
+                      "zfloat32::tag != zval_tag.");
+        static_assert(std::is_same<zfloat32 < 0>::vector_type, __m128 > ::value,
+                      "zfloat32::vector_type != __m128.");
+        static_assert(std::is_same<zfloat32 < 0>::element_type, float > ::value,
+                      "zfloat32::element_type != float.");
+        static_assert(std::is_same<zfloat32 < 0>::mask_vector_type, __m128 > ::value,
+                      "zfloat32::mask_vector_type != __m128.");
+        static_assert(std::is_same<zfloat32 < 0>::extracted_type,
+                      std::array<float, 4>>::value,
+                      "zfloat32::extracted_type != std::array<float, 4>.");
+
+
+        static_assert(std::is_same<typename ztraits<zfloat32 < 0>>::tag, zval_tag > ::value,
+                      "zfloat32::tag != zval_tag.");
+        static_assert(std::is_arithmetic<typename ztraits<zfloat32 < 0>>::element_type > ::value,
+                      "is_arithmetic<zfloat32::element_type> == false.");
+        static_assert(is_zval < zfloat32 < 0 >> ::value,
+                      "is_zval<zfloat32> == false.");
+        static_assert(!is_bval < zfloat32 < 0 >> ::value,
+                      "is_bval<zfloat32> != false.");
+
+
+        static_assert(std::is_base_of<izfloat32 < 0>,
+                      izfloat32 < 0 >> ::value,
+                      "base_of<izfloat32> != izfloat32.");
+        static_assert(!std::is_base_of<ibfloat32 < 0>,
+                      izfloat32 < 0 >> ::value,
+                      "base_of<izfloat32> == ibfloat32.");
+
+
+        static_assert(!is_zval < ibfloat32 < 0 >> ::value,
+                      "is_zval<ibfloat32> != false.");
+        static_assert(is_bval < ibfloat32 < 0 >> ::value,
+                      "is_bval<ibfloat32> == false.");
+
+        static_assert(std::is_base_of<ibfloat32 < 0>, bfloat32 < 0 >> ::value,
+                      "base_of<bfloat32> != ibfloat32.");
+        static_assert(!std::is_base_of<izfloat32 < 0>, bfloat32 < 0 >> ::value,
+                      "base_of<bfloat32> == izfloat32.");
+
+        static_assert(bfloat32 < 0 > ::size == 4,
+                      "bfloat32::size != 4.");
+        static_assert(bfloat32 < 0 > ::alignment == 16,
+                      "bfloat32::alignment != 16.");
+        static_assert(bfloat32 < 0 > ::is_vector == (4 > 1),
+        "bfloat32::is_vector != (4 > 1).");
+
+        static_assert(std::is_same<bfloat32 < 0>::tag, bval_tag > ::value,
+                      "bfloat32::tag != zval_tag.");
+        static_assert(std::is_same<bfloat32 < 0>::vector_type, __m128 > ::value,
+                      "bfloat32::vector_type != __m128.");
+        static_assert(std::is_same<bfloat32 < 0>::element_type, float > ::value,
+                      "bfloat32::element_type != float.");
+        static_assert(std::is_same<bfloat32 < 0>::mask_vector_type, __m128 > ::value,
+                      "bfloat32::mask_vector_type != __m128.");
+        static_assert(std::is_same<bfloat32 < 0>::extracted_type,
+                      std::array<float, 4>>::value,
+        "bfloat32::extracted_type != std::array<float, 4>.");
+
+        static_assert(std::is_same<typename ztraits<bfloat32 < 0>>::tag, bval_tag > ::value,
+                      "bfloat32::tag != bval_tag.");
+        static_assert(std::is_arithmetic<typename ztraits<bfloat32 < 0>>::element_type > ::value,
+                      "is_arithmetic<bfloat32::element_type> == false.");
+        static_assert(!is_zval < bfloat32 < 0 >> ::value,
+                      "is_zval<bfloat32> != false.");
+        static_assert(is_bval < bfloat32 < 0 >> ::value,
+                      "is_bval<bfloat32> == false.");
+
+        static_assert(!std::is_floating_point<float>::value ||
+                      is_floating_point < zfloat32 < 0 >> ::value,
+                      "is_floating_point<zfloat32> == false. [scalar = float]");
+        static_assert(!std::is_floating_point<float>::value ||
+                      !is_integral < zfloat32 < 0 >> ::value,
+                      "is_integral<zfloat32> != false. [scalar = float]");
+
+        static_assert(
+                !std::is_same<float, float>::value || is_float < zfloat32 < 0 >> ::value,
+                "is_float<zfloat32> == false. [scalar = float]");
+        static_assert(
+                !std::is_same<float, float>::value || !is_double < zfloat32 < 0 >> ::value,
+                "is_double<zfloat32> != false. [scalar = float]");
+
+        static_assert(
+                !std::is_same<float, double>::value || is_double < zfloat32 < 0 >> ::value,
+                "is_double<zfloat32> == false. [scalar = float]");
+        static_assert(
+                !std::is_same<float, double>::value || !is_float < zfloat32 < 0 >> ::value,
+                "is_float<zfloat32> != false. [scalar = float]");
+
+        static_assert(
+                !std::is_integral<float>::value || is_integral < zfloat32 < 0 >> ::value,
+                "is_integral<zfloat32> == false. [scalar = float]");
+        static_assert(!std::is_integral<float>::value ||
+                      !is_floating_point < zfloat32 < 0 >> ::value,
+                      "is_floating_point<zfloat32> != false. [scalar = float]");
+    }
     ///@}
 }}}

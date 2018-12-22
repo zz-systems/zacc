@@ -26,28 +26,9 @@
 #pragma once
 #include <type_traits>
 #include <array>
+#include "backend/zval_interface.hpp"
 
 namespace zacc {
-    struct zval_base
-    {};
-
-    struct bval_base
-    {};
-
-//    template<template<class> class T, class U>
-//    struct is_derived_from
-//    {
-//    private:
-//        template<class V>
-//        static decltype(static_cast<const T<V>&>(std::declval<U>()), std::true_type{}) test(const T<V>&);
-//        static std::false_type test(...);
-//    public:
-//        static constexpr bool value = decltype(is_derived_from::test(std::declval<U>()))::value;
-//    };
-
-    struct zval_tag {};
-    struct bval_tag : zval_tag {};
-    struct cval_tag : zval_tag {};
 
 
     template<typename From, typename To>
@@ -117,6 +98,14 @@ namespace zacc {
     template<typename T, typename enable = void>
     struct ztraits;
 
+    //template<template<class> class T, typename FeatureMask, typename enable = void>
+//    template<template<uint64_t FeatureMask> class T, typename enable = void>
+//    struct ztraits;
+
+//    {
+//        static_assert(false, "Non-ztype supplied.");
+//    };
+
 //    template<typename T, typename enable = void>
 //    struct zval_is_base_of : std::false_type
 //    {};
@@ -138,13 +127,13 @@ namespace zacc {
 
     template<typename val_t>
     struct is_zval<val_t, std::enable_if_t<std::is_same<typename ztraits<val_t>::tag, zval_tag>::value
-                                           && std::is_arithmetic<typename ztraits<val_t>::element_t>::value>>
+                                           && std::is_arithmetic<typename ztraits<val_t>::element_type>::value>>
             : public std::true_type
     {};
 
 //    template<typename val_t>
 //    struct is_zval<val_t, std::enable_if_t<std::is_same<typename val_t::tag, zval_tag>::value
-//                                           && std::is_arithmetic<typename val_t::element_t>::value>>
+//                                           && std::is_arithmetic<typename val_t::element_type>::value>>
 //            : public std::true_type
 //    {};
 
@@ -155,7 +144,7 @@ namespace zacc {
 
     template<typename val_t>
     struct is_bval<val_t, std::enable_if_t<std::is_same<typename ztraits<val_t>::tag, bval_tag>::value
-                                           && std::is_same<typename ztraits<val_t>::element_t, bool>::value>>
+                                           && std::is_same<typename ztraits<val_t>::element_type, bool>::value>>
             : public std::true_type
     {};
 
@@ -175,13 +164,13 @@ namespace zacc {
     /// @struct is_cval<val_t, std::enable_if_t<is cval_tag && (zval || is_bval)>
     template<typename val_t>
     struct is_cval<val_t, std::enable_if_t<std::is_same<typename ztraits<val_t>::tag, cval_tag>::value
-                                           && (is_zval<typename ztraits<val_t>::element_t>::value || is_bval<typename val_t::element_t>::value)>>
+                                           && (is_zval<typename ztraits<val_t>::element_type>::value || is_bval<typename val_t::element_type>::value)>>
             : public std::true_type
     {};
     /// @endcond
 
     template<typename val_t>
-    struct is_bval<val_t, std::enable_if_t<is_cval<val_t>::value && is_bval<typename ztraits<val_t>::element_t>::value>>
+    struct is_bval<val_t, std::enable_if_t<is_cval<val_t>::value && is_bval<typename ztraits<val_t>::element_type>::value>>
             : public std::true_type
     {};
 
@@ -191,7 +180,7 @@ namespace zacc {
     {};
 
     template<typename val_t>
-    struct is_floating_point<val_t, std::enable_if_t<std::is_floating_point<typename ztraits<val_t>::element_t>::value>>
+    struct is_floating_point<val_t, std::enable_if_t<std::is_floating_point<typename ztraits<val_t>::element_type>::value>>
             : public std::true_type
     {};
 
@@ -202,7 +191,7 @@ namespace zacc {
     {};
 
     template<typename val_t>
-    struct is_float<val_t, std::enable_if_t<std::is_same<typename ztraits<val_t>::element_t, float>::value>>
+    struct is_float<val_t, std::enable_if_t<std::is_same<typename ztraits<val_t>::element_type, float>::value>>
             : public std::true_type
     {};
 
@@ -213,7 +202,7 @@ namespace zacc {
     {};
 
     template<typename val_t>
-    struct is_double<val_t, std::enable_if_t<std::is_same<typename ztraits<val_t>::element_t, double>::value>>
+    struct is_double<val_t, std::enable_if_t<std::is_same<typename ztraits<val_t>::element_type, double>::value>>
             : public std::true_type
     {};
 
@@ -223,12 +212,12 @@ namespace zacc {
     {};
 
 //    template<typename val_t>
-//    struct is_integral<val_t, std::enable_if_t<std::is_integral<typename ztraits<val_t>::element_t>::value>>
+//    struct is_integral<val_t, std::enable_if_t<std::is_integral<typename ztraits<val_t>::element_type>::value>>
 //            : public std::true_type
 //    {};
 
     template<typename val_t>
-    struct is_integral<val_t, std::enable_if_t<std::is_integral<typename val_t::element_t>::value>>
+    struct is_integral<val_t, std::enable_if_t<std::is_integral<typename val_t::element_type>::value>>
             : public std::true_type
     {};
 
@@ -312,7 +301,7 @@ namespace zacc
 //        using vector_t = Vector;
 //
 //        /// scalar type, like int for sse 4x integer vector
-//        using element_t = Element;
+//        using element_type = Element;
 //
 //        /// mask type for boolean operations
 //        using mask_vector_t = MaskVector;
@@ -342,7 +331,7 @@ namespace zacc
 //        using vector_t = void;
 //
 //        /// scalar type, like int for sse 4x integer vector
-//        using element_t = void;
+//        using element_type = void;
 //
 //        /// mask type for boolean operations
 //        using mask_vector_t = void;
@@ -373,17 +362,17 @@ namespace zacc
 //        using vector_t = typename T::vector_t;
 //
 //        /// scalar type, like int for sse 4x integer vector
-//        using element_t = typename T::element_t;
+//        using element_type = typename T::element_type;
 //
 //        /// mask type for boolean operations
 //        using mask_vector_t = typename T::mask_vector_t;
 //
 //        /// extracted std::array of (dim) scalar values
-//        using extracted_t = std::array<element_t, size>; //aligned_array<scalar_t, dim, alignment>;
+//        using extracted_t = std::array<element_type, size>; //aligned_array<scalar_t, dim, alignment>;
 //
 //
 //
-//        using zval_t = typename T::zval_t;//zval_base<vector_t, mask_vector_t , element_t , zval_tag, size, alignment, features>;
+//        using zval_t = typename T::zval_t;//zval_base<vector_t, mask_vector_t , element_type , zval_tag, size, alignment, features>;
 //        using bval_t = typename T::bval_t;//zval_base<vector_t, mask_vector_t , bool , bval_tag, size, alignment, features>;
 //
 //        //using tag = typename zval_t::tag;
@@ -485,7 +474,7 @@ namespace zacc
     template<typename T>
     struct element_type<T, std::enable_if_t<is_cval<T>::value || is_zval<T>::value || is_bval<T>::value>>
     {
-        using type = std::remove_cv_t<std::remove_reference_t<typename ztraits<T>::element_t>>;
+        using type = std::remove_cv_t<std::remove_reference_t<typename ztraits<T>::element_type>>;
     };
 
 

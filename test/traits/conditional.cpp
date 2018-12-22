@@ -53,7 +53,7 @@ namespace zacc { namespace test {
 //            const size_t size   = 8;
 //            auto max_size       = std::min(TypeParam::size(), size);
 //
-//            using data_t = typename std::array<typename TypeParam::element_t, size>;
+//            using data_t = typename std::array<typename TypeParam::element_type, size>;
 //
 //            data_t  _one        {{  1,  2,  3,  4,  5,  6,  7,  8 }},
 //                    _other      {{ 10, 11, 12, 13, 14, 15, 16, 17 }};

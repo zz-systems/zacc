@@ -38,7 +38,7 @@ modules:
       - args: [[*scalar_t, value]]
         init: _mm256_set1_epi8(value)
 
-      - args: "extracted_t value"
+      - args: "extracted_type value"
         init: _mm256_load_si256((__m256i*)value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
@@ -85,7 +85,7 @@ modules:
       body:
         - auto dividend = one.data();
         - auto divisor = other.data();
-        - typename Composed::extracted_t result;
+        - typename Composed::extracted_type result;
         - for (size_t i = 0; i < Composed::size; i++) { result[i] = dividend[i] / divisor[i]; }
         - return result;
     vmod: vsub(one, vmul(other, vdiv(one, other)))

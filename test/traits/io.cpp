@@ -40,7 +40,7 @@ namespace zacc { namespace test {
 
         TYPED_TEST_P(io_test, store)
         {
-            std::array<typename TypeParam::element_t, TypeParam::size> test_data;
+            std::array<typename TypeParam::element_type, TypeParam::size> test_data;
             for(size_t i = 0; i < TypeParam::size; i++)
                 test_data[i] = i;
 
@@ -55,7 +55,7 @@ namespace zacc { namespace test {
         TYPED_TEST_P(gather_test, gather)
         {
 
-            typename TypeParam::extracted_t data;
+            typename TypeParam::extracted_type data;
             for(size_t i = 0; i < TypeParam::size; i++)
                 data[i] = 10 + i;
 

@@ -35,7 +35,7 @@ modules:
       - args: [[*scalar_t, value]]
         init: value
 
-      - args: "extracted_t value"
+      - args: "extracted_type value"
         init: "value[0]"
 
     boolean: []

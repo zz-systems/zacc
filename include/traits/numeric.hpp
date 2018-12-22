@@ -52,7 +52,7 @@ namespace zacc { namespace traits {
          * @return NaN
          */
         static constexpr Composed quiet_NaN() noexcept {
-            return std::numeric_limits<typename ztraits<Composed>::element_t>::quiet_NaN();
+            return std::numeric_limits<typename ztraits<Composed>::element_type>::quiet_NaN();
         };
 
         /**
@@ -69,7 +69,7 @@ namespace zacc { namespace traits {
          * @return infinity
          */
         static constexpr Composed infinity() noexcept {
-            return std::numeric_limits<typename ztraits<Composed>::element_t>::infinity();
+            return std::numeric_limits<typename ztraits<Composed>::element_type>::infinity();
         };
 
         /**
@@ -78,7 +78,7 @@ namespace zacc { namespace traits {
          * @return minimum value
          */
         static constexpr Composed min() noexcept {
-            return std::numeric_limits<typename ztraits<Composed>::element_t>::min();
+            return std::numeric_limits<typename ztraits<Composed>::element_type>::min();
         }
 
         /**
@@ -87,7 +87,7 @@ namespace zacc { namespace traits {
          * @return maximum value
          */
         static constexpr Composed max() noexcept {
-            return std::numeric_limits<typename ztraits<Composed>::element_t>::max();
+            return std::numeric_limits<typename ztraits<Composed>::element_type>::max();
         }
     };
 }}

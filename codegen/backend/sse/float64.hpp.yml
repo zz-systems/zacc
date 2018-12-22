@@ -43,7 +43,7 @@ modules:
       - args: [[*scalar_t, value]]
         init: _mm_set1_pd(value)
 
-      - args: "extracted_t value"
+      - args: "extracted_type value"
         init: _mm_load_pd(value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }

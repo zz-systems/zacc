@@ -46,21 +46,6 @@ class Traits:
     def render(cls, node, params=None):
         return Traits._renderer.render(node, params)
 
-
-class Verifications:
-
-    def render_float_condition(cls, node):
-        return FloatVerificationRenderer().render(None, node, None)
-
-    def render_double_condition(cls, node):
-        return DoubleVerificationRenderer().render(None, node, None)
-
-    def render_fp_condition(cls, node):
-        return FpVerificationRenderer().render(None, node, None)
-
-    def render_int_condition(cls, node):
-        return IntVerificationRenderer().render(None, node, None)
-
 class Parsers:
     @classmethod
     def parse(cls, data):
@@ -82,7 +67,6 @@ def wrapper(parse):
             "Modules"       : Modules(),
             "Functions"     : Functions(),
             "Traits"        : Traits(),
-            "Verifications" : Verifications(),
             "ModuleTypes"   : ModuleTypes
         }
 

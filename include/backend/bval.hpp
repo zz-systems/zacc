@@ -36,6 +36,8 @@
 
 namespace zacc {
 
+    struct bval_base {};
+
     /**
      * last operation
      */
@@ -55,30 +57,10 @@ namespace zacc {
      * @tparam Alignment memory alignment
      * @tparam Features capabilities
      */
-    template<typename Vector, typename MaskVector, typename Element, size_t Size, size_t Alignment, uint64_t FeatureMask>
-    struct bval : bval_base
+    template<typename Interface>
+    struct bval : Interface
     {
-        /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size = Size;
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = Size > 1;
-
-
-        static constexpr size_t feature_mask = FeatureMask;
-
-        /// memory alignment
-        static constexpr size_t alignment = Alignment;
-
-        using original_extracted_t = std::array<Element, Size>;
-
-        using extracted_t = std::array<bool, Size>;
-
-        using tag = bval_tag;
-
-        using original_element_t = Element;
-
-        using element_t = bool;
+        USING_ZTYPE(Interface);
 
         /**
          * default constructor
@@ -87,17 +69,17 @@ namespace zacc {
                 : _last_op(last_operation::undefined)
         {}
 
-        template<typename T, typename std::enable_if<(Size > 1) && std::is_convertible<T, MaskVector>::value, void**>::type = nullptr>
+        template<typename T, typename std::enable_if<(size > 1) && std::is_convertible<T, mask_vector_type>::value, void**>::type = nullptr>
         constexpr bval(T value, last_operation last_op = last_operation::undefined) noexcept
             : _value(value), _last_op(last_op)
         {}
 
-        template<typename T, typename std::enable_if<(Size == 1) && std::is_convertible<T, bool>::value, void**>::type = nullptr>
+        template<typename T, typename std::enable_if<(size == 1) && std::is_convertible<T, bool>::value, void**>::type = nullptr>
         constexpr bval(T value, last_operation last_op = last_operation::undefined) noexcept
                 : _value {{ static_cast<bool>(value) }}, _last_op(last_op)
         {}
 
-        template<typename T, typename std::enable_if<(Size == 1) && is_zval<T>::value, void**>::type = nullptr>
+        template<typename T, typename std::enable_if<(size == 1) && is_zval<T>::value, void**>::type = nullptr>
         constexpr bval(T value, last_operation last_op = last_operation::undefined) noexcept
                 : bval(value.value(), last_op)
         {}
@@ -137,7 +119,7 @@ namespace zacc {
          * @param other
          * @return self
          */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, MaskVector>::value>>
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, mask_vector_type>::value>>
         constexpr bval& operator=(const T& other) noexcept
         {
             _value = other._value;
@@ -152,7 +134,7 @@ namespace zacc {
          * @param other
          * @return self
          */
-        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, MaskVector>::value>>
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, mask_vector_type>::value>>
         constexpr bval& operator=(T&& other) noexcept
         {
             _value = std::move(other._value);
@@ -208,7 +190,7 @@ namespace zacc {
 //        }
 
         //template <bool Cond = (Size > 1), typename std::enable_if<Cond, void**>::type = nullptr>
-        constexpr operator MaskVector() const {
+        constexpr operator mask_vector_type() const {
             return value();
         }
 
@@ -216,12 +198,12 @@ namespace zacc {
         * underlying vector
         * @return raw value
         */
-        template <bool Cond = (Size > 1), typename std::enable_if<Cond, void**>::type = nullptr>
-        constexpr MaskVector value() const {
+        template <bool Cond = (size > 1), typename std::enable_if<Cond, void**>::type = nullptr>
+        constexpr mask_vector_type value() const {
             return _value;
         }
 
-        template <bool Cond = (Size == 1), typename std::enable_if<Cond, void**>::type = nullptr>
+        template <bool Cond = (size == 1), typename std::enable_if<Cond, void**>::type = nullptr>
         constexpr bool value() const {
             return _value[0];
         }
@@ -235,7 +217,7 @@ namespace zacc {
         }
 
     private:
-        alignas(Alignment) MaskVector _value;
+        alignas(alignment) mask_vector_type _value;
         last_operation _last_op;
     };
 

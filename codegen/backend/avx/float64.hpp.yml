@@ -36,7 +36,7 @@ modules:
       - args: [[*scalar_t, value]]
         init: _mm256_set1_pd(value)
 
-      - args: "extracted_t value"
+      - args: "extracted_type value"
         init: _mm256_load_pd(value.data())
 
       - args: "std::array<sse::zint32<Interface::capability>, 2> value"

@@ -40,44 +40,61 @@ namespace zacc { namespace traits {
         public Base
     {
 
+//        template<typename OutputIt>
+//        void store (OutputIt result, bval_tag) const
+//        {
+//            std::array<bool, Interface::size> data;
+//
+//            vstore(std::begin(data), *static_cast<const Composed*>(this));
+//
+//            std::transform(std::begin(data), std::end(data), result, [](auto i) { return i != 0;});
+//
+////            for(auto i : data)
+////                *(result++) = i != 0;
+//        }
+
         template<typename OutputIt>
-        void store (OutputIt result, bval_tag) const
-        {
-            typename Interface::original_extracted_t data;
-
-            vstore(std::begin(data), *static_cast<const Composed*>(this));
-
-            for(auto i : data)
-                *(result++) = i != 0;
-        }
-
-        template<typename OutputIt>
-        void store (OutputIt result, zval_tag) const
+        void store (OutputIt result) const
         {
             vstore(result, *static_cast<const Composed*>(this));
         }
 
+//        template<typename OutputIt>
+//        void stream (OutputIt result, bval_tag) const
+//        {
+//            std::array<bool, Interface::size> data;
+//
+//            vstore(std::begin(data), *static_cast<const Composed*>(this));
+//
+//            std::transform(std::begin(data), std::end(data), result, [](auto i) { return i != 0;});
+////            for(auto i : data)
+////                *(result++) = i != 0;
+//        }
+
         template<typename OutputIt>
-        void stream (OutputIt result, bval_tag) const
-        {
-            typename Interface::original_extracted_t data;
-
-            vstore(std::begin(data), *static_cast<const Composed*>(this));
-
-            for(auto i : data)
-                *(result++) = i != 0;
-        }
-
-        template<typename OutputIt>
-        void stream (OutputIt result, zval_tag) const
+        void stream (OutputIt result) const
         {
             vstream(result, *static_cast<const Composed*>(this));
         }
 
-        const typename Interface::extracted_t data() const {
-            alignas(Interface::alignment) typename Interface::extracted_t result;
+        template <bool Cond = is_zval<Interface>::value, typename std::enable_if<Cond, void**>::type = nullptr>
+        const typename Interface::extracted_type data() const {
+            alignas(Interface::alignment) typename Interface::extracted_type result;
 
-            store(std::begin(result), typename Interface::tag());
+            store(std::begin(result));
+
+            return result;
+        }
+
+        template <bool Cond = is_bval<Interface>::value, typename std::enable_if<Cond, void**>::type = nullptr>
+        const std::array<bool, Interface::size> data() const {
+
+            alignas(Interface::alignment) typename Interface::extracted_type data;
+            std::array<bool, Interface::size> result;
+
+            store(std::begin(data));
+
+            std::transform(std::begin(data), std::end(data), std::begin(result), [](auto i) { return static_cast<bool>(i);});
 
             return result;
         }

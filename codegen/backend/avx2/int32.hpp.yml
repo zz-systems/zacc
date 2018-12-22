@@ -44,7 +44,7 @@ modules:
       - args: [[*scalar_t, value]]
         init: _mm256_set1_epi32(value)
 
-      - args: "extracted_t value"
+      - args: "extracted_type value"
         init: _mm256_load_si256((__m256i*)value.data())
 
       - args: { from: *vec_size, to: 0, type: *scalar_t }
