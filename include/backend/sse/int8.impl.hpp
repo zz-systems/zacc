@@ -47,15 +47,15 @@
 
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/math.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/comparable.hpp"
 #include "traits/conditional.hpp"
-#include "traits/logical.hpp"
-#include "traits/equatable.hpp"
-#include "traits/numeric.hpp"
+#include "traits/math.hpp"
+#include "traits/comparable.hpp"
 #include "traits/arithmetic.hpp"
+#include "traits/logical.hpp"
 #include "traits/io.hpp"
+#include "traits/numeric.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/equatable.hpp"
 
 namespace zacc { namespace backend { namespace sse
 {
@@ -68,10 +68,10 @@ namespace zacc { namespace backend { namespace sse
     /// @endcond
     
     template<uint64_t FeatureMask>
-    using izint8 = ztype<zval_tag, __m128i, __m128i, int8_t, 16, 16, FeatureMask>;
+    using izint8 = ztype<zval_tag, __m128i, int8_t, 16, 16, FeatureMask>;
 
     template<uint64_t FeatureMask>
-    using ibint8 = ztype<bval_tag, __m128i, __m128i, int8_t, 16, 16, FeatureMask>;
+    using ibint8 = ztype<bval_tag, __m128i, int8_t, 16, 16, FeatureMask>;
 }}}
 
 namespace zacc {
@@ -102,9 +102,6 @@ namespace zacc {
 
         /// scalar type, like int for sse 4x integer vector
         using element_type = int8_t;
-
-        /// mask type for boolean operations
-        using mask_vector_type = __m128i;
 
         /// extracted std::array of (dim) scalar values
         using extracted_type = std::array<element_type, size>;
@@ -688,7 +685,6 @@ namespace zacc { namespace backend { namespace sse
     static_assert(std::is_same<zint8<0>::tag, zval_tag>::value, "zint8::tag != zval_tag.");
     static_assert(std::is_same<zint8<0>::vector_type, __m128i>::value, "zint8::vector_type != __m128i.");
     static_assert(std::is_same<zint8<0>::element_type, int8_t>::value, "zint8::element_type != int8_t.");
-    static_assert(std::is_same<zint8<0>::mask_vector_type, __m128i>::value, "zint8::mask_vector_type != __m128i.");
     static_assert(std::is_same<zint8<0>::extracted_type, std::array<int8_t, 16>>::value, "zint8::extracted_type != std::array<int8_t, 16>.");
 
     static_assert( is_zval<zint8<0>>::value, "is_zval<zint8> == false.");
@@ -712,7 +708,6 @@ namespace zacc { namespace backend { namespace sse
     static_assert(std::is_same<bint8<0>::tag, bval_tag>::value, "bint8::tag != zval_tag.");
     static_assert(std::is_same<bint8<0>::vector_type, __m128i>::value, "bint8::vector_type != __m128i.");
     static_assert(std::is_same<bint8<0>::element_type, int8_t>::value, "bint8::element_type != int8_t.");
-    static_assert(std::is_same<bint8<0>::mask_vector_type, __m128i>::value, "bint8::mask_vector_type != __m128i.");
     static_assert(std::is_same<bint8<0>::extracted_type, std::array<int8_t, 16>>::value, "bint8::extracted_type != std::array<int8_t, 16>.");
 
     static_assert( is_bval<bint8<0>>::value, "is_bval<bint8> == false.");

@@ -69,7 +69,7 @@ namespace zacc {
                 : _last_op(last_operation::undefined)
         {}
 
-        template<typename T, typename std::enable_if<(size > 1) && std::is_convertible<T, mask_vector_type>::value, void**>::type = nullptr>
+        template<typename T, typename std::enable_if<(size > 1) && std::is_convertible<T, vector_type>::value, void**>::type = nullptr>
         constexpr bval(T value, last_operation last_op = last_operation::undefined) noexcept
             : _value(value), _last_op(last_op)
         {}
@@ -83,10 +83,6 @@ namespace zacc {
         constexpr bval(T value, last_operation last_op = last_operation::undefined) noexcept
                 : bval(value.value(), last_op)
         {}
-
-//        constexpr bval(MaskVector value, last_operation last_op = last_operation::undefined) noexcept
-//            : _value(value), _last_op(last_op)
-//        {}
 
         /**
          * copy constructor
@@ -119,7 +115,7 @@ namespace zacc {
          * @param other
          * @return self
          */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, mask_vector_type>::value>>
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, vector_type>::value>>
         constexpr bval& operator=(const T& other) noexcept
         {
             _value = other._value;
@@ -134,7 +130,7 @@ namespace zacc {
          * @param other
          * @return self
          */
-        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, mask_vector_type>::value>>
+        template<typename T, typename enable = std::enable_if_t<std::is_convertible<T, vector_type>::value>>
         constexpr bval& operator=(T&& other) noexcept
         {
             _value = std::move(other._value);
@@ -179,18 +175,7 @@ namespace zacc {
             std::swap(_last_op, other._last_op);
         }
 
-        /**
-         * implicit cast operator to wrapped raw type (MaskVector)
-         * @remark valid only for vectors, not scalars (size has to be > 1, otherwise default C++ operators will apply for wrapped scalars)
-         * @return raw value
-         */
-//        template<typename T = bval>
-//        constexpr operator std::enable_if_t<is_vector_v<T>, MaskVector>() const {
-//            return value();
-//        }
-
-        //template <bool Cond = (Size > 1), typename std::enable_if<Cond, void**>::type = nullptr>
-        constexpr operator mask_vector_type() const {
+        constexpr operator vector_type() const {
             return value();
         }
 
@@ -199,7 +184,7 @@ namespace zacc {
         * @return raw value
         */
         template <bool Cond = (size > 1), typename std::enable_if<Cond, void**>::type = nullptr>
-        constexpr mask_vector_type value() const {
+        constexpr vector_type value() const {
             return _value;
         }
 
@@ -217,7 +202,7 @@ namespace zacc {
         }
 
     private:
-        alignas(alignment) mask_vector_type _value;
+        alignas(alignment) std::conditional_t<is_vector, vector_type, std::array<bool, 1>> _value;
         last_operation _last_op;
     };
 

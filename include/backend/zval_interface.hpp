@@ -31,7 +31,7 @@ namespace zacc
     struct cval_tag {};
 
 
-    template<typename Tag, typename Vector, typename MaskVector, typename Element, size_t Size, size_t Alignment, uint64_t FeatureMask = 0xFFFF'FFFF'FFFF'FFFF>
+    template<typename Tag, typename Vector, typename Element, size_t Size, size_t Alignment, uint64_t FeatureMask = 0xFFFF'FFFF'FFFF'FFFF>
     struct ztype
     {
         /// type tag
@@ -55,9 +55,6 @@ namespace zacc
         /// scalar type, like int for sse 4x integer vector
         using element_type = Element;
 
-        /// mask type for boolean operations
-        using mask_vector_type = MaskVector;
-
         /// extracted std::array of (dim) scalar values
         using extracted_type = std::array<element_type, size>;
     };
@@ -70,6 +67,5 @@ namespace zacc
     using typename Interface::tag; \
     using typename Interface::element_type; \
     using typename Interface::vector_type; \
-    using typename Interface::mask_vector_type; \
     using typename Interface::extracted_type;
 }

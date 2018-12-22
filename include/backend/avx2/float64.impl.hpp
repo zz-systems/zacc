@@ -47,15 +47,15 @@
 
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/math.hpp"
-#include "traits/numeric.hpp"
-#include "traits/conditional.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/comparable.hpp"
 #include "traits/equatable.hpp"
+#include "traits/conditional.hpp"
+#include "traits/math.hpp"
 #include "traits/io.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/logical.hpp"
+#include "traits/numeric.hpp"
+#include "traits/comparable.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/arithmetic.hpp"
 
 namespace zacc { namespace backend { namespace avx2
 {
@@ -68,10 +68,10 @@ namespace zacc { namespace backend { namespace avx2
     /// @endcond
     
     template<uint64_t FeatureMask>
-    using izfloat64 = ztype<zval_tag, __m256d, __m256d, double, 4, 32, FeatureMask>;
+    using izfloat64 = ztype<zval_tag, __m256d, double, 4, 32, FeatureMask>;
 
     template<uint64_t FeatureMask>
-    using ibfloat64 = ztype<bval_tag, __m256d, __m256d, double, 4, 32, FeatureMask>;
+    using ibfloat64 = ztype<bval_tag, __m256d, double, 4, 32, FeatureMask>;
 }}}
 
 namespace zacc {
@@ -102,9 +102,6 @@ namespace zacc {
 
         /// scalar type, like int for sse 4x integer vector
         using element_type = double;
-
-        /// mask type for boolean operations
-        using mask_vector_type = __m256d;
 
         /// extracted std::array of (dim) scalar values
         using extracted_type = std::array<element_type, size>;
@@ -721,7 +718,6 @@ namespace zacc { namespace backend { namespace avx2
     static_assert(std::is_same<zfloat64<0>::tag, zval_tag>::value, "zfloat64::tag != zval_tag.");
     static_assert(std::is_same<zfloat64<0>::vector_type, __m256d>::value, "zfloat64::vector_type != __m256d.");
     static_assert(std::is_same<zfloat64<0>::element_type, double>::value, "zfloat64::element_type != double.");
-    static_assert(std::is_same<zfloat64<0>::mask_vector_type, __m256d>::value, "zfloat64::mask_vector_type != __m256d.");
     static_assert(std::is_same<zfloat64<0>::extracted_type, std::array<double, 4>>::value, "zfloat64::extracted_type != std::array<double, 4>.");
 
     static_assert( is_zval<zfloat64<0>>::value, "is_zval<zfloat64> == false.");
@@ -745,7 +741,6 @@ namespace zacc { namespace backend { namespace avx2
     static_assert(std::is_same<bfloat64<0>::tag, bval_tag>::value, "bfloat64::tag != zval_tag.");
     static_assert(std::is_same<bfloat64<0>::vector_type, __m256d>::value, "bfloat64::vector_type != __m256d.");
     static_assert(std::is_same<bfloat64<0>::element_type, double>::value, "bfloat64::element_type != double.");
-    static_assert(std::is_same<bfloat64<0>::mask_vector_type, __m256d>::value, "bfloat64::mask_vector_type != __m256d.");
     static_assert(std::is_same<bfloat64<0>::extracted_type, std::array<double, 4>>::value, "bfloat64::extracted_type != std::array<double, 4>.");
 
     static_assert( is_bval<bfloat64<0>>::value, "is_bval<bfloat64> == false.");

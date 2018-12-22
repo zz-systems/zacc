@@ -62,10 +62,10 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
     /// @endcond
     
     template<uint64_t FeatureMask>
-    using iz{{ ast.type.name }} = ztype<zval_tag, {{ ast.type.vector_type }}, {{ ast.type.mask_type }}, {{ ast.type.scalar_type }}, {{ ast.type.size }}, {{ ast.type.alignment }}, FeatureMask>;
+    using iz{{ ast.type.name }} = ztype<zval_tag, {{ ast.type.vector_type }}, {{ ast.type.scalar_type }}, {{ ast.type.size }}, {{ ast.type.alignment }}, FeatureMask>;
 
     template<uint64_t FeatureMask>
-    using ib{{ ast.type.name }} = ztype<bval_tag, {{ ast.type.vector_type }}, {{ ast.type.mask_type }}, {{ ast.type.scalar_type }}, {{ ast.type.size }}, {{ ast.type.alignment }}, FeatureMask>;
+    using ib{{ ast.type.name }} = ztype<bval_tag, {{ ast.type.vector_type }}, {{ ast.type.scalar_type }}, {{ ast.type.size }}, {{ ast.type.alignment }}, FeatureMask>;
 }}}
 
 namespace zacc {
@@ -96,9 +96,6 @@ namespace zacc {
 
         /// scalar type, like int for sse 4x integer vector
         using element_type = {{ ast.type.scalar_type }};
-
-        /// mask type for boolean operations
-        using mask_vector_type = {{ ast.type.mask_type }};
 
         /// extracted std::array of (dim) scalar values
         using extracted_type = std::array<element_type, size>;
@@ -306,7 +303,6 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
     static_assert(std::is_same<z{{ast.type.name}}<0>::tag, zval_tag>::value, "z{{ ast.type.name }}::tag != zval_tag.");
     static_assert(std::is_same<z{{ast.type.name}}<0>::vector_type, {{ast.type.vector_type}}>::value, "z{{ ast.type.name }}::vector_type != {{ ast.type.vector_type }}.");
     static_assert(std::is_same<z{{ast.type.name}}<0>::element_type, {{ast.type.scalar_type}}>::value, "z{{ ast.type.name }}::element_type != {{ ast.type.scalar_type }}.");
-    static_assert(std::is_same<z{{ast.type.name}}<0>::mask_vector_type, {{ast.type.mask_type}}>::value, "z{{ ast.type.name }}::mask_vector_type != {{ ast.type.mask_type }}.");
     static_assert(std::is_same<z{{ast.type.name}}<0>::extracted_type, std::array<{{ast.type.scalar_type}}, {{ast.type.size}}>>::value, "z{{ ast.type.name }}::extracted_type != std::array<{{ ast.type.scalar_type }}, {{ ast.type.size }}>.");
 
     static_assert( is_zval<z{{ast.type.name}}<0>>::value, "is_zval<z{{ ast.type.name }}> == false.");
@@ -330,7 +326,6 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
     static_assert(std::is_same<b{{ast.type.name}}<0>::tag, bval_tag>::value, "b{{ ast.type.name }}::tag != zval_tag.");
     static_assert(std::is_same<b{{ast.type.name}}<0>::vector_type, {{ast.type.vector_type}}>::value, "b{{ ast.type.name }}::vector_type != {{ ast.type.vector_type }}.");
     static_assert(std::is_same<b{{ast.type.name}}<0>::element_type, {{ast.type.scalar_type}}>::value, "b{{ ast.type.name }}::element_type != {{ ast.type.scalar_type }}.");
-    static_assert(std::is_same<b{{ast.type.name}}<0>::mask_vector_type, {{ast.type.mask_type}}>::value, "b{{ ast.type.name }}::mask_vector_type != {{ ast.type.mask_type }}.");
     static_assert(std::is_same<b{{ast.type.name}}<0>::extracted_type, std::array<{{ast.type.scalar_type}}, {{ast.type.size}}>>::value, "b{{ ast.type.name }}::extracted_type != std::array<{{ ast.type.scalar_type }}, {{ ast.type.size }}>.");
 
     static_assert( is_bval<b{{ast.type.name}}<0>>::value, "is_bval<b{{ ast.type.name }}> == false.");

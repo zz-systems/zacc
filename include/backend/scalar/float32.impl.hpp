@@ -47,15 +47,15 @@
 
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/equatable.hpp"
-#include "traits/comparable.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/math.hpp"
-#include "traits/io.hpp"
-#include "traits/conditional.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/numeric.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/conditional.hpp"
+#include "traits/io.hpp"
 #include "traits/logical.hpp"
+#include "traits/math.hpp"
+#include "traits/comparable.hpp"
+#include "traits/equatable.hpp"
+#include "traits/arithmetic.hpp"
 
 namespace zacc { namespace backend { namespace scalar
 {
@@ -68,10 +68,10 @@ namespace zacc { namespace backend { namespace scalar
     /// @endcond
     
     template<uint64_t FeatureMask>
-    using izfloat32 = ztype<zval_tag, std::array<float, 1>, std::array<bool, 1>, float, 1, 16, FeatureMask>;
+    using izfloat32 = ztype<zval_tag, std::array<float, 1>, float, 1, 16, FeatureMask>;
 
     template<uint64_t FeatureMask>
-    using ibfloat32 = ztype<bval_tag, std::array<float, 1>, std::array<bool, 1>, float, 1, 16, FeatureMask>;
+    using ibfloat32 = ztype<bval_tag, std::array<float, 1>, float, 1, 16, FeatureMask>;
 }}}
 
 namespace zacc {
@@ -102,9 +102,6 @@ namespace zacc {
 
         /// scalar type, like int for sse 4x integer vector
         using element_type = float;
-
-        /// mask type for boolean operations
-        using mask_vector_type = std::array<bool, 1>;
 
         /// extracted std::array of (dim) scalar values
         using extracted_type = std::array<element_type, size>;
@@ -681,7 +678,6 @@ namespace zacc { namespace backend { namespace scalar
     static_assert(std::is_same<zfloat32<0>::tag, zval_tag>::value, "zfloat32::tag != zval_tag.");
     static_assert(std::is_same<zfloat32<0>::vector_type, std::array<float, 1>>::value, "zfloat32::vector_type != std::array<float, 1>.");
     static_assert(std::is_same<zfloat32<0>::element_type, float>::value, "zfloat32::element_type != float.");
-    static_assert(std::is_same<zfloat32<0>::mask_vector_type, std::array<bool, 1>>::value, "zfloat32::mask_vector_type != std::array<bool, 1>.");
     static_assert(std::is_same<zfloat32<0>::extracted_type, std::array<float, 1>>::value, "zfloat32::extracted_type != std::array<float, 1>.");
 
     static_assert( is_zval<zfloat32<0>>::value, "is_zval<zfloat32> == false.");
@@ -705,7 +701,6 @@ namespace zacc { namespace backend { namespace scalar
     static_assert(std::is_same<bfloat32<0>::tag, bval_tag>::value, "bfloat32::tag != zval_tag.");
     static_assert(std::is_same<bfloat32<0>::vector_type, std::array<float, 1>>::value, "bfloat32::vector_type != std::array<float, 1>.");
     static_assert(std::is_same<bfloat32<0>::element_type, float>::value, "bfloat32::element_type != float.");
-    static_assert(std::is_same<bfloat32<0>::mask_vector_type, std::array<bool, 1>>::value, "bfloat32::mask_vector_type != std::array<bool, 1>.");
     static_assert(std::is_same<bfloat32<0>::extracted_type, std::array<float, 1>>::value, "bfloat32::extracted_type != std::array<float, 1>.");
 
     static_assert( is_bval<bfloat32<0>>::value, "is_bval<bfloat32> == false.");
