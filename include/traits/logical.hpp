@@ -53,22 +53,5 @@ namespace zacc { namespace traits {
         Boolean operator&&(const U other) {
             return Boolean(vland(*self(), static_cast<Composed>(other/*.value()*/)), last_operation::logic);
         }
-
-//        friend Boolean operator!(const Composed one) {
-//            return Boolean(vlneg(one), last_operation::logic);
-//        }
-//
-//        friend Boolean operator||(const Composed one, const Composed other) {
-//            return Boolean(vlor(one, other), last_operation::logic);
-//        }
-//
-//        friend Boolean operator&&(const Composed one, const Composed other) {
-//            return Boolean(vland(one, other), last_operation::logic);
-//        }
-//
-//
-//        CONVERSION2(||, Boolean);
-//
-//        CONVERSION2(&&, Boolean);
     };
 }}

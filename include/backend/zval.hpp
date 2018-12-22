@@ -25,6 +25,8 @@
 #pragma once
 #include <array>
 
+#include "backend/ztype.hpp"
+
 #include "system/capabilities.hpp"
 
 #include "util/type/type_traits.hpp"
@@ -36,165 +38,185 @@
 
 namespace zacc {
 
-    struct zval_base {};
-
-    /// @cond
-    template<typename Interface>
-    struct bval;
-    /// @endcond
-
     /**
-     * @struct zval
-     * @brief base type for all zacc computation types
-     * @tparam Vector vector type, like __m128i for sse 4x integer vector
-     * @tparam MaskVector mask type for boolean operations
-     * @tparam Element scalar type, like int for sse 4x integer vector
-     * @tparam Tag zval type tag
-     * @tparam Size vector size (1 - scalar, 4, 8, 16, ...)
-     * @tparam Alignment memory alignment
-     * @tparam Features capabilities
+     * last operation
      */
+    enum class last_operation
+    {
+        undefined,  ///< last operation is unknown (e.g initialization or arithmetic)
+        comparison, ///< last operation has been a comparison. Assume all-set mask of ones
+        logic,      ///< last operation has been a logic operation. Assume all-set mask of ones
+        bitwise     ///< last operation has been a comparison. Assume user knows what to do
+    };
+
+    template<typename Interface, typename enable = void>
+    struct zval;
+
     template<typename Interface>
-    struct zval : Interface
+    struct zval<Interface, std::enable_if_t<is_zval<Interface>::value>>
+            : Interface
     {
         USING_ZTYPE(Interface);
 
-        /**
-         * default constructor
-         */
-        constexpr zval() noexcept = default;
-
-
-        template<typename T, typename std::enable_if<(size > 1) && std::is_convertible<T, vector_type>::value, void**>::type = nullptr>
-        constexpr zval(T value) noexcept
-            : _value(value)
+        constexpr zval() noexcept
         {}
 
-        template<typename T, typename std::enable_if<(size == 1) && std::is_convertible<T, element_type>::value, void**>::type = nullptr>
-        constexpr zval(T value) noexcept
-            : _value {{ static_cast<element_type>(value) }}
-        {}
+        // =============================================================================================================
 
-        template<typename T, typename std::enable_if<(size == 1) && is_bval<T>::value, void**>::type = nullptr>
-        constexpr zval(T value) noexcept
-            : zval(value.value())
-        {}
-
-        /**
-         * copy constructor
-         * @param other
-         */
         constexpr zval(const zval& other) noexcept
-                : _value (other._value)
+            : _value (other._value)
         {}
 
-        /**
-         * move constructor
-         * @param other
-         */
         constexpr zval(zval&& other) noexcept
-                : _value(std::move(other._value))
+            : zval()
+        {
+            swap(*this, other);
+        }
+
+        constexpr zval& operator=(zval other) noexcept
+        {
+            swap(*this, other);
+            return *this;
+        }
+
+        // =============================================================================================================
+
+        template<typename T, typename std::enable_if<is_vector && std::is_convertible<T, vector_type>::value, void**>::type = nullptr>
+        constexpr zval(const T& other) noexcept
+            : _value(other)
         {}
 
-         /**
-          * assignment operator
-          * @tparam T any type convertable to Vector
-          * @param other
-          * @returns self
-          */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, vector_type>::value>>
-        constexpr zval& operator=(const T& other) noexcept
+        // =============================================================================================================
+
+        template<typename T, typename std::enable_if<!is_vector && std::is_convertible<T, element_type>::value, void**>::type = nullptr>
+        constexpr zval(const T& other) noexcept
+            : _value {{ static_cast<element_type>(other) }}
+        {}
+
+        // =============================================================================================================
+
+        friend void swap(zval& one, zval& other) // nothrow
         {
-            _value = other;
-            return *this;
+            // enable ADL (not necessary in our case, but good practice)
+            using std::swap;
+
+            // by swapping the members of two objects,
+            // the two objects are effectively swapped
+            swap(one._value, other._value);
         }
 
-        /**
-         * moving assignment operator
-         * @tparam T any type convertable to Vector
-         * @param other
-         * @returns self
-         */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, vector_type>::value>>
-        constexpr zval& operator=(T&& other) noexcept
-        {
-            swap(other);
-            return *this;
-        }
+        // =============================================================================================================
 
-        /**
-         * assignment operator
-         * @param other
-         * @returns self
-         */
-        constexpr zval& operator=(const zval& other) noexcept
-        {
-            _value = other._value;
-            return *this;
-        }
-
-        /**
-         * moving assignment operator
-         * @param other
-         * @returns self
-         */
-        constexpr zval& operator=(zval&& other) noexcept
-        {
-            swap(other);
-            return *this;
-        }
-
-        /**
-         * swaps values
-         * @param other
-         */
-        void swap(zval& other) noexcept
-        {
-            std::swap(_value, other._value);
-        }
-
-        /**
-         * implicit cast operator to wrapped raw type (Vector)
-         * @remark valid only for vectors, not scalars (size has to be > 1, otherwise default C++ operators will apply for wrapped scalars)
-         * @return raw value
-         */
-        //template <bool Cond = (Size > 1), typename std::enable_if<Cond, void**>::type = nullptr>
-        constexpr operator vector_type() const {
-            return value();
-        }
-
-//        template<typename T = zval>
-//        constexpr operator std::enable_if_t<T::is_vector, Vector>() const {
-//            return value();
-//        }
-
-        /**
-         * @brief underlying vector
-         * @return raw value
-         */
-        template <bool Cond = (size > 1), typename std::enable_if<Cond, void**>::type = nullptr>
+        template <bool Cond = is_vector, typename std::enable_if<Cond, void**>::type = nullptr>
         constexpr vector_type value() const {
-            return _value;
+            return this->_value;
         }
 
-        template <bool Cond = (size == 1), typename std::enable_if<Cond, void**>::type = nullptr>
+        template <bool Cond = !is_vector, typename std::enable_if<Cond, void**>::type = nullptr>
         constexpr element_type value() const {
             return _value[0];
         }
 
-    private:
+        constexpr operator vector_type() const {
+            return this->value();
+        }
+        
+    protected:
         alignas(alignment) vector_type _value;
     };
 
-    /**
-     * swaps contents of zval instances
-     * @tparam Args zval parametrization
-     * @param one
-     * @param other
-     */
-    template<typename... Args>
-    void swap(zval<Args...>& one, zval<Args...>& other)
+    template<typename Interface>
+    struct zval<Interface, std::enable_if_t<is_bval<Interface>::value>>
+            : Interface
     {
-        one.swap(other);
-    }
+        USING_ZTYPE(Interface);
+
+        constexpr zval() noexcept
+            : _last_op(last_operation::undefined)
+        {}
+
+        // =============================================================================================================
+
+        constexpr zval(const zval& other) noexcept
+            : _value (other._value), _last_op(other.last_op())
+        {}
+
+        constexpr zval(const zval& other, last_operation last_op) noexcept
+            : _value (other._value), _last_op(last_op)
+        {}
+
+        constexpr zval(zval&& other) noexcept
+            : zval()
+        {
+            swap(*this, other);
+        }
+
+        constexpr zval(zval&& other, last_operation last_op) noexcept
+            : zval()
+        {
+            std::swap(_last_op, last_op);
+            swap(*this, other);
+        }
+
+        constexpr zval& operator=(zval other) noexcept
+        {
+            swap(*this, other);
+            return *this;
+        }
+
+        // =============================================================================================================
+
+        template<typename T, typename std::enable_if<is_vector && std::is_convertible<T, vector_type>::value, void**>::type = nullptr>
+        constexpr zval(const T& other, last_operation last_op = last_operation::undefined) noexcept
+            : _value(other), _last_op(last_op)
+        {}
+
+        // =============================================================================================================
+
+        template<typename T, typename std::enable_if<!is_vector && std::is_convertible<T, bool>::value, void**>::type = nullptr>
+        constexpr zval(const T& other, last_operation last_op = last_operation::undefined) noexcept
+            : _value {{ static_cast<bool>(other) }}, _last_op(last_op)
+        {}
+
+        template<typename T, typename std::enable_if<!is_vector && std::is_convertible<decltype(std::declval<T>().value()), bool>::value, void**>::type = nullptr>
+        constexpr zval(const T& other, last_operation last_op = last_operation::undefined) noexcept
+            : _value {{ static_cast<bool>(other.value()) }}, _last_op(last_op)
+        {}
+
+        // =============================================================================================================
+
+        friend void swap(zval& one, zval& other) // nothrow
+        {
+            // enable ADL (not necessary in our case, but good practice)
+            using std::swap;
+
+            // by swapping the members of two objects,
+            // the two objects are effectively swapped
+            swap(one._value, other._value);
+            swap(one._last_op, other._last_op);
+        }
+
+        // =============================================================================================================
+
+        template <bool Cond = is_vector, typename std::enable_if<Cond, void**>::type = nullptr>
+        constexpr vector_type value() const {
+            return this->_value;
+        }
+
+        template <bool Cond = !is_vector, typename std::enable_if<Cond, void**>::type = nullptr>
+        constexpr bool value() const {
+            return this->_value[0];
+        }
+
+        constexpr operator vector_type() const {
+            return this->value();
+        }
+
+        constexpr last_operation last_op() const {
+            return _last_op;
+        }
+    protected:
+        alignas(alignment) std::conditional_t<is_vector, vector_type, std::array<bool, 1>> _value;
+        last_operation _last_op;
+    };
 }

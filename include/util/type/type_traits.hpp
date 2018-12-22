@@ -26,7 +26,7 @@
 #pragma once
 #include <type_traits>
 #include <array>
-#include "backend/zval_interface.hpp"
+#include "backend/ztype.hpp"
 
 namespace zacc {
 
@@ -98,27 +98,41 @@ namespace zacc {
     template<typename T, typename enable = void>
     struct ztraits;
 
-    //template<template<class> class T, typename FeatureMask, typename enable = void>
-//    template<template<uint64_t FeatureMask> class T, typename enable = void>
-//    struct ztraits;
+    /// vector size (1 - scalar, 4, 8, 16, ...)
+    template<typename T>
+    constexpr size_t size_v = ztraits<T>::size;
 
-//    {
-//        static_assert(false, "Non-ztype supplied.");
-//    };
+    /// capabilities
+    template<typename T>
+    constexpr uint64_t feature_mask_v = ztraits<T>::feature_mask;
 
-//    template<typename T, typename enable = void>
-//    struct zval_is_base_of : std::false_type
-//    {};
-//
-//    template<typename T, typename enable = void>
-//    struct bval_is_base_of : std::false_type
-//    {};
+    /// memory alignment
+    template<typename T>
+    constexpr size_t alignment_v = ztraits<T>::alignment;
 
-//    template<typename T>
-//    using enable_if_zval_is_base_of_t = std::enable_if_t<zval_is_base_of<T>::value, T>;
-//
-//    template<typename T>
-//    using enable_if_bval_is_base_of_t = std::enable_if_t<bval_is_base_of<T>::value, T>;
+    /// scalar type? vector type?
+    template<typename T>
+    constexpr bool is_vector_v = ztraits<T>::is_vector;
+
+    /// vector type, like __m128i for sse 4x integer vector
+    template<typename T>
+    using vector_t = typename ztraits<T>::vector_type;
+
+    /// scalar type, like int for sse 4x integer vector
+    template<typename T>
+    using element_t = typename ztraits<T>::element_type;
+
+    /// extracted std::array of (dim) scalar values
+    template<typename T>
+    using extracted_t = typename ztraits<T>::extracted_type;
+
+    template<typename T>
+    using zval_t = typename ztraits<T>::zval_type;
+    template<typename T>
+    using bval_t = typename ztraits<T>::bval_type;
+
+    template<typename T>
+    using tag_t = typename ztraits<T>::tag;
 
     template<typename val_t, typename enable_t = void>
     struct is_zval
@@ -246,8 +260,6 @@ namespace zacc {
             : public std::true_type
     {};
 
-    template<typename val_t>
-    constexpr bool is_vector_v = is_vector<val_t>::value;
 
     template<typename T>
     using resolve_uint_t = std::conditional_t<

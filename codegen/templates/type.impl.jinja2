@@ -37,7 +37,6 @@
 
 #include "backend/intrin.hpp"
 #include "backend/zval.hpp"
-#include "backend/zval_interface.hpp"
 
 #include "util/type/type_composition.hpp"
 #include "util/type/type_traits.hpp"
@@ -124,7 +123,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
             {% for func in module.functions %}
             {% for body in func.bodies %}
             /**
-             * @brief {{ module.name }} [{{ body.target }} branch]
+             * @brief {{ func.name }} [{{ body.target }} branch]
              * @relates {{ ast.type.name }}
              */
             {% for part in Functions.render(func.signature, (module, ast, body)) if part %}
@@ -236,7 +235,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
     /// public b{{ ast.type.name }} implementation [{{ ast.type.target }} branch]
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
-    struct b{{ ast.type.name }} : public bval<ib{{ ast.type.name }}<FeatureMask>>,
+    struct b{{ ast.type.name }} : public zval<ib{{ ast.type.name }}<FeatureMask>>,
 
         // generic traits
         {% for trait in ast.traits.shared %}
@@ -244,7 +243,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
         {% endfor %}
 
         // {{ ast.type.name }} traits
-        {% for trait in ast.traits.default %}
+        {% for trait in ast.traits.boolean %}
         {{ ast.type.name }}_modules::{{ trait }}<ib{{ ast.type.name }}<FeatureMask>, b{{ ast.type.name }}<FeatureMask>>{{ "," if not loop.last }}
         {% endfor %}
     {
@@ -257,7 +256,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
         using bval_t = b{{ ast.type.name }}<FeatureMask>;
 
         /// Forwarding constructor
-        FORWARD2(b{{ ast.type.name }}, bval<ib{{ ast.type.name }}<FeatureMask>>);
+        FORWARD2(b{{ ast.type.name }}, zval<ib{{ ast.type.name }}<FeatureMask>>);
 
         {% for module in ast.modules.initializers if module.type == ModuleTypes.BOOLEAN %}
         {% for func in module.functions %}

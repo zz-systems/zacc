@@ -37,7 +37,6 @@
 
 #include "backend/intrin.hpp"
 #include "backend/zval.hpp"
-#include "backend/zval_interface.hpp"
 
 #include "util/type/type_composition.hpp"
 #include "util/type/type_traits.hpp"
@@ -47,16 +46,16 @@
 
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/equatable.hpp"
-#include "traits/io.hpp"
-#include "traits/numeric.hpp"
-#include "traits/bitwise_shift.hpp"
 #include "traits/logical.hpp"
-#include "traits/math.hpp"
-#include "traits/comparable.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/arithmetic.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/equatable.hpp"
+#include "traits/numeric.hpp"
 #include "traits/conditional.hpp"
+#include "traits/comparable.hpp"
+#include "traits/io.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/math.hpp"
+#include "traits/arithmetic.hpp"
 
 namespace zacc { namespace backend { namespace sse
 {
@@ -128,7 +127,7 @@ namespace zacc { namespace backend { namespace sse
         struct io : traits::io<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief io [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
@@ -137,7 +136,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief io [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
@@ -146,7 +145,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief io [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             template<typename RandomIt> friend zint32<Interface::feature_mask> vgather(RandomIt input, const zint32<Interface::feature_mask> &index, Composed) 
@@ -166,7 +165,7 @@ namespace zacc { namespace backend { namespace sse
         struct math : traits::math<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief math [sse3 branch]
+             * @brief  [sse3 branch]
              * @relates int32
              */
             template<typename T = zint32<Interface::feature_mask>>
@@ -177,7 +176,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             template<typename T = zint32<Interface::feature_mask>>
@@ -188,7 +187,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [sse4 branch]
+             * @brief  [sse4 branch]
              * @relates int32
              */
             template<typename T = zint32<Interface::feature_mask>>
@@ -199,7 +198,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             template<typename T = zint32<Interface::feature_mask>>
@@ -210,7 +209,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [sse4 branch]
+             * @brief  [sse4 branch]
              * @relates int32
              */
             template<typename T = zint32<Interface::feature_mask>>
@@ -221,7 +220,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             template<typename T = zint32<Interface::feature_mask>>
@@ -232,7 +231,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
@@ -241,7 +240,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vsqrt(Composed one) 
@@ -271,7 +270,7 @@ namespace zacc { namespace backend { namespace sse
         struct arithmetic : traits::arithmetic<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vneg(Composed one) 
@@ -280,7 +279,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vadd(Composed one, Composed other) 
@@ -289,7 +288,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vsub(Composed one, Composed other) 
@@ -298,7 +297,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [sse4 branch]
+             * @brief  [sse4 branch]
              * @relates int32
              */
             template<typename T = zint32<Interface::feature_mask>>
@@ -309,7 +308,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             template<typename T = zint32<Interface::feature_mask>>
@@ -322,7 +321,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vdiv(Composed one, Composed other) 
@@ -331,7 +330,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vmod(Composed one, Composed other) 
@@ -350,7 +349,7 @@ namespace zacc { namespace backend { namespace sse
         struct bitwise : traits::bitwise<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief bitwise [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vbneg(Composed one) 
@@ -361,7 +360,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vbor(Composed one, Composed other) 
@@ -370,7 +369,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vband(Composed one, Composed other) 
@@ -379,7 +378,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vbxor(Composed one, Composed other) 
@@ -388,7 +387,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise [sse4 branch]
+             * @brief  [sse4 branch]
              * @relates int32
              */
             template<typename T = bool>
@@ -399,7 +398,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             template<typename T = bool>
@@ -422,7 +421,7 @@ namespace zacc { namespace backend { namespace sse
         struct bitwise_shift : traits::bitwise_shift<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief bitwise_shift [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vbsll(Composed one, Composed other) 
@@ -431,7 +430,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise_shift [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vbsrl(Composed one, Composed other) 
@@ -440,7 +439,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise_shift [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vbslli(const Composed one, const size_t other) 
@@ -449,7 +448,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise_shift [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend zint32<Interface::feature_mask> vbsrli(const Composed one, const size_t other) 
@@ -468,7 +467,7 @@ namespace zacc { namespace backend { namespace sse
         struct comparable : traits::comparable<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief comparable [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend bint32<Interface::feature_mask> vgt(Composed one, Composed other) 
@@ -477,7 +476,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief comparable [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend bint32<Interface::feature_mask> vlt(Composed one, Composed other) 
@@ -486,7 +485,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief comparable [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend bint32<Interface::feature_mask> vge(Composed one, Composed other) 
@@ -495,7 +494,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief comparable [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend bint32<Interface::feature_mask> vle(Composed one, Composed other) 
@@ -514,7 +513,7 @@ namespace zacc { namespace backend { namespace sse
         struct logical : traits::logical<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief logical [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend bint32<Interface::feature_mask> vlneg(Composed one) 
@@ -523,7 +522,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief logical [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend bint32<Interface::feature_mask> vlor(Composed one, Composed other) 
@@ -532,7 +531,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief logical [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend bint32<Interface::feature_mask> vland(Composed one, Composed other) 
@@ -551,7 +550,7 @@ namespace zacc { namespace backend { namespace sse
         struct equatable : traits::equatable<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief equatable [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend bint32<Interface::feature_mask> veq(Composed one, Composed other) 
@@ -560,7 +559,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief equatable [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             friend bint32<Interface::feature_mask> vneq(Composed one, Composed other) 
@@ -579,7 +578,7 @@ namespace zacc { namespace backend { namespace sse
         struct conditional : traits::conditional<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief conditional [sse4 branch]
+             * @brief  [sse4 branch]
              * @relates int32
              */
             template<typename T = zint32<Interface::feature_mask>>
@@ -590,7 +589,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief conditional [default branch]
+             * @brief  [default branch]
              * @relates int32
              */
             template<typename T = zint32<Interface::feature_mask>>
@@ -730,7 +729,7 @@ namespace zacc { namespace backend { namespace sse
     /// public bint32 implementation [sse branch]
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
-    struct bint32 : public bval<ibint32<FeatureMask>>,
+    struct bint32 : public zval<ibint32<FeatureMask>>,
 
         // generic traits
         printable<bint32<FeatureMask>, bint32<FeatureMask>>,
@@ -738,15 +737,9 @@ namespace zacc { namespace backend { namespace sse
 
         // int32 traits
         int32_modules::io<ibint32<FeatureMask>, bint32<FeatureMask>>,
-        int32_modules::math<ibint32<FeatureMask>, bint32<FeatureMask>>,
-        int32_modules::numeric<ibint32<FeatureMask>, bint32<FeatureMask>>,
-        int32_modules::arithmetic<ibint32<FeatureMask>, bint32<FeatureMask>>,
         int32_modules::bitwise<ibint32<FeatureMask>, bint32<FeatureMask>>,
-        int32_modules::bitwise_shift<ibint32<FeatureMask>, bint32<FeatureMask>>,
-        int32_modules::comparable<ibint32<FeatureMask>, bint32<FeatureMask>>,
         int32_modules::logical<ibint32<FeatureMask>, bint32<FeatureMask>>,
-        int32_modules::equatable<ibint32<FeatureMask>, bint32<FeatureMask>>,
-        int32_modules::conditional<ibint32<FeatureMask>, bint32<FeatureMask>>
+        int32_modules::equatable<ibint32<FeatureMask>, bint32<FeatureMask>>
     {
         USING_ZTYPE(ibint32<FeatureMask>);
 
@@ -757,7 +750,7 @@ namespace zacc { namespace backend { namespace sse
         using bval_t = bint32<FeatureMask>;
 
         /// Forwarding constructor
-        FORWARD2(bint32, bval<ibint32<FeatureMask>>);
+        FORWARD2(bint32, zval<ibint32<FeatureMask>>);
 
     };
 

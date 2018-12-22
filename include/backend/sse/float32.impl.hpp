@@ -37,7 +37,6 @@
 
 #include "backend/intrin.hpp"
 #include "backend/zval.hpp"
-#include "backend/zval_interface.hpp"
 
 #include "util/type/type_composition.hpp"
 #include "util/type/type_traits.hpp"
@@ -47,13 +46,13 @@
 
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/math.hpp"
-#include "traits/conditional.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/io.hpp"
 #include "traits/equatable.hpp"
-#include "traits/logical.hpp"
+#include "traits/math.hpp"
+#include "traits/io.hpp"
 #include "traits/numeric.hpp"
+#include "traits/conditional.hpp"
+#include "traits/logical.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/arithmetic.hpp"
 #include "traits/comparable.hpp"
 
@@ -127,7 +126,7 @@ namespace zacc { namespace backend { namespace sse
         struct io : traits::io<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief io [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
@@ -136,7 +135,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief io [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
@@ -145,7 +144,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief io [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             template<typename RandomIt> friend zfloat32<Interface::feature_mask> vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
@@ -165,7 +164,7 @@ namespace zacc { namespace backend { namespace sse
         struct math : traits::math<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vabs(Composed one) 
@@ -174,7 +173,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vmin(Composed one, Composed other) 
@@ -183,7 +182,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vmax(Composed one, Composed other) 
@@ -192,7 +191,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
@@ -201,7 +200,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vrcp(Composed one) 
@@ -210,7 +209,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vtrunc(Composed one) 
@@ -219,7 +218,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [sse4 branch]
+             * @brief  [sse4 branch]
              * @relates float32
              */
             template<typename T = zfloat32<Interface::feature_mask>>
@@ -230,7 +229,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             template<typename T = zfloat32<Interface::feature_mask>>
@@ -244,7 +243,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [sse4 branch]
+             * @brief  [sse4 branch]
              * @relates float32
              */
             template<typename T = zfloat32<Interface::feature_mask>>
@@ -255,7 +254,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             template<typename T = zfloat32<Interface::feature_mask>>
@@ -269,7 +268,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [sse4 branch]
+             * @brief  [sse4 branch]
              * @relates float32
              */
             template<typename T = zfloat32<Interface::feature_mask>>
@@ -280,7 +279,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             template<typename T = zfloat32<Interface::feature_mask>>
@@ -302,7 +301,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief math [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vsqrt(Composed one) 
@@ -332,7 +331,7 @@ namespace zacc { namespace backend { namespace sse
         struct arithmetic : traits::arithmetic<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vneg(Composed one) 
@@ -341,7 +340,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vadd(Composed one, Composed other) 
@@ -350,7 +349,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vsub(Composed one, Composed other) 
@@ -359,7 +358,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vmul(Composed one, Composed other) 
@@ -368,7 +367,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vdiv(Composed one, Composed other) 
@@ -377,7 +376,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [fma branch]
+             * @brief  [fma branch]
              * @relates float32
              */
             template<typename T = zfloat32<Interface::feature_mask>>
@@ -388,7 +387,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             template<typename T = zfloat32<Interface::feature_mask>>
@@ -399,7 +398,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [fma branch]
+             * @brief  [fma branch]
              * @relates float32
              */
             template<typename T = zfloat32<Interface::feature_mask>>
@@ -410,7 +409,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief arithmetic [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             template<typename T = zfloat32<Interface::feature_mask>>
@@ -431,7 +430,7 @@ namespace zacc { namespace backend { namespace sse
         struct bitwise : traits::bitwise<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief bitwise [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vbneg(Composed one) 
@@ -442,7 +441,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vband(Composed one, Composed other) 
@@ -451,7 +450,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vbor(Composed one, Composed other) 
@@ -460,7 +459,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend zfloat32<Interface::feature_mask> vbxor(Composed one, Composed other) 
@@ -469,7 +468,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise [sse4 branch]
+             * @brief  [sse4 branch]
              * @relates float32
              */
             template<typename T = bool>
@@ -480,7 +479,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief bitwise [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             template<typename T = bool>
@@ -503,7 +502,7 @@ namespace zacc { namespace backend { namespace sse
         struct comparable : traits::comparable<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief comparable [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend bfloat32<Interface::feature_mask> vgt(Composed one, Composed other) 
@@ -512,7 +511,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief comparable [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend bfloat32<Interface::feature_mask> vlt(Composed one, Composed other) 
@@ -521,7 +520,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief comparable [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend bfloat32<Interface::feature_mask> vge(Composed one, Composed other) 
@@ -530,7 +529,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief comparable [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend bfloat32<Interface::feature_mask> vle(Composed one, Composed other) 
@@ -549,7 +548,7 @@ namespace zacc { namespace backend { namespace sse
         struct logical : traits::logical<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief logical [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend bfloat32<Interface::feature_mask> vlneg(Composed one) 
@@ -558,7 +557,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief logical [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend bfloat32<Interface::feature_mask> vlor(Composed one, Composed other) 
@@ -567,7 +566,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief logical [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend bfloat32<Interface::feature_mask> vland(Composed one, Composed other) 
@@ -586,7 +585,7 @@ namespace zacc { namespace backend { namespace sse
         struct equatable : traits::equatable<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief equatable [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend bfloat32<Interface::feature_mask> veq(Composed one, Composed other) 
@@ -595,7 +594,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief equatable [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             friend bfloat32<Interface::feature_mask> vneq(Composed one, Composed other) 
@@ -614,7 +613,7 @@ namespace zacc { namespace backend { namespace sse
         struct conditional : traits::conditional<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief conditional [sse4 branch]
+             * @brief  [sse4 branch]
              * @relates float32
              */
             template<typename T = zfloat32<Interface::feature_mask>>
@@ -625,7 +624,7 @@ namespace zacc { namespace backend { namespace sse
             }
             
             /**
-             * @brief conditional [default branch]
+             * @brief  [default branch]
              * @relates float32
              */
             template<typename T = zfloat32<Interface::feature_mask>>
@@ -764,7 +763,7 @@ namespace zacc { namespace backend { namespace sse
     /// public bfloat32 implementation [sse branch]
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
-    struct bfloat32 : public bval<ibfloat32<FeatureMask>>,
+    struct bfloat32 : public zval<ibfloat32<FeatureMask>>,
 
         // generic traits
         printable<bfloat32<FeatureMask>, bfloat32<FeatureMask>>,
@@ -772,14 +771,9 @@ namespace zacc { namespace backend { namespace sse
 
         // float32 traits
         float32_modules::io<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
-        float32_modules::math<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
-        float32_modules::numeric<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
-        float32_modules::arithmetic<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
         float32_modules::bitwise<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
-        float32_modules::comparable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
         float32_modules::logical<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
-        float32_modules::equatable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
-        float32_modules::conditional<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>
+        float32_modules::equatable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>
     {
         USING_ZTYPE(ibfloat32<FeatureMask>);
 
@@ -790,7 +784,7 @@ namespace zacc { namespace backend { namespace sse
         using bval_t = bfloat32<FeatureMask>;
 
         /// Forwarding constructor
-        FORWARD2(bfloat32, bval<ibfloat32<FeatureMask>>);
+        FORWARD2(bfloat32, zval<ibfloat32<FeatureMask>>);
 
     };
 

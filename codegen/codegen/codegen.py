@@ -60,7 +60,7 @@ def wrapper(parse):
         try:
             parsed = Parsers.parse(data)
         except Exception as e:
-            print(f"FUCK OFF: {e}")
+            print(f"ERROR: {e}")
 
         return {
             "ast"           : parsed,
@@ -70,7 +70,6 @@ def wrapper(parse):
             "ModuleTypes"   : ModuleTypes
         }
 
-    #print("FUCK FUCK FUCK")
     return postprocess
 
 for name, function in PARSERS.items():

@@ -23,17 +23,15 @@
 //---------------------------------------------------------------------------------
 
 #pragma once
-#include <array>
-namespace zacc
-{
+
+namespace zacc {
+
     struct zval_tag {};
     struct bval_tag {};
     struct cval_tag {};
 
-
     template<typename Tag, typename Vector, typename Element, size_t Size, size_t Alignment, uint64_t FeatureMask = 0xFFFF'FFFF'FFFF'FFFF>
-    struct ztype
-    {
+    struct ztype {
         /// type tag
         using tag = Tag;
 
