@@ -130,7 +130,9 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
              * @brief {{ module.name }} [{{ body.target }} branch]
              * @relates {{ ast.type.name }}
              */
-            {{ Functions.render(func.signature, (module, ast, body)) }}
+            {% for part in Functions.render(func.signature, (module, ast, body)) if part %}
+            {{ part }}
+            {% endfor %}
             {
                 {% for instruction in Functions.render(body) %}
                 {{ instruction }}
@@ -159,10 +161,12 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
     struct z{{ ast.type.name }} : public zval<iz{{ ast.type.name }}<FeatureMask>>,
+
         // generic traits
         {% for trait in ast.traits.shared %}
         {{ trait }}<iz{{ ast.type.name }}<FeatureMask>, z{{ ast.type.name }}<FeatureMask>>,
         {% endfor %}
+
         // {{ ast.type.name }} traits
         {% for trait in ast.traits.default %}
         {{ ast.type.name }}_modules::{{ trait }}<iz{{ ast.type.name }}<FeatureMask>, z{{ ast.type.name }}<FeatureMask>>{{ "," if not loop.last }}
@@ -211,7 +215,9 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
          * @brief z{{ ast.type.name }} constructor [{{ ast.type.target }} branch]
          * @relates z{{ ast.type.name }}
          */
-        {{ Functions.render(func.signature, (module, ast, body)) }}
+        {% for part in Functions.render(func.signature, (module, ast, body)) if part %}
+        {{ part }}
+        {% endfor %}
         {
             {% for instruction in Functions.render(body) %}
             {{ instruction }}
@@ -221,6 +227,9 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
 
         {% endif %}
         {% endfor %}
+        {% if not loop.last %}
+
+        {% endif %}
         {% endfor %}
         {% endfor %}
     };
@@ -231,10 +240,12 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
     struct b{{ ast.type.name }} : public bval<ib{{ ast.type.name }}<FeatureMask>>,
+
         // generic traits
         {% for trait in ast.traits.shared %}
         {{ trait }}<b{{ ast.type.name }}<FeatureMask>, b{{ ast.type.name }}<FeatureMask>>,
         {% endfor %}
+
         // {{ ast.type.name }} traits
         {% for trait in ast.traits.default %}
         {{ ast.type.name }}_modules::{{ trait }}<ib{{ ast.type.name }}<FeatureMask>, b{{ ast.type.name }}<FeatureMask>>{{ "," if not loop.last }}
@@ -258,144 +269,84 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
          * @brief b{{ ast.type.name }} constructor [{{ ast.type.target }} branch]
          * @relates b{{ ast.type.name }}
          */
-        {{ Functions.render(func.signature, (module, ast, body)) }}
+        {% for part in Functions.render(func.signature, (module, ast, body)) if part %}
+        {{ part }}
+        {% endfor %}
         {
             {% for instruction in Functions.render(body) %}
             {{ instruction }}
             {% endfor %}
         }
         {% if not loop.last %}
-        
+
         {% endif %}
         {% endfor %}
+        {% if not loop.last %}
+
+        {% endif %}
         {% endfor %}
         {% endfor %}
     };
 
     // Validate z{{ ast.type.name }} ===================================================================================
 
-    static_assert(std::is_base_of<iz{{ast.type.name}}<0>,
-                  iz{{ast.type.name}}<0>>::value,
-                  "base_of<iz{{ ast.type.name }}> != iz{{ ast.type.name }}.");
-    static_assert(!std::is_base_of<ib{{ast.type.name}}<0>,
-                  iz{{ast.type.name}}<0>>::value,
-                  "base_of<iz{{ ast.type.name }}> == ib{{ ast.type.name }}.");
+    static_assert( std::is_base_of<iz{{ast.type.name}}<0>, iz{{ast.type.name}}<0>>::value, "base_of<iz{{ ast.type.name }}> != iz{{ ast.type.name }}.");
+    static_assert(!std::is_base_of<ib{{ast.type.name}}<0>, iz{{ast.type.name}}<0>>::value, "base_of<iz{{ ast.type.name }}> == ib{{ ast.type.name }}.");
 
-    static_assert(is_zval<iz{{ast.type.name}}<0>>::value,
-                  "is_zval<iz{{ ast.type.name }}> == false.");
-    static_assert(!is_bval<iz{{ast.type.name}}<0>>::value,
-                  "is_bval<iz{{ ast.type.name }}> != false.");
+    static_assert( is_zval<iz{{ast.type.name}}<0>>::value, "is_zval<iz{{ ast.type.name }}> == false.");
+    static_assert(!is_bval<iz{{ast.type.name}}<0>>::value, "is_bval<iz{{ ast.type.name }}> != false.");
 
-    static_assert(std::is_base_of<iz{{ast.type.name}}<0>, z{{ast.type.name}}<0>>::value,
-                  "base_of<z{{ ast.type.name }}> != iz{{ ast.type.name }}.");
-    static_assert(!std::is_base_of<ib{{ast.type.name}}<0>, z{{ast.type.name}}<0>>::value,
-                  "base_of<z{{ ast.type.name }}> == ib{{ ast.type.name }}.");
+    static_assert( std::is_base_of<iz{{ast.type.name}}<0>, z{{ast.type.name}}<0>>::value, "base_of<z{{ ast.type.name }}> != iz{{ ast.type.name }}.");
+    static_assert(!std::is_base_of<ib{{ast.type.name}}<0>, z{{ast.type.name}}<0>>::value, "base_of<z{{ ast.type.name }}> == ib{{ ast.type.name }}.");
 
-    static_assert(z{{ast.type.name}}<0>::size == {{ast.type.size}},
-                  "z{{ ast.type.name }}::size != {{ ast.type.size }}.");
-    static_assert(z{{ast.type.name}}<0>::alignment == {{ast.type.alignment}},
-                  "z{{ ast.type.name }}::alignment != {{ ast.type.alignment }}.");
-    static_assert(z{{ast.type.name}}<0>::is_vector == ({{ ast.type.size }} > 1),
-    "z{{ ast.type.name }}::is_vector != ({{ ast.type.size }} > 1).");
+    static_assert(z{{ast.type.name}}<0>::size == {{ast.type.size}}, "z{{ ast.type.name }}::size != {{ ast.type.size }}.");
+    static_assert(z{{ast.type.name}}<0>::alignment == {{ast.type.alignment}}, "z{{ ast.type.name }}::alignment != {{ ast.type.alignment }}.");
+    static_assert(z{{ast.type.name}}<0>::is_vector == {{ (ast.type.size > 1)|lower }}, "z{{ ast.type.name }}::is_vector != {{ (ast.type.size > 1)|lower }}.");
 
-    static_assert(std::is_same<z{{ast.type.name}}<0>::tag, zval_tag > ::value,
-                  "z{{ ast.type.name }}::tag != zval_tag.");
-    static_assert(std::is_same<z{{ast.type.name}}<0>::vector_type, {{ast.type.vector_type}} > ::value,
-                  "z{{ ast.type.name }}::vector_type != {{ ast.type.vector_type }}.");
-    static_assert(std::is_same<z{{ast.type.name}}<0>::element_type, {{ast.type.scalar_type}} > ::value,
-                  "z{{ ast.type.name }}::element_type != {{ ast.type.scalar_type }}.");
-    static_assert(std::is_same<z{{ast.type.name}}<0>::mask_vector_type, {{ast.type.mask_type}} > ::value,
-                  "z{{ ast.type.name }}::mask_vector_type != {{ ast.type.mask_type }}.");
-    static_assert(std::is_same<z{{ast.type.name}}<0>::extracted_type,
-                  std::array<{{ast.type.scalar_type}}, {{ast.type.size}}>>::value,
-                  "z{{ ast.type.name }}::extracted_type != std::array<{{ ast.type.scalar_type }}, {{ ast.type.size }}>.");
+    static_assert(std::is_same<z{{ast.type.name}}<0>::tag, zval_tag>::value, "z{{ ast.type.name }}::tag != zval_tag.");
+    static_assert(std::is_same<z{{ast.type.name}}<0>::vector_type, {{ast.type.vector_type}}>::value, "z{{ ast.type.name }}::vector_type != {{ ast.type.vector_type }}.");
+    static_assert(std::is_same<z{{ast.type.name}}<0>::element_type, {{ast.type.scalar_type}}>::value, "z{{ ast.type.name }}::element_type != {{ ast.type.scalar_type }}.");
+    static_assert(std::is_same<z{{ast.type.name}}<0>::mask_vector_type, {{ast.type.mask_type}}>::value, "z{{ ast.type.name }}::mask_vector_type != {{ ast.type.mask_type }}.");
+    static_assert(std::is_same<z{{ast.type.name}}<0>::extracted_type, std::array<{{ast.type.scalar_type}}, {{ast.type.size}}>>::value, "z{{ ast.type.name }}::extracted_type != std::array<{{ ast.type.scalar_type }}, {{ ast.type.size }}>.");
 
-
-    static_assert(std::is_same<typename ztraits<z{{ast.type.name}}<0>>::tag, zval_tag > ::value,
-                  "z{{ ast.type.name }}::tag != zval_tag.");
-    static_assert(std::is_arithmetic<typename ztraits<z{{ast.type.name}}<0>>::element_type > ::value,
-                  "is_arithmetic<z{{ ast.type.name }}::element_type> == false.");
-    static_assert(is_zval < z{{ast.type.name}}<0>>::value,
-                  "is_zval<z{{ ast.type.name }}> == false.");
-    static_assert(!is_bval < z{{ast.type.name}}<0>>::value,
-                  "is_bval<z{{ ast.type.name }}> != false.");
-
+    static_assert( is_zval<z{{ast.type.name}}<0>>::value, "is_zval<z{{ ast.type.name }}> == false.");
+    static_assert(!is_bval<z{{ast.type.name}}<0>>::value, "is_bval<z{{ ast.type.name }}> != false.");
 
     // Validate b{{ ast.type.name }} ===================================================================================
 
+    static_assert( std::is_base_of<ib{{ast.type.name}}<0>, ib{{ast.type.name}}<0>>::value, "base_of<iz{{ ast.type.name }}> != iz{{ ast.type.name }}.");
+    static_assert(!std::is_base_of<iz{{ast.type.name}}<0>, ib{{ast.type.name}}<0>>::value, "base_of<iz{{ ast.type.name }}> == ib{{ ast.type.name }}.");
 
-    static_assert(std::is_base_of<ib{{ast.type.name}}<0>,
-                  ib{{ast.type.name}}<0>>::value,
-                  "base_of<iz{{ ast.type.name }}> != iz{{ ast.type.name }}.");
-    static_assert(!std::is_base_of<iz{{ast.type.name}}<0>,
-                  ib{{ast.type.name}}<0>>::value,
-                  "base_of<iz{{ ast.type.name }}> == ib{{ ast.type.name }}.");
+    static_assert( is_bval<ib{{ast.type.name}}<0>>::value, "is_bval<ib{{ ast.type.name }}> == false.");
+    static_assert(!is_zval<ib{{ast.type.name}}<0>>::value, "is_zval<ib{{ ast.type.name }}> != false.");
 
-    static_assert(!is_zval<ib{{ast.type.name}}<0>>::value,
-                  "is_zval<ib{{ ast.type.name }}> != false.");
-    static_assert(is_bval<ib{{ast.type.name}}<0>>::value,
-                  "is_bval<ib{{ ast.type.name }}> == false.");
+    static_assert( std::is_base_of<ib{{ast.type.name}}<0>, b{{ast.type.name}}<0>>::value, "base_of<b{{ ast.type.name }}> != ib{{ ast.type.name }}.");
+    static_assert(!std::is_base_of<iz{{ast.type.name}}<0>, b{{ast.type.name}}<0>>::value, "base_of<b{{ ast.type.name }}> == iz{{ ast.type.name }}.");
 
-    static_assert(std::is_base_of<ib{{ast.type.name}}<0>, b{{ast.type.name}}<0>>::value,
-                  "base_of<b{{ ast.type.name }}> != ib{{ ast.type.name }}.");
-    static_assert(!std::is_base_of<iz{{ast.type.name}}<0>, b{{ast.type.name}}<0>>::value,
-                  "base_of<b{{ ast.type.name }}> == iz{{ ast.type.name }}.");
+    static_assert(b{{ast.type.name}}<0>::size == {{ast.type.size}}, "b{{ ast.type.name }}::size != {{ ast.type.size }}.");
+    static_assert(b{{ast.type.name}}<0>::alignment == {{ast.type.alignment}}, "b{{ ast.type.name }}::alignment != {{ ast.type.alignment }}.");
+    static_assert(b{{ast.type.name}}<0>::is_vector == {{ (ast.type.size > 1)|lower }}, "b{{ ast.type.name }}::is_vector != {{ (ast.type.size > 1)|lower }}.");
 
-    static_assert(b{{ast.type.name}}<0>::size == {{ast.type.size}},
-                  "b{{ ast.type.name }}::size != {{ ast.type.size }}.");
-    static_assert(b{{ast.type.name}}<0>::alignment == {{ast.type.alignment}},
-                  "b{{ ast.type.name }}::alignment != {{ ast.type.alignment }}.");
-    static_assert(b{{ast.type.name}}<0>::is_vector == ({{ ast.type.size }} > 1),
-    "b{{ ast.type.name }}::is_vector != ({{ ast.type.size }} > 1).");
+    static_assert(std::is_same<b{{ast.type.name}}<0>::tag, bval_tag>::value, "b{{ ast.type.name }}::tag != zval_tag.");
+    static_assert(std::is_same<b{{ast.type.name}}<0>::vector_type, {{ast.type.vector_type}}>::value, "b{{ ast.type.name }}::vector_type != {{ ast.type.vector_type }}.");
+    static_assert(std::is_same<b{{ast.type.name}}<0>::element_type, {{ast.type.scalar_type}}>::value, "b{{ ast.type.name }}::element_type != {{ ast.type.scalar_type }}.");
+    static_assert(std::is_same<b{{ast.type.name}}<0>::mask_vector_type, {{ast.type.mask_type}}>::value, "b{{ ast.type.name }}::mask_vector_type != {{ ast.type.mask_type }}.");
+    static_assert(std::is_same<b{{ast.type.name}}<0>::extracted_type, std::array<{{ast.type.scalar_type}}, {{ast.type.size}}>>::value, "b{{ ast.type.name }}::extracted_type != std::array<{{ ast.type.scalar_type }}, {{ ast.type.size }}>.");
 
-    static_assert(std::is_same<b{{ast.type.name}}<0>::tag, bval_tag > ::value,
-                  "b{{ ast.type.name }}::tag != zval_tag.");
-    static_assert(std::is_same<b{{ast.type.name}}<0>::vector_type, {{ast.type.vector_type}} > ::value,
-                  "b{{ ast.type.name }}::vector_type != {{ ast.type.vector_type }}.");
-    static_assert(std::is_same<b{{ast.type.name}}<0>::element_type, {{ast.type.scalar_type}} > ::value,
-                  "b{{ ast.type.name }}::element_type != {{ ast.type.scalar_type }}.");
-    static_assert(std::is_same<b{{ast.type.name}}<0>::mask_vector_type, {{ast.type.mask_type}} > ::value,
-                  "b{{ ast.type.name }}::mask_vector_type != {{ ast.type.mask_type }}.");
-    static_assert(std::is_same<b{{ast.type.name}}<0>::extracted_type,
-                  std::array<{{ast.type.scalar_type}}, {{ast.type.size}}>>::value,
-    "b{{ ast.type.name }}::extracted_type != std::array<{{ ast.type.scalar_type }}, {{ ast.type.size }}>.");
-
-    static_assert(std::is_same<typename ztraits<b{{ast.type.name}}<0>>::tag, bval_tag > ::value,
-                  "b{{ ast.type.name }}::tag != bval_tag.");
-    static_assert(std::is_arithmetic<typename ztraits<b{{ast.type.name}}<0>>::element_type > ::value,
-                  "is_arithmetic<b{{ ast.type.name }}::element_type> == false.");
-    static_assert(!is_zval < b{{ast.type.name}}<0>>::value,
-                  "is_zval<b{{ ast.type.name }}> != false.");
-    static_assert(is_bval < b{{ast.type.name}}<0>>::value,
-                  "is_bval<b{{ ast.type.name }}> == false.");
+    static_assert( is_bval<b{{ast.type.name}}<0>>::value, "is_bval<b{{ ast.type.name }}> == false.");
+    static_assert(!is_zval<b{{ast.type.name}}<0>>::value, "is_zval<b{{ ast.type.name }}> != false.");
 
     // Validate integral, float, double traits =========================================================================
 
-    static_assert(!std::is_floating_point<{{ast.type.scalar_type}}>::value ||
-                  is_floating_point < z{{ast.type.name}}<0>>::value,
-                  "is_floating_point<z{{ ast.type.name }}> == false. [scalar = {{ ast.type.scalar_type }}]");
-    static_assert(!std::is_floating_point<{{ast.type.scalar_type}}>::value ||
-                  !is_integral < z{{ast.type.name}}<0>>::value,
-                  "is_integral<z{{ ast.type.name }}> != false. [scalar = {{ ast.type.scalar_type }}]");
+    static_assert(!std::is_floating_point<{{ast.type.scalar_type}}>::value || is_floating_point < z{{ast.type.name}}<0>>::value, "is_floating_point<z{{ ast.type.name }}> == false. [scalar = {{ ast.type.scalar_type }}]");
+    static_assert(!std::is_floating_point<{{ast.type.scalar_type}}>::value || !is_integral<z{{ast.type.name}}<0>>::value, "is_integral<z{{ ast.type.name }}> != false. [scalar = {{ ast.type.scalar_type }}]");
 
-    static_assert(
-            !std::is_same<{{ast.type.scalar_type}}, float>::value || is_float < z{{ast.type.name}}<0>>::value,
-            "is_float<z{{ ast.type.name }}> == false. [scalar = {{ ast.type.scalar_type }}]");
-    static_assert(
-            !std::is_same<{{ast.type.scalar_type}}, float>::value || !is_double < z{{ast.type.name}}<0>>::value,
-            "is_double<z{{ ast.type.name }}> != false. [scalar = {{ ast.type.scalar_type }}]");
+    static_assert(!std::is_same<{{ast.type.scalar_type}}, float>::value || is_float < z{{ast.type.name}}<0>>::value, "is_float<z{{ ast.type.name }}> == false. [scalar = {{ ast.type.scalar_type }}]");
+    static_assert(!std::is_same<{{ast.type.scalar_type}}, float>::value || !is_double < z{{ast.type.name}}<0>>::value, "is_double<z{{ ast.type.name }}> != false. [scalar = {{ ast.type.scalar_type }}]");
 
-    static_assert(
-            !std::is_same<{{ast.type.scalar_type}}, double>::value || is_double < z{{ast.type.name}}<0>>::value,
-            "is_double<z{{ ast.type.name }}> == false. [scalar = {{ ast.type.scalar_type }}]");
-    static_assert(
-            !std::is_same<{{ast.type.scalar_type}}, double>::value || !is_float < z{{ast.type.name}}<0>>::value,
-            "is_float<z{{ ast.type.name }}> != false. [scalar = {{ ast.type.scalar_type }}]");
+    static_assert(!std::is_same<{{ast.type.scalar_type}}, double>::value || is_double < z{{ast.type.name}}<0>>::value, "is_double<z{{ ast.type.name }}> == false. [scalar = {{ ast.type.scalar_type }}]");
+    static_assert(!std::is_same<{{ast.type.scalar_type}}, double>::value || !is_float < z{{ast.type.name}}<0>>::value, "is_float<z{{ ast.type.name }}> != false. [scalar = {{ ast.type.scalar_type }}]");
 
-    static_assert(
-            !std::is_integral<{{ast.type.scalar_type}}>::value || is_integral < z{{ast.type.name}}<0>>::value,
-            "is_integral<z{{ ast.type.name }}> == false. [scalar = {{ ast.type.scalar_type }}]");
-    static_assert(!std::is_integral<{{ast.type.scalar_type}}>::value ||
-                  !is_floating_point < z{{ast.type.name}}<0>>::value,
-                  "is_floating_point<z{{ ast.type.name }}> != false. [scalar = {{ ast.type.scalar_type }}]");
+    static_assert(!std::is_integral<{{ast.type.scalar_type}}>::value || is_integral<z{{ast.type.name}}<0>>::value,"is_integral<z{{ ast.type.name }}> == false. [scalar = {{ ast.type.scalar_type }}]");
+    static_assert(!std::is_integral<{{ast.type.scalar_type}}>::value || !is_floating_point < z{{ast.type.name}}<0>>::value, "is_floating_point<z{{ ast.type.name }}> != false. [scalar = {{ ast.type.scalar_type }}]");
 }}}

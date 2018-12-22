@@ -109,6 +109,7 @@ class FunctionSignatureRenderer(Renderable):
         module.type = overrides.get(module.name, module.type)
 
         # basic
+        template = None
         prefix = node.prefix or "friend"
         suffix = node.suffix or "const" if prefix.strip().find('friend') == -1 else ""
         return_type = node.return_type or f"{make_typename(module, ast)}<Interface::feature_mask>"
@@ -126,15 +127,17 @@ class FunctionSignatureRenderer(Renderable):
 
         if body.selector:
             condition = " && ".join([map_requirement(req) for req in body.selector])
-            prefix = f"template<typename T = {return_type}> {prefix}"
-            return_type = f"std::enable_if_t<{condition}, T>"
 
-        return "{prefix} {returns} {name}({args}) {suffix}".format(
+            return [f"template<typename T = {return_type}>",
+                    f"{prefix} std::enable_if_t<{condition}, T>",
+                    f"{node.name}({args}) {suffix}"]
+
+        return ["{prefix} {returns} {name}({args}) {suffix}".format(
             prefix=prefix,
             returns=return_type,
             name=node.name,
             args=args,
-            suffix=suffix)
+            suffix=suffix)]
 
 def render_args_signature(node: FunctionSignatureNode):
     return ", ".join([f"{arg.type}" for arg in node.arguments])
@@ -172,12 +175,10 @@ class InitializerSignatureRenderer(Renderable):
     def render(self, renderer, node: InitializerSignatureNode, params):
         module, ast, body = copy.deepcopy(params)
 
+        prefix = node.prefix or "constexpr"
+        suffix = " " + (node.suffix or "noexcept")
         args = ", ".join([f"{remapInitializerArgType(module, ast, arg)} {arg.name}" for arg in node.arguments])
         name = f"{resolve_prefix(module.type)}{ast.type.name}"
 
-        return "{prefix} {name}({args}) {suffix} : {initializer}".format(
-            prefix=node.prefix or "constexpr",
-            name=name,
-            args=args,
-            initializer=f"{resolve_prefix(module.type)}val<i{name}<FeatureMask>>({renderer.render(node.initializer, { 'is_initializer' : True })})",
-            suffix=node.suffix or "noexcept")
+        return [f"{prefix} {name}({args}){suffix}",
+                f"    : {resolve_prefix(module.type)}val<i{name}<FeatureMask>>({renderer.render(node.initializer, { 'is_initializer' : True })})"]

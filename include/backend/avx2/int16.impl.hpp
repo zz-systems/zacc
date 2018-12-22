@@ -47,16 +47,16 @@
 
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/equatable.hpp"
-#include "traits/conditional.hpp"
 #include "traits/comparable.hpp"
+#include "traits/equatable.hpp"
 #include "traits/io.hpp"
-#include "traits/numeric.hpp"
-#include "traits/logical.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
+#include "traits/logical.hpp"
+#include "traits/numeric.hpp"
 #include "traits/bitwise_shift.hpp"
 #include "traits/math.hpp"
+#include "traits/conditional.hpp"
+#include "traits/bitwise.hpp"
 
 namespace zacc { namespace backend { namespace avx2
 {
@@ -514,9 +514,11 @@ namespace zacc { namespace backend { namespace avx2
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
     struct zint16 : public zval<izint16<FeatureMask>>,
+
         // generic traits
         printable<izint16<FeatureMask>, zint16<FeatureMask>>,
         convertable<izint16<FeatureMask>, zint16<FeatureMask>>,
+
         // int16 traits
         int16_modules::io<izint16<FeatureMask>, zint16<FeatureMask>>,
         int16_modules::math<izint16<FeatureMask>, zint16<FeatureMask>>,
@@ -569,35 +571,44 @@ namespace zacc { namespace backend { namespace avx2
          * @brief zint16 constructor [avx2 branch]
          * @relates zint16
          */
-        constexpr zint16(  ) noexcept : zval<izint16<FeatureMask>>()
+        constexpr zint16(  ) noexcept
+            : zval<izint16<FeatureMask>>()
         {
         }
+
         /**
          * @brief zint16 constructor [avx2 branch]
          * @relates zint16
          */
-        constexpr zint16(__m256i value) noexcept : zval<izint16<FeatureMask>>(value)
+        constexpr zint16(__m256i value) noexcept
+            : zval<izint16<FeatureMask>>(value)
         {
         }
+
         /**
          * @brief zint16 constructor [avx2 branch]
          * @relates zint16
          */
-        constexpr zint16(int16_t value) noexcept : zval<izint16<FeatureMask>>(_mm256_set1_epi16(value))
+        constexpr zint16(int16_t value) noexcept
+            : zval<izint16<FeatureMask>>(_mm256_set1_epi16(value))
         {
         }
+
         /**
          * @brief zint16 constructor [avx2 branch]
          * @relates zint16
          */
-        constexpr zint16(extracted_type value) noexcept : zval<izint16<FeatureMask>>(_mm256_load_si256((__m256i*)value.data()))
+        constexpr zint16(extracted_type value) noexcept
+            : zval<izint16<FeatureMask>>(_mm256_load_si256((__m256i*)value.data()))
         {
         }
+
         /**
          * @brief zint16 constructor [avx2 branch]
          * @relates zint16
          */
-        constexpr zint16(int16_t _15, int16_t _14, int16_t _13, int16_t _12, int16_t _11, int16_t _10, int16_t _9, int16_t _8, int16_t _7, int16_t _6, int16_t _5, int16_t _4, int16_t _3, int16_t _2, int16_t _1, int16_t _0) noexcept : zval<izint16<FeatureMask>>(_mm256_set_epi16(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15))
+        constexpr zint16(int16_t _15, int16_t _14, int16_t _13, int16_t _12, int16_t _11, int16_t _10, int16_t _9, int16_t _8, int16_t _7, int16_t _6, int16_t _5, int16_t _4, int16_t _3, int16_t _2, int16_t _1, int16_t _0) noexcept
+            : zval<izint16<FeatureMask>>(_mm256_set_epi16(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15))
         {
         }
     };
@@ -608,9 +619,11 @@ namespace zacc { namespace backend { namespace avx2
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
     struct bint16 : public bval<ibint16<FeatureMask>>,
+
         // generic traits
         printable<bint16<FeatureMask>, bint16<FeatureMask>>,
         convertable<bint16<FeatureMask>, bint16<FeatureMask>>,
+
         // int16 traits
         int16_modules::io<ibint16<FeatureMask>, bint16<FeatureMask>>,
         int16_modules::math<ibint16<FeatureMask>, bint16<FeatureMask>>,
@@ -638,128 +651,63 @@ namespace zacc { namespace backend { namespace avx2
 
     // Validate zint16 ===================================================================================
 
-    static_assert(std::is_base_of<izint16<0>,
-                  izint16<0>>::value,
-                  "base_of<izint16> != izint16.");
-    static_assert(!std::is_base_of<ibint16<0>,
-                  izint16<0>>::value,
-                  "base_of<izint16> == ibint16.");
+    static_assert( std::is_base_of<izint16<0>, izint16<0>>::value, "base_of<izint16> != izint16.");
+    static_assert(!std::is_base_of<ibint16<0>, izint16<0>>::value, "base_of<izint16> == ibint16.");
 
-    static_assert(is_zval<izint16<0>>::value,
-                  "is_zval<izint16> == false.");
-    static_assert(!is_bval<izint16<0>>::value,
-                  "is_bval<izint16> != false.");
+    static_assert( is_zval<izint16<0>>::value, "is_zval<izint16> == false.");
+    static_assert(!is_bval<izint16<0>>::value, "is_bval<izint16> != false.");
 
-    static_assert(std::is_base_of<izint16<0>, zint16<0>>::value,
-                  "base_of<zint16> != izint16.");
-    static_assert(!std::is_base_of<ibint16<0>, zint16<0>>::value,
-                  "base_of<zint16> == ibint16.");
+    static_assert( std::is_base_of<izint16<0>, zint16<0>>::value, "base_of<zint16> != izint16.");
+    static_assert(!std::is_base_of<ibint16<0>, zint16<0>>::value, "base_of<zint16> == ibint16.");
 
-    static_assert(zint16<0>::size == 16,
-                  "zint16::size != 16.");
-    static_assert(zint16<0>::alignment == 32,
-                  "zint16::alignment != 32.");
-    static_assert(zint16<0>::is_vector == (16 > 1),
-    "zint16::is_vector != (16 > 1).");
+    static_assert(zint16<0>::size == 16, "zint16::size != 16.");
+    static_assert(zint16<0>::alignment == 32, "zint16::alignment != 32.");
+    static_assert(zint16<0>::is_vector == true, "zint16::is_vector != true.");
 
-    static_assert(std::is_same<zint16<0>::tag, zval_tag > ::value,
-                  "zint16::tag != zval_tag.");
-    static_assert(std::is_same<zint16<0>::vector_type, __m256i > ::value,
-                  "zint16::vector_type != __m256i.");
-    static_assert(std::is_same<zint16<0>::element_type, int16_t > ::value,
-                  "zint16::element_type != int16_t.");
-    static_assert(std::is_same<zint16<0>::mask_vector_type, __m256i > ::value,
-                  "zint16::mask_vector_type != __m256i.");
-    static_assert(std::is_same<zint16<0>::extracted_type,
-                  std::array<int16_t, 16>>::value,
-                  "zint16::extracted_type != std::array<int16_t, 16>.");
+    static_assert(std::is_same<zint16<0>::tag, zval_tag>::value, "zint16::tag != zval_tag.");
+    static_assert(std::is_same<zint16<0>::vector_type, __m256i>::value, "zint16::vector_type != __m256i.");
+    static_assert(std::is_same<zint16<0>::element_type, int16_t>::value, "zint16::element_type != int16_t.");
+    static_assert(std::is_same<zint16<0>::mask_vector_type, __m256i>::value, "zint16::mask_vector_type != __m256i.");
+    static_assert(std::is_same<zint16<0>::extracted_type, std::array<int16_t, 16>>::value, "zint16::extracted_type != std::array<int16_t, 16>.");
 
-
-    static_assert(std::is_same<typename ztraits<zint16<0>>::tag, zval_tag > ::value,
-                  "zint16::tag != zval_tag.");
-    static_assert(std::is_arithmetic<typename ztraits<zint16<0>>::element_type > ::value,
-                  "is_arithmetic<zint16::element_type> == false.");
-    static_assert(is_zval < zint16<0>>::value,
-                  "is_zval<zint16> == false.");
-    static_assert(!is_bval < zint16<0>>::value,
-                  "is_bval<zint16> != false.");
-
+    static_assert( is_zval<zint16<0>>::value, "is_zval<zint16> == false.");
+    static_assert(!is_bval<zint16<0>>::value, "is_bval<zint16> != false.");
 
     // Validate bint16 ===================================================================================
 
+    static_assert( std::is_base_of<ibint16<0>, ibint16<0>>::value, "base_of<izint16> != izint16.");
+    static_assert(!std::is_base_of<izint16<0>, ibint16<0>>::value, "base_of<izint16> == ibint16.");
 
-    static_assert(std::is_base_of<ibint16<0>,
-                  ibint16<0>>::value,
-                  "base_of<izint16> != izint16.");
-    static_assert(!std::is_base_of<izint16<0>,
-                  ibint16<0>>::value,
-                  "base_of<izint16> == ibint16.");
+    static_assert( is_bval<ibint16<0>>::value, "is_bval<ibint16> == false.");
+    static_assert(!is_zval<ibint16<0>>::value, "is_zval<ibint16> != false.");
 
-    static_assert(!is_zval<ibint16<0>>::value,
-                  "is_zval<ibint16> != false.");
-    static_assert(is_bval<ibint16<0>>::value,
-                  "is_bval<ibint16> == false.");
+    static_assert( std::is_base_of<ibint16<0>, bint16<0>>::value, "base_of<bint16> != ibint16.");
+    static_assert(!std::is_base_of<izint16<0>, bint16<0>>::value, "base_of<bint16> == izint16.");
 
-    static_assert(std::is_base_of<ibint16<0>, bint16<0>>::value,
-                  "base_of<bint16> != ibint16.");
-    static_assert(!std::is_base_of<izint16<0>, bint16<0>>::value,
-                  "base_of<bint16> == izint16.");
+    static_assert(bint16<0>::size == 16, "bint16::size != 16.");
+    static_assert(bint16<0>::alignment == 32, "bint16::alignment != 32.");
+    static_assert(bint16<0>::is_vector == true, "bint16::is_vector != true.");
 
-    static_assert(bint16<0>::size == 16,
-                  "bint16::size != 16.");
-    static_assert(bint16<0>::alignment == 32,
-                  "bint16::alignment != 32.");
-    static_assert(bint16<0>::is_vector == (16 > 1),
-    "bint16::is_vector != (16 > 1).");
+    static_assert(std::is_same<bint16<0>::tag, bval_tag>::value, "bint16::tag != zval_tag.");
+    static_assert(std::is_same<bint16<0>::vector_type, __m256i>::value, "bint16::vector_type != __m256i.");
+    static_assert(std::is_same<bint16<0>::element_type, int16_t>::value, "bint16::element_type != int16_t.");
+    static_assert(std::is_same<bint16<0>::mask_vector_type, __m256i>::value, "bint16::mask_vector_type != __m256i.");
+    static_assert(std::is_same<bint16<0>::extracted_type, std::array<int16_t, 16>>::value, "bint16::extracted_type != std::array<int16_t, 16>.");
 
-    static_assert(std::is_same<bint16<0>::tag, bval_tag > ::value,
-                  "bint16::tag != zval_tag.");
-    static_assert(std::is_same<bint16<0>::vector_type, __m256i > ::value,
-                  "bint16::vector_type != __m256i.");
-    static_assert(std::is_same<bint16<0>::element_type, int16_t > ::value,
-                  "bint16::element_type != int16_t.");
-    static_assert(std::is_same<bint16<0>::mask_vector_type, __m256i > ::value,
-                  "bint16::mask_vector_type != __m256i.");
-    static_assert(std::is_same<bint16<0>::extracted_type,
-                  std::array<int16_t, 16>>::value,
-    "bint16::extracted_type != std::array<int16_t, 16>.");
-
-    static_assert(std::is_same<typename ztraits<bint16<0>>::tag, bval_tag > ::value,
-                  "bint16::tag != bval_tag.");
-    static_assert(std::is_arithmetic<typename ztraits<bint16<0>>::element_type > ::value,
-                  "is_arithmetic<bint16::element_type> == false.");
-    static_assert(!is_zval < bint16<0>>::value,
-                  "is_zval<bint16> != false.");
-    static_assert(is_bval < bint16<0>>::value,
-                  "is_bval<bint16> == false.");
+    static_assert( is_bval<bint16<0>>::value, "is_bval<bint16> == false.");
+    static_assert(!is_zval<bint16<0>>::value, "is_zval<bint16> != false.");
 
     // Validate integral, float, double traits =========================================================================
 
-    static_assert(!std::is_floating_point<int16_t>::value ||
-                  is_floating_point < zint16<0>>::value,
-                  "is_floating_point<zint16> == false. [scalar = int16_t]");
-    static_assert(!std::is_floating_point<int16_t>::value ||
-                  !is_integral < zint16<0>>::value,
-                  "is_integral<zint16> != false. [scalar = int16_t]");
+    static_assert(!std::is_floating_point<int16_t>::value || is_floating_point < zint16<0>>::value, "is_floating_point<zint16> == false. [scalar = int16_t]");
+    static_assert(!std::is_floating_point<int16_t>::value || !is_integral<zint16<0>>::value, "is_integral<zint16> != false. [scalar = int16_t]");
 
-    static_assert(
-            !std::is_same<int16_t, float>::value || is_float < zint16<0>>::value,
-            "is_float<zint16> == false. [scalar = int16_t]");
-    static_assert(
-            !std::is_same<int16_t, float>::value || !is_double < zint16<0>>::value,
-            "is_double<zint16> != false. [scalar = int16_t]");
+    static_assert(!std::is_same<int16_t, float>::value || is_float < zint16<0>>::value, "is_float<zint16> == false. [scalar = int16_t]");
+    static_assert(!std::is_same<int16_t, float>::value || !is_double < zint16<0>>::value, "is_double<zint16> != false. [scalar = int16_t]");
 
-    static_assert(
-            !std::is_same<int16_t, double>::value || is_double < zint16<0>>::value,
-            "is_double<zint16> == false. [scalar = int16_t]");
-    static_assert(
-            !std::is_same<int16_t, double>::value || !is_float < zint16<0>>::value,
-            "is_float<zint16> != false. [scalar = int16_t]");
+    static_assert(!std::is_same<int16_t, double>::value || is_double < zint16<0>>::value, "is_double<zint16> == false. [scalar = int16_t]");
+    static_assert(!std::is_same<int16_t, double>::value || !is_float < zint16<0>>::value, "is_float<zint16> != false. [scalar = int16_t]");
 
-    static_assert(
-            !std::is_integral<int16_t>::value || is_integral < zint16<0>>::value,
-            "is_integral<zint16> == false. [scalar = int16_t]");
-    static_assert(!std::is_integral<int16_t>::value ||
-                  !is_floating_point < zint16<0>>::value,
-                  "is_floating_point<zint16> != false. [scalar = int16_t]");
+    static_assert(!std::is_integral<int16_t>::value || is_integral<zint16<0>>::value,"is_integral<zint16> == false. [scalar = int16_t]");
+    static_assert(!std::is_integral<int16_t>::value || !is_floating_point < zint16<0>>::value, "is_floating_point<zint16> != false. [scalar = int16_t]");
 }}}

@@ -47,15 +47,15 @@
 
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/logical.hpp"
 #include "traits/equatable.hpp"
-#include "traits/comparable.hpp"
-#include "traits/numeric.hpp"
-#include "traits/arithmetic.hpp"
 #include "traits/conditional.hpp"
+#include "traits/numeric.hpp"
+#include "traits/logical.hpp"
 #include "traits/io.hpp"
-#include "traits/math.hpp"
+#include "traits/arithmetic.hpp"
 #include "traits/bitwise.hpp"
+#include "traits/math.hpp"
+#include "traits/comparable.hpp"
 
 namespace zacc { namespace backend { namespace avx2
 {
@@ -469,9 +469,11 @@ namespace zacc { namespace backend { namespace avx2
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
     struct zint8 : public zval<izint8<FeatureMask>>,
+
         // generic traits
         printable<izint8<FeatureMask>, zint8<FeatureMask>>,
         convertable<izint8<FeatureMask>, zint8<FeatureMask>>,
+
         // int8 traits
         int8_modules::io<izint8<FeatureMask>, zint8<FeatureMask>>,
         int8_modules::math<izint8<FeatureMask>, zint8<FeatureMask>>,
@@ -523,35 +525,44 @@ namespace zacc { namespace backend { namespace avx2
          * @brief zint8 constructor [avx2 branch]
          * @relates zint8
          */
-        constexpr zint8(  ) noexcept : zval<izint8<FeatureMask>>()
+        constexpr zint8(  ) noexcept
+            : zval<izint8<FeatureMask>>()
         {
         }
+
         /**
          * @brief zint8 constructor [avx2 branch]
          * @relates zint8
          */
-        constexpr zint8(__m256i value) noexcept : zval<izint8<FeatureMask>>(value)
+        constexpr zint8(__m256i value) noexcept
+            : zval<izint8<FeatureMask>>(value)
         {
         }
+
         /**
          * @brief zint8 constructor [avx2 branch]
          * @relates zint8
          */
-        constexpr zint8(int8_t value) noexcept : zval<izint8<FeatureMask>>(_mm256_set1_epi8(value))
+        constexpr zint8(int8_t value) noexcept
+            : zval<izint8<FeatureMask>>(_mm256_set1_epi8(value))
         {
         }
+
         /**
          * @brief zint8 constructor [avx2 branch]
          * @relates zint8
          */
-        constexpr zint8(extracted_type value) noexcept : zval<izint8<FeatureMask>>(_mm256_load_si256((__m256i*)value.data()))
+        constexpr zint8(extracted_type value) noexcept
+            : zval<izint8<FeatureMask>>(_mm256_load_si256((__m256i*)value.data()))
         {
         }
+
         /**
          * @brief zint8 constructor [avx2 branch]
          * @relates zint8
          */
-        constexpr zint8(int8_t _31, int8_t _30, int8_t _29, int8_t _28, int8_t _27, int8_t _26, int8_t _25, int8_t _24, int8_t _23, int8_t _22, int8_t _21, int8_t _20, int8_t _19, int8_t _18, int8_t _17, int8_t _16, int8_t _15, int8_t _14, int8_t _13, int8_t _12, int8_t _11, int8_t _10, int8_t _9, int8_t _8, int8_t _7, int8_t _6, int8_t _5, int8_t _4, int8_t _3, int8_t _2, int8_t _1, int8_t _0) noexcept : zval<izint8<FeatureMask>>(_mm256_set_epi8(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31))
+        constexpr zint8(int8_t _31, int8_t _30, int8_t _29, int8_t _28, int8_t _27, int8_t _26, int8_t _25, int8_t _24, int8_t _23, int8_t _22, int8_t _21, int8_t _20, int8_t _19, int8_t _18, int8_t _17, int8_t _16, int8_t _15, int8_t _14, int8_t _13, int8_t _12, int8_t _11, int8_t _10, int8_t _9, int8_t _8, int8_t _7, int8_t _6, int8_t _5, int8_t _4, int8_t _3, int8_t _2, int8_t _1, int8_t _0) noexcept
+            : zval<izint8<FeatureMask>>(_mm256_set_epi8(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31))
         {
         }
     };
@@ -562,9 +573,11 @@ namespace zacc { namespace backend { namespace avx2
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
     struct bint8 : public bval<ibint8<FeatureMask>>,
+
         // generic traits
         printable<bint8<FeatureMask>, bint8<FeatureMask>>,
         convertable<bint8<FeatureMask>, bint8<FeatureMask>>,
+
         // int8 traits
         int8_modules::io<ibint8<FeatureMask>, bint8<FeatureMask>>,
         int8_modules::math<ibint8<FeatureMask>, bint8<FeatureMask>>,
@@ -591,128 +604,63 @@ namespace zacc { namespace backend { namespace avx2
 
     // Validate zint8 ===================================================================================
 
-    static_assert(std::is_base_of<izint8<0>,
-                  izint8<0>>::value,
-                  "base_of<izint8> != izint8.");
-    static_assert(!std::is_base_of<ibint8<0>,
-                  izint8<0>>::value,
-                  "base_of<izint8> == ibint8.");
+    static_assert( std::is_base_of<izint8<0>, izint8<0>>::value, "base_of<izint8> != izint8.");
+    static_assert(!std::is_base_of<ibint8<0>, izint8<0>>::value, "base_of<izint8> == ibint8.");
 
-    static_assert(is_zval<izint8<0>>::value,
-                  "is_zval<izint8> == false.");
-    static_assert(!is_bval<izint8<0>>::value,
-                  "is_bval<izint8> != false.");
+    static_assert( is_zval<izint8<0>>::value, "is_zval<izint8> == false.");
+    static_assert(!is_bval<izint8<0>>::value, "is_bval<izint8> != false.");
 
-    static_assert(std::is_base_of<izint8<0>, zint8<0>>::value,
-                  "base_of<zint8> != izint8.");
-    static_assert(!std::is_base_of<ibint8<0>, zint8<0>>::value,
-                  "base_of<zint8> == ibint8.");
+    static_assert( std::is_base_of<izint8<0>, zint8<0>>::value, "base_of<zint8> != izint8.");
+    static_assert(!std::is_base_of<ibint8<0>, zint8<0>>::value, "base_of<zint8> == ibint8.");
 
-    static_assert(zint8<0>::size == 32,
-                  "zint8::size != 32.");
-    static_assert(zint8<0>::alignment == 32,
-                  "zint8::alignment != 32.");
-    static_assert(zint8<0>::is_vector == (32 > 1),
-    "zint8::is_vector != (32 > 1).");
+    static_assert(zint8<0>::size == 32, "zint8::size != 32.");
+    static_assert(zint8<0>::alignment == 32, "zint8::alignment != 32.");
+    static_assert(zint8<0>::is_vector == true, "zint8::is_vector != true.");
 
-    static_assert(std::is_same<zint8<0>::tag, zval_tag > ::value,
-                  "zint8::tag != zval_tag.");
-    static_assert(std::is_same<zint8<0>::vector_type, __m256i > ::value,
-                  "zint8::vector_type != __m256i.");
-    static_assert(std::is_same<zint8<0>::element_type, int8_t > ::value,
-                  "zint8::element_type != int8_t.");
-    static_assert(std::is_same<zint8<0>::mask_vector_type, __m256i > ::value,
-                  "zint8::mask_vector_type != __m256i.");
-    static_assert(std::is_same<zint8<0>::extracted_type,
-                  std::array<int8_t, 32>>::value,
-                  "zint8::extracted_type != std::array<int8_t, 32>.");
+    static_assert(std::is_same<zint8<0>::tag, zval_tag>::value, "zint8::tag != zval_tag.");
+    static_assert(std::is_same<zint8<0>::vector_type, __m256i>::value, "zint8::vector_type != __m256i.");
+    static_assert(std::is_same<zint8<0>::element_type, int8_t>::value, "zint8::element_type != int8_t.");
+    static_assert(std::is_same<zint8<0>::mask_vector_type, __m256i>::value, "zint8::mask_vector_type != __m256i.");
+    static_assert(std::is_same<zint8<0>::extracted_type, std::array<int8_t, 32>>::value, "zint8::extracted_type != std::array<int8_t, 32>.");
 
-
-    static_assert(std::is_same<typename ztraits<zint8<0>>::tag, zval_tag > ::value,
-                  "zint8::tag != zval_tag.");
-    static_assert(std::is_arithmetic<typename ztraits<zint8<0>>::element_type > ::value,
-                  "is_arithmetic<zint8::element_type> == false.");
-    static_assert(is_zval < zint8<0>>::value,
-                  "is_zval<zint8> == false.");
-    static_assert(!is_bval < zint8<0>>::value,
-                  "is_bval<zint8> != false.");
-
+    static_assert( is_zval<zint8<0>>::value, "is_zval<zint8> == false.");
+    static_assert(!is_bval<zint8<0>>::value, "is_bval<zint8> != false.");
 
     // Validate bint8 ===================================================================================
 
+    static_assert( std::is_base_of<ibint8<0>, ibint8<0>>::value, "base_of<izint8> != izint8.");
+    static_assert(!std::is_base_of<izint8<0>, ibint8<0>>::value, "base_of<izint8> == ibint8.");
 
-    static_assert(std::is_base_of<ibint8<0>,
-                  ibint8<0>>::value,
-                  "base_of<izint8> != izint8.");
-    static_assert(!std::is_base_of<izint8<0>,
-                  ibint8<0>>::value,
-                  "base_of<izint8> == ibint8.");
+    static_assert( is_bval<ibint8<0>>::value, "is_bval<ibint8> == false.");
+    static_assert(!is_zval<ibint8<0>>::value, "is_zval<ibint8> != false.");
 
-    static_assert(!is_zval<ibint8<0>>::value,
-                  "is_zval<ibint8> != false.");
-    static_assert(is_bval<ibint8<0>>::value,
-                  "is_bval<ibint8> == false.");
+    static_assert( std::is_base_of<ibint8<0>, bint8<0>>::value, "base_of<bint8> != ibint8.");
+    static_assert(!std::is_base_of<izint8<0>, bint8<0>>::value, "base_of<bint8> == izint8.");
 
-    static_assert(std::is_base_of<ibint8<0>, bint8<0>>::value,
-                  "base_of<bint8> != ibint8.");
-    static_assert(!std::is_base_of<izint8<0>, bint8<0>>::value,
-                  "base_of<bint8> == izint8.");
+    static_assert(bint8<0>::size == 32, "bint8::size != 32.");
+    static_assert(bint8<0>::alignment == 32, "bint8::alignment != 32.");
+    static_assert(bint8<0>::is_vector == true, "bint8::is_vector != true.");
 
-    static_assert(bint8<0>::size == 32,
-                  "bint8::size != 32.");
-    static_assert(bint8<0>::alignment == 32,
-                  "bint8::alignment != 32.");
-    static_assert(bint8<0>::is_vector == (32 > 1),
-    "bint8::is_vector != (32 > 1).");
+    static_assert(std::is_same<bint8<0>::tag, bval_tag>::value, "bint8::tag != zval_tag.");
+    static_assert(std::is_same<bint8<0>::vector_type, __m256i>::value, "bint8::vector_type != __m256i.");
+    static_assert(std::is_same<bint8<0>::element_type, int8_t>::value, "bint8::element_type != int8_t.");
+    static_assert(std::is_same<bint8<0>::mask_vector_type, __m256i>::value, "bint8::mask_vector_type != __m256i.");
+    static_assert(std::is_same<bint8<0>::extracted_type, std::array<int8_t, 32>>::value, "bint8::extracted_type != std::array<int8_t, 32>.");
 
-    static_assert(std::is_same<bint8<0>::tag, bval_tag > ::value,
-                  "bint8::tag != zval_tag.");
-    static_assert(std::is_same<bint8<0>::vector_type, __m256i > ::value,
-                  "bint8::vector_type != __m256i.");
-    static_assert(std::is_same<bint8<0>::element_type, int8_t > ::value,
-                  "bint8::element_type != int8_t.");
-    static_assert(std::is_same<bint8<0>::mask_vector_type, __m256i > ::value,
-                  "bint8::mask_vector_type != __m256i.");
-    static_assert(std::is_same<bint8<0>::extracted_type,
-                  std::array<int8_t, 32>>::value,
-    "bint8::extracted_type != std::array<int8_t, 32>.");
-
-    static_assert(std::is_same<typename ztraits<bint8<0>>::tag, bval_tag > ::value,
-                  "bint8::tag != bval_tag.");
-    static_assert(std::is_arithmetic<typename ztraits<bint8<0>>::element_type > ::value,
-                  "is_arithmetic<bint8::element_type> == false.");
-    static_assert(!is_zval < bint8<0>>::value,
-                  "is_zval<bint8> != false.");
-    static_assert(is_bval < bint8<0>>::value,
-                  "is_bval<bint8> == false.");
+    static_assert( is_bval<bint8<0>>::value, "is_bval<bint8> == false.");
+    static_assert(!is_zval<bint8<0>>::value, "is_zval<bint8> != false.");
 
     // Validate integral, float, double traits =========================================================================
 
-    static_assert(!std::is_floating_point<int8_t>::value ||
-                  is_floating_point < zint8<0>>::value,
-                  "is_floating_point<zint8> == false. [scalar = int8_t]");
-    static_assert(!std::is_floating_point<int8_t>::value ||
-                  !is_integral < zint8<0>>::value,
-                  "is_integral<zint8> != false. [scalar = int8_t]");
+    static_assert(!std::is_floating_point<int8_t>::value || is_floating_point < zint8<0>>::value, "is_floating_point<zint8> == false. [scalar = int8_t]");
+    static_assert(!std::is_floating_point<int8_t>::value || !is_integral<zint8<0>>::value, "is_integral<zint8> != false. [scalar = int8_t]");
 
-    static_assert(
-            !std::is_same<int8_t, float>::value || is_float < zint8<0>>::value,
-            "is_float<zint8> == false. [scalar = int8_t]");
-    static_assert(
-            !std::is_same<int8_t, float>::value || !is_double < zint8<0>>::value,
-            "is_double<zint8> != false. [scalar = int8_t]");
+    static_assert(!std::is_same<int8_t, float>::value || is_float < zint8<0>>::value, "is_float<zint8> == false. [scalar = int8_t]");
+    static_assert(!std::is_same<int8_t, float>::value || !is_double < zint8<0>>::value, "is_double<zint8> != false. [scalar = int8_t]");
 
-    static_assert(
-            !std::is_same<int8_t, double>::value || is_double < zint8<0>>::value,
-            "is_double<zint8> == false. [scalar = int8_t]");
-    static_assert(
-            !std::is_same<int8_t, double>::value || !is_float < zint8<0>>::value,
-            "is_float<zint8> != false. [scalar = int8_t]");
+    static_assert(!std::is_same<int8_t, double>::value || is_double < zint8<0>>::value, "is_double<zint8> == false. [scalar = int8_t]");
+    static_assert(!std::is_same<int8_t, double>::value || !is_float < zint8<0>>::value, "is_float<zint8> != false. [scalar = int8_t]");
 
-    static_assert(
-            !std::is_integral<int8_t>::value || is_integral < zint8<0>>::value,
-            "is_integral<zint8> == false. [scalar = int8_t]");
-    static_assert(!std::is_integral<int8_t>::value ||
-                  !is_floating_point < zint8<0>>::value,
-                  "is_floating_point<zint8> != false. [scalar = int8_t]");
+    static_assert(!std::is_integral<int8_t>::value || is_integral<zint8<0>>::value,"is_integral<zint8> == false. [scalar = int8_t]");
+    static_assert(!std::is_integral<int8_t>::value || !is_floating_point < zint8<0>>::value, "is_floating_point<zint8> != false. [scalar = int8_t]");
 }}}

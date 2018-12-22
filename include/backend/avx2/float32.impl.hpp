@@ -47,15 +47,15 @@
 
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/io.hpp"
-#include "traits/equatable.hpp"
-#include "traits/numeric.hpp"
-#include "traits/conditional.hpp"
-#include "traits/math.hpp"
-#include "traits/comparable.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/logical.hpp"
+#include "traits/conditional.hpp"
+#include "traits/numeric.hpp"
+#include "traits/math.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/comparable.hpp"
+#include "traits/equatable.hpp"
+#include "traits/io.hpp"
+#include "traits/arithmetic.hpp"
 
 namespace zacc { namespace backend { namespace avx2
 {
@@ -392,7 +392,9 @@ namespace zacc { namespace backend { namespace avx2
              * @brief bitwise [avx2 branch]
              * @relates float32
              */
-            template<typename T = bool> friend std::enable_if_t<has_feature_v<Interface, capabilities::AVX2>, T> is_set(Composed one) 
+            template<typename T = bool>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::AVX2>, T>
+            is_set(Composed one) 
             {
                 auto ival =  _mm256_castps_si256(one);
                 return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
@@ -402,7 +404,9 @@ namespace zacc { namespace backend { namespace avx2
              * @brief bitwise [default branch]
              * @relates float32
              */
-            template<typename T = bool> friend std::enable_if_t<!has_feature_v<Interface, capabilities::AVX2>, T> is_set(Composed one) 
+            template<typename T = bool>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::AVX2>, T>
+            is_set(Composed one) 
             {
                 auto hi = _mm_castps_si128(_mm256_extractf128_ps(one, 1));
                 auto lo = _mm_castps_si128(_mm256_extractf128_ps(one, 0));
@@ -547,9 +551,11 @@ namespace zacc { namespace backend { namespace avx2
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
     struct zfloat32 : public zval<izfloat32<FeatureMask>>,
+
         // generic traits
         printable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
         convertable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
+
         // float32 traits
         float32_modules::io<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
         float32_modules::math<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
@@ -601,49 +607,62 @@ namespace zacc { namespace backend { namespace avx2
          * @brief zfloat32 constructor [avx2 branch]
          * @relates zfloat32
          */
-        constexpr zfloat32(  ) noexcept : zval<izfloat32<FeatureMask>>()
+        constexpr zfloat32(  ) noexcept
+            : zval<izfloat32<FeatureMask>>()
         {
         }
+
         /**
          * @brief zfloat32 constructor [avx2 branch]
          * @relates zfloat32
          */
-        constexpr zfloat32(__m256 value) noexcept : zval<izfloat32<FeatureMask>>(value)
+        constexpr zfloat32(__m256 value) noexcept
+            : zval<izfloat32<FeatureMask>>(value)
         {
         }
+
         /**
          * @brief zfloat32 constructor [avx2 branch]
          * @relates zfloat32
          */
-        constexpr zfloat32(__m256d value) noexcept : zval<izfloat32<FeatureMask>>(_mm256_castps128_ps256(_mm256_cvtpd_ps(value)))
+        constexpr zfloat32(__m256d value) noexcept
+            : zval<izfloat32<FeatureMask>>(_mm256_castps128_ps256(_mm256_cvtpd_ps(value)))
         {
         }
+
         /**
          * @brief zfloat32 constructor [avx2 branch]
          * @relates zfloat32
          */
-        constexpr zfloat32(__m256i value) noexcept : zval<izfloat32<FeatureMask>>(_mm256_cvtepi32_ps(value))
+        constexpr zfloat32(__m256i value) noexcept
+            : zval<izfloat32<FeatureMask>>(_mm256_cvtepi32_ps(value))
         {
         }
+
         /**
          * @brief zfloat32 constructor [avx2 branch]
          * @relates zfloat32
          */
-        constexpr zfloat32(float value) noexcept : zval<izfloat32<FeatureMask>>(_mm256_set1_ps(value))
+        constexpr zfloat32(float value) noexcept
+            : zval<izfloat32<FeatureMask>>(_mm256_set1_ps(value))
         {
         }
+
         /**
          * @brief zfloat32 constructor [avx2 branch]
          * @relates zfloat32
          */
-        constexpr zfloat32(extracted_type value) noexcept : zval<izfloat32<FeatureMask>>(_mm256_load_ps(value.data()))
+        constexpr zfloat32(extracted_type value) noexcept
+            : zval<izfloat32<FeatureMask>>(_mm256_load_ps(value.data()))
         {
         }
+
         /**
          * @brief zfloat32 constructor [avx2 branch]
          * @relates zfloat32
          */
-        constexpr zfloat32(float _7, float _6, float _5, float _4, float _3, float _2, float _1, float _0) noexcept : zval<izfloat32<FeatureMask>>(_mm256_set_ps(_0, _1, _2, _3, _4, _5, _6, _7))
+        constexpr zfloat32(float _7, float _6, float _5, float _4, float _3, float _2, float _1, float _0) noexcept
+            : zval<izfloat32<FeatureMask>>(_mm256_set_ps(_0, _1, _2, _3, _4, _5, _6, _7))
         {
         }
     };
@@ -654,9 +673,11 @@ namespace zacc { namespace backend { namespace avx2
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
     struct bfloat32 : public bval<ibfloat32<FeatureMask>>,
+
         // generic traits
         printable<bfloat32<FeatureMask>, bfloat32<FeatureMask>>,
         convertable<bfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+
         // float32 traits
         float32_modules::io<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
         float32_modules::math<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
@@ -683,128 +704,63 @@ namespace zacc { namespace backend { namespace avx2
 
     // Validate zfloat32 ===================================================================================
 
-    static_assert(std::is_base_of<izfloat32<0>,
-                  izfloat32<0>>::value,
-                  "base_of<izfloat32> != izfloat32.");
-    static_assert(!std::is_base_of<ibfloat32<0>,
-                  izfloat32<0>>::value,
-                  "base_of<izfloat32> == ibfloat32.");
+    static_assert( std::is_base_of<izfloat32<0>, izfloat32<0>>::value, "base_of<izfloat32> != izfloat32.");
+    static_assert(!std::is_base_of<ibfloat32<0>, izfloat32<0>>::value, "base_of<izfloat32> == ibfloat32.");
 
-    static_assert(is_zval<izfloat32<0>>::value,
-                  "is_zval<izfloat32> == false.");
-    static_assert(!is_bval<izfloat32<0>>::value,
-                  "is_bval<izfloat32> != false.");
+    static_assert( is_zval<izfloat32<0>>::value, "is_zval<izfloat32> == false.");
+    static_assert(!is_bval<izfloat32<0>>::value, "is_bval<izfloat32> != false.");
 
-    static_assert(std::is_base_of<izfloat32<0>, zfloat32<0>>::value,
-                  "base_of<zfloat32> != izfloat32.");
-    static_assert(!std::is_base_of<ibfloat32<0>, zfloat32<0>>::value,
-                  "base_of<zfloat32> == ibfloat32.");
+    static_assert( std::is_base_of<izfloat32<0>, zfloat32<0>>::value, "base_of<zfloat32> != izfloat32.");
+    static_assert(!std::is_base_of<ibfloat32<0>, zfloat32<0>>::value, "base_of<zfloat32> == ibfloat32.");
 
-    static_assert(zfloat32<0>::size == 8,
-                  "zfloat32::size != 8.");
-    static_assert(zfloat32<0>::alignment == 32,
-                  "zfloat32::alignment != 32.");
-    static_assert(zfloat32<0>::is_vector == (8 > 1),
-    "zfloat32::is_vector != (8 > 1).");
+    static_assert(zfloat32<0>::size == 8, "zfloat32::size != 8.");
+    static_assert(zfloat32<0>::alignment == 32, "zfloat32::alignment != 32.");
+    static_assert(zfloat32<0>::is_vector == true, "zfloat32::is_vector != true.");
 
-    static_assert(std::is_same<zfloat32<0>::tag, zval_tag > ::value,
-                  "zfloat32::tag != zval_tag.");
-    static_assert(std::is_same<zfloat32<0>::vector_type, __m256 > ::value,
-                  "zfloat32::vector_type != __m256.");
-    static_assert(std::is_same<zfloat32<0>::element_type, float > ::value,
-                  "zfloat32::element_type != float.");
-    static_assert(std::is_same<zfloat32<0>::mask_vector_type, __m256 > ::value,
-                  "zfloat32::mask_vector_type != __m256.");
-    static_assert(std::is_same<zfloat32<0>::extracted_type,
-                  std::array<float, 8>>::value,
-                  "zfloat32::extracted_type != std::array<float, 8>.");
+    static_assert(std::is_same<zfloat32<0>::tag, zval_tag>::value, "zfloat32::tag != zval_tag.");
+    static_assert(std::is_same<zfloat32<0>::vector_type, __m256>::value, "zfloat32::vector_type != __m256.");
+    static_assert(std::is_same<zfloat32<0>::element_type, float>::value, "zfloat32::element_type != float.");
+    static_assert(std::is_same<zfloat32<0>::mask_vector_type, __m256>::value, "zfloat32::mask_vector_type != __m256.");
+    static_assert(std::is_same<zfloat32<0>::extracted_type, std::array<float, 8>>::value, "zfloat32::extracted_type != std::array<float, 8>.");
 
-
-    static_assert(std::is_same<typename ztraits<zfloat32<0>>::tag, zval_tag > ::value,
-                  "zfloat32::tag != zval_tag.");
-    static_assert(std::is_arithmetic<typename ztraits<zfloat32<0>>::element_type > ::value,
-                  "is_arithmetic<zfloat32::element_type> == false.");
-    static_assert(is_zval < zfloat32<0>>::value,
-                  "is_zval<zfloat32> == false.");
-    static_assert(!is_bval < zfloat32<0>>::value,
-                  "is_bval<zfloat32> != false.");
-
+    static_assert( is_zval<zfloat32<0>>::value, "is_zval<zfloat32> == false.");
+    static_assert(!is_bval<zfloat32<0>>::value, "is_bval<zfloat32> != false.");
 
     // Validate bfloat32 ===================================================================================
 
+    static_assert( std::is_base_of<ibfloat32<0>, ibfloat32<0>>::value, "base_of<izfloat32> != izfloat32.");
+    static_assert(!std::is_base_of<izfloat32<0>, ibfloat32<0>>::value, "base_of<izfloat32> == ibfloat32.");
 
-    static_assert(std::is_base_of<ibfloat32<0>,
-                  ibfloat32<0>>::value,
-                  "base_of<izfloat32> != izfloat32.");
-    static_assert(!std::is_base_of<izfloat32<0>,
-                  ibfloat32<0>>::value,
-                  "base_of<izfloat32> == ibfloat32.");
+    static_assert( is_bval<ibfloat32<0>>::value, "is_bval<ibfloat32> == false.");
+    static_assert(!is_zval<ibfloat32<0>>::value, "is_zval<ibfloat32> != false.");
 
-    static_assert(!is_zval<ibfloat32<0>>::value,
-                  "is_zval<ibfloat32> != false.");
-    static_assert(is_bval<ibfloat32<0>>::value,
-                  "is_bval<ibfloat32> == false.");
+    static_assert( std::is_base_of<ibfloat32<0>, bfloat32<0>>::value, "base_of<bfloat32> != ibfloat32.");
+    static_assert(!std::is_base_of<izfloat32<0>, bfloat32<0>>::value, "base_of<bfloat32> == izfloat32.");
 
-    static_assert(std::is_base_of<ibfloat32<0>, bfloat32<0>>::value,
-                  "base_of<bfloat32> != ibfloat32.");
-    static_assert(!std::is_base_of<izfloat32<0>, bfloat32<0>>::value,
-                  "base_of<bfloat32> == izfloat32.");
+    static_assert(bfloat32<0>::size == 8, "bfloat32::size != 8.");
+    static_assert(bfloat32<0>::alignment == 32, "bfloat32::alignment != 32.");
+    static_assert(bfloat32<0>::is_vector == true, "bfloat32::is_vector != true.");
 
-    static_assert(bfloat32<0>::size == 8,
-                  "bfloat32::size != 8.");
-    static_assert(bfloat32<0>::alignment == 32,
-                  "bfloat32::alignment != 32.");
-    static_assert(bfloat32<0>::is_vector == (8 > 1),
-    "bfloat32::is_vector != (8 > 1).");
+    static_assert(std::is_same<bfloat32<0>::tag, bval_tag>::value, "bfloat32::tag != zval_tag.");
+    static_assert(std::is_same<bfloat32<0>::vector_type, __m256>::value, "bfloat32::vector_type != __m256.");
+    static_assert(std::is_same<bfloat32<0>::element_type, float>::value, "bfloat32::element_type != float.");
+    static_assert(std::is_same<bfloat32<0>::mask_vector_type, __m256>::value, "bfloat32::mask_vector_type != __m256.");
+    static_assert(std::is_same<bfloat32<0>::extracted_type, std::array<float, 8>>::value, "bfloat32::extracted_type != std::array<float, 8>.");
 
-    static_assert(std::is_same<bfloat32<0>::tag, bval_tag > ::value,
-                  "bfloat32::tag != zval_tag.");
-    static_assert(std::is_same<bfloat32<0>::vector_type, __m256 > ::value,
-                  "bfloat32::vector_type != __m256.");
-    static_assert(std::is_same<bfloat32<0>::element_type, float > ::value,
-                  "bfloat32::element_type != float.");
-    static_assert(std::is_same<bfloat32<0>::mask_vector_type, __m256 > ::value,
-                  "bfloat32::mask_vector_type != __m256.");
-    static_assert(std::is_same<bfloat32<0>::extracted_type,
-                  std::array<float, 8>>::value,
-    "bfloat32::extracted_type != std::array<float, 8>.");
-
-    static_assert(std::is_same<typename ztraits<bfloat32<0>>::tag, bval_tag > ::value,
-                  "bfloat32::tag != bval_tag.");
-    static_assert(std::is_arithmetic<typename ztraits<bfloat32<0>>::element_type > ::value,
-                  "is_arithmetic<bfloat32::element_type> == false.");
-    static_assert(!is_zval < bfloat32<0>>::value,
-                  "is_zval<bfloat32> != false.");
-    static_assert(is_bval < bfloat32<0>>::value,
-                  "is_bval<bfloat32> == false.");
+    static_assert( is_bval<bfloat32<0>>::value, "is_bval<bfloat32> == false.");
+    static_assert(!is_zval<bfloat32<0>>::value, "is_zval<bfloat32> != false.");
 
     // Validate integral, float, double traits =========================================================================
 
-    static_assert(!std::is_floating_point<float>::value ||
-                  is_floating_point < zfloat32<0>>::value,
-                  "is_floating_point<zfloat32> == false. [scalar = float]");
-    static_assert(!std::is_floating_point<float>::value ||
-                  !is_integral < zfloat32<0>>::value,
-                  "is_integral<zfloat32> != false. [scalar = float]");
+    static_assert(!std::is_floating_point<float>::value || is_floating_point < zfloat32<0>>::value, "is_floating_point<zfloat32> == false. [scalar = float]");
+    static_assert(!std::is_floating_point<float>::value || !is_integral<zfloat32<0>>::value, "is_integral<zfloat32> != false. [scalar = float]");
 
-    static_assert(
-            !std::is_same<float, float>::value || is_float < zfloat32<0>>::value,
-            "is_float<zfloat32> == false. [scalar = float]");
-    static_assert(
-            !std::is_same<float, float>::value || !is_double < zfloat32<0>>::value,
-            "is_double<zfloat32> != false. [scalar = float]");
+    static_assert(!std::is_same<float, float>::value || is_float < zfloat32<0>>::value, "is_float<zfloat32> == false. [scalar = float]");
+    static_assert(!std::is_same<float, float>::value || !is_double < zfloat32<0>>::value, "is_double<zfloat32> != false. [scalar = float]");
 
-    static_assert(
-            !std::is_same<float, double>::value || is_double < zfloat32<0>>::value,
-            "is_double<zfloat32> == false. [scalar = float]");
-    static_assert(
-            !std::is_same<float, double>::value || !is_float < zfloat32<0>>::value,
-            "is_float<zfloat32> != false. [scalar = float]");
+    static_assert(!std::is_same<float, double>::value || is_double < zfloat32<0>>::value, "is_double<zfloat32> == false. [scalar = float]");
+    static_assert(!std::is_same<float, double>::value || !is_float < zfloat32<0>>::value, "is_float<zfloat32> != false. [scalar = float]");
 
-    static_assert(
-            !std::is_integral<float>::value || is_integral < zfloat32<0>>::value,
-            "is_integral<zfloat32> == false. [scalar = float]");
-    static_assert(!std::is_integral<float>::value ||
-                  !is_floating_point < zfloat32<0>>::value,
-                  "is_floating_point<zfloat32> != false. [scalar = float]");
+    static_assert(!std::is_integral<float>::value || is_integral<zfloat32<0>>::value,"is_integral<zfloat32> == false. [scalar = float]");
+    static_assert(!std::is_integral<float>::value || !is_floating_point < zfloat32<0>>::value, "is_floating_point<zfloat32> != false. [scalar = float]");
 }}}
