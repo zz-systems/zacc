@@ -41,17 +41,15 @@ namespace zacc { namespace traits {
         }
 
         Boolean operator!() {
-            return Boolean(vlneg(*self()), last_operation::logic);
+            return Boolean(vlneg(*self()), last_operation::boolean);
         }
 
-        template<typename U>
-        Boolean operator||(const U other) {
-            return Boolean(vlor(*self(), static_cast<Composed>(other/*.value()*/)), last_operation::logic);
+        Boolean operator||(Composed other) {
+            return Boolean(vlor(*self(), other), last_operation::boolean);
         }
 
-        template<typename U>
-        Boolean operator&&(const U other) {
-            return Boolean(vland(*self(), static_cast<Composed>(other/*.value()*/)), last_operation::logic);
+        Boolean operator&&(Composed other) {
+            return Boolean(vland(*self(), other), last_operation::boolean);
         }
     };
 }}

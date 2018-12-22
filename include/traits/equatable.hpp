@@ -37,11 +37,11 @@ namespace zacc { namespace traits {
     {
 
         friend Boolean operator==(const Composed one, const Composed other) {
-            return Boolean(veq(one, other), last_operation::comparison);
+            return Boolean(veq(one, other), last_operation::boolean);
         }
 
         friend Boolean operator!=(const Composed one, const Composed other) {
-            return Boolean(vneq(one, other), last_operation::comparison);
+            return Boolean(vneq(one, other), last_operation::boolean);
         }
     };
 }}

@@ -10,7 +10,6 @@ type:
   traits:
     shared:
       - printable
-      - convertable
     default:
       - io
       - math
@@ -19,7 +18,7 @@ type:
       - bitwise
       - bitwise_shift
       - comparable
-      - logical
+      # - logical
       - equatable
       - conditional
 
@@ -50,7 +49,9 @@ modules:
       - args: { from: *vec_size, to: 0, type: *scalar_t }
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi32 }
 
-    bboolean: []
+    boolean:
+      - args: bool value
+        init: "(value ? _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128()) : _mm_setzero_si128()), (last_operation::boolean)"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -121,19 +122,9 @@ modules:
         default:
           requires: [not SSE41]
           body:
-            #- /* vmul 2,0*/
-            #- auto tmp1 = _mm_castsi128_ps(_mm_mul_epu32(one, other));
-            #- /* vmul 3,1 */
-            #- auto tmp2 = _mm_castsi128_ps(_mm_mul_epu32(_mm_srli_si128(one, 4), _mm_srli_si128(other, 4)));
-            #- return _mm_castps_si128(_mm_shuffle_ps(tmp1, tmp2, _MM_SHUFFLE(2, 0, 2, 0)));
             - __m128i tmp1 = _mm_mul_epu32(one,other); /* mul 2,0*/
             - __m128i tmp2 = _mm_mul_epu32( _mm_srli_si128(one,4), _mm_srli_si128(other,4)); /* mul 3,1 */
             - return _mm_unpacklo_epi32(_mm_shuffle_epi32(tmp1, _MM_SHUFFLE (0,0,2,0)), _mm_shuffle_epi32(tmp2, _MM_SHUFFLE (0,0,2,0)));
-            #- auto d0 = one.data();
-            #- auto d1 = other.data();
-            #- alignas(Interface::alignment) typename Interface::extracted_type raw_result;
-            #- for(auto i = 0; i < ztraits<Base>::size; i++) raw_result[i] = d0[i] * d1[i];
-            #- return raw_result.data();
     vdiv: _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));
     vmod: vsub(one, vmul(other, vdiv(one, other)))
 #-----------------------------------------------------------------------------------------------------------------------

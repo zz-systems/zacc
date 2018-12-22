@@ -44,17 +44,16 @@
 #include "util/memory.hpp"
 #include "util/macros.hpp"
 
-#include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/math.hpp"
-#include "traits/numeric.hpp"
-#include "traits/comparable.hpp"
-#include "traits/conditional.hpp"
-#include "traits/equatable.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/logical.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/conditional.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/math.hpp"
+#include "traits/comparable.hpp"
+#include "traits/equatable.hpp"
 #include "traits/io.hpp"
+#include "traits/numeric.hpp"
 
 namespace zacc { namespace backend { namespace sse
 {
@@ -65,7 +64,7 @@ namespace zacc { namespace backend { namespace sse
     template<uint64_t features>
     struct zfloat64;
     /// @endcond
-    
+
     template<uint64_t FeatureMask>
     using izfloat64 = ztype<zval_tag, __m128d, double, 2, 16, FeatureMask>;
 
@@ -108,9 +107,7 @@ namespace zacc {
         using zval_t = backend::sse::zfloat64<T::feature_mask>;
         using bval_t = backend::sse::bfloat64<T::feature_mask>;
 
-        using tag = select_t<
-            when<std::is_base_of<backend::sse::izfloat64<T::feature_mask>, T>::value, zval_tag>,
-            when<std::is_base_of<backend::sse::ibfloat64<T::feature_mask>, T>::value, bval_tag>>;
+        using tag = typename T::tag;
     };
 }
 
@@ -119,38 +116,211 @@ namespace zacc { namespace backend { namespace sse
     namespace float64_modules
     {
         /**
-         * @brief io mixin implementation [sse branch]
+         * @brief arithmetic mixin implementation [sse branch]
          * @relates float64
          */
-        template<typename Interface, typename Composed>
-        struct io : traits::io<Interface, Composed, bfloat64<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
+            friend Composed vneg(Composed one) 
             {
-                _mm_store_pd(&(*result), input);
+                return _mm_sub_pd(_mm_setzero_pd(), one);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
+            friend Composed vadd(Composed one, Composed other) 
             {
-                _mm_stream_pd(&(*result), input);
+                return _mm_add_pd(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            template<typename RandomIt> friend zfloat64<Interface::feature_mask> vgather(RandomIt input, const zint32<Interface::feature_mask> &index, Composed) 
+            friend Composed vsub(Composed one, Composed other) 
             {
-                auto i = index.data();
-                return _mm_set_pd(input[i[3]], input[i[1]]);
+                return _mm_sub_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vmul(Composed one, Composed other) 
+            {
+                return _mm_mul_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vdiv(Composed one, Composed other) 
+            {
+                return _mm_div_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return vadd(vmul(multiplicand, multiplier), addendum);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return vsub(vmul(multiplicand, multiplier), addendum);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief logical mixin implementation [sse branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vlneg(Composed one) 
+            {
+                return _mm_cmpeq_pd(one, _mm_setzero_pd());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vlor(Composed one, Composed other) 
+            {
+                return _mm_or_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vland(Composed one, Composed other) 
+            {
+                return _mm_and_pd(one, other);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief conditional mixin implementation [sse branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [sse4 branch]
+             * @relates float64
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
+            vsel(Boolean condition, Composed if_value, Composed else_value) 
+            {
+                return _mm_blendv_pd(else_value, if_value, condition);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
+            vsel(Boolean condition, Composed if_value, Composed else_value) 
+            {
+                return _mm_or_pd(_mm_andnot_pd(condition, else_value), _mm_and_pd(condition, if_value));
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief bitwise mixin implementation [sse branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vbneg(Composed one) 
+            {
+                auto ones = _mm_cmpeq_pd(one, one);
+                return _mm_xor_pd(one, ones);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vband(Composed one, Composed other) 
+            {
+                return _mm_and_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vbor(Composed one, Composed other) 
+            {
+                return _mm_or_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vbxor(Composed one, Composed other) 
+            {
+                return _mm_xor_pd(one, other);
+            }
+
+            /**
+             * @brief  [sse4 branch]
+             * @relates float64
+             */
+            template<typename T = bool>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
+            is_set(Composed one) 
+            {
+                return _mm_test_all_ones(_mm_castpd_si128(one)) != 0;
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            template<typename T = bool>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
+            is_set(Composed one) 
+            {
+                return _mm_movemask_pd(_mm_cmpeq_pd(one, _mm_cmpeq_pd(one, one))) == 0xFFFF;
             }
         };
 
@@ -160,79 +330,79 @@ namespace zacc { namespace backend { namespace sse
          * @brief math mixin implementation [sse branch]
          * @relates float64
          */
-        template<typename Interface, typename Composed>
-        struct math : traits::math<Interface, Composed, bfloat64<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct math : traits::math<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend zfloat64<Interface::feature_mask> vabs(Composed one) 
+            friend Composed vabs(Composed one) 
             {
                 return _mm_max_pd(one, -one);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend zfloat64<Interface::feature_mask> vmin(Composed one, Composed other) 
+            friend Composed vmin(Composed one, Composed other) 
             {
                 return _mm_min_pd(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend zfloat64<Interface::feature_mask> vmax(Composed one, Composed other) 
+            friend Composed vmax(Composed one, Composed other) 
             {
                 return _mm_max_pd(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend zfloat64<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
+            friend Composed vclamp(Composed self, Composed from, Composed to) 
             {
                 return vmin(to, vmax(from, self));
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend zfloat64<Interface::feature_mask> vrcp(Composed one) 
+            friend Composed vrcp(Composed one) 
             {
                 return (1 / one);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend zfloat64<Interface::feature_mask> vtrunc(Composed one) 
+            friend Composed vtrunc(Composed one) 
             {
                 return _mm_cvtepi32_pd(_mm_cvttpd_epi32(one));
             }
-            
+
             /**
              * @brief  [sse4 branch]
              * @relates float64
              */
-            template<typename T = zfloat64<Interface::feature_mask>>
+            template<typename T = Composed>
             friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
             vfloor(Composed one) 
             {
                 return _mm_floor_pd(one);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            template<typename T = zfloat64<Interface::feature_mask>>
+            template<typename T = Composed>
             friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
             vfloor(Composed one) 
             {
@@ -241,23 +411,23 @@ namespace zacc { namespace backend { namespace sse
                 auto fi = vtrunc(one);
                 return vsel(vgt(fi, one), vsub(fi, _1), fi);
             }
-            
+
             /**
              * @brief  [sse4 branch]
              * @relates float64
              */
-            template<typename T = zfloat64<Interface::feature_mask>>
+            template<typename T = Composed>
             friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
             vceil(Composed one) 
             {
                 return _mm_ceil_pd(one);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            template<typename T = zfloat64<Interface::feature_mask>>
+            template<typename T = Composed>
             friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
             vceil(Composed one) 
             {
@@ -266,23 +436,23 @@ namespace zacc { namespace backend { namespace sse
                 auto fi = vtrunc(one);
                 return vsel(vlt(fi, one), vadd(fi, _1), fi);
             }
-            
+
             /**
              * @brief  [sse4 branch]
              * @relates float64
              */
-            template<typename T = zfloat64<Interface::feature_mask>>
+            template<typename T = Composed>
             friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
             vround(Composed one) 
             {
                 return _mm_round_pd (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            template<typename T = zfloat64<Interface::feature_mask>>
+            template<typename T = Composed>
             friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
             vround(Composed one) 
             {
@@ -299,167 +469,14 @@ namespace zacc { namespace backend { namespace sse
                 auto rmd2tr = vtrunc(rmd2);
                 return tr + rmd2tr;
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend zfloat64<Interface::feature_mask> vsqrt(Composed one) 
+            friend Composed vsqrt(Composed one) 
             {
                 return _mm_sqrt_pd(one);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief numeric mixin implementation [sse branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed>
-        struct numeric : traits::numeric<Interface, Composed, bfloat64<Interface::feature_mask>>
-        {
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief arithmetic mixin implementation [sse branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed>
-        struct arithmetic : traits::arithmetic<Interface, Composed, bfloat64<Interface::feature_mask>>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vneg(Composed one) 
-            {
-                return _mm_sub_pd(_mm_setzero_pd(), one);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vadd(Composed one, Composed other) 
-            {
-                return _mm_add_pd(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vsub(Composed one, Composed other) 
-            {
-                return _mm_sub_pd(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vmul(Composed one, Composed other) 
-            {
-                return _mm_mul_pd(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vdiv(Composed one, Composed other) 
-            {
-                return _mm_div_pd(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return vadd(vmul(multiplicand, multiplier), addendum);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return vsub(vmul(multiplicand, multiplier), addendum);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief bitwise mixin implementation [sse branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed>
-        struct bitwise : traits::bitwise<Interface, Composed, bfloat64<Interface::feature_mask>>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vbneg(Composed one) 
-            {
-                auto ones = _mm_cmpeq_pd(one, one);
-                return _mm_xor_pd(one, ones);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vband(Composed one, Composed other) 
-            {
-                return _mm_and_pd(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vbor(Composed one, Composed other) 
-            {
-                return _mm_or_pd(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vbxor(Composed one, Composed other) 
-            {
-                return _mm_xor_pd(one, other);
-            }
-            
-            /**
-             * @brief  [sse4 branch]
-             * @relates float64
-             */
-            template<typename T = bool>
-            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
-            is_set(Composed one) 
-            {
-                return _mm_test_all_ones(_mm_castpd_si128(one)) != 0;
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            template<typename T = bool>
-            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
-            is_set(Composed one) 
-            {
-                return _mm_movemask_pd(_mm_cmpeq_pd(one, _mm_cmpeq_pd(one, one))) == 0xFFFF;
             }
         };
 
@@ -469,80 +486,43 @@ namespace zacc { namespace backend { namespace sse
          * @brief comparable mixin implementation [sse branch]
          * @relates float64
          */
-        template<typename Interface, typename Composed>
-        struct comparable : traits::comparable<Interface, Composed, bfloat64<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct comparable : traits::comparable<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend bfloat64<Interface::feature_mask> vgt(Composed one, Composed other) 
+            friend Composed vgt(Composed one, Composed other) 
             {
                 return _mm_cmpgt_pd(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend bfloat64<Interface::feature_mask> vlt(Composed one, Composed other) 
+            friend Composed vlt(Composed one, Composed other) 
             {
                 return _mm_cmplt_pd(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend bfloat64<Interface::feature_mask> vge(Composed one, Composed other) 
+            friend Composed vge(Composed one, Composed other) 
             {
                 return _mm_cmpge_pd(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend bfloat64<Interface::feature_mask> vle(Composed one, Composed other) 
+            friend Composed vle(Composed one, Composed other) 
             {
                 return _mm_cmple_pd(one, other);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief logical mixin implementation [sse branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed>
-        struct logical : traits::logical<Interface, Composed, bfloat64<Interface::feature_mask>>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend bfloat64<Interface::feature_mask> vlneg(Composed one) 
-            {
-                return _mm_cmpeq_pd(one, _mm_setzero_pd());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend bfloat64<Interface::feature_mask> vlor(Composed one, Composed other) 
-            {
-                return _mm_or_pd(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend bfloat64<Interface::feature_mask> vland(Composed one, Composed other) 
-            {
-                return _mm_and_pd(one, other);
             }
         };
 
@@ -552,23 +532,23 @@ namespace zacc { namespace backend { namespace sse
          * @brief equatable mixin implementation [sse branch]
          * @relates float64
          */
-        template<typename Interface, typename Composed>
-        struct equatable : traits::equatable<Interface, Composed, bfloat64<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct equatable : traits::equatable<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend bfloat64<Interface::feature_mask> veq(Composed one, Composed other) 
+            friend Composed veq(Composed one, Composed other) 
             {
                 return _mm_cmpeq_pd(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend bfloat64<Interface::feature_mask> vneq(Composed one, Composed other) 
+            friend Composed vneq(Composed one, Composed other) 
             {
                 return _mm_cmpneq_pd(one, other);
             }
@@ -577,33 +557,50 @@ namespace zacc { namespace backend { namespace sse
         // =============================================================================================================
 
         /**
-         * @brief conditional mixin implementation [sse branch]
+         * @brief io mixin implementation [sse branch]
          * @relates float64
          */
-        template<typename Interface, typename Composed>
-        struct conditional : traits::conditional<Interface, Composed, bfloat64<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct io : traits::io<Interface, Composed, Boolean>
         {
-            /**
-             * @brief  [sse4 branch]
-             * @relates float64
-             */
-            template<typename T = zfloat64<Interface::feature_mask>>
-            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
-            vsel(bfloat64<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
-            {
-                return _mm_blendv_pd(else_value, if_value, condition);
-            }
-            
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            template<typename T = zfloat64<Interface::feature_mask>>
-            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
-            vsel(bfloat64<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
             {
-                return _mm_or_pd(_mm_andnot_pd(condition, else_value), _mm_and_pd(condition, if_value));
+                _mm_store_pd(&(*result), input);
             }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
+            {
+                _mm_stream_pd(&(*result), input);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            template<typename RandomIt> friend Composed vgather(RandomIt input, const zint32<Interface::feature_mask> &index, Composed) 
+            {
+                auto i = index.data();
+                return _mm_set_pd(input[i[3]], input[i[1]]);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief numeric mixin implementation [sse branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct numeric : traits::numeric<Interface, Composed, Boolean>
+        {
         };
     } // end float64_modules
 
@@ -616,18 +613,16 @@ namespace zacc { namespace backend { namespace sse
 
         // generic traits
         printable<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        convertable<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
 
         // float64 traits
-        float64_modules::io<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::math<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::numeric<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::arithmetic<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::bitwise<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::comparable<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::logical<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::equatable<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::conditional<izfloat64<FeatureMask>, zfloat64<FeatureMask>>
+        float64_modules::io<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::math<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::numeric<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::arithmetic<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::bitwise<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::comparable<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::equatable<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::conditional<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>
     {
         USING_ZTYPE(izfloat64<FeatureMask>);
 
@@ -637,42 +632,7 @@ namespace zacc { namespace backend { namespace sse
         /// complete boolean vector
         using bval_t = bfloat64<FeatureMask>;
 
-        /**
-         * Copy constructor, forwards to base implementation
-         * @tparam T any type convertable to __m128d
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, __m128d>::value>>
-        constexpr zfloat64(const T& other) noexcept
-            : zval<izfloat64<FeatureMask>>(other)
-        {}
-
-        /**
-         * Move constructor, forwards to base implementation
-         * @tparam T any type convertable to __m128d
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<(size > 1) && std::is_convertible<T, __m128d>::value>>
-        constexpr zfloat64(T&& other) noexcept
-            : zval<izfloat64<FeatureMask>>(std::forward<T>(other))
-        {}
-
-        /**
-         * Converting constructor from bfloat64, forwards to base implementation 
-         * @param other
-         */
-        constexpr zfloat64(const bfloat64<FeatureMask>& other) noexcept
-            : zval<izfloat64<FeatureMask>>(other.value())
-        {}
-
-        /**
-         * @brief zfloat64 constructor [sse branch]
-         * @relates zfloat64
-         */
-        constexpr zfloat64(  ) noexcept
-            : zval<izfloat64<FeatureMask>>()
-        {
-        }
+        using zval<izfloat64<FeatureMask>>::zval;
 
         /**
          * @brief zfloat64 constructor [sse branch]
@@ -738,13 +698,12 @@ namespace zacc { namespace backend { namespace sse
 
         // generic traits
         printable<bfloat64<FeatureMask>, bfloat64<FeatureMask>>,
-        convertable<bfloat64<FeatureMask>, bfloat64<FeatureMask>>,
 
         // float64 traits
-        float64_modules::io<ibfloat64<FeatureMask>, bfloat64<FeatureMask>>,
-        float64_modules::bitwise<ibfloat64<FeatureMask>, bfloat64<FeatureMask>>,
-        float64_modules::logical<ibfloat64<FeatureMask>, bfloat64<FeatureMask>>,
-        float64_modules::equatable<ibfloat64<FeatureMask>, bfloat64<FeatureMask>>
+        float64_modules::io<ibfloat64<FeatureMask>, bfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::bitwise<ibfloat64<FeatureMask>, bfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::logical<ibfloat64<FeatureMask>, bfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::equatable<ibfloat64<FeatureMask>, bfloat64<FeatureMask>, bfloat64<FeatureMask>>
     {
         USING_ZTYPE(ibfloat64<FeatureMask>);
 
@@ -754,9 +713,16 @@ namespace zacc { namespace backend { namespace sse
         /// complete boolean vector
         using bval_t = bfloat64<FeatureMask>;
 
-        /// Forwarding constructor
-        FORWARD2(bfloat64, zval<ibfloat64<FeatureMask>>);
+        using zval<ibfloat64<FeatureMask>>::zval;
 
+        /**
+         * @brief bfloat64 constructor [sse branch]
+         * @relates bfloat64
+         */
+        constexpr bfloat64(bool value) noexcept
+            : zval<ibfloat64<FeatureMask>>((value ? _mm_cmpeq_pd(_mm_setzero_pd(), _mm_setzero_pd()) : _mm_setzero_pd()), (last_operation::boolean))
+        {
+        }
     };
 
     // Validate zfloat64 ===================================================================================

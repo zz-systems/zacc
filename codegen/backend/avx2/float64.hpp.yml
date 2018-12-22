@@ -10,7 +10,7 @@ type:
   traits:
     shared:
       - printable
-      - convertable
+
     default:
       - io
       - math
@@ -18,7 +18,7 @@ type:
       - arithmetic
       - bitwise
       - comparable
-      - logical
+      # - logical
       - equatable
       - conditional
 
@@ -49,7 +49,9 @@ modules:
       - args: { from: *vec_size, to: 0, type: *scalar_t }
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_pd }
 
-    boolean: []
+    boolean:
+      - args: bool value
+        init: "(value ? _mm256_cmp_pd(_mm256_setzero_pd(), _mm256_setzero_pd(), _CMP_EQ_OQ) : _mm256_setzero_pd()), (last_operation::boolean)"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

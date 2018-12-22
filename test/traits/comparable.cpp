@@ -37,89 +37,55 @@ namespace zacc { namespace test {
         TYPED_TEST_P(comparison_test, equals)
         {
             TypeParam value = 5;
-            auto actual= value == 5;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
-
-            actual = value == 6;
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) false));
+            VASSERT_EQ(value == 4, false);
+            VASSERT_EQ(value == 5, true);
+            VASSERT_EQ(value == 6, false);
         }
 
         TYPED_TEST_P(comparison_test, not_equals)
         {
             TypeParam value = 5;
-            auto actual= value != 5;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) false));
-
-            actual = value != 6;
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
+            VASSERT_EQ(value != 4, true);
+            VASSERT_EQ(value != 5, false);
+            VASSERT_EQ(value != 6, true);
         }
 
         TYPED_TEST_P(comparison_test, greater_than)
         {
             TypeParam value = 5;
-            auto actual= value > 4;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
-
-            actual = value > 5;
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) false));
-
-            actual = value > 6;
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) false));
+            VASSERT_EQ(value > 4, true);
+            VASSERT_EQ(value > 5, false);
+            VASSERT_EQ(value > 6, false);
         }
 
         TYPED_TEST_P(comparison_test, greater_than_equal)
         {
             TypeParam value = 5;
-            auto actual= value >= 4;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
-
-            actual = value >= 5;
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
-
-            actual = value >= 6;
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) false));
+            VASSERT_EQ(value >= 4, true);
+            VASSERT_EQ(value >= 5, true);
+            VASSERT_EQ(value >= 6, false);
         }
 
         TYPED_TEST_P(comparison_test, less_than)
         {
             TypeParam value = 5;
-            auto actual= value < 4;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) false));
-
-            actual = value < 5;
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) false));
-
-            actual = value < 6;
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
+            VASSERT_EQ(value < 4, false);
+            VASSERT_EQ(value < 5, false);
+            VASSERT_EQ(value < 6, true);
         }
 
         TYPED_TEST_P(comparison_test, less_than_equal)
         {
             TypeParam value = 5;
-            auto actual= value <= 4;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) false));
-
-            actual = value <= 5;
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
-
-            actual = value <= 6;
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
+            VASSERT_EQ(value <= 4, false);
+            VASSERT_EQ(value <= 5, true);
+            VASSERT_EQ(value <= 6, true);
         }
 
 

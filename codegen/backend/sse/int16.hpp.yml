@@ -10,7 +10,6 @@ type:
   traits:
     shared:
       - printable
-      - convertable
     default:
       - io
       - math
@@ -19,7 +18,7 @@ type:
       - bitwise
       - bitwise_shift
       - comparable
-      - logical
+      # - logical
       - equatable
       - conditional
 
@@ -44,7 +43,9 @@ modules:
       - args: { from: *vec_size, to: 0, type: *scalar_t }
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi16 }
 
-    boolean: []
+    boolean:
+      - args: bool value
+        init: "(value ? _mm_cmpeq_epi16(_mm_setzero_si128(), _mm_setzero_si128()) : _mm_setzero_si128()), (last_operation::boolean)"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

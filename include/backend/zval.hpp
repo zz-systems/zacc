@@ -44,9 +44,8 @@ namespace zacc {
     enum class last_operation
     {
         undefined,  ///< last operation is unknown (e.g initialization or arithmetic)
-        comparison, ///< last operation has been a comparison. Assume all-set mask of ones
-        logic,      ///< last operation has been a logic operation. Assume all-set mask of ones
-        bitwise     ///< last operation has been a comparison. Assume user knows what to do
+        boolean,    ///< last operation is boolean (skip mask generation)
+        bitwise     ///< last operation is bitwise. (skip mask generation)
     };
 
     template<typename Interface, typename enable = void>
@@ -64,7 +63,7 @@ namespace zacc {
         // =============================================================================================================
 
         constexpr zval(const zval& other) noexcept
-            : _value (other._value)
+            : _value { other._value }
         {}
 
         constexpr zval(zval&& other) noexcept
@@ -81,16 +80,21 @@ namespace zacc {
 
         // =============================================================================================================
 
-        template<typename T, typename std::enable_if<is_vector && std::is_convertible<T, vector_type>::value, void**>::type = nullptr>
-        constexpr zval(const T& other) noexcept
-            : _value(other)
+        template<typename T, typename std::enable_if<std::is_convertible<T, vector_type>::value, void**>::type = nullptr>
+        constexpr zval(T&& other) noexcept
+            : _value { std::forward<vector_type>(other) }
         {}
 
         // =============================================================================================================
 
         template<typename T, typename std::enable_if<!is_vector && std::is_convertible<T, element_type>::value, void**>::type = nullptr>
-        constexpr zval(const T& other) noexcept
-            : _value {{ static_cast<element_type>(other) }}
+        constexpr zval(T&& other) noexcept
+            : _value {{ std::forward<element_type>(other) }}
+        {}
+
+        template<typename T, typename std::enable_if<!is_vector && std::is_convertible<decltype(std::declval<T>().value()), element_type>::value, void**>::type = nullptr>
+        constexpr zval(T&& other) noexcept
+                : _value {{ std::forward<element_type>(other.value()) }}
         {}
 
         // =============================================================================================================
@@ -118,7 +122,7 @@ namespace zacc {
         }
 
         constexpr operator vector_type() const {
-            return this->value();
+            return this->_value;
         }
         
     protected:
@@ -138,11 +142,11 @@ namespace zacc {
         // =============================================================================================================
 
         constexpr zval(const zval& other) noexcept
-            : _value (other._value), _last_op(other.last_op())
+            : _value (other._value), _last_op { other.last_op() }
         {}
 
         constexpr zval(const zval& other, last_operation last_op) noexcept
-            : _value (other._value), _last_op(last_op)
+            : _value (other._value), _last_op { last_op }
         {}
 
         constexpr zval(zval&& other) noexcept
@@ -167,20 +171,24 @@ namespace zacc {
         // =============================================================================================================
 
         template<typename T, typename std::enable_if<is_vector && std::is_convertible<T, vector_type>::value, void**>::type = nullptr>
-        constexpr zval(const T& other, last_operation last_op = last_operation::undefined) noexcept
-            : _value(other), _last_op(last_op)
+        constexpr zval(T&& other, last_operation last_op = last_operation::undefined) noexcept
+            : _value { std::forward<vector_type>(other) }, _last_op { last_op }
+        {}
+
+        template<typename T, typename std::enable_if<is_vector && std::is_convertible<T, bool>::value, void**>::type = nullptr>
+        constexpr zval(T&& other) noexcept
+                : _value {{ std::forward<bool>(other)  }}, _last_op { last_operation::boolean }
         {}
 
         // =============================================================================================================
 
-        template<typename T, typename std::enable_if<!is_vector && std::is_convertible<T, bool>::value, void**>::type = nullptr>
-        constexpr zval(const T& other, last_operation last_op = last_operation::undefined) noexcept
-            : _value {{ static_cast<bool>(other) }}, _last_op(last_op)
+        constexpr zval(bool value, last_operation last_op = last_operation::boolean) noexcept
+            : _value {{ value }}, _last_op { last_op }
         {}
 
         template<typename T, typename std::enable_if<!is_vector && std::is_convertible<decltype(std::declval<T>().value()), bool>::value, void**>::type = nullptr>
-        constexpr zval(const T& other, last_operation last_op = last_operation::undefined) noexcept
-            : _value {{ static_cast<bool>(other.value()) }}, _last_op(last_op)
+        constexpr zval(T&& other, last_operation last_op = last_operation::boolean) noexcept
+            : _value {{ std::forward<bool>(other.value()) }}, _last_op { last_op }
         {}
 
         // =============================================================================================================
@@ -209,7 +217,7 @@ namespace zacc {
         }
 
         constexpr operator vector_type() const {
-            return this->value();
+            return this->_value;
         }
 
         constexpr last_operation last_op() const {

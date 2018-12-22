@@ -10,7 +10,6 @@ type:
   traits:
     shared:
       - printable
-      - convertable
     default:
       - io
       - math
@@ -18,7 +17,7 @@ type:
       - arithmetic
       - bitwise
       - comparable
-      - logical
+      # - logical
       - equatable
       - conditional
 
@@ -37,7 +36,9 @@ modules:
       - args: "extracted_type value"
         init: "value[0]"
 
-    boolean: []
+    boolean:
+      - args: bool value
+        init: value
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

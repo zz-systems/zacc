@@ -44,18 +44,17 @@
 #include "util/memory.hpp"
 #include "util/macros.hpp"
 
-#include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/logical.hpp"
-#include "traits/numeric.hpp"
 #include "traits/io.hpp"
 #include "traits/equatable.hpp"
-#include "traits/math.hpp"
-#include "traits/conditional.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/bitwise_shift.hpp"
 #include "traits/comparable.hpp"
+#include "traits/numeric.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/math.hpp"
+#include "traits/logical.hpp"
+#include "traits/conditional.hpp"
 
 namespace zacc { namespace backend { namespace scalar
 {
@@ -66,7 +65,7 @@ namespace zacc { namespace backend { namespace scalar
     template<uint64_t features>
     struct zint8;
     /// @endcond
-    
+
     template<uint64_t FeatureMask>
     using izint8 = ztype<zval_tag, std::array<int8_t, 1>, int8_t, 1, 16, FeatureMask>;
 
@@ -109,9 +108,7 @@ namespace zacc {
         using zval_t = backend::scalar::zint8<T::feature_mask>;
         using bval_t = backend::scalar::bint8<T::feature_mask>;
 
-        using tag = select_t<
-            when<std::is_base_of<backend::scalar::izint8<T::feature_mask>, T>::value, zval_tag>,
-            when<std::is_base_of<backend::scalar::ibint8<T::feature_mask>, T>::value, bval_tag>>;
+        using tag = typename T::tag;
     };
 }
 
@@ -123,8 +120,8 @@ namespace zacc { namespace backend { namespace scalar
          * @brief io mixin implementation [scalar branch]
          * @relates int8
          */
-        template<typename Interface, typename Composed>
-        struct io : traits::io<Interface, Composed, bint8<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct io : traits::io<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
@@ -134,7 +131,7 @@ namespace zacc { namespace backend { namespace scalar
             {
                 result[0] = input.value();
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int8
@@ -148,46 +145,175 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief math mixin implementation [scalar branch]
+         * @brief logical mixin implementation [scalar branch]
          * @relates int8
          */
-        template<typename Interface, typename Composed>
-        struct math : traits::math<Interface, Composed, bint8<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vabs(Composed one) 
+            friend Composed vlneg(Composed one) 
             {
-                return std::abs(one.value());
+                return (!one.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vmin(Composed one, Composed other) 
+            friend Composed vlor(Composed one, Composed other) 
             {
-                return std::min(one.value(), other.value());
+                return (one.value() || other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vmax(Composed one, Composed other) 
+            friend Composed vland(Composed one, Composed other) 
             {
-                return std::max(one.value(), other.value());
+                return (one.value() && other.value());
             }
-            
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief equatable mixin implementation [scalar branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct equatable : traits::equatable<Interface, Composed, Boolean>
+        {
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
+            friend Composed veq(Composed one, Composed other) 
             {
-                return vmin(to, vmax(from, self));
+                return (one.value() == other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vneq(Composed one, Composed other) 
+            {
+                return (one.value() != other.value());
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief arithmetic mixin implementation [scalar branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vneg(Composed one) 
+            {
+                return (-one.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vadd(Composed one, Composed other) 
+            {
+                return (one.value() + other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vsub(Composed one, Composed other) 
+            {
+                return (one.value() - other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vmul(Composed one, Composed other) 
+            {
+                return (one.value() * other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vdiv(Composed one, Composed other) 
+            {
+                return (one.value() / other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vmod(Composed one, Composed other) 
+            {
+                return (one.value() % other.value());
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief comparable mixin implementation [scalar branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct comparable : traits::comparable<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vgt(Composed one, Composed other) 
+            {
+                return (one.value() > other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vlt(Composed one, Composed other) 
+            {
+                return (one.value() < other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vge(Composed one, Composed other) 
+            {
+                return (one.value() >= other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vle(Composed one, Composed other) 
+            {
+                return (one.value() <= other.value());
             }
         };
 
@@ -197,73 +323,9 @@ namespace zacc { namespace backend { namespace scalar
          * @brief numeric mixin implementation [scalar branch]
          * @relates int8
          */
-        template<typename Interface, typename Composed>
-        struct numeric : traits::numeric<Interface, Composed, bint8<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct numeric : traits::numeric<Interface, Composed, Boolean>
         {
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief arithmetic mixin implementation [scalar branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed>
-        struct arithmetic : traits::arithmetic<Interface, Composed, bint8<Interface::feature_mask>>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend zint8<Interface::feature_mask> vneg(Composed one) 
-            {
-                return (-one.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend zint8<Interface::feature_mask> vadd(Composed one, Composed other) 
-            {
-                return (one.value() + other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend zint8<Interface::feature_mask> vsub(Composed one, Composed other) 
-            {
-                return (one.value() - other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend zint8<Interface::feature_mask> vmul(Composed one, Composed other) 
-            {
-                return (one.value() * other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend zint8<Interface::feature_mask> vdiv(Composed one, Composed other) 
-            {
-                return (one.value() / other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend zint8<Interface::feature_mask> vmod(Composed one, Composed other) 
-            {
-                return (one.value() % other.value());
-            }
         };
 
         // =============================================================================================================
@@ -272,45 +334,45 @@ namespace zacc { namespace backend { namespace scalar
          * @brief bitwise mixin implementation [scalar branch]
          * @relates int8
          */
-        template<typename Interface, typename Composed>
-        struct bitwise : traits::bitwise<Interface, Composed, bint8<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vbneg(Composed one) 
+            friend Composed vbneg(Composed one) 
             {
                 return (~one.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vband(Composed one, Composed other) 
+            friend Composed vband(Composed one, Composed other) 
             {
                 return (one.value() & other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vbor(Composed one, Composed other) 
+            friend Composed vbor(Composed one, Composed other) 
             {
                 return (one.value() | other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vbxor(Composed one, Composed other) 
+            friend Composed vbxor(Composed one, Composed other) 
             {
                 return (one.value() ^ other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int8
@@ -327,41 +389,41 @@ namespace zacc { namespace backend { namespace scalar
          * @brief bitwise_shift mixin implementation [scalar branch]
          * @relates int8
          */
-        template<typename Interface, typename Composed>
-        struct bitwise_shift : traits::bitwise_shift<Interface, Composed, bint8<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise_shift : traits::bitwise_shift<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vbsll(Composed one, Composed other) 
+            friend Composed vbsll(Composed one, Composed other) 
             {
                 return (one.value() << other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vbsrl(Composed one, Composed other) 
+            friend Composed vbsrl(Composed one, Composed other) 
             {
                 return (one.value() >> other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vbslli(const Composed one, const size_t other) 
+            friend Composed vbslli(const Composed one, const size_t other) 
             {
                 return (one.value() << other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vbsrli(const Composed one, const size_t other) 
+            friend Composed vbsrli(const Composed one, const size_t other) 
             {
                 return (one.value() >> other);
             }
@@ -370,111 +432,46 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief comparable mixin implementation [scalar branch]
+         * @brief math mixin implementation [scalar branch]
          * @relates int8
          */
-        template<typename Interface, typename Composed>
-        struct comparable : traits::comparable<Interface, Composed, bint8<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct math : traits::math<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend bint8<Interface::feature_mask> vgt(Composed one, Composed other) 
+            friend Composed vabs(Composed one) 
             {
-                return (one.value() > other.value());
+                return std::abs(one.value());
             }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend bint8<Interface::feature_mask> vlt(Composed one, Composed other) 
-            {
-                return (one.value() < other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend bint8<Interface::feature_mask> vge(Composed one, Composed other) 
-            {
-                return (one.value() >= other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend bint8<Interface::feature_mask> vle(Composed one, Composed other) 
-            {
-                return (one.value() <= other.value());
-            }
-        };
 
-        // =============================================================================================================
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vmin(Composed one, Composed other) 
+            {
+                return std::min(one.value(), other.value());
+            }
 
-        /**
-         * @brief logical mixin implementation [scalar branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed>
-        struct logical : traits::logical<Interface, Composed, bint8<Interface::feature_mask>>
-        {
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend bint8<Interface::feature_mask> vlneg(Composed one) 
+            friend Composed vmax(Composed one, Composed other) 
             {
-                return (!one.value());
+                return std::max(one.value(), other.value());
             }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend bint8<Interface::feature_mask> vlor(Composed one, Composed other) 
-            {
-                return (one.value() || other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend bint8<Interface::feature_mask> vland(Composed one, Composed other) 
-            {
-                return (one.value() && other.value());
-            }
-        };
 
-        // =============================================================================================================
-
-        /**
-         * @brief equatable mixin implementation [scalar branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed>
-        struct equatable : traits::equatable<Interface, Composed, bint8<Interface::feature_mask>>
-        {
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend bint8<Interface::feature_mask> veq(Composed one, Composed other) 
+            friend Composed vclamp(Composed self, Composed from, Composed to) 
             {
-                return (one.value() == other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend bint8<Interface::feature_mask> vneq(Composed one, Composed other) 
-            {
-                return (one.value() != other.value());
+                return vmin(to, vmax(from, self));
             }
         };
 
@@ -484,14 +481,14 @@ namespace zacc { namespace backend { namespace scalar
          * @brief conditional mixin implementation [scalar branch]
          * @relates int8
          */
-        template<typename Interface, typename Composed>
-        struct conditional : traits::conditional<Interface, Composed, bint8<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend zint8<Interface::feature_mask> vsel(bint8<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
+            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
             {
                 return (condition.value() ? if_value : else_value);
             }
@@ -507,19 +504,17 @@ namespace zacc { namespace backend { namespace scalar
 
         // generic traits
         printable<izint8<FeatureMask>, zint8<FeatureMask>>,
-        convertable<izint8<FeatureMask>, zint8<FeatureMask>>,
 
         // int8 traits
-        int8_modules::io<izint8<FeatureMask>, zint8<FeatureMask>>,
-        int8_modules::math<izint8<FeatureMask>, zint8<FeatureMask>>,
-        int8_modules::numeric<izint8<FeatureMask>, zint8<FeatureMask>>,
-        int8_modules::arithmetic<izint8<FeatureMask>, zint8<FeatureMask>>,
-        int8_modules::bitwise<izint8<FeatureMask>, zint8<FeatureMask>>,
-        int8_modules::bitwise_shift<izint8<FeatureMask>, zint8<FeatureMask>>,
-        int8_modules::comparable<izint8<FeatureMask>, zint8<FeatureMask>>,
-        int8_modules::logical<izint8<FeatureMask>, zint8<FeatureMask>>,
-        int8_modules::equatable<izint8<FeatureMask>, zint8<FeatureMask>>,
-        int8_modules::conditional<izint8<FeatureMask>, zint8<FeatureMask>>
+        int8_modules::io<izint8<FeatureMask>, zint8<FeatureMask>, bint8<FeatureMask>>,
+        int8_modules::math<izint8<FeatureMask>, zint8<FeatureMask>, bint8<FeatureMask>>,
+        int8_modules::numeric<izint8<FeatureMask>, zint8<FeatureMask>, bint8<FeatureMask>>,
+        int8_modules::arithmetic<izint8<FeatureMask>, zint8<FeatureMask>, bint8<FeatureMask>>,
+        int8_modules::bitwise<izint8<FeatureMask>, zint8<FeatureMask>, bint8<FeatureMask>>,
+        int8_modules::bitwise_shift<izint8<FeatureMask>, zint8<FeatureMask>, bint8<FeatureMask>>,
+        int8_modules::comparable<izint8<FeatureMask>, zint8<FeatureMask>, bint8<FeatureMask>>,
+        int8_modules::equatable<izint8<FeatureMask>, zint8<FeatureMask>, bint8<FeatureMask>>,
+        int8_modules::conditional<izint8<FeatureMask>, zint8<FeatureMask>, bint8<FeatureMask>>
     {
         USING_ZTYPE(izint8<FeatureMask>);
 
@@ -529,42 +524,7 @@ namespace zacc { namespace backend { namespace scalar
         /// complete boolean vector
         using bval_t = bint8<FeatureMask>;
 
-        /**
-         * Copy constructor, forwards to base implementation
-         * @tparam T any type convertable to std::array<int8_t, 1>
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, std::array<int8_t, 1>>::value>>
-        constexpr zint8(const T& other) noexcept
-            : zval<izint8<FeatureMask>>(other)
-        {}
-
-        /**
-         * Move constructor, forwards to base implementation
-         * @tparam T any type convertable to std::array<int8_t, 1>
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<(size > 1) && std::is_convertible<T, std::array<int8_t, 1>>::value>>
-        constexpr zint8(T&& other) noexcept
-            : zval<izint8<FeatureMask>>(std::forward<T>(other))
-        {}
-
-        /**
-         * Converting constructor from bint8, forwards to base implementation 
-         * @param other
-         */
-        constexpr zint8(const bint8<FeatureMask>& other) noexcept
-            : zval<izint8<FeatureMask>>(other.value())
-        {}
-
-        /**
-         * @brief zint8 constructor [scalar branch]
-         * @relates zint8
-         */
-        constexpr zint8(  ) noexcept
-            : zval<izint8<FeatureMask>>()
-        {
-        }
+        using zval<izint8<FeatureMask>>::zval;
 
         /**
          * @brief zint8 constructor [scalar branch]
@@ -594,13 +554,12 @@ namespace zacc { namespace backend { namespace scalar
 
         // generic traits
         printable<bint8<FeatureMask>, bint8<FeatureMask>>,
-        convertable<bint8<FeatureMask>, bint8<FeatureMask>>,
 
         // int8 traits
-        int8_modules::io<ibint8<FeatureMask>, bint8<FeatureMask>>,
-        int8_modules::bitwise<ibint8<FeatureMask>, bint8<FeatureMask>>,
-        int8_modules::logical<ibint8<FeatureMask>, bint8<FeatureMask>>,
-        int8_modules::equatable<ibint8<FeatureMask>, bint8<FeatureMask>>
+        int8_modules::io<ibint8<FeatureMask>, bint8<FeatureMask>, bint8<FeatureMask>>,
+        int8_modules::bitwise<ibint8<FeatureMask>, bint8<FeatureMask>, bint8<FeatureMask>>,
+        int8_modules::logical<ibint8<FeatureMask>, bint8<FeatureMask>, bint8<FeatureMask>>,
+        int8_modules::equatable<ibint8<FeatureMask>, bint8<FeatureMask>, bint8<FeatureMask>>
     {
         USING_ZTYPE(ibint8<FeatureMask>);
 
@@ -610,9 +569,16 @@ namespace zacc { namespace backend { namespace scalar
         /// complete boolean vector
         using bval_t = bint8<FeatureMask>;
 
-        /// Forwarding constructor
-        FORWARD2(bint8, zval<ibint8<FeatureMask>>);
+        using zval<ibint8<FeatureMask>>::zval;
 
+        /**
+         * @brief bint8 constructor [scalar branch]
+         * @relates bint8
+         */
+        constexpr bint8(bool value) noexcept
+            : zval<ibint8<FeatureMask>>(value)
+        {
+        }
     };
 
     // Validate zint8 ===================================================================================

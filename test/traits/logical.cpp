@@ -36,46 +36,33 @@ namespace zacc { namespace test {
 
         TYPED_TEST_P(logical_test, negate)
         {
-            TypeParam value = 5;
-            auto actual= !value;
+            TypeParam true_val = true;
+            TypeParam false_val = false;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) false));
-
-            actual = !actual;
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
+            VASSERT_EQ(!true_val, false);
+            VASSERT_EQ(!false_val, true);
         }
 
         TYPED_TEST_P(logical_test, or_operation)
         {
-            TypeParam value = 5;
-            auto actual= value || (value >= 2);
+            TypeParam true_val = true;
+            TypeParam false_val = false;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
-
-            actual = TypeParam(0) || (value >= 2);
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
-
-            actual = value || (value < 2);
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
-
-            actual = TypeParam(0) || (value <= 2);
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) false));
+            VASSERT_EQ(true_val || true_val, true);
+            VASSERT_EQ(true_val || false_val, true);
+            VASSERT_EQ(false_val || true_val, true);
+            VASSERT_EQ(false_val || false_val, false);
         }
 
         TYPED_TEST_P(logical_test, and_operation)
         {
-            TypeParam value = 5;
-            auto actual= value && (value >= 2);
+            TypeParam true_val = true;
+            TypeParam false_val = false;
 
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) true));
-
-            actual = value && (value < 2);
-
-            VASSERT_EQ(actual.as_bool(), TypeParam((typename TypeParam::element_type) false));
+            VASSERT_EQ(true_val && true_val, true);
+            VASSERT_EQ(true_val && false_val, false);
+            VASSERT_EQ(false_val && true_val, false);
+            VASSERT_EQ(false_val && false_val, false);
         }
 
         REGISTER_TYPED_TEST_CASE_P(logical_test,
@@ -83,7 +70,7 @@ namespace zacc { namespace test {
                                    or_operation,
                                    and_operation);
 
-        typedef ::testing::Types<zfloat, zdouble, zint8, zint16, zint32> logical_test_types;
+        typedef ::testing::Types<bfloat, bdouble, bint8, bint16, bint32> logical_test_types;
 
         INSTANTIATE_TYPED_TEST_CASE_P(zacc, logical_test, logical_test_types);
 

@@ -10,7 +10,6 @@ type:
   traits:
     shared:
       - printable
-      - convertable
     default:
       - io
       - math
@@ -18,7 +17,7 @@ type:
       - arithmetic
       - bitwise
       - comparable
-      - logical
+      # - logical
       - equatable
       - conditional
 

@@ -10,7 +10,6 @@ type:
   traits:
     shared:
       - printable
-      - convertable
     default:
       - io
       - math
@@ -19,7 +18,7 @@ type:
       - bitwise
       - bitwise_shift
       - comparable
-      - logical
+      # - logical
       - equatable
       - conditional
 
@@ -50,7 +49,9 @@ modules:
       - args: { from: *vec_size, to: 0, type: *scalar_t }
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_epi32 }
 
-    boolean: []
+    boolean:
+      - args: bool value
+        init: "(value ? _mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256()) : _mm256_setzero_si256()), (last_operation::boolean)"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -132,16 +133,16 @@ modules:
   logical:
     vlneg:
       args: one
-      body: "{ _mm256_cmpeq_epi32(one, _mm256_setzero_si256()), last_operation::logic }"
-    vlor:   "{ _mm256_or_si256(one, other), last_operation::logic }"
-    vland:  "{ _mm256_and_si256(one, other), last_operation::logic }"
+      body: _mm256_cmpeq_epi32(one, _mm256_setzero_si256())
+    vlor:   _mm256_or_si256(one, other)
+    vland:  _mm256_and_si256(one, other)
 #-----------------------------------------------------------------------------------------------------------------------
   equatable:
-    veq:   "{ _mm256_cmpeq_epi32(one, other), last_operation::comparison }"
+    veq:   "_mm256_cmpeq_epi32(one, other)"
     vneq:  "!(one == other)"
   comparable:
-    vgt:   "{ _mm256_cmpgt_epi32(one, other), last_operation::comparison }"
-    vlt:   "{ _mm256_cmpgt_epi32(other, one), last_operation::comparison }"
+    vgt:   "_mm256_cmpgt_epi32(one, other)"
+    vlt:   "_mm256_cmpgt_epi32(other, one)"
     vge:   "!(one < other)"
     vle:   "!(one > other)"
 #-----------------------------------------------------------------------------------------------------------------------

@@ -44,7 +44,6 @@
 #include "util/memory.hpp"
 #include "util/macros.hpp"
 
-#include "traits/convertable.hpp"
 #include "traits/printable.hpp"
 {% for module in Traits.render(ast.modules) %}
 #include "traits/{{ module }}.hpp"
@@ -59,7 +58,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
     template<uint64_t features>
     struct z{{ ast.type.name }};
     /// @endcond
-    
+
     template<uint64_t FeatureMask>
     using iz{{ ast.type.name }} = ztype<zval_tag, {{ ast.type.vector_type }}, {{ ast.type.scalar_type }}, {{ ast.type.size }}, {{ ast.type.alignment }}, FeatureMask>;
 
@@ -102,9 +101,7 @@ namespace zacc {
         using zval_t = backend::{{ ast.type.target }}::z{{ ast.type.name }}<T::feature_mask>;
         using bval_t = backend::{{ ast.type.target }}::b{{ ast.type.name }}<T::feature_mask>;
 
-        using tag = select_t<
-            when<std::is_base_of<backend::{{ ast.type.target }}::iz{{ ast.type.name }}<T::feature_mask>, T>::value, zval_tag>,
-            when<std::is_base_of<backend::{{ ast.type.target }}::ib{{ ast.type.name }}<T::feature_mask>, T>::value, bval_tag>>;
+        using tag = typename T::tag;
     };
 }
 
@@ -117,8 +114,8 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
          * @brief {{ module.name }} mixin implementation [{{ ast.type.target }} branch]
          * @relates {{ ast.type.name }}
          */
-        template<typename Interface, typename Composed>
-        struct {{ module.name }} : traits::{{ module.name }}<Interface, Composed, b{{ ast.type.name }}<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct {{ module.name }} : traits::{{ module.name }}<Interface, Composed, Boolean>
         {
             {% for func in module.functions %}
             {% for body in func.bodies %}
@@ -135,11 +132,11 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
                 {% endfor %}
             }
             {% if not loop.last %}
-            
+
             {% endif %}
             {% endfor %}
             {% if not loop.last %}
-            
+
             {% endif %}
             {% endfor %}
         };
@@ -165,7 +162,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
 
         // {{ ast.type.name }} traits
         {% for trait in ast.traits.default %}
-        {{ ast.type.name }}_modules::{{ trait }}<iz{{ ast.type.name }}<FeatureMask>, z{{ ast.type.name }}<FeatureMask>>{{ "," if not loop.last }}
+        {{ ast.type.name }}_modules::{{ trait }}<iz{{ ast.type.name }}<FeatureMask>, z{{ ast.type.name }}<FeatureMask>, b{{ ast.type.name }}<FeatureMask>>{{ "," if not loop.last }}
         {% endfor %}
     {
         USING_ZTYPE(iz{{ ast.type.name }}<FeatureMask>);
@@ -176,33 +173,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
         /// complete boolean vector
         using bval_t = b{{ ast.type.name }}<FeatureMask>;
 
-        /**
-         * Copy constructor, forwards to base implementation
-         * @tparam T any type convertable to {{ ast.type.vector_type }}
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, {{ ast.type.vector_type }}>::value>>
-        constexpr z{{ ast.type.name }}(const T& other) noexcept
-            : zval<iz{{ ast.type.name }}<FeatureMask>>(other)
-        {}
-
-        /**
-         * Move constructor, forwards to base implementation
-         * @tparam T any type convertable to {{ ast.type.vector_type }}
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<(size > 1) && std::is_convertible<T, {{ ast.type.vector_type }}>::value>>
-        constexpr z{{ ast.type.name }}(T&& other) noexcept
-            : zval<iz{{ ast.type.name }}<FeatureMask>>(std::forward<T>(other))
-        {}
-
-        /**
-         * Converting constructor from b{{ ast.type.name }}, forwards to base implementation 
-         * @param other
-         */
-        constexpr z{{ ast.type.name }}(const b{{ ast.type.name }}<FeatureMask>& other) noexcept
-            : zval<iz{{ ast.type.name }}<FeatureMask>>(other.value())
-        {}
+        using zval<iz{{ ast.type.name }}<FeatureMask>>::zval;
 
         {% for module in ast.modules.initializers if module.type == ModuleTypes.DEFAULT %}
         {% for func in module.functions %}
@@ -244,7 +215,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
 
         // {{ ast.type.name }} traits
         {% for trait in ast.traits.boolean %}
-        {{ ast.type.name }}_modules::{{ trait }}<ib{{ ast.type.name }}<FeatureMask>, b{{ ast.type.name }}<FeatureMask>>{{ "," if not loop.last }}
+        {{ ast.type.name }}_modules::{{ trait }}<ib{{ ast.type.name }}<FeatureMask>, b{{ ast.type.name }}<FeatureMask>, b{{ ast.type.name }}<FeatureMask>>{{ "," if not loop.last }}
         {% endfor %}
     {
         USING_ZTYPE(ib{{ ast.type.name }}<FeatureMask>);
@@ -255,10 +226,9 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
         /// complete boolean vector
         using bval_t = b{{ ast.type.name }}<FeatureMask>;
 
-        /// Forwarding constructor
-        FORWARD2(b{{ ast.type.name }}, zval<ib{{ ast.type.name }}<FeatureMask>>);
+        using zval<ib{{ ast.type.name }}<FeatureMask>>::zval;
 
-        {% for module in ast.modules.initializers if module.type == ModuleTypes.BOOLEAN %}
+        {% for module in ast.modules.initializers if (module.type == ModuleTypes.BOOLEAN)%}
         {% for func in module.functions %}
         {% for body in func.bodies %}
         /**

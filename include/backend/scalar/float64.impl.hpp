@@ -44,17 +44,16 @@
 #include "util/memory.hpp"
 #include "util/macros.hpp"
 
-#include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/io.hpp"
-#include "traits/equatable.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/comparable.hpp"
-#include "traits/math.hpp"
+#include "traits/logical.hpp"
+#include "traits/io.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/numeric.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/logical.hpp"
+#include "traits/equatable.hpp"
 #include "traits/conditional.hpp"
+#include "traits/math.hpp"
 
 namespace zacc { namespace backend { namespace scalar
 {
@@ -65,7 +64,7 @@ namespace zacc { namespace backend { namespace scalar
     template<uint64_t features>
     struct zfloat64;
     /// @endcond
-    
+
     template<uint64_t FeatureMask>
     using izfloat64 = ztype<zval_tag, std::array<double, 1>, double, 1, 16, FeatureMask>;
 
@@ -108,9 +107,7 @@ namespace zacc {
         using zval_t = backend::scalar::zfloat64<T::feature_mask>;
         using bval_t = backend::scalar::bfloat64<T::feature_mask>;
 
-        using tag = select_t<
-            when<std::is_base_of<backend::scalar::izfloat64<T::feature_mask>, T>::value, zval_tag>,
-            when<std::is_base_of<backend::scalar::ibfloat64<T::feature_mask>, T>::value, bval_tag>>;
+        using tag = typename T::tag;
     };
 }
 
@@ -119,11 +116,94 @@ namespace zacc { namespace backend { namespace scalar
     namespace float64_modules
     {
         /**
+         * @brief comparable mixin implementation [scalar branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct comparable : traits::comparable<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vgt(Composed one, Composed other) 
+            {
+                return (one.value() > other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vlt(Composed one, Composed other) 
+            {
+                return (one.value() < other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vge(Composed one, Composed other) 
+            {
+                return (one.value() >= other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vle(Composed one, Composed other) 
+            {
+                return (one.value() <= other.value());
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief logical mixin implementation [scalar branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vlneg(Composed one) 
+            {
+                return (!one.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vlor(Composed one, Composed other) 
+            {
+                return (one.value() || other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vland(Composed one, Composed other) 
+            {
+                return (one.value() && other.value());
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
          * @brief io mixin implementation [scalar branch]
          * @relates float64
          */
-        template<typename Interface, typename Composed>
-        struct io : traits::io<Interface, Composed, bfloat64<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct io : traits::io<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
@@ -133,7 +213,7 @@ namespace zacc { namespace backend { namespace scalar
             {
                 result[0] = input.value();
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
@@ -142,198 +222,14 @@ namespace zacc { namespace backend { namespace scalar
             {
                 result[0] = input.value();
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            template<typename RandomIt> friend zfloat64<Interface::feature_mask> vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
+            template<typename RandomIt> friend Composed vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
             {
                 return input[index.value()];
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief math mixin implementation [scalar branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed>
-        struct math : traits::math<Interface, Composed, bfloat64<Interface::feature_mask>>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vabs(Composed one) 
-            {
-                return std::abs(one.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vmin(Composed one, Composed other) 
-            {
-                return std::min(one.value(), other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vmax(Composed one, Composed other) 
-            {
-                return std::max(one.value(), other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
-            {
-                return vmin(to, vmax(from, self));
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vrcp(Composed one) 
-            {
-                return (1 / one.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vtrunc(Composed one) 
-            {
-                return std::trunc(one.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vfloor(Composed one) 
-            {
-                return std::floor(one.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vceil(Composed one) 
-            {
-                return std::ceil(one.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vround(Composed one) 
-            {
-                return std::round(one.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vsqrt(Composed one) 
-            {
-                return std::sqrt(one.value());
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief numeric mixin implementation [scalar branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed>
-        struct numeric : traits::numeric<Interface, Composed, bfloat64<Interface::feature_mask>>
-        {
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief arithmetic mixin implementation [scalar branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed>
-        struct arithmetic : traits::arithmetic<Interface, Composed, bfloat64<Interface::feature_mask>>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vneg(Composed one) 
-            {
-                return (-one.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vadd(Composed one, Composed other) 
-            {
-                return (one.value() + other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vsub(Composed one, Composed other) 
-            {
-                return (one.value() - other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vmul(Composed one, Composed other) 
-            {
-                return (one.value() * other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vdiv(Composed one, Composed other) 
-            {
-                return (one.value() / other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return multiplicand.value() * multiplier.value() + addendum.value();
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend zfloat64<Interface::feature_mask> vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return multiplicand.value() * multiplier.value() - addendum.value();
             }
         };
 
@@ -343,26 +239,26 @@ namespace zacc { namespace backend { namespace scalar
          * @brief bitwise mixin implementation [scalar branch]
          * @relates float64
          */
-        template<typename Interface, typename Composed>
-        struct bitwise : traits::bitwise<Interface, Composed, bfloat64<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend zfloat64<Interface::feature_mask> vbneg(Composed one) 
+            friend Composed vbneg(Composed one) 
             {
                 auto _one = one.value();
                 double result;
                 bitsof(result) = ~bitsof(_one);
                 return result;
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend zfloat64<Interface::feature_mask> vband(Composed one, Composed other) 
+            friend Composed vband(Composed one, Composed other) 
             {
                 auto _one = one.value();
                 auto _other = other.value();
@@ -370,12 +266,12 @@ namespace zacc { namespace backend { namespace scalar
                 bitsof(result) = bitsof(_one) & bitsof(_other);
                 return result;
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend zfloat64<Interface::feature_mask> vbor(Composed one, Composed other) 
+            friend Composed vbor(Composed one, Composed other) 
             {
                 auto _one = one.value();
                 auto _other = other.value();
@@ -383,12 +279,12 @@ namespace zacc { namespace backend { namespace scalar
                 bitsof(result) = bitsof(_one) | bitsof(_other);
                 return result;
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend zfloat64<Interface::feature_mask> vbxor(Composed one, Composed other) 
+            friend Composed vbxor(Composed one, Composed other) 
             {
                 auto _one = one.value();
                 auto _other = other.value();
@@ -396,7 +292,7 @@ namespace zacc { namespace backend { namespace scalar
                 bitsof(result) = bitsof(_one) ^ bitsof(_other);
                 return result;
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
@@ -410,83 +306,84 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief comparable mixin implementation [scalar branch]
+         * @brief numeric mixin implementation [scalar branch]
          * @relates float64
          */
-        template<typename Interface, typename Composed>
-        struct comparable : traits::comparable<Interface, Composed, bfloat64<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct numeric : traits::numeric<Interface, Composed, Boolean>
         {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend bfloat64<Interface::feature_mask> vgt(Composed one, Composed other) 
-            {
-                return (one.value() > other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend bfloat64<Interface::feature_mask> vlt(Composed one, Composed other) 
-            {
-                return (one.value() < other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend bfloat64<Interface::feature_mask> vge(Composed one, Composed other) 
-            {
-                return (one.value() >= other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend bfloat64<Interface::feature_mask> vle(Composed one, Composed other) 
-            {
-                return (one.value() <= other.value());
-            }
         };
 
         // =============================================================================================================
 
         /**
-         * @brief logical mixin implementation [scalar branch]
+         * @brief arithmetic mixin implementation [scalar branch]
          * @relates float64
          */
-        template<typename Interface, typename Composed>
-        struct logical : traits::logical<Interface, Composed, bfloat64<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend bfloat64<Interface::feature_mask> vlneg(Composed one) 
+            friend Composed vneg(Composed one) 
             {
-                return (!one.value());
+                return (-one.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend bfloat64<Interface::feature_mask> vlor(Composed one, Composed other) 
+            friend Composed vadd(Composed one, Composed other) 
             {
-                return (one.value() || other.value());
+                return (one.value() + other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend bfloat64<Interface::feature_mask> vland(Composed one, Composed other) 
+            friend Composed vsub(Composed one, Composed other) 
             {
-                return (one.value() && other.value());
+                return (one.value() - other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vmul(Composed one, Composed other) 
+            {
+                return (one.value() * other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vdiv(Composed one, Composed other) 
+            {
+                return (one.value() / other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return multiplicand.value() * multiplier.value() + addendum.value();
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return multiplicand.value() * multiplier.value() - addendum.value();
             }
         };
 
@@ -496,23 +393,23 @@ namespace zacc { namespace backend { namespace scalar
          * @brief equatable mixin implementation [scalar branch]
          * @relates float64
          */
-        template<typename Interface, typename Composed>
-        struct equatable : traits::equatable<Interface, Composed, bfloat64<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct equatable : traits::equatable<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend bfloat64<Interface::feature_mask> veq(Composed one, Composed other) 
+            friend Composed veq(Composed one, Composed other) 
             {
                 return (one.value() == other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend bfloat64<Interface::feature_mask> vneq(Composed one, Composed other) 
+            friend Composed vneq(Composed one, Composed other) 
             {
                 return (one.value() != other.value());
             }
@@ -524,16 +421,116 @@ namespace zacc { namespace backend { namespace scalar
          * @brief conditional mixin implementation [scalar branch]
          * @relates float64
          */
-        template<typename Interface, typename Composed>
-        struct conditional : traits::conditional<Interface, Composed, bfloat64<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend zfloat64<Interface::feature_mask> vsel(bfloat64<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
+            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
             {
                 return (condition.value() ? if_value : else_value);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief math mixin implementation [scalar branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct math : traits::math<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vabs(Composed one) 
+            {
+                return std::abs(one.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vmin(Composed one, Composed other) 
+            {
+                return std::min(one.value(), other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vmax(Composed one, Composed other) 
+            {
+                return std::max(one.value(), other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vclamp(Composed self, Composed from, Composed to) 
+            {
+                return vmin(to, vmax(from, self));
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vrcp(Composed one) 
+            {
+                return (1 / one.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vtrunc(Composed one) 
+            {
+                return std::trunc(one.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vfloor(Composed one) 
+            {
+                return std::floor(one.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vceil(Composed one) 
+            {
+                return std::ceil(one.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vround(Composed one) 
+            {
+                return std::round(one.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vsqrt(Composed one) 
+            {
+                return std::sqrt(one.value());
             }
         };
     } // end float64_modules
@@ -547,18 +544,16 @@ namespace zacc { namespace backend { namespace scalar
 
         // generic traits
         printable<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        convertable<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
 
         // float64 traits
-        float64_modules::io<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::math<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::numeric<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::arithmetic<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::bitwise<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::comparable<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::logical<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::equatable<izfloat64<FeatureMask>, zfloat64<FeatureMask>>,
-        float64_modules::conditional<izfloat64<FeatureMask>, zfloat64<FeatureMask>>
+        float64_modules::io<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::math<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::numeric<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::arithmetic<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::bitwise<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::comparable<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::equatable<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::conditional<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>
     {
         USING_ZTYPE(izfloat64<FeatureMask>);
 
@@ -568,42 +563,7 @@ namespace zacc { namespace backend { namespace scalar
         /// complete boolean vector
         using bval_t = bfloat64<FeatureMask>;
 
-        /**
-         * Copy constructor, forwards to base implementation
-         * @tparam T any type convertable to std::array<double, 1>
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, std::array<double, 1>>::value>>
-        constexpr zfloat64(const T& other) noexcept
-            : zval<izfloat64<FeatureMask>>(other)
-        {}
-
-        /**
-         * Move constructor, forwards to base implementation
-         * @tparam T any type convertable to std::array<double, 1>
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<(size > 1) && std::is_convertible<T, std::array<double, 1>>::value>>
-        constexpr zfloat64(T&& other) noexcept
-            : zval<izfloat64<FeatureMask>>(std::forward<T>(other))
-        {}
-
-        /**
-         * Converting constructor from bfloat64, forwards to base implementation 
-         * @param other
-         */
-        constexpr zfloat64(const bfloat64<FeatureMask>& other) noexcept
-            : zval<izfloat64<FeatureMask>>(other.value())
-        {}
-
-        /**
-         * @brief zfloat64 constructor [scalar branch]
-         * @relates zfloat64
-         */
-        constexpr zfloat64(  ) noexcept
-            : zval<izfloat64<FeatureMask>>()
-        {
-        }
+        using zval<izfloat64<FeatureMask>>::zval;
 
         /**
          * @brief zfloat64 constructor [scalar branch]
@@ -633,13 +593,12 @@ namespace zacc { namespace backend { namespace scalar
 
         // generic traits
         printable<bfloat64<FeatureMask>, bfloat64<FeatureMask>>,
-        convertable<bfloat64<FeatureMask>, bfloat64<FeatureMask>>,
 
         // float64 traits
-        float64_modules::io<ibfloat64<FeatureMask>, bfloat64<FeatureMask>>,
-        float64_modules::bitwise<ibfloat64<FeatureMask>, bfloat64<FeatureMask>>,
-        float64_modules::logical<ibfloat64<FeatureMask>, bfloat64<FeatureMask>>,
-        float64_modules::equatable<ibfloat64<FeatureMask>, bfloat64<FeatureMask>>
+        float64_modules::io<ibfloat64<FeatureMask>, bfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::bitwise<ibfloat64<FeatureMask>, bfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::logical<ibfloat64<FeatureMask>, bfloat64<FeatureMask>, bfloat64<FeatureMask>>,
+        float64_modules::equatable<ibfloat64<FeatureMask>, bfloat64<FeatureMask>, bfloat64<FeatureMask>>
     {
         USING_ZTYPE(ibfloat64<FeatureMask>);
 
@@ -649,9 +608,16 @@ namespace zacc { namespace backend { namespace scalar
         /// complete boolean vector
         using bval_t = bfloat64<FeatureMask>;
 
-        /// Forwarding constructor
-        FORWARD2(bfloat64, zval<ibfloat64<FeatureMask>>);
+        using zval<ibfloat64<FeatureMask>>::zval;
 
+        /**
+         * @brief bfloat64 constructor [scalar branch]
+         * @relates bfloat64
+         */
+        constexpr bfloat64(bool value) noexcept
+            : zval<ibfloat64<FeatureMask>>(value)
+        {
+        }
     };
 
     // Validate zfloat64 ===================================================================================

@@ -10,7 +10,6 @@ type:
   traits:
      shared:
       - printable
-      - convertable
      default:
        - io
        - math

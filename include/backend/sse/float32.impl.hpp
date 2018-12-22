@@ -44,17 +44,16 @@
 #include "util/memory.hpp"
 #include "util/macros.hpp"
 
-#include "traits/convertable.hpp"
 #include "traits/printable.hpp"
 #include "traits/equatable.hpp"
-#include "traits/math.hpp"
-#include "traits/io.hpp"
 #include "traits/numeric.hpp"
-#include "traits/conditional.hpp"
-#include "traits/logical.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/arithmetic.hpp"
 #include "traits/comparable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/math.hpp"
+#include "traits/conditional.hpp"
+#include "traits/io.hpp"
+#include "traits/logical.hpp"
 
 namespace zacc { namespace backend { namespace sse
 {
@@ -65,7 +64,7 @@ namespace zacc { namespace backend { namespace sse
     template<uint64_t features>
     struct zfloat32;
     /// @endcond
-    
+
     template<uint64_t FeatureMask>
     using izfloat32 = ztype<zval_tag, __m128, float, 4, 16, FeatureMask>;
 
@@ -108,9 +107,7 @@ namespace zacc {
         using zval_t = backend::sse::zfloat32<T::feature_mask>;
         using bval_t = backend::sse::bfloat32<T::feature_mask>;
 
-        using tag = select_t<
-            when<std::is_base_of<backend::sse::izfloat32<T::feature_mask>, T>::value, zval_tag>,
-            when<std::is_base_of<backend::sse::ibfloat32<T::feature_mask>, T>::value, bval_tag>>;
+        using tag = typename T::tag;
     };
 }
 
@@ -119,194 +116,28 @@ namespace zacc { namespace backend { namespace sse
     namespace float32_modules
     {
         /**
-         * @brief io mixin implementation [sse branch]
+         * @brief equatable mixin implementation [sse branch]
          * @relates float32
          */
-        template<typename Interface, typename Composed>
-        struct io : traits::io<Interface, Composed, bfloat32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct equatable : traits::equatable<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
+            friend Composed veq(Composed one, Composed other) 
             {
-                _mm_store_ps(&(*result), input);
+                return _mm_cmpeq_ps(one, other);
             }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
-            {
-                _mm_stream_ps(&(*result), input);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            template<typename RandomIt> friend zfloat32<Interface::feature_mask> vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
-            {
-                auto i = index.data();
-                return _mm_set_ps(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
-            }
-        };
 
-        // =============================================================================================================
-
-        /**
-         * @brief math mixin implementation [sse branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed>
-        struct math : traits::math<Interface, Composed, bfloat32<Interface::feature_mask>>
-        {
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend zfloat32<Interface::feature_mask> vabs(Composed one) 
+            friend Composed vneq(Composed one, Composed other) 
             {
-                return _mm_max_ps(one, -one);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend zfloat32<Interface::feature_mask> vmin(Composed one, Composed other) 
-            {
-                return _mm_min_ps(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend zfloat32<Interface::feature_mask> vmax(Composed one, Composed other) 
-            {
-                return _mm_max_ps(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend zfloat32<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
-            {
-                return vmin(to, vmax(from, self));
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend zfloat32<Interface::feature_mask> vrcp(Composed one) 
-            {
-                return (1 / one);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend zfloat32<Interface::feature_mask> vtrunc(Composed one) 
-            {
-                return _mm_cvtepi32_ps(_mm_cvttps_epi32(one));
-            }
-            
-            /**
-             * @brief  [sse4 branch]
-             * @relates float32
-             */
-            template<typename T = zfloat32<Interface::feature_mask>>
-            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
-            vfloor(Composed one) 
-            {
-                return _mm_floor_ps(one);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            template<typename T = zfloat32<Interface::feature_mask>>
-            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
-            vfloor(Composed one) 
-            {
-                auto zero = _mm_setzero_si128();
-                auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
-                auto fi = vtrunc(one);
-                return vsel(vgt(fi, one), vsub(fi, _1), fi);
-            }
-            
-            /**
-             * @brief  [sse4 branch]
-             * @relates float32
-             */
-            template<typename T = zfloat32<Interface::feature_mask>>
-            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
-            vceil(Composed one) 
-            {
-                return _mm_ceil_ps(one);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            template<typename T = zfloat32<Interface::feature_mask>>
-            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
-            vceil(Composed one) 
-            {
-                auto zero = _mm_setzero_si128();
-                auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
-                auto fi = vtrunc(one);
-                return vsel(vlt(fi, one), vadd(fi, _1), fi);
-            }
-            
-            /**
-             * @brief  [sse4 branch]
-             * @relates float32
-             */
-            template<typename T = zfloat32<Interface::feature_mask>>
-            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
-            vround(Composed one) 
-            {
-                return _mm_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            template<typename T = zfloat32<Interface::feature_mask>>
-            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
-            vround(Composed one) 
-            {
-                auto zero = _mm_setzero_si128();
-                auto ones = _mm_cmpeq_epi32(zero, zero);
-                // generate the highest value < 2;
-                auto nearest = _mm_castsi128_ps(_mm_srli_epi32(ones, 2));
-                auto tr = vtrunc(one);
-                // get remainder;
-                auto rmd = one - tr;
-                // mul remainder by near 2 will yield the needed offset;
-                auto rmd2 = vmul(rmd, nearest);
-                // after being truncated of course;
-                auto rmd2tr = vtrunc(rmd2);
-                return tr + rmd2tr;
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend zfloat32<Interface::feature_mask> vsqrt(Composed one) 
-            {
-                return _mm_sqrt_ps(one);
+                return _mm_cmpneq_ps(one, other);
             }
         };
 
@@ -316,108 +147,9 @@ namespace zacc { namespace backend { namespace sse
          * @brief numeric mixin implementation [sse branch]
          * @relates float32
          */
-        template<typename Interface, typename Composed>
-        struct numeric : traits::numeric<Interface, Composed, bfloat32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct numeric : traits::numeric<Interface, Composed, Boolean>
         {
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief arithmetic mixin implementation [sse branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed>
-        struct arithmetic : traits::arithmetic<Interface, Composed, bfloat32<Interface::feature_mask>>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend zfloat32<Interface::feature_mask> vneg(Composed one) 
-            {
-                return _mm_sub_ps(_mm_setzero_ps(), one);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend zfloat32<Interface::feature_mask> vadd(Composed one, Composed other) 
-            {
-                return _mm_add_ps(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend zfloat32<Interface::feature_mask> vsub(Composed one, Composed other) 
-            {
-                return _mm_sub_ps(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend zfloat32<Interface::feature_mask> vmul(Composed one, Composed other) 
-            {
-                return _mm_mul_ps(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend zfloat32<Interface::feature_mask> vdiv(Composed one, Composed other) 
-            {
-                return _mm_div_ps(one, other);
-            }
-            
-            /**
-             * @brief  [fma branch]
-             * @relates float32
-             */
-            template<typename T = zfloat32<Interface::feature_mask>>
-            friend std::enable_if_t<has_feature_v<Interface, capabilities::FMA3>, T>
-            vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return _mm_fmadd_ps(multiplicand, multiplier, addendum);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            template<typename T = zfloat32<Interface::feature_mask>>
-            friend std::enable_if_t<!has_feature_v<Interface, capabilities::FMA3>, T>
-            vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return vadd(vmul(multiplicand, multiplier), addendum);
-            }
-            
-            /**
-             * @brief  [fma branch]
-             * @relates float32
-             */
-            template<typename T = zfloat32<Interface::feature_mask>>
-            friend std::enable_if_t<has_feature_v<Interface, capabilities::FMA3>, T>
-            vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return _mm_fmsub_ps(multiplicand, multiplier, addendum);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            template<typename T = zfloat32<Interface::feature_mask>>
-            friend std::enable_if_t<!has_feature_v<Interface, capabilities::FMA3>, T>
-            vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return vsub(vmul(multiplicand, multiplier), addendum);
-            }
         };
 
         // =============================================================================================================
@@ -426,47 +158,47 @@ namespace zacc { namespace backend { namespace sse
          * @brief bitwise mixin implementation [sse branch]
          * @relates float32
          */
-        template<typename Interface, typename Composed>
-        struct bitwise : traits::bitwise<Interface, Composed, bfloat32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend zfloat32<Interface::feature_mask> vbneg(Composed one) 
+            friend Composed vbneg(Composed one) 
             {
                 auto zero = _mm_setzero_ps();
                 auto ones = _mm_cmpeq_ps(zero, zero);
                 return _mm_xor_ps(one, ones);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend zfloat32<Interface::feature_mask> vband(Composed one, Composed other) 
+            friend Composed vband(Composed one, Composed other) 
             {
                 return _mm_and_ps(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend zfloat32<Interface::feature_mask> vbor(Composed one, Composed other) 
+            friend Composed vbor(Composed one, Composed other) 
             {
                 return _mm_or_ps(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend zfloat32<Interface::feature_mask> vbxor(Composed one, Composed other) 
+            friend Composed vbxor(Composed one, Composed other) 
             {
                 return _mm_xor_ps(one, other);
             }
-            
+
             /**
              * @brief  [sse4 branch]
              * @relates float32
@@ -477,7 +209,7 @@ namespace zacc { namespace backend { namespace sse
             {
                 return _mm_test_all_ones(_mm_castps_si128(one)) != 0;
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float32
@@ -498,41 +230,41 @@ namespace zacc { namespace backend { namespace sse
          * @brief comparable mixin implementation [sse branch]
          * @relates float32
          */
-        template<typename Interface, typename Composed>
-        struct comparable : traits::comparable<Interface, Composed, bfloat32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct comparable : traits::comparable<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend bfloat32<Interface::feature_mask> vgt(Composed one, Composed other) 
+            friend Composed vgt(Composed one, Composed other) 
             {
                 return _mm_cmpgt_ps(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend bfloat32<Interface::feature_mask> vlt(Composed one, Composed other) 
+            friend Composed vlt(Composed one, Composed other) 
             {
                 return _mm_cmplt_ps(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend bfloat32<Interface::feature_mask> vge(Composed one, Composed other) 
+            friend Composed vge(Composed one, Composed other) 
             {
                 return _mm_cmpge_ps(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend bfloat32<Interface::feature_mask> vle(Composed one, Composed other) 
+            friend Composed vle(Composed one, Composed other) 
             {
                 return _mm_cmple_ps(one, other);
             }
@@ -541,65 +273,156 @@ namespace zacc { namespace backend { namespace sse
         // =============================================================================================================
 
         /**
-         * @brief logical mixin implementation [sse branch]
+         * @brief math mixin implementation [sse branch]
          * @relates float32
          */
-        template<typename Interface, typename Composed>
-        struct logical : traits::logical<Interface, Composed, bfloat32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct math : traits::math<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend bfloat32<Interface::feature_mask> vlneg(Composed one) 
+            friend Composed vabs(Composed one) 
             {
-                return _mm_cmpeq_ps(one, _mm_setzero_ps());
+                return _mm_max_ps(one, -one);
             }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend bfloat32<Interface::feature_mask> vlor(Composed one, Composed other) 
-            {
-                return _mm_or_ps(one, other);
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend bfloat32<Interface::feature_mask> vland(Composed one, Composed other) 
-            {
-                return _mm_and_ps(one, other);
-            }
-        };
 
-        // =============================================================================================================
-
-        /**
-         * @brief equatable mixin implementation [sse branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed>
-        struct equatable : traits::equatable<Interface, Composed, bfloat32<Interface::feature_mask>>
-        {
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend bfloat32<Interface::feature_mask> veq(Composed one, Composed other) 
+            friend Composed vmin(Composed one, Composed other) 
             {
-                return _mm_cmpeq_ps(one, other);
+                return _mm_min_ps(one, other);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend bfloat32<Interface::feature_mask> vneq(Composed one, Composed other) 
+            friend Composed vmax(Composed one, Composed other) 
             {
-                return _mm_cmpneq_ps(one, other);
+                return _mm_max_ps(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vclamp(Composed self, Composed from, Composed to) 
+            {
+                return vmin(to, vmax(from, self));
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vrcp(Composed one) 
+            {
+                return (1 / one);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vtrunc(Composed one) 
+            {
+                return _mm_cvtepi32_ps(_mm_cvttps_epi32(one));
+            }
+
+            /**
+             * @brief  [sse4 branch]
+             * @relates float32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
+            vfloor(Composed one) 
+            {
+                return _mm_floor_ps(one);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
+            vfloor(Composed one) 
+            {
+                auto zero = _mm_setzero_si128();
+                auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
+                auto fi = vtrunc(one);
+                return vsel(vgt(fi, one), vsub(fi, _1), fi);
+            }
+
+            /**
+             * @brief  [sse4 branch]
+             * @relates float32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
+            vceil(Composed one) 
+            {
+                return _mm_ceil_ps(one);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
+            vceil(Composed one) 
+            {
+                auto zero = _mm_setzero_si128();
+                auto _1  = _mm_srli_epi32(_mm_cmpeq_epi32(zero, zero), 31);
+                auto fi = vtrunc(one);
+                return vsel(vlt(fi, one), vadd(fi, _1), fi);
+            }
+
+            /**
+             * @brief  [sse4 branch]
+             * @relates float32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
+            vround(Composed one) 
+            {
+                return _mm_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
+            vround(Composed one) 
+            {
+                auto zero = _mm_setzero_si128();
+                auto ones = _mm_cmpeq_epi32(zero, zero);
+                // generate the highest value < 2;
+                auto nearest = _mm_castsi128_ps(_mm_srli_epi32(ones, 2));
+                auto tr = vtrunc(one);
+                // get remainder;
+                auto rmd = one - tr;
+                // mul remainder by near 2 will yield the needed offset;
+                auto rmd2 = vmul(rmd, nearest);
+                // after being truncated of course;
+                auto rmd2tr = vtrunc(rmd2);
+                return tr + rmd2tr;
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vsqrt(Composed one) 
+            {
+                return _mm_sqrt_ps(one);
             }
         };
 
@@ -609,29 +432,203 @@ namespace zacc { namespace backend { namespace sse
          * @brief conditional mixin implementation [sse branch]
          * @relates float32
          */
-        template<typename Interface, typename Composed>
-        struct conditional : traits::conditional<Interface, Composed, bfloat32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
         {
             /**
              * @brief  [sse4 branch]
              * @relates float32
              */
-            template<typename T = zfloat32<Interface::feature_mask>>
+            template<typename T = Composed>
             friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
-            vsel(bfloat32<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
+            vsel(Boolean condition, Composed if_value, Composed else_value) 
             {
                 return _mm_blendv_ps(else_value, if_value, condition);
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            template<typename T = zfloat32<Interface::feature_mask>>
+            template<typename T = Composed>
             friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
-            vsel(bfloat32<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
+            vsel(Boolean condition, Composed if_value, Composed else_value) 
             {
                 return _mm_or_ps(_mm_andnot_ps(condition, else_value), _mm_and_ps(condition, if_value));
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief logical mixin implementation [sse branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vlneg(Composed one) 
+            {
+                return _mm_cmpeq_ps(one, _mm_setzero_ps());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vlor(Composed one, Composed other) 
+            {
+                return _mm_or_ps(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vland(Composed one, Composed other) 
+            {
+                return _mm_and_ps(one, other);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief io mixin implementation [sse branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct io : traits::io<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
+            {
+                _mm_store_ps(&(*result), input);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
+            {
+                _mm_stream_ps(&(*result), input);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            template<typename RandomIt> friend Composed vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
+            {
+                auto i = index.data();
+                return _mm_set_ps(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief arithmetic mixin implementation [sse branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vneg(Composed one) 
+            {
+                return _mm_sub_ps(_mm_setzero_ps(), one);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vadd(Composed one, Composed other) 
+            {
+                return _mm_add_ps(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vsub(Composed one, Composed other) 
+            {
+                return _mm_sub_ps(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vmul(Composed one, Composed other) 
+            {
+                return _mm_mul_ps(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vdiv(Composed one, Composed other) 
+            {
+                return _mm_div_ps(one, other);
+            }
+
+            /**
+             * @brief  [fma branch]
+             * @relates float32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::FMA3>, T>
+            vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return _mm_fmadd_ps(multiplicand, multiplier, addendum);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::FMA3>, T>
+            vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return vadd(vmul(multiplicand, multiplier), addendum);
+            }
+
+            /**
+             * @brief  [fma branch]
+             * @relates float32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::FMA3>, T>
+            vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return _mm_fmsub_ps(multiplicand, multiplier, addendum);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::FMA3>, T>
+            vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return vsub(vmul(multiplicand, multiplier), addendum);
             }
         };
     } // end float32_modules
@@ -645,18 +642,16 @@ namespace zacc { namespace backend { namespace sse
 
         // generic traits
         printable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
-        convertable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
 
         // float32 traits
-        float32_modules::io<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
-        float32_modules::math<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
-        float32_modules::numeric<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
-        float32_modules::arithmetic<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
-        float32_modules::bitwise<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
-        float32_modules::comparable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
-        float32_modules::logical<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
-        float32_modules::equatable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
-        float32_modules::conditional<izfloat32<FeatureMask>, zfloat32<FeatureMask>>
+        float32_modules::io<izfloat32<FeatureMask>, zfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::math<izfloat32<FeatureMask>, zfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::numeric<izfloat32<FeatureMask>, zfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::arithmetic<izfloat32<FeatureMask>, zfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::bitwise<izfloat32<FeatureMask>, zfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::comparable<izfloat32<FeatureMask>, zfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::equatable<izfloat32<FeatureMask>, zfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::conditional<izfloat32<FeatureMask>, zfloat32<FeatureMask>, bfloat32<FeatureMask>>
     {
         USING_ZTYPE(izfloat32<FeatureMask>);
 
@@ -666,42 +661,7 @@ namespace zacc { namespace backend { namespace sse
         /// complete boolean vector
         using bval_t = bfloat32<FeatureMask>;
 
-        /**
-         * Copy constructor, forwards to base implementation
-         * @tparam T any type convertable to __m128
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, __m128>::value>>
-        constexpr zfloat32(const T& other) noexcept
-            : zval<izfloat32<FeatureMask>>(other)
-        {}
-
-        /**
-         * Move constructor, forwards to base implementation
-         * @tparam T any type convertable to __m128
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<(size > 1) && std::is_convertible<T, __m128>::value>>
-        constexpr zfloat32(T&& other) noexcept
-            : zval<izfloat32<FeatureMask>>(std::forward<T>(other))
-        {}
-
-        /**
-         * Converting constructor from bfloat32, forwards to base implementation 
-         * @param other
-         */
-        constexpr zfloat32(const bfloat32<FeatureMask>& other) noexcept
-            : zval<izfloat32<FeatureMask>>(other.value())
-        {}
-
-        /**
-         * @brief zfloat32 constructor [sse branch]
-         * @relates zfloat32
-         */
-        constexpr zfloat32(  ) noexcept
-            : zval<izfloat32<FeatureMask>>()
-        {
-        }
+        using zval<izfloat32<FeatureMask>>::zval;
 
         /**
          * @brief zfloat32 constructor [sse branch]
@@ -767,13 +727,12 @@ namespace zacc { namespace backend { namespace sse
 
         // generic traits
         printable<bfloat32<FeatureMask>, bfloat32<FeatureMask>>,
-        convertable<bfloat32<FeatureMask>, bfloat32<FeatureMask>>,
 
         // float32 traits
-        float32_modules::io<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
-        float32_modules::bitwise<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
-        float32_modules::logical<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
-        float32_modules::equatable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>
+        float32_modules::io<ibfloat32<FeatureMask>, bfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::bitwise<ibfloat32<FeatureMask>, bfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::logical<ibfloat32<FeatureMask>, bfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::equatable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>, bfloat32<FeatureMask>>
     {
         USING_ZTYPE(ibfloat32<FeatureMask>);
 
@@ -783,9 +742,16 @@ namespace zacc { namespace backend { namespace sse
         /// complete boolean vector
         using bval_t = bfloat32<FeatureMask>;
 
-        /// Forwarding constructor
-        FORWARD2(bfloat32, zval<ibfloat32<FeatureMask>>);
+        using zval<ibfloat32<FeatureMask>>::zval;
 
+        /**
+         * @brief bfloat32 constructor [sse branch]
+         * @relates bfloat32
+         */
+        constexpr bfloat32(bool value) noexcept
+            : zval<ibfloat32<FeatureMask>>((value ? _mm_cmpeq_pd(_mm_setzero_ps(), _mm_setzero_ps()) : _mm_setzero_ps()), (last_operation::boolean))
+        {
+        }
     };
 
     // Validate zfloat32 ===================================================================================

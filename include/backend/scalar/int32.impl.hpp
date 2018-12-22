@@ -44,17 +44,16 @@
 #include "util/memory.hpp"
 #include "util/macros.hpp"
 
-#include "traits/convertable.hpp"
 #include "traits/printable.hpp"
 #include "traits/equatable.hpp"
 #include "traits/conditional.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/io.hpp"
 #include "traits/numeric.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/arithmetic.hpp"
+#include "traits/comparable.hpp"
+#include "traits/io.hpp"
 #include "traits/math.hpp"
 #include "traits/logical.hpp"
-#include "traits/comparable.hpp"
 #include "traits/bitwise_shift.hpp"
 
 namespace zacc { namespace backend { namespace scalar
@@ -66,7 +65,7 @@ namespace zacc { namespace backend { namespace scalar
     template<uint64_t features>
     struct zint32;
     /// @endcond
-    
+
     template<uint64_t FeatureMask>
     using izint32 = ztype<zval_tag, std::array<int32_t, 1>, int32_t, 1, 16, FeatureMask>;
 
@@ -109,9 +108,7 @@ namespace zacc {
         using zval_t = backend::scalar::zint32<T::feature_mask>;
         using bval_t = backend::scalar::bint32<T::feature_mask>;
 
-        using tag = select_t<
-            when<std::is_base_of<backend::scalar::izint32<T::feature_mask>, T>::value, zval_tag>,
-            when<std::is_base_of<backend::scalar::ibint32<T::feature_mask>, T>::value, bval_tag>>;
+        using tag = typename T::tag;
     };
 }
 
@@ -120,92 +117,47 @@ namespace zacc { namespace backend { namespace scalar
     namespace int32_modules
     {
         /**
-         * @brief io mixin implementation [scalar branch]
+         * @brief equatable mixin implementation [scalar branch]
          * @relates int32
          */
-        template<typename Interface, typename Composed>
-        struct io : traits::io<Interface, Composed, bint32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct equatable : traits::equatable<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
+            friend Composed veq(Composed one, Composed other) 
             {
-                result[0] = input.value();
+                return (one.value() == other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
+            friend Composed vneq(Composed one, Composed other) 
             {
-                result[0] = input.value();
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            template<typename RandomIt> friend zint32<Interface::feature_mask> vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
-            {
-                return input[index.value()];
+                return (one.value() != other.value());
             }
         };
 
         // =============================================================================================================
 
         /**
-         * @brief math mixin implementation [scalar branch]
+         * @brief conditional mixin implementation [scalar branch]
          * @relates int32
          */
-        template<typename Interface, typename Composed>
-        struct math : traits::math<Interface, Composed, bint32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend zint32<Interface::feature_mask> vabs(Composed one) 
+            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
             {
-                return std::abs(one.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend zint32<Interface::feature_mask> vmin(Composed one, Composed other) 
-            {
-                return std::min(one.value(), other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend zint32<Interface::feature_mask> vmax(Composed one, Composed other) 
-            {
-                return std::max(one.value(), other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend zint32<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
-            {
-                return vmin(to, vmax(from, self));
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend zint32<Interface::feature_mask> vsqrt(Composed one) 
-            {
-                return std::sqrt(one.value());
+                return (condition.value() ? if_value : else_value);
             }
         };
 
@@ -215,73 +167,9 @@ namespace zacc { namespace backend { namespace scalar
          * @brief numeric mixin implementation [scalar branch]
          * @relates int32
          */
-        template<typename Interface, typename Composed>
-        struct numeric : traits::numeric<Interface, Composed, bint32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct numeric : traits::numeric<Interface, Composed, Boolean>
         {
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief arithmetic mixin implementation [scalar branch]
-         * @relates int32
-         */
-        template<typename Interface, typename Composed>
-        struct arithmetic : traits::arithmetic<Interface, Composed, bint32<Interface::feature_mask>>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend zint32<Interface::feature_mask> vneg(Composed one) 
-            {
-                return (-one.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend zint32<Interface::feature_mask> vadd(Composed one, Composed other) 
-            {
-                return (one.value() + other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend zint32<Interface::feature_mask> vsub(Composed one, Composed other) 
-            {
-                return (one.value() - other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend zint32<Interface::feature_mask> vmul(Composed one, Composed other) 
-            {
-                return (one.value() * other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend zint32<Interface::feature_mask> vdiv(Composed one, Composed other) 
-            {
-                return (one.value() / other.value());
-            }
-            
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend zint32<Interface::feature_mask> vmod(Composed one, Composed other) 
-            {
-                return (one.value() % other.value());
-            }
         };
 
         // =============================================================================================================
@@ -290,45 +178,45 @@ namespace zacc { namespace backend { namespace scalar
          * @brief bitwise mixin implementation [scalar branch]
          * @relates int32
          */
-        template<typename Interface, typename Composed>
-        struct bitwise : traits::bitwise<Interface, Composed, bint32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend zint32<Interface::feature_mask> vbneg(Composed one) 
+            friend Composed vbneg(Composed one) 
             {
                 return (~one.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend zint32<Interface::feature_mask> vband(Composed one, Composed other) 
+            friend Composed vband(Composed one, Composed other) 
             {
                 return (one.value() & other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend zint32<Interface::feature_mask> vbor(Composed one, Composed other) 
+            friend Composed vbor(Composed one, Composed other) 
             {
                 return (one.value() | other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend zint32<Interface::feature_mask> vbxor(Composed one, Composed other) 
+            friend Composed vbxor(Composed one, Composed other) 
             {
                 return (one.value() ^ other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
@@ -342,46 +230,64 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief bitwise_shift mixin implementation [scalar branch]
+         * @brief arithmetic mixin implementation [scalar branch]
          * @relates int32
          */
-        template<typename Interface, typename Composed>
-        struct bitwise_shift : traits::bitwise_shift<Interface, Composed, bint32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend zint32<Interface::feature_mask> vbsll(Composed one, Composed other) 
+            friend Composed vneg(Composed one) 
             {
-                return (one.value() << other.value());
+                return (-one.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend zint32<Interface::feature_mask> vbsrl(Composed one, Composed other) 
+            friend Composed vadd(Composed one, Composed other) 
             {
-                return (one.value() >> other.value());
+                return (one.value() + other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend zint32<Interface::feature_mask> vbslli(const Composed one, const size_t other) 
+            friend Composed vsub(Composed one, Composed other) 
             {
-                return (one.value() << other);
+                return (one.value() - other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend zint32<Interface::feature_mask> vbsrli(const Composed one, const size_t other) 
+            friend Composed vmul(Composed one, Composed other) 
             {
-                return (one.value() >> other);
+                return (one.value() * other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vdiv(Composed one, Composed other) 
+            {
+                return (one.value() / other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vmod(Composed one, Composed other) 
+            {
+                return (one.value() % other.value());
             }
         };
 
@@ -391,43 +297,135 @@ namespace zacc { namespace backend { namespace scalar
          * @brief comparable mixin implementation [scalar branch]
          * @relates int32
          */
-        template<typename Interface, typename Composed>
-        struct comparable : traits::comparable<Interface, Composed, bint32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct comparable : traits::comparable<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend bint32<Interface::feature_mask> vgt(Composed one, Composed other) 
+            friend Composed vgt(Composed one, Composed other) 
             {
                 return (one.value() > other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend bint32<Interface::feature_mask> vlt(Composed one, Composed other) 
+            friend Composed vlt(Composed one, Composed other) 
             {
                 return (one.value() < other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend bint32<Interface::feature_mask> vge(Composed one, Composed other) 
+            friend Composed vge(Composed one, Composed other) 
             {
                 return (one.value() >= other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend bint32<Interface::feature_mask> vle(Composed one, Composed other) 
+            friend Composed vle(Composed one, Composed other) 
             {
                 return (one.value() <= other.value());
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief io mixin implementation [scalar branch]
+         * @relates int32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct io : traits::io<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
+            {
+                result[0] = input.value();
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
+            {
+                result[0] = input.value();
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            template<typename RandomIt> friend Composed vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
+            {
+                return input[index.value()];
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief math mixin implementation [scalar branch]
+         * @relates int32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct math : traits::math<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vabs(Composed one) 
+            {
+                return std::abs(one.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vmin(Composed one, Composed other) 
+            {
+                return std::min(one.value(), other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vmax(Composed one, Composed other) 
+            {
+                return std::max(one.value(), other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vclamp(Composed self, Composed from, Composed to) 
+            {
+                return vmin(to, vmax(from, self));
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vsqrt(Composed one) 
+            {
+                return std::sqrt(one.value());
             }
         };
 
@@ -437,32 +435,32 @@ namespace zacc { namespace backend { namespace scalar
          * @brief logical mixin implementation [scalar branch]
          * @relates int32
          */
-        template<typename Interface, typename Composed>
-        struct logical : traits::logical<Interface, Composed, bint32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend bint32<Interface::feature_mask> vlneg(Composed one) 
+            friend Composed vlneg(Composed one) 
             {
                 return (!one.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend bint32<Interface::feature_mask> vlor(Composed one, Composed other) 
+            friend Composed vlor(Composed one, Composed other) 
             {
                 return (one.value() || other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend bint32<Interface::feature_mask> vland(Composed one, Composed other) 
+            friend Composed vland(Composed one, Composed other) 
             {
                 return (one.value() && other.value());
             }
@@ -471,47 +469,46 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief equatable mixin implementation [scalar branch]
+         * @brief bitwise_shift mixin implementation [scalar branch]
          * @relates int32
          */
-        template<typename Interface, typename Composed>
-        struct equatable : traits::equatable<Interface, Composed, bint32<Interface::feature_mask>>
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise_shift : traits::bitwise_shift<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend bint32<Interface::feature_mask> veq(Composed one, Composed other) 
+            friend Composed vbsll(Composed one, Composed other) 
             {
-                return (one.value() == other.value());
+                return (one.value() << other.value());
             }
-            
+
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend bint32<Interface::feature_mask> vneq(Composed one, Composed other) 
+            friend Composed vbsrl(Composed one, Composed other) 
             {
-                return (one.value() != other.value());
+                return (one.value() >> other.value());
             }
-        };
 
-        // =============================================================================================================
-
-        /**
-         * @brief conditional mixin implementation [scalar branch]
-         * @relates int32
-         */
-        template<typename Interface, typename Composed>
-        struct conditional : traits::conditional<Interface, Composed, bint32<Interface::feature_mask>>
-        {
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend zint32<Interface::feature_mask> vsel(bint32<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
+            friend Composed vbslli(const Composed one, const size_t other) 
             {
-                return (condition.value() ? if_value : else_value);
+                return (one.value() << other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vbsrli(const Composed one, const size_t other) 
+            {
+                return (one.value() >> other);
             }
         };
     } // end int32_modules
@@ -525,19 +522,17 @@ namespace zacc { namespace backend { namespace scalar
 
         // generic traits
         printable<izint32<FeatureMask>, zint32<FeatureMask>>,
-        convertable<izint32<FeatureMask>, zint32<FeatureMask>>,
 
         // int32 traits
-        int32_modules::io<izint32<FeatureMask>, zint32<FeatureMask>>,
-        int32_modules::math<izint32<FeatureMask>, zint32<FeatureMask>>,
-        int32_modules::numeric<izint32<FeatureMask>, zint32<FeatureMask>>,
-        int32_modules::arithmetic<izint32<FeatureMask>, zint32<FeatureMask>>,
-        int32_modules::bitwise<izint32<FeatureMask>, zint32<FeatureMask>>,
-        int32_modules::bitwise_shift<izint32<FeatureMask>, zint32<FeatureMask>>,
-        int32_modules::comparable<izint32<FeatureMask>, zint32<FeatureMask>>,
-        int32_modules::logical<izint32<FeatureMask>, zint32<FeatureMask>>,
-        int32_modules::equatable<izint32<FeatureMask>, zint32<FeatureMask>>,
-        int32_modules::conditional<izint32<FeatureMask>, zint32<FeatureMask>>
+        int32_modules::io<izint32<FeatureMask>, zint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::math<izint32<FeatureMask>, zint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::numeric<izint32<FeatureMask>, zint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::arithmetic<izint32<FeatureMask>, zint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::bitwise<izint32<FeatureMask>, zint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::bitwise_shift<izint32<FeatureMask>, zint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::comparable<izint32<FeatureMask>, zint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::equatable<izint32<FeatureMask>, zint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::conditional<izint32<FeatureMask>, zint32<FeatureMask>, bint32<FeatureMask>>
     {
         USING_ZTYPE(izint32<FeatureMask>);
 
@@ -547,42 +542,7 @@ namespace zacc { namespace backend { namespace scalar
         /// complete boolean vector
         using bval_t = bint32<FeatureMask>;
 
-        /**
-         * Copy constructor, forwards to base implementation
-         * @tparam T any type convertable to std::array<int32_t, 1>
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, std::array<int32_t, 1>>::value>>
-        constexpr zint32(const T& other) noexcept
-            : zval<izint32<FeatureMask>>(other)
-        {}
-
-        /**
-         * Move constructor, forwards to base implementation
-         * @tparam T any type convertable to std::array<int32_t, 1>
-         * @param other
-         */
-        template<typename T, typename = std::enable_if_t<(size > 1) && std::is_convertible<T, std::array<int32_t, 1>>::value>>
-        constexpr zint32(T&& other) noexcept
-            : zval<izint32<FeatureMask>>(std::forward<T>(other))
-        {}
-
-        /**
-         * Converting constructor from bint32, forwards to base implementation 
-         * @param other
-         */
-        constexpr zint32(const bint32<FeatureMask>& other) noexcept
-            : zval<izint32<FeatureMask>>(other.value())
-        {}
-
-        /**
-         * @brief zint32 constructor [scalar branch]
-         * @relates zint32
-         */
-        constexpr zint32(  ) noexcept
-            : zval<izint32<FeatureMask>>()
-        {
-        }
+        using zval<izint32<FeatureMask>>::zval;
 
         /**
          * @brief zint32 constructor [scalar branch]
@@ -612,13 +572,12 @@ namespace zacc { namespace backend { namespace scalar
 
         // generic traits
         printable<bint32<FeatureMask>, bint32<FeatureMask>>,
-        convertable<bint32<FeatureMask>, bint32<FeatureMask>>,
 
         // int32 traits
-        int32_modules::io<ibint32<FeatureMask>, bint32<FeatureMask>>,
-        int32_modules::bitwise<ibint32<FeatureMask>, bint32<FeatureMask>>,
-        int32_modules::logical<ibint32<FeatureMask>, bint32<FeatureMask>>,
-        int32_modules::equatable<ibint32<FeatureMask>, bint32<FeatureMask>>
+        int32_modules::io<ibint32<FeatureMask>, bint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::bitwise<ibint32<FeatureMask>, bint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::logical<ibint32<FeatureMask>, bint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::equatable<ibint32<FeatureMask>, bint32<FeatureMask>, bint32<FeatureMask>>
     {
         USING_ZTYPE(ibint32<FeatureMask>);
 
@@ -628,9 +587,16 @@ namespace zacc { namespace backend { namespace scalar
         /// complete boolean vector
         using bval_t = bint32<FeatureMask>;
 
-        /// Forwarding constructor
-        FORWARD2(bint32, zval<ibint32<FeatureMask>>);
+        using zval<ibint32<FeatureMask>>::zval;
 
+        /**
+         * @brief bint32 constructor [scalar branch]
+         * @relates bint32
+         */
+        constexpr bint32(bool value) noexcept
+            : zval<ibint32<FeatureMask>>(value)
+        {
+        }
     };
 
     // Validate zint32 ===================================================================================

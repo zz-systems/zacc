@@ -63,11 +63,12 @@ class Parser():
                 return [func(name, type, data[name]) for name in traits]
             return \
                 make_modules(func, data, traits.default, ModuleTypes.DEFAULT) + \
+                make_modules(func, data, traits.boolean, ModuleTypes.BOOLEAN) + \
                 make_modules(func, data, traits.unsigned, ModuleTypes.UNSIGNED)
 
         return ModulesNode(
             initializers=make_modules(self.initializer_module, initializers, self.traits({ k:[k] for k,v in initializers.items() })),
-            modules=make_modules(self.module, modules, traits))
+            modules=[self.module(name, ModuleTypes.DEFAULT, modules[name]) for name in list(set(traits.all))]) #make_modules(self.module, modules, traits))
 
     def module(self, name, type, data) -> ModuleNode:
         return ModuleNode(name=name,
@@ -81,11 +82,8 @@ class Parser():
 
         module = ModuleNode(name="constructable",#self._lexer.unlex(name),
                           mangling=False,#accept(data, Tokens.MANGLING),
-                          functions=[self.initializer(entry) for entry in initializers],
+                          functions=[self.initializer(entry) for entry in data],
                           type=type)
-
-        #default_cons = [] if any(cons.signature.arguments == [] for cons in module.functions) else [self.initializer({'args': 'void ', 'init': ''})]
-        #module.functions = default_cons + module.functions
 
         return module
 

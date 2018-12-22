@@ -51,16 +51,16 @@ def make_typename(node, ast):
 def remapArgType(module, ast, arg):
     arg_map = {
         #"Composed": format(module.type, ast.type.name),
-        "bval_t": f"b{ast.type.name}<Interface::feature_mask>",
-        "zval_t": f"z{ast.type.name}<Interface::feature_mask>",
+        "bval_t": "Boolean", #f"b{ast.type.name}<Interface::feature_mask>",
+        "zval_t": "Composed", #f"z{ast.type.name}<Interface::feature_mask>",
     }
     return arg_map.get(arg.type) or arg.type
 
 def remapInitializerArgType(module, ast, arg):
     arg_map = {
         #"Composed": format(module.type, ast.type.name),
-        "bval_t": f"b{ast.type.name}<FeatureMask>",
-        "zval_t": f"z{ast.type.name}<FeatureMask>",
+        "bval_t": "Boolean", #f"b{ast.type.name}<FeatureMask>",
+        "zval_t": "Composed", #f"z{ast.type.name}<FeatureMask>",
     }
     return arg_map.get(arg.type) or arg.type
 
@@ -112,7 +112,7 @@ class FunctionSignatureRenderer(Renderable):
         template = None
         prefix = node.prefix or "friend"
         suffix = node.suffix or "const" if prefix.strip().find('friend') == -1 else ""
-        return_type = node.return_type or f"{make_typename(module, ast)}<Interface::feature_mask>"
+        return_type = node.return_type or "Composed" #f"{make_typename(module, ast)}<Interface::feature_mask>"
 
         # dispatching
         dispatcher = "{0}has_feature_v<Interface, capabilities::{1}>"
@@ -181,4 +181,4 @@ class InitializerSignatureRenderer(Renderable):
         name = f"{resolve_prefix(module.type)}{ast.type.name}"
 
         return [f"{prefix} {name}({args}){suffix}",
-                f"    : {resolve_prefix(module.type)}val<i{name}<FeatureMask>>({renderer.render(node.initializer, { 'is_initializer' : True })})"]
+                f"    : zval<i{name}<FeatureMask>>({renderer.render(node.initializer, { 'is_initializer' : True })})"]
