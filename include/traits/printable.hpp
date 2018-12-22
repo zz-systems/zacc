@@ -36,9 +36,8 @@ namespace zacc {
      * @brief printable trait implementation
      * @tparam Base base type (e.g previous trait)
      */
-    template<typename Base, typename Interface, typename Composed>
-    struct __printable :
-            public Base
+    template<typename Interface, typename Composed>
+    struct printable
     {
         /**
          * @brief converts current data to string representation
@@ -70,15 +69,5 @@ namespace zacc {
 
             return os;
         }
-    };
-
-    /**
-     * @brief provides pretty-print functionality for zacc types
-     */
-    template<typename Interface, typename Composed>
-    struct printable {
-
-        template<typename Base>
-        using impl = __printable<Base, Interface, Composed>;
     };
 }

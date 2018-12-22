@@ -47,16 +47,16 @@
 
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/equatable.hpp"
-#include "traits/logical.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/math.hpp"
-#include "traits/conditional.hpp"
 #include "traits/comparable.hpp"
 #include "traits/numeric.hpp"
-#include "traits/arithmetic.hpp"
 #include "traits/io.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/logical.hpp"
+#include "traits/math.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/conditional.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/equatable.hpp"
 
 namespace zacc { namespace backend { namespace scalar
 {
@@ -67,40 +67,20 @@ namespace zacc { namespace backend { namespace scalar
     template<uint64_t features>
     struct zint32;
     /// @endcond
-
+    
     template<uint64_t FeatureMask>
     using izint32 = ztype<zval_tag, std::array<int32_t, 1>, std::array<bool, 1>, int32_t, 1, 16, FeatureMask>;
 
     template<uint64_t FeatureMask>
     using ibint32 = ztype<bval_tag, std::array<int32_t, 1>, std::array<bool, 1>, int32_t, 1, 16, FeatureMask>;
-
-    namespace int32_detail
-    {
-        /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size = 1;
-
-        /// memory alignment
-        static constexpr size_t alignment = 16;
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = size > 1;
-
-        /// vector type, like __m128i for sse 4x integer vector
-        using vector_type = std::array<int32_t, 1>;
-
-        /// scalar type, like int for sse 4x integer vector
-        using element_type = int32_t;
-
-        /// mask type for boolean operations
-        using mask_vector_type = std::array<bool, 1>;
-
-        /// extracted std::array of (dim) scalar values
-        using extracted_type = std::array<element_type, size>;
-    }
 }}}
 
 namespace zacc {
 
+    /**
+     * @brief ztraits type trait specialization for int32 [scalar branch]
+     * @tparam T
+     */
     template<typename T>
     struct ztraits<T, std::enable_if_t<
             std::is_base_of<backend::scalar::izint32<T::feature_mask>, T>::value
@@ -139,1123 +119,427 @@ namespace zacc {
     };
 }
 
-namespace zacc { namespace backend { namespace scalar {
-
-    namespace detail {
-
-        // =================================================================================================================
+namespace zacc { namespace backend { namespace scalar
+{
+    namespace int32_modules
+    {
         /**
-         * @name io modules
-         */
-        ///@{
-        /**
-         * @brief io
+         * @brief io mixin implementation [scalar branch]
          * @relates int32
-         * @remark scalar
          */
         template<typename Interface, typename Composed>
-        struct zint32_io
+        struct io : traits::io<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief io basic interface implementation
+             * @brief io [default branch]
              * @relates int32
-             * @remark scalar
              */
-            struct __impl
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
             {
-
-                /**
-                 * @brief io default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vstore");
-
-                    result[0] = input.value();
-                }
-
-
-                /**
-                 * @brief io default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vstream");
-
-                    result[0] = input.value();
-                }
-
-
-                /**
-                 * @brief io default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                template<typename RandomIt> friend zint32<Interface::feature_mask> vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vgather");
-
-                    return input[index.value()];
-                }
-
-            };
-
+                result[0] = input.value();
+            }
+            
             /**
-             * @brief io public interface implementation
+             * @brief io [default branch]
              * @relates int32
-             * @remark scalar
              */
-            template<typename Base>
-            using impl = traits::io<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
+            {
+                result[0] = input.value();
+            }
+            
+            /**
+             * @brief io [default branch]
+             * @relates int32
+             */
+            template<typename RandomIt> friend zint32<Interface::feature_mask> vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
+            {
+                return input[index.value()];
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name math modules
-         */
-        ///@{
-        /**
-         * @brief math
+         * @brief math mixin implementation [scalar branch]
          * @relates int32
-         * @remark scalar
          */
         template<typename Interface, typename Composed>
-        struct zint32_math
+        struct math : traits::math<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief math basic interface implementation
+             * @brief math [default branch]
              * @relates int32
-             * @remark scalar
              */
-            struct __impl
+            friend zint32<Interface::feature_mask> vabs(Composed one) 
             {
-
-                /**
-                 * @brief math default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vabs(Composed one) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vabs");
-
-                    return std::abs(one.value());
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vmin(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vmin");
-
-                    return std::min(one.value(), other.value());
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vmax(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vmax");
-
-                    return std::max(one.value(), other.value());
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vclamp");
-
-                    return vmin(to, vmax(from, self));
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vsqrt(Composed one) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vsqrt");
-
-                    return std::sqrt(one.value());
-                }
-
-            };
-
+                return std::abs(one.value());
+            }
+            
             /**
-             * @brief math public interface implementation
+             * @brief math [default branch]
              * @relates int32
-             * @remark scalar
              */
-            template<typename Base>
-            using impl = traits::math<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
+            friend zint32<Interface::feature_mask> vmin(Composed one, Composed other) 
+            {
+                return std::min(one.value(), other.value());
+            }
+            
+            /**
+             * @brief math [default branch]
+             * @relates int32
+             */
+            friend zint32<Interface::feature_mask> vmax(Composed one, Composed other) 
+            {
+                return std::max(one.value(), other.value());
+            }
+            
+            /**
+             * @brief math [default branch]
+             * @relates int32
+             */
+            friend zint32<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
+            {
+                return vmin(to, vmax(from, self));
+            }
+            
+            /**
+             * @brief math [default branch]
+             * @relates int32
+             */
+            friend zint32<Interface::feature_mask> vsqrt(Composed one) 
+            {
+                return std::sqrt(one.value());
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name numeric modules
-         */
-        ///@{
-        /**
-         * @brief numeric
+         * @brief numeric mixin implementation [scalar branch]
          * @relates int32
-         * @remark scalar
          */
         template<typename Interface, typename Composed>
-        struct zint32_numeric
+        struct numeric : traits::numeric<Interface, Composed, bint32<Interface::feature_mask>>
         {
-            /**
-             * @brief numeric basic interface implementation
-             * @relates int32
-             * @remark scalar
-             */
-            struct __impl
-            {
-            };
-
-            /**
-             * @brief numeric public interface implementation
-             * @relates int32
-             * @remark scalar
-             */
-            template<typename Base>
-            using impl = traits::numeric<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name arithmetic modules
-         */
-        ///@{
-        /**
-         * @brief arithmetic
+         * @brief arithmetic mixin implementation [scalar branch]
          * @relates int32
-         * @remark scalar
          */
         template<typename Interface, typename Composed>
-        struct zint32_arithmetic
+        struct arithmetic : traits::arithmetic<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief arithmetic basic interface implementation
+             * @brief arithmetic [default branch]
              * @relates int32
-             * @remark scalar
              */
-            struct __impl
+            friend zint32<Interface::feature_mask> vneg(Composed one) 
             {
-
-                /**
-                 * @brief arithmetic default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vneg(Composed one) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vneg");
-
-                    return (-one.value());
-                }
-
-
-                /**
-                 * @brief arithmetic default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vadd(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vadd");
-
-                    return (one.value() + other.value());
-                }
-
-
-                /**
-                 * @brief arithmetic default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vsub(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vsub");
-
-                    return (one.value() - other.value());
-                }
-
-
-                /**
-                 * @brief arithmetic default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vmul(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vmul");
-
-                    return (one.value() * other.value());
-                }
-
-
-                /**
-                 * @brief arithmetic default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vdiv(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vdiv");
-
-                    return (one.value() / other.value());
-                }
-
-
-                /**
-                 * @brief arithmetic default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vmod(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vmod");
-
-                    return (one.value() % other.value());
-                }
-
-            };
-
+                return (-one.value());
+            }
+            
             /**
-             * @brief arithmetic public interface implementation
+             * @brief arithmetic [default branch]
              * @relates int32
-             * @remark scalar
              */
-            template<typename Base>
-            using impl = traits::arithmetic<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
+            friend zint32<Interface::feature_mask> vadd(Composed one, Composed other) 
+            {
+                return (one.value() + other.value());
+            }
+            
+            /**
+             * @brief arithmetic [default branch]
+             * @relates int32
+             */
+            friend zint32<Interface::feature_mask> vsub(Composed one, Composed other) 
+            {
+                return (one.value() - other.value());
+            }
+            
+            /**
+             * @brief arithmetic [default branch]
+             * @relates int32
+             */
+            friend zint32<Interface::feature_mask> vmul(Composed one, Composed other) 
+            {
+                return (one.value() * other.value());
+            }
+            
+            /**
+             * @brief arithmetic [default branch]
+             * @relates int32
+             */
+            friend zint32<Interface::feature_mask> vdiv(Composed one, Composed other) 
+            {
+                return (one.value() / other.value());
+            }
+            
+            /**
+             * @brief arithmetic [default branch]
+             * @relates int32
+             */
+            friend zint32<Interface::feature_mask> vmod(Composed one, Composed other) 
+            {
+                return (one.value() % other.value());
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name bitwise modules
-         */
-        ///@{
-        /**
-         * @brief bitwise
+         * @brief bitwise mixin implementation [scalar branch]
          * @relates int32
-         * @remark scalar
          */
         template<typename Interface, typename Composed>
-        struct zint32_bitwise
+        struct bitwise : traits::bitwise<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief bitwise basic interface implementation
+             * @brief bitwise [default branch]
              * @relates int32
-             * @remark scalar
              */
-            struct __impl
+            friend zint32<Interface::feature_mask> vbneg(Composed one) 
             {
-
-                /**
-                 * @brief bitwise default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vbneg(Composed one) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbneg");
-
-                    return (~one.value());
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vband(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vband");
-
-                    return (one.value() & other.value());
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vbor(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbor");
-
-                    return (one.value() | other.value());
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vbxor(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbxor");
-
-                    return (one.value() ^ other.value());
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bool is_set(Composed one) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "is_set");
-
-                    return one.value() != 0;
-                }
-
-            };
-
+                return (~one.value());
+            }
+            
             /**
-             * @brief bitwise public interface implementation
+             * @brief bitwise [default branch]
              * @relates int32
-             * @remark scalar
              */
-            template<typename Base>
-            using impl = traits::bitwise<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
+            friend zint32<Interface::feature_mask> vband(Composed one, Composed other) 
+            {
+                return (one.value() & other.value());
+            }
+            
+            /**
+             * @brief bitwise [default branch]
+             * @relates int32
+             */
+            friend zint32<Interface::feature_mask> vbor(Composed one, Composed other) 
+            {
+                return (one.value() | other.value());
+            }
+            
+            /**
+             * @brief bitwise [default branch]
+             * @relates int32
+             */
+            friend zint32<Interface::feature_mask> vbxor(Composed one, Composed other) 
+            {
+                return (one.value() ^ other.value());
+            }
+            
+            /**
+             * @brief bitwise [default branch]
+             * @relates int32
+             */
+            friend bool is_set(Composed one) 
+            {
+                return one.value() != 0;
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name bitwise_shift modules
-         */
-        ///@{
-        /**
-         * @brief bitwise_shift
+         * @brief bitwise_shift mixin implementation [scalar branch]
          * @relates int32
-         * @remark scalar
          */
         template<typename Interface, typename Composed>
-        struct zint32_bitwise_shift
+        struct bitwise_shift : traits::bitwise_shift<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief bitwise_shift basic interface implementation
+             * @brief bitwise_shift [default branch]
              * @relates int32
-             * @remark scalar
              */
-            struct __impl
+            friend zint32<Interface::feature_mask> vbsll(Composed one, Composed other) 
             {
-
-                /**
-                 * @brief bitwise_shift default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vbsll(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbsll");
-
-                    return (one.value() << other.value());
-                }
-
-
-                /**
-                 * @brief bitwise_shift default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vbsrl(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbsrl");
-
-                    return (one.value() >> other.value());
-                }
-
-
-                /**
-                 * @brief bitwise_shift default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vbslli(const Composed one, const size_t other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbslli");
-
-                    return (one.value() << other);
-                }
-
-
-                /**
-                 * @brief bitwise_shift default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vbsrli(const Composed one, const size_t other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbsrli");
-
-                    return (one.value() >> other);
-                }
-
-            };
-
+                return (one.value() << other.value());
+            }
+            
             /**
-             * @brief bitwise_shift public interface implementation
+             * @brief bitwise_shift [default branch]
              * @relates int32
-             * @remark scalar
              */
-            template<typename Base>
-            using impl = traits::bitwise_shift<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
+            friend zint32<Interface::feature_mask> vbsrl(Composed one, Composed other) 
+            {
+                return (one.value() >> other.value());
+            }
+            
+            /**
+             * @brief bitwise_shift [default branch]
+             * @relates int32
+             */
+            friend zint32<Interface::feature_mask> vbslli(const Composed one, const size_t other) 
+            {
+                return (one.value() << other);
+            }
+            
+            /**
+             * @brief bitwise_shift [default branch]
+             * @relates int32
+             */
+            friend zint32<Interface::feature_mask> vbsrli(const Composed one, const size_t other) 
+            {
+                return (one.value() >> other);
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name comparable modules
-         */
-        ///@{
-        /**
-         * @brief comparable
+         * @brief comparable mixin implementation [scalar branch]
          * @relates int32
-         * @remark scalar
          */
         template<typename Interface, typename Composed>
-        struct zint32_comparable
+        struct comparable : traits::comparable<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief comparable basic interface implementation
+             * @brief comparable [default branch]
              * @relates int32
-             * @remark scalar
              */
-            struct __impl
+            friend bint32<Interface::feature_mask> vgt(Composed one, Composed other) 
             {
-
-                /**
-                 * @brief comparable default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vgt(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vgt");
-
-                    return (one.value() > other.value());
-                }
-
-
-                /**
-                 * @brief comparable default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vlt(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vlt");
-
-                    return (one.value() < other.value());
-                }
-
-
-                /**
-                 * @brief comparable default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vge(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vge");
-
-                    return (one.value() >= other.value());
-                }
-
-
-                /**
-                 * @brief comparable default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vle(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vle");
-
-                    return (one.value() <= other.value());
-                }
-
-            };
-
+                return (one.value() > other.value());
+            }
+            
             /**
-             * @brief comparable public interface implementation
+             * @brief comparable [default branch]
              * @relates int32
-             * @remark scalar
              */
-            template<typename Base>
-            using impl = traits::comparable<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
+            friend bint32<Interface::feature_mask> vlt(Composed one, Composed other) 
+            {
+                return (one.value() < other.value());
+            }
+            
+            /**
+             * @brief comparable [default branch]
+             * @relates int32
+             */
+            friend bint32<Interface::feature_mask> vge(Composed one, Composed other) 
+            {
+                return (one.value() >= other.value());
+            }
+            
+            /**
+             * @brief comparable [default branch]
+             * @relates int32
+             */
+            friend bint32<Interface::feature_mask> vle(Composed one, Composed other) 
+            {
+                return (one.value() <= other.value());
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name logical modules
-         */
-        ///@{
-        /**
-         * @brief logical
+         * @brief logical mixin implementation [scalar branch]
          * @relates int32
-         * @remark scalar
          */
         template<typename Interface, typename Composed>
-        struct zint32_logical
+        struct logical : traits::logical<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief logical basic interface implementation
+             * @brief logical [default branch]
              * @relates int32
-             * @remark scalar
              */
-            struct __impl
+            friend bint32<Interface::feature_mask> vlneg(Composed one) 
             {
-
-                /**
-                 * @brief logical default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vlneg(Composed one) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vlneg");
-
-                    return (!one.value());
-                }
-
-
-                /**
-                 * @brief logical default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vlor(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vlor");
-
-                    return (one.value() || other.value());
-                }
-
-
-                /**
-                 * @brief logical default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vland(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vland");
-
-                    return (one.value() && other.value());
-                }
-
-            };
-
+                return (!one.value());
+            }
+            
             /**
-             * @brief logical public interface implementation
+             * @brief logical [default branch]
              * @relates int32
-             * @remark scalar
              */
-            template<typename Base>
-            using impl = traits::logical<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
+            friend bint32<Interface::feature_mask> vlor(Composed one, Composed other) 
+            {
+                return (one.value() || other.value());
+            }
+            
+            /**
+             * @brief logical [default branch]
+             * @relates int32
+             */
+            friend bint32<Interface::feature_mask> vland(Composed one, Composed other) 
+            {
+                return (one.value() && other.value());
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name equatable modules
-         */
-        ///@{
-        /**
-         * @brief equatable
+         * @brief equatable mixin implementation [scalar branch]
          * @relates int32
-         * @remark scalar
          */
         template<typename Interface, typename Composed>
-        struct zint32_equatable
+        struct equatable : traits::equatable<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief equatable basic interface implementation
+             * @brief equatable [default branch]
              * @relates int32
-             * @remark scalar
              */
-            struct __impl
+            friend bint32<Interface::feature_mask> veq(Composed one, Composed other) 
             {
-
-                /**
-                 * @brief equatable default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> veq(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "veq");
-
-                    return (one.value() == other.value());
-                }
-
-
-                /**
-                 * @brief equatable default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vneq(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vneq");
-
-                    return (one.value() != other.value());
-                }
-
-            };
-
+                return (one.value() == other.value());
+            }
+            
             /**
-             * @brief equatable public interface implementation
+             * @brief equatable [default branch]
              * @relates int32
-             * @remark scalar
              */
-            template<typename Base>
-            using impl = traits::equatable<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
+            friend bint32<Interface::feature_mask> vneq(Composed one, Composed other) 
+            {
+                return (one.value() != other.value());
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name conditional modules
-         */
-        ///@{
-        /**
-         * @brief conditional
+         * @brief conditional mixin implementation [scalar branch]
          * @relates int32
-         * @remark scalar
          */
         template<typename Interface, typename Composed>
-        struct zint32_conditional
+        struct conditional : traits::conditional<Interface, Composed, bint32<Interface::feature_mask>>
         {
             /**
-             * @brief conditional basic interface implementation
+             * @brief conditional [default branch]
              * @relates int32
-             * @remark scalar
              */
-            struct __impl
+            friend zint32<Interface::feature_mask> vsel(bint32<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
             {
-
-                /**
-                 * @brief conditional default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend zint32<Interface::feature_mask> vsel(bint32<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vsel");
-
-                    return (condition.value() ? if_value : else_value);
-                }
-
-            };
-
-            /**
-             * @brief conditional public interface implementation
-             * @relates int32
-             * @remark scalar
-             */
-            template<typename Base>
-            using impl = traits::conditional<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
+                return (condition.value() ? if_value : else_value);
+            }
         };
+    } // end int32_modules
 
-        ///@}
+    // =================================================================================================================
 
-        // =================================================================================================================
-        /**
-         * @name io modules
-         */
-        ///@{
-        /**
-         * @brief io
-         * @relates int32
-         * @remark scalar
-         */
-        template<typename Interface, typename Composed>
-        struct bint32_io
-        {
-            /**
-             * @brief io basic interface implementation
-             * @relates int32
-             * @remark scalar
-             */
-            struct __impl
-            {
-
-                /**
-                 * @brief io default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vstore");
-
-                    result[0] = input.value();
-                }
-
-
-                /**
-                 * @brief io default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vstream");
-
-                    result[0] = input.value();
-                }
-
-
-                /**
-                 * @brief io default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                template<typename RandomIt> friend bint32<Interface::feature_mask> vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vgather");
-
-                    return input[index.value()];
-                }
-
-            };
-
-            /**
-             * @brief io public interface implementation
-             * @relates int32
-             * @remark scalar
-             */
-            template<typename Base>
-            using impl = traits::io<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
-        };
-
-        ///@}
-
-        // =================================================================================================================
-        /**
-         * @name bitwise modules
-         */
-        ///@{
-        /**
-         * @brief bitwise
-         * @relates int32
-         * @remark scalar
-         */
-        template<typename Interface, typename Composed>
-        struct bint32_bitwise
-        {
-            /**
-             * @brief bitwise basic interface implementation
-             * @relates int32
-             * @remark scalar
-             */
-            struct __impl
-            {
-
-                /**
-                 * @brief bitwise default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vbneg(Composed one) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbneg");
-
-                    return (~one.value());
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vband(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vband");
-
-                    return (one.value() & other.value());
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vbor(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbor");
-
-                    return (one.value() | other.value());
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vbxor(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vbxor");
-
-                    return (one.value() ^ other.value());
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bool is_set(Composed one) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "is_set");
-
-                    return one.value() != 0;
-                }
-
-            };
-
-            /**
-             * @brief bitwise public interface implementation
-             * @relates int32
-             * @remark scalar
-             */
-            template<typename Base>
-            using impl = traits::bitwise<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
-        };
-
-        ///@}
-
-        // =================================================================================================================
-        /**
-         * @name logical modules
-         */
-        ///@{
-        /**
-         * @brief logical
-         * @relates int32
-         * @remark scalar
-         */
-        template<typename Interface, typename Composed>
-        struct bint32_logical
-        {
-            /**
-             * @brief logical basic interface implementation
-             * @relates int32
-             * @remark scalar
-             */
-            struct __impl
-            {
-
-                /**
-                 * @brief logical default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vlneg(Composed one) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vlneg");
-
-                    return (!one.value());
-                }
-
-
-                /**
-                 * @brief logical default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vlor(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vlor");
-
-                    return (one.value() || other.value());
-                }
-
-
-                /**
-                 * @brief logical default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vland(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vland");
-
-                    return (one.value() && other.value());
-                }
-
-            };
-
-            /**
-             * @brief logical public interface implementation
-             * @relates int32
-             * @remark scalar
-             */
-            template<typename Base>
-            using impl = traits::logical<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
-        };
-
-        ///@}
-
-        // =================================================================================================================
-        /**
-         * @name equatable modules
-         */
-        ///@{
-        /**
-         * @brief equatable
-         * @relates int32
-         * @remark scalar
-         */
-        template<typename Interface, typename Composed>
-        struct bint32_equatable
-        {
-            /**
-             * @brief equatable basic interface implementation
-             * @relates int32
-             * @remark scalar
-             */
-            struct __impl
-            {
-
-                /**
-                 * @brief equatable default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> veq(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "veq");
-
-                    return (one.value() == other.value());
-                }
-
-
-                /**
-                 * @brief equatable default
-                 * @relates int32
-                 * @remark scalar default
-                 */
-                friend bint32<Interface::feature_mask> vneq(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "default", "vneq");
-
-                    return (one.value() != other.value());
-                }
-
-            };
-
-            /**
-             * @brief equatable public interface implementation
-             * @relates int32
-             * @remark scalar
-             */
-            template<typename Base>
-            using impl = traits::equatable<__impl, Base, Interface, Composed, bint32<Interface::feature_mask>>;
-        };
-
-        ///@}
-
-
-        // Type composition ================================================================================================
-
-        /**
-         * @name int32 composition
-         */
-        ///@{
-
-        /**
-         * @brief zval composition
-         * @relates int32
-         * @remark scalar
-         * @tparam features feature mask
-         */
-        template<uint64_t FeatureMask>
-        using zint32_ops = compose_t
-        <
-            printable<izint32<FeatureMask>, zint32<FeatureMask>>::template impl,
-            convertable<izint32<FeatureMask>, zint32<FeatureMask>>::template impl,
-            zint32_io<izint32<FeatureMask>, zint32<FeatureMask>>::template impl,
-            zint32_math<izint32<FeatureMask>, zint32<FeatureMask>>::template impl,
-            zint32_numeric<izint32<FeatureMask>, zint32<FeatureMask>>::template impl,
-            zint32_arithmetic<izint32<FeatureMask>, zint32<FeatureMask>>::template impl,
-            zint32_bitwise<izint32<FeatureMask>, zint32<FeatureMask>>::template impl,
-            zint32_bitwise_shift<izint32<FeatureMask>, zint32<FeatureMask>>::template impl,
-            zint32_comparable<izint32<FeatureMask>, zint32<FeatureMask>>::template impl,
-            zint32_logical<izint32<FeatureMask>, zint32<FeatureMask>>::template impl,
-            zint32_equatable<izint32<FeatureMask>, zint32<FeatureMask>>::template impl,
-            zint32_conditional<izint32<FeatureMask>, zint32<FeatureMask>>::template impl
-        >;
-
-        /// bint32 composition
-        /// @tparam features feature mask
-        template<uint64_t FeatureMask>
-        using bint32_ops = compose_t
-        <
-            printable<ibint32<FeatureMask>, bint32<FeatureMask>>::template impl,
-            convertable<ibint32<FeatureMask>, bint32<FeatureMask>>::template impl,
-            bint32_io<ibint32<FeatureMask>, bint32<FeatureMask>>::template impl,
-            bint32_bitwise<ibint32<FeatureMask>, bint32<FeatureMask>>::template impl,
-            bint32_logical<ibint32<FeatureMask>, bint32<FeatureMask>>::template impl,
-            bint32_equatable<ibint32<FeatureMask>, bint32<FeatureMask>>::template impl
-        >;
-
-        ///@}
-    } // end namespace
-
-    /// public zint32 implementation
+    /// public zint32 implementation [scalar branch]
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
-    struct zint32 :
-        public detail::zint32_ops<FeatureMask>,
-        public zval<izint32<FeatureMask>>
+    struct zint32 : public zval<izint32<FeatureMask>>,
+        // generic traits
+        printable<izint32<FeatureMask>, zint32<FeatureMask>>,
+        convertable<izint32<FeatureMask>, zint32<FeatureMask>>,
+        // int32 traits
+        int32_modules::io<izint32<FeatureMask>, zint32<FeatureMask>>,
+        int32_modules::math<izint32<FeatureMask>, zint32<FeatureMask>>,
+        int32_modules::numeric<izint32<FeatureMask>, zint32<FeatureMask>>,
+        int32_modules::arithmetic<izint32<FeatureMask>, zint32<FeatureMask>>,
+        int32_modules::bitwise<izint32<FeatureMask>, zint32<FeatureMask>>,
+        int32_modules::bitwise_shift<izint32<FeatureMask>, zint32<FeatureMask>>,
+        int32_modules::comparable<izint32<FeatureMask>, zint32<FeatureMask>>,
+        int32_modules::logical<izint32<FeatureMask>, zint32<FeatureMask>>,
+        int32_modules::equatable<izint32<FeatureMask>, zint32<FeatureMask>>,
+        int32_modules::conditional<izint32<FeatureMask>, zint32<FeatureMask>>
     {
         USING_ZTYPE(izint32<FeatureMask>);
 
@@ -1266,18 +550,18 @@ namespace zacc { namespace backend { namespace scalar {
         using bval_t = bint32<FeatureMask>;
 
         /**
-         * copy constructor
-         * @tparam T any type convertable to Vector
+         * Copy constructor, forwards to base implementation
+         * @tparam T any type convertable to std::array<int32_t, 1>
          * @param other
          */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, std::array<int32_t, 1>>::value>>// || std::is_convertible<T, int32_t>::value>>
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, std::array<int32_t, 1>>::value>>
         constexpr zint32(const T& other) noexcept
             : zval<izint32<FeatureMask>>(other)
         {}
 
         /**
-         * move constructor
-         * @tparam T any type convertable to Vector
+         * Move constructor, forwards to base implementation
+         * @tparam T any type convertable to std::array<int32_t, 1>
          * @param other
          */
         template<typename T, typename = std::enable_if_t<(size > 1) && std::is_convertible<T, std::array<int32_t, 1>>::value>>
@@ -1286,57 +570,56 @@ namespace zacc { namespace backend { namespace scalar {
         {}
 
         /**
-         * copy constructor
+         * Converting constructor from bint32, forwards to base implementation 
          * @param other
          */
         constexpr zint32(const bint32<FeatureMask>& other) noexcept
             : zval<izint32<FeatureMask>>(other.value())
         {}
 
-
         /**
-         * @brief constructable 
-         * @relates int32
-         * @remark scalar 
+         * @brief zint32 constructor [scalar branch]
+         * @relates zint32
          */
         constexpr zint32(  ) noexcept : zval<izint32<FeatureMask>>()
         {
-            ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS()");
-
         }
-
-
         /**
-         * @brief constructable 
-         * @relates int32
-         * @remark scalar 
+         * @brief zint32 constructor [scalar branch]
+         * @relates zint32
          */
         constexpr zint32(int32_t value) noexcept : zval<izint32<FeatureMask>>(value)
         {
-            ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS(int32_t)");
-
         }
-
-
         /**
-         * @brief constructable 
-         * @relates int32
-         * @remark scalar 
+         * @brief zint32 constructor [scalar branch]
+         * @relates zint32
          */
         constexpr zint32(extracted_type value) noexcept : zval<izint32<FeatureMask>>(value[0])
         {
-            ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS(extracted_type)");
-
         }
-
     };
 
-    /// public bint32 implementation
+    // =================================================================================================================
+
+    /// public bint32 implementation [scalar branch]
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
-    struct bint32 :
-            public detail::bint32_ops<FeatureMask>,
-            public bval<ibint32<FeatureMask>>
+    struct bint32 : public bval<ibint32<FeatureMask>>,
+        // generic traits
+        printable<bint32<FeatureMask>, bint32<FeatureMask>>,
+        convertable<bint32<FeatureMask>, bint32<FeatureMask>>,
+        // int32 traits
+        int32_modules::io<ibint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::math<ibint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::numeric<ibint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::arithmetic<ibint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::bitwise<ibint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::bitwise_shift<ibint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::comparable<ibint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::logical<ibint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::equatable<ibint32<FeatureMask>, bint32<FeatureMask>>,
+        int32_modules::conditional<ibint32<FeatureMask>, bint32<FeatureMask>>
     {
         USING_ZTYPE(ibint32<FeatureMask>);
 
@@ -1349,143 +632,132 @@ namespace zacc { namespace backend { namespace scalar {
         /// Forwarding constructor
         FORWARD2(bint32, bval<ibint32<FeatureMask>>);
 
-
-        /**
-         * @brief constructable 
-         * @relates int32
-         * @remark scalar 
-         */
-        constexpr bint32(  ) noexcept : bval<ibint32<FeatureMask>>()
-        {
-            ZTRACE_BACKEND("scalar.int32.impl", __LINE__, "int32(int32_t[1])", "", "CONS()");
-
-        }
-
     };
 
-    namespace {
-        using namespace scalar::int32_detail;
+    // Validate zint32 ===================================================================================
 
-        static_assert(std::is_base_of<izint32 < 0>,
-                      izint32 < 0 >> ::value,
-                      "base_of<izint32> != izint32.");
-        static_assert(!std::is_base_of<ibint32 < 0>,
-                      izint32 < 0 >> ::value,
-                      "base_of<izint32> == ibint32.");
+    static_assert(std::is_base_of<izint32<0>,
+                  izint32<0>>::value,
+                  "base_of<izint32> != izint32.");
+    static_assert(!std::is_base_of<ibint32<0>,
+                  izint32<0>>::value,
+                  "base_of<izint32> == ibint32.");
 
-        static_assert(is_zval < izint32 < 0 >> ::value,
-                      "is_zval<izint32> == false.");
-        static_assert(!is_bval < izint32 < 0 >> ::value,
-                      "is_bval<izint32> != false.");
+    static_assert(is_zval<izint32<0>>::value,
+                  "is_zval<izint32> == false.");
+    static_assert(!is_bval<izint32<0>>::value,
+                  "is_bval<izint32> != false.");
 
-        static_assert(std::is_base_of<izint32 < 0>, zint32 < 0 >> ::value,
-                      "base_of<zint32> != izint32.");
-        static_assert(!std::is_base_of<ibint32 < 0>, zint32 < 0 >> ::value,
-                      "base_of<zint32> == ibint32.");
+    static_assert(std::is_base_of<izint32<0>, zint32<0>>::value,
+                  "base_of<zint32> != izint32.");
+    static_assert(!std::is_base_of<ibint32<0>, zint32<0>>::value,
+                  "base_of<zint32> == ibint32.");
 
-        static_assert(zint32 < 0 > ::size == 1,
-                      "zint32::size != 1.");
-        static_assert(zint32 < 0 > ::alignment == 16,
-                      "zint32::alignment != 16.");
-        static_assert(zint32 < 0 > ::is_vector == (1 > 1),
-        "zint32::is_vector != (1 > 1).");
+    static_assert(zint32<0>::size == 1,
+                  "zint32::size != 1.");
+    static_assert(zint32<0>::alignment == 16,
+                  "zint32::alignment != 16.");
+    static_assert(zint32<0>::is_vector == (1 > 1),
+    "zint32::is_vector != (1 > 1).");
 
-        static_assert(std::is_same<zint32 < 0>::tag, zval_tag > ::value,
-                      "zint32::tag != zval_tag.");
-        static_assert(std::is_same<zint32 < 0>::vector_type, std::array<int32_t, 1> > ::value,
-                      "zint32::vector_type != std::array<int32_t, 1>.");
-        static_assert(std::is_same<zint32 < 0>::element_type, int32_t > ::value,
-                      "zint32::element_type != int32_t.");
-        static_assert(std::is_same<zint32 < 0>::mask_vector_type, std::array<bool, 1> > ::value,
-                      "zint32::mask_vector_type != std::array<bool, 1>.");
-        static_assert(std::is_same<zint32 < 0>::extracted_type,
-                      std::array<int32_t, 1>>::value,
-                      "zint32::extracted_type != std::array<int32_t, 1>.");
-
-
-        static_assert(std::is_same<typename ztraits<zint32 < 0>>::tag, zval_tag > ::value,
-                      "zint32::tag != zval_tag.");
-        static_assert(std::is_arithmetic<typename ztraits<zint32 < 0>>::element_type > ::value,
-                      "is_arithmetic<zint32::element_type> == false.");
-        static_assert(is_zval < zint32 < 0 >> ::value,
-                      "is_zval<zint32> == false.");
-        static_assert(!is_bval < zint32 < 0 >> ::value,
-                      "is_bval<zint32> != false.");
+    static_assert(std::is_same<zint32<0>::tag, zval_tag > ::value,
+                  "zint32::tag != zval_tag.");
+    static_assert(std::is_same<zint32<0>::vector_type, std::array<int32_t, 1> > ::value,
+                  "zint32::vector_type != std::array<int32_t, 1>.");
+    static_assert(std::is_same<zint32<0>::element_type, int32_t > ::value,
+                  "zint32::element_type != int32_t.");
+    static_assert(std::is_same<zint32<0>::mask_vector_type, std::array<bool, 1> > ::value,
+                  "zint32::mask_vector_type != std::array<bool, 1>.");
+    static_assert(std::is_same<zint32<0>::extracted_type,
+                  std::array<int32_t, 1>>::value,
+                  "zint32::extracted_type != std::array<int32_t, 1>.");
 
 
-        static_assert(std::is_base_of<izint32 < 0>,
-                      izint32 < 0 >> ::value,
-                      "base_of<izint32> != izint32.");
-        static_assert(!std::is_base_of<ibint32 < 0>,
-                      izint32 < 0 >> ::value,
-                      "base_of<izint32> == ibint32.");
+    static_assert(std::is_same<typename ztraits<zint32<0>>::tag, zval_tag > ::value,
+                  "zint32::tag != zval_tag.");
+    static_assert(std::is_arithmetic<typename ztraits<zint32<0>>::element_type > ::value,
+                  "is_arithmetic<zint32::element_type> == false.");
+    static_assert(is_zval < zint32<0>>::value,
+                  "is_zval<zint32> == false.");
+    static_assert(!is_bval < zint32<0>>::value,
+                  "is_bval<zint32> != false.");
 
 
-        static_assert(!is_zval < ibint32 < 0 >> ::value,
-                      "is_zval<ibint32> != false.");
-        static_assert(is_bval < ibint32 < 0 >> ::value,
-                      "is_bval<ibint32> == false.");
+    // Validate bint32 ===================================================================================
 
-        static_assert(std::is_base_of<ibint32 < 0>, bint32 < 0 >> ::value,
-                      "base_of<bint32> != ibint32.");
-        static_assert(!std::is_base_of<izint32 < 0>, bint32 < 0 >> ::value,
-                      "base_of<bint32> == izint32.");
 
-        static_assert(bint32 < 0 > ::size == 1,
-                      "bint32::size != 1.");
-        static_assert(bint32 < 0 > ::alignment == 16,
-                      "bint32::alignment != 16.");
-        static_assert(bint32 < 0 > ::is_vector == (1 > 1),
-        "bint32::is_vector != (1 > 1).");
+    static_assert(std::is_base_of<ibint32<0>,
+                  ibint32<0>>::value,
+                  "base_of<izint32> != izint32.");
+    static_assert(!std::is_base_of<izint32<0>,
+                  ibint32<0>>::value,
+                  "base_of<izint32> == ibint32.");
 
-        static_assert(std::is_same<bint32 < 0>::tag, bval_tag > ::value,
-                      "bint32::tag != zval_tag.");
-        static_assert(std::is_same<bint32 < 0>::vector_type, std::array<int32_t, 1> > ::value,
-                      "bint32::vector_type != std::array<int32_t, 1>.");
-        static_assert(std::is_same<bint32 < 0>::element_type, int32_t > ::value,
-                      "bint32::element_type != int32_t.");
-        static_assert(std::is_same<bint32 < 0>::mask_vector_type, std::array<bool, 1> > ::value,
-                      "bint32::mask_vector_type != std::array<bool, 1>.");
-        static_assert(std::is_same<bint32 < 0>::extracted_type,
-                      std::array<int32_t, 1>>::value,
-        "bint32::extracted_type != std::array<int32_t, 1>.");
+    static_assert(!is_zval<ibint32<0>>::value,
+                  "is_zval<ibint32> != false.");
+    static_assert(is_bval<ibint32<0>>::value,
+                  "is_bval<ibint32> == false.");
 
-        static_assert(std::is_same<typename ztraits<bint32 < 0>>::tag, bval_tag > ::value,
-                      "bint32::tag != bval_tag.");
-        static_assert(std::is_arithmetic<typename ztraits<bint32 < 0>>::element_type > ::value,
-                      "is_arithmetic<bint32::element_type> == false.");
-        static_assert(!is_zval < bint32 < 0 >> ::value,
-                      "is_zval<bint32> != false.");
-        static_assert(is_bval < bint32 < 0 >> ::value,
-                      "is_bval<bint32> == false.");
+    static_assert(std::is_base_of<ibint32<0>, bint32<0>>::value,
+                  "base_of<bint32> != ibint32.");
+    static_assert(!std::is_base_of<izint32<0>, bint32<0>>::value,
+                  "base_of<bint32> == izint32.");
 
-        static_assert(!std::is_floating_point<int32_t>::value ||
-                      is_floating_point < zint32 < 0 >> ::value,
-                      "is_floating_point<zint32> == false. [scalar = int32_t]");
-        static_assert(!std::is_floating_point<int32_t>::value ||
-                      !is_integral < zint32 < 0 >> ::value,
-                      "is_integral<zint32> != false. [scalar = int32_t]");
+    static_assert(bint32<0>::size == 1,
+                  "bint32::size != 1.");
+    static_assert(bint32<0>::alignment == 16,
+                  "bint32::alignment != 16.");
+    static_assert(bint32<0>::is_vector == (1 > 1),
+    "bint32::is_vector != (1 > 1).");
 
-        static_assert(
-                !std::is_same<int32_t, float>::value || is_float < zint32 < 0 >> ::value,
-                "is_float<zint32> == false. [scalar = int32_t]");
-        static_assert(
-                !std::is_same<int32_t, float>::value || !is_double < zint32 < 0 >> ::value,
-                "is_double<zint32> != false. [scalar = int32_t]");
+    static_assert(std::is_same<bint32<0>::tag, bval_tag > ::value,
+                  "bint32::tag != zval_tag.");
+    static_assert(std::is_same<bint32<0>::vector_type, std::array<int32_t, 1> > ::value,
+                  "bint32::vector_type != std::array<int32_t, 1>.");
+    static_assert(std::is_same<bint32<0>::element_type, int32_t > ::value,
+                  "bint32::element_type != int32_t.");
+    static_assert(std::is_same<bint32<0>::mask_vector_type, std::array<bool, 1> > ::value,
+                  "bint32::mask_vector_type != std::array<bool, 1>.");
+    static_assert(std::is_same<bint32<0>::extracted_type,
+                  std::array<int32_t, 1>>::value,
+    "bint32::extracted_type != std::array<int32_t, 1>.");
 
-        static_assert(
-                !std::is_same<int32_t, double>::value || is_double < zint32 < 0 >> ::value,
-                "is_double<zint32> == false. [scalar = int32_t]");
-        static_assert(
-                !std::is_same<int32_t, double>::value || !is_float < zint32 < 0 >> ::value,
-                "is_float<zint32> != false. [scalar = int32_t]");
+    static_assert(std::is_same<typename ztraits<bint32<0>>::tag, bval_tag > ::value,
+                  "bint32::tag != bval_tag.");
+    static_assert(std::is_arithmetic<typename ztraits<bint32<0>>::element_type > ::value,
+                  "is_arithmetic<bint32::element_type> == false.");
+    static_assert(!is_zval < bint32<0>>::value,
+                  "is_zval<bint32> != false.");
+    static_assert(is_bval < bint32<0>>::value,
+                  "is_bval<bint32> == false.");
 
-        static_assert(
-                !std::is_integral<int32_t>::value || is_integral < zint32 < 0 >> ::value,
-                "is_integral<zint32> == false. [scalar = int32_t]");
-        static_assert(!std::is_integral<int32_t>::value ||
-                      !is_floating_point < zint32 < 0 >> ::value,
-                      "is_floating_point<zint32> != false. [scalar = int32_t]");
-    }
-    ///@}
+    // Validate integral, float, double traits =========================================================================
+
+    static_assert(!std::is_floating_point<int32_t>::value ||
+                  is_floating_point < zint32<0>>::value,
+                  "is_floating_point<zint32> == false. [scalar = int32_t]");
+    static_assert(!std::is_floating_point<int32_t>::value ||
+                  !is_integral < zint32<0>>::value,
+                  "is_integral<zint32> != false. [scalar = int32_t]");
+
+    static_assert(
+            !std::is_same<int32_t, float>::value || is_float < zint32<0>>::value,
+            "is_float<zint32> == false. [scalar = int32_t]");
+    static_assert(
+            !std::is_same<int32_t, float>::value || !is_double < zint32<0>>::value,
+            "is_double<zint32> != false. [scalar = int32_t]");
+
+    static_assert(
+            !std::is_same<int32_t, double>::value || is_double < zint32<0>>::value,
+            "is_double<zint32> == false. [scalar = int32_t]");
+    static_assert(
+            !std::is_same<int32_t, double>::value || !is_float < zint32<0>>::value,
+            "is_float<zint32> != false. [scalar = int32_t]");
+
+    static_assert(
+            !std::is_integral<int32_t>::value || is_integral < zint32<0>>::value,
+            "is_integral<zint32> == false. [scalar = int32_t]");
+    static_assert(!std::is_integral<int32_t>::value ||
+                  !is_floating_point < zint32<0>>::value,
+                  "is_floating_point<zint32> != false. [scalar = int32_t]");
 }}}

@@ -90,9 +90,8 @@ class TraitCompositionRenderer(Renderable):
         typename = f"{resolve_prefix(type)}{node.type.name}<FeatureMask>"
         interface = f"i{typename}"
 
-        return [f"{trait}<{interface}, {typename}>::template impl" for trait in shared_traits] + \
-               [f"{modules[trait]}<{interface}, {typename}>::template impl" for trait in traits[type]]# +\
-               #[f"{initializer}<{impl}>::template impl" for initializer in initializers.values()]
+        return [f"{trait}" for trait in shared_traits] + \
+               [f"modules::{modules[trait]}" for trait in traits[type]]
 
 class FunctionSignatureRenderer(Renderable):
     def render(self, renderer, node: FunctionSignatureNode, params):

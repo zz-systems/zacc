@@ -63,7 +63,6 @@ class Parser():
                 return [func(name, type, data[name]) for name in traits]
             return \
                 make_modules(func, data, traits.default, ModuleTypes.DEFAULT) + \
-                make_modules(func, data, traits.boolean, ModuleTypes.BOOLEAN) + \
                 make_modules(func, data, traits.unsigned, ModuleTypes.UNSIGNED)
 
         return ModulesNode(

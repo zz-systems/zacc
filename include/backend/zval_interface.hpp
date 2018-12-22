@@ -31,7 +31,7 @@ namespace zacc
     struct cval_tag {};
 
 
-    template<typename Tag, typename Vector, typename MaskVector, typename Element, /*typename Tag,*/ size_t Size, size_t Alignment, uint64_t FeatureMask = 0xFFFF'FFFF'FFFF'FFFF>
+    template<typename Tag, typename Vector, typename MaskVector, typename Element, size_t Size, size_t Alignment, uint64_t FeatureMask = 0xFFFF'FFFF'FFFF'FFFF>
     struct ztype
     {
         /// type tag
@@ -71,12 +71,5 @@ namespace zacc
     using typename Interface::element_type; \
     using typename Interface::vector_type; \
     using typename Interface::mask_vector_type; \
-    using typename Interface::extracted_type
-
-//#define USING_ZTYPE(Tag) \
-//    using ztype<Vector, MaskVector, Element, Tag, Size, Alignment, FeatureMask>::tag; \
-//    using ztype<Vector, MaskVector, Element, Tag, Size, Alignment, FeatureMask>::element_type; \
-//    using ztype<Vector, MaskVector, Element, Tag, Size, Alignment, FeatureMask>::vector_type; \
-//    using ztype<Vector, MaskVector, Element, Tag, Size, Alignment, FeatureMask>::mask_vector_type; \
-//    using ztype<Vector, MaskVector, Element, Tag, Size, Alignment, FeatureMask>::extracted_type
+    using typename Interface::extracted_type;
 }

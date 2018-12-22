@@ -35,10 +35,8 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Impl, typename Base, typename Interface, typename Composed, typename Boolean>
-    struct numeric :
-        public Impl,
-        public Base
+    template<typename Interface, typename Composed, typename Boolean>
+    struct numeric
     {
 
         constexpr auto self() const
@@ -77,7 +75,7 @@ namespace zacc { namespace traits {
          * @see std::numeric_limits
          * @return minimum value
          */
-        static constexpr Composed min() noexcept {
+        static constexpr Composed min_value() noexcept {
             return std::numeric_limits<typename ztraits<Composed>::element_type>::min();
         }
 
@@ -86,7 +84,7 @@ namespace zacc { namespace traits {
          * @see std::numeric_limits
          * @return maximum value
          */
-        static constexpr Composed max() noexcept {
+        static constexpr Composed max_value() noexcept {
             return std::numeric_limits<typename ztraits<Composed>::element_type>::max();
         }
     };

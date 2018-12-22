@@ -32,10 +32,8 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zint32)
      */
-    template<typename Impl, typename Base, typename Interface, typename Composed, typename Boolean>
-    struct bitwise :
-        public Impl,
-        public Base
+    template<typename Interface, typename Composed, typename Boolean>
+    struct bitwise
     {
 
         friend Composed operator~(const Composed one) { return vbneg(one); }

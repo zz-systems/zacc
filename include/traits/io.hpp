@@ -34,10 +34,8 @@ namespace zacc { namespace traits {
      * @tparam Base base type (e.g previous trait)
      * @tparam Composed final composed type (e.g zfloat32)
      */
-    template<typename Impl, typename Base, typename Interface, typename Composed, typename Boolean>
-    struct io :
-        public Impl,
-        public Base
+    template<typename Interface, typename Composed, typename Boolean>
+    struct io
     {
 
 //        template<typename OutputIt>

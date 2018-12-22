@@ -48,14 +48,14 @@
 #include "traits/convertable.hpp"
 #include "traits/printable.hpp"
 #include "traits/io.hpp"
-#include "traits/logical.hpp"
-#include "traits/conditional.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/equatable.hpp"
-#include "traits/math.hpp"
 #include "traits/numeric.hpp"
-#include "traits/arithmetic.hpp"
+#include "traits/conditional.hpp"
+#include "traits/math.hpp"
 #include "traits/comparable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/logical.hpp"
 
 namespace zacc { namespace backend { namespace avx2
 {
@@ -66,40 +66,20 @@ namespace zacc { namespace backend { namespace avx2
     template<uint64_t features>
     struct zfloat32;
     /// @endcond
-
+    
     template<uint64_t FeatureMask>
     using izfloat32 = ztype<zval_tag, __m256, __m256, float, 8, 32, FeatureMask>;
 
     template<uint64_t FeatureMask>
     using ibfloat32 = ztype<bval_tag, __m256, __m256, float, 8, 32, FeatureMask>;
-
-    namespace float32_detail
-    {
-        /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size = 8;
-
-        /// memory alignment
-        static constexpr size_t alignment = 32;
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = size > 1;
-
-        /// vector type, like __m128i for sse 4x integer vector
-        using vector_type = __m256;
-
-        /// scalar type, like int for sse 4x integer vector
-        using element_type = float;
-
-        /// mask type for boolean operations
-        using mask_vector_type = __m256;
-
-        /// extracted std::array of (dim) scalar values
-        using extracted_type = std::array<element_type, size>;
-    }
 }}}
 
 namespace zacc {
 
+    /**
+     * @brief ztraits type trait specialization for float32 [avx2 branch]
+     * @tparam T
+     */
     template<typename T>
     struct ztraits<T, std::enable_if_t<
             std::is_base_of<backend::avx2::izfloat32<T::feature_mask>, T>::value
@@ -138,1151 +118,448 @@ namespace zacc {
     };
 }
 
-namespace zacc { namespace backend { namespace avx2 {
-
-    namespace detail {
-
-        // =================================================================================================================
+namespace zacc { namespace backend { namespace avx2
+{
+    namespace float32_modules
+    {
         /**
-         * @name io modules
-         */
-        ///@{
-        /**
-         * @brief io
+         * @brief io mixin implementation [avx2 branch]
          * @relates float32
-         * @remark avx2
          */
         template<typename Interface, typename Composed>
-        struct zfloat32_io
+        struct io : traits::io<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief io basic interface implementation
+             * @brief io [default branch]
              * @relates float32
-             * @remark avx2
              */
-            struct __impl
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
             {
-
-                /**
-                 * @brief io default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vstore");
-
-                    _mm256_store_ps(&(*result), input);
-                }
-
-
-                /**
-                 * @brief io default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vstream");
-
-                    _mm256_stream_ps(&(*result), input);
-                }
-
-
-                /**
-                 * @brief io default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                template<typename RandomIt> friend zfloat32<Interface::feature_mask> vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vgather");
-
-                    return _mm256_i32gather_ps(&(*input), index, 4);
-                }
-
-            };
-
+                _mm256_store_ps(&(*result), input);
+            }
+            
             /**
-             * @brief io public interface implementation
+             * @brief io [default branch]
              * @relates float32
-             * @remark avx2
              */
-            template<typename Base>
-            using impl = traits::io<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
+            {
+                _mm256_stream_ps(&(*result), input);
+            }
+            
+            /**
+             * @brief io [default branch]
+             * @relates float32
+             */
+            template<typename RandomIt> friend zfloat32<Interface::feature_mask> vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
+            {
+                return _mm256_i32gather_ps(&(*input), index, 4);
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name math modules
-         */
-        ///@{
-        /**
-         * @brief math
+         * @brief math mixin implementation [avx2 branch]
          * @relates float32
-         * @remark avx2
          */
         template<typename Interface, typename Composed>
-        struct zfloat32_math
+        struct math : traits::math<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief math basic interface implementation
+             * @brief math [default branch]
              * @relates float32
-             * @remark avx2
              */
-            struct __impl
+            friend zfloat32<Interface::feature_mask> vabs(Composed one) 
             {
-
-                /**
-                 * @brief math default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vabs(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vabs");
-
-                    return _mm256_max_ps(one, _mm256_sub_ps(_mm256_setzero_ps(), one));
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vmin(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vmin");
-
-                    return _mm256_min_ps(one, other);
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vmax(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vmax");
-
-                    return _mm256_max_ps(one, other);
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vclamp");
-
-                    return vmin(to, vmax(from, self));
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vrcp(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vrcp");
-
-                    return (1/one);
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vtrunc(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vtrunc");
-
-                    return _mm256_cvtepi32_ps(_mm256_cvttps_epi32(one));
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vfloor(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vfloor");
-
-                    return _mm256_floor_ps(one);
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vceil(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vceil");
-
-                    return _mm256_ceil_ps(one);
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vround(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vround");
-
-                    return _mm256_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
-                }
-
-
-                /**
-                 * @brief math default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vsqrt(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vsqrt");
-
-                    return _mm256_sqrt_ps(one);
-                }
-
-            };
-
+                return _mm256_max_ps(one, _mm256_sub_ps(_mm256_setzero_ps(), one));
+            }
+            
             /**
-             * @brief math public interface implementation
+             * @brief math [default branch]
              * @relates float32
-             * @remark avx2
              */
-            template<typename Base>
-            using impl = traits::math<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
+            friend zfloat32<Interface::feature_mask> vmin(Composed one, Composed other) 
+            {
+                return _mm256_min_ps(one, other);
+            }
+            
+            /**
+             * @brief math [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vmax(Composed one, Composed other) 
+            {
+                return _mm256_max_ps(one, other);
+            }
+            
+            /**
+             * @brief math [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vclamp(Composed self, Composed from, Composed to) 
+            {
+                return vmin(to, vmax(from, self));
+            }
+            
+            /**
+             * @brief math [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vrcp(Composed one) 
+            {
+                return (1/one);
+            }
+            
+            /**
+             * @brief math [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vtrunc(Composed one) 
+            {
+                return _mm256_cvtepi32_ps(_mm256_cvttps_epi32(one));
+            }
+            
+            /**
+             * @brief math [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vfloor(Composed one) 
+            {
+                return _mm256_floor_ps(one);
+            }
+            
+            /**
+             * @brief math [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vceil(Composed one) 
+            {
+                return _mm256_ceil_ps(one);
+            }
+            
+            /**
+             * @brief math [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vround(Composed one) 
+            {
+                return _mm256_round_ps (one, _MM_FROUND_TO_NEAREST_INT |_MM_FROUND_NO_EXC);
+            }
+            
+            /**
+             * @brief math [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vsqrt(Composed one) 
+            {
+                return _mm256_sqrt_ps(one);
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name numeric modules
-         */
-        ///@{
-        /**
-         * @brief numeric
+         * @brief numeric mixin implementation [avx2 branch]
          * @relates float32
-         * @remark avx2
          */
         template<typename Interface, typename Composed>
-        struct zfloat32_numeric
+        struct numeric : traits::numeric<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
-            /**
-             * @brief numeric basic interface implementation
-             * @relates float32
-             * @remark avx2
-             */
-            struct __impl
-            {
-            };
-
-            /**
-             * @brief numeric public interface implementation
-             * @relates float32
-             * @remark avx2
-             */
-            template<typename Base>
-            using impl = traits::numeric<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name arithmetic modules
-         */
-        ///@{
-        /**
-         * @brief arithmetic
+         * @brief arithmetic mixin implementation [avx2 branch]
          * @relates float32
-         * @remark avx2
          */
         template<typename Interface, typename Composed>
-        struct zfloat32_arithmetic
+        struct arithmetic : traits::arithmetic<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief arithmetic basic interface implementation
+             * @brief arithmetic [default branch]
              * @relates float32
-             * @remark avx2
              */
-            struct __impl
+            friend zfloat32<Interface::feature_mask> vneg(Composed one) 
             {
-
-                /**
-                 * @brief arithmetic default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vneg(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vneg");
-
-                    return _mm256_sub_ps(_mm256_setzero_ps(), one);
-                }
-
-
-                /**
-                 * @brief arithmetic default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vadd(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vadd");
-
-                    return _mm256_add_ps(one, other);
-                }
-
-
-                /**
-                 * @brief arithmetic default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vsub(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vsub");
-
-                    return _mm256_sub_ps(one, other);
-                }
-
-
-                /**
-                 * @brief arithmetic default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vmul(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vmul");
-
-                    return _mm256_mul_ps(one, other);
-                }
-
-
-                /**
-                 * @brief arithmetic default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vdiv(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vdiv");
-
-                    return _mm256_div_ps(one, other);
-                }
-
-
-                /**
-                 * @brief arithmetic default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vfmadd");
-
-                    return _mm256_fmadd_ps (multiplicand, multiplier, addendum);
-                }
-
-
-                /**
-                 * @brief arithmetic default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vfmsub");
-
-                    return _mm256_fmsub_ps(multiplicand, multiplier, addendum);
-                }
-
-            };
-
+                return _mm256_sub_ps(_mm256_setzero_ps(), one);
+            }
+            
             /**
-             * @brief arithmetic public interface implementation
+             * @brief arithmetic [default branch]
              * @relates float32
-             * @remark avx2
              */
-            template<typename Base>
-            using impl = traits::arithmetic<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
+            friend zfloat32<Interface::feature_mask> vadd(Composed one, Composed other) 
+            {
+                return _mm256_add_ps(one, other);
+            }
+            
+            /**
+             * @brief arithmetic [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vsub(Composed one, Composed other) 
+            {
+                return _mm256_sub_ps(one, other);
+            }
+            
+            /**
+             * @brief arithmetic [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vmul(Composed one, Composed other) 
+            {
+                return _mm256_mul_ps(one, other);
+            }
+            
+            /**
+             * @brief arithmetic [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vdiv(Composed one, Composed other) 
+            {
+                return _mm256_div_ps(one, other);
+            }
+            
+            /**
+             * @brief arithmetic [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return _mm256_fmadd_ps (multiplicand, multiplier, addendum);
+            }
+            
+            /**
+             * @brief arithmetic [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return _mm256_fmsub_ps(multiplicand, multiplier, addendum);
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name bitwise modules
-         */
-        ///@{
-        /**
-         * @brief bitwise
+         * @brief bitwise mixin implementation [avx2 branch]
          * @relates float32
-         * @remark avx2
          */
         template<typename Interface, typename Composed>
-        struct zfloat32_bitwise
+        struct bitwise : traits::bitwise<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief bitwise basic interface implementation
+             * @brief bitwise [default branch]
              * @relates float32
-             * @remark avx2
              */
-            struct __impl
+            friend zfloat32<Interface::feature_mask> vbneg(Composed one) 
             {
-
-                /**
-                 * @brief bitwise default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vbneg(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vbneg");
-
-                    auto zero = _mm256_setzero_ps();
-                    auto ones = _mm256_cmp_ps(zero, zero, _CMP_EQ_OQ);
-                    return _mm256_xor_ps(one, ones);
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vband(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vband");
-
-                    return _mm256_and_ps(one, other);
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vbor(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vbor");
-
-                    return _mm256_or_ps(one, other);
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vbxor(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vbxor");
-
-                    return _mm256_xor_ps(one, other);
-                }
-
-
-                /**
-                 * @brief bitwise avx2
-                 * @relates float32
-                 * @remark avx2 avx2
-                 */
-                template<typename T = bool> friend std::enable_if_t<has_feature_v<Interface, capabilities::AVX2>, T> is_set(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "avx2", "is_set");
-
-                    auto ival =  _mm256_castps_si256(one);
-                    return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                template<typename T = bool> friend std::enable_if_t<!has_feature_v<Interface, capabilities::AVX2>, T> is_set(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "is_set");
-
-                    auto hi = _mm_castps_si128(_mm256_extractf128_ps(one, 1));
-                    auto lo = _mm_castps_si128(_mm256_extractf128_ps(one, 0));
-                    return _mm_test_all_ones(hi) != 0 && _mm_test_all_ones(lo) != 0;
-                }
-
-            };
-
+                auto zero = _mm256_setzero_ps();
+                auto ones = _mm256_cmp_ps(zero, zero, _CMP_EQ_OQ);
+                return _mm256_xor_ps(one, ones);
+            }
+            
             /**
-             * @brief bitwise public interface implementation
+             * @brief bitwise [default branch]
              * @relates float32
-             * @remark avx2
              */
-            template<typename Base>
-            using impl = traits::bitwise<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
+            friend zfloat32<Interface::feature_mask> vband(Composed one, Composed other) 
+            {
+                return _mm256_and_ps(one, other);
+            }
+            
+            /**
+             * @brief bitwise [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vbor(Composed one, Composed other) 
+            {
+                return _mm256_or_ps(one, other);
+            }
+            
+            /**
+             * @brief bitwise [default branch]
+             * @relates float32
+             */
+            friend zfloat32<Interface::feature_mask> vbxor(Composed one, Composed other) 
+            {
+                return _mm256_xor_ps(one, other);
+            }
+            
+            /**
+             * @brief bitwise [avx2 branch]
+             * @relates float32
+             */
+            template<typename T = bool> friend std::enable_if_t<has_feature_v<Interface, capabilities::AVX2>, T> is_set(Composed one) 
+            {
+                auto ival =  _mm256_castps_si256(one);
+                return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
+            }
+            
+            /**
+             * @brief bitwise [default branch]
+             * @relates float32
+             */
+            template<typename T = bool> friend std::enable_if_t<!has_feature_v<Interface, capabilities::AVX2>, T> is_set(Composed one) 
+            {
+                auto hi = _mm_castps_si128(_mm256_extractf128_ps(one, 1));
+                auto lo = _mm_castps_si128(_mm256_extractf128_ps(one, 0));
+                return _mm_test_all_ones(hi) != 0 && _mm_test_all_ones(lo) != 0;
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name comparable modules
-         */
-        ///@{
-        /**
-         * @brief comparable
+         * @brief comparable mixin implementation [avx2 branch]
          * @relates float32
-         * @remark avx2
          */
         template<typename Interface, typename Composed>
-        struct zfloat32_comparable
+        struct comparable : traits::comparable<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief comparable basic interface implementation
+             * @brief comparable [default branch]
              * @relates float32
-             * @remark avx2
              */
-            struct __impl
+            friend bfloat32<Interface::feature_mask> vgt(Composed one, Composed other) 
             {
-
-                /**
-                 * @brief comparable default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vgt(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vgt");
-
-                    return { _mm256_cmp_ps(one, other, _CMP_GT_OQ), last_operation::comparison };
-                }
-
-
-                /**
-                 * @brief comparable default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vlt(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vlt");
-
-                    return { _mm256_cmp_ps(one, other, _CMP_LT_OQ), last_operation::comparison };
-                }
-
-
-                /**
-                 * @brief comparable default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vge(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vge");
-
-                    return { _mm256_cmp_ps(one, other, _CMP_GE_OQ), last_operation::comparison };
-                }
-
-
-                /**
-                 * @brief comparable default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vle(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vle");
-
-                    return { _mm256_cmp_ps(one, other, _CMP_LE_OQ), last_operation::comparison };
-                }
-
-            };
-
+                return { _mm256_cmp_ps(one, other, _CMP_GT_OQ), last_operation::comparison };
+            }
+            
             /**
-             * @brief comparable public interface implementation
+             * @brief comparable [default branch]
              * @relates float32
-             * @remark avx2
              */
-            template<typename Base>
-            using impl = traits::comparable<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
+            friend bfloat32<Interface::feature_mask> vlt(Composed one, Composed other) 
+            {
+                return { _mm256_cmp_ps(one, other, _CMP_LT_OQ), last_operation::comparison };
+            }
+            
+            /**
+             * @brief comparable [default branch]
+             * @relates float32
+             */
+            friend bfloat32<Interface::feature_mask> vge(Composed one, Composed other) 
+            {
+                return { _mm256_cmp_ps(one, other, _CMP_GE_OQ), last_operation::comparison };
+            }
+            
+            /**
+             * @brief comparable [default branch]
+             * @relates float32
+             */
+            friend bfloat32<Interface::feature_mask> vle(Composed one, Composed other) 
+            {
+                return { _mm256_cmp_ps(one, other, _CMP_LE_OQ), last_operation::comparison };
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name logical modules
-         */
-        ///@{
-        /**
-         * @brief logical
+         * @brief logical mixin implementation [avx2 branch]
          * @relates float32
-         * @remark avx2
          */
         template<typename Interface, typename Composed>
-        struct zfloat32_logical
+        struct logical : traits::logical<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief logical basic interface implementation
+             * @brief logical [default branch]
              * @relates float32
-             * @remark avx2
              */
-            struct __impl
+            friend bfloat32<Interface::feature_mask> vlneg(Composed one) 
             {
-
-                /**
-                 * @brief logical default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vlneg(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vlneg");
-
-                    return { _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ), last_operation::logic };
-                }
-
-
-                /**
-                 * @brief logical default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vlor(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vlor");
-
-                    return { _mm256_or_ps(one, other), last_operation::logic };
-                }
-
-
-                /**
-                 * @brief logical default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vland(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vland");
-
-                    return { _mm256_and_ps(one, other), last_operation::logic };
-                }
-
-            };
-
+                return { _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ), last_operation::logic };
+            }
+            
             /**
-             * @brief logical public interface implementation
+             * @brief logical [default branch]
              * @relates float32
-             * @remark avx2
              */
-            template<typename Base>
-            using impl = traits::logical<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
+            friend bfloat32<Interface::feature_mask> vlor(Composed one, Composed other) 
+            {
+                return { _mm256_or_ps(one, other), last_operation::logic };
+            }
+            
+            /**
+             * @brief logical [default branch]
+             * @relates float32
+             */
+            friend bfloat32<Interface::feature_mask> vland(Composed one, Composed other) 
+            {
+                return { _mm256_and_ps(one, other), last_operation::logic };
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name equatable modules
-         */
-        ///@{
-        /**
-         * @brief equatable
+         * @brief equatable mixin implementation [avx2 branch]
          * @relates float32
-         * @remark avx2
          */
         template<typename Interface, typename Composed>
-        struct zfloat32_equatable
+        struct equatable : traits::equatable<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief equatable basic interface implementation
+             * @brief equatable [default branch]
              * @relates float32
-             * @remark avx2
              */
-            struct __impl
+            friend bfloat32<Interface::feature_mask> veq(Composed one, Composed other) 
             {
-
-                /**
-                 * @brief equatable default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> veq(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "veq");
-
-                    return { _mm256_cmp_ps(one, other, _CMP_EQ_OQ), last_operation::comparison };
-                }
-
-
-                /**
-                 * @brief equatable default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vneq(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vneq");
-
-                    return { _mm256_cmp_ps(one, other, _CMP_NEQ_OQ), last_operation::comparison };
-                }
-
-            };
-
+                return { _mm256_cmp_ps(one, other, _CMP_EQ_OQ), last_operation::comparison };
+            }
+            
             /**
-             * @brief equatable public interface implementation
+             * @brief equatable [default branch]
              * @relates float32
-             * @remark avx2
              */
-            template<typename Base>
-            using impl = traits::equatable<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
+            friend bfloat32<Interface::feature_mask> vneq(Composed one, Composed other) 
+            {
+                return { _mm256_cmp_ps(one, other, _CMP_NEQ_OQ), last_operation::comparison };
+            }
         };
 
-        ///@}
+        // =============================================================================================================
 
-        // =================================================================================================================
         /**
-         * @name conditional modules
-         */
-        ///@{
-        /**
-         * @brief conditional
+         * @brief conditional mixin implementation [avx2 branch]
          * @relates float32
-         * @remark avx2
          */
         template<typename Interface, typename Composed>
-        struct zfloat32_conditional
+        struct conditional : traits::conditional<Interface, Composed, bfloat32<Interface::feature_mask>>
         {
             /**
-             * @brief conditional basic interface implementation
+             * @brief conditional [default branch]
              * @relates float32
-             * @remark avx2
              */
-            struct __impl
+            friend zfloat32<Interface::feature_mask> vsel(bfloat32<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
             {
-
-                /**
-                 * @brief conditional default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend zfloat32<Interface::feature_mask> vsel(bfloat32<Interface::feature_mask> condition, Composed if_value, Composed else_value) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vsel");
-
-                    return _mm256_blendv_ps(else_value, if_value, condition);
-                }
-
-            };
-
-            /**
-             * @brief conditional public interface implementation
-             * @relates float32
-             * @remark avx2
-             */
-            template<typename Base>
-            using impl = traits::conditional<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
+                return _mm256_blendv_ps(else_value, if_value, condition);
+            }
         };
+    } // end float32_modules
 
-        ///@}
+    // =================================================================================================================
 
-        // =================================================================================================================
-        /**
-         * @name io modules
-         */
-        ///@{
-        /**
-         * @brief io
-         * @relates float32
-         * @remark avx2
-         */
-        template<typename Interface, typename Composed>
-        struct bfloat32_io
-        {
-            /**
-             * @brief io basic interface implementation
-             * @relates float32
-             * @remark avx2
-             */
-            struct __impl
-            {
-
-                /**
-                 * @brief io default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vstore");
-
-                    _mm256_store_ps(&(*result), input);
-                }
-
-
-                /**
-                 * @brief io default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vstream");
-
-                    _mm256_stream_ps(&(*result), input);
-                }
-
-
-                /**
-                 * @brief io default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                template<typename RandomIt> friend bfloat32<Interface::feature_mask> vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vgather");
-
-                    return _mm256_i32gather_ps(&(*input), index, 4);
-                }
-
-            };
-
-            /**
-             * @brief io public interface implementation
-             * @relates float32
-             * @remark avx2
-             */
-            template<typename Base>
-            using impl = traits::io<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
-        };
-
-        ///@}
-
-        // =================================================================================================================
-        /**
-         * @name bitwise modules
-         */
-        ///@{
-        /**
-         * @brief bitwise
-         * @relates float32
-         * @remark avx2
-         */
-        template<typename Interface, typename Composed>
-        struct bfloat32_bitwise
-        {
-            /**
-             * @brief bitwise basic interface implementation
-             * @relates float32
-             * @remark avx2
-             */
-            struct __impl
-            {
-
-                /**
-                 * @brief bitwise default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vbneg(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vbneg");
-
-                    auto zero = _mm256_setzero_ps();
-                    auto ones = _mm256_cmp_ps(zero, zero, _CMP_EQ_OQ);
-                    return _mm256_xor_ps(one, ones);
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vband(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vband");
-
-                    return _mm256_and_ps(one, other);
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vbor(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vbor");
-
-                    return _mm256_or_ps(one, other);
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vbxor(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vbxor");
-
-                    return _mm256_xor_ps(one, other);
-                }
-
-
-                /**
-                 * @brief bitwise avx2
-                 * @relates float32
-                 * @remark avx2 avx2
-                 */
-                template<typename T = bool> friend std::enable_if_t<has_feature_v<Interface, capabilities::AVX2>, T> is_set(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "avx2", "is_set");
-
-                    auto ival =  _mm256_castps_si256(one);
-                    return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
-                }
-
-
-                /**
-                 * @brief bitwise default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                template<typename T = bool> friend std::enable_if_t<!has_feature_v<Interface, capabilities::AVX2>, T> is_set(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "is_set");
-
-                    auto hi = _mm_castps_si128(_mm256_extractf128_ps(one, 1));
-                    auto lo = _mm_castps_si128(_mm256_extractf128_ps(one, 0));
-                    return _mm_test_all_ones(hi) != 0 && _mm_test_all_ones(lo) != 0;
-                }
-
-            };
-
-            /**
-             * @brief bitwise public interface implementation
-             * @relates float32
-             * @remark avx2
-             */
-            template<typename Base>
-            using impl = traits::bitwise<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
-        };
-
-        ///@}
-
-        // =================================================================================================================
-        /**
-         * @name logical modules
-         */
-        ///@{
-        /**
-         * @brief logical
-         * @relates float32
-         * @remark avx2
-         */
-        template<typename Interface, typename Composed>
-        struct bfloat32_logical
-        {
-            /**
-             * @brief logical basic interface implementation
-             * @relates float32
-             * @remark avx2
-             */
-            struct __impl
-            {
-
-                /**
-                 * @brief logical default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vlneg(Composed one) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vlneg");
-
-                    return { _mm256_cmp_ps(one, _mm256_setzero_ps(), _CMP_EQ_OQ), last_operation::logic };
-                }
-
-
-                /**
-                 * @brief logical default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vlor(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vlor");
-
-                    return { _mm256_or_ps(one, other), last_operation::logic };
-                }
-
-
-                /**
-                 * @brief logical default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vland(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vland");
-
-                    return { _mm256_and_ps(one, other), last_operation::logic };
-                }
-
-            };
-
-            /**
-             * @brief logical public interface implementation
-             * @relates float32
-             * @remark avx2
-             */
-            template<typename Base>
-            using impl = traits::logical<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
-        };
-
-        ///@}
-
-        // =================================================================================================================
-        /**
-         * @name equatable modules
-         */
-        ///@{
-        /**
-         * @brief equatable
-         * @relates float32
-         * @remark avx2
-         */
-        template<typename Interface, typename Composed>
-        struct bfloat32_equatable
-        {
-            /**
-             * @brief equatable basic interface implementation
-             * @relates float32
-             * @remark avx2
-             */
-            struct __impl
-            {
-
-                /**
-                 * @brief equatable default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> veq(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "veq");
-
-                    return { _mm256_cmp_ps(one, other, _CMP_EQ_OQ), last_operation::comparison };
-                }
-
-
-                /**
-                 * @brief equatable default
-                 * @relates float32
-                 * @remark avx2 default
-                 */
-                friend bfloat32<Interface::feature_mask> vneq(Composed one, Composed other) 
-                {
-                    ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "default", "vneq");
-
-                    return { _mm256_cmp_ps(one, other, _CMP_NEQ_OQ), last_operation::comparison };
-                }
-
-            };
-
-            /**
-             * @brief equatable public interface implementation
-             * @relates float32
-             * @remark avx2
-             */
-            template<typename Base>
-            using impl = traits::equatable<__impl, Base, Interface, Composed, bfloat32<Interface::feature_mask>>;
-        };
-
-        ///@}
-
-
-        // Type composition ================================================================================================
-
-        /**
-         * @name float32 composition
-         */
-        ///@{
-
-        /**
-         * @brief zval composition
-         * @relates float32
-         * @remark avx2
-         * @tparam features feature mask
-         */
-        template<uint64_t FeatureMask>
-        using zfloat32_ops = compose_t
-        <
-            printable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            convertable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_io<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_math<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_numeric<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_arithmetic<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_bitwise<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_comparable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_logical<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_equatable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl,
-            zfloat32_conditional<izfloat32<FeatureMask>, zfloat32<FeatureMask>>::template impl
-        >;
-
-        /// bfloat32 composition
-        /// @tparam features feature mask
-        template<uint64_t FeatureMask>
-        using bfloat32_ops = compose_t
-        <
-            printable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>::template impl,
-            convertable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>::template impl,
-            bfloat32_io<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>::template impl,
-            bfloat32_bitwise<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>::template impl,
-            bfloat32_logical<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>::template impl,
-            bfloat32_equatable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>::template impl
-        >;
-
-        ///@}
-    } // end namespace
-
-    /// public zfloat32 implementation
+    /// public zfloat32 implementation [avx2 branch]
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
-    struct zfloat32 :
-        public detail::zfloat32_ops<FeatureMask>,
-        public zval<izfloat32<FeatureMask>>
+    struct zfloat32 : public zval<izfloat32<FeatureMask>>,
+        // generic traits
+        printable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
+        convertable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
+        // float32 traits
+        float32_modules::io<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
+        float32_modules::math<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
+        float32_modules::numeric<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
+        float32_modules::arithmetic<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
+        float32_modules::bitwise<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
+        float32_modules::comparable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
+        float32_modules::logical<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
+        float32_modules::equatable<izfloat32<FeatureMask>, zfloat32<FeatureMask>>,
+        float32_modules::conditional<izfloat32<FeatureMask>, zfloat32<FeatureMask>>
     {
         USING_ZTYPE(izfloat32<FeatureMask>);
 
@@ -1293,18 +570,18 @@ namespace zacc { namespace backend { namespace avx2 {
         using bval_t = bfloat32<FeatureMask>;
 
         /**
-         * copy constructor
-         * @tparam T any type convertable to Vector
+         * Copy constructor, forwards to base implementation
+         * @tparam T any type convertable to __m256
          * @param other
          */
-        template<typename T, typename = std::enable_if_t<std::is_convertible<T, __m256>::value>>// || std::is_convertible<T, float>::value>>
+        template<typename T, typename = std::enable_if_t<std::is_convertible<T, __m256>::value>>
         constexpr zfloat32(const T& other) noexcept
             : zval<izfloat32<FeatureMask>>(other)
         {}
 
         /**
-         * move constructor
-         * @tparam T any type convertable to Vector
+         * Move constructor, forwards to base implementation
+         * @tparam T any type convertable to __m256
          * @param other
          */
         template<typename T, typename = std::enable_if_t<(size > 1) && std::is_convertible<T, __m256>::value>>
@@ -1313,105 +590,83 @@ namespace zacc { namespace backend { namespace avx2 {
         {}
 
         /**
-         * copy constructor
+         * Converting constructor from bfloat32, forwards to base implementation 
          * @param other
          */
         constexpr zfloat32(const bfloat32<FeatureMask>& other) noexcept
             : zval<izfloat32<FeatureMask>>(other.value())
         {}
 
-
         /**
-         * @brief constructable 
-         * @relates float32
-         * @remark avx2 
+         * @brief zfloat32 constructor [avx2 branch]
+         * @relates zfloat32
          */
         constexpr zfloat32(  ) noexcept : zval<izfloat32<FeatureMask>>()
         {
-            ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "", "CONS()");
-
         }
-
-
         /**
-         * @brief constructable 
-         * @relates float32
-         * @remark avx2 
+         * @brief zfloat32 constructor [avx2 branch]
+         * @relates zfloat32
          */
         constexpr zfloat32(__m256 value) noexcept : zval<izfloat32<FeatureMask>>(value)
         {
-            ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "", "CONS(__m256)");
-
         }
-
-
         /**
-         * @brief constructable 
-         * @relates float32
-         * @remark avx2 
+         * @brief zfloat32 constructor [avx2 branch]
+         * @relates zfloat32
          */
         constexpr zfloat32(__m256d value) noexcept : zval<izfloat32<FeatureMask>>(_mm256_castps128_ps256(_mm256_cvtpd_ps(value)))
         {
-            ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "", "CONS(__m256d)");
-
         }
-
-
         /**
-         * @brief constructable 
-         * @relates float32
-         * @remark avx2 
+         * @brief zfloat32 constructor [avx2 branch]
+         * @relates zfloat32
          */
         constexpr zfloat32(__m256i value) noexcept : zval<izfloat32<FeatureMask>>(_mm256_cvtepi32_ps(value))
         {
-            ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "", "CONS(__m256i)");
-
         }
-
-
         /**
-         * @brief constructable 
-         * @relates float32
-         * @remark avx2 
+         * @brief zfloat32 constructor [avx2 branch]
+         * @relates zfloat32
          */
         constexpr zfloat32(float value) noexcept : zval<izfloat32<FeatureMask>>(_mm256_set1_ps(value))
         {
-            ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "", "CONS(float)");
-
         }
-
-
         /**
-         * @brief constructable 
-         * @relates float32
-         * @remark avx2 
+         * @brief zfloat32 constructor [avx2 branch]
+         * @relates zfloat32
          */
         constexpr zfloat32(extracted_type value) noexcept : zval<izfloat32<FeatureMask>>(_mm256_load_ps(value.data()))
         {
-            ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "", "CONS(extracted_type)");
-
         }
-
-
         /**
-         * @brief constructable 
-         * @relates float32
-         * @remark avx2 
+         * @brief zfloat32 constructor [avx2 branch]
+         * @relates zfloat32
          */
         constexpr zfloat32(float _7, float _6, float _5, float _4, float _3, float _2, float _1, float _0) noexcept : zval<izfloat32<FeatureMask>>(_mm256_set_ps(_0, _1, _2, _3, _4, _5, _6, _7))
         {
-            ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "", "CONS(float, float, float, float, float, float, float, float)");
-
         }
-
     };
 
-    /// public bfloat32 implementation
+    // =================================================================================================================
+
+    /// public bfloat32 implementation [avx2 branch]
     /// @tparam FeatureMask feature mask
     template<uint64_t FeatureMask>
-    struct bfloat32 :
-            public detail::bfloat32_ops<FeatureMask>,
-            public bval<ibfloat32<FeatureMask>>
+    struct bfloat32 : public bval<ibfloat32<FeatureMask>>,
+        // generic traits
+        printable<bfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        convertable<bfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        // float32 traits
+        float32_modules::io<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::math<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::numeric<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::arithmetic<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::bitwise<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::comparable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::logical<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::equatable<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>,
+        float32_modules::conditional<ibfloat32<FeatureMask>, bfloat32<FeatureMask>>
     {
         USING_ZTYPE(ibfloat32<FeatureMask>);
 
@@ -1424,143 +679,132 @@ namespace zacc { namespace backend { namespace avx2 {
         /// Forwarding constructor
         FORWARD2(bfloat32, bval<ibfloat32<FeatureMask>>);
 
-
-        /**
-         * @brief constructable 
-         * @relates float32
-         * @remark avx2 
-         */
-        constexpr bfloat32(  ) noexcept : bval<ibfloat32<FeatureMask>>()
-        {
-            ZTRACE_BACKEND("avx2.float32.impl", __LINE__, "float32(float[8])", "", "CONS()");
-
-        }
-
     };
 
-    namespace {
-        using namespace avx2::float32_detail;
+    // Validate zfloat32 ===================================================================================
 
-        static_assert(std::is_base_of<izfloat32 < 0>,
-                      izfloat32 < 0 >> ::value,
-                      "base_of<izfloat32> != izfloat32.");
-        static_assert(!std::is_base_of<ibfloat32 < 0>,
-                      izfloat32 < 0 >> ::value,
-                      "base_of<izfloat32> == ibfloat32.");
+    static_assert(std::is_base_of<izfloat32<0>,
+                  izfloat32<0>>::value,
+                  "base_of<izfloat32> != izfloat32.");
+    static_assert(!std::is_base_of<ibfloat32<0>,
+                  izfloat32<0>>::value,
+                  "base_of<izfloat32> == ibfloat32.");
 
-        static_assert(is_zval < izfloat32 < 0 >> ::value,
-                      "is_zval<izfloat32> == false.");
-        static_assert(!is_bval < izfloat32 < 0 >> ::value,
-                      "is_bval<izfloat32> != false.");
+    static_assert(is_zval<izfloat32<0>>::value,
+                  "is_zval<izfloat32> == false.");
+    static_assert(!is_bval<izfloat32<0>>::value,
+                  "is_bval<izfloat32> != false.");
 
-        static_assert(std::is_base_of<izfloat32 < 0>, zfloat32 < 0 >> ::value,
-                      "base_of<zfloat32> != izfloat32.");
-        static_assert(!std::is_base_of<ibfloat32 < 0>, zfloat32 < 0 >> ::value,
-                      "base_of<zfloat32> == ibfloat32.");
+    static_assert(std::is_base_of<izfloat32<0>, zfloat32<0>>::value,
+                  "base_of<zfloat32> != izfloat32.");
+    static_assert(!std::is_base_of<ibfloat32<0>, zfloat32<0>>::value,
+                  "base_of<zfloat32> == ibfloat32.");
 
-        static_assert(zfloat32 < 0 > ::size == 8,
-                      "zfloat32::size != 8.");
-        static_assert(zfloat32 < 0 > ::alignment == 32,
-                      "zfloat32::alignment != 32.");
-        static_assert(zfloat32 < 0 > ::is_vector == (8 > 1),
-        "zfloat32::is_vector != (8 > 1).");
+    static_assert(zfloat32<0>::size == 8,
+                  "zfloat32::size != 8.");
+    static_assert(zfloat32<0>::alignment == 32,
+                  "zfloat32::alignment != 32.");
+    static_assert(zfloat32<0>::is_vector == (8 > 1),
+    "zfloat32::is_vector != (8 > 1).");
 
-        static_assert(std::is_same<zfloat32 < 0>::tag, zval_tag > ::value,
-                      "zfloat32::tag != zval_tag.");
-        static_assert(std::is_same<zfloat32 < 0>::vector_type, __m256 > ::value,
-                      "zfloat32::vector_type != __m256.");
-        static_assert(std::is_same<zfloat32 < 0>::element_type, float > ::value,
-                      "zfloat32::element_type != float.");
-        static_assert(std::is_same<zfloat32 < 0>::mask_vector_type, __m256 > ::value,
-                      "zfloat32::mask_vector_type != __m256.");
-        static_assert(std::is_same<zfloat32 < 0>::extracted_type,
-                      std::array<float, 8>>::value,
-                      "zfloat32::extracted_type != std::array<float, 8>.");
-
-
-        static_assert(std::is_same<typename ztraits<zfloat32 < 0>>::tag, zval_tag > ::value,
-                      "zfloat32::tag != zval_tag.");
-        static_assert(std::is_arithmetic<typename ztraits<zfloat32 < 0>>::element_type > ::value,
-                      "is_arithmetic<zfloat32::element_type> == false.");
-        static_assert(is_zval < zfloat32 < 0 >> ::value,
-                      "is_zval<zfloat32> == false.");
-        static_assert(!is_bval < zfloat32 < 0 >> ::value,
-                      "is_bval<zfloat32> != false.");
+    static_assert(std::is_same<zfloat32<0>::tag, zval_tag > ::value,
+                  "zfloat32::tag != zval_tag.");
+    static_assert(std::is_same<zfloat32<0>::vector_type, __m256 > ::value,
+                  "zfloat32::vector_type != __m256.");
+    static_assert(std::is_same<zfloat32<0>::element_type, float > ::value,
+                  "zfloat32::element_type != float.");
+    static_assert(std::is_same<zfloat32<0>::mask_vector_type, __m256 > ::value,
+                  "zfloat32::mask_vector_type != __m256.");
+    static_assert(std::is_same<zfloat32<0>::extracted_type,
+                  std::array<float, 8>>::value,
+                  "zfloat32::extracted_type != std::array<float, 8>.");
 
 
-        static_assert(std::is_base_of<izfloat32 < 0>,
-                      izfloat32 < 0 >> ::value,
-                      "base_of<izfloat32> != izfloat32.");
-        static_assert(!std::is_base_of<ibfloat32 < 0>,
-                      izfloat32 < 0 >> ::value,
-                      "base_of<izfloat32> == ibfloat32.");
+    static_assert(std::is_same<typename ztraits<zfloat32<0>>::tag, zval_tag > ::value,
+                  "zfloat32::tag != zval_tag.");
+    static_assert(std::is_arithmetic<typename ztraits<zfloat32<0>>::element_type > ::value,
+                  "is_arithmetic<zfloat32::element_type> == false.");
+    static_assert(is_zval < zfloat32<0>>::value,
+                  "is_zval<zfloat32> == false.");
+    static_assert(!is_bval < zfloat32<0>>::value,
+                  "is_bval<zfloat32> != false.");
 
 
-        static_assert(!is_zval < ibfloat32 < 0 >> ::value,
-                      "is_zval<ibfloat32> != false.");
-        static_assert(is_bval < ibfloat32 < 0 >> ::value,
-                      "is_bval<ibfloat32> == false.");
+    // Validate bfloat32 ===================================================================================
 
-        static_assert(std::is_base_of<ibfloat32 < 0>, bfloat32 < 0 >> ::value,
-                      "base_of<bfloat32> != ibfloat32.");
-        static_assert(!std::is_base_of<izfloat32 < 0>, bfloat32 < 0 >> ::value,
-                      "base_of<bfloat32> == izfloat32.");
 
-        static_assert(bfloat32 < 0 > ::size == 8,
-                      "bfloat32::size != 8.");
-        static_assert(bfloat32 < 0 > ::alignment == 32,
-                      "bfloat32::alignment != 32.");
-        static_assert(bfloat32 < 0 > ::is_vector == (8 > 1),
-        "bfloat32::is_vector != (8 > 1).");
+    static_assert(std::is_base_of<ibfloat32<0>,
+                  ibfloat32<0>>::value,
+                  "base_of<izfloat32> != izfloat32.");
+    static_assert(!std::is_base_of<izfloat32<0>,
+                  ibfloat32<0>>::value,
+                  "base_of<izfloat32> == ibfloat32.");
 
-        static_assert(std::is_same<bfloat32 < 0>::tag, bval_tag > ::value,
-                      "bfloat32::tag != zval_tag.");
-        static_assert(std::is_same<bfloat32 < 0>::vector_type, __m256 > ::value,
-                      "bfloat32::vector_type != __m256.");
-        static_assert(std::is_same<bfloat32 < 0>::element_type, float > ::value,
-                      "bfloat32::element_type != float.");
-        static_assert(std::is_same<bfloat32 < 0>::mask_vector_type, __m256 > ::value,
-                      "bfloat32::mask_vector_type != __m256.");
-        static_assert(std::is_same<bfloat32 < 0>::extracted_type,
-                      std::array<float, 8>>::value,
-        "bfloat32::extracted_type != std::array<float, 8>.");
+    static_assert(!is_zval<ibfloat32<0>>::value,
+                  "is_zval<ibfloat32> != false.");
+    static_assert(is_bval<ibfloat32<0>>::value,
+                  "is_bval<ibfloat32> == false.");
 
-        static_assert(std::is_same<typename ztraits<bfloat32 < 0>>::tag, bval_tag > ::value,
-                      "bfloat32::tag != bval_tag.");
-        static_assert(std::is_arithmetic<typename ztraits<bfloat32 < 0>>::element_type > ::value,
-                      "is_arithmetic<bfloat32::element_type> == false.");
-        static_assert(!is_zval < bfloat32 < 0 >> ::value,
-                      "is_zval<bfloat32> != false.");
-        static_assert(is_bval < bfloat32 < 0 >> ::value,
-                      "is_bval<bfloat32> == false.");
+    static_assert(std::is_base_of<ibfloat32<0>, bfloat32<0>>::value,
+                  "base_of<bfloat32> != ibfloat32.");
+    static_assert(!std::is_base_of<izfloat32<0>, bfloat32<0>>::value,
+                  "base_of<bfloat32> == izfloat32.");
 
-        static_assert(!std::is_floating_point<float>::value ||
-                      is_floating_point < zfloat32 < 0 >> ::value,
-                      "is_floating_point<zfloat32> == false. [scalar = float]");
-        static_assert(!std::is_floating_point<float>::value ||
-                      !is_integral < zfloat32 < 0 >> ::value,
-                      "is_integral<zfloat32> != false. [scalar = float]");
+    static_assert(bfloat32<0>::size == 8,
+                  "bfloat32::size != 8.");
+    static_assert(bfloat32<0>::alignment == 32,
+                  "bfloat32::alignment != 32.");
+    static_assert(bfloat32<0>::is_vector == (8 > 1),
+    "bfloat32::is_vector != (8 > 1).");
 
-        static_assert(
-                !std::is_same<float, float>::value || is_float < zfloat32 < 0 >> ::value,
-                "is_float<zfloat32> == false. [scalar = float]");
-        static_assert(
-                !std::is_same<float, float>::value || !is_double < zfloat32 < 0 >> ::value,
-                "is_double<zfloat32> != false. [scalar = float]");
+    static_assert(std::is_same<bfloat32<0>::tag, bval_tag > ::value,
+                  "bfloat32::tag != zval_tag.");
+    static_assert(std::is_same<bfloat32<0>::vector_type, __m256 > ::value,
+                  "bfloat32::vector_type != __m256.");
+    static_assert(std::is_same<bfloat32<0>::element_type, float > ::value,
+                  "bfloat32::element_type != float.");
+    static_assert(std::is_same<bfloat32<0>::mask_vector_type, __m256 > ::value,
+                  "bfloat32::mask_vector_type != __m256.");
+    static_assert(std::is_same<bfloat32<0>::extracted_type,
+                  std::array<float, 8>>::value,
+    "bfloat32::extracted_type != std::array<float, 8>.");
 
-        static_assert(
-                !std::is_same<float, double>::value || is_double < zfloat32 < 0 >> ::value,
-                "is_double<zfloat32> == false. [scalar = float]");
-        static_assert(
-                !std::is_same<float, double>::value || !is_float < zfloat32 < 0 >> ::value,
-                "is_float<zfloat32> != false. [scalar = float]");
+    static_assert(std::is_same<typename ztraits<bfloat32<0>>::tag, bval_tag > ::value,
+                  "bfloat32::tag != bval_tag.");
+    static_assert(std::is_arithmetic<typename ztraits<bfloat32<0>>::element_type > ::value,
+                  "is_arithmetic<bfloat32::element_type> == false.");
+    static_assert(!is_zval < bfloat32<0>>::value,
+                  "is_zval<bfloat32> != false.");
+    static_assert(is_bval < bfloat32<0>>::value,
+                  "is_bval<bfloat32> == false.");
 
-        static_assert(
-                !std::is_integral<float>::value || is_integral < zfloat32 < 0 >> ::value,
-                "is_integral<zfloat32> == false. [scalar = float]");
-        static_assert(!std::is_integral<float>::value ||
-                      !is_floating_point < zfloat32 < 0 >> ::value,
-                      "is_floating_point<zfloat32> != false. [scalar = float]");
-    }
-    ///@}
+    // Validate integral, float, double traits =========================================================================
+
+    static_assert(!std::is_floating_point<float>::value ||
+                  is_floating_point < zfloat32<0>>::value,
+                  "is_floating_point<zfloat32> == false. [scalar = float]");
+    static_assert(!std::is_floating_point<float>::value ||
+                  !is_integral < zfloat32<0>>::value,
+                  "is_integral<zfloat32> != false. [scalar = float]");
+
+    static_assert(
+            !std::is_same<float, float>::value || is_float < zfloat32<0>>::value,
+            "is_float<zfloat32> == false. [scalar = float]");
+    static_assert(
+            !std::is_same<float, float>::value || !is_double < zfloat32<0>>::value,
+            "is_double<zfloat32> != false. [scalar = float]");
+
+    static_assert(
+            !std::is_same<float, double>::value || is_double < zfloat32<0>>::value,
+            "is_double<zfloat32> == false. [scalar = float]");
+    static_assert(
+            !std::is_same<float, double>::value || !is_float < zfloat32<0>>::value,
+            "is_float<zfloat32> != false. [scalar = float]");
+
+    static_assert(
+            !std::is_integral<float>::value || is_integral < zfloat32<0>>::value,
+            "is_integral<zfloat32> == false. [scalar = float]");
+    static_assert(!std::is_integral<float>::value ||
+                  !is_floating_point < zfloat32<0>>::value,
+                  "is_floating_point<zfloat32> != false. [scalar = float]");
 }}}

@@ -31,23 +31,12 @@
 
 namespace zacc {
 
-    template<typename Base, typename Interface, typename Composed>
-    struct __convertable :
-            public Base
+    template<typename Interface, typename Composed>
+    struct convertable
     {
         auto as_bool() const noexcept
         {
             return static_cast<typename Composed::bval_t>(*static_cast<const Composed*>(this));
         }
-    };
-
-    /**
-     * @brief provides pretty-print functionality for zacc types
-     */
-    template<typename Interface, typename Composed>
-    struct convertable {
-
-        template<typename Base>
-        using impl = __convertable<Base, Interface, Composed>;
     };
 }
