@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include "util/operators.hpp"
+
 namespace zacc { namespace traits {
 
     /**
@@ -34,22 +36,18 @@ namespace zacc { namespace traits {
      */
     template<typename Interface, typename Composed, typename Boolean>
     struct logical
+            : inherit<ops_meta<Composed, Interface>, logical_and, logical_or>
     {
-        constexpr auto self()
-        {
-            return static_cast<Composed*>(this);
+        friend Boolean operator!(param_t<Composed> self) {
+            return Boolean(vlneg(self), last_operation::boolean);
         }
 
-        Boolean operator!() {
-            return Boolean(vlneg(*self()), last_operation::boolean);
+        friend Boolean operator||(param_t<Composed> self, param_t<Composed> other) {
+            return Boolean(vlor(self, other), last_operation::boolean);
         }
 
-        Boolean operator||(Composed other) {
-            return Boolean(vlor(*self(), other), last_operation::boolean);
-        }
-
-        Boolean operator&&(Composed other) {
-            return Boolean(vland(*self(), other), last_operation::boolean);
+        friend Boolean operator&&(param_t<Composed> self, param_t<Composed> other) {
+            return Boolean(vland(self, other), last_operation::boolean);
         }
     };
 }}

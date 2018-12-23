@@ -98,6 +98,15 @@ namespace zacc {
                     separator);
     }
 
+    template<class InputIt1, class InputIt2, class T, class TernaryOperation>
+    T accumulate( InputIt1 first1, InputIt1 last1, InputIt2 first2, T init, TernaryOperation ternary_op)
+    {
+        for (; first1 != last1; ++first1, ++first2) {
+            init = ternary_op(std::move(init), *first1, *first2);
+        }
+
+        return init;
+    }
 
     /**
      * @brief Applies a generator function to container

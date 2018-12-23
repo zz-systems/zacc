@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include "util/operators.hpp"
+
 namespace zacc { namespace traits {
 
     /**

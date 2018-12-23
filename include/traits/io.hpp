@@ -27,6 +27,8 @@
 
 #include "memory.h"
 
+#include "util/operators.hpp"
+
 namespace zacc { namespace traits {
 
     /**

@@ -66,46 +66,46 @@
 //#define BASE() \
 //    Base* base() { return static_cast<Base*>(this); }
 
-/**
- * @brief provides converting binary operators, where one argument is of another type and has to be casted appropriately.
- * @param op operator
- * @param Composed final composed type
- */
-#define CONVERSION2(op, Composed) \
-    /** \
-    * @brief converting op operator \
-    */ \
-    template<typename other_t> \
-    friend Composed operator op(const Composed one, const enable_if_not_same<other_t, Composed> other) { \
-        return one op static_cast<Composed>(other); \
-    }; \
-    /** \
-    * @brief converting op operator \
-    */ \
-    template<typename other_t> \
-    friend Composed operator op (const enable_if_not_same<other_t, Composed> one, const Composed other) { \
-        return static_cast<Composed>(one) op other; \
-    }
-
-/**
- * @brief provides converting binary operators, where one argument is of another type and has to be casted appropriately.
- * 'Composed' used as default final composed type
- * @param op operator
- */
-#define CONVERSION(op) CONVERSION2(op, Composed)
-
-/**
- * @brief provides assignment operators in form of +=, <<=, etc...
- * @param op operator
- * @param Composed final composed type
- */
-#define ASSIGNMENT2(op, Composed) \
-    /** \
-    * @brief merged op - assignment operator \
-    */ \
-    friend Composed &operator op##=(Composed &one, const Composed other) { \
-        return one = one op other; \
-    }
+///**
+// * @brief provides converting binary operators, where one argument is of another type and has to be casted appropriately.
+// * @param op operator
+// * @param Composed final composed type
+// */
+//#define CONVERSION2(op, Composed) \
+//    /** \
+//    * @brief converting op operator \
+//    */ \
+//    template<typename other_t> \
+//    friend Composed operator op(const Composed one, const enable_if_not_same<other_t, Composed> other) { \
+//        return one op static_cast<Composed>(other); \
+//    }; \
+//    /** \
+//    * @brief converting op operator \
+//    */ \
+//    template<typename other_t> \
+//    friend Composed operator op (const enable_if_not_same<other_t, Composed> one, const Composed other) { \
+//        return static_cast<Composed>(one) op other; \
+//    }
+//
+///**
+// * @brief provides converting binary operators, where one argument is of another type and has to be casted appropriately.
+// * 'Composed' used as default final composed type
+// * @param op operator
+// */
+//#define CONVERSION(op) CONVERSION2(op, Composed)
+//
+///**
+// * @brief provides assignment operators in form of +=, <<=, etc...
+// * @param op operator
+// * @param Composed final composed type
+// */
+//#define ASSIGNMENT2(op, Composed) \
+//    /** \
+//    * @brief merged op - assignment operator \
+//    */ \
+//    friend Composed &operator op##=(Composed &one, const Composed other) { \
+//        return one = one op other; \
+//    }
 
 /**
  * @brief provides assignment operators in form of +=, <<=, etc...

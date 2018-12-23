@@ -45,14 +45,14 @@
 #include "util/macros.hpp"
 
 #include "traits/printable.hpp"
-#include "traits/arithmetic.hpp"
+#include "traits/math.hpp"
+#include "traits/numeric.hpp"
+#include "traits/conditional.hpp"
 #include "traits/logical.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/math.hpp"
+#include "traits/arithmetic.hpp"
 #include "traits/comparable.hpp"
-#include "traits/numeric.hpp"
 #include "traits/io.hpp"
-#include "traits/conditional.hpp"
 #include "traits/equatable.hpp"
 
 namespace zacc { namespace backend { namespace avx2
@@ -104,8 +104,8 @@ namespace zacc {
         /// extracted std::array of (dim) scalar values
         using extracted_type = std::array<element_type, size>;
 
-        using zval_t = backend::avx2::zint8<T::feature_mask>;
-        using bval_t = backend::avx2::bint8<T::feature_mask>;
+        using zval_type = backend::avx2::zint8<T::feature_mask>;
+        using bval_type = backend::avx2::bint8<T::feature_mask>;
 
         using tag = typename T::tag;
     };
@@ -115,6 +115,176 @@ namespace zacc { namespace backend { namespace avx2
 {
     namespace int8_modules
     {
+        /**
+         * @brief math mixin implementation [avx2 branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct math : traits::math<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vabs(Composed one) 
+            {
+                return _mm256_abs_epi8(one);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vmin(Composed one, Composed other) 
+            {
+                return _mm256_min_epi8(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vmax(Composed one, Composed other) 
+            {
+                return _mm256_max_epi8(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vclamp(Composed self, Composed from, Composed to) 
+            {
+                return vmin(to, vmax(from, self));
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief numeric mixin implementation [avx2 branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct numeric : traits::numeric<Interface, Composed, Boolean>
+        {
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief conditional mixin implementation [avx2 branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
+            {
+                return _mm256_blendv_epi8(else_value, if_value, condition);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief logical mixin implementation [avx2 branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Boolean vlneg(Composed one) 
+            {
+                return _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Boolean vlor(Composed one, Composed other) 
+            {
+                return _mm256_or_si256(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Boolean vland(Composed one, Composed other) 
+            {
+                return _mm256_and_si256(one, other);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief bitwise mixin implementation [avx2 branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vbneg(Composed one) 
+            {
+                auto zero = _mm256_setzero_si256();
+                auto ones = _mm256_cmpeq_epi8(zero, zero);
+                return _mm256_xor_si256(one, ones);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vband(Composed one, Composed other) 
+            {
+                return _mm256_and_si256(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vbor(Composed one, Composed other) 
+            {
+                return _mm256_or_si256(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vbxor(Composed one, Composed other) 
+            {
+                return _mm256_xor_si256(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend bool vis_set(Composed one) 
+            {
+                return _mm256_testc_si256(one, _mm256_cmpeq_epi8(one,one));
+            }
+        };
+
+        // =============================================================================================================
+
         /**
          * @brief arithmetic mixin implementation [avx2 branch]
          * @relates int8
@@ -186,146 +356,6 @@ namespace zacc { namespace backend { namespace avx2
         // =============================================================================================================
 
         /**
-         * @brief logical mixin implementation [avx2 branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct logical : traits::logical<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vlneg(Composed one) 
-            {
-                return _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vlor(Composed one, Composed other) 
-            {
-                return _mm256_or_si256(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vland(Composed one, Composed other) 
-            {
-                return _mm256_and_si256(one, other);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief bitwise mixin implementation [avx2 branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vbneg(Composed one) 
-            {
-                auto zero = _mm256_setzero_si256();
-                auto ones = _mm256_cmpeq_epi8(zero, zero);
-                return _mm256_xor_si256(one, ones);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vband(Composed one, Composed other) 
-            {
-                return _mm256_and_si256(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vbor(Composed one, Composed other) 
-            {
-                return _mm256_or_si256(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vbxor(Composed one, Composed other) 
-            {
-                return _mm256_xor_si256(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend bool is_set(Composed one) 
-            {
-                return _mm256_testc_si256(one, _mm256_cmpeq_epi8(one,one));
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief math mixin implementation [avx2 branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct math : traits::math<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vabs(Composed one) 
-            {
-                return _mm256_abs_epi8(one);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vmin(Composed one, Composed other) 
-            {
-                return _mm256_min_epi8(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vmax(Composed one, Composed other) 
-            {
-                return _mm256_max_epi8(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vclamp(Composed self, Composed from, Composed to) 
-            {
-                return vmin(to, vmax(from, self));
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
          * @brief comparable mixin implementation [avx2 branch]
          * @relates int8
          */
@@ -336,7 +366,7 @@ namespace zacc { namespace backend { namespace avx2
              * @brief  [default branch]
              * @relates int8
              */
-            friend Composed vgt(Composed one, Composed other) 
+            friend Boolean vgt(Composed one, Composed other) 
             {
                 return _mm256_cmpgt_epi8(one, other);
             }
@@ -345,7 +375,7 @@ namespace zacc { namespace backend { namespace avx2
              * @brief  [default branch]
              * @relates int8
              */
-            friend Composed vlt(Composed one, Composed other) 
+            friend Boolean vlt(Composed one, Composed other) 
             {
                 return _mm256_cmpgt_epi8(other, one);
             }
@@ -354,7 +384,7 @@ namespace zacc { namespace backend { namespace avx2
              * @brief  [default branch]
              * @relates int8
              */
-            friend Composed vge(Composed one, Composed other) 
+            friend Boolean vge(Composed one, Composed other) 
             {
                 return !(one < other);
             }
@@ -363,21 +393,10 @@ namespace zacc { namespace backend { namespace avx2
              * @brief  [default branch]
              * @relates int8
              */
-            friend Composed vle(Composed one, Composed other) 
+            friend Boolean vle(Composed one, Composed other) 
             {
                 return !(one > other);
             }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief numeric mixin implementation [avx2 branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct numeric : traits::numeric<Interface, Composed, Boolean>
-        {
         };
 
         // =============================================================================================================
@@ -411,25 +430,6 @@ namespace zacc { namespace backend { namespace avx2
         // =============================================================================================================
 
         /**
-         * @brief conditional mixin implementation [avx2 branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct conditional : traits::conditional<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
-            {
-                return _mm256_blendv_epi8(else_value, if_value, condition);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
          * @brief equatable mixin implementation [avx2 branch]
          * @relates int8
          */
@@ -440,7 +440,7 @@ namespace zacc { namespace backend { namespace avx2
              * @brief  [default branch]
              * @relates int8
              */
-            friend Composed veq(Composed one, Composed other) 
+            friend Boolean veq(Composed one, Composed other) 
             {
                 return _mm256_cmpeq_epi8(one, other);
             }
@@ -449,7 +449,7 @@ namespace zacc { namespace backend { namespace avx2
              * @brief  [default branch]
              * @relates int8
              */
-            friend Composed vneq(Composed one, Composed other) 
+            friend Boolean vneq(Composed one, Composed other) 
             {
                 return !(one == other);
             }
@@ -478,13 +478,16 @@ namespace zacc { namespace backend { namespace avx2
     {
         USING_ZTYPE(izint8<FeatureMask>);
 
-        /// complete vector
-        using zval_t = zint8<FeatureMask>;
-
-        /// complete boolean vector
-        using bval_t = bint8<FeatureMask>;
-
         using zval<izint8<FeatureMask>>::zval;
+
+        template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
+        constexpr zint8(const T& other) noexcept
+                : zint8(other.value())
+        {}
+
+        explicit constexpr zint8(const bval_t<izint8<FeatureMask>>& other) noexcept
+                : zint8(other.value())
+        {}
 
         /**
          * @brief zint8 constructor [avx2 branch]
@@ -541,13 +544,16 @@ namespace zacc { namespace backend { namespace avx2
     {
         USING_ZTYPE(ibint8<FeatureMask>);
 
-        /// complete vector
-        using zval_t = zint8<FeatureMask>;
-
-        /// complete boolean vector
-        using bval_t = bint8<FeatureMask>;
-
         using zval<ibint8<FeatureMask>>::zval;
+
+        template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
+        constexpr bint8(const T& other) noexcept
+                : bint8(other.value())
+        {}
+
+//        constexpr bint8(const zval_t<ibint8<FeatureMask>>& other) noexcept
+//                : bint8(other.value())
+//        {}
 
         /**
          * @brief bint8 constructor [avx2 branch]

@@ -46,14 +46,14 @@
 
 #include "traits/printable.hpp"
 #include "traits/logical.hpp"
-#include "traits/numeric.hpp"
-#include "traits/bitwise.hpp"
 #include "traits/comparable.hpp"
-#include "traits/math.hpp"
 #include "traits/arithmetic.hpp"
+#include "traits/numeric.hpp"
 #include "traits/io.hpp"
-#include "traits/conditional.hpp"
+#include "traits/bitwise.hpp"
 #include "traits/equatable.hpp"
+#include "traits/conditional.hpp"
+#include "traits/math.hpp"
 
 namespace zacc { namespace backend { namespace scalar
 {
@@ -104,8 +104,8 @@ namespace zacc {
         /// extracted std::array of (dim) scalar values
         using extracted_type = std::array<element_type, size>;
 
-        using zval_t = backend::scalar::zfloat32<T::feature_mask>;
-        using bval_t = backend::scalar::bfloat32<T::feature_mask>;
+        using zval_type = backend::scalar::zfloat32<T::feature_mask>;
+        using bval_type = backend::scalar::bfloat32<T::feature_mask>;
 
         using tag = typename T::tag;
     };
@@ -126,7 +126,7 @@ namespace zacc { namespace backend { namespace scalar
              * @brief  [default branch]
              * @relates float32
              */
-            friend Composed vlneg(Composed one) 
+            friend Boolean vlneg(Composed one) 
             {
                 return !one.value();
             }
@@ -135,7 +135,7 @@ namespace zacc { namespace backend { namespace scalar
              * @brief  [default branch]
              * @relates float32
              */
-            friend Composed vlor(Composed one, Composed other) 
+            friend Boolean vlor(Composed one, Composed other) 
             {
                 return (one.value() || other.value());
             }
@@ -144,9 +144,128 @@ namespace zacc { namespace backend { namespace scalar
              * @brief  [default branch]
              * @relates float32
              */
-            friend Composed vland(Composed one, Composed other) 
+            friend Boolean vland(Composed one, Composed other) 
             {
                 return (one.value() && other.value());
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief comparable mixin implementation [scalar branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct comparable : traits::comparable<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean vgt(Composed one, Composed other) 
+            {
+                return (one.value() > other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean vlt(Composed one, Composed other) 
+            {
+                return (one.value() < other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean vge(Composed one, Composed other) 
+            {
+                return (one.value() >= other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean vle(Composed one, Composed other) 
+            {
+                return (one.value() <= other.value());
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief arithmetic mixin implementation [scalar branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vneg(Composed one) 
+            {
+                return (-one.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vadd(Composed one, Composed other) 
+            {
+                return (one.value() + other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vsub(Composed one, Composed other) 
+            {
+                return (one.value() - other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vmul(Composed one, Composed other) 
+            {
+                return (one.value() * other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vdiv(Composed one, Composed other) 
+            {
+                return (one.value() / other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return multiplicand.value() * multiplier.value() + addendum.value();
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return multiplicand.value() * multiplier.value() - addendum.value();
             }
         };
 
@@ -159,6 +278,43 @@ namespace zacc { namespace backend { namespace scalar
         template<typename Interface, typename Composed, typename Boolean>
         struct numeric : traits::numeric<Interface, Composed, Boolean>
         {
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief io mixin implementation [scalar branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct io : traits::io<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
+            {
+                result[0] = input.value();
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
+            {
+                result[0] = input.value();
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            template<typename RandomIt> friend Composed vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
+            {
+                return input[index.value()];
+            }
         };
 
         // =============================================================================================================
@@ -225,7 +381,7 @@ namespace zacc { namespace backend { namespace scalar
              * @brief  [default branch]
              * @relates float32
              */
-            friend bool is_set(Composed one) 
+            friend bool vis_set(Composed one) 
             {
                 return one.value() != 0;
             }
@@ -234,46 +390,47 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief comparable mixin implementation [scalar branch]
+         * @brief equatable mixin implementation [scalar branch]
          * @relates float32
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct comparable : traits::comparable<Interface, Composed, Boolean>
+        struct equatable : traits::equatable<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend Composed vgt(Composed one, Composed other) 
+            friend Boolean veq(Composed one, Composed other) 
             {
-                return (one.value() > other.value());
+                return (one.value() == other.value());
             }
 
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend Composed vlt(Composed one, Composed other) 
+            friend Boolean vneq(Composed one, Composed other) 
             {
-                return (one.value() < other.value());
+                return (one.value() != other.value());
             }
+        };
 
+        // =============================================================================================================
+
+        /**
+         * @brief conditional mixin implementation [scalar branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
+        {
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend Composed vge(Composed one, Composed other) 
+            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
             {
-                return (one.value() >= other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vle(Composed one, Composed other) 
-            {
-                return (one.value() <= other.value());
+                return (condition.value() ? if_value : else_value);
             }
         };
 
@@ -376,163 +533,6 @@ namespace zacc { namespace backend { namespace scalar
                 return std::sqrt(one.value());
             }
         };
-
-        // =============================================================================================================
-
-        /**
-         * @brief arithmetic mixin implementation [scalar branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vneg(Composed one) 
-            {
-                return (-one.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vadd(Composed one, Composed other) 
-            {
-                return (one.value() + other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vsub(Composed one, Composed other) 
-            {
-                return (one.value() - other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vmul(Composed one, Composed other) 
-            {
-                return (one.value() * other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vdiv(Composed one, Composed other) 
-            {
-                return (one.value() / other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return multiplicand.value() * multiplier.value() + addendum.value();
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return multiplicand.value() * multiplier.value() - addendum.value();
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief io mixin implementation [scalar branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct io : traits::io<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
-            {
-                result[0] = input.value();
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
-            {
-                result[0] = input.value();
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            template<typename RandomIt> friend Composed vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
-            {
-                return input[index.value()];
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief conditional mixin implementation [scalar branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct conditional : traits::conditional<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
-            {
-                return (condition.value() ? if_value : else_value);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief equatable mixin implementation [scalar branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct equatable : traits::equatable<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed veq(Composed one, Composed other) 
-            {
-                return (one.value() == other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vneq(Composed one, Composed other) 
-            {
-                return (one.value() != other.value());
-            }
-        };
     } // end float32_modules
 
     // =================================================================================================================
@@ -557,20 +557,23 @@ namespace zacc { namespace backend { namespace scalar
     {
         USING_ZTYPE(izfloat32<FeatureMask>);
 
-        /// complete vector
-        using zval_t = zfloat32<FeatureMask>;
-
-        /// complete boolean vector
-        using bval_t = bfloat32<FeatureMask>;
-
         using zval<izfloat32<FeatureMask>>::zval;
+
+        template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
+        constexpr zfloat32(const T& other) noexcept
+                : zfloat32(other.value())
+        {}
+
+        explicit constexpr zfloat32(const bval_t<izfloat32<FeatureMask>>& other) noexcept
+                : zfloat32(other.value())
+        {}
 
         /**
          * @brief zfloat32 constructor [scalar branch]
          * @relates zfloat32
          */
         constexpr zfloat32(float value) noexcept
-            : zval<izfloat32<FeatureMask>>(value)
+            : zval<izfloat32<FeatureMask>>(std::array<float, 1> {{value}})
         {
         }
 
@@ -579,7 +582,7 @@ namespace zacc { namespace backend { namespace scalar
          * @relates zfloat32
          */
         constexpr zfloat32(extracted_type value) noexcept
-            : zval<izfloat32<FeatureMask>>(value[0])
+            : zval<izfloat32<FeatureMask>>(value)
         {
         }
     };
@@ -602,20 +605,32 @@ namespace zacc { namespace backend { namespace scalar
     {
         USING_ZTYPE(ibfloat32<FeatureMask>);
 
-        /// complete vector
-        using zval_t = zfloat32<FeatureMask>;
-
-        /// complete boolean vector
-        using bval_t = bfloat32<FeatureMask>;
-
         using zval<ibfloat32<FeatureMask>>::zval;
+
+        template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
+        constexpr bfloat32(const T& other) noexcept
+                : bfloat32(other.value())
+        {}
+
+//        constexpr bfloat32(const zval_t<ibfloat32<FeatureMask>>& other) noexcept
+//                : bfloat32(other.value())
+//        {}
 
         /**
          * @brief bfloat32 constructor [scalar branch]
          * @relates bfloat32
          */
         constexpr bfloat32(bool value) noexcept
-            : zval<ibfloat32<FeatureMask>>(value)
+            : zval<ibfloat32<FeatureMask>>(std::array<bool, 1> {{value}})
+        {
+        }
+
+        /**
+         * @brief bfloat32 constructor [scalar branch]
+         * @relates bfloat32
+         */
+        constexpr bfloat32(zfloat32<FeatureMask> value) noexcept
+            : zval<ibfloat32<FeatureMask>>(std::array<bool, 1> {{ value.value() != 0 }})
         {
         }
     };

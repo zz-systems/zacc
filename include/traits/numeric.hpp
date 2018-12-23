@@ -27,6 +27,7 @@
 
 #include <type_traits>
 #include <limits>
+#include "util/operators.hpp"
 
 namespace zacc { namespace traits {
 

@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include "util/operators.hpp"
+
 namespace zacc { namespace traits {
 
     /**
@@ -38,20 +40,20 @@ namespace zacc { namespace traits {
 
         struct else_branch
         {
-            constexpr Composed otherwise(const Composed& else_value) const
+            constexpr Composed otherwise(param_t<Composed> else_value) const
             {
                 return vsel(_condition, _if_value, else_value);
             }
 
         private:
 
-            constexpr else_branch(const Boolean& condition, const Composed& if_value, std::false_type)
-                    : _if_value(if_value), _condition(condition.last_op() == last_operation::undefined ? (Composed(condition.value()) != 0) : condition)
+            constexpr else_branch(param_t<Boolean> condition, param_t<Composed> if_value, std::false_type)
+                : _if_value(if_value), _condition(condition.last_op() == last_operation::undefined ? (Composed(condition.value()) != 0) : condition)
             {
             }
 
-            constexpr else_branch(const Boolean& condition, const Composed& if_value, std::true_type)
-                    : _if_value(if_value), _condition(condition)
+            constexpr else_branch(param_t<Boolean> condition, param_t<Composed> if_value, std::true_type)
+                : _if_value(if_value), _condition(condition)
             {
             }
 
@@ -62,7 +64,7 @@ namespace zacc { namespace traits {
         };
 
 
-        constexpr else_branch when(const Boolean& condition) const {
+        constexpr else_branch when(param_t<Boolean> condition) const {
             return else_branch(condition, *static_cast<const Composed*>(this), is_cval<Boolean>{});
         }
     };

@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include "util/operators.hpp"
+
 namespace zacc { namespace traits {
 
     /**
@@ -34,13 +36,14 @@ namespace zacc { namespace traits {
      */
     template<typename Interface, typename Composed, typename Boolean>
     struct equatable
+            : inherit<ops_meta<Composed, Interface>, equal_to, not_equal_to>
     {
 
-        friend Boolean operator==(const Composed one, const Composed other) {
+        friend Boolean operator==(param_t<Composed> one, param_t<Composed> other) {
             return Boolean(veq(one, other), last_operation::boolean);
         }
 
-        friend Boolean operator!=(const Composed one, const Composed other) {
+        friend Boolean operator!=(param_t<Composed> one, param_t<Composed> other) {
             return Boolean(vneq(one, other), last_operation::boolean);
         }
     };

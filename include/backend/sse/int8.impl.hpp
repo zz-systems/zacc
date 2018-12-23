@@ -45,15 +45,15 @@
 #include "util/macros.hpp"
 
 #include "traits/printable.hpp"
+#include "traits/numeric.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/logical.hpp"
 #include "traits/comparable.hpp"
 #include "traits/math.hpp"
-#include "traits/logical.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/io.hpp"
 #include "traits/equatable.hpp"
+#include "traits/io.hpp"
 #include "traits/conditional.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/numeric.hpp"
 
 namespace zacc { namespace backend { namespace sse
 {
@@ -104,8 +104,8 @@ namespace zacc {
         /// extracted std::array of (dim) scalar values
         using extracted_type = std::array<element_type, size>;
 
-        using zval_t = backend::sse::zint8<T::feature_mask>;
-        using bval_t = backend::sse::bint8<T::feature_mask>;
+        using zval_type = backend::sse::zint8<T::feature_mask>;
+        using bval_type = backend::sse::bint8<T::feature_mask>;
 
         using tag = typename T::tag;
     };
@@ -115,6 +115,125 @@ namespace zacc { namespace backend { namespace sse
 {
     namespace int8_modules
     {
+        /**
+         * @brief numeric mixin implementation [sse branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct numeric : traits::numeric<Interface, Composed, Boolean>
+        {
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief arithmetic mixin implementation [sse branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vneg(Composed one) 
+            {
+                return _mm_sub_epi8(_mm_setzero_si128(), one);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vadd(Composed one, Composed other) 
+            {
+                return _mm_add_epi8(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vsub(Composed one, Composed other) 
+            {
+                return _mm_sub_epi8(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vmul(Composed one, Composed other) 
+            {
+                /// @see http://stackoverflow.com/a/29155682/1261537;
+                auto even = _mm_mullo_epi16(one, other);
+                auto odd  = _mm_mullo_epi16(_mm_srli_epi16(one, 8),_mm_srli_epi16(other, 8));
+                return _mm_or_si128(_mm_slli_epi16(odd, 8), _mm_and_si128(even, _mm_set1_epi16(0xFF)));
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vdiv(Composed one, Composed other) 
+            {
+                auto dividend = one.data();
+                auto divisor = other.data();
+                alignas(alignof(Composed)) typename Composed::extracted_type result;
+                for (size_t i = 0; i < Composed::size; i++) { result[i] = dividend[i] / divisor[i]; };
+                return result;
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vmod(Composed one, Composed other) 
+            {
+                return vsub(one, vmul(other, vdiv(one, other)));
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief logical mixin implementation [sse branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Boolean vlneg(Composed one) 
+            {
+                return _mm_cmpeq_epi8(one, _mm_setzero_si128());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Boolean vlor(Composed one, Composed other) 
+            {
+                return _mm_or_si128(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Boolean vland(Composed one, Composed other) 
+            {
+                return _mm_and_si128(one, other);
+            }
+        };
+
+        // =============================================================================================================
+
         /**
          * @brief comparable mixin implementation [sse branch]
          * @relates int8
@@ -126,7 +245,7 @@ namespace zacc { namespace backend { namespace sse
              * @brief  [default branch]
              * @relates int8
              */
-            friend Composed vgt(Composed one, Composed other) 
+            friend Boolean vgt(Composed one, Composed other) 
             {
                 return _mm_cmpgt_epi8(one, other);
             }
@@ -135,7 +254,7 @@ namespace zacc { namespace backend { namespace sse
              * @brief  [default branch]
              * @relates int8
              */
-            friend Composed vlt(Composed one, Composed other) 
+            friend Boolean vlt(Composed one, Composed other) 
             {
                 return _mm_cmplt_epi8(one, other);
             }
@@ -144,7 +263,7 @@ namespace zacc { namespace backend { namespace sse
              * @brief  [default branch]
              * @relates int8
              */
-            friend Composed vge(Composed one, Composed other) 
+            friend Boolean vge(Composed one, Composed other) 
             {
                 return !(one < other);
             }
@@ -153,7 +272,7 @@ namespace zacc { namespace backend { namespace sse
              * @brief  [default branch]
              * @relates int8
              */
-            friend Composed vle(Composed one, Composed other) 
+            friend Boolean vle(Composed one, Composed other) 
             {
                 return !(one > other);
             }
@@ -247,43 +366,6 @@ namespace zacc { namespace backend { namespace sse
         // =============================================================================================================
 
         /**
-         * @brief logical mixin implementation [sse branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct logical : traits::logical<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vlneg(Composed one) 
-            {
-                return _mm_cmpeq_epi8(one, _mm_setzero_si128());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vlor(Composed one, Composed other) 
-            {
-                return _mm_or_si128(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vland(Composed one, Composed other) 
-            {
-                return _mm_and_si128(one, other);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
          * @brief bitwise mixin implementation [sse branch]
          * @relates int8
          */
@@ -334,7 +416,7 @@ namespace zacc { namespace backend { namespace sse
              */
             template<typename T = bool>
             friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
-            is_set(Composed one) 
+            vis_set(Composed one) 
             {
                 return _mm_test_all_ones(one) != 0;
             }
@@ -345,11 +427,39 @@ namespace zacc { namespace backend { namespace sse
              */
             template<typename T = bool>
             friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
-            is_set(Composed one) 
+            vis_set(Composed one) 
             {
                 auto zero = _mm_setzero_si128();
                 auto ones = _mm_cmpeq_epi32(zero, zero);
                 return _mm_movemask_epi8(_mm_cmpeq_epi8(one, ones)) == 0xFFFF;
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief equatable mixin implementation [sse branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct equatable : traits::equatable<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Boolean veq(Composed one, Composed other) 
+            {
+                return _mm_cmpeq_epi8(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Boolean vneq(Composed one, Composed other) 
+            {
+                return !(one == other);
             }
         };
 
@@ -384,34 +494,6 @@ namespace zacc { namespace backend { namespace sse
         // =============================================================================================================
 
         /**
-         * @brief equatable mixin implementation [sse branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct equatable : traits::equatable<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed veq(Composed one, Composed other) 
-            {
-                return _mm_cmpeq_epi8(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vneq(Composed one, Composed other) 
-            {
-                return !(one == other);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
          * @brief conditional mixin implementation [sse branch]
          * @relates int8
          */
@@ -440,88 +522,6 @@ namespace zacc { namespace backend { namespace sse
                 return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value));
             }
         };
-
-        // =============================================================================================================
-
-        /**
-         * @brief arithmetic mixin implementation [sse branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vneg(Composed one) 
-            {
-                return _mm_sub_epi8(_mm_setzero_si128(), one);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vadd(Composed one, Composed other) 
-            {
-                return _mm_add_epi8(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vsub(Composed one, Composed other) 
-            {
-                return _mm_sub_epi8(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vmul(Composed one, Composed other) 
-            {
-                /// @see http://stackoverflow.com/a/29155682/1261537;
-                auto even = _mm_mullo_epi16(one, other);
-                auto odd  = _mm_mullo_epi16(_mm_srli_epi16(one, 8),_mm_srli_epi16(other, 8));
-                return _mm_or_si128(_mm_slli_epi16(odd, 8), _mm_and_si128(even, _mm_set1_epi16(0xFF)));
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vdiv(Composed one, Composed other) 
-            {
-                auto dividend = one.data();
-                auto divisor = other.data();
-                typename Composed::extracted_type result;
-                for (size_t i = 0; i < Composed::size; i++) { result[i] = dividend[i] / divisor[i]; };
-                return result;
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vmod(Composed one, Composed other) 
-            {
-                return vsub(one, vmul(other, vdiv(one, other)));
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief numeric mixin implementation [sse branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct numeric : traits::numeric<Interface, Composed, Boolean>
-        {
-        };
     } // end int8_modules
 
     // =================================================================================================================
@@ -546,13 +546,16 @@ namespace zacc { namespace backend { namespace sse
     {
         USING_ZTYPE(izint8<FeatureMask>);
 
-        /// complete vector
-        using zval_t = zint8<FeatureMask>;
-
-        /// complete boolean vector
-        using bval_t = bint8<FeatureMask>;
-
         using zval<izint8<FeatureMask>>::zval;
+
+        template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
+        constexpr zint8(const T& other) noexcept
+                : zint8(other.value())
+        {}
+
+        explicit constexpr zint8(const bval_t<izint8<FeatureMask>>& other) noexcept
+                : zint8(other.value())
+        {}
 
         /**
          * @brief zint8 constructor [sse branch]
@@ -609,13 +612,16 @@ namespace zacc { namespace backend { namespace sse
     {
         USING_ZTYPE(ibint8<FeatureMask>);
 
-        /// complete vector
-        using zval_t = zint8<FeatureMask>;
-
-        /// complete boolean vector
-        using bval_t = bint8<FeatureMask>;
-
         using zval<ibint8<FeatureMask>>::zval;
+
+        template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
+        constexpr bint8(const T& other) noexcept
+                : bint8(other.value())
+        {}
+
+//        constexpr bint8(const zval_t<ibint8<FeatureMask>>& other) noexcept
+//                : bint8(other.value())
+//        {}
 
         /**
          * @brief bint8 constructor [sse branch]

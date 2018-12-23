@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include "util/operators.hpp"
+
 namespace zacc { namespace traits {
 
     /**
@@ -34,6 +36,7 @@ namespace zacc { namespace traits {
      */
     template<typename Interface, typename Composed, typename Boolean>
     struct comparable
+            : inherit<ops_meta<Composed, Interface>, greater, greater_equal, less, less_equal>
     {
 
         friend Boolean operator>(const Composed one, const Composed other) {
@@ -51,13 +54,5 @@ namespace zacc { namespace traits {
         friend Boolean operator<=(const Composed one, const Composed other) {
             return Boolean(vle(one, other), last_operation::boolean);
         }
-
-        CONVERSION(>);
-
-        CONVERSION(>=);
-
-        CONVERSION(<);
-
-        CONVERSION(<=);
     };
 }}

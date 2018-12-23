@@ -26,6 +26,8 @@
 
 #pragma once
 
+#include "util/operators.hpp"
+
 namespace zacc { namespace traits {
 
     /**
@@ -35,22 +37,23 @@ namespace zacc { namespace traits {
      */
     template<typename Interface, typename Composed, typename Boolean>
     struct bitwise_shift
+            //: inherit<Composed, bit_shl, bit_shr>
     {
 
-        friend Composed operator<<(const Composed one, const size_t immediate) {
+        friend Composed operator<<(param_t<Composed> one, const size_t immediate) {
             return vbslli(one, immediate);
         }
 
-        friend Composed operator>>(const Composed one, const size_t immediate) {
+        friend Composed operator>>(param_t<Composed> one, const size_t immediate) {
             return vbsrli(one, immediate);
         }
 
         // TODO: Disabled for now.
-        /*friend Composed operator<<(const Composed one, const Composed other) {
+        /*friend Composed operator<<(param_t<Composed> one, param_t<Composed> other) {
             return vbsll(one, other);
         }
 
-        friend Composed operator>>(const Composed one, const Composed other) {
+        friend Composed operator>>(param_t<Composed> one, param_t<Composed> other) {
             return vbsrl(one, other);
         }*/
 
@@ -67,11 +70,5 @@ namespace zacc { namespace traits {
         friend Composed &operator >>=(Composed &one, const size_t immediate) {
             return one = one >> immediate;
         }
-
-        CONVERSION(<<);
-        ASSIGNMENT(<<);
-
-        CONVERSION(>>);
-        ASSIGNMENT(>>);
     };
 }}

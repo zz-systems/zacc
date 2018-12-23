@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include "util/operators.hpp"
+
 namespace zacc { namespace traits {
 
     /**
@@ -34,19 +36,16 @@ namespace zacc { namespace traits {
      */
     template<typename Interface, typename Composed, typename Boolean>
     struct arithmetic
+            : inherit<ops_meta<Composed, Interface>, plus, minus, multiplies, divides, modulus, increment, decrement>
+            //: compose_t<plus, minus, multiplies, divides, modulus, increment, decrement, composable<Composed>::template type>
     {
-        constexpr auto self()
-        {
-            return static_cast<Composed*>(this);
-        }
-
         /**
          * @brief promotion operator for symmetry sake
          * @param one
          * @return a copy of the argument
          */
-        Composed operator+() {
-            return *self();
+        friend Composed operator+(param_t<Composed> self) {
+            return self;
         }
 
         /**
@@ -54,8 +53,8 @@ namespace zacc { namespace traits {
          * @param one
          * @return negated value
          */
-        Composed operator-() {
-            return vneg(*self());
+        friend Composed operator-(param_t<Composed> self) {
+            return vneg(self);
         }
 
         /**
@@ -64,7 +63,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one + other
          */
-        friend Composed operator+(const Composed one,const Composed other) {
+        friend Composed operator+(param_t<Composed> one, param_t<Composed> other) {
             return vadd(one, other);
         }
 
@@ -74,7 +73,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one - other
          */
-        friend Composed operator-(const Composed one,const Composed other) {
+        friend Composed operator-(param_t<Composed> one, param_t<Composed> other) {
             return vsub(one, other);
         }
 
@@ -84,7 +83,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one * other
          */
-        friend Composed operator*(const Composed one,const Composed other) {
+        friend Composed operator*(param_t<Composed> one, param_t<Composed> other) {
             return vmul(one, other);
         }
 
@@ -94,7 +93,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one / other
          */
-        friend Composed operator/(const Composed one,const Composed other) {
+        friend Composed operator/(param_t<Composed> one, param_t<Composed> other) {
             return vdiv(one, other);
         }
 
@@ -104,7 +103,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one % other
          */
-        friend Composed operator%(const Composed one, const Composed other) {
+        friend Composed operator%(param_t<Composed> one, param_t<Composed> other) {
             return vmod(one, other);
         }
 
@@ -112,52 +111,16 @@ namespace zacc { namespace traits {
          * @brief prefix increment
          * @return self + 1
          */
-        Composed &operator++() {
-            return vadd(*self(), 1);
-        }
-
-        /**
-         * @brief postfix increment
-         * @return self
-         */
-        Composed operator++(int) {
-            auto temp = *self();
-
-            ++(*self());
-
-            return temp;
+        friend Composed& operator++(Composed& self) {
+            return vadd(self, 1);
         }
 
         /**
          * @brief prefix decrement
          * @return self - 1
          */
-        Composed &operator--() {
-            return vsub(*self(), 1);
+        friend Composed& operator--(Composed& self) {
+            return vsub(self, 1);
         }
-
-        /**
-         * @brief postfix decrement
-         * @return self
-         */
-        Composed operator--(int) {
-            auto temp = *self();
-
-            --(*self());
-
-            return temp;
-        }
-
-        CONVERSION(+);
-        ASSIGNMENT(+);
-
-        CONVERSION(-);
-        ASSIGNMENT(-);
-
-        CONVERSION(*);
-        ASSIGNMENT(*);
-
-        CONVERSION(/);
-        ASSIGNMENT(/);
     };
 }}

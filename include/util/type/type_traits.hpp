@@ -65,9 +65,33 @@ namespace zacc {
         using type = typename std::conditional_t<Head::value, Head, void>::type;
     };
 
-
     template<typename Head, typename... Tail>
     using select_t = typename select<Head, Tail...>::type;
+
+    template <typename T, typename enable = void>
+    struct is_small_type
+        : std::false_type
+    {};
+
+    template <typename T>
+    struct is_small_type<T, std::enable_if_t<std::is_pointer<T>::value
+                                             || std::is_arithmetic<T>::value
+                                             || std::is_enum<T>::value
+                                             || sizeof(T) < sizeof(void*)>>
+        : std::true_type
+    {};
+
+    template<typename T>
+    using param_t = std::conditional_t<is_small_type<T>::value, T const, T const&>;
+
+    template<typename T, typename U>
+    using enable_if_convertible2 = std::enable_if_t<std::is_convertible<T, U>::value, void**>;
+
+    template<typename T, typename U>
+    using enable_if_not_same2 = std::enable_if_t<!std::is_same<T, U>::value, void**>;
+
+    template<bool Cond>
+    using enable_if_t = std::enable_if_t<Cond, void**>;
 
     template<typename Base, typename required_t>
     struct requires {
@@ -97,6 +121,36 @@ namespace zacc {
 
     template<typename T, typename enable = void>
     struct ztraits;
+
+    template<typename T>
+    struct ztraits<T, std::enable_if_t<std::is_fundamental<T>::value>>
+    {
+        /// vector size (1 - scalar, 4, 8, 16, ...)
+        static constexpr size_t size = 1;
+
+        /// capabilities
+        static constexpr uint64_t feature_mask = 0;
+
+        /// memory alignment
+        static constexpr size_t alignment = alignof(T);
+
+        /// scalar type? vector type?
+        static constexpr bool is_vector = false;
+
+        /// vector type, like __m128i for sse 4x integer vector
+        using vector_type = std::array<T, 1>;
+
+        /// scalar type, like int for sse 4x integer vector
+        using element_type = T;
+
+        /// extracted std::array of (dim) scalar values
+        using extracted_type = std::array<element_type, size>;
+
+        using zval_type = T;
+        using bval_type = bool;
+
+        using tag = select<when<std::is_same<T, bool>::value, bval_tag>, zval_tag>;
+    };
 
     /// vector size (1 - scalar, 4, 8, 16, ...)
     template<typename T>
@@ -169,16 +223,15 @@ namespace zacc {
 
 
 
-    template<typename val_t, typename enable_t = void>
+    template<typename T, typename enable_t = void>
     struct is_cval
             : public std::false_type
     {};
 
     /// @cond
     /// @struct is_cval<val_t, std::enable_if_t<is cval_tag && (zval || is_bval)>
-    template<typename val_t>
-    struct is_cval<val_t, std::enable_if_t<std::is_same<typename ztraits<val_t>::tag, cval_tag>::value
-                                           && (is_zval<typename ztraits<val_t>::element_type>::value || is_bval<typename val_t::element_type>::value)>>
+    template<typename T>
+    struct is_cval<T, std::enable_if_t<std::is_same<tag_t<T>, cval_tag>::value && is_zval<element_t<T>>::value>>
             : public std::true_type
     {};
     /// @endcond
@@ -288,117 +341,6 @@ namespace zacc {
 
 namespace zacc
 {
-
-
-//    template<typename Vector, typename MaskVector, typename Element, typename Tag, size_t Size, size_t Alignment, uint64_t Features = 0xFFFF'FFFF'FFFF'FFFF>
-//    struct zval_base
-//    {
-//        /// vector size (1 - scalar, 4, 8, 16, ...)
-//        static constexpr size_t size() noexcept
-//        {
-//            return Size;
-//        }
-//
-//        /// scalar type? vector type?
-//        static constexpr bool is_vector = Size > 1;
-//
-//        /// capabilities
-//        static constexpr uint64_t features = Features;
-//
-//        /// memory alignment
-//        static constexpr size_t alignment = Alignment;
-//
-//
-//        /// vector type, like __m128i for sse 4x integer vector
-//        using vector_t = Vector;
-//
-//        /// scalar type, like int for sse 4x integer vector
-//        using element_type = Element;
-//
-//        /// mask type for boolean operations
-//        using mask_vector_t = MaskVector;
-//
-//        using tag = Tag;
-//    };
-
-//    template<typename T>
-//    struct ztraits;
-
-//    template<typename T, typename enable_t = void>
-//    struct ztraits
-//    {
-//        /// vector size (1 - scalar, 4, 8, 16, ...)
-//        static constexpr size_t size = 1;
-//
-//        /// capabilities
-//        static constexpr uint64_t features = 0;
-//
-//        /// memory alignment
-//        static constexpr size_t alignment = alignof(T);
-//
-//        /// scalar type? vector type?
-//        static constexpr bool is_vector = false;
-//
-//        /// vector type, like __m128i for sse 4x integer vector
-//        using vector_t = void;
-//
-//        /// scalar type, like int for sse 4x integer vector
-//        using element_type = void;
-//
-//        /// mask type for boolean operations
-//        using mask_vector_t = void;
-//
-//        /// extracted std::array of (dim) scalar values
-//        using extracted_t = T;
-//
-//    };
-//
-//    template<typename T>
-//    struct ztraits<T, std::enable_if_t<is_cval<T>::value || is_zval<T>::value || is_bval<T>::value>>
-//    {
-//        /// vector size (1 - scalar, 4, 8, 16, ...)
-//        static constexpr size_t size = T::size();
-//
-//        /// capabilities
-//        static constexpr uint64_t features = T::features;
-//
-//        /// memory alignment
-//        static constexpr size_t alignment = T::alignment;
-//
-//        /// scalar type? vector type?
-//        static constexpr bool is_vector = size > 1;
-//
-//
-//
-//        /// vector type, like __m128i for sse 4x integer vector
-//        using vector_t = typename T::vector_t;
-//
-//        /// scalar type, like int for sse 4x integer vector
-//        using element_type = typename T::element_type;
-//
-//        /// mask type for boolean operations
-//        using mask_vector_t = typename T::mask_vector_t;
-//
-//        /// extracted std::array of (dim) scalar values
-//        using extracted_t = std::array<element_type, size>; //aligned_array<scalar_t, dim, alignment>;
-//
-//
-//
-//        using zval_t = typename T::zval_t;//zval_base<vector_t, mask_vector_t , element_type , zval_tag, size, alignment, features>;
-//        using bval_t = typename T::bval_t;//zval_base<vector_t, mask_vector_t , bool , bval_tag, size, alignment, features>;
-//
-//        //using tag = typename zval_t::tag;
-//    };
-
-//    template<typename T, typename enable = void>
-//    struct is_iterable : std::false_type {};
-//
-//    template<typename T>
-//    struct is_iterable <T, type_sink_t<decltype((std::declval<std::remove_pointer<T>>().begin()) - (std::declval<std::remove_pointer<T>>().end()))>>
-//            : std::true_type
-//    {};
-
-    
 
     template<typename Rule>
     struct _is : Rule
