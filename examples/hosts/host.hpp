@@ -91,10 +91,10 @@ namespace zacc { namespace examples {
             cout << setw(15) << "Speedup " << setw(10) << (double)reference_duration / vectorized_duration << endl << endl;
 
             cimg_library::CImg<uint8_t>
-                    img1(_dim.x, _dim.y, 1, 3),
-                    img2(_dim.x, _dim.y, 1, 3);
+                    img1(_dim.x(), _dim.y(), 1, 3),
+                    img2(_dim.x(), _dim.y(), 1, 3);
 
-            for (int i = 0; i < _dim.x * _dim.y; i++)
+            for (int i = 0; i < _dim.x() * _dim.y(); i++)
             {
                 int x, y;
 

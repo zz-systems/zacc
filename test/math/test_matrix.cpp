@@ -50,9 +50,9 @@ namespace zacc { namespace test {
 
         mat<zint32, 3, 3> v
         {
-                { 1, 2, 3 },
-                { 4, 5, 6 },
-                { 7, 8, 9 }
+            { 1, 2, 3 },
+            { 4, 5, 6 },
+            { 7, 8, 9 }
         };
 
         VASSERT_EQ(v(0), 1);
@@ -124,9 +124,9 @@ namespace zacc { namespace test {
 
         vec3<zfloat> normal = v.normalize();
 
-        VASSERT_NEAR(normal.x, 1 / std::sqrt(3), 0.0001);
-        VASSERT_NEAR(normal.y, 1 / std::sqrt(3), 0.0001);
-        VASSERT_NEAR(normal.z, 1 / std::sqrt(3), 0.0001);
+        VASSERT_NEAR(normal.x(), 1 / std::sqrt(3), 0.0001);
+        VASSERT_NEAR(normal.y(), 1 / std::sqrt(3), 0.0001);
+        VASSERT_NEAR(normal.z(), 1 / std::sqrt(3), 0.0001);
     }
 
 
@@ -405,27 +405,5 @@ namespace zacc { namespace test {
         ASSERT_FALSE(static_cast<bool>(m1 != m1));
         ASSERT_FALSE(static_cast<bool>(m2 != m2));
         ASSERT_TRUE(static_cast<bool>(m1 != m2));
-    }
-
-    TEST(matrix, matrix_gt)
-    {
-        REQUIRES(ZACC_ARCH);
-
-        mat<zint32, 2, 3> m1(
-                {
-                        {2, 2, 2},
-                        {2, 2, 2}
-                });
-
-        mat<zint32, 2, 3> m2(
-                {
-                        {3, 3, 3},
-                        {3, 3, 3},
-                });
-
-        ASSERT_FALSE(static_cast<bool>(m1 > m1));
-        ASSERT_FALSE(static_cast<bool>(m2 > m2));
-        ASSERT_FALSE(static_cast<bool>(m1 > m2));
-        ASSERT_TRUE(static_cast<bool>(m2 > m1));
     }
 }}

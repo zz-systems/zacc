@@ -31,15 +31,17 @@ type:
 modules:
   init:
     default:
-      - args: [[*scalar_t, value]]
-        init: value
+      - args: int16_t value
+        init: "std::array<int16_t, 1> {{value}}"
 
       - args: "extracted_type value"
-        init: "value[0]"
+        init: "value"
 
     boolean:
       - args: bool value
-        init: value
+        init: "std::array<bool, 1> {{value}}"
+      - args: zval_t value
+        init: "std::array<bool, 1> {{ value.value() != 0 }}"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -80,7 +82,7 @@ modules:
     vbor:   (one.value() | other.value());
     vbxor:  (one.value() ^ other.value());
 
-    is_set:
+    vis_set:
       args: one
       returns: bool
       body: one.value() != 0

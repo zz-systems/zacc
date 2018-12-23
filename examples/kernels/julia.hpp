@@ -54,7 +54,8 @@ namespace zacc { namespace examples {
         {
             _dim = dim;
             _offset = offset;
-            _c = { c.x, c.y };
+            _c = c;
+
             _zoom = zoom;
 
             _max_iterations = max_iterations;
@@ -69,8 +70,8 @@ namespace zacc { namespace examples {
                 // compute 2D-position from 1D-index
                 auto pos = reshape<vec2<zfloat>>(make_index<zint>(zint(i)), _dim);
 
-                zcomplex<zfloat> z(1.5 * (pos.x - center.x) / (_zoom * center.x) + _offset.x,
-                                   1.0 * (pos.y - center.y) / (_zoom * center.y) + _offset.y);
+                zcomplex<zfloat> z(1.5 * (pos.x() - center.x()) / (_zoom * center.x()) + _offset.x(),
+                                   1.0 * (pos.y() - center.y()) / (_zoom * center.y()) + _offset.y());
 
                 bfloat done = false;
                 zint iterations = 0;
@@ -91,7 +92,7 @@ namespace zacc { namespace examples {
                             .otherwise(iterations + 1);
 
                     // break if all elements are not zero
-                    if (is_set(done))
+                    if ((done))
                         break;
                 }
 

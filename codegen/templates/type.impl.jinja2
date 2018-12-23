@@ -98,8 +98,8 @@ namespace zacc {
         /// extracted std::array of (dim) scalar values
         using extracted_type = std::array<element_type, size>;
 
-        using zval_t = backend::{{ ast.type.target }}::z{{ ast.type.name }}<T::feature_mask>;
-        using bval_t = backend::{{ ast.type.target }}::b{{ ast.type.name }}<T::feature_mask>;
+        using zval_type = backend::{{ ast.type.target }}::z{{ ast.type.name }}<T::feature_mask>;
+        using bval_type = backend::{{ ast.type.target }}::b{{ ast.type.name }}<T::feature_mask>;
 
         using tag = typename T::tag;
     };
@@ -167,13 +167,16 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
     {
         USING_ZTYPE(iz{{ ast.type.name }}<FeatureMask>);
 
-        /// complete vector
-        using zval_t = z{{ ast.type.name }}<FeatureMask>;
-
-        /// complete boolean vector
-        using bval_t = b{{ ast.type.name }}<FeatureMask>;
-
         using zval<iz{{ ast.type.name }}<FeatureMask>>::zval;
+
+        template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
+        constexpr z{{ ast.type.name }}(const T& other) noexcept
+                : z{{ ast.type.name }}(other.value())
+        {}
+
+        explicit constexpr z{{ ast.type.name }}(const bval_t<iz{{ ast.type.name }}<FeatureMask>>& other) noexcept
+                : z{{ ast.type.name }}(other.value())
+        {}
 
         {% for module in ast.modules.initializers if module.type == ModuleTypes.DEFAULT %}
         {% for func in module.functions %}
@@ -220,13 +223,18 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
     {
         USING_ZTYPE(ib{{ ast.type.name }}<FeatureMask>);
 
-        /// complete vector
-        using zval_t = z{{ ast.type.name }}<FeatureMask>;
-
-        /// complete boolean vector
-        using bval_t = b{{ ast.type.name }}<FeatureMask>;
-
         using zval<ib{{ ast.type.name }}<FeatureMask>>::zval;
+
+        template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
+        constexpr b{{ ast.type.name }}(const T& other) noexcept
+                : b{{ ast.type.name }}(other.value())
+        {}
+
+        template<typename T, typename std::enable_if<is_bval<T>::value, void**>::type = nullptr>
+        constexpr b{{ ast.type.name }}(const T& other) noexcept
+                : b{{ ast.type.name }}(other.raw_value())
+        {}
+
 
         {% for module in ast.modules.initializers if (module.type == ModuleTypes.BOOLEAN)%}
         {% for func in module.functions %}

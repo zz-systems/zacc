@@ -120,7 +120,7 @@ namespace zacc {
     template<class T, class ForwardIt, class Generator>
     void generate(ForwardIt first, ForwardIt last, Generator g)
     {
-        auto dim        = T::size();
+        auto dim        = size_v<T>;
         size_t real_size  = std::distance(first, last);
         size_t remainder  = real_size % dim;
         size_t fake_size  = real_size + remainder;

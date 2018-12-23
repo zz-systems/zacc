@@ -3,6 +3,7 @@ enable_testing()
 set(ZACC_TEST_MAIN ${CMAKE_CURRENT_LIST_DIR}/test_main.cpp)
 set(ZACC_TEST_ENTRYPOINT ${CMAKE_CURRENT_LIST_DIR}/test_entry_point.cpp)
 
+file(GLOB test.core "${CMAKE_CURRENT_LIST_DIR}/casting.cpp")
 file(GLOB test.traits "${CMAKE_CURRENT_LIST_DIR}/traits/*.cpp")
 file(GLOB test.math "${CMAKE_CURRENT_LIST_DIR}/math/*.cpp")
 file(GLOB_RECURSE test.util "${CMAKE_CURRENT_LIST_DIR}/util/*.cpp")
@@ -19,6 +20,7 @@ zacc_add_dispatched_tests(zacc.tests
         BRANCHES "${branches}"
         INCLUDES ${CMAKE_SOURCE_DIR}/include
         SOURCES
+            ${test.core}
             ${test.traits}
             ${test.math}
             ${test.util}

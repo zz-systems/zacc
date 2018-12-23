@@ -111,6 +111,11 @@ namespace zacc
                 : _value { other }
         {}
 
+        template<typename T>
+        constexpr zval(const math::vec2<T>& other) noexcept
+                : _value(other)
+        {}
+
 //        template<typename U>
 //        constexpr zval(std::initializer_list<U> init_list)
 //            : _value {{ init_list }}

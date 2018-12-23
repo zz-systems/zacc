@@ -66,8 +66,8 @@ namespace zacc { namespace examples {
                 // compute 2D-position from 1D-index
                 auto pos = reshape<vec2<zfloat>>(make_index<zint>(zint(i)), _dim);
 
-                zcomplex<zfloat> c(_cmin.x + pos.x / zfloat(_dim.x - 1) * (_cmax.x - _cmin.x),
-                                   _cmin.y + pos.y / zfloat(_dim.y - 1) * (_cmax.y - _cmin.x));
+                zcomplex<zfloat> c(_cmin.x() + pos.x() / zfloat(_dim.x() - 1) * (_cmax.x() - _cmin.x()),
+                                   _cmin.y() + pos.y() / zfloat(_dim.y() - 1) * (_cmax.y() - _cmin.x()));
 
                 zcomplex<zfloat> z = 0;
 
@@ -90,7 +90,7 @@ namespace zacc { namespace examples {
                             .otherwise(iterations + 1);
 
                     // break if all elements are not zero
-                    if (is_set(done))
+                    if ((done))
                         break;
                 }
 

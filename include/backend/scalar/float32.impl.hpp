@@ -45,15 +45,15 @@
 #include "util/macros.hpp"
 
 #include "traits/printable.hpp"
-#include "traits/logical.hpp"
-#include "traits/comparable.hpp"
 #include "traits/arithmetic.hpp"
-#include "traits/numeric.hpp"
 #include "traits/io.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/equatable.hpp"
+#include "traits/numeric.hpp"
 #include "traits/conditional.hpp"
 #include "traits/math.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/comparable.hpp"
+#include "traits/equatable.hpp"
+#include "traits/logical.hpp"
 
 namespace zacc { namespace backend { namespace scalar
 {
@@ -115,89 +115,6 @@ namespace zacc { namespace backend { namespace scalar
 {
     namespace float32_modules
     {
-        /**
-         * @brief logical mixin implementation [scalar branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct logical : traits::logical<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Boolean vlneg(Composed one) 
-            {
-                return !one.value();
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Boolean vlor(Composed one, Composed other) 
-            {
-                return (one.value() || other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Boolean vland(Composed one, Composed other) 
-            {
-                return (one.value() && other.value());
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief comparable mixin implementation [scalar branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct comparable : traits::comparable<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Boolean vgt(Composed one, Composed other) 
-            {
-                return (one.value() > other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Boolean vlt(Composed one, Composed other) 
-            {
-                return (one.value() < other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Boolean vge(Composed one, Composed other) 
-            {
-                return (one.value() >= other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Boolean vle(Composed one, Composed other) 
-            {
-                return (one.value() <= other.value());
-            }
-        };
-
-        // =============================================================================================================
-
         /**
          * @brief arithmetic mixin implementation [scalar branch]
          * @relates float32
@@ -272,17 +189,6 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief numeric mixin implementation [scalar branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct numeric : traits::numeric<Interface, Composed, Boolean>
-        {
-        };
-
-        // =============================================================================================================
-
-        /**
          * @brief io mixin implementation [scalar branch]
          * @relates float32
          */
@@ -320,99 +226,12 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief bitwise mixin implementation [scalar branch]
+         * @brief numeric mixin implementation [scalar branch]
          * @relates float32
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
+        struct numeric : traits::numeric<Interface, Composed, Boolean>
         {
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vbneg(Composed one) 
-            {
-                auto _one = one.value();
-                float result;
-                bitsof(result) = ~bitsof(_one);
-                return result;
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vband(Composed one, Composed other) 
-            {
-                auto _one = one.value();
-                auto _other = other.value();
-                float result;
-                bitsof(result) = bitsof(_one) & bitsof(_other);
-                return result;
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vbor(Composed one, Composed other) 
-            {
-                auto _one = one.value();
-                auto _other = other.value();
-                float result;
-                bitsof(result) = bitsof(_one) | bitsof(_other);
-                return result;
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vbxor(Composed one, Composed other) 
-            {
-                auto _one = one.value();
-                auto _other = other.value();
-                float result;
-                bitsof(result) = bitsof(_one) ^ bitsof(_other);
-                return result;
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend bool vis_set(Composed one) 
-            {
-                return one.value() != 0;
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief equatable mixin implementation [scalar branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct equatable : traits::equatable<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Boolean veq(Composed one, Composed other) 
-            {
-                return (one.value() == other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Boolean vneq(Composed one, Composed other) 
-            {
-                return (one.value() != other.value());
-            }
         };
 
         // =============================================================================================================
@@ -533,6 +352,187 @@ namespace zacc { namespace backend { namespace scalar
                 return std::sqrt(one.value());
             }
         };
+
+        // =============================================================================================================
+
+        /**
+         * @brief bitwise mixin implementation [scalar branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vbneg(Composed one) 
+            {
+                auto _one = one.value();
+                float result;
+                bitsof(result) = ~bitsof(_one);
+                return result;
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vband(Composed one, Composed other) 
+            {
+                auto _one = one.value();
+                auto _other = other.value();
+                float result;
+                bitsof(result) = bitsof(_one) & bitsof(_other);
+                return result;
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vbor(Composed one, Composed other) 
+            {
+                auto _one = one.value();
+                auto _other = other.value();
+                float result;
+                bitsof(result) = bitsof(_one) | bitsof(_other);
+                return result;
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vbxor(Composed one, Composed other) 
+            {
+                auto _one = one.value();
+                auto _other = other.value();
+                float result;
+                bitsof(result) = bitsof(_one) ^ bitsof(_other);
+                return result;
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend bool vis_set(Composed one) 
+            {
+                return one.value() != 0;
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief comparable mixin implementation [scalar branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct comparable : traits::comparable<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean vgt(Composed one, Composed other) 
+            {
+                return (one.value() > other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean vlt(Composed one, Composed other) 
+            {
+                return (one.value() < other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean vge(Composed one, Composed other) 
+            {
+                return (one.value() >= other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean vle(Composed one, Composed other) 
+            {
+                return (one.value() <= other.value());
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief equatable mixin implementation [scalar branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct equatable : traits::equatable<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean veq(Composed one, Composed other) 
+            {
+                return (one.value() == other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean vneq(Composed one, Composed other) 
+            {
+                return (one.value() != other.value());
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief logical mixin implementation [scalar branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean vlneg(Composed one) 
+            {
+                return !one.value();
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean vlor(Composed one, Composed other) 
+            {
+                return (one.value() || other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Boolean vland(Composed one, Composed other) 
+            {
+                return (one.value() && other.value());
+            }
+        };
     } // end float32_modules
 
     // =================================================================================================================
@@ -612,9 +612,11 @@ namespace zacc { namespace backend { namespace scalar
                 : bfloat32(other.value())
         {}
 
-//        constexpr bfloat32(const zval_t<ibfloat32<FeatureMask>>& other) noexcept
-//                : bfloat32(other.value())
-//        {}
+        template<typename T, typename std::enable_if<is_bval<T>::value, void**>::type = nullptr>
+        constexpr bfloat32(const T& other) noexcept
+                : bfloat32(other.raw_value())
+        {}
+
 
         /**
          * @brief bfloat32 constructor [scalar branch]

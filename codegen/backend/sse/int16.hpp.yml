@@ -120,7 +120,7 @@ modules:
     vbxor:  &bitwise_xor
       body: _mm_xor_si128
 
-    is_set:
+    vis_set:
       args: one
       returns: bool
       body:

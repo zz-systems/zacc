@@ -106,7 +106,7 @@ modules:
       body:
         - auto dividend = one.data();
         - auto divisor = other.data();
-        - typename Composed::extracted_type result;
+        - alignas(alignof(Composed)) typename Composed::extracted_type result;
         - for (size_t i = 0; i < Composed::size; i++) { result[i] = dividend[i] / divisor[i]; }
         - return result;
     vmod: vsub(one, vmul(other, vdiv(one, other)))
@@ -125,7 +125,7 @@ modules:
     vbxor:  &bitwise_xor
       body: _mm_xor_si128
 
-    is_set:
+    vis_set:
       args: one
       returns: bool
       body:

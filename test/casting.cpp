@@ -29,49 +29,22 @@
 
 namespace zacc { namespace test {
 
-        template <typename T>
-        class logical_test : public ::testing::Test { };
-        TYPED_TEST_CASE_P(logical_test);
+        TEST(casting_test, test_casting) {
+            REQUIRES(ZACC_ARCH);
 
+            zdouble f64     = 15.5;
+            zfloat  f32     = 10.5;
+            zint    i32     = 8;
+            zshort  i16     = 4;
+            zbyte   i8      = 2;
 
-        TYPED_TEST_P(logical_test, negate)
-        {
-            TypeParam true_val = true;
-            TypeParam false_val = false;
+            bdouble bf64    = true;
+            bfloat  bf32    = true;
+            bint    bi32    = true;
+            bshort  bi16    = true;
+            bbyte   bi8     = true;
 
-            VASSERT_EQ(!true_val, false);
-            VASSERT_EQ(!false_val, true);
+            zint cz1 = f32;
+            //bint cb1 = bf32;
         }
-
-        TYPED_TEST_P(logical_test, or_operation)
-        {
-            TypeParam true_val = true;
-            TypeParam false_val = false;
-
-            VASSERT_EQ(true_val || true_val, true);
-            VASSERT_EQ(true_val || false_val, true);
-            VASSERT_EQ(false_val || true_val, true);
-            VASSERT_EQ(false_val || false_val, false);
-        }
-
-        TYPED_TEST_P(logical_test, and_operation)
-        {
-            TypeParam true_val = true;
-            TypeParam false_val = false;
-
-            VASSERT_EQ(true_val && true_val, true);
-            VASSERT_EQ(true_val && false_val, false);
-            VASSERT_EQ(false_val && true_val, false);
-            VASSERT_EQ(false_val && false_val, false);
-        }
-
-        REGISTER_TYPED_TEST_CASE_P(logical_test,
-                                   negate,
-                                   or_operation,
-                                   and_operation);
-
-        typedef ::testing::Types<bfloat, bdouble, bint8, bint16, bint32> logical_test_types;
-
-        INSTANTIATE_TYPED_TEST_CASE_P(zacc, logical_test, logical_test_types);
-
     }}

@@ -239,6 +239,10 @@ namespace zacc {
             return this->_value[0];
         }
 
+        constexpr auto raw_value() const {
+            return this->_value;
+        }
+
         constexpr operator vector_type() const {
             return this->_value;
         }

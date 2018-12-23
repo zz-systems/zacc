@@ -50,6 +50,15 @@ modules:
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_epi32 }
 
     boolean:
+      - args: __m128 value
+        init: _mm_castps_si128(value)
+
+      - args: __m128d value
+        init: _mm_castpd_si128(value)
+
+      - args: __m128i value
+        init: value
+
       - args: bool value
         init: "(value ? _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128()) : _mm_setzero_si128()), (last_operation::boolean)"
 #-----------------------------------------------------------------------------------------------------------------------
@@ -142,7 +151,7 @@ modules:
     vbxor:  &bitwise_xor
       body: _mm_xor_si128
 
-    is_set:
+    vis_set:
       args: one
       returns: bool
       body:

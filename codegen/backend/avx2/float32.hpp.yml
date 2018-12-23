@@ -126,7 +126,7 @@ modules:
     vbor:   _mm256_or_ps
     vbxor:  _mm256_xor_ps
 
-    is_set:
+    vis_set:
       args: one
       returns: bool
       body:

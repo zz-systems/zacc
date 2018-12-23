@@ -74,7 +74,7 @@ namespace zacc { namespace examples {
 
             virtual std::shared_ptr<output_container> run_kernel(input_container) override
             {
-                auto result = zacc::make_shared<std::vector<int>>(_dim.x * _dim.y);
+                auto result = zacc::make_shared<std::vector<int>>(_dim.x() * _dim.y());
 
                 _dispatcher.dispatch_one(*result);
 

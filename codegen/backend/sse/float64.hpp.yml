@@ -49,6 +49,15 @@ modules:
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_pd }
 
     boolean:
+      - args: __m128 value
+        init: _mm_castps_pd(value)
+
+      - args: __m128d value
+        init: value
+
+      - args: __m128i value
+        init: _mm_castsi128_pd(value)
+
       - args: bool value
         init: "(value ? _mm_cmpeq_pd(_mm_setzero_pd(), _mm_setzero_pd()) : _mm_setzero_pd()), (last_operation::boolean)"
 #-----------------------------------------------------------------------------------------------------------------------
@@ -162,7 +171,7 @@ modules:
     vbor:   _mm_or_pd
     vbxor:  _mm_xor_pd
 
-    is_set:
+    vis_set:
       args: one
       returns: bool
       body:

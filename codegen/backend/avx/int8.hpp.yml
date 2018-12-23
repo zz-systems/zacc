@@ -90,10 +90,10 @@ modules:
     vbxor:  &bitwise_xor
       body: return zint8<Interface::capability> ({ one.value()[1] ^ other.value()[1], one.value()[0] ^ other.value()[0] });
 
-    is_set:
+    vis_set:
       args: one
       returns: bool
-      body: return is_set(one.value()[1]) && is_set(one.value()[0])
+      body: return vis_set(one.value()[1]) && vis_set(one.value()[0])
 #-----------------------------------------------------------------------------------------------------------------------
   #bitwise_shift:
   #  vbsll:  return zint8<Interface::capability> { one.value()[1] << other.value()[1], one.value()[0] << other.value()[0] };

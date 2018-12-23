@@ -59,8 +59,8 @@ def remapArgType(module, ast, arg):
 def remapInitializerArgType(module, ast, arg):
     arg_map = {
         #"Composed": format(module.type, ast.type.name),
-        "bval_t": "Boolean", #f"b{ast.type.name}<FeatureMask>",
-        "zval_t": "Composed", #f"z{ast.type.name}<FeatureMask>",
+        "bval_t": f"b{ast.type.name}<FeatureMask>",
+        "zval_t": f"z{ast.type.name}<FeatureMask>"
     }
     return arg_map.get(arg.type) or arg.type
 
@@ -112,7 +112,7 @@ class FunctionSignatureRenderer(Renderable):
         template = None
         prefix = node.prefix or "friend"
         suffix = node.suffix or "const" if prefix.strip().find('friend') == -1 else ""
-        return_type = node.return_type or "Composed" #f"{make_typename(module, ast)}<Interface::feature_mask>"
+        return_type = node.return_type or ("Boolean" if module.type == ModuleTypes.BOOLEAN else "Composed") #f"{make_typename(module, ast)}<Interface::feature_mask>"
 
         # dispatching
         dispatcher = "{0}has_feature_v<Interface, capabilities::{1}>"
