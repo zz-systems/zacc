@@ -59,7 +59,7 @@ modules:
         init: _mm_castsi128_pd(value)
 
       - args: bool value
-        init: "(value ? _mm_cmpeq_pd(_mm_setzero_pd(), _mm_setzero_pd()) : _mm_setzero_pd()), (last_operation::boolean)"
+        init: "(value ? _mm_cmpeq_pd(_mm_setzero_pd(), _mm_setzero_pd()) : _mm_setzero_pd())"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

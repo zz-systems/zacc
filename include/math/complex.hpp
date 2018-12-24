@@ -34,7 +34,6 @@
 
 namespace zacc { namespace math
 {
-
     template<typename T>
     struct zcomplex;
 
@@ -77,81 +76,7 @@ namespace zacc
 
         using tag = cval_tag;
     };
-
-    template<typename Interface>
-    struct zval<Interface, std::enable_if_t<is_cval<Interface>::value>>
-            : Interface
-    {
-        USING_ZTYPE(Interface);
-
-        constexpr zval() noexcept
-        {}
-
-        // =============================================================================================================
-
-        constexpr zval(const zval& other) noexcept
-                : _value { other._value }
-        {}
-
-        constexpr zval(zval&& other) noexcept
-                : zval()
-        {
-            swap(*this, other);
-        }
-
-        constexpr zval& operator=(zval other) noexcept
-        {
-            swap(*this, other);
-            return *this;
-        }
-
-        // =============================================================================================================
-
-        constexpr zval(const vector_type& other) noexcept
-                : _value { other }
-        {}
-
-        template<typename T>
-        constexpr zval(const math::vec2<T>& other) noexcept
-                : _value(other)
-        {}
-
-//        template<typename U>
-//        constexpr zval(std::initializer_list<U> init_list)
-//            : _value {{ init_list }}
-//        {}
-
-        // =============================================================================================================
-
-        friend void swap(zval& one, zval& other) // nothrow
-        {
-            // enable ADL (not necessary in our case, but good practice)
-            using std::swap;
-
-            // by swapping the members of two objects,
-            // the two objects are effectively swapped
-            swap(one._value, other._value);
-        }
-
-        // =============================================================================================================
-
-        constexpr vector_type value() const {
-            return this->_value;
-        }
-
-        constexpr vector_type& value() {
-            return this->_value;
-        }
-
-        constexpr operator vector_type() const {
-            return this->_value;
-        }
-
-    protected:
-        alignas(alignment) vector_type _value;
-    };
 }
-
 
 namespace zacc { namespace math
 {
@@ -381,12 +306,12 @@ namespace zacc { namespace math
 
         using zval<izcomplex<T>>::zval;
 
-         //template<typename U, typename std::enable_if<std::is_convertible<U, element_type>::value, void**>::type = nullptr>
-//         constexpr zcomplex(vector_type other) noexcept
-//            : zval<izcomplex<T>>(other)
-//         {}
-
          // =============================================================================================================
+
+        template<typename U>
+        constexpr zcomplex(const math::vec2<U>& other) noexcept
+                : zval<izcomplex<T>>(other)
+        {}
 
         template<typename U, typename std::enable_if<std::is_convertible<U, element_type>::value, void**>::type = nullptr>
         constexpr zcomplex(const U& re) noexcept
@@ -397,13 +322,6 @@ namespace zacc { namespace math
         constexpr zcomplex(const U& re, const U& im) noexcept
             : zval<izcomplex<T>>(vector_type(re, im))
         {}
-
-        // =============================================================================================================
-
-//        template<typename U, typename std::enable_if<std::is_convertible<U, element_type>::value, void**>::type = nullptr>
-//        constexpr zcomplex(U&& re, element_type&& im) noexcept
-//            : zval<izcomplex<T>>(vector_type(std::forward<element_type>(re), std::forward<element_type>(im)))
-//        {}
 
         // =============================================================================================================
 

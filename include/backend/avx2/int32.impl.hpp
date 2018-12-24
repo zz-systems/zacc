@@ -45,16 +45,16 @@
 #include "util/macros.hpp"
 
 #include "traits/printable.hpp"
-#include "traits/bitwise_shift.hpp"
 #include "traits/equatable.hpp"
 #include "traits/numeric.hpp"
-#include "traits/conditional.hpp"
-#include "traits/math.hpp"
 #include "traits/io.hpp"
 #include "traits/arithmetic.hpp"
+#include "traits/conditional.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/comparable.hpp"
 #include "traits/logical.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/math.hpp"
 
 namespace zacc { namespace backend { namespace avx2
 {
@@ -96,6 +96,9 @@ namespace zacc {
         /// scalar type? vector type?
         static constexpr bool is_vector = size > 1;
 
+        /// Indicates the last executed operation. Relevant for branch optimization.
+        static constexpr last_operation last_operation = last_operation::undefined;
+
         /// vector type, like __m128i for sse 4x integer vector
         using vector_type = __m256i;
 
@@ -116,52 +119,6 @@ namespace zacc { namespace backend { namespace avx2
 {
     namespace int32_modules
     {
-        /**
-         * @brief bitwise_shift mixin implementation [avx2 branch]
-         * @relates int32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct bitwise_shift : traits::bitwise_shift<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Composed vbsll(Composed one, Composed other) 
-            {
-                return _mm256_sll_epi32(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Composed vbsrl(Composed one, Composed other) 
-            {
-                return _mm256_srl_epi32(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Composed vbslli(const Composed one, const size_t other) 
-            {
-                return _mm256_slli_epi32(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Composed vbsrli(const Composed one, const size_t other) 
-            {
-                return _mm256_srli_epi32(one, other);
-            }
-        };
-
-        // =============================================================================================================
-
         /**
          * @brief equatable mixin implementation [avx2 branch]
          * @relates int32
@@ -197,80 +154,6 @@ namespace zacc { namespace backend { namespace avx2
         template<typename Interface, typename Composed, typename Boolean>
         struct numeric : traits::numeric<Interface, Composed, Boolean>
         {
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief conditional mixin implementation [avx2 branch]
-         * @relates int32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct conditional : traits::conditional<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
-            {
-                return _mm256_blendv_epi8(else_value, if_value, condition);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief math mixin implementation [avx2 branch]
-         * @relates int32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct math : traits::math<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Composed vabs(Composed one) 
-            {
-                return _mm256_abs_epi32(one);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Composed vmin(Composed one, Composed other) 
-            {
-                return _mm256_min_epi32(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Composed vmax(Composed one, Composed other) 
-            {
-                return _mm256_max_epi32(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Composed vclamp(Composed self, Composed from, Composed to) 
-            {
-                return vmin(to, vmax(from, self));
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Composed vsqrt(Composed one) 
-            {
-                return _mm256_sqrt_ps(_mm256_cvtepi32_ps(one));
-            }
         };
 
         // =============================================================================================================
@@ -371,6 +254,25 @@ namespace zacc { namespace backend { namespace avx2
             friend Composed vmod(Composed one, Composed other) 
             {
                 return vsub(one, vmul(other, vdiv(one, other)));
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief conditional mixin implementation [avx2 branch]
+         * @relates int32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
+            {
+                return _mm256_blendv_epi8(else_value, if_value, condition);
             }
         };
 
@@ -513,6 +415,107 @@ namespace zacc { namespace backend { namespace avx2
                 return _mm256_and_si256(one, other);
             }
         };
+
+        // =============================================================================================================
+
+        /**
+         * @brief bitwise_shift mixin implementation [avx2 branch]
+         * @relates int32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise_shift : traits::bitwise_shift<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vbsll(Composed one, Composed other) 
+            {
+                return _mm256_sll_epi32(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vbsrl(Composed one, Composed other) 
+            {
+                return _mm256_srl_epi32(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vbslli(const Composed one, const size_t other) 
+            {
+                return _mm256_slli_epi32(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vbsrli(const Composed one, const size_t other) 
+            {
+                return _mm256_srli_epi32(one, other);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief math mixin implementation [avx2 branch]
+         * @relates int32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct math : traits::math<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vabs(Composed one) 
+            {
+                return _mm256_abs_epi32(one);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vmin(Composed one, Composed other) 
+            {
+                return _mm256_min_epi32(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vmax(Composed one, Composed other) 
+            {
+                return _mm256_max_epi32(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vclamp(Composed self, Composed from, Composed to) 
+            {
+                return vmin(to, vmax(from, self));
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vsqrt(Composed one) 
+            {
+                return _mm256_sqrt_ps(_mm256_cvtepi32_ps(one));
+            }
+        };
     } // end int32_modules
 
     // =================================================================================================================
@@ -536,9 +539,19 @@ namespace zacc { namespace backend { namespace avx2
         int32_modules::equatable<izint32<FeatureMask>, zint32<FeatureMask>, bint32<FeatureMask>>,
         int32_modules::conditional<izint32<FeatureMask>, zint32<FeatureMask>, bint32<FeatureMask>>
     {
-        USING_ZTYPE(izint32<FeatureMask>);
+        USING_ZTYPE(zval<izint32<FeatureMask>>);
 
         using zval<izint32<FeatureMask>>::zval;
+
+//        template<typename T, std::enable_if_t<std::is_same<T, view_t<izint32<FeatureMask>>>::value && is_vector, void**> = nullptr>
+//        constexpr zint32(const T& view) noexcept
+//                : zint32(storage_t<izint32<FeatureMask>>(view))
+//        {}
+
+        template<typename T, std::enable_if_t<std::is_same<T, view_t<izint32<FeatureMask>>>::value && !is_vector, void**> = nullptr>
+        constexpr zint32(const T& view) noexcept
+                : zint32(view[0])
+        {}
 
         template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
         constexpr zint32(const T& other) noexcept
@@ -546,7 +559,7 @@ namespace zacc { namespace backend { namespace avx2
         {}
 
         explicit constexpr zint32(const bval_t<izint32<FeatureMask>>& other) noexcept
-                : zint32(other.value())
+            : zint32(other.value())
         {}
 
         /**
@@ -620,19 +633,29 @@ namespace zacc { namespace backend { namespace avx2
         int32_modules::logical<ibint32<FeatureMask>, bint32<FeatureMask>, bint32<FeatureMask>>,
         int32_modules::equatable<ibint32<FeatureMask>, bint32<FeatureMask>, bint32<FeatureMask>>
     {
-        USING_ZTYPE(ibint32<FeatureMask>);
+        USING_ZTYPE(zval<ibint32<FeatureMask>>);
 
         using zval<ibint32<FeatureMask>>::zval;
 
-        template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
+//        template<typename T, std::enable_if_t<std::is_same<T, view_t<ibint32<FeatureMask>>>::value && is_vector, void**> = nullptr>
+//        constexpr bint32(const T& view) noexcept
+//                : bint32(storage_t<izint32<FeatureMask>>(view))
+//        {}
+
+        template<typename T, std::enable_if_t<std::is_same<T, view_t<ibint32<FeatureMask>>>::value && !is_vector, void**> = nullptr>
+        constexpr bint32(const T& view) noexcept
+                : bint32((view[0]))
+        {}
+
+        template<typename T, typename std::enable_if<is_zval<T>::value || is_bval<T>::value, void**>::type = nullptr>
         constexpr bint32(const T& other) noexcept
                 : bint32(other.value())
         {}
 
-        template<typename T, typename std::enable_if<is_bval<T>::value, void**>::type = nullptr>
-        constexpr bint32(const T& other) noexcept
-                : bint32(other.raw_value())
-        {}
+//        template<typename T, typename std::enable_if<is_bval<T>::value, void**>::type = nullptr>
+//        constexpr bint32(const T& other) noexcept
+//                : bint32(other.value())
+//        {}
 
 
         /**
@@ -640,13 +663,29 @@ namespace zacc { namespace backend { namespace avx2
          * @relates bint32
          */
         constexpr bint32(bool value) noexcept
-            : zval<ibint32<FeatureMask>>((value ? _mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256()) : _mm256_setzero_si256()), (last_operation::boolean))
+            : zval<ibint32<FeatureMask>>((value ? _mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256()) : _mm256_setzero_si256()))
         {
         }
     };
 
     // Validate zint32 ===================================================================================
 
+
+    static_assert( is_vector_v<izint32<0>> == true,    "is_vector_v<izint32> != true.");
+    static_assert( is_vector_v<ibint32<0>> == true,    "is_vector_v<ibint32> != true.");
+
+    static_assert( std::is_same<element_t<ibint32<0>>, int32_t>::value,    "element_t<ibint32> != int32_t.");
+
+    static_assert( std::is_same<element_t<izint32<0>>, int32_t>::value,    "element_t<izint32> != int32_t.");
+    static_assert( std::is_same<element_t<ibint32<0>>, int32_t>::value,    "element_t<ibint32> != int32_t.");
+
+    static_assert( std::is_same<vector_t<izint32<0>>, __m256i>::value,    "vector_t<izint32> != __m256i.");
+    static_assert( std::is_same<vector_t<ibint32<0>>, __m256i>::value,    "vector_t<ibint32> != __m256i.");
+
+    static_assert( std::is_same<view_t<izint32<0>>, std::array<int32_t, 8>>::value,    "view_t<izint32> != std::array<int32_t, 8>.");
+    static_assert( std::is_same<view_t<ibint32<0>>, std::array<bool, 8>>::value,                        "view_t<ibint32> != std::array<bool, 8>.");
+
+//
     static_assert( std::is_base_of<izint32<0>, izint32<0>>::value, "base_of<izint32> != izint32.");
     static_assert(!std::is_base_of<ibint32<0>, izint32<0>>::value, "base_of<izint32> == ibint32.");
 

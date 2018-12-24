@@ -45,13 +45,14 @@ namespace zacc {
     template<bool... bs>
     using all_true = std::is_same<bool_pack<bs..., true>, bool_pack<true, bs...>>;
 
+    // =============================================================================================================
+
     template<bool Condition, typename T>
     struct when
     {
         static constexpr bool value = Condition;
         using type = T;
     };
-
 
     template<typename Head, typename... Tail>
     struct select
@@ -65,8 +66,55 @@ namespace zacc {
         using type = typename std::conditional_t<Head::value, Head, void>::type;
     };
 
+//    template<typename Head>
+//    struct select<Head>
+//    {
+//        template<typename T, typename enable = void>
+//        struct terminator : when<true, T>
+//        {};
+//
+//        template<typename T>
+//        struct terminator<T, std::enable_if_t<T::value || true, T>> : T
+//        {};
+//
+//        using type = typename std::conditional_t<terminator<Head>::value, terminator<Head>, void>::type;
+//    };
+
     template<typename Head, typename... Tail>
     using select_t = typename select<Head, Tail...>::type;
+
+    namespace
+    {
+        using select1 = select_t<
+                when<true, int>,
+                when<false, float>,
+                when<false, bool>>;
+
+        static_assert(std::is_same<select1, int>::value, "is_same<select1> != int");
+
+        using select2 = select_t<
+                when<false, int>,
+                when<true, float>,
+                when<false, bool>>;
+
+        static_assert(std::is_same<select2, float>::value, "is_same<select2> != float");
+
+        using select3 = select_t<
+                when<false, int>,
+                when<false, float>,
+                when<true, bool>>;
+
+        static_assert(std::is_same<select3, bool>::value, "is_same<select3> != bool");
+
+        using select4 = select_t<
+                when<false, int>,
+                when<false, float>,
+                when<true, double>>;
+
+        static_assert(std::is_same<select4, double>::value, "is_same<select4> != double");
+    }
+
+    // =============================================================================================================
 
     template <typename T, typename enable = void>
     struct is_small_type
@@ -119,215 +167,6 @@ namespace zacc {
         return ((ref_value & head) != 0) || is_any_set(ref_value, tail...);
     };
 
-    template<typename T, typename enable = void>
-    struct ztraits;
-
-    template<typename T>
-    struct ztraits<T, std::enable_if_t<std::is_fundamental<T>::value>>
-    {
-        /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size = 1;
-
-        /// capabilities
-        static constexpr uint64_t feature_mask = 0;
-
-        /// memory alignment
-        static constexpr size_t alignment = alignof(T);
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = false;
-
-        /// vector type, like __m128i for sse 4x integer vector
-        using vector_type = std::array<T, 1>;
-
-        /// scalar type, like int for sse 4x integer vector
-        using element_type = T;
-
-        /// extracted std::array of (dim) scalar values
-        using extracted_type = std::array<element_type, size>;
-
-        using zval_type = T;
-        using bval_type = bool;
-
-        using tag = select<when<std::is_same<T, bool>::value, bval_tag>, zval_tag>;
-    };
-
-    /// vector size (1 - scalar, 4, 8, 16, ...)
-    template<typename T>
-    constexpr size_t size_v = ztraits<T>::size;
-
-    /// capabilities
-    template<typename T>
-    constexpr uint64_t feature_mask_v = ztraits<T>::feature_mask;
-
-    /// memory alignment
-    template<typename T>
-    constexpr size_t alignment_v = ztraits<T>::alignment;
-
-    /// scalar type? vector type?
-    template<typename T>
-    constexpr bool is_vector_v = ztraits<T>::is_vector;
-
-    /// vector type, like __m128i for sse 4x integer vector
-    template<typename T>
-    using vector_t = typename ztraits<T>::vector_type;
-
-    /// scalar type, like int for sse 4x integer vector
-    template<typename T>
-    using element_t = typename ztraits<T>::element_type;
-
-    /// extracted std::array of (dim) scalar values
-    template<typename T>
-    using extracted_t = typename ztraits<T>::extracted_type;
-
-    template<typename T>
-    using zval_t = typename ztraits<T>::zval_type;
-    template<typename T>
-    using bval_t = typename ztraits<T>::bval_type;
-
-    template<typename T>
-    using tag_t = typename ztraits<T>::tag;
-
-    template<typename val_t, typename enable_t = void>
-    struct is_zval
-            : public std::false_type
-    {};
-
-    template<typename val_t>
-    struct is_zval<val_t, std::enable_if_t<std::is_same<typename ztraits<val_t>::tag, zval_tag>::value
-                                           && std::is_arithmetic<typename ztraits<val_t>::element_type>::value>>
-            : public std::true_type
-    {};
-
-//    template<typename val_t>
-//    struct is_zval<val_t, std::enable_if_t<std::is_same<typename val_t::tag, zval_tag>::value
-//                                           && std::is_arithmetic<typename val_t::element_type>::value>>
-//            : public std::true_type
-//    {};
-
-
-    template<typename val_t, typename enable_t = void>
-    struct is_bval : public std::false_type
-    {};
-
-    template<typename val_t>
-    struct is_bval<val_t, std::enable_if_t<std::is_same<typename ztraits<val_t>::tag, bval_tag>::value
-                                           && std::is_same<typename ztraits<val_t>::element_type, bool>::value>>
-            : public std::true_type
-    {};
-
-    template<typename val_t>
-    struct is_bval<val_t, std::enable_if_t<std::is_same<typename val_t::tag, bval_tag>::value>>
-            : public std::true_type
-    {};
-
-
-
-    template<typename T, typename enable_t = void>
-    struct is_cval
-            : public std::false_type
-    {};
-
-    /// @cond
-    /// @struct is_cval<val_t, std::enable_if_t<is cval_tag && (zval || is_bval)>
-    template<typename T>
-    struct is_cval<T, std::enable_if_t<std::is_same<tag_t<T>, cval_tag>::value && is_zval<element_t<T>>::value>>
-            : public std::true_type
-    {};
-    /// @endcond
-
-    template<typename val_t>
-    struct is_bval<val_t, std::enable_if_t<is_cval<val_t>::value && is_bval<typename ztraits<val_t>::element_type>::value>>
-            : public std::true_type
-    {};
-
-    template<typename val_t, typename enable_t = void>
-    struct is_floating_point
-            : public std::false_type
-    {};
-
-    template<typename val_t>
-    struct is_floating_point<val_t, std::enable_if_t<std::is_floating_point<typename ztraits<val_t>::element_type>::value>>
-            : public std::true_type
-    {};
-
-
-    template<typename val_t, typename enable_t = void>
-    struct is_float
-            : public std::false_type
-    {};
-
-    template<typename val_t>
-    struct is_float<val_t, std::enable_if_t<std::is_same<typename ztraits<val_t>::element_type, float>::value>>
-            : public std::true_type
-    {};
-
-
-    template<typename val_t, typename enable_t = void>
-    struct is_double
-            : public std::false_type
-    {};
-
-    template<typename val_t>
-    struct is_double<val_t, std::enable_if_t<std::is_same<typename ztraits<val_t>::element_type, double>::value>>
-            : public std::true_type
-    {};
-
-    template<typename val_t, typename enable_t = void>
-    struct is_integral
-            : public std::false_type
-    {};
-
-//    template<typename val_t>
-//    struct is_integral<val_t, std::enable_if_t<std::is_integral<typename ztraits<val_t>::element_type>::value>>
-//            : public std::true_type
-//    {};
-
-    template<typename val_t>
-    struct is_integral<val_t, std::enable_if_t<std::is_integral<typename val_t::element_type>::value>>
-            : public std::true_type
-    {};
-
-    template<typename val_t, typename enable_t = void>
-    struct is_scalar
-            : public std::false_type
-    {};
-
-    template<typename val_t>
-    struct is_scalar<val_t, std::enable_if_t<!ztraits<val_t>::is_vector>>
-            : public std::true_type
-    {};
-
-    template<typename val_t, typename enable_t = void>
-    struct is_vector
-            : public std::false_type
-    {};
-
-//    template<typename val_t>
-//    struct is_vector<val_t, std::enable_if_t<ztraits<val_t>::is_vector>>
-//            : public std::true_type
-//    {};
-
-    template<typename val_t>
-    struct is_vector<val_t, std::enable_if_t<val_t::is_vector>>
-            : public std::true_type
-    {};
-
-
-    template<typename T>
-    using resolve_uint_t = std::conditional_t<
-            sizeof(T) == 8,
-                uint64_t,
-                std::conditional_t<
-            sizeof(T) == 4,
-                uint32_t,
-                std::conditional_t<
-            sizeof(T) == 2,
-                uint16_t,
-                uint8_t>>>;
-
-
-
 
     /**
      * @see https://stackoverflow.com/a/19532607/1261537
@@ -337,6 +176,12 @@ namespace zacc {
     template<class> struct type_sink { using type = void; };
     template<class T> using type_sink_t = typename type_sink<T>::type;
 
+    template<typename T>
+    using resolve_uint_t = select_t<
+            when<sizeof(T) == 8, uint64_t>,
+            when<sizeof(T) == 4, uint32_t>,
+            when<sizeof(T) == 2, uint16_t>,
+            uint8_t>;
 }
 
 namespace zacc
@@ -415,31 +260,18 @@ namespace zacc
     };
 
 
-    /**
-    * @see https://stackoverflow.com/a/44522730/1261537
-    */
-
-    template<typename T, typename enable = void>
-    struct element_type
+    template<typename T>
+    constexpr std::enable_if_t<is<iterable, T>,T> make_iterable(const T& value)
     {
-        using type = std::remove_cv_t<std::remove_reference_t<decltype(std::declval<T>().data())>>;
-    };
+        return value;
+    }
 
     template<typename T>
-    struct element_type<T, std::enable_if_t<is_cval<T>::value || is_zval<T>::value || is_bval<T>::value>>
+    constexpr std::enable_if_t<!is<iterable, T>, std::array<T, 1>> make_iterable(const T& value)
     {
-        using type = std::remove_cv_t<std::remove_reference_t<typename ztraits<T>::element_type>>;
-    };
+        return std::array<T, 1> {{ value }};
+    }
 
-
-    template<typename T>
-    struct element_type<T, std::enable_if_t<is<iterable, T> && !is_cval<T>::value && !is_zval<T>::value && !is_bval<T>::value>>
-    {
-        using type =  std::remove_reference_t<decltype(*std::begin(std::declval<T&>()))>;
-    };
-
-    template<typename T>
-    using element_type_t = typename element_type<T>::type;
 
     /// @brief trait system for function pointer-like objects
     /// @see https://functionalcpp.wordpress.com/2013/08/05/function-traits/

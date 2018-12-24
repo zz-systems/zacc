@@ -48,7 +48,7 @@ namespace zacc { namespace traits {
         private:
 
             constexpr else_branch(param_t<Boolean> condition, param_t<Composed> if_value, std::false_type)
-                : _if_value(if_value), _condition(condition.last_op() == last_operation::undefined ? (Composed(condition.value()) != 0) : condition)
+                : _if_value(if_value), _condition(last_operation_v<Boolean> == last_operation::undefined ? (Composed(condition.value()) != 0) : condition)
             {
             }
 

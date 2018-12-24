@@ -40,28 +40,26 @@ namespace zacc { namespace test {
 
         TYPED_TEST_P(io_test, store)
         {
-            std::array<typename TypeParam::element_type, TypeParam::size> test_data;
+            view_t<TypeParam> data;
+            std::iota(data.begin(), data.end(), 0);
+
+            TypeParam actual(0);//test_data);
+
+            auto result = actual.data();
+
             for(size_t i = 0; i < TypeParam::size; i++)
-                test_data[i] = i;
-
-            TypeParam actual(test_data);
-
-            auto data = actual.data();
-
-            for(size_t i = 0; i < TypeParam::size; i++)
-                VASSERT_EQ(data[i], test_data[i]);
+                VASSERT_EQ(result[i], data[i]);
         }
 
         TYPED_TEST_P(gather_test, gather)
         {
 
-            typename TypeParam::extracted_type data;
-            for(size_t i = 0; i < TypeParam::size; i++)
-                data[i] = 10 + i;
+            view_t<TypeParam> data;
+            std::iota(data.begin(), data.end(), 10);
 
-            TypeParam actual = TypeParam::gather(std::begin(data), zint32(0));
+            TypeParam result = TypeParam::gather(std::begin(data), zint32(0));
 
-            VASSERT_EQ(actual, 10);
+            VASSERT_EQ(result, 10);
         }
 
 

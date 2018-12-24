@@ -51,7 +51,7 @@ modules:
 
     boolean:
       - args: bool value
-        init: "(value ? _mm256_cmp_pd(_mm256_setzero_pd(), _mm256_setzero_pd(), _CMP_EQ_OQ) : _mm256_setzero_pd()), (last_operation::boolean)"
+        init: "(value ? _mm256_cmp_pd(_mm256_setzero_pd(), _mm256_setzero_pd(), _CMP_EQ_OQ) : _mm256_setzero_pd())"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

@@ -45,15 +45,15 @@
 #include "util/macros.hpp"
 
 #include "traits/printable.hpp"
-#include "traits/comparable.hpp"
-#include "traits/conditional.hpp"
-#include "traits/io.hpp"
-#include "traits/arithmetic.hpp"
 #include "traits/bitwise.hpp"
-#include "traits/equatable.hpp"
 #include "traits/numeric.hpp"
-#include "traits/logical.hpp"
+#include "traits/io.hpp"
+#include "traits/comparable.hpp"
 #include "traits/math.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/equatable.hpp"
+#include "traits/conditional.hpp"
+#include "traits/logical.hpp"
 
 namespace zacc { namespace backend { namespace avx2
 {
@@ -95,6 +95,9 @@ namespace zacc {
         /// scalar type? vector type?
         static constexpr bool is_vector = size > 1;
 
+        /// Indicates the last executed operation. Relevant for branch optimization.
+        static constexpr last_operation last_operation = last_operation::undefined;
+
         /// vector type, like __m128i for sse 4x integer vector
         using vector_type = __m256d;
 
@@ -115,182 +118,6 @@ namespace zacc { namespace backend { namespace avx2
 {
     namespace float64_modules
     {
-        /**
-         * @brief comparable mixin implementation [avx2 branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct comparable : traits::comparable<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Boolean vgt(Composed one, Composed other) 
-            {
-                return _mm256_cmp_pd(one, other, _CMP_GT_OQ);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Boolean vlt(Composed one, Composed other) 
-            {
-                return _mm256_cmp_pd(one, other, _CMP_LT_OQ);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Boolean vge(Composed one, Composed other) 
-            {
-                return _mm256_cmp_pd(one, other, _CMP_GE_OQ);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Boolean vle(Composed one, Composed other) 
-            {
-                return _mm256_cmp_pd(one, other, _CMP_LE_OQ);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief conditional mixin implementation [avx2 branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct conditional : traits::conditional<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
-            {
-                return _mm256_blendv_pd(else_value, if_value, condition);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief io mixin implementation [avx2 branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct io : traits::io<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
-            {
-                _mm256_store_pd(&(*result), input);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
-            {
-                _mm256_stream_pd(&(*result), input);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            template<typename RandomIt> friend Composed vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
-            {
-                auto i = _mm256_extractf128_si256(index, 1);
-                return _mm256_i32gather_pd(&(*input), i, 8);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief arithmetic mixin implementation [avx2 branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vneg(Composed one) 
-            {
-                return _mm256_sub_pd(_mm256_setzero_pd(), one);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vadd(Composed one, Composed other) 
-            {
-                return _mm256_add_pd(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vsub(Composed one, Composed other) 
-            {
-                return _mm256_sub_pd(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vmul(Composed one, Composed other) 
-            {
-                return _mm256_mul_pd(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vdiv(Composed one, Composed other) 
-            {
-                return _mm256_div_pd(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return _mm256_fmadd_pd(multiplicand, multiplier, addendum);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return _mm256_fmsub_pd(multiplicand, multiplier, addendum);
-            }
-        };
-
-        // =============================================================================================================
-
         /**
          * @brief bitwise mixin implementation [avx2 branch]
          * @relates float64
@@ -365,28 +192,38 @@ namespace zacc { namespace backend { namespace avx2
         // =============================================================================================================
 
         /**
-         * @brief equatable mixin implementation [avx2 branch]
+         * @brief io mixin implementation [avx2 branch]
          * @relates float64
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct equatable : traits::equatable<Interface, Composed, Boolean>
+        struct io : traits::io<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend Boolean veq(Composed one, Composed other) 
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
             {
-                return _mm256_cmp_pd(one, other, _CMP_EQ_OQ);
+                _mm256_store_pd(&(*result), input);
             }
 
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend Boolean vneq(Composed one, Composed other) 
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
             {
-                return _mm256_cmp_pd(one, other, _CMP_NEQ_OQ);
+                _mm256_stream_pd(&(*result), input);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            template<typename RandomIt> friend Composed vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
+            {
+                auto i = _mm256_extractf128_si256(index, 1);
+                return _mm256_i32gather_pd(&(*input), i, 8);
             }
         };
 
@@ -404,37 +241,46 @@ namespace zacc { namespace backend { namespace avx2
         // =============================================================================================================
 
         /**
-         * @brief logical mixin implementation [avx2 branch]
+         * @brief comparable mixin implementation [avx2 branch]
          * @relates float64
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct logical : traits::logical<Interface, Composed, Boolean>
+        struct comparable : traits::comparable<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend Boolean vlneg(Composed one) 
+            friend Boolean vgt(Composed one, Composed other) 
             {
-                return _mm256_cmp_pd(one, _mm256_setzero_pd(), _CMP_EQ_OQ);
+                return _mm256_cmp_pd(one, other, _CMP_GT_OQ);
             }
 
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend Boolean vlor(Composed one, Composed other) 
+            friend Boolean vlt(Composed one, Composed other) 
             {
-                return _mm256_or_pd(one, other);
+                return _mm256_cmp_pd(one, other, _CMP_LT_OQ);
             }
 
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend Boolean vland(Composed one, Composed other) 
+            friend Boolean vge(Composed one, Composed other) 
             {
-                return _mm256_and_pd(one, other);
+                return _mm256_cmp_pd(one, other, _CMP_GE_OQ);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Boolean vle(Composed one, Composed other) 
+            {
+                return _mm256_cmp_pd(one, other, _CMP_LE_OQ);
             }
         };
 
@@ -537,6 +383,163 @@ namespace zacc { namespace backend { namespace avx2
                 return _mm256_sqrt_pd(one);
             }
         };
+
+        // =============================================================================================================
+
+        /**
+         * @brief arithmetic mixin implementation [avx2 branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vneg(Composed one) 
+            {
+                return _mm256_sub_pd(_mm256_setzero_pd(), one);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vadd(Composed one, Composed other) 
+            {
+                return _mm256_add_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vsub(Composed one, Composed other) 
+            {
+                return _mm256_sub_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vmul(Composed one, Composed other) 
+            {
+                return _mm256_mul_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vdiv(Composed one, Composed other) 
+            {
+                return _mm256_div_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return _mm256_fmadd_pd(multiplicand, multiplier, addendum);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return _mm256_fmsub_pd(multiplicand, multiplier, addendum);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief equatable mixin implementation [avx2 branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct equatable : traits::equatable<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Boolean veq(Composed one, Composed other) 
+            {
+                return _mm256_cmp_pd(one, other, _CMP_EQ_OQ);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Boolean vneq(Composed one, Composed other) 
+            {
+                return _mm256_cmp_pd(one, other, _CMP_NEQ_OQ);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief conditional mixin implementation [avx2 branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
+            {
+                return _mm256_blendv_pd(else_value, if_value, condition);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief logical mixin implementation [avx2 branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Boolean vlneg(Composed one) 
+            {
+                return _mm256_cmp_pd(one, _mm256_setzero_pd(), _CMP_EQ_OQ);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Boolean vlor(Composed one, Composed other) 
+            {
+                return _mm256_or_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Boolean vland(Composed one, Composed other) 
+            {
+                return _mm256_and_pd(one, other);
+            }
+        };
     } // end float64_modules
 
     // =================================================================================================================
@@ -559,9 +562,19 @@ namespace zacc { namespace backend { namespace avx2
         float64_modules::equatable<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>,
         float64_modules::conditional<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>
     {
-        USING_ZTYPE(izfloat64<FeatureMask>);
+        USING_ZTYPE(zval<izfloat64<FeatureMask>>);
 
         using zval<izfloat64<FeatureMask>>::zval;
+
+//        template<typename T, std::enable_if_t<std::is_same<T, view_t<izfloat64<FeatureMask>>>::value && is_vector, void**> = nullptr>
+//        constexpr zfloat64(const T& view) noexcept
+//                : zfloat64(storage_t<izfloat64<FeatureMask>>(view))
+//        {}
+
+        template<typename T, std::enable_if_t<std::is_same<T, view_t<izfloat64<FeatureMask>>>::value && !is_vector, void**> = nullptr>
+        constexpr zfloat64(const T& view) noexcept
+                : zfloat64(view[0])
+        {}
 
         template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
         constexpr zfloat64(const T& other) noexcept
@@ -569,7 +582,7 @@ namespace zacc { namespace backend { namespace avx2
         {}
 
         explicit constexpr zfloat64(const bval_t<izfloat64<FeatureMask>>& other) noexcept
-                : zfloat64(other.value())
+            : zfloat64(other.value())
         {}
 
         /**
@@ -643,19 +656,29 @@ namespace zacc { namespace backend { namespace avx2
         float64_modules::logical<ibfloat64<FeatureMask>, bfloat64<FeatureMask>, bfloat64<FeatureMask>>,
         float64_modules::equatable<ibfloat64<FeatureMask>, bfloat64<FeatureMask>, bfloat64<FeatureMask>>
     {
-        USING_ZTYPE(ibfloat64<FeatureMask>);
+        USING_ZTYPE(zval<ibfloat64<FeatureMask>>);
 
         using zval<ibfloat64<FeatureMask>>::zval;
 
-        template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
+//        template<typename T, std::enable_if_t<std::is_same<T, view_t<ibfloat64<FeatureMask>>>::value && is_vector, void**> = nullptr>
+//        constexpr bfloat64(const T& view) noexcept
+//                : bfloat64(storage_t<izfloat64<FeatureMask>>(view))
+//        {}
+
+        template<typename T, std::enable_if_t<std::is_same<T, view_t<ibfloat64<FeatureMask>>>::value && !is_vector, void**> = nullptr>
+        constexpr bfloat64(const T& view) noexcept
+                : bfloat64((view[0]))
+        {}
+
+        template<typename T, typename std::enable_if<is_zval<T>::value || is_bval<T>::value, void**>::type = nullptr>
         constexpr bfloat64(const T& other) noexcept
                 : bfloat64(other.value())
         {}
 
-        template<typename T, typename std::enable_if<is_bval<T>::value, void**>::type = nullptr>
-        constexpr bfloat64(const T& other) noexcept
-                : bfloat64(other.raw_value())
-        {}
+//        template<typename T, typename std::enable_if<is_bval<T>::value, void**>::type = nullptr>
+//        constexpr bfloat64(const T& other) noexcept
+//                : bfloat64(other.value())
+//        {}
 
 
         /**
@@ -663,13 +686,29 @@ namespace zacc { namespace backend { namespace avx2
          * @relates bfloat64
          */
         constexpr bfloat64(bool value) noexcept
-            : zval<ibfloat64<FeatureMask>>((value ? _mm256_cmp_pd(_mm256_setzero_pd(), _mm256_setzero_pd(), _CMP_EQ_OQ) : _mm256_setzero_pd()), (last_operation::boolean))
+            : zval<ibfloat64<FeatureMask>>((value ? _mm256_cmp_pd(_mm256_setzero_pd(), _mm256_setzero_pd(), _CMP_EQ_OQ) : _mm256_setzero_pd()))
         {
         }
     };
 
     // Validate zfloat64 ===================================================================================
 
+
+    static_assert( is_vector_v<izfloat64<0>> == true,    "is_vector_v<izfloat64> != true.");
+    static_assert( is_vector_v<ibfloat64<0>> == true,    "is_vector_v<ibfloat64> != true.");
+
+    static_assert( std::is_same<element_t<ibfloat64<0>>, double>::value,    "element_t<ibfloat64> != double.");
+
+    static_assert( std::is_same<element_t<izfloat64<0>>, double>::value,    "element_t<izfloat64> != double.");
+    static_assert( std::is_same<element_t<ibfloat64<0>>, double>::value,    "element_t<ibfloat64> != double.");
+
+    static_assert( std::is_same<vector_t<izfloat64<0>>, __m256d>::value,    "vector_t<izfloat64> != __m256d.");
+    static_assert( std::is_same<vector_t<ibfloat64<0>>, __m256d>::value,    "vector_t<ibfloat64> != __m256d.");
+
+    static_assert( std::is_same<view_t<izfloat64<0>>, std::array<double, 4>>::value,    "view_t<izfloat64> != std::array<double, 4>.");
+    static_assert( std::is_same<view_t<ibfloat64<0>>, std::array<bool, 4>>::value,                        "view_t<ibfloat64> != std::array<bool, 4>.");
+
+//
     static_assert( std::is_base_of<izfloat64<0>, izfloat64<0>>::value, "base_of<izfloat64> != izfloat64.");
     static_assert(!std::is_base_of<ibfloat64<0>, izfloat64<0>>::value, "base_of<izfloat64> == ibfloat64.");
 

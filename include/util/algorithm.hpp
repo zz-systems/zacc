@@ -35,6 +35,8 @@
 #include <iostream>
 #include "util/type/type_traits.hpp"
 
+#include "backend/zval.hpp"
+
 namespace zacc {
 
     /**

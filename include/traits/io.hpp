@@ -39,37 +39,11 @@ namespace zacc { namespace traits {
     template<typename Interface, typename Composed, typename Boolean>
     struct io
     {
-
-//        template<typename OutputIt>
-//        void store (OutputIt result, bval_tag) const
-//        {
-//            std::array<bool, Interface::size> data;
-//
-//            vstore(std::begin(data), *static_cast<const Composed*>(this));
-//
-//            std::transform(std::begin(data), std::end(data), result, [](auto i) { return i != 0;});
-//
-////            for(auto i : data)
-////                *(result++) = i != 0;
-//        }
-
         template<typename OutputIt>
         void store (OutputIt result) const
         {
             vstore(result, *static_cast<const Composed*>(this));
         }
-
-//        template<typename OutputIt>
-//        void stream (OutputIt result, bval_tag) const
-//        {
-//            std::array<bool, Interface::size> data;
-//
-//            vstore(std::begin(data), *static_cast<const Composed*>(this));
-//
-//            std::transform(std::begin(data), std::end(data), result, [](auto i) { return i != 0;});
-////            for(auto i : data)
-////                *(result++) = i != 0;
-//        }
 
         template<typename OutputIt>
         void stream (OutputIt result) const
@@ -77,26 +51,14 @@ namespace zacc { namespace traits {
             vstream(result, *static_cast<const Composed*>(this));
         }
 
-        template <bool Cond = is_zval<Interface>::value, typename std::enable_if<Cond, void**>::type = nullptr>
-        const typename Interface::extracted_type data() const {
-            alignas(Interface::alignment) typename Interface::extracted_type result;
 
-            store(std::begin(result));
+        const view_t<Interface> data() const {
 
-            return result;
-        }
-
-        template <bool Cond = is_bval<Interface>::value, typename std::enable_if<Cond, void**>::type = nullptr>
-        const std::array<bool, Interface::size> data() const {
-
-            alignas(Interface::alignment) typename Interface::extracted_type data;
-            std::array<bool, Interface::size> result;
+            alignas(Interface::alignment) extracted_t<Interface> data;
 
             store(std::begin(data));
 
-            std::transform(std::begin(data), std::end(data), std::begin(result), [](auto i) { return static_cast<bool>(i);});
-
-            return result;
+            return array_cast<typename view_t<Interface>::value_type>(data);
         }
 
         template<typename RandomIt, typename index_t>

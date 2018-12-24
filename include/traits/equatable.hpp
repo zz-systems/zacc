@@ -40,11 +40,11 @@ namespace zacc { namespace traits {
     {
 
         friend Boolean operator==(param_t<Composed> one, param_t<Composed> other) {
-            return Boolean(veq(one, other), last_operation::boolean);
+            return veq(one, other);
         }
 
         friend Boolean operator!=(param_t<Composed> one, param_t<Composed> other) {
-            return Boolean(vneq(one, other), last_operation::boolean);
+            return vneq(one, other);
         }
     };
 }}

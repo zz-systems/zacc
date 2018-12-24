@@ -45,7 +45,7 @@ modules:
 
     boolean:
       - args: bool value
-        init: "(value ? _mm256_cmpeq_epi16(_mm256_setzero_si256(), _mm256_setzero_si256()) : _mm256_setzero_si256()), (last_operation::boolean)"
+        init: "(value ? _mm256_cmpeq_epi16(_mm256_setzero_si256(), _mm256_setzero_si256()) : _mm256_setzero_si256())"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -82,7 +82,7 @@ modules:
       body:
         - auto dividend = one.data();
         - auto divisor = other.data();
-        - typename Composed::extracted_type result;
+        - alignas(Composed::alignment) typename Composed::extracted_type result;
         - for (size_t i = 0; i < Composed::size; i++) { result[i] = dividend[i] / divisor[i]; }
         - return result;
     vmod: vsub(one, vmul(other, vdiv(one, other)))

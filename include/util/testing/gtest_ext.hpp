@@ -57,15 +57,22 @@ namespace zacc { namespace test {
     std::enable_if_t<is_zval<T>::value && is_integral<T>::value, ::testing::AssertionResult>
     vassert_eq(const char* actual_expr, const char* expected_expr, const T& actual, const U& expected)
     {
-        auto dataset = zip(actual.data(), static_cast<T>(expected).data());
-        element_type_t<T> actual_elem, expected_elem;
+        auto actual_dataset = actual.data();
+        auto expected_dataset = static_cast<T>(expected).data();
 
-        bool isValid = std::accumulate(std::begin(dataset), std::end(dataset), true, [&](auto acc, auto pair)
-        {
-            std::tie(actual_elem, expected_elem) = pair;
-
-            return acc && actual_elem == expected_elem;
+        bool isValid = zacc::accumulate(actual_dataset.begin(), actual_dataset.end(), expected_dataset.begin(), true, [&](auto acc, auto a, auto e){
+            return acc && a == e;
         });
+
+//        auto dataset = zip(actual.data(), static_cast<T>(expected).data());
+//        element_type_t<T> actual_elem, expected_elem;
+//
+//        bool isValid = std::accumulate(std::begin(dataset), std::end(dataset), true, [&](auto acc, auto pair)
+//        {
+//            std::tie(actual_elem, expected_elem) = pair;
+//
+//            return acc && actual_elem == expected_elem;
+//        });
 
         if(isValid)
             return ::testing::AssertionSuccess();
@@ -79,17 +86,28 @@ namespace zacc { namespace test {
     std::enable_if_t<is_zval<T>::value && is_floating_point<T>::value, ::testing::AssertionResult>
     vassert_eq(const char* actual_expr, const char* expected_expr, const T& actual, const U& expected)
     {
-        auto dataset = zip(actual.data(), static_cast<T>(expected).data());
-        element_type_t<T> actual_elem, expected_elem;
+        auto actual_dataset = actual.data();
+        auto expected_dataset = static_cast<T>(expected).data();
 
-        bool isValid = std::accumulate(std::begin(dataset), std::end(dataset), true, [&](auto acc, auto pair)
-        {
-            std::tie(actual_elem, expected_elem) = pair;
+        bool isValid = zacc::accumulate(actual_dataset.begin(), actual_dataset.end(), expected_dataset.begin(), true, [&](auto acc, auto a, auto e){
 
-            const ::testing::internal::FloatingPoint<element_type_t<T>> lhs(actual_elem), rhs(expected_elem);
+            const ::testing::internal::FloatingPoint<element_t<T>> lhs(a), rhs(e);
 
             return acc && lhs.AlmostEquals(rhs);
         });
+
+
+//        auto dataset = zip(actual.data(), static_cast<T>(expected).data());
+//        element_type_t<T> actual_elem, expected_elem;
+//
+//        bool isValid = std::accumulate(std::begin(dataset), std::end(dataset), true, [&](auto acc, auto pair)
+//        {
+//            std::tie(actual_elem, expected_elem) = pair;
+//
+//            const ::testing::internal::FloatingPoint<element_type_t<T>> lhs(actual_elem), rhs(expected_elem);
+//
+//            return acc && lhs.AlmostEquals(rhs);
+//        });
 
         if(isValid)
             return ::testing::AssertionSuccess();
@@ -103,15 +121,23 @@ namespace zacc { namespace test {
     std::enable_if_t<is_bval<T>::value, ::testing::AssertionResult>
     vassert_eq(const char* actual_expr, const char* expected_expr, const T& actual, const U& expected)
     {
-        auto dataset = zip(actual.data(), static_cast<T>(expected).data());
-        element_type_t<T> actual_elem, expected_elem;
+        auto actual_dataset = actual.data();
+        auto expected_dataset = static_cast<T>(expected).data();
 
-        bool isValid = std::accumulate(std::begin(dataset), std::end(dataset), true, [&](auto acc, auto pair)
-        {
-            std::tie(actual_elem, expected_elem) = pair;
+        bool isValid = zacc::accumulate(actual_dataset.begin(), actual_dataset.end(), expected_dataset.begin(), true, [&](auto acc, auto a, auto e){
 
-            return acc && actual_elem == expected_elem;
+            return acc && a == e;
         });
+
+//        auto dataset = zip(actual.data(), static_cast<T>(expected).data());
+//        element_type_t<T> actual_elem, expected_elem;
+//
+//        bool isValid = std::accumulate(std::begin(dataset), std::end(dataset), true, [&](auto acc, auto pair)
+//        {
+//            std::tie(actual_elem, expected_elem) = pair;
+//
+//            return acc && actual_elem == expected_elem;
+//        });
 
         if(isValid)
             return ::testing::AssertionSuccess();
@@ -132,15 +158,23 @@ namespace zacc { namespace test {
                  const U& expected,
                  double abs_error)
     {
-        auto dataset = zip(actual.data(), static_cast<T>(expected).data());
-        element_type_t<T> actual_elem, expected_elem;
+        auto actual_dataset = actual.data();
+        auto expected_dataset = static_cast<T>(expected).data();
 
-        bool isValid = std::accumulate(std::begin(dataset), std::end(dataset), true, [&](auto acc, auto pair)
-        {
-            std::tie(actual_elem, expected_elem) = pair;
+        bool isValid = zacc::accumulate(actual_dataset.begin(), actual_dataset.end(), expected_dataset.begin(), true, [&](auto acc, auto a, auto e){
 
-            return acc && abs_error >= std::abs(actual_elem - expected_elem);
+            return acc && abs_error >= std::abs(a - e);
         });
+
+//        auto dataset = zip(actual.data(), static_cast<T>(expected).data());
+//        element_type_t<T> actual_elem, expected_elem;
+//
+//        bool isValid = std::accumulate(std::begin(dataset), std::end(dataset), true, [&](auto acc, auto pair)
+//        {
+//            std::tie(actual_elem, expected_elem) = pair;
+//
+//            return acc && abs_error >= std::abs(actual_elem - expected_elem);
+//        });
 
         if(isValid)
             return ::testing::AssertionSuccess();

@@ -60,10 +60,16 @@ namespace zacc { namespace math {
      * @param value [-pi; pi] rad
      * @return [-1; 1]
      */
-    template<typename Real>
-    std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), Real> vsin(Real value)
+    template<typename Real, std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), void**> = nullptr>
+    Real vsin(Real value)
     {
-        return zacc::transform(value.data(), [](auto i) { return std::sin(i); });
+        extracted_t<Real> result;
+        auto data = value.data();
+
+        std::transform(data.begin(), data.end(), result.begin(), [](auto i) { return std::sin(i); });
+
+        return result;
+        //return zacc::transform(value.data(), [](auto i) { return std::sin(i); });
     }
 
     /**
@@ -72,10 +78,17 @@ namespace zacc { namespace math {
      * @param value [-pi; pi] rad
      * @return [-1; 1]
      */
-    template<typename Real>
-    std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), Real> vcos(Real value)
+    template<typename Real, std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), void**> = nullptr>
+    Real vcos(Real value)
     {
-        return zacc::transform(value.data(), [](auto i) { return std::cos(i); });
+        extracted_t<Real> result;
+        auto data = value.data();
+
+        std::transform(data.begin(), data.end(), result.begin(), [](auto i) { return std::cos(i); });
+
+        return result;
+
+        //return zacc::transform(value.data(), [](auto i) { return std::cos(i); });
     }
 
     /**
@@ -84,10 +97,17 @@ namespace zacc { namespace math {
      * @param value [-pi/2; pi/2] rad
      * @return [-1; 1]
      */
-    template <typename Real>
-    std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), Real> vtan(Real value)
+    template<typename Real, std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), void**> = nullptr>
+    Real vtan(Real value)
     {
-        return zacc::transform(value.data(), [](auto i) { return std::tan(i); });
+        extracted_t<Real> result;
+        auto data = value.data();
+
+        std::transform(data.begin(), data.end(), result.begin(), [](auto i) { return std::tan(i); });
+
+        return result;
+
+        //return zacc::transform(value.data(), [](auto i) { return std::tan(i); });
     }
 
     /**
@@ -96,10 +116,18 @@ namespace zacc { namespace math {
      * @param value [-1; 1] rad
      * @return [-1; 1]
      */
-    template<typename Real>
-    std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), Real> vatan2(Real y, Real x)
+    template<typename Real, std::enable_if_t<is_floating_point<Real>::value && (!has_integer_types_v<Real> || is_scalar<Real>::value), void**> = nullptr>
+    Real vatan2(Real y, Real x)
     {
-        return zacc::transform(x.data(), y.data(), [](auto i, auto j) { return std::atan2(i, j); });
+        extracted_t<Real> result;
+        auto xdata = x.data();
+        auto ydata = y.data();
+
+        std::transform(xdata.begin(), xdata.end(), ydata.begin(), result.begin(), [](auto i, auto j) { return std::atan2(i, j); });
+
+        return result;
+
+        //return zacc::transform(x.data(), y.data(), [](auto i, auto j) { return std::atan2(i, j); });
     }
 
     /**
@@ -108,8 +136,8 @@ namespace zacc { namespace math {
      * @param value [-pi; pi] rad
      * @return [-1; 1]
      */
-    template<typename Real>
-    std::enable_if_t<is_floating_point<Real>::value && is_vector<Real>::value && has_integer_types_v<Real>, Real> vsin(Real value)
+    template<typename Real, std::enable_if_t<is_floating_point<Real>::value && is_vector<Real>::value && has_integer_types_v<Real>, void**> = nullptr>
+    Real vsin(Real value)
     {
         Real q = (value * Z_1_PI).floor();
         zint iq = q;
@@ -180,8 +208,8 @@ namespace zacc { namespace math {
      * @param value [-pi; pi] rad
      * @return [-1; 1]
      */
-    template<typename Real>
-    std::enable_if_t<is_floating_point<Real>::value && is_vector<Real>::value && has_integer_types_v<Real>, Real> vcos(Real value)
+    template<typename Real, std::enable_if_t<is_floating_point<Real>::value && is_vector<Real>::value && has_integer_types_v<Real>, void**> = nullptr>
+    Real vcos(Real value)
     {
         Real q = 2.0 * (value * Z_1_PI - 0.5).floor() + 1;
         zint iq = q;
@@ -252,8 +280,8 @@ namespace zacc { namespace math {
      * @param value [-pi/2; pi/2] rad
      * @return [-1; 1]
      */
-    template <typename Real>
-    std::enable_if_t<is_floating_point<Real>::value && is_vector<Real>::value && has_integer_types_v<Real>, Real> vtan(Real value)
+    template<typename Real, std::enable_if_t<is_floating_point<Real>::value && is_vector<Real>::value && has_integer_types_v<Real>, void**> = nullptr>
+    Real  vtan(Real value)
     {
         Real q = (value * 2 * Z_1_PI).round();
         zint iq = q;
@@ -338,8 +366,8 @@ namespace zacc { namespace math {
      * @param y [-1; 1] rad
      * @return [-1; 1]
      */
-    template<typename Real>
-    std::enable_if_t<is_floating_point<Real>::value && is_vector<Real>::value && has_integer_types_v<Real>, Real> vatan2(Real y, Real x)
+    template<typename Real, std::enable_if_t<is_floating_point<Real>::value && is_vector<Real>::value && has_integer_types_v<Real>, void**> = nullptr>
+    Real vatan2(Real y, Real x)
     {
         auto q = Real(2)
                 .when(x < 0)

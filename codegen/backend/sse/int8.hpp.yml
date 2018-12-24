@@ -45,7 +45,7 @@ modules:
 
     boolean:
       - args: bool value
-        init: "(value ? _mm_cmpeq_epi8(_mm_setzero_si128(), _mm_setzero_si128()) : _mm_setzero_si128()), (last_operation::boolean)"
+        init: "(value ? _mm_cmpeq_epi8(_mm_setzero_si128(), _mm_setzero_si128()) : _mm_setzero_si128())"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
@@ -106,7 +106,7 @@ modules:
       body:
         - auto dividend = one.data();
         - auto divisor = other.data();
-        - alignas(alignof(Composed)) typename Composed::extracted_type result;
+        - alignas(Composed::alignment) typename Composed::extracted_type result;
         - for (size_t i = 0; i < Composed::size; i++) { result[i] = dividend[i] / divisor[i]; }
         - return result;
     vmod: vsub(one, vmul(other, vdiv(one, other)))

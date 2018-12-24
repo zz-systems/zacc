@@ -60,7 +60,7 @@ modules:
         init: value
 
       - args: bool value
-        init: "(value ? _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128()) : _mm_setzero_si128()), (last_operation::boolean)"
+        init: "(value ? _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128()) : _mm_setzero_si128())"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

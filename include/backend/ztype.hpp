@@ -24,46 +24,11 @@
 
 #pragma once
 
+#include "util/type/type_traits.hpp"
+
 namespace zacc {
 
-    struct zval_tag {};
-    struct bval_tag {};
-    struct cval_tag {};
 
-    template<typename Tag, typename Vector, typename Element, size_t Size, size_t Alignment, uint64_t FeatureMask = 0xFFFF'FFFF'FFFF'FFFF>
-    struct ztype {
-        /// type tag
-        using tag = Tag;
 
-        /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size = Size;
 
-        /// memory alignment
-        static constexpr size_t alignment = Alignment;
-
-        /// feature mask (indicates available features)
-        static constexpr uint64_t feature_mask = FeatureMask;
-
-        /// scalar type? vector type?
-        static constexpr bool is_vector = size > 1;
-
-        /// vector type, like __m128i for sse 4x integer vector
-        using vector_type = Vector;
-
-        /// scalar type, like int for sse 4x integer vector
-        using element_type = Element;
-
-        /// extracted std::array of (dim) scalar values
-        using extracted_type = std::array<element_type, size>;
-    };
-
-#define USING_ZTYPE(Interface) \
-    using Interface::size; \
-    using Interface::alignment; \
-    using Interface::feature_mask; \
-    using Interface::is_vector; \
-    using typename Interface::tag; \
-    using typename Interface::element_type; \
-    using typename Interface::vector_type; \
-    using typename Interface::extracted_type;
 }

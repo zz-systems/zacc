@@ -51,7 +51,7 @@ modules:
 
     boolean:
       - args: bool value
-        init: "(value ? _mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256()) : _mm256_setzero_si256()), (last_operation::boolean)"
+        init: "(value ? _mm256_cmpeq_epi32(_mm256_setzero_si256(), _mm256_setzero_si256()) : _mm256_setzero_si256())"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store

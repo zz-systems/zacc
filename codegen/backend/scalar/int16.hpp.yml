@@ -32,16 +32,16 @@ modules:
   init:
     default:
       - args: int16_t value
-        init: "std::array<int16_t, 1> {{value}}"
+        init: value #"std::array<int16_t, 1> {{value}}"
 
-      - args: "extracted_type value"
-        init: "value"
+#      - args: "extracted_type value"
+#        init: "value"
 
     boolean:
       - args: bool value
-        init: "std::array<bool, 1> {{value}}"
+        init: value #"std::array<bool, 1> {{value}}"
       - args: zval_t value
-        init: "std::array<bool, 1> {{ value.value() != 0 }}"
+        init: value.value() != 0 #"std::array<bool, 1> {{ value.value() != 0 }}"
 #-----------------------------------------------------------------------------------------------------------------------
   io:
     vstore: &io_store
