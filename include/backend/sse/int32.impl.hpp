@@ -46,30 +46,30 @@
 
 #include "traits/printable.hpp"
 #include "traits/io.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/logical.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/numeric.hpp"
-#include "traits/equatable.hpp"
 #include "traits/conditional.hpp"
-#include "traits/bitwise_shift.hpp"
-#include "traits/comparable.hpp"
+#include "traits/arithmetic.hpp"
 #include "traits/math.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/equatable.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/numeric.hpp"
+#include "traits/logical.hpp"
+#include "traits/comparable.hpp"
 
 namespace zacc { namespace backend { namespace sse
 {
     /// @cond
-    template<uint64_t features>
+    template<uint64_t FeatureMask>// = last_operation::undefined>
     struct bint32;
 
-    template<uint64_t features>
+    template<uint64_t FeatureMask>// = last_operation::undefined>
     struct zint32;
     /// @endcond
 
-    template<uint64_t FeatureMask>
+    template<uint64_t FeatureMask>// = last_operation::undefined>
     using izint32 = ztype<zval_tag, __m128i, int32_t, 4, 16, FeatureMask>;
 
-    template<uint64_t FeatureMask>
+    template<uint64_t FeatureMask>// = last_operation::undefined>
     using ibint32 = ztype<bval_tag, __m128i, int32_t, 4, 16, FeatureMask>;
 }}}
 
@@ -97,7 +97,7 @@ namespace zacc {
         static constexpr bool is_vector = size > 1;
 
         /// Indicates the last executed operation. Relevant for branch optimization.
-        static constexpr last_operation last_operation = last_operation::undefined;
+        static constexpr last_op last_operation = last_op::undefined;
 
         /// vector type, like __m128i for sse 4x integer vector
         using vector_type = __m128i;
@@ -152,6 +152,38 @@ namespace zacc { namespace backend { namespace sse
             {
                 auto i = index.data();
                 return _mm_set_epi32(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief conditional mixin implementation [sse branch]
+         * @relates int32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [sse4 branch]
+             * @relates int32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
+            vsel(Boolean condition, Composed if_value, Composed else_value) 
+            {
+                return _mm_blendv_epi8(else_value, if_value, condition);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
+            vsel(Boolean condition, Composed if_value, Composed else_value) 
+            {
+                return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value));
             }
         };
 
@@ -237,37 +269,94 @@ namespace zacc { namespace backend { namespace sse
         // =============================================================================================================
 
         /**
-         * @brief logical mixin implementation [sse branch]
+         * @brief math mixin implementation [sse branch]
          * @relates int32
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct logical : traits::logical<Interface, Composed, Boolean>
+        struct math : traits::math<Interface, Composed, Boolean>
         {
             /**
-             * @brief  [default branch]
+             * @brief  [sse3 branch]
              * @relates int32
              */
-            friend Boolean vlneg(Composed one) 
+            template<typename T = Composed>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE3>, T>
+            vabs(Composed one) 
             {
-                return _mm_cmpeq_epi32(one, _mm_setzero_si128());
+                return _mm_abs_epi32(one);
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Boolean vlor(Composed one, Composed other) 
+            template<typename T = Composed>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE3>, T>
+            vabs(Composed one) 
             {
-                return _mm_or_si128(one, other);
+                return vmax(one, -one);
+            }
+
+            /**
+             * @brief  [sse4 branch]
+             * @relates int32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
+            vmin(Composed one, Composed other) 
+            {
+                return _mm_min_epi32(one, other);
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Boolean vland(Composed one, Composed other) 
+            template<typename T = Composed>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
+            vmin(Composed one, Composed other) 
             {
-                return _mm_and_si128(one, other);
+                return vsel(one < other, one, other);
+            }
+
+            /**
+             * @brief  [sse4 branch]
+             * @relates int32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
+            vmax(Composed one, Composed other) 
+            {
+                return _mm_max_epi32(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
+            vmax(Composed one, Composed other) 
+            {
+                return vsel(one > other, one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vclamp(Composed self, Composed from, Composed to) 
+            {
+                return vmin(to, vmax(from, self));
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vsqrt(Composed one) 
+            {
+                return _mm_sqrt_ps(_mm_cvtepi32_ps(one));
             }
         };
 
@@ -420,44 +509,49 @@ namespace zacc { namespace backend { namespace sse
         // =============================================================================================================
 
         /**
-         * @brief conditional mixin implementation [sse branch]
-         * @relates int32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct conditional : traits::conditional<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [sse4 branch]
-             * @relates int32
-             */
-            template<typename T = Composed>
-            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
-            vsel(Boolean condition, Composed if_value, Composed else_value) 
-            {
-                return _mm_blendv_epi8(else_value, if_value, condition);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            template<typename T = Composed>
-            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
-            vsel(Boolean condition, Composed if_value, Composed else_value) 
-            {
-                return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value));
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
          * @brief numeric mixin implementation [sse branch]
          * @relates int32
          */
         template<typename Interface, typename Composed, typename Boolean>
         struct numeric : traits::numeric<Interface, Composed, Boolean>
         {
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief logical mixin implementation [sse branch]
+         * @relates int32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Boolean vlneg(Composed one) 
+            {
+                return _mm_cmpeq_epi32(one, _mm_setzero_si128());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Boolean vlor(Composed one, Composed other) 
+            {
+                return _mm_or_si128(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Boolean vland(Composed one, Composed other) 
+            {
+                return _mm_and_si128(one, other);
+            }
         };
 
         // =============================================================================================================
@@ -505,100 +599,6 @@ namespace zacc { namespace backend { namespace sse
                 return !(one > other);
             }
         };
-
-        // =============================================================================================================
-
-        /**
-         * @brief math mixin implementation [sse branch]
-         * @relates int32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct math : traits::math<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [sse3 branch]
-             * @relates int32
-             */
-            template<typename T = Composed>
-            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE3>, T>
-            vabs(Composed one) 
-            {
-                return _mm_abs_epi32(one);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            template<typename T = Composed>
-            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE3>, T>
-            vabs(Composed one) 
-            {
-                return vmax(one, -one);
-            }
-
-            /**
-             * @brief  [sse4 branch]
-             * @relates int32
-             */
-            template<typename T = Composed>
-            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
-            vmin(Composed one, Composed other) 
-            {
-                return _mm_min_epi32(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            template<typename T = Composed>
-            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
-            vmin(Composed one, Composed other) 
-            {
-                return vsel(one < other, one, other);
-            }
-
-            /**
-             * @brief  [sse4 branch]
-             * @relates int32
-             */
-            template<typename T = Composed>
-            friend std::enable_if_t<has_feature_v<Interface, capabilities::SSE41>, T>
-            vmax(Composed one, Composed other) 
-            {
-                return _mm_max_epi32(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            template<typename T = Composed>
-            friend std::enable_if_t<!has_feature_v<Interface, capabilities::SSE41>, T>
-            vmax(Composed one, Composed other) 
-            {
-                return vsel(one > other, one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Composed vclamp(Composed self, Composed from, Composed to) 
-            {
-                return vmin(to, vmax(from, self));
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Composed vsqrt(Composed one) 
-            {
-                return _mm_sqrt_ps(_mm_cvtepi32_ps(one));
-            }
-        };
     } // end int32_modules
 
     // =================================================================================================================
@@ -623,13 +623,8 @@ namespace zacc { namespace backend { namespace sse
         int32_modules::conditional<izint32<FeatureMask>, zint32<FeatureMask>, bint32<FeatureMask>>
     {
         USING_ZTYPE(zval<izint32<FeatureMask>>);
-
         using zval<izint32<FeatureMask>>::zval;
 
-//        template<typename T, std::enable_if_t<std::is_same<T, view_t<izint32<FeatureMask>>>::value && is_vector, void**> = nullptr>
-//        constexpr zint32(const T& view) noexcept
-//                : zint32(storage_t<izint32<FeatureMask>>(view))
-//        {}
 
         template<typename T, std::enable_if_t<std::is_same<T, view_t<izint32<FeatureMask>>>::value && !is_vector, void**> = nullptr>
         constexpr zint32(const T& view) noexcept
@@ -717,13 +712,7 @@ namespace zacc { namespace backend { namespace sse
         int32_modules::equatable<ibint32<FeatureMask>, bint32<FeatureMask>, bint32<FeatureMask>>
     {
         USING_ZTYPE(zval<ibint32<FeatureMask>>);
-
         using zval<ibint32<FeatureMask>>::zval;
-
-//        template<typename T, std::enable_if_t<std::is_same<T, view_t<ibint32<FeatureMask>>>::value && is_vector, void**> = nullptr>
-//        constexpr bint32(const T& view) noexcept
-//                : bint32(storage_t<izint32<FeatureMask>>(view))
-//        {}
 
         template<typename T, std::enable_if_t<std::is_same<T, view_t<ibint32<FeatureMask>>>::value && !is_vector, void**> = nullptr>
         constexpr bint32(const T& view) noexcept
@@ -734,12 +723,6 @@ namespace zacc { namespace backend { namespace sse
         constexpr bint32(const T& other) noexcept
                 : bint32(other.value())
         {}
-
-//        template<typename T, typename std::enable_if<is_bval<T>::value, void**>::type = nullptr>
-//        constexpr bint32(const T& other) noexcept
-//                : bint32(other.value())
-//        {}
-
 
         /**
          * @brief bint32 constructor [sse branch]
@@ -780,77 +763,78 @@ namespace zacc { namespace backend { namespace sse
 
     // Validate zint32 ===================================================================================
 
+#define params 0
 
-    static_assert( is_vector_v<izint32<0>> == true,    "is_vector_v<izint32> != true.");
-    static_assert( is_vector_v<ibint32<0>> == true,    "is_vector_v<ibint32> != true.");
+    static_assert( is_vector_v<izint32<params>> == true,    "is_vector_v<izint32> != true.");
+    static_assert( is_vector_v<ibint32<params>> == true,    "is_vector_v<ibint32> != true.");
 
-    static_assert( std::is_same<element_t<ibint32<0>>, int32_t>::value,    "element_t<ibint32> != int32_t.");
+    static_assert( std::is_same<element_t<ibint32<params>>, int32_t>::value,    "element_t<ibint32> != int32_t.");
 
-    static_assert( std::is_same<element_t<izint32<0>>, int32_t>::value,    "element_t<izint32> != int32_t.");
-    static_assert( std::is_same<element_t<ibint32<0>>, int32_t>::value,    "element_t<ibint32> != int32_t.");
+    static_assert( std::is_same<element_t<izint32<params>>, int32_t>::value,    "element_t<izint32> != int32_t.");
+    static_assert( std::is_same<element_t<ibint32<params>>, int32_t>::value,    "element_t<ibint32> != int32_t.");
 
-    static_assert( std::is_same<vector_t<izint32<0>>, __m128i>::value,    "vector_t<izint32> != __m128i.");
-    static_assert( std::is_same<vector_t<ibint32<0>>, __m128i>::value,    "vector_t<ibint32> != __m128i.");
+    static_assert( std::is_same<vector_t<izint32<params>>, __m128i>::value,    "vector_t<izint32> != __m128i.");
+    static_assert( std::is_same<vector_t<ibint32<params>>, __m128i>::value,    "vector_t<ibint32> != __m128i.");
 
-    static_assert( std::is_same<view_t<izint32<0>>, std::array<int32_t, 4>>::value,    "view_t<izint32> != std::array<int32_t, 4>.");
-    static_assert( std::is_same<view_t<ibint32<0>>, std::array<bool, 4>>::value,                        "view_t<ibint32> != std::array<bool, 4>.");
+    static_assert( std::is_same<view_t<izint32<params>>, std::array<int32_t, 4>>::value,    "view_t<izint32> != std::array<int32_t, 4>.");
+    static_assert( std::is_same<view_t<ibint32<params>>, std::array<bool, 4>>::value,                        "view_t<ibint32> != std::array<bool, 4>.");
 
 //
-    static_assert( std::is_base_of<izint32<0>, izint32<0>>::value, "base_of<izint32> != izint32.");
-    static_assert(!std::is_base_of<ibint32<0>, izint32<0>>::value, "base_of<izint32> == ibint32.");
+    static_assert( std::is_base_of<izint32<params>, izint32<params>>::value, "base_of<izint32> != izint32.");
+    static_assert(!std::is_base_of<ibint32<params>, izint32<params>>::value, "base_of<izint32> == ibint32.");
 
-    static_assert( is_zval<izint32<0>>::value, "is_zval<izint32> == false.");
-    static_assert(!is_bval<izint32<0>>::value, "is_bval<izint32> != false.");
+    static_assert( is_zval<izint32<params>>::value, "is_zval<izint32> == false.");
+    static_assert(!is_bval<izint32<params>>::value, "is_bval<izint32> != false.");
 
-    static_assert( std::is_base_of<izint32<0>, zint32<0>>::value, "base_of<zint32> != izint32.");
-    static_assert(!std::is_base_of<ibint32<0>, zint32<0>>::value, "base_of<zint32> == ibint32.");
+    static_assert( std::is_base_of<izint32<params>, zint32<params>>::value, "base_of<zint32> != izint32.");
+    static_assert(!std::is_base_of<ibint32<params>, zint32<params>>::value, "base_of<zint32> == ibint32.");
 
-    static_assert(zint32<0>::size == 4, "zint32::size != 4.");
-    static_assert(zint32<0>::alignment == 16, "zint32::alignment != 16.");
-    static_assert(zint32<0>::is_vector == true, "zint32::is_vector != true.");
+    static_assert(zint32<params>::size == 4, "zint32::size != 4.");
+    static_assert(zint32<params>::alignment == 16, "zint32::alignment != 16.");
+    static_assert(zint32<params>::is_vector == true, "zint32::is_vector != true.");
 
-    static_assert(std::is_same<zint32<0>::tag, zval_tag>::value, "zint32::tag != zval_tag.");
-    static_assert(std::is_same<zint32<0>::vector_type, __m128i>::value, "zint32::vector_type != __m128i.");
-    static_assert(std::is_same<zint32<0>::element_type, int32_t>::value, "zint32::element_type != int32_t.");
-    static_assert(std::is_same<zint32<0>::extracted_type, std::array<int32_t, 4>>::value, "zint32::extracted_type != std::array<int32_t, 4>.");
+    static_assert(std::is_same<zint32<params>::tag, zval_tag>::value, "zint32::tag != zval_tag.");
+    static_assert(std::is_same<zint32<params>::vector_type, __m128i>::value, "zint32::vector_type != __m128i.");
+    static_assert(std::is_same<zint32<params>::element_type, int32_t>::value, "zint32::element_type != int32_t.");
+    static_assert(std::is_same<zint32<params>::extracted_type, std::array<int32_t, 4>>::value, "zint32::extracted_type != std::array<int32_t, 4>.");
 
-    static_assert( is_zval<zint32<0>>::value, "is_zval<zint32> == false.");
-    static_assert(!is_bval<zint32<0>>::value, "is_bval<zint32> != false.");
+    static_assert( is_zval<zint32<params>>::value, "is_zval<zint32> == false.");
+    static_assert(!is_bval<zint32<params>>::value, "is_bval<zint32> != false.");
 
     // Validate bint32 ===================================================================================
 
-    static_assert( std::is_base_of<ibint32<0>, ibint32<0>>::value, "base_of<izint32> != izint32.");
-    static_assert(!std::is_base_of<izint32<0>, ibint32<0>>::value, "base_of<izint32> == ibint32.");
+    static_assert( std::is_base_of<ibint32<params>, ibint32<params>>::value, "base_of<izint32> != izint32.");
+    static_assert(!std::is_base_of<izint32<params>, ibint32<params>>::value, "base_of<izint32> == ibint32.");
 
-    static_assert( is_bval<ibint32<0>>::value, "is_bval<ibint32> == false.");
-    static_assert(!is_zval<ibint32<0>>::value, "is_zval<ibint32> != false.");
+    static_assert( is_bval<ibint32<params>>::value, "is_bval<ibint32> == false.");
+    static_assert(!is_zval<ibint32<params>>::value, "is_zval<ibint32> != false.");
 
-    static_assert( std::is_base_of<ibint32<0>, bint32<0>>::value, "base_of<bint32> != ibint32.");
-    static_assert(!std::is_base_of<izint32<0>, bint32<0>>::value, "base_of<bint32> == izint32.");
+    static_assert( std::is_base_of<ibint32<params>, bint32<params>>::value, "base_of<bint32> != ibint32.");
+    static_assert(!std::is_base_of<izint32<params>, bint32<params>>::value, "base_of<bint32> == izint32.");
 
-    static_assert(bint32<0>::size == 4, "bint32::size != 4.");
-    static_assert(bint32<0>::alignment == 16, "bint32::alignment != 16.");
-    static_assert(bint32<0>::is_vector == true, "bint32::is_vector != true.");
+    static_assert(bint32<params>::size == 4, "bint32::size != 4.");
+    static_assert(bint32<params>::alignment == 16, "bint32::alignment != 16.");
+    static_assert(bint32<params>::is_vector == true, "bint32::is_vector != true.");
 
-    static_assert(std::is_same<bint32<0>::tag, bval_tag>::value, "bint32::tag != zval_tag.");
-    static_assert(std::is_same<bint32<0>::vector_type, __m128i>::value, "bint32::vector_type != __m128i.");
-    static_assert(std::is_same<bint32<0>::element_type, int32_t>::value, "bint32::element_type != int32_t.");
-    static_assert(std::is_same<bint32<0>::extracted_type, std::array<int32_t, 4>>::value, "bint32::extracted_type != std::array<int32_t, 4>.");
+    static_assert(std::is_same<bint32<params>::tag, bval_tag>::value, "bint32::tag != zval_tag.");
+    static_assert(std::is_same<bint32<params>::vector_type, __m128i>::value, "bint32::vector_type != __m128i.");
+    static_assert(std::is_same<bint32<params>::element_type, int32_t>::value, "bint32::element_type != int32_t.");
+    static_assert(std::is_same<bint32<params>::extracted_type, std::array<int32_t, 4>>::value, "bint32::extracted_type != std::array<int32_t, 4>.");
 
-    static_assert( is_bval<bint32<0>>::value, "is_bval<bint32> == false.");
-    static_assert(!is_zval<bint32<0>>::value, "is_zval<bint32> != false.");
+    static_assert( is_bval<bint32<params>>::value, "is_bval<bint32> == false.");
+    static_assert(!is_zval<bint32<params>>::value, "is_zval<bint32> != false.");
 
     // Validate integral, float, double traits =========================================================================
 
-    static_assert(!std::is_floating_point<int32_t>::value || is_floating_point < zint32<0>>::value, "is_floating_point<zint32> == false. [scalar = int32_t]");
-    static_assert(!std::is_floating_point<int32_t>::value || !is_integral<zint32<0>>::value, "is_integral<zint32> != false. [scalar = int32_t]");
+    static_assert(!std::is_floating_point<int32_t>::value || is_floating_point < zint32<params>>::value, "is_floating_point<zint32> == false. [scalar = int32_t]");
+    static_assert(!std::is_floating_point<int32_t>::value || !is_integral<zint32<params>>::value, "is_integral<zint32> != false. [scalar = int32_t]");
 
-    static_assert(!std::is_same<int32_t, float>::value || is_float < zint32<0>>::value, "is_float<zint32> == false. [scalar = int32_t]");
-    static_assert(!std::is_same<int32_t, float>::value || !is_double < zint32<0>>::value, "is_double<zint32> != false. [scalar = int32_t]");
+    static_assert(!std::is_same<int32_t, float>::value || is_float < zint32<params>>::value, "is_float<zint32> == false. [scalar = int32_t]");
+    static_assert(!std::is_same<int32_t, float>::value || !is_double < zint32<params>>::value, "is_double<zint32> != false. [scalar = int32_t]");
 
-    static_assert(!std::is_same<int32_t, double>::value || is_double < zint32<0>>::value, "is_double<zint32> == false. [scalar = int32_t]");
-    static_assert(!std::is_same<int32_t, double>::value || !is_float < zint32<0>>::value, "is_float<zint32> != false. [scalar = int32_t]");
+    static_assert(!std::is_same<int32_t, double>::value || is_double < zint32<params>>::value, "is_double<zint32> == false. [scalar = int32_t]");
+    static_assert(!std::is_same<int32_t, double>::value || !is_float < zint32<params>>::value, "is_float<zint32> != false. [scalar = int32_t]");
 
-    static_assert(!std::is_integral<int32_t>::value || is_integral<zint32<0>>::value,"is_integral<zint32> == false. [scalar = int32_t]");
-    static_assert(!std::is_integral<int32_t>::value || !is_floating_point < zint32<0>>::value, "is_floating_point<zint32> != false. [scalar = int32_t]");
+    static_assert(!std::is_integral<int32_t>::value || is_integral<zint32<params>>::value,"is_integral<zint32> == false. [scalar = int32_t]");
+    static_assert(!std::is_integral<int32_t>::value || !is_floating_point < zint32<params>>::value, "is_floating_point<zint32> != false. [scalar = int32_t]");
 }}}

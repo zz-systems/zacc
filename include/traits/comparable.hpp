@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
 // 
-// Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
+// Copyright (c) 2015-2018 3214w^   Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -39,20 +39,20 @@ namespace zacc { namespace traits {
             : inherit<ops_meta<Composed, Interface>, greater, greater_equal, less, less_equal>
     {
 
-        friend Boolean operator>(const Composed one, const Composed other) {
-            return vgt(one, other);
+        friend op_proxy<Boolean, last_op::boolean> operator>(const Composed one, const Composed other) {
+            return { vgt(one, other), last_op::boolean };
         }
 
-        friend Boolean operator>=(const Composed one, const Composed other) {
-            return vge(one, other);
+        friend op_proxy<Boolean, last_op::boolean> operator>=(const Composed one, const Composed other) {
+            return { vge(one, other), last_op::boolean };
         }
 
-        friend Boolean operator<(const Composed one, const Composed other) {
-            return vlt(one, other);
+        friend op_proxy<Boolean, last_op::boolean> operator<(const Composed one, const Composed other) {
+            return { vlt(one, other), last_op::boolean };
         }
 
-        friend Boolean operator<=(const Composed one, const Composed other) {
-            return vle(one, other);
+        friend op_proxy<Boolean, last_op::boolean> operator<=(const Composed one, const Composed other) {
+            return { vle(one, other), last_op::boolean };
         }
     };
 }}

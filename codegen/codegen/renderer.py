@@ -182,3 +182,15 @@ class InitializerSignatureRenderer(Renderable):
 
         return [f"{prefix} {name}({args}){suffix}",
                 f"    : zval<i{name}<FeatureMask>>({renderer.render(node.initializer, { 'is_initializer' : True })})"]
+
+# def map_last_op(trait):
+#     trait_map = {
+#         "logical": "boolean",
+#         "equatable": "boolean",
+#         "comparable": "boolean",
+#         "bitwise": "bitwise"
+#     }
+#
+#     op = trait_map.get(trait) or "undefined"
+#
+#     return f"last_operation::{op}"

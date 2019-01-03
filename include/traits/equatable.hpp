@@ -39,12 +39,12 @@ namespace zacc { namespace traits {
             : inherit<ops_meta<Composed, Interface>, equal_to, not_equal_to>
     {
 
-        friend Boolean operator==(param_t<Composed> one, param_t<Composed> other) {
-            return veq(one, other);
+        friend op_proxy<Boolean, last_op::boolean> operator==(param_t<Composed> one, param_t<Composed> other) {
+            return { veq(one, other), last_op::boolean }; //return veq(one, other);
         }
 
-        friend Boolean operator!=(param_t<Composed> one, param_t<Composed> other) {
-            return vneq(one, other);
+        friend op_proxy<Boolean, last_op::boolean> operator!=(param_t<Composed> one, param_t<Composed> other) {
+            return { vneq(one, other), last_op::boolean }; //return vneq(one, other);
         }
     };
 }}

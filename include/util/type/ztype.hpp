@@ -30,7 +30,7 @@ namespace zacc {
     /**
      * last operation
      */
-    enum class last_operation {
+    enum class last_op {
         undefined,  ///< last operation is unknown (e.g initialization or arithmetic)
         boolean,    ///< last operation is boolean (skip mask generation)
         bitwise     ///< last operation is bitwise. (skip mask generation)
@@ -42,7 +42,7 @@ namespace zacc {
 
     // =================================================================================================================
 
-    template<typename Tag, typename Container, typename Element, size_t Size, size_t Alignment, uint64_t FeatureMask = 0xFFFF'FFFF'FFFF'FFFF, last_operation LastOperation = last_operation::undefined>
+    template<typename Tag, typename Container, typename Element, size_t Size, size_t Alignment, uint64_t FeatureMask = 0xFFFF'FFFF'FFFF'FFFF>
     struct ztype {
 
         /// vector size (1 - scalar, 4, 8, 16, ...)
@@ -58,7 +58,7 @@ namespace zacc {
         static constexpr bool is_vector = size > 1;
 
         /// Indicates the last executed operation. Relevant for branch optimization.
-        static constexpr last_operation last_operation = LastOperation;
+        //last_op last_operation = last_op::undefined;
 
         /// scalar type, like int for sse 4x integer vector
         using element_type = Element;
@@ -77,7 +77,6 @@ namespace zacc {
     using Interface::alignment; \
     using Interface::feature_mask; \
     using Interface::is_vector; \
-    using Interface::last_operation; \
     using typename Interface::tag; \
     using typename Interface::element_type; \
     using typename Interface::vector_type; \

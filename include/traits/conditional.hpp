@@ -47,14 +47,16 @@ namespace zacc { namespace traits {
 
         private:
 
-            constexpr else_branch(param_t<Boolean> condition, param_t<Composed> if_value, std::false_type)
-                : _if_value(if_value), _condition(last_operation_v<Boolean> == last_operation::undefined ? (Composed(condition.value()) != 0) : condition)
+            constexpr else_branch(param_t<Boolean> condition, param_t<Composed> if_value, std::true_type)
+                : _if_value(if_value), _condition(make_mask(condition))
             {
+                //std::cerr << "Masking" << std::endl;
             }
 
-            constexpr else_branch(param_t<Boolean> condition, param_t<Composed> if_value, std::true_type)
+            constexpr else_branch(param_t<Boolean> condition, param_t<Composed> if_value, std::false_type)
                 : _if_value(if_value), _condition(condition)
             {
+                //std::cerr << "No masking" << std::endl;
             }
 
             Composed _if_value;
@@ -63,9 +65,14 @@ namespace zacc { namespace traits {
             friend struct conditional<Interface, Composed, Boolean>;
         };
 
+        template<typename T, std::enable_if_t<is_bval<T>::value, void**> = nullptr>
+        constexpr else_branch when(const T& condition) const {
+            if(condition.last_operation == last_op::undefined)
+            {
+                return else_branch(condition, *static_cast<const Composed*>(this), std::true_type());
+            }
 
-        constexpr else_branch when(param_t<Boolean> condition) const {
-            return else_branch(condition, *static_cast<const Composed*>(this), is_cval<Boolean>{});
+            return else_branch(condition, *static_cast<const Composed*>(this), std::false_type());
         }
     };
 

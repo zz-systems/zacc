@@ -35,9 +35,7 @@ namespace zacc { namespace traits {
      * @tparam Composed final composed type (e.g zfloat32)
      */
     template<typename Interface, typename Composed, typename Boolean>
-    struct arithmetic
-            : inherit<ops_meta<Composed, Interface>, plus, minus, multiplies, divides, modulus, increment, decrement>
-            //: compose_t<plus, minus, multiplies, divides, modulus, increment, decrement, composable<Composed>::template type>
+    struct arithmetic : inherit<ops_meta<Composed, Interface>, plus, minus, multiplies, divides, modulus, increment, decrement>
     {
         /**
          * @brief promotion operator for symmetry sake

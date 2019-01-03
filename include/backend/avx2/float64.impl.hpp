@@ -45,30 +45,30 @@
 #include "util/macros.hpp"
 
 #include "traits/printable.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/numeric.hpp"
-#include "traits/io.hpp"
 #include "traits/comparable.hpp"
-#include "traits/math.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/equatable.hpp"
-#include "traits/conditional.hpp"
 #include "traits/logical.hpp"
+#include "traits/conditional.hpp"
+#include "traits/numeric.hpp"
+#include "traits/math.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/equatable.hpp"
+#include "traits/arithmetic.hpp"
+#include "traits/io.hpp"
 
 namespace zacc { namespace backend { namespace avx2
 {
     /// @cond
-    template<uint64_t features>
+    template<uint64_t FeatureMask>// = last_operation::undefined>
     struct bfloat64;
 
-    template<uint64_t features>
+    template<uint64_t FeatureMask>// = last_operation::undefined>
     struct zfloat64;
     /// @endcond
 
-    template<uint64_t FeatureMask>
+    template<uint64_t FeatureMask>// = last_operation::undefined>
     using izfloat64 = ztype<zval_tag, __m256d, double, 4, 32, FeatureMask>;
 
-    template<uint64_t FeatureMask>
+    template<uint64_t FeatureMask>// = last_operation::undefined>
     using ibfloat64 = ztype<bval_tag, __m256d, double, 4, 32, FeatureMask>;
 }}}
 
@@ -96,7 +96,7 @@ namespace zacc {
         static constexpr bool is_vector = size > 1;
 
         /// Indicates the last executed operation. Relevant for branch optimization.
-        static constexpr last_operation last_operation = last_operation::undefined;
+        static constexpr last_op last_operation = last_op::undefined;
 
         /// vector type, like __m128i for sse 4x integer vector
         using vector_type = __m256d;
@@ -118,128 +118,6 @@ namespace zacc { namespace backend { namespace avx2
 {
     namespace float64_modules
     {
-        /**
-         * @brief bitwise mixin implementation [avx2 branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vbneg(Composed one) 
-            {
-                auto zero = _mm256_setzero_pd();
-                auto ones = _mm256_cmp_pd(zero, zero, _CMP_EQ_OQ);
-                return _mm256_xor_pd(one, ones);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vband(Composed one, Composed other) 
-            {
-                return _mm256_and_pd(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vbor(Composed one, Composed other) 
-            {
-                return _mm256_or_pd(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vbxor(Composed one, Composed other) 
-            {
-                return _mm256_xor_pd(one, other);
-            }
-
-            /**
-             * @brief  [avx2 branch]
-             * @relates float64
-             */
-            template<typename T = bool>
-            friend std::enable_if_t<has_feature_v<Interface, capabilities::AVX2>, T>
-            vis_set(Composed one) 
-            {
-                auto ival =  _mm256_castpd_si256(one);
-                return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            template<typename T = bool>
-            friend std::enable_if_t<!has_feature_v<Interface, capabilities::AVX2>, T>
-            vis_set(Composed one) 
-            {
-                auto hi = _mm_castpd_si128(_mm256_extractf128_pd(one, 1));
-                auto lo = _mm_castpd_si128(_mm256_extractf128_pd(one, 0));
-                return _mm_test_all_ones(hi) != 0 && _mm_test_all_ones(lo) != 0;
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief io mixin implementation [avx2 branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct io : traits::io<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
-            {
-                _mm256_store_pd(&(*result), input);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
-            {
-                _mm256_stream_pd(&(*result), input);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            template<typename RandomIt> friend Composed vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
-            {
-                auto i = _mm256_extractf128_si256(index, 1);
-                return _mm256_i32gather_pd(&(*input), i, 8);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief numeric mixin implementation [avx2 branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct numeric : traits::numeric<Interface, Composed, Boolean>
-        {
-        };
-
-        // =============================================================================================================
-
         /**
          * @brief comparable mixin implementation [avx2 branch]
          * @relates float64
@@ -282,6 +160,73 @@ namespace zacc { namespace backend { namespace avx2
             {
                 return _mm256_cmp_pd(one, other, _CMP_LE_OQ);
             }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief logical mixin implementation [avx2 branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Boolean vlneg(Composed one) 
+            {
+                return _mm256_cmp_pd(one, _mm256_setzero_pd(), _CMP_EQ_OQ);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Boolean vlor(Composed one, Composed other) 
+            {
+                return _mm256_or_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Boolean vland(Composed one, Composed other) 
+            {
+                return _mm256_and_pd(one, other);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief conditional mixin implementation [avx2 branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
+            {
+                return _mm256_blendv_pd(else_value, if_value, condition);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief numeric mixin implementation [avx2 branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct numeric : traits::numeric<Interface, Composed, Boolean>
+        {
         };
 
         // =============================================================================================================
@@ -387,6 +332,107 @@ namespace zacc { namespace backend { namespace avx2
         // =============================================================================================================
 
         /**
+         * @brief bitwise mixin implementation [avx2 branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vbneg(Composed one) 
+            {
+                auto zero = _mm256_setzero_pd();
+                auto ones = _mm256_cmp_pd(zero, zero, _CMP_EQ_OQ);
+                return _mm256_xor_pd(one, ones);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vband(Composed one, Composed other) 
+            {
+                return _mm256_and_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vbor(Composed one, Composed other) 
+            {
+                return _mm256_or_pd(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Composed vbxor(Composed one, Composed other) 
+            {
+                return _mm256_xor_pd(one, other);
+            }
+
+            /**
+             * @brief  [avx2 branch]
+             * @relates float64
+             */
+            template<typename T = bool>
+            friend std::enable_if_t<has_feature_v<Interface, capabilities::AVX2>, T>
+            vis_set(Composed one) 
+            {
+                auto ival =  _mm256_castpd_si256(one);
+                return _mm256_testc_si256(ival, _mm256_cmpeq_epi32(ival,ival));
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            template<typename T = bool>
+            friend std::enable_if_t<!has_feature_v<Interface, capabilities::AVX2>, T>
+            vis_set(Composed one) 
+            {
+                auto hi = _mm_castpd_si128(_mm256_extractf128_pd(one, 1));
+                auto lo = _mm_castpd_si128(_mm256_extractf128_pd(one, 0));
+                return _mm_test_all_ones(hi) != 0 && _mm_test_all_ones(lo) != 0;
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief equatable mixin implementation [avx2 branch]
+         * @relates float64
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct equatable : traits::equatable<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Boolean veq(Composed one, Composed other) 
+            {
+                return _mm256_cmp_pd(one, other, _CMP_EQ_OQ);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float64
+             */
+            friend Boolean vneq(Composed one, Composed other) 
+            {
+                return _mm256_cmp_pd(one, other, _CMP_NEQ_OQ);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
          * @brief arithmetic mixin implementation [avx2 branch]
          * @relates float64
          */
@@ -460,84 +506,38 @@ namespace zacc { namespace backend { namespace avx2
         // =============================================================================================================
 
         /**
-         * @brief equatable mixin implementation [avx2 branch]
+         * @brief io mixin implementation [avx2 branch]
          * @relates float64
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct equatable : traits::equatable<Interface, Composed, Boolean>
+        struct io : traits::io<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend Boolean veq(Composed one, Composed other) 
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
             {
-                return _mm256_cmp_pd(one, other, _CMP_EQ_OQ);
+                _mm256_store_pd(&(*result), input);
             }
 
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend Boolean vneq(Composed one, Composed other) 
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
             {
-                return _mm256_cmp_pd(one, other, _CMP_NEQ_OQ);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief conditional mixin implementation [avx2 branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct conditional : traits::conditional<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
-            {
-                return _mm256_blendv_pd(else_value, if_value, condition);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief logical mixin implementation [avx2 branch]
-         * @relates float64
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct logical : traits::logical<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Boolean vlneg(Composed one) 
-            {
-                return _mm256_cmp_pd(one, _mm256_setzero_pd(), _CMP_EQ_OQ);
+                _mm256_stream_pd(&(*result), input);
             }
 
             /**
              * @brief  [default branch]
              * @relates float64
              */
-            friend Boolean vlor(Composed one, Composed other) 
+            template<typename RandomIt> friend Composed vgather(RandomIt input, const zint32<Interface::feature_mask> &index,  Composed) 
             {
-                return _mm256_or_pd(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float64
-             */
-            friend Boolean vland(Composed one, Composed other) 
-            {
-                return _mm256_and_pd(one, other);
+                auto i = _mm256_extractf128_si256(index, 1);
+                return _mm256_i32gather_pd(&(*input), i, 8);
             }
         };
     } // end float64_modules
@@ -563,13 +563,8 @@ namespace zacc { namespace backend { namespace avx2
         float64_modules::conditional<izfloat64<FeatureMask>, zfloat64<FeatureMask>, bfloat64<FeatureMask>>
     {
         USING_ZTYPE(zval<izfloat64<FeatureMask>>);
-
         using zval<izfloat64<FeatureMask>>::zval;
 
-//        template<typename T, std::enable_if_t<std::is_same<T, view_t<izfloat64<FeatureMask>>>::value && is_vector, void**> = nullptr>
-//        constexpr zfloat64(const T& view) noexcept
-//                : zfloat64(storage_t<izfloat64<FeatureMask>>(view))
-//        {}
 
         template<typename T, std::enable_if_t<std::is_same<T, view_t<izfloat64<FeatureMask>>>::value && !is_vector, void**> = nullptr>
         constexpr zfloat64(const T& view) noexcept
@@ -657,13 +652,7 @@ namespace zacc { namespace backend { namespace avx2
         float64_modules::equatable<ibfloat64<FeatureMask>, bfloat64<FeatureMask>, bfloat64<FeatureMask>>
     {
         USING_ZTYPE(zval<ibfloat64<FeatureMask>>);
-
         using zval<ibfloat64<FeatureMask>>::zval;
-
-//        template<typename T, std::enable_if_t<std::is_same<T, view_t<ibfloat64<FeatureMask>>>::value && is_vector, void**> = nullptr>
-//        constexpr bfloat64(const T& view) noexcept
-//                : bfloat64(storage_t<izfloat64<FeatureMask>>(view))
-//        {}
 
         template<typename T, std::enable_if_t<std::is_same<T, view_t<ibfloat64<FeatureMask>>>::value && !is_vector, void**> = nullptr>
         constexpr bfloat64(const T& view) noexcept
@@ -674,12 +663,6 @@ namespace zacc { namespace backend { namespace avx2
         constexpr bfloat64(const T& other) noexcept
                 : bfloat64(other.value())
         {}
-
-//        template<typename T, typename std::enable_if<is_bval<T>::value, void**>::type = nullptr>
-//        constexpr bfloat64(const T& other) noexcept
-//                : bfloat64(other.value())
-//        {}
-
 
         /**
          * @brief bfloat64 constructor [avx2 branch]
@@ -693,77 +676,78 @@ namespace zacc { namespace backend { namespace avx2
 
     // Validate zfloat64 ===================================================================================
 
+#define params 0
 
-    static_assert( is_vector_v<izfloat64<0>> == true,    "is_vector_v<izfloat64> != true.");
-    static_assert( is_vector_v<ibfloat64<0>> == true,    "is_vector_v<ibfloat64> != true.");
+    static_assert( is_vector_v<izfloat64<params>> == true,    "is_vector_v<izfloat64> != true.");
+    static_assert( is_vector_v<ibfloat64<params>> == true,    "is_vector_v<ibfloat64> != true.");
 
-    static_assert( std::is_same<element_t<ibfloat64<0>>, double>::value,    "element_t<ibfloat64> != double.");
+    static_assert( std::is_same<element_t<ibfloat64<params>>, double>::value,    "element_t<ibfloat64> != double.");
 
-    static_assert( std::is_same<element_t<izfloat64<0>>, double>::value,    "element_t<izfloat64> != double.");
-    static_assert( std::is_same<element_t<ibfloat64<0>>, double>::value,    "element_t<ibfloat64> != double.");
+    static_assert( std::is_same<element_t<izfloat64<params>>, double>::value,    "element_t<izfloat64> != double.");
+    static_assert( std::is_same<element_t<ibfloat64<params>>, double>::value,    "element_t<ibfloat64> != double.");
 
-    static_assert( std::is_same<vector_t<izfloat64<0>>, __m256d>::value,    "vector_t<izfloat64> != __m256d.");
-    static_assert( std::is_same<vector_t<ibfloat64<0>>, __m256d>::value,    "vector_t<ibfloat64> != __m256d.");
+    static_assert( std::is_same<vector_t<izfloat64<params>>, __m256d>::value,    "vector_t<izfloat64> != __m256d.");
+    static_assert( std::is_same<vector_t<ibfloat64<params>>, __m256d>::value,    "vector_t<ibfloat64> != __m256d.");
 
-    static_assert( std::is_same<view_t<izfloat64<0>>, std::array<double, 4>>::value,    "view_t<izfloat64> != std::array<double, 4>.");
-    static_assert( std::is_same<view_t<ibfloat64<0>>, std::array<bool, 4>>::value,                        "view_t<ibfloat64> != std::array<bool, 4>.");
+    static_assert( std::is_same<view_t<izfloat64<params>>, std::array<double, 4>>::value,    "view_t<izfloat64> != std::array<double, 4>.");
+    static_assert( std::is_same<view_t<ibfloat64<params>>, std::array<bool, 4>>::value,                        "view_t<ibfloat64> != std::array<bool, 4>.");
 
 //
-    static_assert( std::is_base_of<izfloat64<0>, izfloat64<0>>::value, "base_of<izfloat64> != izfloat64.");
-    static_assert(!std::is_base_of<ibfloat64<0>, izfloat64<0>>::value, "base_of<izfloat64> == ibfloat64.");
+    static_assert( std::is_base_of<izfloat64<params>, izfloat64<params>>::value, "base_of<izfloat64> != izfloat64.");
+    static_assert(!std::is_base_of<ibfloat64<params>, izfloat64<params>>::value, "base_of<izfloat64> == ibfloat64.");
 
-    static_assert( is_zval<izfloat64<0>>::value, "is_zval<izfloat64> == false.");
-    static_assert(!is_bval<izfloat64<0>>::value, "is_bval<izfloat64> != false.");
+    static_assert( is_zval<izfloat64<params>>::value, "is_zval<izfloat64> == false.");
+    static_assert(!is_bval<izfloat64<params>>::value, "is_bval<izfloat64> != false.");
 
-    static_assert( std::is_base_of<izfloat64<0>, zfloat64<0>>::value, "base_of<zfloat64> != izfloat64.");
-    static_assert(!std::is_base_of<ibfloat64<0>, zfloat64<0>>::value, "base_of<zfloat64> == ibfloat64.");
+    static_assert( std::is_base_of<izfloat64<params>, zfloat64<params>>::value, "base_of<zfloat64> != izfloat64.");
+    static_assert(!std::is_base_of<ibfloat64<params>, zfloat64<params>>::value, "base_of<zfloat64> == ibfloat64.");
 
-    static_assert(zfloat64<0>::size == 4, "zfloat64::size != 4.");
-    static_assert(zfloat64<0>::alignment == 32, "zfloat64::alignment != 32.");
-    static_assert(zfloat64<0>::is_vector == true, "zfloat64::is_vector != true.");
+    static_assert(zfloat64<params>::size == 4, "zfloat64::size != 4.");
+    static_assert(zfloat64<params>::alignment == 32, "zfloat64::alignment != 32.");
+    static_assert(zfloat64<params>::is_vector == true, "zfloat64::is_vector != true.");
 
-    static_assert(std::is_same<zfloat64<0>::tag, zval_tag>::value, "zfloat64::tag != zval_tag.");
-    static_assert(std::is_same<zfloat64<0>::vector_type, __m256d>::value, "zfloat64::vector_type != __m256d.");
-    static_assert(std::is_same<zfloat64<0>::element_type, double>::value, "zfloat64::element_type != double.");
-    static_assert(std::is_same<zfloat64<0>::extracted_type, std::array<double, 4>>::value, "zfloat64::extracted_type != std::array<double, 4>.");
+    static_assert(std::is_same<zfloat64<params>::tag, zval_tag>::value, "zfloat64::tag != zval_tag.");
+    static_assert(std::is_same<zfloat64<params>::vector_type, __m256d>::value, "zfloat64::vector_type != __m256d.");
+    static_assert(std::is_same<zfloat64<params>::element_type, double>::value, "zfloat64::element_type != double.");
+    static_assert(std::is_same<zfloat64<params>::extracted_type, std::array<double, 4>>::value, "zfloat64::extracted_type != std::array<double, 4>.");
 
-    static_assert( is_zval<zfloat64<0>>::value, "is_zval<zfloat64> == false.");
-    static_assert(!is_bval<zfloat64<0>>::value, "is_bval<zfloat64> != false.");
+    static_assert( is_zval<zfloat64<params>>::value, "is_zval<zfloat64> == false.");
+    static_assert(!is_bval<zfloat64<params>>::value, "is_bval<zfloat64> != false.");
 
     // Validate bfloat64 ===================================================================================
 
-    static_assert( std::is_base_of<ibfloat64<0>, ibfloat64<0>>::value, "base_of<izfloat64> != izfloat64.");
-    static_assert(!std::is_base_of<izfloat64<0>, ibfloat64<0>>::value, "base_of<izfloat64> == ibfloat64.");
+    static_assert( std::is_base_of<ibfloat64<params>, ibfloat64<params>>::value, "base_of<izfloat64> != izfloat64.");
+    static_assert(!std::is_base_of<izfloat64<params>, ibfloat64<params>>::value, "base_of<izfloat64> == ibfloat64.");
 
-    static_assert( is_bval<ibfloat64<0>>::value, "is_bval<ibfloat64> == false.");
-    static_assert(!is_zval<ibfloat64<0>>::value, "is_zval<ibfloat64> != false.");
+    static_assert( is_bval<ibfloat64<params>>::value, "is_bval<ibfloat64> == false.");
+    static_assert(!is_zval<ibfloat64<params>>::value, "is_zval<ibfloat64> != false.");
 
-    static_assert( std::is_base_of<ibfloat64<0>, bfloat64<0>>::value, "base_of<bfloat64> != ibfloat64.");
-    static_assert(!std::is_base_of<izfloat64<0>, bfloat64<0>>::value, "base_of<bfloat64> == izfloat64.");
+    static_assert( std::is_base_of<ibfloat64<params>, bfloat64<params>>::value, "base_of<bfloat64> != ibfloat64.");
+    static_assert(!std::is_base_of<izfloat64<params>, bfloat64<params>>::value, "base_of<bfloat64> == izfloat64.");
 
-    static_assert(bfloat64<0>::size == 4, "bfloat64::size != 4.");
-    static_assert(bfloat64<0>::alignment == 32, "bfloat64::alignment != 32.");
-    static_assert(bfloat64<0>::is_vector == true, "bfloat64::is_vector != true.");
+    static_assert(bfloat64<params>::size == 4, "bfloat64::size != 4.");
+    static_assert(bfloat64<params>::alignment == 32, "bfloat64::alignment != 32.");
+    static_assert(bfloat64<params>::is_vector == true, "bfloat64::is_vector != true.");
 
-    static_assert(std::is_same<bfloat64<0>::tag, bval_tag>::value, "bfloat64::tag != zval_tag.");
-    static_assert(std::is_same<bfloat64<0>::vector_type, __m256d>::value, "bfloat64::vector_type != __m256d.");
-    static_assert(std::is_same<bfloat64<0>::element_type, double>::value, "bfloat64::element_type != double.");
-    static_assert(std::is_same<bfloat64<0>::extracted_type, std::array<double, 4>>::value, "bfloat64::extracted_type != std::array<double, 4>.");
+    static_assert(std::is_same<bfloat64<params>::tag, bval_tag>::value, "bfloat64::tag != zval_tag.");
+    static_assert(std::is_same<bfloat64<params>::vector_type, __m256d>::value, "bfloat64::vector_type != __m256d.");
+    static_assert(std::is_same<bfloat64<params>::element_type, double>::value, "bfloat64::element_type != double.");
+    static_assert(std::is_same<bfloat64<params>::extracted_type, std::array<double, 4>>::value, "bfloat64::extracted_type != std::array<double, 4>.");
 
-    static_assert( is_bval<bfloat64<0>>::value, "is_bval<bfloat64> == false.");
-    static_assert(!is_zval<bfloat64<0>>::value, "is_zval<bfloat64> != false.");
+    static_assert( is_bval<bfloat64<params>>::value, "is_bval<bfloat64> == false.");
+    static_assert(!is_zval<bfloat64<params>>::value, "is_zval<bfloat64> != false.");
 
     // Validate integral, float, double traits =========================================================================
 
-    static_assert(!std::is_floating_point<double>::value || is_floating_point < zfloat64<0>>::value, "is_floating_point<zfloat64> == false. [scalar = double]");
-    static_assert(!std::is_floating_point<double>::value || !is_integral<zfloat64<0>>::value, "is_integral<zfloat64> != false. [scalar = double]");
+    static_assert(!std::is_floating_point<double>::value || is_floating_point < zfloat64<params>>::value, "is_floating_point<zfloat64> == false. [scalar = double]");
+    static_assert(!std::is_floating_point<double>::value || !is_integral<zfloat64<params>>::value, "is_integral<zfloat64> != false. [scalar = double]");
 
-    static_assert(!std::is_same<double, float>::value || is_float < zfloat64<0>>::value, "is_float<zfloat64> == false. [scalar = double]");
-    static_assert(!std::is_same<double, float>::value || !is_double < zfloat64<0>>::value, "is_double<zfloat64> != false. [scalar = double]");
+    static_assert(!std::is_same<double, float>::value || is_float < zfloat64<params>>::value, "is_float<zfloat64> == false. [scalar = double]");
+    static_assert(!std::is_same<double, float>::value || !is_double < zfloat64<params>>::value, "is_double<zfloat64> != false. [scalar = double]");
 
-    static_assert(!std::is_same<double, double>::value || is_double < zfloat64<0>>::value, "is_double<zfloat64> == false. [scalar = double]");
-    static_assert(!std::is_same<double, double>::value || !is_float < zfloat64<0>>::value, "is_float<zfloat64> != false. [scalar = double]");
+    static_assert(!std::is_same<double, double>::value || is_double < zfloat64<params>>::value, "is_double<zfloat64> == false. [scalar = double]");
+    static_assert(!std::is_same<double, double>::value || !is_float < zfloat64<params>>::value, "is_float<zfloat64> != false. [scalar = double]");
 
-    static_assert(!std::is_integral<double>::value || is_integral<zfloat64<0>>::value,"is_integral<zfloat64> == false. [scalar = double]");
-    static_assert(!std::is_integral<double>::value || !is_floating_point < zfloat64<0>>::value, "is_floating_point<zfloat64> != false. [scalar = double]");
+    static_assert(!std::is_integral<double>::value || is_integral<zfloat64<params>>::value,"is_integral<zfloat64> == false. [scalar = double]");
+    static_assert(!std::is_integral<double>::value || !is_floating_point < zfloat64<params>>::value, "is_floating_point<zfloat64> != false. [scalar = double]");
 }}}

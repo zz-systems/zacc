@@ -40,11 +40,11 @@ namespace zacc { namespace traits {
             //: inherit<Composed, bit_shl, bit_shr>
     {
 
-        friend Composed operator<<(param_t<Composed> one, const size_t immediate) {
+        friend op_proxy<Composed, last_op::bitwise> operator<<(param_t<Composed> one, const size_t immediate) {
             return vbslli(one, immediate);
         }
 
-        friend Composed operator>>(param_t<Composed> one, const size_t immediate) {
+        friend op_proxy<Composed, last_op::bitwise> operator>>(param_t<Composed> one, const size_t immediate) {
             return vbsrli(one, immediate);
         }
 
@@ -60,14 +60,14 @@ namespace zacc { namespace traits {
         /**
         * @brief merged << - assignment operator
         */
-        friend Composed &operator <<=(Composed &one, const size_t immediate) {
+        friend op_proxy<Composed, last_op::bitwise> &operator <<=(Composed &one, const size_t immediate) {
             return one = one << immediate;
         }
 
         /**
         * @brief merged >> - assignment operator
         */
-        friend Composed &operator >>=(Composed &one, const size_t immediate) {
+        friend op_proxy<Composed, last_op::bitwise> &operator >>=(Composed &one, const size_t immediate) {
             return one = one >> immediate;
         }
     };

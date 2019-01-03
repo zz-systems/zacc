@@ -46,6 +46,29 @@ class Traits:
     def render(cls, node, params=None):
         return Traits._renderer.render(node, params)
 
+    def map_last_op(self, trait):
+        trait_map = {
+            "logical": "boolean",
+            "equatable": "boolean",
+            "comparable": "boolean",
+            "bitwise": "bitwise",
+            "bitwise_shift": "bitwise"
+        }
+
+        op = trait_map.get(trait) or "undefined"
+
+        return f"last_op::{op}"
+
+    def map_last_op_z(self, trait):
+        trait_map = {
+            "bitwise": "bitwise",
+            "bitwise_shift": "bitwise"
+        }
+
+        op = trait_map.get(trait) or "undefined"
+
+        return f"last_op::{op}"
+
 class Parsers:
     @classmethod
     def parse(cls, data):
