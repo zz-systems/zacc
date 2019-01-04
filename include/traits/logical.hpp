@@ -38,15 +38,15 @@ namespace zacc { namespace traits {
     struct logical
             : inherit<ops_meta<Composed, Interface>, logical_and, logical_or>
     {
-        friend op_proxy<Boolean, last_op::boolean> operator!(param_t<Composed> self) {
+        friend Boolean operator!(param_t<Composed> self) {
             return { vlneg(self), last_op::boolean }; // return vlneg(self);
         }
 
-        friend op_proxy<Boolean, last_op::boolean> operator||(param_t<Composed> self, param_t<Composed> other) {
+        friend Boolean operator||(param_t<Composed> self, param_t<Composed> other) {
             return { vlor(self, other), last_op::boolean };//  return vlor(self, other);
         }
 
-        friend op_proxy<Boolean, last_op::boolean> operator&&(param_t<Composed> self, param_t<Composed> other) {
+        friend Boolean operator&&(param_t<Composed> self, param_t<Composed> other) {
             return { vland(self, other), last_op::boolean }; // return vland(self, other);
         }
     };

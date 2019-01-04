@@ -39,19 +39,19 @@ namespace zacc { namespace traits {
             : inherit<ops_meta<Composed, Interface>, greater, greater_equal, less, less_equal>
     {
 
-        friend op_proxy<Boolean, last_op::boolean> operator>(const Composed one, const Composed other) {
+        friend Boolean operator>(const Composed one, const Composed other) {
             return { vgt(one, other), last_op::boolean };
         }
 
-        friend op_proxy<Boolean, last_op::boolean> operator>=(const Composed one, const Composed other) {
+        friend Boolean operator>=(const Composed one, const Composed other) {
             return { vge(one, other), last_op::boolean };
         }
 
-        friend op_proxy<Boolean, last_op::boolean> operator<(const Composed one, const Composed other) {
+        friend Boolean operator<(const Composed one, const Composed other) {
             return { vlt(one, other), last_op::boolean };
         }
 
-        friend op_proxy<Boolean, last_op::boolean> operator<=(const Composed one, const Composed other) {
+        friend Boolean operator<=(const Composed one, const Composed other) {
             return { vle(one, other), last_op::boolean };
         }
     };

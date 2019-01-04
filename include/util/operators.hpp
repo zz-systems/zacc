@@ -40,34 +40,11 @@ namespace zacc
     using op_enable = std::enable_if_t<!std::tuple_element_t<2, Meta>::value && !std::is_same<U, std::tuple_element_t<0, Meta>>::value>;
 
 
-    template<typename T, last_op LastOp>
-    struct op_proxy : public T
-    {
-        using T::size;
-        using T::alignment;
-        using T::feature_mask;
-        using T::is_vector;
-
-        using typename T::tag;
-        using typename T::element_type;
-        using typename T::vector_type;
-        using typename T::extracted_type;
-
-        template<typename ...Args> \
-        constexpr op_proxy(Args&&... args)
-                : T(std::forward<Args>(args)...)
-        {}
-
-        /// Indicates the last executed operation. Relevant for branch optimization.
-        //static constexpr last_op last_operation = LastOp;
-    };
-
-
     template<typename T>
     using needs_masking = std::integral_constant<bool, last_operation_v<T> != last_op::boolean && last_operation_v<T> != last_op::bitwise>;
 
     template<typename T, typename std::enable_if<is_zval<T>::value || is_bval<T>::value, void**>::type = nullptr>
-    struct op_proxy<bval_t<T>, last_op::boolean> make_mask(const T& value)
+    T make_mask(const T& value)
     {
         return zval_t<T>(value) != 0;
     }

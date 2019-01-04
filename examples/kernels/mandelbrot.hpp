@@ -71,7 +71,7 @@ namespace zacc { namespace examples {
 
                 zcomplex<zfloat> z = 0;
 
-                op_proxy<bfloat, last_op::boolean> done = false;
+                bfloat done = false;
                 zint iterations;
 
                 for (size_t j = 0; j < _max_iterations; j++)

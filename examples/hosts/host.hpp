@@ -82,12 +82,12 @@ namespace zacc { namespace examples {
 
 
 
-            cout << endl << string(43, '-') << endl;
-            cout << setw(15) << "" << setw(10) << "Time (ms)"  << setw(10) << "Min" << setw(10) << "Max" << endl;
-            cout << string(43, '-') << endl;
-            cout << setw(15) << "Vectorized" << setw(10) << vectorized_duration << setw(10) << *min_element(begin(vectorized_result), end(vectorized_result)) << setw(10) << *max_element(begin(vectorized_result), end(vectorized_result)) << endl;
-            cout << setw(15) << "Reference" << setw(10) << reference_duration << setw(10) << *min_element(begin(reference_result), end(reference_result)) << setw(10) << *max_element(begin(reference_result), end(reference_result)) << endl;
-            cout << string(43, '-') << endl;
+            cout << endl << string(53, '-') << endl;
+            cout << setw(15) << "" << setw(10) << "Time (ms)"  << setw(15) << "Min" << setw(15) << "Max" << endl;
+            cout << string(53, '-') << endl;
+            cout << setw(15) << "Vectorized" << setw(10) << vectorized_duration << setw(15) << *min_element(begin(vectorized_result), end(vectorized_result)) << setw(15) << *max_element(begin(vectorized_result), end(vectorized_result)) << endl;
+            cout << setw(15) << "Reference" << setw(10) << reference_duration << setw(15) << *min_element(begin(reference_result), end(reference_result)) << setw(15) << *max_element(begin(reference_result), end(reference_result)) << endl;
+            cout << string(53, '-') << endl;
             cout << setw(15) << "Speedup " << setw(10) << (double)reference_duration / vectorized_duration << endl << endl;
 
             cimg_library::CImg<uint8_t>

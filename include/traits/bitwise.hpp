@@ -38,20 +38,20 @@ namespace zacc { namespace traits {
     struct bitwise : inherit<ops_meta<Composed, Interface>, bit_and, bit_or, bit_xor>
     {
 
-        friend op_proxy<Composed, last_op::bitwise> operator~(param_t<Composed> one)
+        friend Composed operator~(param_t<Composed> one)
         {
             return vbneg(one);
         }
 
-        friend op_proxy<Composed, last_op::bitwise> operator|(param_t<Composed> one, param_t<Composed> other) {
+        friend Composed operator|(param_t<Composed> one, param_t<Composed> other) {
             return vbor(one, other);
         }
 
-        friend op_proxy<Composed, last_op::bitwise> operator&(param_t<Composed> one, param_t<Composed> other) {
+        friend Composed operator&(param_t<Composed> one, param_t<Composed> other) {
             return vband(one, other);
         }
 
-        friend op_proxy<Composed, last_op::bitwise> operator^(param_t<Composed> one, param_t<Composed> other) {
+        friend Composed operator^(param_t<Composed> one, param_t<Composed> other) {
             return vbxor(one, other);
         }
 
