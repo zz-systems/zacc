@@ -52,7 +52,7 @@ namespace zacc {
                 ss << "[ ";
 
             for (auto entry : static_cast<const Composed*>(this)->data())
-                ss << entry << " ";
+                ss << +entry << " ";
 
             if (Interface::is_vector)
                 ss << "]";

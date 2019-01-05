@@ -34,7 +34,7 @@ namespace zacc { namespace test {
         TYPED_TEST_CASE_P(conditional_test);
 
 
-        TYPED_TEST_P(conditional_test, if_then_else_simple)
+        TYPED_TEST_P(conditional_test, if_then_else_0)
         {
             TypeParam a = 10;
             TypeParam b = 20;
@@ -48,49 +48,181 @@ namespace zacc { namespace test {
             VASSERT_EQ(actual1, a);
         }
 
-//        TYPED_TEST_P(conditional_test, if_then_else)
-//        {
-//            const size_t size   = 8;
-//            auto max_size       = std::min(TypeParam::size(), size);
-//
-//            using data_t = typename std::array<typename TypeParam::element_type, size>;
-//
-//            data_t  _one        {{  1,  2,  3,  4,  5,  6,  7,  8 }},
-//                    _other      {{ 10, 11, 12, 13, 14, 15, 16, 17 }};
-//
-//            data_t  _condition  {{ 1, 1,  0, 3, 4,  0, 5, 6 }},
-//                    _expected   {{ 1, 2, 12, 4, 5, 15, 7, 8 }};
-//
-//            typename TypeParam::extracted_t __one, __other, __condition, __expected;
-//
-//            for (size_t i = 0; i < TypeParam::size(); i += size)
-//            {
-//                std::copy(std::begin(_condition), std::begin(_condition) + max_size, std::begin(__condition) + i);
-//                std::copy(std::begin(_expected), std::begin(_expected) + max_size, std::begin(__expected) + i);
-//
-//                std::copy(std::begin(_one), std::begin(_one) + max_size, std::begin(__one) + i);
-//                std::copy(std::begin(_other), std::begin(_other) + max_size, std::begin(__other) + i);
-//            }
-//
-//            TypeParam one(__one), other(__other), condition(__condition), expected(__expected);
-//            VASSERT_EQ(one.when(condition).otherwise(other), expected);
-//
-//            TypeParam a = 10;
-//            TypeParam b = 20;
-//
-//            TypeParam c0 = 0;
-//            auto actual0 = a.when(c0).otherwise(b);
-//            VASSERT_EQ(actual0, b);
-//
-//            TypeParam c1 = 1;
-//            auto actual1 = a.when(c1).otherwise(b);
-//            VASSERT_EQ(actual1, a);
-//        }
+        TYPED_TEST_P(conditional_test, if_then_else_1)
+        {
+            const size_t size   = 8;
+            auto max_size       = std::min(size_v<TypeParam>, size);
+
+            using data_t = typename std::array<typename TypeParam::element_type, size>;
+
+            data_t  _one        {{  1,  2,  3,  4,  5,  6,  7,  8 }},
+                    _other      {{ 10, 11, 12, 13, 14, 15, 16, 17 }};
+
+            data_t  _condition  {{  1,  1,  0,  3,  4,  0,  5,  6 }},
+                    _expected   {{  1,  2, 12,  4,  5, 15,  7,  8 }};
+
+            alignas(alignment_v<TypeParam>) extracted_t<TypeParam> __one, __other, __condition, __expected;
+
+            for (size_t i = 0; i < size_v<TypeParam>; i += size)
+            {
+                std::copy(std::begin(_condition), std::begin(_condition) + max_size, std::begin(__condition) + i);
+                std::copy(std::begin(_expected), std::begin(_expected) + max_size, std::begin(__expected) + i);
+
+                std::copy(std::begin(_one), std::begin(_one) + max_size, std::begin(__one) + i);
+                std::copy(std::begin(_other), std::begin(_other) + max_size, std::begin(__other) + i);
+            }
+
+            TypeParam one(__one), other(__other), condition(__condition), expected(__expected);
+
+            auto actual0 = vsel(make_mask(condition), one, other);
+            VASSERT_EQ(actual0, expected);
+
+            auto actual1 = one.when(condition).otherwise(other);
+            VASSERT_EQ(actual1, expected);
+        }
+
+        TYPED_TEST_P(conditional_test, if_then_else_2)
+        {
+            const size_t size   = 8;
+            auto max_size       = std::min(size_v<TypeParam>, size);
+
+            using data_t = typename std::array<typename TypeParam::element_type, size>;
+
+            data_t  _one        {{  1,  2,  3,  4,  5,  6,  7,  8 }},
+                    _other      {{ 10, 11, 12, 13, 14, 15, 16, 17 }};
+
+            data_t  _condition  {{  0,  1,  0,  3,  4,  0,  0,  6 }},
+                    _expected   {{ 10,  2, 12,  4,  5, 15, 16,  8 }};
+
+            alignas(alignment_v<TypeParam>) extracted_t<TypeParam> __one, __other, __condition, __expected;
+
+            for (size_t i = 0; i < size_v<TypeParam>; i += size)
+            {
+                std::copy(std::begin(_condition), std::begin(_condition) + max_size, std::begin(__condition) + i);
+                std::copy(std::begin(_expected), std::begin(_expected) + max_size, std::begin(__expected) + i);
+
+                std::copy(std::begin(_one), std::begin(_one) + max_size, std::begin(__one) + i);
+                std::copy(std::begin(_other), std::begin(_other) + max_size, std::begin(__other) + i);
+            }
+
+            TypeParam one(__one), other(__other), condition(__condition), expected(__expected);
+
+            std::cout << "CONDITION: " << condition << " MASK: " << make_mask(condition) << std::endl;
+
+            auto actual0 = vsel(make_mask(condition), one, other);
+            VASSERT_EQ(actual0, expected);
+
+            auto actual1 = one.when(condition).otherwise(other);
+            VASSERT_EQ(actual1, expected);
+        }
+
+        TYPED_TEST_P(conditional_test, if_then_else_3)
+        {
+            const size_t size   = 8;
+            auto max_size       = std::min(size_v<TypeParam>, size);
+
+            using data_t = typename std::array<typename TypeParam::element_type, size>;
+
+            data_t  _one        {{  1,  2,  3,  4,  5,  6,  7,  8 }},
+                    _other      {{ 10, 11, 12, 13, 14, 15, 16, 17 }};
+
+            data_t  _condition  {{  0,  0,  0,  0,  0,  0,  0,  0 }},
+                    _expected   {{ 10, 11, 12, 13, 14, 15, 16, 17 }};
+
+            alignas(alignment_v<TypeParam>) extracted_t<TypeParam> __one, __other, __condition, __expected;
+
+            for (size_t i = 0; i < size_v<TypeParam>; i += size)
+            {
+                std::copy(std::begin(_condition), std::begin(_condition) + max_size, std::begin(__condition) + i);
+                std::copy(std::begin(_expected), std::begin(_expected) + max_size, std::begin(__expected) + i);
+
+                std::copy(std::begin(_one), std::begin(_one) + max_size, std::begin(__one) + i);
+                std::copy(std::begin(_other), std::begin(_other) + max_size, std::begin(__other) + i);
+            }
+
+            TypeParam one(__one), other(__other), condition(__condition), expected(__expected);
+
+            auto actual0 = vsel(make_mask(condition), one, other);
+            VASSERT_EQ(actual0, expected);
+
+            auto actual1 = one.when(condition).otherwise(other);
+            VASSERT_EQ(actual1, expected);
+        }
+
+        TYPED_TEST_P(conditional_test, if_then_else_4)
+        {
+            const size_t size   = 8;
+            auto max_size       = std::min(size_v<TypeParam>, size);
+
+            using data_t = typename std::array<typename TypeParam::element_type, size>;
+
+            data_t  _one        {{  1,  2,  3,  4,  5,  6,  7,  8 }},
+                    _other      {{ 10, 11, 12, 13, 14, 15, 16, 17 }};
+
+            data_t  _condition  {{  0,  0,  1,  0,  0,  0,  1,  0 }},
+                    _expected   {{ 10, 11,  3, 13, 14, 15,  7, 17 }};
+
+            alignas(alignment_v<TypeParam>) extracted_t<TypeParam> __one, __other, __condition, __expected;
+
+            for (size_t i = 0; i < size_v<TypeParam>; i += size)
+            {
+                std::copy(std::begin(_condition), std::begin(_condition) + max_size, std::begin(__condition) + i);
+                std::copy(std::begin(_expected), std::begin(_expected) + max_size, std::begin(__expected) + i);
+
+                std::copy(std::begin(_one), std::begin(_one) + max_size, std::begin(__one) + i);
+                std::copy(std::begin(_other), std::begin(_other) + max_size, std::begin(__other) + i);
+            }
+
+            TypeParam one(__one), other(__other), condition(__condition), expected(__expected);
+
+            auto actual0 = vsel(make_mask(condition), one, other);
+            VASSERT_EQ(actual0, expected);
+
+            auto actual1 = one.when(condition).otherwise(other);
+            VASSERT_EQ(actual1, expected);
+        }
+
+        TYPED_TEST_P(conditional_test, if_then_else_5)
+        {
+            const size_t size   = 8;
+            auto max_size       = std::min(size_v<TypeParam>, size);
+
+            using data_t = typename std::array<typename TypeParam::element_type, size>;
+
+            data_t  _one        {{  1,  2,  3,  4,  5,  6,  7,  8 }},
+                    _other      {{ 10, 11, 12, 13, 14, 15, 16, 17 }};
+
+            data_t  _condition  {{  1,  1,  1,  1,  1,  1,  1,  1 }},
+                    _expected   {{  1,  2,  3,  4,  5,  6,  7,  8 }};
+
+            alignas(alignment_v<TypeParam>) extracted_t<TypeParam> __one, __other, __condition, __expected;
+
+            for (size_t i = 0; i < size_v<TypeParam>; i += size)
+            {
+                std::copy(std::begin(_condition), std::begin(_condition) + max_size, std::begin(__condition) + i);
+                std::copy(std::begin(_expected), std::begin(_expected) + max_size, std::begin(__expected) + i);
+
+                std::copy(std::begin(_one), std::begin(_one) + max_size, std::begin(__one) + i);
+                std::copy(std::begin(_other), std::begin(_other) + max_size, std::begin(__other) + i);
+            }
+
+            TypeParam one(__one), other(__other), condition(__condition), expected(__expected);
+
+            auto actual0 = vsel(make_mask(condition), one, other);
+            VASSERT_EQ(actual0, expected);
+
+            auto actual1 = one.when(condition).otherwise(other);
+            VASSERT_EQ(actual1, expected);
+        }
 
 
         REGISTER_TYPED_TEST_CASE_P(conditional_test,
-                                   if_then_else_simple/*,
-                                   if_then_else*/);
+                                   if_then_else_0,
+                                   if_then_else_1,
+                                   if_then_else_2,
+                                   if_then_else_3,
+                                   if_then_else_4,
+                                   if_then_else_5);
 
         typedef ::testing::Types<zfloat, zdouble, zint8, zint16, zint32> conditional_test_types;
 

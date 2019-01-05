@@ -40,7 +40,7 @@ namespace zacc {
     template<typename T, typename enable = void>
     struct ztraits {
         /// vector size (1 - scalar, 4, 8, 16, ...)
-        static constexpr size_t size = 0;
+        static constexpr size_t size = 1;
 
         /// capabilities
         static constexpr uint64_t feature_mask = 0;
@@ -50,9 +50,6 @@ namespace zacc {
 
         /// scalar type? vector type?
         static constexpr bool is_vector = false;
-
-        /// Indicates the last executed operation. Relevant for branch optimization.
-        static constexpr last_op last_operation = last_op::undefined;
 
         /// vector type, like __m128i for sse 4x integer vector
         using vector_type = void;
@@ -86,10 +83,6 @@ namespace zacc {
     /// scalar type? vector type?
     template<typename T>
     constexpr bool is_vector_v = ztraits<T>::is_vector;
-
-    /// scalar type? vector type?
-    template<typename T>
-    constexpr last_op last_operation_v = ztraits<T>::last_operation;
 
     /// vector type, like __m128i for sse 4x integer vector
     template<typename T>

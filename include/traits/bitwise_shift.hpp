@@ -40,20 +40,20 @@ namespace zacc { namespace traits {
             //: inherit<Composed, bit_shl, bit_shr>
     {
 
-        friend Composed operator<<(param_t<Composed> one, const size_t immediate) {
+        friend Composed operator<<(Composed one, const size_t immediate) {
             return vbslli(one, immediate);
         }
 
-        friend Composed operator>>(param_t<Composed> one, const size_t immediate) {
+        friend Composed operator>>(Composed one, const size_t immediate) {
             return vbsrli(one, immediate);
         }
 
         // TODO: Disabled for now.
-        /*friend Composed operator<<(param_t<Composed> one, param_t<Composed> other) {
+        /*friend Composed operator<<(Composed one, Composed other) {
             return vbsll(one, other);
         }
 
-        friend Composed operator>>(param_t<Composed> one, param_t<Composed> other) {
+        friend Composed operator>>(Composed one, Composed other) {
             return vbsrl(one, other);
         }*/
 

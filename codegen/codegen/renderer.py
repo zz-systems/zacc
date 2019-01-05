@@ -48,21 +48,22 @@ class Renderable(ABC):
 def make_typename(node, ast):
     return f"{resolve_prefix(node.type)}{ast.type.name}"
 
-def remapArgType(module, ast, arg):
-    arg_map = {
-        #"Composed": format(module.type, ast.type.name),
-        "bval_t": "Boolean", #f"b{ast.type.name}<Interface::feature_mask>",
-        "zval_t": "Composed", #f"z{ast.type.name}<Interface::feature_mask>",
+def remapArgType(module, ast, arg, map = None):
+    arg_map = map or {
+        "bval_t": "Boolean",
+        "zval_t": "Composed"
     }
+
     return arg_map.get(arg.type) or arg.type
 
+def remapDispatchedArgType(module, ast, arg):
+    return remapArgType(module, ast, arg)
+
 def remapInitializerArgType(module, ast, arg):
-    arg_map = {
-        #"Composed": format(module.type, ast.type.name),
+    return remapArgType(module, ast, arg, {
         "bval_t": f"b{ast.type.name}<FeatureMask>",
         "zval_t": f"z{ast.type.name}<FeatureMask>"
-    }
-    return arg_map.get(arg.type) or arg.type
+    })
 
 class ModuleMangledNameRenderer(Renderable):
     def render(self, renderer: Renderer, node: ModuleNode, ast):
@@ -127,6 +128,7 @@ class FunctionSignatureRenderer(Renderable):
 
         if body.selector:
             condition = " && ".join([map_requirement(req) for req in body.selector])
+            args = ", ".join([f"{remapDispatchedArgType(module, ast, arg)} {arg.name}" for arg in node.arguments])
 
             return [f"template<typename T = {return_type}>",
                     f"{prefix} std::enable_if_t<{condition}, T>",

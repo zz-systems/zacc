@@ -39,12 +39,8 @@ namespace zacc
     template<typename Meta, typename U>
     using op_enable = std::enable_if_t<!std::tuple_element_t<2, Meta>::value && !std::is_same<U, std::tuple_element_t<0, Meta>>::value>;
 
-
-    template<typename T>
-    using needs_masking = std::integral_constant<bool, last_operation_v<T> != last_op::boolean && last_operation_v<T> != last_op::bitwise>;
-
     template<typename T, typename std::enable_if<is_zval<T>::value || is_bval<T>::value, void**>::type = nullptr>
-    T make_mask(const T& value)
+    bval_t<T> make_mask(const T& value)
     {
         return zval_t<T>(value) != 0;
     }

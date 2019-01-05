@@ -42,7 +42,7 @@ namespace zacc { namespace traits {
          * @param one
          * @return a copy of the argument
          */
-        friend Composed operator+(param_t<Composed> self) {
+        friend Composed operator+(Composed self) {
             return self;
         }
 
@@ -51,7 +51,7 @@ namespace zacc { namespace traits {
          * @param one
          * @return negated value
          */
-        friend Composed operator-(param_t<Composed> self) {
+        friend Composed operator-(Composed self) {
             return vneg(self);
         }
 
@@ -61,7 +61,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one + other
          */
-        friend Composed operator+(param_t<Composed> one, param_t<Composed> other) {
+        friend Composed operator+(Composed one, Composed other) {
             return vadd(one, other);
         }
 
@@ -71,7 +71,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one - other
          */
-        friend Composed operator-(param_t<Composed> one, param_t<Composed> other) {
+        friend Composed operator-(Composed one, Composed other) {
             return vsub(one, other);
         }
 
@@ -81,7 +81,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one * other
          */
-        friend Composed operator*(param_t<Composed> one, param_t<Composed> other) {
+        friend Composed operator*(Composed one, Composed other) {
             return vmul(one, other);
         }
 
@@ -91,7 +91,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one / other
          */
-        friend Composed operator/(param_t<Composed> one, param_t<Composed> other) {
+        friend Composed operator/(Composed one, Composed other) {
             return vdiv(one, other);
         }
 
@@ -101,7 +101,7 @@ namespace zacc { namespace traits {
          * @param other
          * @return one % other
          */
-        friend Composed operator%(param_t<Composed> one, param_t<Composed> other) {
+        friend Composed operator%(Composed one, Composed other) {
             return vmod(one, other);
         }
 

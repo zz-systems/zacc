@@ -40,15 +40,15 @@ namespace zacc { namespace traits {
 
         struct else_branch
         {
-            constexpr Composed otherwise(param_t<Composed> else_value) const
+            constexpr Composed otherwise(Composed else_value) const
             {
                 return vsel(_condition, _if_value, else_value);
             }
 
         private:
 
-            constexpr else_branch(param_t<Boolean> condition, param_t<Composed> if_value)
-                    : _if_value(if_value), _condition(condition)
+            constexpr else_branch(Composed if_value, Boolean condition)
+                    : _if_value(if_value), _condition(std::move(condition))
             {}
 
             Composed _if_value;
@@ -57,18 +57,35 @@ namespace zacc { namespace traits {
             friend struct conditional<Interface, Composed, Boolean>;
         };
 
+        /**
+         * Accepts compatible bvalue.
+         * @tparam T
+         * @param condition
+         * @return
+         */
         template<typename T, std::enable_if_t<is_bval<T>::value, void**> = nullptr>
-        constexpr else_branch when(const T& condition) const {
-            return else_branch(condition, *static_cast<const Composed*>(this));
+        constexpr else_branch when(T condition) const {
+            return else_branch(*static_cast<const Composed*>(this), std::move(condition));
         }
 
+        /**
+         * Accepts compatible zvalue. Converts to mask vector.
+         * @tparam T
+         * @param condition
+         * @return
+         */
         template<typename T, std::enable_if_t<is_zval<T>::value, void**> = nullptr>
-        constexpr else_branch when(const T& condition) const {
-            return else_branch(make_mask(condition), *static_cast<const Composed*>(this));
+        constexpr else_branch when(T condition) const {
+            return when(make_mask(condition));
         }
 
+        /**
+         * Accepts boolean value. Converts to mask vector.
+         * @param condition
+         * @return
+         */
         constexpr else_branch when(bool condition) const {
-            return else_branch(condition, *static_cast<const Composed*>(this));
+            return when(static_cast<Boolean>(condition));
         }
     };
 

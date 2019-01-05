@@ -74,23 +74,20 @@ namespace zacc {
      */
     template<typename T>
     struct ztraits<T, std::enable_if_t<
-            std::is_base_of<backend::{{ ast.type.target }}::iz{{ ast.type.name }}<T::feature_mask>, T>::value
-            || std::is_base_of<backend::{{ ast.type.target }}::ib{{ ast.type.name }}<T::feature_mask>, T>::value>>
+            std::is_base_of<backend::{{ ast.type.target }}::iz{{ ast.type.name }}<std::decay_t<T>::feature_mask>, std::decay_t<T>>::value
+            || std::is_base_of<backend::{{ ast.type.target }}::ib{{ ast.type.name }}<std::decay_t<T>::feature_mask>, std::decay_t<T>>::value>>
     {
         /// vector size (1 - scalar, 4, 8, 16, ...)
         static constexpr size_t size = {{ ast.type.size }};
 
         /// capabilities
-        static constexpr uint64_t feature_mask = T::feature_mask;
+        static constexpr uint64_t feature_mask = std::decay_t<T>::feature_mask;
 
         /// memory alignment
         static constexpr size_t alignment = {{ ast.type.alignment }};
 
         /// scalar type? vector type?
         static constexpr bool is_vector = size > 1;
-
-        /// Indicates the last executed operation. Relevant for branch optimization.
-        static constexpr last_op last_operation = last_op::undefined;
 
         /// vector type, like __m128i for sse 4x integer vector
         using vector_type = {{ ast.type.vector_type }};
@@ -101,10 +98,10 @@ namespace zacc {
         /// extracted std::array of (dim) scalar values
         using extracted_type = std::array<element_type, size>;
 
-        using zval_type = backend::{{ ast.type.target }}::z{{ ast.type.name }}<T::feature_mask>;
-        using bval_type = backend::{{ ast.type.target }}::b{{ ast.type.name }}<T::feature_mask>;
+        using zval_type = backend::{{ ast.type.target }}::z{{ ast.type.name }}<std::decay_t<T>::feature_mask>;
+        using bval_type = backend::{{ ast.type.target }}::b{{ ast.type.name }}<std::decay_t<T>::feature_mask>;
 
-        using tag = typename T::tag;
+        using tag = typename std::decay_t<T>::tag;
     };
 }
 
@@ -183,7 +180,7 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
         {}
 
         explicit constexpr z{{ ast.type.name }}(const bval_t<iz{{ ast.type.name }}<FeatureMask>>& other) noexcept
-            : z{{ ast.type.name }}(other.value())
+                : z{{ ast.type.name }}(other.value())
         {}
 
         {% for module in ast.modules.initializers if module.type == ModuleTypes.DEFAULT %}
@@ -240,7 +237,9 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
         template<typename T, typename std::enable_if<is_zval<T>::value || is_bval<T>::value, void**>::type = nullptr>
         constexpr b{{ ast.type.name }}(const T& other) noexcept
                 : b{{ ast.type.name }}(other.value())
-        {}
+        {
+            //static_assert(size_v<T> == {{ ast.type.size }}, "Dimension mismatch");
+        }
 
         {% for module in ast.modules.initializers if (module.type == ModuleTypes.BOOLEAN)%}
         {% for func in module.functions %}

@@ -48,31 +48,31 @@ namespace zacc
      * @tparam T
      */
     template<typename T>
-    struct ztraits<T, std::enable_if_t<std::is_base_of<math::izcomplex<typename T::element_type>, T>::value>>
+    struct ztraits<T, std::enable_if_t<std::is_base_of<math::izcomplex<typename std::decay_t<T>::element_type>, std::decay_t<T>>::value>>
     {
         /// vector size (1 - scalar, 4, 8, 16, ...)
         static constexpr size_t size = 2;
 
         /// capabilities
-        static constexpr uint64_t feature_mask = feature_mask_v<typename T::element_type>;
+        static constexpr uint64_t feature_mask = feature_mask_v<typename std::decay_t<T>::element_type>;
 
         /// memory alignment
-        static constexpr size_t alignment = alignment_v<typename T::element_type>;
+        static constexpr size_t alignment = alignment_v<typename std::decay_t<T>::element_type>;
 
         /// scalar type? vector type?
         static constexpr bool is_vector = true;
 
         /// vector type, like __m128i for sse 4x integer vector
-        using vector_type = math::vec2<typename T::element_type>;
+        using vector_type = math::vec2<typename std::decay_t<T>::element_type>;
 
         /// scalar type, like int for sse 4x integer vector
-        using element_type = typename T::element_type;
+        using element_type = typename std::decay_t<T>::element_type;
 
         /// extracted std::array of (dim) scalar values
         using extracted_type = std::array<element_type, size>;
 
-        using zval_type = math::zcomplex<typename T::element_type>;
-        using bval_type = bval_t<typename T::element_type>;
+        using zval_type = math::zcomplex<typename std::decay_t<T>::element_type>;
+        using bval_type = bval_t<typename std::decay_t<T>::element_type>;
 
         using tag = cval_tag;
     };
@@ -124,7 +124,7 @@ namespace zacc { namespace math
              * @param data printable trait
              * @return target stream
              */
-            friend std::ostream &operator<<(std::ostream &os, const Composed &data) {
+            friend std::ostream &operator<<(std::ostream &os, Composed data) {
                 os << data.to_string();
 
                 return os;
@@ -277,7 +277,7 @@ namespace zacc { namespace math
              * @brief vsel
              * @relates complex
              */
-            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value)
+            friend Composed vsel(param_t<Boolean> condition, Composed if_value, Composed else_value)
             {
                 return {
                     if_value.real().when(condition).otherwise(else_value.real()),

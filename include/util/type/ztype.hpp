@@ -27,15 +27,6 @@
 
 namespace zacc {
 
-    /**
-     * last operation
-     */
-    enum class last_op {
-        undefined,  ///< last operation is unknown (e.g initialization or arithmetic)
-        boolean,    ///< last operation is boolean (skip mask generation)
-        bitwise     ///< last operation is bitwise. (skip mask generation)
-    };
-
     struct zval_tag {};
     struct bval_tag {};
     struct cval_tag {};
@@ -56,9 +47,6 @@ namespace zacc {
 
         /// scalar type? vector type?
         static constexpr bool is_vector = size > 1;
-
-        /// Indicates the last executed operation. Relevant for branch optimization.
-        //last_op last_operation = last_op::undefined;
 
         /// scalar type, like int for sse 4x integer vector
         using element_type = Element;

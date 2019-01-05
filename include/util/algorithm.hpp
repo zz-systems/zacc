@@ -119,7 +119,7 @@ namespace zacc {
      * @param last last iterator
      * @param g generator
      */
-    template<class T, class ForwardIt, class Generator>
+    template<class T, class ForwardIt, class Generator>//, std::enable_if_t<is_zval<T>::value, void**> = nullptr>
     void generate(ForwardIt first, ForwardIt last, Generator g)
     {
         auto dim        = size_v<T>;
@@ -135,6 +135,26 @@ namespace zacc {
             std::copy(std::begin(result), std::begin(result) + to_fetch, first + i);
         }
     };
+
+//    /**
+//     * @brief Applies a generator function to container
+//     * @tparam T element type
+//     * @tparam ForwardIt container iterator type
+//     * @tparam Generator generator function type
+//     * @param first first iterator
+//     * @param last last iterator
+//     * @param g generator
+//     */
+//    template<class T, class ForwardIt, class Generator, std::enable_if_t<!is_zval<T>::value, void**> = nullptr>
+//    void generate(ForwardIt first, ForwardIt last, Generator g)
+//    {
+//        size_t real_size  = std::distance(first, last);
+//
+//        for (size_t i = 0; i < real_size; i++)
+//        {
+//            *(first++) = g(i);
+//        }
+//    };
 
     /**
      * @brief Applies a generator function to container

@@ -44,23 +44,18 @@ namespace zacc {
     {
         USING_ZTYPE(Interface);
 
-        /// Indicates the last executed operation. Relevant for branch optimization.
-        last_op last_operation = last_op::undefined;
-
         constexpr zval() = default;
 
         // =============================================================================================================
 
-        constexpr zval(const zval& other, last_op op = last_op::undefined) noexcept
-            : _value { other._value }, last_operation {op}
+        constexpr zval(const zval& other) noexcept
+            : _value { other._value }
         {}
 
-        constexpr zval(zval&& other, last_op op = last_op::undefined) noexcept
+        constexpr zval(zval&& other) noexcept
             : zval()
         {
-            std::swap(this->_value, other._value);
-            std::swap(this->last_operation, op);
-            //swap(*this, other);
+            swap(*this, other);
         }
 
         constexpr zval& operator=(zval other) noexcept
@@ -77,13 +72,7 @@ namespace zacc {
 
         friend void swap(zval& one, zval& other) // nothrow
         {
-            // enable ADL (not necessary in our case, but good practice)
-            using std::swap;
-
-            // by swapping the members of two objects,
-            // the two objects are effectively swapped
-            swap(one._value, other._value);
-            swap(one.last_operation, other.last_operation);
+            std::swap(one._value, other._value);
         }
 
         // =============================================================================================================

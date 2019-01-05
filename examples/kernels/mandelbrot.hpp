@@ -41,6 +41,50 @@ namespace zacc { namespace examples {
 
     using namespace math;
 
+#if defined(ZACC_SCALAR) && false
+    KERNEL_IMPL(mandelbrot)
+    {
+        vec2<int> _dim;
+        vec2<float> _cmin;
+        vec2<float> _cmax;
+
+        size_t _max_iterations;
+
+        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) override
+        {
+            _dim = dim;
+            _cmax = cmax;
+            _cmin = cmin;
+
+            _max_iterations = max_iterations;
+        }
+
+        virtual void run(std::vector<int> &output) override
+        {
+            for(int i = 0; i < output.size(); i++)
+            // populate output container
+            //zacc::generate<int>(std::begin(output), std::end(output), [this](int i)
+            {
+                // compute 2D-position from 1D-index
+                auto pos = reshape<vec2<float>>(i, _dim);
+
+                std::complex<float> c(_cmin.x() + pos.x() / float(_dim.x() - 1) * (_cmax.x() - _cmin.x()),
+                                      _cmin.y() + pos.y() / float(_dim.y() - 1) * (_cmax.y() - _cmin.x()));
+
+                std::complex<float> z = 0;
+
+                int iterations;
+
+                //for (iterations = 0; iterations < _max_iterations && std::abs(z) < 2.0; ++iterations)
+                for (iterations = 0; iterations < _max_iterations && (z.real() * z.real() + z.imag() * z.imag()) < 4.0; ++iterations)
+                    z = z*z + c;
+
+                //return iterations;
+                output[i] = iterations;
+            }//);
+        }
+    };
+#else
     KERNEL_IMPL(mandelbrot)
     {
         vec2<zint> _dim;
@@ -60,7 +104,7 @@ namespace zacc { namespace examples {
 
         virtual void run(std::vector<int> &output) override
         {
-            // populate output container 
+            // populate output container
             zacc::generate<zint>(std::begin(output), std::end(output), [this](auto i)
             {
                 // compute 2D-position from 1D-index
@@ -72,7 +116,7 @@ namespace zacc { namespace examples {
                 zcomplex<zfloat> z = 0;
 
                 bfloat done = false;
-                zint iterations;
+                zint iterations = 0;
 
                 for (size_t j = 0; j < _max_iterations; j++)
                 {
@@ -90,7 +134,7 @@ namespace zacc { namespace examples {
                             .otherwise(iterations + 1);
 
                     // break if all elements are not zero
-                    if ((done))
+                    if (done.is_set())
                         break;
                 }
 
@@ -98,7 +142,7 @@ namespace zacc { namespace examples {
             });
         }
     };
-
+#endif
     /// implement shared library factory methods
     REGISTER_KERNEL(mandelbrot);
 }}

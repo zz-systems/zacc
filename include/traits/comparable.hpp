@@ -40,19 +40,19 @@ namespace zacc { namespace traits {
     {
 
         friend Boolean operator>(const Composed one, const Composed other) {
-            return { vgt(one, other), last_op::boolean };
+            return vgt(one, other);
         }
 
         friend Boolean operator>=(const Composed one, const Composed other) {
-            return { vge(one, other), last_op::boolean };
+            return vge(one, other);
         }
 
         friend Boolean operator<(const Composed one, const Composed other) {
-            return { vlt(one, other), last_op::boolean };
+            return vlt(one, other);
         }
 
         friend Boolean operator<=(const Composed one, const Composed other) {
-            return { vle(one, other), last_op::boolean };
+            return vle(one, other);
         }
     };
 }}

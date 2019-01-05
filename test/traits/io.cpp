@@ -40,10 +40,10 @@ namespace zacc { namespace test {
 
         TYPED_TEST_P(io_test, store)
         {
-            view_t<TypeParam> data;
-            std::iota(data.begin(), data.end(), 0);
+            alignas(alignment_v<TypeParam>) view_t<TypeParam> data;
+            std::iota(data.begin(), data.end(), 10);
 
-            TypeParam actual(0);//test_data);
+            TypeParam actual(data);
 
             auto result = actual.data();
 
@@ -53,8 +53,7 @@ namespace zacc { namespace test {
 
         TYPED_TEST_P(gather_test, gather)
         {
-
-            view_t<TypeParam> data;
+            alignas(alignment_v<TypeParam>) view_t<TypeParam> data;
             std::iota(data.begin(), data.end(), 10);
 
             TypeParam result = TypeParam::gather(std::begin(data), zint32(0));

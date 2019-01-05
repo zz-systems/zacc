@@ -29,22 +29,165 @@
 
 namespace zacc { namespace test {
 
-        TEST(casting_test, test_casting) {
-            REQUIRES(ZACC_ARCH);
+    template <typename T>
+    class casting_test : public ::testing::Test { };
+    TYPED_TEST_CASE_P(casting_test);
 
-            zdouble f64     = 15.5;
-            zfloat  f32     = 10.5;
-            zint    i32     = 8;
-            zshort  i16     = 4;
-            zbyte   i8      = 2;
+    TYPED_TEST_P(casting_test, make_mask_0)
+    {
 
-            bdouble bf64    = true;
-            bfloat  bf32    = true;
-            bint    bi32    = true;
-            bshort  bi16    = true;
-            bbyte   bi8     = true;
+        const size_t size   = 8;
+        auto max_size       = std::min(size_v<TypeParam>, size);
 
-            zint cz1 = f32;
-            //bint cb1 = bf32;
+        using data_t = typename std::array<element_t<TypeParam>, size>;
+        data_t _condition   {{ 1, 1, 0, 3, 4, 0, 5, 6 }};
+        data_t _expected    {{ 1, 1, 0, 1, 1, 0, 1, 1 }};
+
+
+        alignas(alignment_v<TypeParam>) extracted_t<TypeParam> __condition, expected;
+
+        for (size_t i = 0; i < size_v<TypeParam>; i += size)
+        {
+            std::copy(std::begin(_condition), std::begin(_condition) + max_size, std::begin(__condition) + i);
+            std::copy(std::begin(_expected), std::begin(_expected) + max_size, std::begin(expected) + i);
         }
-    }}
+
+        TypeParam condition(static_cast<zval_t<TypeParam>>(__condition));
+
+        auto actual = make_mask(condition);
+        auto data = actual.data();
+
+        for(int i = 0; i < size_v<TypeParam>; i++)
+        {
+            VASSERT_EQ(data[i], expected[i]);
+        }
+    }
+
+    TYPED_TEST_P(casting_test, make_mask_1)
+    {
+
+        const size_t size   = 8;
+        auto max_size       = std::min(size_v<TypeParam>, size);
+
+        using data_t = typename std::array<element_t<TypeParam>, size>;
+        data_t _condition   {{ 0, 1, 0, 3, 4, 0, 0, 6 }};
+        data_t _expected    {{ 0, 1, 0, 1, 1, 0, 0, 1 }};
+
+
+        alignas(alignment_v<TypeParam>) extracted_t<TypeParam> __condition, expected;
+
+        for (size_t i = 0; i < size_v<TypeParam>; i += size)
+        {
+            std::copy(std::begin(_condition), std::begin(_condition) + max_size, std::begin(__condition) + i);
+            std::copy(std::begin(_expected), std::begin(_expected) + max_size, std::begin(expected) + i);
+        }
+
+        TypeParam condition(static_cast<zval_t<TypeParam>>(__condition));
+
+        auto actual = make_mask(condition);
+        auto data = actual.data();
+
+        for(int i = 0; i < size_v<TypeParam>; i++)
+        {
+            VASSERT_EQ(data[i], expected[i]);
+        }
+    }
+
+    TYPED_TEST_P(casting_test, make_mask_2)
+    {
+        const size_t size   = 8;
+        auto max_size       = std::min(size_v<TypeParam>, size);
+
+        using data_t = typename std::array<element_t<TypeParam>, size>;
+        data_t _condition   {{ 0, 0, 0, 0, 0, 0, 0, 0 }};
+        data_t _expected    {{ 0, 0, 0, 0, 0, 0, 0, 0 }};
+
+
+        alignas(alignment_v<TypeParam>) extracted_t<TypeParam> __condition, expected;
+
+        for (size_t i = 0; i < size_v<TypeParam>; i += size)
+        {
+            std::copy(std::begin(_condition), std::begin(_condition) + max_size, std::begin(__condition) + i);
+            std::copy(std::begin(_expected), std::begin(_expected) + max_size, std::begin(expected) + i);
+        }
+
+        TypeParam condition(static_cast<zval_t<TypeParam>>(__condition));
+
+        auto actual = make_mask(condition);
+        auto data = actual.data();
+
+        for(int i = 0; i < size_v<TypeParam>; i++)
+        {
+            VASSERT_EQ(data[i], expected[i]);
+        }
+    }
+
+    TYPED_TEST_P(casting_test, make_mask_3)
+    {
+        const size_t size   = 8;
+        auto max_size       = std::min(size_v<TypeParam>, size);
+
+        using data_t = typename std::array<element_t<TypeParam>, size>;
+        data_t _condition   {{ 0, 0, 1, 0, 0, 0, 1, 0 }};
+        data_t _expected    {{ 0, 0, 1, 0, 0, 0, 1, 0 }};
+
+
+        alignas(alignment_v<TypeParam>) extracted_t<TypeParam> __condition, expected;
+
+        for (size_t i = 0; i < size_v<TypeParam>; i += size)
+        {
+            std::copy(std::begin(_condition), std::begin(_condition) + max_size, std::begin(__condition) + i);
+            std::copy(std::begin(_expected), std::begin(_expected) + max_size, std::begin(expected) + i);
+        }
+
+        TypeParam condition(static_cast<zval_t<TypeParam>>(__condition));
+
+        auto actual = make_mask(condition);
+        auto data = actual.data();
+
+        for(int i = 0; i < size_v<TypeParam>; i++)
+        {
+            VASSERT_EQ(data[i], expected[i]);
+        }
+    }
+
+    TYPED_TEST_P(casting_test, make_mask_4)
+    {
+        const size_t size   = 8;
+        auto max_size       = std::min(size_v<TypeParam>, size);
+
+        using data_t = typename std::array<element_t<TypeParam>, size>;
+        data_t _condition   {{ 1, 1, 1, 1, 1, 1, 1, 1 }};
+        data_t _expected    {{ 1, 1, 1, 1, 1, 1, 1, 1 }};
+
+
+        alignas(alignment_v<TypeParam>) extracted_t<TypeParam> __condition, expected;
+
+        for (size_t i = 0; i < size_v<TypeParam>; i += size)
+        {
+            std::copy(std::begin(_condition), std::begin(_condition) + max_size, std::begin(__condition) + i);
+            std::copy(std::begin(_expected), std::begin(_expected) + max_size, std::begin(expected) + i);
+        }
+
+        TypeParam condition(static_cast<zval_t<TypeParam>>(__condition));
+
+        auto actual = make_mask(condition);
+        auto data = actual.data();
+
+        for(int i = 0; i < size_v<TypeParam>; i++)
+        {
+            VASSERT_EQ(data[i], expected[i]);
+        }
+    }
+
+    REGISTER_TYPED_TEST_CASE_P(casting_test,
+                               make_mask_0,
+                               make_mask_1,
+                               make_mask_2,
+                               make_mask_3,
+                               make_mask_4);
+
+    typedef ::testing::Types<zfloat, zdouble, zint8, zint16, zint32, bfloat, bdouble, bint8, bint16, bint32> casting_test_types;
+
+    INSTANTIATE_TYPED_TEST_CASE_P(zacc, casting_test, casting_test_types);
+}}

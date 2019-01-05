@@ -37,21 +37,20 @@ namespace zacc { namespace traits {
     template<typename Interface, typename Composed, typename Boolean>
     struct bitwise : inherit<ops_meta<Composed, Interface>, bit_and, bit_or, bit_xor>
     {
-
-        friend Composed operator~(param_t<Composed> one)
+        friend Composed operator~(Composed one)
         {
             return vbneg(one);
         }
 
-        friend Composed operator|(param_t<Composed> one, param_t<Composed> other) {
+        friend Composed operator|(Composed one, Composed other) {
             return vbor(one, other);
         }
 
-        friend Composed operator&(param_t<Composed> one, param_t<Composed> other) {
+        friend Composed operator&(Composed one, Composed other) {
             return vband(one, other);
         }
 
-        friend Composed operator^(param_t<Composed> one, param_t<Composed> other) {
+        friend Composed operator^(Composed one, Composed other) {
             return vbxor(one, other);
         }
 

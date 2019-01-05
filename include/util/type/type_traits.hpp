@@ -129,8 +129,11 @@ namespace zacc {
         : std::true_type
     {};
 
+//    template<typename T>
+//    using param_t = std::conditional_t<is_small_type<T>::value, T const, T const&>;
+
     template<typename T>
-    using param_t = std::conditional_t<is_small_type<T>::value, T const, T const&>;
+    using param_t = std::conditional_t<is_small_type<T>::value, T, const T&>;
 
     template<typename T, typename U>
     using enable_if_convertible2 = std::enable_if_t<std::is_convertible<T, U>::value, void**>;
