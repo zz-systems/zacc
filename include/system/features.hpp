@@ -61,7 +61,7 @@ namespace zacc {
     /**
      * @brief Provides metadata and typecasts to capabilities enum
      */
-    class arch
+    class feature
     {
         typedef const char* c_str_t;
 
@@ -75,7 +75,7 @@ namespace zacc {
          * @param str string representation
          * @param is_set availability flag
          */
-        constexpr arch(const capabilities arch, const char* str, bool is_set = false)
+        constexpr feature(const capabilities arch, const char* str, bool is_set = false)
                 : Arch(arch), _c_str(str), _is_set(is_set)
         {}
 
@@ -135,14 +135,14 @@ namespace zacc {
          * @param other other arch
          * @return result of bitwise-or as raw underlying value
          */
-        constexpr flag_t operator |(const arch &other) const { return raw_value() | other.raw_value(); }
+        constexpr flag_t operator |(const feature &other) const { return raw_value() | other.raw_value(); }
 
         /**
          * @brief provides bitwise-and functionality
          * @param other other arch
          * @return result of bitwise-and as raw underlying value
          */
-        constexpr flag_t operator &(const arch &other) const { return raw_value() & other.raw_value(); }
+        constexpr flag_t operator &(const feature &other) const { return raw_value() & other.raw_value(); }
 
         /**
          * @brief returns true if this arch is available
@@ -156,7 +156,7 @@ namespace zacc {
          * @param cap arch object
          * @return modified target output stream
          */
-        friend inline std::ostream& operator<<(std::ostream& os, const arch& cap) {
+        friend inline std::ostream& operator<<(std::ostream& os, const feature& cap) {
             using namespace std;
 
             const int w = 15;
@@ -185,37 +185,7 @@ namespace zacc {
 //            return result;
 //        }
 
-        /**
-         * @brief arch dispatcher. from aggregated integer representation one can extract specific features
-         * @tparam arch aggregated integer representation
-         */
-        template<uint64_t arch = 0>
-        struct dispatcher {
 
-            using flag_t = std::make_unsigned_t<capabilities>;
-
-            /**
-             * @brief checks if a particular arch is set
-             * @param flag arch to check
-             * @return true if arch is set
-             */
-            static constexpr bool is_set(capabilities flag)
-            {
-                return 0 != (flags & static_cast<flag_t>(flag));
-            }
-
-            /// current capabilities
-            static constexpr flag_t flags = arch;
-
-            /// usually all branches provide floating types
-            static constexpr bool has_floating_types = true;
-
-            /// AVX 1 does not provide operations on integer types
-            static constexpr bool has_integer_types = !is_set(capabilities::AVX1) || is_set(capabilities::AVX2);
-
-            /// fast (lower precision) float enabled?
-            static constexpr bool use_fast_float = is_set(capabilities::FASTFLOAT);
-        };
     private:
         const capabilities Arch;
         const char* _c_str;
@@ -223,31 +193,99 @@ namespace zacc {
     };
 
 
+    /**
+     * @brief arch dispatcher. from aggregated integer representation one can extract specific features
+     * @tparam arch aggregated integer representation
+     */
+    template<uint64_t arch = 0>
+    struct dispatcher {
+
+        using flag_t = std::make_unsigned_t<capabilities>;
+
+        /**
+         * @brief checks if a particular arch is set
+         * @param flag arch to check
+         * @return true if arch is set
+         */
+        static constexpr bool is_set(capabilities flag)
+        {
+            return 0 != (flags & static_cast<flag_t>(flag));
+        }
+
+        /// current capabilities
+        static constexpr flag_t flags = arch;
+
+        /// usually all branches provide floating types
+        static constexpr bool has_floating_types = true;
+
+        /// AVX 1 does not provide operations on integer types
+        static constexpr bool has_integer_types = !is_set(capabilities::AVX1) || is_set(capabilities::AVX2);
+
+        /// fast (lower precision) float enabled?
+        static constexpr bool use_fast_float = is_set(capabilities::FASTFLOAT);
+    };
+
     template<typename T, capabilities feature>
-    constexpr bool has_feature_v = arch::dispatcher<T::feature_mask>::is_set(feature);
+    constexpr bool has_feature_v = dispatcher<T::feature_mask>::is_set(feature);
 
     template<typename T>
-    constexpr bool has_integer_types_v = arch::dispatcher<T::feature_mask>::has_integer_types;
+    constexpr bool has_integer_types_v = dispatcher<T::feature_mask>::has_integer_types;
 
     template<typename T>
-    constexpr bool has_floating_types_v = arch::dispatcher<T::feature_mask>::has_floating_types;
+    constexpr bool has_floating_types_v = dispatcher<T::feature_mask>::has_floating_types;
 
     template <typename T, typename... TList>
-    static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, arch::flag_t>
+    static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, feature::flag_t>
     make_flag(T && arch, TList &&... list) noexcept {
         return static_cast<std::underlying_type_t<capabilities>>(arch) | make_flag(std::forward<TList>(list)...);
     }
 
     template <typename T>
-    static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, arch::flag_t>
+    static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, feature::flag_t>
     make_flag(T arch) noexcept {
         return static_cast<std::underlying_type_t<capabilities>>(arch);
     }
 
-    struct architectures 
+    struct arch
     {
         using flag_t        = std::underlying_type_t<capabilities>;
 
+        flag_t features;
+        std::string name;
+
+        arch()
+            : features(0), name()
+        {}
+
+        template<typename T>
+        arch(T)
+            : features(T::value), name(T::name())
+        {}
+
+        arch(const arch& other)
+            : features(other.features), name(other.name)
+        {}
+
+        arch(arch&& other)
+            : arch()
+        {
+            swap(*this, other);
+        }
+
+        arch& operator=(arch other)
+        {
+            swap(*this, other);
+            return *this;
+        }
+
+        friend void swap(arch& one, arch& other)
+        {
+            std::swap(one.features, other.features);
+            std::swap(one.name, other.name);
+        }
+
+        constexpr bool is_none() const { return features == 0 && name.empty(); }
+        
         struct scalar       : public std::integral_constant<flag_t, make_flag(capabilities::SCALAR)>
         {
             static const std::string name() { return "scalar"; }
@@ -303,6 +341,5 @@ namespace zacc {
             static const std::string name() { return "gpgpu.opencl"; }
         };
     };
-
 
 }

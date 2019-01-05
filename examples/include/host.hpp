@@ -44,8 +44,8 @@ namespace zacc { namespace examples {
         using kernel_result_t       = std::tuple<std::shared_ptr<output_container>, std::chrono::milliseconds>;
 
     public:
-        host(math::vec2<int> dim)
-                : _dim(dim)
+        host(const platform& platform, math::vec2<int> dim)
+                : _dim(dim), _platform(platform)
         {
         }
 
@@ -53,15 +53,19 @@ namespace zacc { namespace examples {
 
         virtual void run()
         {
-            platform::global().set(0);
+            auto backup = _platform.raw();
+
+            _platform.set(0);
 
             this->configure_kernel();
             auto reference  = this->run_kernel();
 
-            platform::global().reload()
-                    .set(capabilities::AVX2, true)
-                    .set(capabilities::SSE41, true)
-                    .set(capabilities::FMA3, true);
+            _platform.set(backup);
+
+//            platform::global().reload()
+//                    .set(capabilities::AVX2, true)
+//                    .set(capabilities::SSE41, true)
+//                    .set(capabilities::FMA3, true);
 
             this->configure_kernel();
             auto vectorized = this->run_kernel();
@@ -122,7 +126,7 @@ namespace zacc { namespace examples {
         {
             using namespace std::chrono;
 
-            std::cout << platform::global() << std::endl;
+            std::cout << _platform << std::endl;
 
             auto start = high_resolution_clock::now();
             auto result = this->run_kernel(input_container{});
@@ -140,6 +144,9 @@ namespace zacc { namespace examples {
 
         math::vec2<int> _dim;
         system::dispatcher<system::kernel_dispatcher<KernelInterface>> _dispatcher;
+
+        platform _platform;
+
     };
 
 }}
