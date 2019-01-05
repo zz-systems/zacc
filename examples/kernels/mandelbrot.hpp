@@ -25,7 +25,7 @@
 
 #pragma once
 
-// @file mandelbrot.hpp
+// @file mandelbrot.zacc.hpp
 
 #include "zacc.hpp"
 
@@ -42,7 +42,7 @@ namespace zacc { namespace examples {
     using namespace math;
 
 #if defined(ZACC_SCALAR) && false
-    KERNEL_IMPL(mandelbrot)
+    KERNEL_IMPL(mandelbrot.zacc)
     {
         vec2<int> _dim;
         vec2<float> _cmin;
@@ -85,7 +85,7 @@ namespace zacc { namespace examples {
         }
     };
 #else
-    KERNEL_IMPL(mandelbrot)
+    KERNEL_IMPL(julia)
     {
         vec2<zint> _dim;
         vec2<zfloat> _cmin;

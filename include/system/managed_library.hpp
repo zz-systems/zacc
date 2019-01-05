@@ -30,7 +30,7 @@
 #include <chrono>
 #include <thread>
 
-#include "system/capabilities.hpp"
+#include "system/features.hpp"
 #include "system/dlloader.hpp"
 
 namespace zacc { namespace system {

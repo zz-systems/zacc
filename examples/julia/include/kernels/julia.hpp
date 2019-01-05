@@ -25,17 +25,15 @@
 
 #pragma once
 
-// @file mandelbrot.zacc.hpp
-
 #include "zacc.hpp"
-
 #include "system/arch.hpp"
 
 #include "math/complex.hpp"
 #include "math/matrix.hpp"
 #include "util/algorithm.hpp"
 
-#include "interfaces/mandelbrot.hpp"
+#include "interfaces/julia.hpp"
+
 
 namespace zacc { namespace examples {
 
@@ -44,45 +42,47 @@ namespace zacc { namespace examples {
     KERNEL_IMPL(julia)
     {
         vec2<zint> _dim;
-        vec2<zfloat> _cmin;
-        vec2<zfloat> _cmax;
+        vec2<zfloat> _offset;
+        zcomplex<zfloat> _c;
+        zfloat _zoom;
 
         size_t _max_iterations;
 
-        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) override
+        virtual void configure(vec2<int> dim, vec2<float> offset, vec2<float> c, float zoom, size_t max_iterations) override
         {
             _dim = dim;
-            _cmax = cmax;
-            _cmin = cmin;
+            _offset = offset;
+            _c = c;
+
+            _zoom = zoom;
 
             _max_iterations = max_iterations;
         }
 
         virtual void run(std::vector<int> &output) override
         {
-            // populate output container
-            zacc::generate<zint>(std::begin(output), std::end(output), [this](auto i)
+            vec2<zfloat> center = _dim / 2.0;
+
+            zacc::generate<zint>(std::begin(output), std::end(output), [this, center](auto i)
             {
                 // compute 2D-position from 1D-index
                 auto pos = reshape<vec2<zfloat>>(make_index<zint>(zint(i)), _dim);
 
-                zcomplex<zfloat> c(_cmin.x() + pos.x() / zfloat(_dim.x() - 1) * (_cmax.x() - _cmin.x()),
-                                   _cmin.y() + pos.y() / zfloat(_dim.y() - 1) * (_cmax.y() - _cmin.x()));
-
-                zcomplex<zfloat> z = 0;
+                zcomplex<zfloat> z(1.5 * (pos.x() - center.x()) / (_zoom * center.x()) + _offset.x(),
+                                   1.0 * (pos.y() - center.y()) / (_zoom * center.y()) + _offset.y());
 
                 bfloat done = false;
                 zint iterations = 0;
 
-                for (size_t j = 0; j < _max_iterations; j++)
+                for (size_t j = _max_iterations; j > 1; --j)
                 {
                     // done when magnitude is >= 2 (or square magnitude is >= 4)
                     done = done || z.sqr_magnitude() >= 4.0;
 
                     // compute next complex if not done
                     z = z
-                           .when(done)
-                           .otherwise(z * z + c);
+                            .when(done)
+                            .otherwise(z * z + _c);
 
                     // increment if not done
                     iterations = iterations
@@ -90,7 +90,7 @@ namespace zacc { namespace examples {
                             .otherwise(iterations + 1);
 
                     // break if all elements are not zero
-                    if (done.is_set())
+                    if ((done))
                         break;
                 }
 
@@ -100,5 +100,5 @@ namespace zacc { namespace examples {
     };
 
     /// implement shared library factory methods
-    REGISTER_KERNEL(mandelbrot);
+    REGISTER_KERNEL(julia);
 }}

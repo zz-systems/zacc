@@ -35,11 +35,11 @@ namespace zacc { namespace examples {
 
     using namespace math;
 
-    struct mandelbrot_vanilla : system::kernel<mandelbrot_vanilla>
+    struct julia_vanilla : system::kernel<julia_vanilla>
     {
-        static constexpr auto name() { return "mandelbrot.vanilla"; }
+        static constexpr auto name() { return "julia.vanilla"; }
 
-        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
+        virtual void configure(vec2<int> dim, vec2<float> offset, vec2<float> c, float zoom, size_t max_iterations) = 0;
         virtual void run(std::vector<int> &output) = 0;
     };
 }}

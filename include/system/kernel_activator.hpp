@@ -29,7 +29,7 @@
 #include <map>
 #include <cassert>
 
-#include "system/capabilities.hpp"
+#include "system/features.hpp"
 #include "system/managed_library.hpp"
 #include "system/entrypoint.hpp"
 

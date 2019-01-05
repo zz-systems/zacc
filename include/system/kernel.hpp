@@ -46,6 +46,10 @@ namespace zacc { namespace system {
 
         /// Kernel name
         static constexpr auto kernel_name() { return KernelInterface::name(); }
+
+        //using compatible = KernelInterface::compatible;
+
+        //using compatible = KernelInterface::compatible;
     };
 
     /**

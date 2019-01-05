@@ -35,9 +35,9 @@ namespace zacc { namespace examples {
 
     using namespace math;
 
-    struct mandelbrot : system::kernel<mandelbrot>
+    struct julia : system::kernel<julia>
     {
-        static constexpr auto name() { return "mandelbrot"; }
+        static constexpr auto name() { return "mandelbrot.zacc"; }
 
         virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
         virtual void run(std::vector<int> &output) = 0;

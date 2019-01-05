@@ -36,21 +36,41 @@ namespace zacc {
     /**
      * @brief Platform settings
      */
-    template<typename Parser = option_parser>
     class platform_settings
     {
     public:
+
+        /**
+         * @brief accepts main() args
+         * @param argc argument count
+         * @param argv argument array
+         */
+        platform_settings(const option_parser& parser)
+        {
+            for(auto feature : _platform.all_capabilities())
+            {
+                if(parser.has_option("-mno-" + tolower(feature.str())))
+                {
+                    _platform.disable(feature);
+                }
+            }
+        }
+
         /**
          * @brief accepts main() args
          * @param argc argument count
          * @param argv argument array
          */
         platform_settings(const int argc, char** argv)
-            : _parser(std::make_unique<Parser>(argc, argv)), _platform(std::make_shared<platform>())
         {
-            for(auto feature : _platform->all_capabilities())
-            {
+            option_parser parser(argc, argv);
 
+            for(auto feature : _platform.all_capabilities())
+            {
+                if(parser.has_option("-mno-" + tolower(feature.str())))
+                {
+                    _platform.disable(feature);
+                }
             }
         }
 
@@ -60,18 +80,22 @@ namespace zacc {
          * @param data printable trait
          * @return target stream
          */
-        friend std::ostream &operator<<(std::ostream &os, const platform_settings& data)
+        inline friend std::ostream &operator<<(std::ostream &os, const platform_settings& data)
         {
-            for(auto feature : data._platform->all_capabilities())
+            for(auto feature : data._platform.all_capabilities())
             {
-                os << std::setw(15) << " -mno-" << tolower(feature->str()) << "Disables " << tolower(feature->str()) << " feature" << std::endl;
+                os << " -mno-" << std::left << std::setw(15) <<  tolower(feature.str()) << " Disable " << toupper(feature.str()) << " feature" << std::endl;
             }
 
             return os;
         }
 
+        inline const zacc::platform& platform() const
+        {
+            return _platform;
+        }
+
     private:
-        std::unique_ptr<Parser> _parser;
-        std::shared_ptr<platform> _platform;
+        zacc::platform _platform;
     };
 }

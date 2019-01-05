@@ -49,11 +49,15 @@ namespace zacc { namespace system {
          */
         constexpr kernel_dispatcher() noexcept
             : _activator(std::make_unique<system::kernel_activator>(ZACC_DYLIBNAME,
-                                                                      std::string(kernel_traits<Kernel>::kernel_name()) + "_create_instance",
-                                                                      std::string(kernel_traits<Kernel>::kernel_name()) + "_delete_instance"))
+                                                                    kernel_name() + "_create_instance",
+                                                                    kernel_name() + "_delete_instance"))
         {
             std::cerr << "loading: " << ZACC_DYLIBNAME << std::endl;
         }
+
+        /// Kernel name
+        static const std::string kernel_name() { return kernel_traits<Kernel>::kernel_name(); }
+
     protected:
         /**
          * Instantiate a kernel if necessary and execute
@@ -67,10 +71,9 @@ namespace zacc { namespace system {
             log_has_kernel<Arch>();
 
             if(_kernels.count(Arch::value) == 0) {
-                //auto name = std::string(kernel_traits<Kernel>::kernel_name()) + "_" + Arch::name();
-                //std::cerr << "creating kernel: " << name << std::endl;
-                _kernels[Arch::value] = _activator->create_instance<Arch, Kernel, system::kernel>(/*name.c_str(),*/ std::forward<Args>(arg)...);
+                _kernels[Arch::value] = _activator->create_instance<Arch, Kernel, system::kernel>(std::forward<Args>(arg)...);
             }
+
             log_has_kernel<Arch>();
             _kernels[Arch::value]->operator()(std::forward<Args>(arg)...);
         }
@@ -87,10 +90,10 @@ namespace zacc { namespace system {
         }
     };
 
-    template<typename KernelImpl>
-    auto make_dispatcher()
+    template<typename KernelImpl, typename... Args>
+    auto make_dispatcher(Args&& ...args)
     {
-        return system::dispatcher<kernel_dispatcher<KernelImpl>>();
+        return system::dispatcher<kernel_dispatcher<KernelImpl>>(std::forward<Args>(args)...);
     };
 
 }}

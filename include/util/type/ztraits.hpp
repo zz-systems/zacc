@@ -27,7 +27,7 @@
 
 #include "util/type/ztype.hpp"
 
-#include "system/capabilities.hpp"
+#include "system/features.hpp"
 
 #include "util/type/type_traits.hpp"
 #include "util/type/type_casts.hpp"

@@ -24,7 +24,7 @@
 
 #include <iostream>
 
-#include "mandelbrot.host.hpp"
+#include "julia.host.hpp"
 
 #include "system/platform_settings.hpp"
 
@@ -35,7 +35,7 @@ int main(int argc, char** argv)
 
     std::cout << platform_settings << std::endl;
 
-    zacc::examples::mandelbrot_host host(platform_settings.platform());
+    zacc::examples::julia_host host(platform_settings.platform());
     host.run();
 
     return 0;

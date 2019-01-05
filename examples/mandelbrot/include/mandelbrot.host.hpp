@@ -27,13 +27,13 @@
 
 #include<chrono>
 
-#include "../interfaces/mandelbrot.hpp"
+#include "interfaces/mandelbrot.hpp"
 
 #include "system/kernel_dispatcher.hpp"
 #include "math/matrix.hpp"
 #include "util/color.hpp"
 
-#include "hosts/host.hpp"
+#include "host.hpp"
 
 namespace zacc { namespace examples {
     class mandelbrot_host : public host<mandelbrot>
@@ -70,28 +70,14 @@ namespace zacc { namespace examples {
 
     protected:
 
-        virtual void configure_kernel() override
+        virtual void configure() override
         {
-            _dispatcher = system::make_dispatcher<mandelbrot>(_platform);
-
             vec2<float> cmin = {-2, -2};
             vec2<float> cmax = { 2, 2 };
 
             size_t max_iterations = 2048;
 
-            _dispatcher.dispatch_some(_dim, cmin, cmax, max_iterations);
-        }
-
-        virtual std::shared_ptr<output_container> run_kernel(input_container) override
-        {
-            auto result = zacc::make_shared<std::vector<int>>(_dim.x() * _dim.y()
-
-
-                    );
-
-            _dispatcher.dispatch_one(*result);
-
-            return result;
+            configure_kernels(_dim, cmin, cmax, max_iterations);
         }
 
         virtual util::color_rgb map_value(typename output_container::value_type value) override

@@ -34,31 +34,36 @@
 #include "math/matrix.hpp"
 #include "util/algorithm.hpp"
 
-#include "interfaces/mandelbrot.vanilla.hpp"
+#include "interfaces/julia.vanilla.hpp"
 
 namespace zacc { namespace examples {
 
     using namespace math;
 
-    KERNEL_IMPL(mandelbrot_vanilla)
+    KERNEL_IMPL(julia_vanilla)
     {
         vec2<int> _dim;
-        vec2<float> _cmin;
-        vec2<float> _cmax;
+        vec2<float> _offset;
+        std::complex<float> _c;
+        float _zoom;
 
         size_t _max_iterations;
 
-        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) override
+        virtual void configure(vec2<int> dim, vec2<float> offset, vec2<float> c, float zoom, size_t max_iterations) override
         {
             _dim = dim;
-            _cmax = cmax;
-            _cmin = cmin;
+            _offset = offset;
+            _c = { c.x(), c.y() };
+
+            _zoom = zoom;
 
             _max_iterations = max_iterations;
         }
 
         virtual void run(std::vector<int> &output) override
         {
+            vec2<float> center = _dim / 2.0;
+
             for(int i = 0; i < output.size(); i++)
             // populate output container
             //zacc::generate<int>(std::begin(output), std::end(output), [this](int i)
@@ -66,16 +71,14 @@ namespace zacc { namespace examples {
                 // compute 2D-position from 1D-index
                 auto pos = reshape<vec2<float>>(i, _dim);
 
-                std::complex<float> c(_cmin.x() + pos.x() / float(_dim.x() - 1) * (_cmax.x() - _cmin.x()),
-                                      _cmin.y() + pos.y() / float(_dim.y() - 1) * (_cmax.y() - _cmin.x()));
-
-                std::complex<float> z = 0;
+                std::complex<float> z(1.5 * (pos.x() - center.x()) / (_zoom * center.x()) + _offset.x(),
+                                      1.0 * (pos.y() - center.y()) / (_zoom * center.y()) + _offset.y());
 
                 int iterations;
 
                 //for (iterations = 0; iterations < _max_iterations && std::abs(z) < 2.0; ++iterations)
                 for (iterations = 0; iterations < _max_iterations && (z.real() * z.real() + z.imag() * z.imag()) < 4.0; ++iterations)
-                    z = z*z + c;
+                    z = z*z + _c;
 
                 //return iterations;
                 output[i] = iterations;
@@ -84,5 +87,5 @@ namespace zacc { namespace examples {
     };
 
     /// implement shared library factory methods
-    REGISTER_KERNEL(mandelbrot_vanilla);
+    REGISTER_KERNEL(julia_vanilla);
 }}

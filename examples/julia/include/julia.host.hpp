@@ -32,75 +32,51 @@
 #include "system/kernel_dispatcher.hpp"
 #include "math/matrix.hpp"
 #include "util/color.hpp"
+#include "util/vector.hpp"
 
 #include "host.hpp"
 
 namespace zacc { namespace examples {
-    class mandelbrot_host : public host<julia>
+
+    class julia_host : public host<julia>
     {
         using input_container     = typename system::kernel_traits<julia>::input_container;
         using output_container    = typename system::kernel_traits<julia>::output_container;
 
     public:
 
-        mandelbrot_host(const platform& platform)
+        julia_host(const platform& platform)
                 : host(platform, {2048, 2048})
         {
             using namespace util;
-            _gradient = {
-                    { -1, color_rgb(0, 0, 0 ) },
-                    { 0, color_rgb(66, 30, 15 ) },
-                    { 1, color_rgb(25, 7, 26 ) },
-                    { 2, color_rgb(9, 1, 47 ) },
-                    { 3, color_rgb(4, 4, 73 ) },
-                    { 4, color_rgb(0, 7, 100 ) },
-                    { 5, color_rgb(12, 44, 138 ) },
-                    { 6, color_rgb(24, 82, 177 ) },
-                    { 7, color_rgb(57, 125, 209 ) },
-                    { 8, color_rgb(134, 181, 229 ) },
-                    { 9, color_rgb(211, 236, 248 ) },
-                    { 10, color_rgb(241, 233, 191 ) },
-                    { 11, color_rgb(248, 201, 95 ) },
-                    { 12, color_rgb(255, 170, 0 ) },
-                    { 13, color_rgb(204, 128, 0 ) },
-                    { 14, color_rgb(153, 87, 0 ) },
-                    { 15, color_rgb(106, 52, 3 ) }
-            };
+            std::vector<std::pair<const float, color_rgb>> colors;
+
+            for(uint8_t i = 0; i < 255; i++)
+            {
+                colors.push_back({i, color_rgb(uint8_t((i >> 5) * 36), uint8_t((i >> 3 & 7) * 36), uint8_t((i & 3) * 85))});
+            }
+
+            _gradient = colors;
         }
 
     protected:
 
-        virtual void configure_kernel() override
+        virtual void configure() override
         {
-            _dispatcher = system::make_dispatcher<julia>(_platform);
-
-            vec2<float> cmin = {-2, -2};
-            vec2<float> cmax = { 2, 2 };
-
+            vec2<float> offset = { 0, 0 };
+            vec2<float> c = { -0.7, 0.27015 };
+            float zoom = 1;
             size_t max_iterations = 2048;
 
-            _dispatcher.dispatch_some(_dim, cmin, cmax, max_iterations);
-        }
-
-        virtual std::shared_ptr<output_container> run_kernel(input_container) override
-        {
-            auto result = zacc::make_shared<std::vector<int>>(_dim.x() * _dim.y()
-
-
-                    );
-
-            _dispatcher.dispatch_one(*result);
-
-            return result;
+            configure_kernels(_dim, offset, c, zoom, max_iterations);
         }
 
         virtual util::color_rgb map_value(typename output_container::value_type value) override
         {
-            return _gradient.getColor(value % 32);
+            return _gradient.getColor(value % 255);
         }
 
     private:
         util::gradient1D _gradient;
     };
-
 }}

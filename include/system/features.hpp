@@ -34,7 +34,7 @@ namespace zacc {
 
     /// @enum capabilities
     /// @brief relevant system capabilities
-    enum class capabilities : uint64_t {
+    enum class features : uint64_t {
         SCALAR      = 0,         ///< simply x87 FPU
         SSE2        = 1 << 0,    ///< SSE 2 support
         SSE3        = 1 << 1,    ///< SSE 3 support
@@ -67,7 +67,7 @@ namespace zacc {
 
     public:
 
-        using flag_t = std::underlying_type_t<capabilities>;
+        using flag_t = std::underlying_type_t<features>;
 
         /**
          * @brief constructs metadata with arch and string representation
@@ -75,8 +75,8 @@ namespace zacc {
          * @param str string representation
          * @param is_set availability flag
          */
-        constexpr feature(const capabilities arch, const char* str, bool is_set = false)
-                : Arch(arch), _c_str(str), _is_set(is_set)
+        constexpr feature(const features arch, const char* str, bool is_set = false)
+                : _mask(arch), _c_str(str), _is_set(is_set)
         {}
 
         /**
@@ -104,25 +104,25 @@ namespace zacc {
          * @brief returns arch enum value
          * @return arch enum value
          */
-        constexpr capabilities value() const { return Arch; }
+        constexpr features value() const { return _mask; }
 
         /**
          * @brief implicit cast to arch enum value
          * @return raw arch enum value
          */
-        constexpr operator capabilities() const { return value(); };
+        constexpr operator features() const { return value(); };
 
         /**
          * @brief returns raw underlying value
          * @return raw underlying value
          */
-        constexpr flag_t raw_value() const { return static_cast<flag_t>(Arch); }
+        constexpr flag_t mask() const { return static_cast<flag_t>(_mask); }
 
         /**
          * @brief implicit cast to raw underlying value
          * @return raw underlying value
          */
-        constexpr operator flag_t() const { return raw_value(); };
+        constexpr operator flag_t() const { return mask(); };
 
         /**
          * @brief implicit cast to arch's string representation
@@ -135,14 +135,14 @@ namespace zacc {
          * @param other other arch
          * @return result of bitwise-or as raw underlying value
          */
-        constexpr flag_t operator |(const feature &other) const { return raw_value() | other.raw_value(); }
+        constexpr flag_t operator |(const feature &other) const { return mask() | other.mask(); }
 
         /**
          * @brief provides bitwise-and functionality
          * @param other other arch
          * @return result of bitwise-and as raw underlying value
          */
-        constexpr flag_t operator &(const feature &other) const { return raw_value() & other.raw_value(); }
+        constexpr flag_t operator &(const feature &other) const { return mask() & other.mask(); }
 
         /**
          * @brief returns true if this arch is available
@@ -167,11 +167,11 @@ namespace zacc {
         }
 
 //        /**
-//         * @brief sets all capabilities to enabled until the given one and returns the raw value
+//         * @brief sets all features to enabled until the given one and returns the raw value
 //         * @param arch highest arch (inclusive)
 //         * @return raw value
 //         */
-//        static constexpr flag_t fill_up_to(const capabilities arch)
+//        static constexpr flag_t fill_up_to(const features arch)
 //        {
 //            auto value = to_underlying(arch);
 //            uint64_t result = 0;
@@ -187,7 +187,7 @@ namespace zacc {
 
 
     private:
-        const capabilities Arch;
+        const features _mask;
         const char* _c_str;
         bool _is_set;
     };
@@ -200,14 +200,14 @@ namespace zacc {
     template<uint64_t arch = 0>
     struct dispatcher {
 
-        using flag_t = std::make_unsigned_t<capabilities>;
+        using flag_t = std::make_unsigned_t<features>;
 
         /**
          * @brief checks if a particular arch is set
          * @param flag arch to check
          * @return true if arch is set
          */
-        static constexpr bool is_set(capabilities flag)
+        static constexpr bool is_set(features flag)
         {
             return 0 != (flags & static_cast<flag_t>(flag));
         }
@@ -219,13 +219,13 @@ namespace zacc {
         static constexpr bool has_floating_types = true;
 
         /// AVX 1 does not provide operations on integer types
-        static constexpr bool has_integer_types = !is_set(capabilities::AVX1) || is_set(capabilities::AVX2);
+        static constexpr bool has_integer_types = !is_set(features::AVX1) || is_set(features::AVX2);
 
         /// fast (lower precision) float enabled?
-        static constexpr bool use_fast_float = is_set(capabilities::FASTFLOAT);
+        static constexpr bool use_fast_float = is_set(features::FASTFLOAT);
     };
 
-    template<typename T, capabilities feature>
+    template<typename T, features feature>
     constexpr bool has_feature_v = dispatcher<T::feature_mask>::is_set(feature);
 
     template<typename T>
@@ -235,20 +235,20 @@ namespace zacc {
     constexpr bool has_floating_types_v = dispatcher<T::feature_mask>::has_floating_types;
 
     template <typename T, typename... TList>
-    static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, feature::flag_t>
+    static constexpr std::enable_if_t<std::is_same<T, features>::value, feature::flag_t>
     make_flag(T && arch, TList &&... list) noexcept {
-        return static_cast<std::underlying_type_t<capabilities>>(arch) | make_flag(std::forward<TList>(list)...);
+        return static_cast<std::underlying_type_t<features>>(arch) | make_flag(std::forward<TList>(list)...);
     }
 
     template <typename T>
-    static constexpr std::enable_if_t<std::is_same<T, capabilities>::value, feature::flag_t>
+    static constexpr std::enable_if_t<std::is_same<T, features>::value, feature::flag_t>
     make_flag(T arch) noexcept {
-        return static_cast<std::underlying_type_t<capabilities>>(arch);
+        return static_cast<std::underlying_type_t<features>>(arch);
     }
 
     struct arch
     {
-        using flag_t        = std::underlying_type_t<capabilities>;
+        using flag_t        = std::underlying_type_t<features>;
 
         flag_t features;
         std::string name;
@@ -286,57 +286,57 @@ namespace zacc {
 
         constexpr bool is_none() const { return features == 0 && name.empty(); }
         
-        struct scalar       : public std::integral_constant<flag_t, make_flag(capabilities::SCALAR)>
+        struct scalar       : public std::integral_constant<flag_t, make_flag(features::SCALAR)>
         {
             static const std::string name() { return "scalar"; }
         };
 
-        struct sse2         : public std::integral_constant<flag_t, make_flag(capabilities::SSE2)>
+        struct sse2         : public std::integral_constant<flag_t, make_flag(features::SSE2)>
         {
             static const std::string name() { return "sse.sse2"; }
         };
 
-        struct sse3         : public std::integral_constant<flag_t, sse2::value | make_flag(capabilities::SSE3, capabilities::SSSE3)>
+        struct sse3         : public std::integral_constant<flag_t, sse2::value | make_flag(features::SSE3, features::SSSE3)>
         {
             static const std::string name() { return "sse.sse3"; }
         };
 
-        struct sse41        : public std::integral_constant<flag_t, sse3::value | make_flag(capabilities::SSE41)>
+        struct sse41        : public std::integral_constant<flag_t, sse3::value | make_flag(features::SSE41)>
         {
             static const std::string name() { return "sse.sse41"; }
         };
 
-        struct sse41_fma3   : public std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA3)>
+        struct sse41_fma3   : public std::integral_constant<flag_t, sse41::value | make_flag(features::FMA3)>
         {
             static const std::string name() { return "sse.sse41.fma3"; }
         };
 
-        struct sse41_fma4   : public std::integral_constant<flag_t, sse41::value | make_flag(capabilities::FMA4)>
+        struct sse41_fma4   : public std::integral_constant<flag_t, sse41::value | make_flag(features::FMA4)>
         {
             static const std::string name() { return "sse.sse41.fma4"; }
         };
 
-        struct avx1         : public std::integral_constant<flag_t, make_flag(capabilities::AVX1)>
+        struct avx1         : public std::integral_constant<flag_t, make_flag(features::AVX1)>
         {
             static const std::string name() { return "avx.avx1"; }
         };
 
-        struct avx1_fma3     : public std::integral_constant<flag_t, make_flag(capabilities::FMA3, capabilities::AVX1)>
+        struct avx1_fma3     : public std::integral_constant<flag_t, make_flag(features::FMA3, features::AVX1)>
         {
             static const std::string name() { return "avx.avx1.fma3"; }
         };
 
-        struct avx2         : public std::integral_constant<flag_t, avx1_fma3::value | make_flag(capabilities::AVX2)>
+        struct avx2         : public std::integral_constant<flag_t, avx1_fma3::value | make_flag(features::AVX2)>
         {
             static const std::string name() { return "avx.avx2"; }
         };
 
-        struct avx512       : public std::integral_constant<flag_t, make_flag(capabilities::AVX512)>
+        struct avx512       : public std::integral_constant<flag_t, make_flag(features::AVX512)>
         {
             static const std::string name() { return "avx.avx512"; }
         };
 
-        struct opencl       : public std::integral_constant<flag_t, make_flag(capabilities::OPENCL)>
+        struct opencl       : public std::integral_constant<flag_t, make_flag(features::OPENCL)>
         {
             static const std::string name() { return "gpgpu.opencl"; }
         };

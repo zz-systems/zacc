@@ -35,10 +35,10 @@
 #include "math/matrix.hpp"
 #include "util/algorithm.hpp"
 
-#include "interfaces/mandelbrot.zacc.hpp"
+#include "interfaces/mandelbrot.hpp"
 
 namespace zacc { namespace examples {
-<
+
     using namespace math;
 
     KERNEL_IMPL(mandelbrot)

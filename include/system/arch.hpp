@@ -26,7 +26,7 @@
 #pragma once
 
 #include "system/platform.hpp"
-#include "system/capabilities.hpp"
+#include "system/features.hpp"
 #include "backend/all.hpp"
 
 namespace zacc {

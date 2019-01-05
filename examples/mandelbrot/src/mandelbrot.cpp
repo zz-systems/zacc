@@ -35,6 +35,9 @@ int main(int argc, char** argv)
 
     std::cout << platform_settings << std::endl;
 
+    std::cout << "Your system supports: " << std::endl;
+    std::cout << zacc::platform() << std::endl;
+
     zacc::examples::mandelbrot_host host(platform_settings.platform());
     host.run();
 

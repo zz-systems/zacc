@@ -27,7 +27,7 @@
 
 #include "util/algorithm.hpp"
 #include "platform.hpp"
-#include "system/capabilities.hpp"
+#include "system/platform.hpp"
 #include "system/dlloader.hpp"
 
 namespace zacc { namespace system {
@@ -39,25 +39,31 @@ namespace zacc { namespace system {
      * @tparam _Impl
      */
     template<typename _Impl>
-    struct dispatcher : public _Impl
-    {
-        FORWARD2(dispatcher, _Impl);
+    struct dispatcher : public _Impl {
+        //FORWARD2(dispatcher, _Impl);
+
+        dispatcher()
+                : _Impl() {}
+
+        dispatcher(platform platform)
+                : _Impl(), _platform(std::move(platform))
+        {
+        }
+
         /**
          * @brief execute all _valid_ code paths
          */
         template<typename ...Args>
-        void dispatch_some(Args&&... args)
-        {
-            dispatch(false, std::forward<Args>(args)...);
+        arch dispatch_some(Args &&... args) {
+            return dispatch(false, std::forward<Args>(args)...);
         }
 
         /**
          * @brief execute one _valid_ code path (highest featureset)
          */
         template<typename ...Args>
-        void dispatch_one(Args&&... args)
-        {
-            dispatch(true, std::forward<Args>(args)...);
+        arch dispatch_one(Args &&... args) {
+            return dispatch(true, std::forward<Args>(args)...);
         }
 
         /**
@@ -65,36 +71,58 @@ namespace zacc { namespace system {
          * @param select_one if ture, only one path will be executed
          */
         template<typename ...Args>
-        void operator()(bool select_one, Args&&... args)
-        {
-            dispatch(select_one, std::forward<Args>(args)...);
+        arch operator()(bool select_one, Args &&... args) {
+            return dispatch(select_one, std::forward<Args>(args)...);
         }
 
         /**
          * @brief execute all or one _valid_ code paths (highest featureset)
          * @param select_one if ture, only one path will be executed
          */
-        template<typename ...Args>
-        void dispatch(bool select_one, Args&&... args)
+        template<typename... Args>
+        arch dispatch(bool select_one, Args&& ...args) {
+            arch selected_arch;
+
+            auto can_select = [select_one, &selected_arch](){ return !select_one || selected_arch.is_none(); };
+
+            selected_arch = (can_select() ? dispatch_opencl(select_one, std::forward<Args>(args)...) : selected_arch);
+            selected_arch = (can_select() ? dispatch_avx(select_one, std::forward<Args>(args)...) : selected_arch);
+            selected_arch = (can_select() ? dispatch_sse(select_one, std::forward<Args>(args)...) : selected_arch);
+            selected_arch = (can_select() ? dispatch_scalar(select_one, std::forward<Args>(args)...) : selected_arch);
+
+            return selected_arch;
+        }
+
+        template<typename... Args>
+        arch dispatch_opencl(bool select_one, Args &&...args)
         {
-            auto p = &platform::global();
+            arch selected_arch;
 
 #if defined(ZACC_OPENCL)
-            if(p->is_set(capabilities::OPENCL))
+            if(_platform.is_set(features::OPENCL))
             {
-                // not implemented yet
-                //_Impl::dispatch_impl<opencl::types<architectures::opencl>>(std::forward<Args>(args)...);
+                selected_arch = dispatch_branch<arch::opencl>(std::forward<Args>(args)...);
             }
 #endif
+
+            return selected_arch;
+        }
+
+        template<typename... Args>
+        arch dispatch_avx(bool select_one, Args &&...args)
+        {
+            arch selected_arch;
 
 #if defined(ZACC_AVX512)
 
             _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
-            if(p->is_set(capabilities::AVX512))
+            if(p->is_set(features::AVX512))
             {
-                // not implemented yet
-                //_Impl::dispatch_impl<avx512::types<architectures::avx512>>(std::forward<Args>(args)...);
+                selected_arch = dispatch_branch<arch::avx512>(std::forward<Args>(args)...);
+
+                if (select_one)
+                    return selected_arch;
             }
 #endif
 
@@ -102,14 +130,11 @@ namespace zacc { namespace system {
 
             _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
-            if(p->is_set(capabilities::AVX2))
-            {
-                log_branch<architectures::avx2>();
-                _Impl::template dispatch_impl<architectures::avx2>(std::forward<Args>(args)...);
-                log_branch_end<architectures::avx2>();
+            if (_platform.is_set(features::AVX2)) {
+                selected_arch = dispatch_branch<arch::avx2>(std::forward<Args>(args)...);
 
-                if(select_one)
-                    return;
+                if (select_one)
+                    return selected_arch;
             }
 #endif
 
@@ -117,89 +142,90 @@ namespace zacc { namespace system {
 
             _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
-            if(p->is_set(capabilities::AVX1))
+            if(_platform.is_set(features::AVX1))
             {
-                if(p->is_set(capabilities::FMA3))
+                if(_platform.is_set(features::FMA3))
                 {
-                    log_branch<architectures::avx1_fma3>();
-                    _Impl::template dispatch_impl<architectures::avx1_fma3>(std::forward<Args>(args)...);
-                    log_branch_end<architectures::avx1_fma3>();
+                    selected_arch = dispatch_branch<arch::avx1_fma3>(std::forward<Args>(args)...);
 
-                    if(select_one)
-                        return;
+                    if (select_one)
+                        return selected_arch;
                 }
 
-                log_branch<architectures::avx1>();
-                _Impl::template dispatch_impl<architectures::avx1>(std::forward<Args>(args)...);
-                log_branch_end<architectures::avx1>();
-                if(select_one)
-                    return;
+                selected_arch = dispatch_branch<arch::avx1>(std::forward<Args>(args)...);
             }
 #endif
+
+            return selected_arch;
+        }
+
+        template<typename... Args>
+        arch dispatch_sse(bool select_one, Args &&...args)
+        {
+            arch selected_arch;
 
 #if defined(ZACC_SSE)
 
             _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
-            if(p->is_set(capabilities::SSE41))
-            {
-                if(p->is_set(capabilities::FMA4))
-                {
-                    log_branch<architectures::sse41_fma4>();
-                    _Impl::template dispatch_impl<architectures::sse41_fma4>(std::forward<Args>(args)...);
-                    log_branch_end<architectures::sse41_fma4>();
+            if (_platform.is_set(features::SSE41)) {
+                if (_platform.is_set(features::FMA4)) {
+                    selected_arch = dispatch_branch<arch::sse41_fma4>(std::forward<Args>(args)...);
 
-                    if(select_one)
-                        return;
+                    if (select_one)
+                        return selected_arch;
                 }
 
-                if(p->is_set(capabilities::FMA3))
-                {
-                    log_branch<architectures::sse41_fma3>();
-                    _Impl::template dispatch_impl<architectures::sse41_fma3>(std::forward<Args>(args)...);
-                    log_branch_end<architectures::sse41_fma3>();
+                if (_platform.is_set(features::FMA3)) {
+                    selected_arch = dispatch_branch<arch::sse41_fma3>(std::forward<Args>(args)...);
 
-                    if(select_one)
-                        return;
+                    if (select_one)
+                        return selected_arch;;
                 }
 
                 // no fma
-                log_branch<architectures::sse41>();
-                _Impl::template dispatch_impl<architectures::sse41>(std::forward<Args>(args)...);
-                log_branch_end<architectures::sse41>();
+                selected_arch = dispatch_branch<arch::sse41>(std::forward<Args>(args)...);
 
-                if(select_one)
-                    return;
+                if (select_one)
+                    return selected_arch;
             }
 
-            if(p->is_set(capabilities::SSSE3) && p->is_set(capabilities::SSE3))
-            {
-                log_branch<architectures::sse3>();
-                _Impl::template dispatch_impl<architectures::sse3>(std::forward<Args>(args)...);
-                log_branch_end<architectures::sse3>();
+            if (_platform.is_set(features::SSSE3) && _platform.is_set(features::SSE3)) {
+                selected_arch = dispatch_branch<arch::sse3>(std::forward<Args>(args)...);
 
-                if(select_one)
-                    return;
+                if (select_one)
+                    return selected_arch;
             }
 
-            if(p->is_set(capabilities::SSE2))
-            {
-                log_branch<architectures::sse2>();
-                _Impl::template dispatch_impl<architectures::sse2>(std::forward<Args>(args)...);
-                log_branch_end<architectures::sse2>();
-
-                if(select_one)
-                    return;
+            if (_platform.is_set(features::SSE2)) {
+                selected_arch = dispatch_branch<arch::sse2>(std::forward<Args>(args)...);
             }
 #endif
+
+            return selected_arch;
+        }
+
+        template<typename... Args>
+        arch dispatch_scalar(bool select_one, Args &&...args)
+        {
+            arch selected_arch;
 
 #if defined(ZACC_SCALAR)
-
-            // scalar
-            log_branch<architectures::scalar>();
-            _Impl::template dispatch_impl<architectures::scalar>(std::forward<Args>(args)...);
-            log_branch_end<architectures::scalar>();
+            selected_arch = dispatch_branch<arch::scalar>(std::forward<Args>(args)...);
 #endif
+
+            return selected_arch;
+        }
+
+
+        template<typename Arch, typename... Args>
+        arch dispatch_branch(Args&& ...args)
+        {
+            log_branch<Arch>();
+            _Impl::template dispatch_impl<Arch>(std::forward<Args>(args)...);
+            log_branch_end<Arch>();
+
+            return Arch {};
         }
         /**
          * @brief displays the selected arch with extended information
@@ -207,7 +233,7 @@ namespace zacc { namespace system {
         template<typename arch> void log_branch() const
         {
             std::cout << "Dispatching: " << arch::name()
-                      << " [" << join(platform::global().make_capabilities(arch::value), ", ") << "]"
+                      << " [" << join(_platform.make_capabilities(arch::value), ", ") << "]"
                       << std::endl;
         }
 
@@ -217,8 +243,25 @@ namespace zacc { namespace system {
         template<typename arch> void log_branch_end() const
         {
             std::cout << "Dispatched: " << arch::name()
-                      << " [" << join(platform::global().make_capabilities(arch::value), ", ") << "]"
+                      << " [" << join(_platform.make_capabilities(arch::value), ", ") << "]"
                       << std::endl;
         }
+
+        inline const platform& platform() const
+        {
+            return this->_platform;
+        }
+
+        inline struct platform& platform()
+        {
+            return this->_platform;
+        }
+
+
+
+    private:
+
+
+        struct platform _platform;
     };
 }}

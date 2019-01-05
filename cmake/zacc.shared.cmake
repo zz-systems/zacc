@@ -285,13 +285,13 @@ function(zacc_add_dispatched_executable target_name)
     string(REPLACE "." "_" macro_target_name "${macro_target_name}")
     string(TOUPPER ${target_name} macro_target_name)
 
-    generate_export_header(${target_name}
-            BASE_NAME ${target_name}
-            EXPORT_MACRO_NAME ${macro_target_name}_EXPORT
-            EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/${target_name}_export.hpp
-            STATIC_DEFINE ${macro_target_name}_BUILT_AS_STATIC
-            )
-
+#    generate_export_header(${target_name}
+#            BASE_NAME ${target_name}
+#            EXPORT_MACRO_NAME ${macro_target_name}_EXPORT
+#            EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/${target_name}_export.hpp
+#            STATIC_DEFINE ${macro_target_name}_BUILT_AS_STATIC
+#            )
+#
     target_compile_definitions(${target_name} PUBLIC ZACC_FAST_FLOAT=false ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}.impl>")
 
     foreach(branch ${target_branches})

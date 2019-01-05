@@ -37,7 +37,7 @@ namespace zacc { namespace examples {
 
     struct mandelbrot_vanilla : system::kernel<mandelbrot_vanilla>
     {
-        static constexpr auto name() { return "mandelbrot.zacc.vanilla"; }
+        static constexpr auto name() { return "mandelbrot.vanilla"; }
 
         virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
         virtual void run(std::vector<int> &output) = 0;

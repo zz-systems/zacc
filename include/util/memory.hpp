@@ -198,4 +198,19 @@ namespace zacc {
             return std::make_shared<T>(std::forward<Args>(args)...);
         }
     }
+
+// TODO
+//    template<typename T, std::size_t align = std::alignment_of<T>::value, typename... Args>
+//    std::shared_ptr<T> make_unique(Args &&... args) {
+//
+//        const std::size_t default_alignment = 16;
+//
+//        if (align > default_alignment) {
+//            typedef aligned_allocator<T, align> alloc_type;
+//            return std::allocate_unique<T, alloc_type>(alloc_type(), std::forward<Args>(args)...);
+//        }
+//        else {
+//            return std::make_unique<T>(std::forward<Args>(args)...);
+//        }
+//    }
 }

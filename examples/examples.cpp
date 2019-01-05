@@ -24,12 +24,19 @@
 
 #include <iostream>
 
+#include "system/platform_settings.hpp"
+
 #include "hosts/julia.hpp"
 #include "hosts/mandelbrot.hpp"
 
-int main(int, char**)
+int main(int argc, char** argv)
 {
-    zacc::examples::mandelbrot_host host;
+    zacc::option_parser options(argc, argv);
+    zacc::platform_settings platform_settings(options);
+
+    std::cout << platform_settings << std::endl;
+
+    zacc::examples::mandelbrot_host host(platform_settings.platform());
     host.run();
 
     return 0;
