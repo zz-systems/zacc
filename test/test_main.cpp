@@ -28,12 +28,12 @@
 #include "util/testing/test_entry_point.hpp"
 
 #include "system/managed_library.hpp"
-#include "system/platform.hpp"
+#include "system/sysinfo.hpp"
 
 int main(int argc, char **argv) {
     std::cout << "Running main() from test_main.cpp" << std::endl;
 
-    auto c = zacc::platform::global().match_capabilities(zacc::architectures::ZACC_ARCH::value);
+    auto c = zacc::sysinfo().match(zacc::feature(zacc::arch::ZACC_ARCH::value));
     std::string str;
 
     if(c.size() != 0) {

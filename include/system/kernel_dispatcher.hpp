@@ -91,7 +91,7 @@ namespace zacc { namespace system {
         {
             arch a(Arch{});
 
-            std::cout << "[KERNEL DISPATCHER][DISPATCH][" << a.name << "]"
+            std::clog << "[KERNEL DISPATCHER][DISPATCH][" << a.name << "]"
                       << " [" << join(a.mask.active(), ", ") << "] "
                       << kernel_name()
                       << std::endl;

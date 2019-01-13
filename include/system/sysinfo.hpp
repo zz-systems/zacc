@@ -38,21 +38,15 @@
 
 namespace zacc {
 
-    struct sysinfo
+    struct sysinfo : feature
     {
-        constexpr operator uint64_t() { return _mask; }
+        using feature::feature;
 
-        constexpr sysinfo() noexcept
-            : _mask {0}
-        {}
-
-        constexpr explicit sysinfo(uint64_t mask) noexcept
-                : _mask(mask)
-        {}
-
-        sysinfo(cpuid cpuid) noexcept
-            : sysinfo()
+        sysinfo() noexcept
+            : feature()
         {
+            cpuid cpuid;
+
             // Generic info and features
             auto cpuInfo = cpuid.reg(1);
 
@@ -80,124 +74,5 @@ namespace zacc {
 
             set(feature::fma4(), cpuInfo[cpuid::ECX][16]);
         }
-
-        template <typename... Args>
-        constexpr explicit sysinfo(feature f, Args&& ...args ) noexcept
-                : _mask{or_reduce(f, std::forward<Args>(args)...)}
-        {}
-
-        constexpr sysinfo(const sysinfo&) = default;
-        constexpr sysinfo(sysinfo&& other) = default;
-        sysinfo& operator=(const sysinfo& other) = default;
-
-        constexpr sysinfo& set() noexcept
-        {
-            _mask = ~0ul;
-
-            return *this;
-        }
-
-        constexpr sysinfo& set( feature feature, bool value = true ) noexcept
-        {
-            if(value)
-                _mask |= feature.mask();
-            else
-                _mask &= ~feature.mask();
-
-            return *this;
-        }
-
-        sysinfo& set( std::initializer_list<feature> features, bool value = true ) noexcept
-        {
-            std::for_each(std::begin(features), std::end(features), [this, value](auto feature) {
-                this->set(feature, value);
-            });
-
-            return *this;
-        }
-
-        constexpr sysinfo& reset() noexcept
-        {
-            _mask = 0;
-
-            return *this;
-        }
-
-        constexpr sysinfo& reset( feature feature ) noexcept
-        {
-            set(feature, false);
-
-            return *this;
-        }
-
-        sysinfo& reset( std::initializer_list<feature> features ) noexcept
-        {
-            std::for_each(std::begin(features), std::end(features), [this](auto feature) {
-                this->reset(feature);
-            });
-
-            return *this;
-        }
-
-        constexpr bool test( feature feature ) const
-        {
-            return (_mask & feature.mask()) != 0;
-        }
-
-        bool test( std::initializer_list<feature> features ) const
-        {
-            return std::accumulate(std::begin(features), std::end(features), false, [this](bool acc, auto feature) {
-                return acc && this->test(feature);
-            });
-        }
-
-        constexpr uint64_t mask() const
-        {
-            return _mask;
-        }
-
-        auto active() const
-        {
-            std::vector<feature> result;
-            auto features = available();
-
-            transform_if(std::begin(features), std::end(features),
-                         std::back_inserter(result),
-                         [](auto i) { return i; },
-                         [this](auto i) { return this->test(i); });
-
-            return result;
-        }
-
-        auto match(feature required) const
-        {
-            feature diff { (this->_mask ^ required.mask()) & required.mask() };
-
-            return diff.active();
-        }
-
-        // TODO: size
-        constexpr std::array<feature, 13> available() const
-        {
-            return {{
-                            feature::scalar(), feature::sse2(), feature::sse3(),
-                            feature::ssse3(), feature::sse41(), feature::sse42(),
-                            feature::fma3(), feature::fma4(), feature::avx1(),
-                            feature::avx2(), feature::avx512(), feature::opencl(), feature::fpga()
-                    }};
-        }
-
-        friend std::ostream &operator<<(std::ostream &os, const sysinfo& data) {
-            using namespace std;
-
-            for(auto feature : data.available())
-                os << left << setw(15) << zacc::toupper(feature.to_string()) << boolcolor(data.test(feature)) << endl;
-
-            os << endl;
-
-            return os;
-        }
-    private:
-        uint64_t _mask;
     };
 }

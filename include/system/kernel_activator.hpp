@@ -131,7 +131,7 @@ namespace zacc { namespace system {
                 path = filename + "." + a.name + "." + extension;
             }
 
-            std::cerr << "[KERNEL ACTIVATOR][SELECT IMPL] " << a.name << std::endl;
+            std::clog << "[KERNEL ACTIVATOR][SELECT IMPL] " << a.name << std::endl;
 
             if(this->_loaded_libraries.count(a.mask) == 0)
                 this->_loaded_libraries[a.mask] = std::make_shared<managed_library>(path);

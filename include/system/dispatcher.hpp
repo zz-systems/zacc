@@ -238,7 +238,7 @@ namespace zacc { namespace system {
         {
             arch a(Arch{});
 
-            std::cout << "[ARCH DISPATCHER][DISPATCH][" << a.name << "]"
+            std::clog << "[ARCH DISPATCHER][DISPATCH][" << a.name << "]"
                       << " [" << join(a.mask.active(), ", ") << "]"
                       << std::endl;
         }

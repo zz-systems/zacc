@@ -156,7 +156,7 @@ namespace zacc { namespace examples {
         {
             using namespace std::chrono;
 
-            std::cout << "[HOST][EXECUTE] " << Disp::kernel_name() << std::endl;
+            std::clog << "[HOST][EXECUTE] " << Disp::kernel_name() << std::endl;
 
             output_container data(_dim.x() * _dim.y());
 

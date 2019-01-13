@@ -60,8 +60,6 @@ namespace zacc { namespace examples {
 
         virtual void run(std::vector<int> &output) override
         {
-            std::cout << "EXEC mandelbrot" << std::endl;
-
             // populate output container
             zacc::generate<zint>(std::begin(output), std::end(output), [this](auto i)
             {
