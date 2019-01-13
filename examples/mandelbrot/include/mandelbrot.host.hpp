@@ -28,6 +28,7 @@
 #include<chrono>
 
 #include "interfaces/mandelbrot.hpp"
+#include "interfaces/mandelbrot.vanilla.hpp"
 
 #include "system/kernel_dispatcher.hpp"
 #include "math/matrix.hpp"
@@ -36,7 +37,7 @@
 #include "host.hpp"
 
 namespace zacc { namespace examples {
-    class mandelbrot_host : public host<mandelbrot>
+    class mandelbrot_host : public host<mandelbrot, mandelbrot_vanilla>
     {
         using input_container     = typename system::kernel_traits<mandelbrot>::input_container;
         using output_container    = typename system::kernel_traits<mandelbrot>::output_container;

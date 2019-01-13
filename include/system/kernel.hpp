@@ -30,6 +30,9 @@
 
 namespace zacc { namespace system {
 
+    template<typename... Ts> struct make_void { typedef void type;};
+    template<typename... Ts> using void_t = typename make_void<Ts...>::type;
+
     /**
     * Kernel traits - extract information from kernel
     * @tparam KernelInterface
@@ -47,9 +50,30 @@ namespace zacc { namespace system {
         /// Kernel name
         static constexpr auto kernel_name() { return KernelInterface::name(); }
 
-        //using compatible = KernelInterface::compatible;
 
-        //using compatible = KernelInterface::compatible;
+        template<typename T, typename = void>
+        struct kt
+        {
+            static constexpr feature compatible()
+            {
+                return feature().set();
+            }
+        };
+
+
+        template<typename T>
+        struct kt<T, void_t< decltype( T::compatible )> >
+        {
+            static constexpr feature compatible()
+            {
+                return T::compatible();
+            }
+        };
+
+        static constexpr feature compatible()
+        {
+            return kt<KernelInterface>::compatible();
+        }
     };
 
     /**

@@ -30,7 +30,7 @@
 #include <chrono>
 #include <thread>
 
-#include "system/features.hpp"
+//#include "system/features.hpp"
 #include "system/dlloader.hpp"
 
 namespace zacc { namespace system {
@@ -64,7 +64,7 @@ namespace zacc { namespace system {
                 throw std::logic_error("can't load library named \"" + library_path + "\": " + error);
             }
 
-            std::cerr << "loaded library: " << _library_name << std::endl;
+            std::cerr << "[MANAGED LIBRARY][LOAD] " << _library_name << std::endl;
         }
 
         /**

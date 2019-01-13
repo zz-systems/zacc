@@ -47,11 +47,11 @@ namespace zacc {
          */
         platform_settings(const option_parser& parser)
         {
-            for(auto feature : _platform.all_capabilities())
+            for(auto feature : _platform.features().available())
             {
-                if(parser.has_option("-mno-" + tolower(feature.str())))
+                if(parser.has_option("-mno-" + tolower(feature.to_string())))
                 {
-                    _platform.disable(feature);
+                    _platform.features().reset(feature);
                 }
             }
         }
@@ -62,17 +62,8 @@ namespace zacc {
          * @param argv argument array
          */
         platform_settings(const int argc, char** argv)
-        {
-            option_parser parser(argc, argv);
-
-            for(auto feature : _platform.all_capabilities())
-            {
-                if(parser.has_option("-mno-" + tolower(feature.str())))
-                {
-                    _platform.disable(feature);
-                }
-            }
-        }
+            : platform_settings(option_parser(argc, argv))
+        {}
 
         /**
          * @brief prints current value to target stream
@@ -82,9 +73,9 @@ namespace zacc {
          */
         inline friend std::ostream &operator<<(std::ostream &os, const platform_settings& data)
         {
-            for(auto feature : data._platform.all_capabilities())
+            for(auto feature : data._platform.features().available())
             {
-                os << " -mno-" << std::left << std::setw(15) <<  tolower(feature.str()) << " Disable " << toupper(feature.str()) << " feature" << std::endl;
+                os << " -mno-" << std::left << std::setw(15) <<  tolower(feature.to_string()) << " Disable " << toupper(feature.to_string()) << " feature" << std::endl;
             }
 
             return os;

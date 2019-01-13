@@ -51,9 +51,7 @@ namespace zacc { namespace system {
             : _activator(std::make_unique<system::kernel_activator>(ZACC_DYLIBNAME,
                                                                     kernel_name() + "_create_instance",
                                                                     kernel_name() + "_delete_instance"))
-        {
-            std::cerr << "loading: " << ZACC_DYLIBNAME << std::endl;
-        }
+        {}
 
         /// Kernel name
         static const std::string kernel_name() { return kernel_traits<Kernel>::kernel_name(); }
@@ -68,24 +66,34 @@ namespace zacc { namespace system {
         template<typename Arch, typename... Args>
         void dispatch_impl(Args&&... arg)
         {
-            log_has_kernel<Arch>();
+            log_branch<Arch>();
 
             if(_kernels.count(Arch::value) == 0) {
                 _kernels[Arch::value] = _activator->create_instance<Arch, Kernel, system::kernel>(std::forward<Args>(arg)...);
             }
 
-            log_has_kernel<Arch>();
             _kernels[Arch::value]->operator()(std::forward<Args>(arg)...);
+        }
+
+        bool can_execute(feature f)
+        {
+            return f.test(kernel_traits<Kernel>::compatible());
         }
 
     private:
         aligned_map<int, std::shared_ptr<Kernel>> _kernels;
         std::unique_ptr<system::kernel_activator> _activator;
 
-        template<typename Arch> void log_has_kernel()
+        /**
+         * @brief displays the selected arch with extended information
+         */
+        template<typename Arch> void log_branch() const
         {
-            std::cout << "Has kernel for arch " << Arch::name() << ": " << std::boolalpha
-                      << (_kernels.count(Arch::value) != 0)
+            arch a(Arch{});
+
+            std::cout << "[KERNEL DISPATCHER][DISPATCH][" << a.name << "]"
+                      << " [" << join(a.mask.active(), ", ") << "] "
+                      << kernel_name()
                       << std::endl;
         }
     };

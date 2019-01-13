@@ -78,9 +78,9 @@ namespace zacc {
         if(first == last)
             return "";
 
-        return std::accumulate(first + 1, last, first->str(),
+        return std::accumulate(first + 1, last, first->to_string(),
                         [separator](std::string &acc, auto &part) {
-                            return acc + separator + part.str();
+                            return acc + separator + part.to_string();
             });
     }
 
@@ -122,7 +122,7 @@ namespace zacc {
      * @param source
      * @return Transformed string
      */
-    inline std::string toupper(const std::string& source) {
+    inline std::string  toupper(const std::string& source) {
         return transform(source, [](auto c){ return std::toupper(c); });
     }
 

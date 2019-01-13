@@ -116,10 +116,10 @@ class FunctionSignatureRenderer(Renderable):
         return_type = node.return_type or ("Boolean" if module.type == ModuleTypes.BOOLEAN else "Composed") #f"{make_typename(module, ast)}<Interface::feature_mask>"
 
         # dispatching
-        dispatcher = "{0}has_feature_v<Interface, features::{1}>"
+        dispatcher = "{0}has_feature_v<Interface>(feature::{1}())"
 
         def map_requirement(requirement):
-            requirement = cleanup(requirement)[0]
+            requirement = cleanup(requirement)[0].lower()
             if requirement.startswith("not"):
                 requirement = requirement.replace("not", "", 1).strip()
                 return dispatcher.format("!", requirement)

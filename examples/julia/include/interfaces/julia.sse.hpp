@@ -37,7 +37,7 @@ namespace zacc { namespace examples {
 
     struct julia_sse : system::kernel<julia_sse>
     {
-        static constexpr auto name() { return "julia.sse"; }
+        static constexpr auto name() { return "julia_sse"; }
 
         virtual void configure(vec2<int> dim, vec2<float> offset, vec2<float> c, float zoom, size_t max_iterations) = 0;
         virtual void run(std::vector<int> &output) = 0;

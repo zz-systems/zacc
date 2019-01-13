@@ -36,7 +36,7 @@ namespace zacc {
      */
     struct dispatched_arch
     {
-        using arch = architectures::ZACC_ARCH;
+        using arch = arch::ZACC_ARCH;
 
         /// fast float enabled? used for faster and less precise computations
         static constexpr bool use_fast_float = ZACC_FAST_FLOAT;

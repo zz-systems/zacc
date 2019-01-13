@@ -70,7 +70,7 @@ namespace zacc { namespace examples {
             friend std::ostream& operator<<(std::ostream& os, const stat& data)
             {
                 using namespace std;
-                os  << setw(15) << data.title << setw(15) << data.selected_arch.name << setw(10) << data.duration.count()
+                os  << setw(30) << data.title << setw(15) << data.selected_arch.name << setw(10) << data.duration.count()
                     << setw(15) << data.min_element << setw(15) << data.max_element;
 
                 return os;
@@ -87,13 +87,11 @@ namespace zacc { namespace examples {
         {
             this->configure();
 
-            _main_dispatcher.platform().set(0);
+            _main_dispatcher.features().reset();
             auto scalar  = this->execute(_main_dispatcher);
 
-            _main_dispatcher.platform() = _platform;
+            _main_dispatcher.features() = _platform.features();
             auto simd = this->execute(_main_dispatcher);
-
-
 
             std::vector<result> results;
             std::vector<stat> stats;
@@ -115,69 +113,22 @@ namespace zacc { namespace examples {
         {
             using namespace std;
 
-            cout << endl << string(68, '-') << endl;
-            cout << setw(15) << "" << setw(15) << "_mask" << setw(10) << "Time (ms)" << setw(15) << "Min" << setw(15) << "Max" << endl;
-            cout << string(68, '-') << endl;
+            cout << endl << string(83, '-') << endl;
+            cout << setw(30) << "" << setw(15) << "_mask" << setw(10) << "Time (ms)" << setw(15) << "Min" << setw(15) << "Max" << endl;
+            cout << string(83, '-') << endl;
             cout << scalar << endl;
             cout << simd << endl;
-            cout << string(68, '-') << endl;
-            cout << setw(15) << "Speedup " << setw(10) << (double)scalar.duration.count() / simd.duration.count() << endl << endl;
-            cout << string(68, '-') << endl;
+            cout << string(83, '-') << endl;
+            cout << setw(30) << "Speedup " << setw(10) << (double)scalar.duration.count() / simd.duration.count() << endl;
+            cout << string(83, '-') << endl;
 
             for(auto r : refs)
             {
-                cout << simd << endl;
+                cout << r << endl;
             }
 
-            cout << string(68, '-') << endl;
+            cout << string(83, '-') << endl;
         }
-
-//        virtual void display(kernel_result_t reference, kernel_result_t vectorized)
-//        {
-//            using namespace math;
-//            using namespace std;
-//
-//            auto reference_result   = *get<0>(reference);
-//            auto vectorized_result  = *get<0>(vectorized);
-//
-//            auto reference_duration  = get<1>(reference).count();
-//            auto vectorized_duration = get<1>(vectorized).count();
-//
-//
-//            cout << endl << string(53, '-') << endl;
-//            cout << setw(15) << "" << setw(10) << "Time (ms)"  << setw(15) << "Min" << setw(15) << "Max" << endl;
-//            cout << string(53, '-') << endl;
-//            cout << setw(15) << "Vectorized" << setw(10) << vectorized_duration << setw(15) << *min_element(begin(vectorized_result), end(vectorized_result)) << setw(15) << *max_element(begin(vectorized_result), end(vectorized_result)) << endl;
-//            cout << setw(15) << "Reference" << setw(10) << reference_duration << setw(15) << *min_element(begin(reference_result), end(reference_result)) << setw(15) << *max_element(begin(reference_result), end(reference_result)) << endl;
-//            cout << string(53, '-') << endl;
-//            cout << setw(15) << "Speedup " << setw(10) << (double)reference_duration / vectorized_duration << endl << endl;
-//
-//            cimg_library::CImg<uint8_t>
-//                    img1(_dim.x(), _dim.y(), 1, 3),
-//                    img2(_dim.x(), _dim.y(), 1, 3);
-//
-//            for (int i = 0; i < _dim.x() * _dim.y(); i++)
-//            {
-//                int x, y;
-//
-//                std::tie(x, y) = math::reshape<std::tuple<int, int>>(i, _dim);
-//
-//                auto color1 = this->map_value(vectorized_result[i]);
-//
-//                img1(x, y, 0) = color1.r;
-//                img1(x, y, 1) = color1.g;
-//                img1(x, y, 2) = color1.b;
-//
-//                auto color2 = this->map_value(reference_result[i]);
-//
-//                img2(x, y, 0) = color2.r;
-//                img2(x, y, 1) = color2.g;
-//                img2(x, y, 2) = color2.b;
-//            }
-//
-//            img1.display("simd", true);
-//            img2.display("sisd", true);
-//        }
 
         virtual void display_image(const std::string& title, const result& result)
         {
@@ -205,6 +156,8 @@ namespace zacc { namespace examples {
         {
             using namespace std::chrono;
 
+            std::cout << "[HOST][EXECUTE] " << Disp::kernel_name() << std::endl;
+
             output_container data(_dim.x() * _dim.y());
 
             auto start = high_resolution_clock::now();
@@ -224,10 +177,11 @@ namespace zacc { namespace examples {
         template<typename... Args>
         constexpr void configure_kernels(Args&& ...args)
         {
-            auto dispatchers = std::tuple_cat(std::tie(_main_dispatcher), _reference_dispatchers);
+            _main_dispatcher.features() = _platform.features();
+            _main_dispatcher.dispatch_some(std::forward<Args>(args)...);
 
-            zacc::for_each(dispatchers, [&](auto& k){
-                k.platform() = _platform;
+            zacc::for_each(_reference_dispatchers, [&](auto& k){
+                k.features() = _platform.features();
                 k.dispatch_some(std::forward<Args>(args)...);
             });
         }

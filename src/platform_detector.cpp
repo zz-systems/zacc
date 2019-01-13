@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
 
     if(parser.has_option("CMAKE_OUTPUT"))
     {
-        auto c = platform.enabled_capabilities();
+        auto c = platform.features().active();
 
         std::cout << join(std::begin(c), std::end(c), ";");
     }

@@ -1,3 +1,5 @@
+#include <utility>
+
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
 //
@@ -29,7 +31,7 @@
 #include <map>
 #include <cassert>
 
-#include "system/features.hpp"
+//#include "system/features.hpp"
 #include "system/managed_library.hpp"
 #include "system/entrypoint.hpp"
 
@@ -47,8 +49,10 @@ namespace zacc { namespace system {
          * @param create_instance
          * @param delete_instance
          */
-        kernel_activator(const std::string& library_name, const std::string& create_instance, const std::string& delete_instance)
-            : _library_name(library_name), _create_instance(create_instance), _delete_instance(delete_instance)
+        kernel_activator(std::string library_name, std::string create_instance, std::string delete_instance)
+            : _library_name(std::move(library_name)),
+            _create_instance(std::move(create_instance)),
+            _delete_instance(std::move(delete_instance))
         {
         }
 
@@ -114,6 +118,8 @@ namespace zacc { namespace system {
         template<typename Arch>
         std::shared_ptr<managed_library> select_implementation()
         {
+            arch a(Arch{});
+
             auto path = this->_library_name;
             size_t dot = path.find_last_of('.');
 
@@ -122,15 +128,15 @@ namespace zacc { namespace system {
                 auto filename   = path.substr(0, dot);
                 auto extension  = path.substr().substr(dot + 1);
 
-                path = filename + "." + Arch::name() + "." + extension;
+                path = filename + "." + a.name + "." + extension;
             }
 
-            std::cerr << "loading impl for: " << Arch::name() << std::endl;
+            std::cerr << "[KERNEL ACTIVATOR][SELECT IMPL] " << a.name << std::endl;
 
-            if(this->_loaded_libraries.count(Arch::value) == 0)
-                this->_loaded_libraries[Arch::value] = std::make_shared<managed_library>(path);
+            if(this->_loaded_libraries.count(a.mask) == 0)
+                this->_loaded_libraries[a.mask] = std::make_shared<managed_library>(path);
 
-            return this->_loaded_libraries[Arch::value];
+            return this->_loaded_libraries[a.mask];
         }
 
 

@@ -45,8 +45,8 @@ namespace zacc { namespace system {
         dispatcher()
                 : _Impl() {}
 
-        dispatcher(platform platform)
-                : _Impl(), _platform(std::move(platform))
+        dispatcher(feature features)
+                : _Impl(), _features(features)
         {
         }
 
@@ -99,9 +99,9 @@ namespace zacc { namespace system {
             arch selected_arch;
 
 #if defined(ZACC_OPENCL)
-            if(_platform.is_set(features::OPENCL))
+            if(can_execute(feature::opencl()))
             {
-                selected_arch = dispatch_branch<arch::opencl>(std::forward<Args>(args)...);
+                selected_arch = dispatch_branch(arch::opencl(), std::forward<Args>(args)...);
             }
 #endif
 
@@ -117,7 +117,7 @@ namespace zacc { namespace system {
 
             _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
-            if(p->is_set(features::AVX512))
+            if(can_execute(feature::avx512()))
             {
                 selected_arch = dispatch_branch<arch::avx512>(std::forward<Args>(args)...);
 
@@ -130,7 +130,7 @@ namespace zacc { namespace system {
 
             _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
-            if (_platform.is_set(features::AVX2)) {
+            if (can_execute(feature::avx2())) {
                 selected_arch = dispatch_branch<arch::avx2>(std::forward<Args>(args)...);
 
                 if (select_one)
@@ -142,9 +142,9 @@ namespace zacc { namespace system {
 
             _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
-            if(_platform.is_set(features::AVX1))
+            if(can_execute(feature::avx1()))
             {
-                if(_platform.is_set(features::FMA3))
+                if(can_execute(feature::fma3()))
                 {
                     selected_arch = dispatch_branch<arch::avx1_fma3>(std::forward<Args>(args)...);
 
@@ -168,15 +168,15 @@ namespace zacc { namespace system {
 
             _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
 
-            if (_platform.is_set(features::SSE41)) {
-                if (_platform.is_set(features::FMA4)) {
+            if (can_execute(feature::sse41())) {
+                if (can_execute(feature::fma3())) {
                     selected_arch = dispatch_branch<arch::sse41_fma4>(std::forward<Args>(args)...);
 
                     if (select_one)
                         return selected_arch;
                 }
 
-                if (_platform.is_set(features::FMA3)) {
+                if (can_execute(feature::fma4())) {
                     selected_arch = dispatch_branch<arch::sse41_fma3>(std::forward<Args>(args)...);
 
                     if (select_one)
@@ -190,14 +190,14 @@ namespace zacc { namespace system {
                     return selected_arch;
             }
 
-            if (_platform.is_set(features::SSSE3) && _platform.is_set(features::SSE3)) {
+            if (can_execute(feature::ssse3()) && _features.test(feature::sse3())) {
                 selected_arch = dispatch_branch<arch::sse3>(std::forward<Args>(args)...);
 
                 if (select_one)
                     return selected_arch;
             }
 
-            if (_platform.is_set(features::SSE2)) {
+            if (can_execute(feature::sse2())) {
                 selected_arch = dispatch_branch<arch::sse2>(std::forward<Args>(args)...);
             }
 #endif
@@ -223,45 +223,40 @@ namespace zacc { namespace system {
         {
             log_branch<Arch>();
             _Impl::template dispatch_impl<Arch>(std::forward<Args>(args)...);
-            log_branch_end<Arch>();
 
             return Arch {};
         }
+
+        bool can_execute(feature f)
+        {
+            return _features.test(f) && _Impl::template can_execute(f);
+        }
         /**
          * @brief displays the selected arch with extended information
          */
-        template<typename arch> void log_branch() const
+        template<typename Arch> void log_branch() const
         {
-            std::cout << "Dispatching: " << arch::name()
-                      << " [" << join(_platform.make_capabilities(arch::value), ", ") << "]"
+            arch a(Arch{});
+
+            std::cout << "[ARCH DISPATCHER][DISPATCH][" << a.name << "]"
+                      << " [" << join(a.mask.active(), ", ") << "]"
                       << std::endl;
         }
 
-        /**
-         * @brief displays the selected arch with extended information
-         */
-        template<typename arch> void log_branch_end() const
+
+        inline const feature& features() const
         {
-            std::cout << "Dispatched: " << arch::name()
-                      << " [" << join(_platform.make_capabilities(arch::value), ", ") << "]"
-                      << std::endl;
+            return this->_features;
         }
 
-        inline const platform& platform() const
+        inline struct feature& features()
         {
-            return this->_platform;
+            return this->_features;
         }
-
-        inline struct platform& platform()
-        {
-            return this->_platform;
-        }
-
 
 
     private:
 
-
-        struct platform _platform;
+        struct feature _features;
     };
 }}

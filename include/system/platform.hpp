@@ -46,83 +46,82 @@ namespace zacc {
      */
     struct platform {
     private:
-        using capability_map_t = std::map<const features, feature>;
 
     public:
 
-        using raw_t = std::underlying_type_t<features>;
-
-        /**
-         * @brief Enable arch, fluent interface
-         * @param arch
-         * @return self
-         */
-        platform &enable(const features arch);
-
-        /**
-         * @brief Disable arch, fluent interface
-         * @param arch
-         * @return self
-         */
-        platform &disable(const features arch);
-
-        /**
-         * @brief Set arch, fluent interface
-         * @param arch
-         * @param enabled
-         * @return self
-         */
-        platform &set(const features arch, bool enabled);
-
-        /**
-         * @brief Set capabilities from raw value, fluent interface
-         * @param raw_value
-         * @return self
-         */
-        platform &set(raw_t raw_value);
-
-        /**
-         * @brief Checks if arch is set
-         * @param arch
-         * @return true if set, otherwise false
-         */
-        bool is_set(const features arch) const;
-
-        /**
-         * @brief Get entire raw value with all capabilities
-         * @return raw value
-         */
-        raw_t raw() const;
-
-        /**
-         * @brief Get enabled arch objects from raw representation
-         * @return array of capabilities for each enabled arch
-         */
-        std::vector<feature> enabled_capabilities() const;
-
-        /**
-         * @brief Get all arch objects from raw representation
-         * @return array of capabilities for each enabled arch
-         */
-        std::vector<feature> all_capabilities() const;
-
-        /**
-         * @brief Match runtime capabilities with requirement list
-         * @return array of missing capabilities. Empty if conditions met.
-         */
-        std::vector<feature> match_capabilities(std::initializer_list<features> required) const;
-
-        /**
-         * @brief Match runtime capabilities with raw requirement list (integer reporesentation)
-         * @return array of missing capabilities. Empty if conditions met.
-         */
-        std::vector<feature> match_capabilities(raw_t required) const;
-
-        /**
-         * @brief Get all arch objects from raw representation
-         * @return array of capabilities for each enabled arch
-         */
-        std::vector<feature> make_capabilities(raw_t value) const;
+//        using raw_t = std::underlying_type_t<features>;
+//
+//        /**
+//         * @brief Enable arch, fluent interface
+//         * @param feature
+//         * @return self
+//         */
+//        platform &enable(features feature);
+//
+//        /**
+//         * @brief Disable arch, fluent interface
+//         * @param feature
+//         * @return self
+//         */
+//        platform &disable(features feature);
+//
+//        /**
+//         * @brief Set arch, fluent interface
+//         * @param feature
+//         * @param enabled
+//         * @return self
+//         */
+//        platform &set(features feature, bool enabled);
+//
+//        /**
+//         * @brief Set capabilities from raw value, fluent interface
+//         * @param raw_value
+//         * @return self
+//         */
+//        platform &set(raw_t raw_value);
+//
+//        /**
+//         * @brief Checks if arch is set
+//         * @param feature
+//         * @return true if set, otherwise false
+//         */
+//        bool is_set(features feature) const;
+//
+//        /**
+//         * @brief Get entire raw value with all capabilities
+//         * @return raw value
+//         */
+//        raw_t raw() const;
+//
+//        /**
+//         * @brief Get enabled arch objects from raw representation
+//         * @return array of capabilities for each enabled arch
+//         */
+//        std::vector<feature> active() const;
+//
+//        /**
+//         * @brief Get all arch objects from raw representation
+//         * @return array of capabilities for each enabled arch
+//         */
+//        std::vector<feature> all() const;
+//
+//        /**
+//         * @brief Match runtime capabilities with requirement list
+//         * @return array of missing capabilities. Empty if conditions met.
+//         */
+//        std::vector<feature> match(std::initializer_list<features> required) const;
+//
+//        /**
+//         * @brief Match runtime capabilities with raw requirement list (integer reporesentation)
+//         * @return array of missing capabilities. Empty if conditions met.
+//         */
+//        std::vector<feature> match(raw_t required) const;
+//
+//        /**
+//         * @brief Get all arch objects from raw representation
+//         * @return array of capabilities for each enabled arch
+//         */
+//        std::vector<feature> make_capabilities(raw_t value) const;
 
         /**
          * @brief Resolves platform information and populates capabilities, fluent interface
@@ -131,18 +130,18 @@ namespace zacc {
         platform &reload();
 
         /**
-         * @brief registers main capabilitiy metadata, fluent interface
-         * @return self
-         */
-        platform& register_capabilities();
-
-        /**
-         * @brief registers a specified arch metadata, fluent interface
-         * @param cap arch
-         * @param str capabilitiy's string representation
-         * @return self
-         */
-        platform & register_capability(const features cap, const char* str);
+//         * @brief registers main capabilitiy metadata, fluent interface
+//         * @return self
+//         */
+//        platform& register_features();
+//
+//        /**
+//         * @brief registers a specified arch metadata, fluent interface
+//         * @param feature arch
+//         * @param str capabilitiy's string representation
+//         * @return self
+//         */
+//        platform& register_feature(features feature, const char *str);
 
         /**
          * @brief returns number of threads available on this machine
@@ -153,16 +152,17 @@ namespace zacc {
          * @brief constructor
          * Fetches system information and populates main capabilities
          */
-        platform();
+        platform()
+        {
+            reload();
+        }
 
         /**
          * @brief copy constructor not available
          */
-        platform(platform const& other)
-            : _flags { other._flags }, _capabilities { other._capabilities }
-        {}
+        platform(platform const& other) = default;
 
-        platform(platform&& other)
+        platform(platform&& other) noexcept
             : platform()
         {
             swap(*this, other);
@@ -185,25 +185,32 @@ namespace zacc {
 
         friend void swap(platform& one, platform& other) // nothrow
         {
-            std::swap(one._flags, other._flags);
-            std::swap(one._capabilities, other._capabilities);
+            std::swap(one._features, other._features);
         }
 
 
-    private:
-        raw_t _flags;
+        const feature& features() const {
+            return _features;
+        }
 
-        capability_map_t _capabilities;
+        struct feature& features() {
+            return _features;
+        }
+
+    private:
+        //raw_t _flags;
+
+        struct feature _features;
 
         static thread_local cpuid _cpuid;
 
-        /**
-         * @brief if the arch is registered, set the availability flag, fluent interface
-         * @param cap arch
-         * @param enabled availability flag
-         * @return self
-         */
-        platform & set_capability_if_registered(features cap, bool enabled);
+//        /**
+//         * @brief if the arch is registered, set the availability flag, fluent interface
+//         * @param cap arch
+//         * @param enabled availability flag
+//         * @return self
+//         */
+//        platform & set_capability_if_registered(features cap, bool enabled);
 
         /**
          * @brief pretty-prints the currently supported features
