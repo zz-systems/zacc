@@ -1,3 +1,5 @@
+#include <utility>
+
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
 //
@@ -26,15 +28,11 @@
 #pragma once
 
 #include <iostream>
-#include "util/io.hpp"
-#include "util/type/type_casts.hpp"
-#include "util/bithacks.hpp"
-#include "util/algorithm.hpp"
-#include "system/features.hpp"
+#include <iomanip>
+#include "util/option_parser.hpp"
+#include "system/feature.hpp"
+#include "system/arch.hpp"
 #include "system/cpuid.hpp"
-#include <bitset>
-#include <functional>
-#include <algorithm>
 
 namespace zacc {
 
@@ -73,6 +71,47 @@ namespace zacc {
             cpuInfo = cpuid.ext_reg(1);
 
             set(feature::fma4(), cpuInfo[cpuid::ECX][16]);
+        }
+    };
+
+    class put_sysinfo
+    {
+        sysinfo _sysinfo;
+    public:
+        explicit put_sysinfo(sysinfo sysinfo)
+            : _sysinfo {std::move(sysinfo)}
+        {}
+
+        friend std::ostream& operator<<(std::ostream& os, put_sysinfo)
+        {
+            for(auto feature : sysinfo::available())
+            {
+                os << " -mno-" << std::left << std::setw(15) <<  tolower(feature.to_string()) << " Disable " << toupper(feature.to_string()) << " feature" << std::endl;
+            }
+
+            return os;
+        }
+    };
+
+    class get_sysinfo
+    {
+        sysinfo& _sysinfo;
+    public:
+        explicit get_sysinfo(sysinfo& sysinfo)
+            : _sysinfo {sysinfo}
+        {}
+
+        friend option_parser& operator>>(option_parser& parser, get_sysinfo sysinfo)
+        {
+            for(auto feature : sysinfo::available())
+            {
+                if(parser.has_option("-mno-" + tolower(feature.to_string())))
+                {
+                    sysinfo._sysinfo.reset(feature);
+                }
+            }
+
+            return parser;
         }
     };
 }

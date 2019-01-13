@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "system/arch.hpp"
+#include "system/dispatched_arch.hpp"
 #include "math/constants.hpp"
 #include "math/fundamental.hpp"
 #include "util/algorithm.hpp"

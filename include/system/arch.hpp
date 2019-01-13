@@ -25,91 +25,115 @@
 
 #pragma once
 
-#include "system/platform.hpp"
-#include "system/features.hpp"
-#include "backend/all.hpp"
+#include <iostream>
+#include "util/io.hpp"
+#include "util/type/type_casts.hpp"
+#include "util/bithacks.hpp"
+#include "util/algorithm.hpp"
+#include "system/feature.hpp"
+#include <functional>
+#include <algorithm>
 
 namespace zacc {
+    struct arch {
+        feature mask;
+        std::string name;
 
-    /**
-     * @brief provides all necessary types for the current arch at compile time
-     */
-    struct dispatched_arch
-    {
-        using arch = arch::ZACC_ARCH;
+        arch()
+                : mask{}, name{} {}
 
-        /// fast float enabled? used for faster and less precise computations
-        static constexpr bool use_fast_float = ZACC_FAST_FLOAT;
+        template<typename T>
+        arch(T)
+                : mask{T::value}, name{T::name()} {}
 
-        /// memory alignment
-        static constexpr size_t alignment = ztraits<backend::ZACC_MAJOR_ARCH::zfloat32<arch::value>>::alignment;
+        arch(const arch &other) = default;
 
-        /// exposed dispatched implementation of zfloat32
-        using zfloat32  = backend::ZACC_MAJOR_ARCH::zfloat32<arch::value>;
-        /// exposed dispatched implementation of zfloat64
-        using zfloat64  = backend::ZACC_MAJOR_ARCH::zfloat64<arch::value>;
-        /// exposed dispatched implementation of zint8
-        using zint8     = backend::ZACC_MAJOR_ARCH::zint8<arch::value>;
-        /// exposed dispatched implementation of zint16
-        using zint16    = backend::ZACC_MAJOR_ARCH::zint16<arch::value>;
-        /// exposed dispatched implementation of zint32
-        using zint32    = backend::ZACC_MAJOR_ARCH::zint32<arch::value>;
+        arch(arch &&other) noexcept
+                : arch() {
+            swap(*this, other);
+        }
 
-        /// exposed dispatched implementation of boolean vector for zfloat32
-        using bfloat32  = backend::ZACC_MAJOR_ARCH::bfloat32<arch::value>;
-        /// exposed dispatched implementation of boolean vector for zfloat64
-        using bfloat64  = backend::ZACC_MAJOR_ARCH::bfloat64<arch::value>;
-        /// exposed dispatched implementation of boolean vector for zint8
-        using bint8     = backend::ZACC_MAJOR_ARCH::bint8<arch::value>;
-        /// exposed dispatched implementation of boolean vector for zint16
-        using bint16    = backend::ZACC_MAJOR_ARCH::bint16<arch::value>;
-        /// exposed dispatched implementation of boolean vector for zint32
-        using bint32    = backend::ZACC_MAJOR_ARCH::bint32<arch::value>;
+        arch &operator=(arch other) {
+            swap(*this, other);
+            return *this;
+        }
 
-        static const std::string name() { return arch::name(); }
+        friend void swap(arch &one, arch &other) {
+            std::swap(one.mask, other.mask);
+            std::swap(one.name, other.name);
+        }
+
+        constexpr bool is_none() const { return mask.mask() == 0 && name.empty(); }
+
+        friend std::ostream &operator<<(std::ostream &os, const arch &data) {
+            using namespace std;
+
+            os << data.mask;
+
+            return os;
+        }
+
+
+        struct scalar : public std::integral_constant<uint64_t, feature::scalar()>
+        {
+            static const std::string name() { return "scalar"; }
+        };
+
+        struct sse2 : public std::integral_constant<uint64_t, feature::sse2()>
+        {
+            static const std::string name() { return "sse.sse2"; }
+        };
+
+        struct sse3 : public std::integral_constant<uint64_t, feature(feature::sse2(), feature::sse3(),
+                                                                      feature::ssse3())>
+        {
+            static const std::string name() { return "sse.sse3"; }
+        };
+
+        struct sse41 : public std::integral_constant<uint64_t, feature(feature::sse2(), feature::sse3(),
+                                                                       feature::ssse3(), feature::sse41())>
+        {
+            static const std::string name() { return "sse.sse41"; }
+        };
+
+        struct sse41_fma3 : public std::integral_constant<uint64_t, feature(feature::sse2(), feature::sse3(),
+                                                                            feature::ssse3(), feature::sse41(),
+                                                                            feature::fma3())>
+        {
+            static const std::string name() { return "sse.sse41.fma3"; }
+        };
+
+        struct sse41_fma4 : public std::integral_constant<uint64_t, feature(feature::sse2(), feature::sse3(),
+                                                                            feature::ssse3(), feature::sse41(),
+                                                                            feature::fma4())>
+        {
+            static const std::string name() { return "sse.sse41.fma4"; }
+        };
+
+        struct avx1 : public std::integral_constant<uint64_t, feature::avx1()>
+        {
+            static const std::string name() { return "avx.avx1"; }
+        };
+
+        struct avx1_fma3 : public std::integral_constant<uint64_t, feature(feature::avx1(), feature::fma3())>
+        {
+            static const std::string name() { return "avx.avx1.fma3"; }
+        };
+
+        struct avx2 : public std::integral_constant<uint64_t, feature(feature::avx1(), feature::fma3(),
+                                                                      feature::avx2())>
+        {
+            static const std::string name() { return "avx.avx2"; }
+        };
+
+        struct avx512 : public std::integral_constant<uint64_t, feature::avx512()>
+        {
+            static const std::string name() { return "avx.avx512"; }
+        };
+
+        struct opencl : public std::integral_constant<uint64_t, feature::opencl()>
+        {
+            static const std::string name() { return "gpgpu.opencl"; }
+        };
     };
-
-    /// exposed dispatched implementation of zfloat32
-    using zfloat32   = typename dispatched_arch::zfloat32;
-    /// exposed dispatched implementation of zfloat64
-    using zfloat64   = typename dispatched_arch::zfloat64;
-    /// exposed dispatched implementation of zint8
-    using zint8      = typename dispatched_arch::zint8;
-    /// exposed dispatched implementation of zint16
-    using zint16     = typename dispatched_arch::zint16;
-    /// exposed dispatched implementation of zint32
-    using zint32     = typename dispatched_arch::zint32;
-
-    /// alias for zfloat64
-    using zdouble    = zfloat64;
-    /// alias for zfloat32
-    using zfloat     = zfloat32;
-    /// alias for zint8
-    using zbyte      = zint8;
-    /// alias for zint16
-    using zshort     = zint16;
-    /// alias for zint32
-    using zint       = zint32;
-
-    /// exposed dispatched implementation of boolean vector for zfloat32
-    using bfloat32   = typename dispatched_arch::bfloat32;
-    /// exposed dispatched implementation of boolean vector for zfloat64
-    using bfloat64   = typename dispatched_arch::bfloat64;
-    /// exposed dispatched implementation of boolean vector for zint8
-    using bint8      = typename dispatched_arch::bint8;
-    /// exposed dispatched implementation of boolean vector for zint16
-    using bint16     = typename dispatched_arch::bint16;
-    /// exposed dispatched implementation of boolean vector for zint32
-    using bint32     = typename dispatched_arch::bint32;
-
-    /// alias for bfloat32
-    using bfloat     = bfloat32;
-    /// alias for bfloat64
-    using bdouble    = bfloat64;
-    /// alias for bint8
-    using bbyte      = bint8;
-    /// alias for bint16
-    using bshort     = bint16;
-    /// alias for bint32
-    using bint       = bint32;
 }

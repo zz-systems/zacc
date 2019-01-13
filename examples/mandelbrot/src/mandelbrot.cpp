@@ -26,19 +26,21 @@
 
 #include "mandelbrot.host.hpp"
 
-#include "system/platform_settings.hpp"
+#include "system/sysinfo.hpp"
 
 int main(int argc, char** argv)
 {
     zacc::option_parser options(argc, argv);
-    zacc::platform_settings platform_settings(options);
+    zacc::sysinfo sysinfo;
 
-    std::cout << platform_settings << std::endl;
+    options >> zacc::get_sysinfo(sysinfo);
+
+    std::cout << zacc::put_sysinfo(sysinfo) << std::endl;
 
     std::cout << "Your system supports: " << std::endl;
-    std::cout << zacc::platform() << std::endl;
+    std::cout << zacc::sysinfo() << std::endl;
 
-    zacc::examples::mandelbrot_host host(platform_settings.platform());
+    zacc::examples::mandelbrot_host host(sysinfo);
     host.run();
 
     return 0;

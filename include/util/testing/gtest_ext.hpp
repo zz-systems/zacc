@@ -26,7 +26,7 @@
 #pragma once
 
 #include "system/sysinfo.hpp"
-#include "system/arch.hpp"
+#include "system/dispatched_arch.hpp"
 #include "util/algorithm.hpp"
 #include "gtest/gtest.h"
 

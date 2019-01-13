@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------------
 
 
-#include "system/platform.hpp"
+#include "system/sysinfo.hpp"
 #include "util/option_parser.hpp"
 #include "util/algorithm.hpp"
 
@@ -36,17 +36,17 @@ using namespace zacc;
 int main(int argc, char** argv) {
 
     option_parser parser(argc, argv);
-    platform platform;
+    sysinfo sysinfo;
 
     if(parser.has_option("CMAKE_OUTPUT"))
     {
-        auto c = platform.features().active();
+        auto c = sysinfo.active();
 
         std::cout << join(std::begin(c), std::end(c), ";");
     }
     else
     {
-        std::cout << platform;
+        std::cout << sysinfo;
     }
 
     return 0;

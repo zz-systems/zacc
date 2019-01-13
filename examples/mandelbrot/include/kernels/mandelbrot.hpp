@@ -29,7 +29,7 @@
 
 #include "zacc.hpp"
 
-#include "system/arch.hpp"
+#include "system/dispatched_arch.hpp"
 
 #include "math/complex.hpp"
 #include "math/matrix.hpp"

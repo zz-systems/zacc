@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "system/arch.hpp"
+#include "system/dispatched_arch.hpp"
 #include "util/testing/gtest_ext.hpp"
 #include <type_traits>
 

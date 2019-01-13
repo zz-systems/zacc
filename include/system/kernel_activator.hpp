@@ -32,6 +32,7 @@
 #include <cassert>
 
 //#include "system/features.hpp"
+#include "system/arch.hpp"
 #include "system/managed_library.hpp"
 #include "system/entrypoint.hpp"
 

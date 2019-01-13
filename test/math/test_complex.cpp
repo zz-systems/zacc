@@ -23,7 +23,7 @@
 //---------------------------------------------------------------------------------
 
 #include "gtest/gtest.h"
-#include "system/arch.hpp"
+#include "system/dispatched_arch.hpp"
 #include "math/complex.hpp"
 
 #include <cmath>

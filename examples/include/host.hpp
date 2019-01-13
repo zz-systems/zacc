@@ -29,6 +29,7 @@
 
 #include "../../dependencies/CImg/CImg.h"
 
+#include "system/sysinfo.hpp"
 #include "system/kernel_dispatcher.hpp"
 #include "math/matrix.hpp"
 #include "util/color.hpp"
@@ -77,8 +78,8 @@ namespace zacc { namespace examples {
             }
         };
 
-        host(const platform& platform, math::vec2<int> dim)
-                : _dim(dim), _platform(platform)
+        host(const sysinfo& sysinfo, math::vec2<int> dim)
+                : _dim(dim), _sysinfo(sysinfo)
         {}
 
         virtual ~host() {}
@@ -90,7 +91,7 @@ namespace zacc { namespace examples {
             _main_dispatcher.features().reset();
             auto scalar  = this->execute(_main_dispatcher);
 
-            _main_dispatcher.features() = _platform.features();
+            _main_dispatcher.features() = _sysinfo;
             auto simd = this->execute(_main_dispatcher);
 
             std::vector<result> results;
@@ -177,11 +178,11 @@ namespace zacc { namespace examples {
         template<typename... Args>
         constexpr void configure_kernels(Args&& ...args)
         {
-            _main_dispatcher.features() = _platform.features();
+            _main_dispatcher.features() = _sysinfo;
             _main_dispatcher.dispatch_some(std::forward<Args>(args)...);
 
             zacc::for_each(_reference_dispatchers, [&](auto& k){
-                k.features() = _platform.features();
+                k.features() = _sysinfo;
                 k.dispatch_some(std::forward<Args>(args)...);
             });
         }
@@ -194,7 +195,7 @@ namespace zacc { namespace examples {
         system::dispatcher<system::kernel_dispatcher<Kernel>> _main_dispatcher;
         std::tuple<system::dispatcher<system::kernel_dispatcher<ReferenceKernels>>...> _reference_dispatchers;
 
-        platform _platform;
+        sysinfo _sysinfo;
     };
 
 }}

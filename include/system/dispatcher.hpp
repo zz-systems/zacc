@@ -26,8 +26,7 @@
 #pragma once
 
 #include "util/algorithm.hpp"
-#include "platform.hpp"
-#include "system/platform.hpp"
+#include "system/feature.hpp"
 #include "system/dlloader.hpp"
 
 namespace zacc { namespace system {
