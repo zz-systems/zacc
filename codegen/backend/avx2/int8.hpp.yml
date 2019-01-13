@@ -120,7 +120,7 @@ modules:
   logical:
     vlneg:
       args: one
-      body: _mm256_cmpeq_epi32(one, _mm256_setzero_si256());
+      body: _mm256_cmpeq_epi8(one, _mm256_setzero_si256());
     vlor:   _mm256_or_si256
     vland:  _mm256_and_si256
 #-----------------------------------------------------------------------------------------------------------------------

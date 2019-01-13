@@ -70,42 +70,42 @@ namespace zacc { namespace test {
         }
     }
 
-    TEST(float64_trigonometry, sin) {
-        REQUIRES(ZACC_ARCH);
-        _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
-        _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
-        for (int i = -180; i <= 180; i++)
-        {
-            auto actual     = math::vsin(zdouble(i / 180.0 * M_PI));
-            zdouble expected   = std::sin(i / 180.0 * M_PI);
-
-            VASSERT_NEAR(actual, expected, 0.00000006);
-        }
-    }
-
-    TEST(float64_trigonometry, cos) {
-        REQUIRES(ZACC_ARCH);
-        _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
-        _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
-        for (int i = -180; i <= 180; i++)
-        {
-            auto actual     = math::vcos(zdouble(i / 180.0 * M_PI));
-            zdouble expected   = std::cos(i / 180.0 * M_PI);
-
-            VASSERT_NEAR(actual, expected, 0.00000006);
-        }
-    }
-
-    TEST(float64_trigonometry, tan) {
-        REQUIRES(ZACC_ARCH);
-        _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
-        _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
-        for (int i = -44; i <= 44; i++)
-        {
-            auto actual     = math::vtan(zdouble(i / 180.0 * M_PI));
-            zdouble expected   = std::tan(i / 180.0 * M_PI);
-
-            VASSERT_NEAR(actual, expected, 0.00000006);
-        }
-    }
+//    TEST(float64_trigonometry, sin) {
+//        REQUIRES(ZACC_ARCH);
+//        _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+//        _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+//        for (int i = -180; i <= 180; i++)
+//        {
+//            auto actual     = math::vsin(zdouble(i / 180.0 * M_PI));
+//            zdouble expected   = std::sin(i / 180.0 * M_PI);
+//
+//            VASSERT_NEAR(actual, expected, 0.00000006);
+//        }
+//    }
+//
+//    TEST(float64_trigonometry, cos) {
+//        REQUIRES(ZACC_ARCH);
+//        _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+//        _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+//        for (int i = -180; i <= 180; i++)
+//        {
+//            auto actual     = math::vcos(zdouble(i / 180.0 * M_PI));
+//            zdouble expected   = std::cos(i / 180.0 * M_PI);
+//
+//            VASSERT_NEAR(actual, expected, 0.00000006);
+//        }
+//    }
+//
+//    TEST(float64_trigonometry, tan) {
+//        REQUIRES(ZACC_ARCH);
+//        _MM_SET_ROUNDING_MODE(_MM_ROUND_TOWARD_ZERO);
+//        _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+//        for (int i = -44; i <= 44; i++)
+//        {
+//            auto actual     = math::vtan(zdouble(i / 180.0 * M_PI));
+//            zdouble expected   = std::tan(i / 180.0 * M_PI);
+//
+//            VASSERT_NEAR(actual, expected, 0.00000006);
+//        }
+//    }
 }}
