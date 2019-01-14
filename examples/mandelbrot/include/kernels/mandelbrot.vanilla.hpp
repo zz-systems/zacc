@@ -59,7 +59,7 @@ namespace zacc { namespace examples {
 
         virtual void run(std::vector<int> &output) override
         {
-            for(int i = 0; i < output.size(); i++)
+            for(size_t i = 0; i < output.size(); i++)
             // populate output container
             //zacc::generate<int>(std::begin(output), std::end(output), [this](int i)
             {

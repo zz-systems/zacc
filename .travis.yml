@@ -40,6 +40,9 @@ matrix:
       compiler: clang
       language: generic
       env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc RELEASE_BUILDER=1 DOC_BUILDER=1 RELEASE_NAME="${TRAVIS_BRANCH}_${TRAVIS_OS_NAME}"
+      addons:
+        homebrew:
+          brewfile: ./ci/brewfile.travis
 
     # Linux Clang Builds
     - os: linux
@@ -56,6 +59,7 @@ matrix:
             - g++-5
             - g++-6
             - g++-7
+            - libx11-dev
       env: COMPILER=clang++-4.0 BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
 
 #    - os: linux
