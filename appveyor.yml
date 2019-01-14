@@ -82,13 +82,14 @@ before_build:
 - cmake .. -G"%BUILD_ENV%"  -DCMAKE_BUILD_TYPE=%CONFIGURATION% -DPYTHON_EXECUTABLE:FILEPATH="%PYTHON%"/python.exe -DBUILD_SANITIZE_MEMORY=%BUILD_SANITIZE_MEMORY%  -DCMAKE_VERBOSE_MAKEFILE:BOOL=%VERBOSE%
 
 build_script:
-  - cmake --build . --config %CONFIGURATION% --target zacc.system.detect -- -j 4
+  - cmake --build . --config %CONFIGURATION% --target zacc.system.info -- -j 4
   - cmake --build . --config %CONFIGURATION% --target zacc.tests.all -- -j 4
-  
+  - cmake --build . --config %CONFIGURATION% --target zacc.examples.mandelbrot -- -j 4
+  - cmake --build . --config %CONFIGURATION% --target zacc.examples.julia -- -j 4
 test_script:
 - ls .\bin
 - ls .\lib
-- .\bin\zacc.system.detect.exe
+- .\bin\zacc.system.info.exe
 - ctest --output-on-failure
 
 #on_finish:

@@ -10,7 +10,7 @@ ls ./bin
 ls ./lib
 
 # detect system
-./bin/zacc.system.detect
+./bin/zacc.system.info
 
 # run tests
 ctest --output-on-failure
