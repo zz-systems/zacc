@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+#if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
 #    brew update
 #    brew upgrade python3
 #    brew install doxygen
@@ -9,4 +9,4 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
 #    brew cask install xquartz
 #    virtualenv venv -p python3
 #    source venv/bin/activate
-fi
+#fi
