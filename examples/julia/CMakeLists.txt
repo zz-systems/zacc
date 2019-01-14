@@ -14,7 +14,7 @@ zacc_add_dispatched_executable(zacc.examples.julia
 
 if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin") # requires XQuartz
     target_include_directories(zacc.examples.julia PRIVATE "/usr/X11/include")
-    target_link_directories(zacc.examples.julia PRIVATE "/usr/X11/lib" "/usr/X11R6/lib")
+    link_directories("/usr/X11/lib" "/usr/X11R6/lib")
     target_link_libraries(zacc.examples.julia PRIVATE X11)
 elseif(NOT WIN32)
     target_link_libraries(zacc.examples.julia PRIVATE X11 jpeg png m pthread)
