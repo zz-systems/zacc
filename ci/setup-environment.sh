@@ -7,6 +7,6 @@ if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
 #    brew install sphinx-doc
 #    brew link sphinx-doc --force
 #    brew cask install xquartz
-    virtualenv venv -p python3
-    source venv/bin/activate
+#    virtualenv venv -p python3
+#    source venv/bin/activate
 fi
