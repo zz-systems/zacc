@@ -26,7 +26,7 @@ if(NOT WIN32)
 
     link_directories("/usr/X11/lib" "/usr/X11R6/lib")
 
-    if(LINUX)
+    if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         target_link_libraries(zacc.examples.mandelbrot PRIVATE jpeg png m pthread)
     endif()
 endif()
