@@ -77,9 +77,6 @@ matrix:
     - os: osx
       osx_image: xcode9
       compiler: clang
-      addons:
-        homebrew:
-          brewfile: ./ci/brewfile.travis
       env: MATRIX_EVAL="CC=cc && CXX=c++"
 
       #env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc RELEASE_BUILDER=1 DOC_BUILDER=1 RELEASE_NAME="${TRAVIS_BRANCH}_${TRAVIS_OS_NAME}"
@@ -91,7 +88,7 @@ matrix:
 
 before_install:
   - eval "${MATRIX_EVAL}"
-  
+
 install:
   - source ci/travis/install-$TRAVIS_OS_NAME.sh
 
