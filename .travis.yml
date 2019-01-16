@@ -1,13 +1,14 @@
-language: cpp
+language: generic
 sudo: false
-dist: trusty
+dist: xenial
 
 python:
- - "3.3"
+ - 3.6
 
 cache:
   ccache: true
-  apt: true
+
+apt: true
 
 env:
   global:
@@ -17,6 +18,7 @@ env:
     - CCACHE_CPP2=1
     - BUILD_SANITIZE_MEMORY=0
     - BUILD_DIR=Build
+    - BUILD_TYPE='Release'
 git:
   depth: 1
 
@@ -24,76 +26,81 @@ branches:
   only:
   - master
   - develop
+  - ci
 
 matrix:
   include:
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-5
+      env:
+        - MATRIX_EVAL="CC=gcc-5 && CXX=g++-5"
 
-    # OSX Clang Builds
-#    - os: osx
-#      osx_image: xcode8.3
-#      compiler: clang
-#      language: generic
-#      env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7 "
+
+    - os: linux
+      compiler: clang
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-4.0
+          packages:
+            - clang-4.0
+      env:
+        - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
 
     - os: osx
       osx_image: xcode9
       compiler: clang
-      language: generic
-      env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc RELEASE_BUILDER=1 DOC_BUILDER=1 RELEASE_NAME="${TRAVIS_BRANCH}_${TRAVIS_OS_NAME}"
       addons:
         homebrew:
           brewfile: ./ci/brewfile.travis
+      env: MATRIX_EVAL="CC=cc && CXX=c++"
 
-    # Linux Clang Builds
-    - os: linux
-      compiler: clang
-      addons: &addons
-        apt:
-          sources: &sources
-            - llvm-toolchain-trusty-3.9
-            - llvm-toolchain-trusty-4.0
-            - ubuntu-toolchain-r-test
-          packages:
-            - clang-4.0
-            #- clang-5.0
-            - g++-5
-            - g++-6
-            - g++-7
-            - libx11-dev
-      env: COMPILER=clang++-4.0 BUILD_TYPE='Release' CXX=clang++-4.0 CC=clang-4.0
+      #env: COMPILER=c++ BUILD_TYPE='Release' CXX=c++ CC=cc RELEASE_BUILDER=1 DOC_BUILDER=1 RELEASE_NAME="${TRAVIS_BRANCH}_${TRAVIS_OS_NAME}"
 
-#    - os: linux
-#      compiler: clang
-#      addons: *addons
-#      env: COMPILER=clang++-5.0 BUILD_TYPE='Release' CXX=clang++-5.0 CC=clang-5.0
-
-    # Linux GCC Builds
 #    - os: linux
 #      compiler: gcc
 #      addons: *addons
-#      env: COMPILER=g++-5 BUILD_TYPE='Release' CXX=g++-5 CC=gcc-5
+#      env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7 RELEASE_BUILDER=1 RELEASE_NAME="${TRAVIS_BRANCH}_${TRAVIS_OS_NAME}"
 
-    - os: linux
-      compiler: gcc
-      addons: *addons
-      env: COMPILER=g++-6 BUILD_TYPE='Release' CXX=g++-6 CC=gcc-6
-
-    - os: linux
-      compiler: gcc
-      addons: *addons
-      env: COMPILER=g++-7 BUILD_TYPE='Release' CXX=g++-7 CC=gcc-7 RELEASE_BUILDER=1 RELEASE_NAME="${TRAVIS_BRANCH}_${TRAVIS_OS_NAME}"
-
-before_install:
-  - travis_retry ./ci/setup-environment.sh
 install:
-  - travis_retry ./ci/setup-dependencies.sh
-before_script:
-  - ./ci/prepare-build.sh
+  - source ci/travis/install-$TRAVIS_OS_NAME.sh
+
 script:
-  - ./ci/run-build.sh
-  - ./ci/run-test.sh
-after_success:
-  - ./ci/run-build-documentation.sh
+  - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY} -DBUILD_DOCUMENTATION=${DOC_BUILDER}
+  - cd ${BUILD_DIR}
+  - cmake --build . --config ${BUILD_TYPE} --target zacc.system.info -- -j 4
+  - cmake --build . --config ${BUILD_TYPE} --target zacc.tests.all -- -j 4
+  - cmake --build . --config ${BUILD_TYPE} --target zacc.examples.mandelbrot -- -j 4
+  - cmake --build . --config ${BUILD_TYPE} --target zacc.examples.julia -- -j 4
+#after_success:
+#  - ./ci/run-build-documentation.sh
 
 before_deploy:
 #  - ./ci/run-pack-documentation.sh
