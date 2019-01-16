@@ -57,7 +57,7 @@ namespace zacc { namespace test {
         auto actual = make_mask(condition);
         auto data = actual.data();
 
-        for(int i = 0; i < size_v<TypeParam>; i++)
+        for(size_t i = 0; i < size_v<TypeParam>; i++)
         {
             VASSERT_EQ(data[i], expected[i]);
         }
@@ -87,7 +87,7 @@ namespace zacc { namespace test {
         auto actual = make_mask(condition);
         auto data = actual.data();
 
-        for(int i = 0; i < size_v<TypeParam>; i++)
+        for(size_t i = 0; i < size_v<TypeParam>; i++)
         {
             VASSERT_EQ(data[i], expected[i]);
         }
@@ -116,7 +116,7 @@ namespace zacc { namespace test {
         auto actual = make_mask(condition);
         auto data = actual.data();
 
-        for(int i = 0; i < size_v<TypeParam>; i++)
+        for(size_t i = 0; i < size_v<TypeParam>; i++)
         {
             VASSERT_EQ(data[i], expected[i]);
         }
@@ -145,7 +145,7 @@ namespace zacc { namespace test {
         auto actual = make_mask(condition);
         auto data = actual.data();
 
-        for(int i = 0; i < size_v<TypeParam>; i++)
+        for(size_t i = 0; i < size_v<TypeParam>; i++)
         {
             VASSERT_EQ(data[i], expected[i]);
         }
