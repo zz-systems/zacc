@@ -88,8 +88,8 @@ matrix:
 
 before_install:
   - eval "${MATRIX_EVAL}"
-  - echo ${CC}
-  - echo ${CXX}
+  - export CC=${CC}
+  - export CXX=${CXX}
 
 install:
   - source ci/travis/install-$TRAVIS_OS_NAME.sh
