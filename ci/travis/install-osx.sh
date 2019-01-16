@@ -9,5 +9,5 @@ brew cask install xquartz
 
 #virtualenv venv -p python3
 source venv/bin/activate
-#pip install --user -r ${TRAVIS_BUILD_DIR}/ci/requirements.txt
-pip install -r ${TRAVIS_BUILD_DIR}/ci/requirements.txt
+pip install --user -r ${TRAVIS_BUILD_DIR}/ci/requirements.txt
+#pip install -r ${TRAVIS_BUILD_DIR}/ci/requirements.txt
