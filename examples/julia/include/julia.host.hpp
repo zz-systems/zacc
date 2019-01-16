@@ -46,7 +46,7 @@ namespace zacc { namespace examples {
     public:
 
         julia_host(const sysinfo& sysinfo)
-                : host(sysinfo, {2048, 2048})
+                : host(sysinfo, {256, 256})
         {
             using namespace util;
             std::vector<std::pair<const float, color_rgb>> colors;

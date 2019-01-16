@@ -69,7 +69,7 @@ namespace zacc { namespace examples {
             //zacc::generate<int>(std::begin(output), std::end(output), [this](int i)
             {
                 // compute 2D-position from 1D-index
-                auto pos = reshape<vec2<float>>(i, _dim);
+                auto pos = reshape<vec2<float>, size_t>(i, _dim);
 
                 std::complex<float> z(1.5 * (pos.x() - center.x()) / (_zoom * center.x()) + _offset.x(),
                                       1.0 * (pos.y() - center.y()) / (_zoom * center.y()) + _offset.y());

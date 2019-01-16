@@ -26,8 +26,6 @@
 
 #include "julia.host.hpp"
 
-#include "system/platform_settings.hpp"
-
 int main(int argc, char** argv)
 {
     zacc::option_parser options(argc, argv);

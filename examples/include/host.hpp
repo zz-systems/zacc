@@ -61,7 +61,7 @@ namespace zacc { namespace examples {
             arch selected_arch;
 
             stat(const std::string& title, const result& result)
-                : title(result.kernel_name),
+                : title(title + result.kernel_name),
                 min_element(*std::min_element(std::begin(result.data), std::end(result.data))),
                 max_element(*std::max_element(std::begin(result.data), std::end(result.data))),
                 duration(result.duration),

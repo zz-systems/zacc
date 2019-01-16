@@ -64,14 +64,14 @@ namespace zacc { namespace examples {
             //zacc::generate<int>(std::begin(output), std::end(output), [this](int i)
             {
                 // compute 2D-position from 1D-index
-                auto pos = reshape<vec2<float>>(i, _dim);
+                auto pos = reshape<vec2<float>, size_t>(i, _dim);
 
                 std::complex<float> c(_cmin.x() + pos.x() / float(_dim.x() - 1) * (_cmax.x() - _cmin.x()),
                                       _cmin.y() + pos.y() / float(_dim.y() - 1) * (_cmax.y() - _cmin.x()));
 
                 std::complex<float> z = 0;
 
-                int iterations;
+                size_t iterations;
 
                 //for (iterations = 0; iterations < _max_iterations && std::abs(z) < 2.0; ++iterations)
                 for (iterations = 0; iterations < _max_iterations && (z.real() * z.real() + z.imag() * z.imag()) < 4.0; ++iterations)

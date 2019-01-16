@@ -57,7 +57,7 @@ namespace zacc { namespace examples {
             _max_iterations = max_iterations;
         }
 
-        virtual void run(std::vector<int> &output) override
+        virtual void run(std::vector<int> &) override
         {
             // TODO;
         }
