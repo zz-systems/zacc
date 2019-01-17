@@ -36,37 +36,37 @@ namespace zacc {
      */
     struct dispatched_arch
     {
-        using arch = arch::ZACC_ARCH;
+        using arch_t = arch::ZACC_ARCH;
 
         /// fast float enabled? used for faster and less precise computations
         static constexpr bool use_fast_float = ZACC_FAST_FLOAT;
 
         /// memory alignment
-        static constexpr size_t alignment = ztraits<backend::ZACC_MAJOR_ARCH::zfloat32<arch::value>>::alignment;
+        static constexpr size_t alignment = ztraits<backend::ZACC_MAJOR_ARCH::zfloat32<arch_t::value>>::alignment;
 
         /// exposed dispatched implementation of zfloat32
-        using zfloat32  = backend::ZACC_MAJOR_ARCH::zfloat32<arch::value>;
+        using zfloat32  = backend::ZACC_MAJOR_ARCH::zfloat32<arch_t::value>;
         /// exposed dispatched implementation of zfloat64
-        using zfloat64  = backend::ZACC_MAJOR_ARCH::zfloat64<arch::value>;
+        using zfloat64  = backend::ZACC_MAJOR_ARCH::zfloat64<arch_t::value>;
         /// exposed dispatched implementation of zint8
-        using zint8     = backend::ZACC_MAJOR_ARCH::zint8<arch::value>;
+        using zint8     = backend::ZACC_MAJOR_ARCH::zint8<arch_t::value>;
         /// exposed dispatched implementation of zint16
-        using zint16    = backend::ZACC_MAJOR_ARCH::zint16<arch::value>;
+        using zint16    = backend::ZACC_MAJOR_ARCH::zint16<arch_t::value>;
         /// exposed dispatched implementation of zint32
-        using zint32    = backend::ZACC_MAJOR_ARCH::zint32<arch::value>;
+        using zint32    = backend::ZACC_MAJOR_ARCH::zint32<arch_t::value>;
 
         /// exposed dispatched implementation of boolean vector for zfloat32
-        using bfloat32  = backend::ZACC_MAJOR_ARCH::bfloat32<arch::value>;
+        using bfloat32  = backend::ZACC_MAJOR_ARCH::bfloat32<arch_t::value>;
         /// exposed dispatched implementation of boolean vector for zfloat64
-        using bfloat64  = backend::ZACC_MAJOR_ARCH::bfloat64<arch::value>;
+        using bfloat64  = backend::ZACC_MAJOR_ARCH::bfloat64<arch_t::value>;
         /// exposed dispatched implementation of boolean vector for zint8
-        using bint8     = backend::ZACC_MAJOR_ARCH::bint8<arch::value>;
+        using bint8     = backend::ZACC_MAJOR_ARCH::bint8<arch_t::value>;
         /// exposed dispatched implementation of boolean vector for zint16
-        using bint16    = backend::ZACC_MAJOR_ARCH::bint16<arch::value>;
+        using bint16    = backend::ZACC_MAJOR_ARCH::bint16<arch_t::value>;
         /// exposed dispatched implementation of boolean vector for zint32
-        using bint32    = backend::ZACC_MAJOR_ARCH::bint32<arch::value>;
+        using bint32    = backend::ZACC_MAJOR_ARCH::bint32<arch_t::value>;
 
-        static const std::string name() { return arch::name(); }
+        static const std::string name() { return arch_t::name(); }
     };
 
     /// exposed dispatched implementation of zfloat32
