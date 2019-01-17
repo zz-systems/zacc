@@ -39,11 +39,9 @@ namespace zacc { namespace test {
             TypeParam a = 10;
             TypeParam b = 20;
 
-            TypeParam c0 = 0;
             auto actual0 = a.when(false).otherwise(b);
             VASSERT_EQ(actual0, b);
 
-            TypeParam c1 = 1;
             auto actual1 = a.when(true).otherwise(b);
             VASSERT_EQ(actual1, a);
         }
