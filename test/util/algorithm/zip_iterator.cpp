@@ -56,8 +56,9 @@ namespace zacc { namespace test {
         {}
 
         // You can define per-test set-up and tear-down logic as usual.
-        virtual void SetUp() {  }
-        virtual void TearDown() {  }
+        void SetUp() override {  }
+
+        void TearDown() override {  }
 
 
         static const size_t size = 10;
@@ -78,7 +79,7 @@ namespace zacc { namespace test {
 
 
     TEST(zip_iterator_test, verify_data_not_cloned) {
-            REQUIRES(ZACC_ARCH);
+        REQUIRES(ZACC_ARCH);
 
         std::array<int, 10> a_items {{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }};
         std::array<int, 10> b_items {{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 }};

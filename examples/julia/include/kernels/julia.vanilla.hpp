@@ -74,7 +74,7 @@ namespace zacc { namespace examples {
                 std::complex<float> z(1.5 * (pos.x() - center.x()) / (_zoom * center.x()) + _offset.x(),
                                       1.0 * (pos.y() - center.y()) / (_zoom * center.y()) + _offset.y());
 
-                int iterations;
+                size_t iterations;
 
                 //for (iterations = 0; iterations < _max_iterations && std::abs(z) < 2.0; ++iterations)
                 for (iterations = 0; iterations < _max_iterations && (z.real() * z.real() + z.imag() * z.imag()) < 4.0; ++iterations)
