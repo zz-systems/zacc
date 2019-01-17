@@ -56,8 +56,8 @@ modules:
       - args: __m128d value
         init: _mm_castpd_si128(value)
 
-      - args: __m128i value
-        init: value
+      #- args: __m128i value
+      #  init: value
 
       - args: bool value
         init: "(value ? _mm_cmpeq_epi32(_mm_setzero_si128(), _mm_setzero_si128()) : _mm_setzero_si128())"
