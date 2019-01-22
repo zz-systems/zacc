@@ -49,8 +49,8 @@ modules:
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm_set_ps }
 
     boolean:
-      - args: __m128 value
-        init: value
+#      - args: __m128 value
+#        init: value
 
       - args: __m128d value
         init: _mm_castpd_ps(value)

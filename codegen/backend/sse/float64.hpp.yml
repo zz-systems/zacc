@@ -52,8 +52,8 @@ modules:
       - args: __m128 value
         init: _mm_castps_pd(value)
 
-      - args: __m128d value
-        init: value
+#      - args: __m128d value
+#        init: value
 
       - args: __m128i value
         init: _mm_castsi128_pd(value)
