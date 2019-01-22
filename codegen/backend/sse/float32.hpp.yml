@@ -30,8 +30,8 @@ type:
 modules:
   init:
     default:
-      - args: __m128 value
-        init: value
+#      - args: __m128 value
+#        init: value
 
       - args: __m128d value
         init: _mm_cvtpd_ps(value)

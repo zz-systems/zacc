@@ -31,8 +31,8 @@ type:
 modules:
   init:
     default:
-      - args: __m128i value
-        init: value
+#      - args: __m128i value
+#        init: value
 
       - args: [[*scalar_t, value]]
         init: _mm_set1_epi8(value)

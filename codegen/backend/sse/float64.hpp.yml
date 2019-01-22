@@ -33,8 +33,8 @@ modules:
       - args: __m128 value
         init: _mm_cvtps_pd(value)
 
-      - args: __m128d value
-        init: value
+#      - args: __m128d value
+#        init: value
 
       - args: __m128i value
         init: _mm_cvtepi32_pd(_mm_shuffle_epi32(value, _MM_SHUFFLE(0,2,0,0)))
