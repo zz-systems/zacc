@@ -34,8 +34,8 @@ modules:
       - args: __m256 value
         init: _mm256_cvtps_pd(_mm256_castps256_ps128(value))
 
-      - args: __m256d value
-        init: value
+#      - args: __m256d value
+#        init: value
 
       - args: __m256i value
         init: _mm256_cvtepi32_pd(_mm256_castsi256_si128(value))

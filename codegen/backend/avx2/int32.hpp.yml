@@ -37,8 +37,8 @@ modules:
       - args: __m256d value
         init: _mm256_castsi128_si256(_mm256_cvttpd_epi32(value))
 
-      - args: __m256i value
-        init: value
+#      - args: __m256i value
+#        init: value
 
       - args: [[*scalar_t, value]]
         init: _mm256_set1_epi32(value)

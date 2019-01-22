@@ -30,8 +30,8 @@ type:
 modules:
   init:
     default:
-      - args: __m256 value
-        init: value
+#      - args: __m256 value
+#        init: value
 
       - args: __m256d value
         init: _mm256_castps128_ps256(_mm256_cvtpd_ps(value))
