@@ -35,9 +35,37 @@
 #include <algorithm>
 
 namespace zacc {
+
+    struct string_view {
+        const char* str;
+        size_t size;
+
+        constexpr string_view() noexcept
+            : str {nullptr}, size {0}
+        {}
+        // can only construct from a char[] literal
+        template <std::size_t N>
+        constexpr string_view(const char (&s)[N]) noexcept
+            : str(s)
+            , size(N - 1) // not count the trailing nul
+        {}
+
+        operator std::string() const
+        {
+            return std::string(str, size);
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const string_view& str)
+        {
+            os << str.str;
+            return os;
+        }
+    };
+
+
     struct arch {
         feature mask;
-        const char* name;
+        string_view name;
 
         constexpr arch()
             : mask{}, name{}
@@ -71,64 +99,64 @@ namespace zacc {
 
         struct scalar : public std::integral_constant<uint64_t, feature::scalar()>
         {
-            static constexpr const char* name() { return "scalar"; }
+            static constexpr string_view name() { return "scalar"; }
         };
 
         struct sse2 : public std::integral_constant<uint64_t, feature::sse2()>
         {
-            static constexpr const char* name() { return "sse.sse2"; }
+            static constexpr string_view name() { return "sse.sse2"; }
         };
 
         struct sse3 : public std::integral_constant<uint64_t, feature(feature::sse2(), feature::sse3(),
                                                                       feature::ssse3())>
         {
-            static constexpr const char* name() { return "sse.sse3"; }
+            static constexpr string_view name() { return "sse.sse3"; }
         };
 
         struct sse41 : public std::integral_constant<uint64_t, feature(feature::sse2(), feature::sse3(),
                                                                        feature::ssse3(), feature::sse41())>
         {
-            static constexpr const char* name() { return "sse.sse41"; }
+            static constexpr string_view name() { return "sse.sse41"; }
         };
 
         struct sse41_fma3 : public std::integral_constant<uint64_t, feature(feature::sse2(), feature::sse3(),
                                                                             feature::ssse3(), feature::sse41(),
                                                                             feature::fma3())>
         {
-            static constexpr const char* name() { return "sse.sse41.fma3"; }
+            static constexpr string_view name() { return "sse.sse41.fma3"; }
         };
 
         struct sse41_fma4 : public std::integral_constant<uint64_t, feature(feature::sse2(), feature::sse3(),
                                                                             feature::ssse3(), feature::sse41(),
                                                                             feature::fma4())>
         {
-            static constexpr const char* name() { return "sse.sse41.fma4"; }
+            static constexpr string_view name() { return "sse.sse41.fma4"; }
         };
 
         struct avx1 : public std::integral_constant<uint64_t, feature::avx1()>
         {
-            static constexpr const char* name() { return "avx.avx1"; }
+            static constexpr string_view name() { return "avx.avx1"; }
         };
 
         struct avx1_fma3 : public std::integral_constant<uint64_t, feature(feature::avx1(), feature::fma3())>
         {
-            static constexpr const char* name() { return "avx.avx1.fma3"; }
+            static constexpr string_view name() { return "avx.avx1.fma3"; }
         };
 
         struct avx2 : public std::integral_constant<uint64_t, feature(feature::avx1(), feature::fma3(),
                                                                       feature::avx2())>
         {
-            static constexpr const char* name() { return "avx.avx2"; }
+            static constexpr string_view name() { return "avx.avx2"; }
         };
 
         struct avx512 : public std::integral_constant<uint64_t, feature::avx512()>
         {
-            static constexpr const char* name() { return "avx.avx512"; }
+            static constexpr string_view name() { return "avx.avx512"; }
         };
 
         struct opencl : public std::integral_constant<uint64_t, feature::opencl()>
         {
-            static constexpr const char* name() { return "gpgpu.opencl"; }
+            static constexpr string_view name() { return "gpgpu.opencl"; }
         };
     };
 }

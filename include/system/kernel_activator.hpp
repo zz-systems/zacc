@@ -129,7 +129,7 @@ namespace zacc { namespace system {
                 auto filename   = path.substr(0, dot);
                 auto extension  = path.substr().substr(dot + 1);
 
-                path = filename + "." + a.name + "." + extension;
+                path = filename + "." + std::string(a.name) + "." + extension;
             }
 
             std::clog << "[KERNEL ACTIVATOR][SELECT IMPL] " << a.name << std::endl;
