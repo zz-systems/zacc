@@ -39,12 +39,17 @@ namespace zacc
     template<typename Meta, typename U>
     using op_enable = std::enable_if_t<!std::tuple_element_t<2, Meta>::value && !std::is_same<U, std::tuple_element_t<0, Meta>>::value>;
 
-    template<typename T, typename std::enable_if<is_zval<T>::value || is_bval<T>::value, void**>::type = nullptr>
+    template<typename T, typename std::enable_if<is_zval<T>::value, void**>::type = nullptr>
     bval_t<T> make_mask(const T& value)
     {
         return zval_t<T>(value) != 0;
     }
 
+    template<typename T, typename std::enable_if<is_bval<T>::value, void**>::type = nullptr>
+    bval_t<T> make_mask(const T& value)
+    {
+        return value != false;
+    }
 
 
     template<typename Meta, typename T = std::tuple_element_t<0, Meta>, typename Interface = std::tuple_element_t<1, Meta>>
