@@ -306,7 +306,9 @@ namespace zacc { namespace math
 
         //using zval<izcomplex<T>>::zval;
 
-         constexpr zcomplex() = default;
+         constexpr zcomplex() 
+            : zval<izcomplex<T>>()
+         {}
 
          constexpr zcomplex(const zcomplex& other) noexcept
             : zval<izcomplex<T>> { other._value }

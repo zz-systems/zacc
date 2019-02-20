@@ -129,7 +129,7 @@ namespace zacc { namespace math {
 
         // =============================================================================================================
 
-        constexpr __mat()
+        constexpr __mat() noexcept
             : data {}
         {}
 
@@ -151,7 +151,7 @@ namespace zacc { namespace math {
 
         // =============================================================================================================
 
-        template<typename U>
+        template<typename U, typename std::enable_if<std::is_convertible<U, T>::value, void**>::type = nullptr>
         constexpr __mat(const __mat<U, Rows, Cols>& other)
             : data { array_cast<T>(other.data) }
         {}
@@ -163,7 +163,7 @@ namespace zacc { namespace math {
             std::transform(init_list.begin(), init_list.end(), data.begin(), [](U i) { return static_cast<T> (i); });
         }
 
-        template<typename U>
+        template<typename U, typename std::enable_if<std::is_convertible<U, T>::value, void**>::type = nullptr>
         constexpr __mat(std::initializer_list<std::initializer_list<U>> init_list)
         {
             int index = 0;
@@ -177,7 +177,7 @@ namespace zacc { namespace math {
             }
         }
 
-        template<typename U>
+        template<typename U, typename std::enable_if<std::is_convertible<U, T>::value, void**>::type = nullptr>
         constexpr __mat(std::initializer_list<__mat<U, Cols, 1>> init_list)
         {
             int index = 0;
@@ -350,6 +350,8 @@ namespace zacc { namespace math {
         using __mat<T, Rows, Cols>::data;
         using __mat<T, Rows, Cols>::__mat;
 
+        constexpr mat() = default;
+
         template<typename U, typename std::enable_if<std::is_convertible<U, T>::value, void**>::type = nullptr>
         constexpr mat(const U& all) noexcept
         {
@@ -365,6 +367,8 @@ namespace zacc { namespace math {
         using __mat<T, 1, 1>::data;
         using __mat<T, 1, 1>::__mat;
 
+        constexpr mat() = default;
+        
         template<typename U, typename std::enable_if<std::is_convertible<U, T>::value, void**>::type = nullptr>
         constexpr mat(const U& all) noexcept
             : __mat<T, 1, 1> {{ static_cast<T>(all) }}
@@ -383,7 +387,9 @@ namespace zacc { namespace math {
         auto& x()       { return data[0]; }
 
         auto& y() const { return data[1]; }
-        auto& y()       { return data[1]; }
+        auto& y()       { return data[1]; }        
+
+        constexpr mat() = default;
 
         template<typename U, typename std::enable_if<std::is_convertible<U, T>::value, void**>::type = nullptr>
         constexpr mat(const U& all)
@@ -412,6 +418,8 @@ namespace zacc { namespace math {
 
         auto& z() const { return data[2]; }
         auto& z()       { return data[2]; }
+
+        constexpr mat() = default;
 
         template<typename U, typename std::enable_if<std::is_convertible<U, T>::value, void**>::type = nullptr>
         constexpr mat(const U& all)
