@@ -1,6 +1,4 @@
 language: generic
-sudo: false
-dist: xenial
 
 python:
  - "3.6"
@@ -32,7 +30,8 @@ branches:
 matrix:
   include:
     - os: linux
-      compiler: gcc
+      sudo: false
+      dist: xenial
       addons:
         apt:
           sources:
@@ -43,7 +42,8 @@ matrix:
         - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
 
     - os: linux
-      compiler: gcc
+      sudo: false
+      dist: xenial
       addons:
         apt:
           sources:
@@ -54,7 +54,8 @@ matrix:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7 "
 
     - os: linux
-      compiler: clang
+      sudo: false
+      dist: xenial
       addons:
         apt:
           sources:
@@ -66,14 +67,13 @@ matrix:
 
     - os: osx
       osx_image: xcode9
-      compiler: clang
-      env:
-        - MATRIX_EVAL="CC=cc && CXX=c++"
 
 before_install:
-  - eval "${MATRIX_EVAL}"
-  - export CC=${CC}
-  - export CXX=${CXX}
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+      eval "${MATRIX_EVAL}";
+      export CC=${CC};
+      export CXX=${CXX};
+    fi
 
 install:
   - source ci/travis/install-$TRAVIS_OS_NAME.sh
