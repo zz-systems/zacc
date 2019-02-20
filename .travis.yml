@@ -2,10 +2,8 @@ language: generic
 
 python: 3.6
 
-cache:
-  ccache: true
-
-apt: true
+# cache:
+#   ccache: true
 
 env:
   global:
