@@ -1,7 +1,6 @@
 language: generic
 
-python:
- - "3.6"
+python: 3.6
 
 cache:
   ccache: true
@@ -23,47 +22,47 @@ git:
 
 branches:
   only:
-  - master
-  - develop
-  - ci
+    - master
+    - develop
+    - ci
 
 matrix:
   include:
-    - os: linux
-      sudo: false
-      dist: xenial
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-6
-      env:
-        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+    # - os: linux
+    #   sudo: false
+    #   dist: xenial
+    #   addons:
+    #     apt:
+    #       sources:
+    #         - ubuntu-toolchain-r-test
+    #       packages:
+    #         - g++-6
+    #   env:
+    #     - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
 
-    - os: linux
-      sudo: false
-      dist: xenial
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-7
-      env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7 "
+    # - os: linux
+    #   sudo: false
+    #   dist: xenial
+    #   addons:
+    #     apt:
+    #       sources:
+    #         - ubuntu-toolchain-r-test
+    #       packages:
+    #         - g++-7
+    #   env:
+    #     - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7 "
 
-    - os: linux
-      sudo: false
-      dist: xenial
-      addons:
-        apt:
-          sources:
-            - llvm-toolchain-trusty-4.0
-          packages:
-            - clang-4.0
-      env:
-        - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
+    # - os: linux
+    #   sudo: false
+    #   dist: xenial
+    #   addons:
+    #     apt:
+    #       sources:
+    #         - llvm-toolchain-trusty-4.0
+    #       packages:
+    #         - clang-4.0
+    #   env:
+    #     - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
 
     - os: osx
       osx_image: xcode9
