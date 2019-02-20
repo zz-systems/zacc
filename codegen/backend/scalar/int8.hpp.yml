@@ -31,15 +31,14 @@ type:
 modules:
   init:
     default:
-      - args: int8_t value
-        init: value #"std::array<int8_t, 1> {{value}}"
-
+#     - args: int8_t value
+#       init: value #"std::array<int8_t, 1> {{value}}"
 #      - args: "extracted_type value"
 #        init: "value"
 
     boolean:
-      - args: bool value
-        init: value #"std::array<bool, 1> {{value}}"
+#      - args: bool value
+#        init: value #"std::array<bool, 1> {{value}}"
       - args: zval_t value
         init: value.value() != 0 #"std::array<bool, 1> {{ value.value() != 0 }}"
 #-----------------------------------------------------------------------------------------------------------------------

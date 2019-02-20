@@ -49,6 +49,12 @@ modules:
         init: { args: { from: 0, to: *vec_size, type: *scalar_t }, body: _mm256_set_ps }
 
     boolean:
+      - args: __m256d value
+        init: _mm256_castpd_ps(value)
+
+      - args: __m256i value
+        init: _mm256_castsi256_ps(value)
+
       - args: bool value
         init: "(value ? _mm256_cmp_ps(_mm256_setzero_ps(), _mm256_setzero_ps(), _CMP_EQ_OQ) : _mm256_setzero_ps())"
 #-----------------------------------------------------------------------------------------------------------------------

@@ -120,8 +120,6 @@ namespace zacc { namespace math {
     {
         static_assert(Rows * Cols > 0, "Wrong dimensions for a matrix");
 
-        using mat = mat<T, Rows, Cols>;
-
         static constexpr size_t rows()     { return Rows; }
         static constexpr size_t cols()     { return Cols; }
         static constexpr size_t size()     { return Rows * Cols; }
@@ -159,10 +157,10 @@ namespace zacc { namespace math {
         {}
 
 
-        template<typename U>
+        template<typename U, typename std::enable_if<std::is_convertible<U, T>::value, void**>::type = nullptr>
         constexpr __mat(std::initializer_list<U> init_list)
         {
-            std::transform(init_list.begin(), init_list.end(), data.begin(), [](auto i) { return static_cast<T> (i); });
+            std::transform(init_list.begin(), init_list.end(), data.begin(), [](U i) { return static_cast<T> (i); });
         }
 
         template<typename U>
@@ -209,7 +207,7 @@ namespace zacc { namespace math {
 
         constexpr auto transpose() const
         {
-            mat result;
+            mat<T, Rows, Cols> result;
 
             for(int n = 0; n < Rows; n++)
             {
@@ -222,9 +220,9 @@ namespace zacc { namespace math {
             return result;
         };
 
-        constexpr mat normalize() const
+        constexpr mat<T, Rows, Cols> normalize() const
         {
-            return *static_cast<const mat*>(this) / magnitude();
+            return *static_cast<const mat<T, Rows, Cols>*>(this) / magnitude();
         }
 
         constexpr T magnitude() const
@@ -340,7 +338,7 @@ namespace zacc { namespace math {
 
         // =============================================================================================================
 
-        constexpr T dot(const mat &other) const
+        constexpr T dot(const mat<T, Rows, Cols> &other) const
         {
             return zacc::accumulate(data.begin(), data.end(), other.begin(), static_cast<T>(0), [](auto sum, auto i, auto o) { return sum + i * o; });
         }

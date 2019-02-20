@@ -77,6 +77,8 @@ class Parser():
                           type=type)
 
     def initializer_module(self, name, type, data) -> ModuleNode:
+        data = data or []
+
         # add default constructor
         initializers = [{Tokens.ARGS : { Tokens.RAW : "", Tokens.TYPE : " "}, Tokens.INIT : ""}] + data
 

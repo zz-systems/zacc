@@ -116,24 +116,27 @@ namespace zacc {
 
     // =============================================================================================================
 
-    template <typename T, typename enable = void>
-    struct is_small_type
-        : std::false_type
-    {};
-
-    template <typename T>
-    struct is_small_type<T, std::enable_if_t<std::is_pointer<T>::value
-                                             || std::is_arithmetic<T>::value
-                                             || std::is_enum<T>::value
-                                             || sizeof(T) < sizeof(void*)>>
-        : std::true_type
-    {};
-
+//    template <typename T, typename enable = void>
+//    struct is_small_type
+//        : std::false_type
+//    {};
+//
+//    template <typename T>
+//    struct is_small_type<T, std::enable_if_t<std::is_pointer<T>::value
+//                                             || std::is_arithmetic<T>::value
+//                                             || std::is_enum<T>::value
+//                                             || sizeof(T) < sizeof(void*)>>
+//        : std::true_type
+//    {};
+//
+////    template<typename T>
+////    using param_t = std::conditional_t<is_small_type<T>::value, T const, T const&>;
+//
 //    template<typename T>
-//    using param_t = std::conditional_t<is_small_type<T>::value, T const, T const&>;
+//    using param_t = std::conditional_t<is_small_type<T>::value, T, const T&>;
 
     template<typename T>
-    using param_t = std::conditional_t<is_small_type<T>::value, T, const T&>;
+    using param_t = const std::decay_t<T>&;
 
     template<typename T, typename U>
     using enable_if_convertible2 = std::enable_if_t<std::is_convertible<T, U>::value, void**>;

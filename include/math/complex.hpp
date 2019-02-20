@@ -304,7 +304,36 @@ namespace zacc { namespace math
     {
         USING_ZTYPE(izcomplex<T>);
 
-        using zval<izcomplex<T>>::zval;
+        //using zval<izcomplex<T>>::zval;
+
+         constexpr zcomplex() = default;
+
+         constexpr zcomplex(const zcomplex& other) noexcept
+            : zval<izcomplex<T>> { other._value }
+         {}
+
+         constexpr zcomplex(zcomplex&& other) noexcept
+            : zcomplex()
+         {
+             swap(*this, other);
+         }
+
+         constexpr zcomplex& operator=(zcomplex other) noexcept
+         {
+             swap(*this, other);
+             return *this;
+         }
+
+         constexpr zcomplex(const storage_t<izcomplex<T>>& other) noexcept
+            : zval<izcomplex<T>> { other }
+         {}
+
+         // =============================================================================================================
+
+         friend void swap(zcomplex& one, zcomplex& other) // nothrow
+         {
+             std::swap(one._value, other._value);
+         }
 
          // =============================================================================================================
 
@@ -312,6 +341,12 @@ namespace zacc { namespace math
         constexpr zcomplex(const math::vec2<U>& other) noexcept
                 : zval<izcomplex<T>>(other)
         {}
+
+        // template<typename U>
+        // constexpr zcomplex(std::initializer_list<U> init_list)
+        //     : zval<izcomplex<T>>(init_list)
+        // {
+        // }
 
         template<typename U, typename std::enable_if<std::is_convertible<U, element_type>::value, void**>::type = nullptr>
         constexpr zcomplex(const U& re) noexcept

@@ -65,7 +65,7 @@ namespace zacc { namespace system {
             return dispatch(true, std::forward<Args>(args)...);
         }
 
-        /**
+        /**†
          * @brief execute all or one _valid_ code paths (highest featureset)
          * @param select_one if ture, only one path will be executed
          */
@@ -228,8 +228,9 @@ namespace zacc { namespace system {
 
         bool can_execute(feature f)
         {
-            return _features.test(f) && _Impl::template can_execute(f);
+            return _features.test(f) && _Impl::can_execute(f);
         }
+
         /**
          * @brief displays the selected arch with extended information
          */

@@ -78,6 +78,8 @@ def wrapper(parse):
     def postprocess(file):
         data = parse(file)
 
+        #pprint.pprint(data)
+
         parsed = None
 
         try:
