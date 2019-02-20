@@ -2,8 +2,8 @@ language: generic
 
 python: 3.6
 
-# cache:
-#   ccache: true
+cache:
+  ccache: true
 
 env:
   global:
@@ -64,6 +64,9 @@ matrix:
 
     - os: osx
       osx_image: xcode9
+
+    # - os: osx
+    #   osx_image: xcode9.4
 
 before_install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
