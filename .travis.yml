@@ -26,65 +26,80 @@ branches:
 
 matrix:
   include:
-    # - os: linux
-    #   sudo: false
-    #   dist: xenial
-    #   addons:
-    #     apt:
-    #       sources:
-    #         - ubuntu-toolchain-r-test
-    #       packages:
-    #         - g++-6
-    #   env:
-    #     - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+    - os: linux
+      sudo: false
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-6
+      env:
+        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
 
-    # - os: linux
-    #   sudo: false
-    #   dist: xenial
-    #   addons:
-    #     apt:
-    #       sources:
-    #         - ubuntu-toolchain-r-test
-    #       packages:
-    #         - g++-7
-    #   env:
-    #     - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7 "
+    - os: linux
+      sudo: false
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
-    # - os: linux
-    #   sudo: false
-    #   dist: xenial
-    #   addons:
-    #     apt:
-    #       sources:
-    #         - llvm-toolchain-trusty-4.0
-    #       packages:
-    #         - clang-4.0
-    #   env:
-    #     - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
+    - os: linux
+      sudo: false
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            - llvm-toolchain-trusty-4.0
+          packages:
+            - clang-4.0
+      env:
+        - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
+
+    - os: linux
+      sudo: false
+      dist: xenial
+      addons:
+        apt:
+          sources:
+            llvm-toolchain-trusty-5.0
+          packages:
+            - clang-5.0
+      env:
+        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
 
     - os: osx
       osx_image: xcode9
 
-    # - os: osx
-    #   osx_image: xcode9.4
+    - os: osx
+      osx_image: xcode9.4
+
+    - os: osx
+      osx_image: xcode10.1
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
-      eval "${MATRIX_EVAL}";
-      export CC=${CC};
-      export CXX=${CXX};
-    fi
+  - eval "${MATRIX_EVAL}"
+  - export CC=${CC}
+  - export CXX=${CXX}
 
 install:
   - source ci/travis/install-$TRAVIS_OS_NAME.sh
 
-script:
+before_script:
   - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY} -DBUILD_DOCUMENTATION=${DOC_BUILDER}
+
+script:  
   - cd ${BUILD_DIR}
-  - cmake --build . --config ${BUILD_TYPE} --target zacc.system.info -- -j 4
-  - cmake --build . --config ${BUILD_TYPE} --target zacc.tests.all -- -j 4
-  - cmake --build . --config ${BUILD_TYPE} --target zacc.examples.mandelbrot -- -j 4
-  - cmake --build . --config ${BUILD_TYPE} --target zacc.examples.julia -- -j 4
+  - cmake --build . --config ${BUILD_TYPE} --target zacc.system.info
+  - cmake --build . --config ${BUILD_TYPE} --target zacc.tests.all
+  - cmake --build . --config ${BUILD_TYPE} --target zacc.examples.mandelbrot
+  - cmake --build . --config ${BUILD_TYPE} --target zacc.examples.julia
 
 #after_success:
 #  - ./ci/run-build-documentation.sh
