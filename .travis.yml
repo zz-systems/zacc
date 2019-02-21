@@ -88,7 +88,7 @@ smoke_stage: &_smoke_stage
     - ./ci/travis/run-smoke.sh
     - ./ci/run-pack-release.sh
   after_success:
-    - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://${AWS_BUCKET}/$TRAVIS_BUILD_NUMBER
+    - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://${AWS_BUCKET}/paclage
 
 # _deploy_stage: &_deploy_stage
 #   install: *_install
@@ -110,9 +110,9 @@ jobs:
       <<: *linux_clang5
       <<: *_smoke_stage
 
-    - stage: smoke
-      <<: *osx_xcode101
-      <<: *_smoke_stage
+    # - stage: smoke
+    #   <<: *osx_xcode101
+    #   <<: *_smoke_stage
 
     # - stage: test
     #   <<: *linux_gcc6
@@ -140,16 +140,18 @@ jobs:
 
     - stage: deploy
       before_script: 
-        - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://${AWS_BUCKET}/$TRAVIS_BUILD_NUMBER
+        - aws s3 sync ~/package s3://${AWS_BUCKET}/package
       deploy:
         - provider: releases
           skip-cleanup: true
           api_key: $GITHUB_TOKEN
           file_glob: true
           file: 
-            - ~/$TRAVIS_BUILD_NUMBER/$release.linux.zip
-            - ~/$TRAVIS_BUILD_NUMBER/$release.osx.zip
+            - ~/package/$release.linux.zip
+            - ~/package/$release.osx.zip
           draft: true  
+      after_deploy:
+        - aws s3 rm --recursive s3://${AWS_BUCKET}/package
 
     - stage: documentation
       before_script: 
