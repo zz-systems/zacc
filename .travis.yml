@@ -149,8 +149,8 @@ jobs:
           api_key: $GITHUB_TOKEN
           file_glob: true
           file: 
-            - ~/package/$release.linux.zip
-            - ~/package/$release.osx.zip
+            - ~/package/release.linux.zip
+            - ~/package/release.osx.zip
           draft: true  
       after_deploy:
         - aws s3 rm --recursive s3://${AWS_BUCKET}/package
