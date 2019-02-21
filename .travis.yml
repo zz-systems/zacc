@@ -42,22 +42,22 @@ matrix:
   include:
     - &linux_gcc6
       <<: *os_linux
-      addons: { apt: { packages: g++-6 }}
+      #addons: { apt: { packages: g++-6 }}
       env: MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
     
     - &linux_gcc7
       <<: *os_linux
-      addons: { apt: { packages: g++-7 }}
+      #addons: { apt: { packages: g++-7 }}
       env: MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
     - &linux_clang4
       <<: *os_linux
-      addons: { apt: { packages: clang-4.0 }}
+      #addons: { apt: { packages: clang-4.0 }}
       env: MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
 
     - &linux_clang5
       <<: *os_linux
-      addons: { apt: { packages: clang-5.0 }}
+      #addons: { apt: { packages: clang-5.0 }}
       env: MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
 
     - &osx_xcode9
