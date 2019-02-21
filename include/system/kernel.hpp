@@ -26,6 +26,7 @@
 #pragma once
 
 #include "zacc.hpp"
+#include "traits/allocatable.hpp"
 #include "system/entrypoint.hpp"
 
 namespace zacc { namespace system {
@@ -116,4 +117,21 @@ namespace zacc { namespace system {
             static_cast<KernelInterface*>(this)->run(output);
         }
     };
+
+#define KERNEL_IMPL(Kernel) \
+    DISPATCHED struct Kernel ## _kernel : Kernel, allocatable<Kernel ## _kernel, arch>
+
+#define REGISTER_KERNEL(Kernel) \
+    extern "C" \
+    { \
+        zacc::system::entrypoint *Kernel ## _create_instance() \
+        { \
+            return new Kernel ## _kernel<zacc::dispatched_arch>(); \
+        } \
+        \
+        void Kernel ## _delete_instance(zacc::system::entrypoint* instance) \
+        { \
+            delete instance; \
+        } \
+    }
 }}

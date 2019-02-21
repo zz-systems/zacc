@@ -25,6 +25,8 @@
 
 #pragma once
 
+#include "util/operators.hpp"
+#include "util/type/type_composition.hpp"
 #include "util/type/type_casts.hpp"
 #include "util/type/type_traits.hpp"
 

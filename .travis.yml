@@ -14,6 +14,7 @@ env:
     - BUILD_SANITIZE_MEMORY=0
     - BUILD_DIR=Build
     - BUILD_TYPE='Release'
+    - JOBS=2
 
 git:
   depth: 1
@@ -56,7 +57,7 @@ matrix:
       addons:
         apt:
           sources:
-            - llvm-toolchain-trusty-4.0
+            - ubuntu-toolchain-r-test
           packages:
             - clang-4.0
       env:
@@ -68,7 +69,7 @@ matrix:
       addons:
         apt:
           sources:
-            llvm-toolchain-trusty-5.0
+            - ubuntu-toolchain-r-test
           packages:
             - clang-5.0
       env:
@@ -92,14 +93,17 @@ install:
   - source ci/travis/install-$TRAVIS_OS_NAME.sh
 
 before_script:
-  - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY} -DBUILD_DOCUMENTATION=${DOC_BUILDER}
+  #- cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY} -DBUILD_DOCUMENTATION=${DOC_BUILDER}
 
 script:  
-  - cd ${BUILD_DIR}
-  - cmake --build . --config ${BUILD_TYPE} --target zacc.system.info
-  - cmake --build . --config ${BUILD_TYPE} --target zacc.tests.all
-  - cmake --build . --config ${BUILD_TYPE} --target zacc.examples.mandelbrot
-  - cmake --build . --config ${BUILD_TYPE} --target zacc.examples.julia
+  - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY} -DBUILD_DOCUMENTATION=${DOC_BUILDER}
+
+  - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.system.info -- -j $JOBS
+  - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.tests.all -- -j $JOBS
+  - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.examples.mandelbrot -- -j $JOBS
+  - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.examples.julia -- -j $JOBS
+
+  - source ci/travis/run-test.sh
 
 #after_success:
 #  - ./ci/run-build-documentation.sh

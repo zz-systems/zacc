@@ -101,6 +101,8 @@ namespace zacc { namespace examples {
                 auto r = this->execute(d);
                 results.push_back(r);
                 stats.push_back(stat("REF: ", r));
+
+                //display_image("REF: " + r.kernel_name, r);
             });
 
             display_stat(stat("SISD: ", scalar), stat("SIMD: ", simd), stats);

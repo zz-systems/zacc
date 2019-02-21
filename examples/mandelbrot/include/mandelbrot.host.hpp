@@ -45,7 +45,7 @@ namespace zacc { namespace examples {
     public:
 
         mandelbrot_host(const sysinfo& sysinfo)
-                : host(sysinfo, {256, 256})
+                : host(sysinfo, {2048, 2048})
         {
             using namespace util;
             _gradient = {

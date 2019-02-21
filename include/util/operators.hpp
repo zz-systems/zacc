@@ -32,9 +32,7 @@
 namespace zacc
 {
     template<typename Composed, typename Interface, bool DisableOverloads = false>
-    using ops_meta = std::tuple<Composed, Interface, std::integral_constant<bool, DisableOverloads>>;
-
-     
+    using ops_meta = std::tuple<Composed, Interface, std::integral_constant<bool, DisableOverloads>>;     
     
     template<typename Meta, typename U>
     using op_enable = std::enable_if_t<!std::tuple_element_t<2, Meta>::value && !std::is_same<U, std::tuple_element_t<0, Meta>>::value>;

@@ -38,6 +38,7 @@ namespace zacc { namespace examples {
     struct julia_vanilla : system::kernel<julia_vanilla>
     {
         static constexpr auto name() { return "julia_vanilla"; }
+        static constexpr auto compatible() { return feature::scalar(); }
 
         virtual void configure(vec2<int> dim, vec2<float> offset, vec2<float> c, float zoom, size_t max_iterations) = 0;
         virtual void run(std::vector<int> &output) = 0;

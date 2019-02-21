@@ -36,6 +36,7 @@
 #include <cmath>
 
 #include "backend/intrin.hpp"
+#include "backend/intrin.ext.hpp"
 #include "backend/zval.hpp"
 
 #include "util/type/type_composition.hpp"
@@ -168,36 +169,11 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
         {% endfor %}
     {
         USING_ZTYPE(zval<iz{{ ast.type.name }}<FeatureMask>>);
-        //using zval<iz{{ ast.type.name }}<FeatureMask>>::zval;
+        using zval<iz{{ ast.type.name }}<FeatureMask>>::zval;
 
         constexpr z{{ ast.type.name }}() = default;
 
-        constexpr z{{ ast.type.name }}(const z{{ ast.type.name }}& other) noexcept
-            : zval<iz{{ ast.type.name }}<FeatureMask>> { other._value }
-        {}
-
-        constexpr z{{ ast.type.name }}(z{{ ast.type.name }}&& other) noexcept
-            : z{{ ast.type.name }}()
-        {
-            swap(*this, other);
-        }
-
-        constexpr z{{ ast.type.name }}& operator=(z{{ ast.type.name }} other) noexcept
-        {
-            swap(*this, other);
-            return *this;
-        }
-
-        constexpr z{{ ast.type.name }}(const storage_t<iz{{ ast.type.name }}<FeatureMask>>& other) noexcept
-            : zval<iz{{ ast.type.name }}<FeatureMask>> { other }
-        {}
-
         // =============================================================================================================
-
-        friend void swap(z{{ ast.type.name }}& one, z{{ ast.type.name }}& other) // nothrow
-        {
-            std::swap(one._value, other._value);
-        }
 
         template<typename T, std::enable_if_t<std::is_same<T, view_t<iz{{ ast.type.name }}<FeatureMask>>>::value && !is_vector, void**> = nullptr>
         constexpr z{{ ast.type.name }}(const T& view) noexcept
@@ -257,36 +233,11 @@ namespace zacc { namespace backend { namespace {{ ast.type.target }}
         {% endfor %}
     {
         USING_ZTYPE(zval<ib{{ ast.type.name }}<FeatureMask>>);
-        //using zval<ib{{ ast.type.name }}<FeatureMask>>::zval;
+        using zval<ib{{ ast.type.name }}<FeatureMask>>::zval;
 
         constexpr b{{ ast.type.name }}() = default;
 
-        constexpr b{{ ast.type.name }}(const b{{ ast.type.name }}& other) noexcept
-            : zval<ib{{ ast.type.name }}<FeatureMask>> { other._value }
-        {}
-
-        constexpr b{{ ast.type.name }}(b{{ ast.type.name }}&& other) noexcept
-            : b{{ ast.type.name }}()
-        {
-            swap(*this, other);
-        }
-
-        constexpr b{{ ast.type.name }}& operator=(b{{ ast.type.name }} other) noexcept
-        {
-            swap(*this, other);
-            return *this;
-        }
-
-        constexpr b{{ ast.type.name }}(const storage_t<ib{{ ast.type.name }}<FeatureMask>>& other) noexcept
-            : zval<ib{{ ast.type.name }}<FeatureMask>> { other }
-        {}
-
         // =============================================================================================================
-
-        friend void swap(b{{ ast.type.name }}& one, b{{ ast.type.name }}& other) // nothrow
-        {
-            std::swap(one._value, other._value);
-        }
 
         template<typename T, std::enable_if_t<std::is_same<T, view_t<ib{{ ast.type.name }}<FeatureMask>>>::value && !is_vector, void**> = nullptr>
         constexpr b{{ ast.type.name }}(const T& view) noexcept

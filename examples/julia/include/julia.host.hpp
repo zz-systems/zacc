@@ -25,9 +25,10 @@
 
 #pragma once
 
-#include<chrono>
+#include <chrono>
 
 #include "interfaces/julia.hpp"
+#include "interfaces/julia.vanilla.hpp"
 
 #include "system/kernel_dispatcher.hpp"
 #include "math/matrix.hpp"
@@ -38,7 +39,7 @@
 
 namespace zacc { namespace examples {
 
-    class julia_host : public host<julia>
+    class julia_host : public host<julia, julia_vanilla>
     {
         using input_container     = typename system::kernel_traits<julia>::input_container;
         using output_container    = typename system::kernel_traits<julia>::output_container;
@@ -46,7 +47,7 @@ namespace zacc { namespace examples {
     public:
 
         julia_host(const sysinfo& sysinfo)
-                : host(sysinfo, {256, 256})
+                : host(sysinfo, {2048, 2048})
         {
             using namespace util;
             std::vector<std::pair<const float, color_rgb>> colors;

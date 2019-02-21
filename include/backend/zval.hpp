@@ -44,7 +44,7 @@ namespace zacc {
     {
         USING_ZTYPE(Interface);
 
-        constexpr zval() = default;
+        constexpr zval() noexcept = default;
 
         // =============================================================================================================
 
@@ -64,9 +64,35 @@ namespace zacc {
             return *this;
         }
 
-        constexpr zval(const storage_t<Interface>& other) noexcept
+        constexpr zval(storage_t<Interface> other) noexcept
             : _value { other }
-        {}
+        {}   
+
+        // template<typename U = Interface, typename std::enable_if<!std::is_fundamental<storage_t<U>>::value, void**>::type = nullptr>
+        // constexpr zval(const storage_t<U>& other) noexcept
+        //     : _value { other }
+        // {}
+
+        // template<typename U = Interface, typename std::enable_if<!std::is_fundamental<storage_t<U>>::value, void**>::type = nullptr>
+        // constexpr zval(storage_t<U>&& other) noexcept
+        //     : _value { other }
+        // {}
+
+
+        // template<typename U = Interface, typename std::enable_if<std::is_fundamental<storage_t<U>>::value, void**>::type = nullptr>
+        // constexpr zval(storage_t<U> other) noexcept
+        //     : _value { other }
+        // {}        
+
+        // template<typename U = Interface, typename std::enable_if<!std::is_fundamental<storage_t<U>>::value, void**>::type = nullptr>
+        // constexpr zval(const storage_t<U>& other) noexcept
+        //     : _value { other }
+        // {}
+
+        // template<typename U = Interface, typename std::enable_if<!std::is_fundamental<storage_t<U>>::value, void**>::type = nullptr>
+        // constexpr zval(storage_t<U>&& other) noexcept
+        //     : _value { other }
+        // {}
 
         // =============================================================================================================
 

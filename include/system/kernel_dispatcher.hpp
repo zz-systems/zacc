@@ -76,7 +76,7 @@ namespace zacc { namespace system {
         }
 
         bool can_execute(feature f)
-        {
+        {            
             return f.test(kernel_traits<Kernel>::compatible());
         }
 

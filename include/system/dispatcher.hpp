@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "backend/intrin.hpp"
 #include "util/algorithm.hpp"
 #include "system/feature.hpp"
 #include "system/dlloader.hpp"

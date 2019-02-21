@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 
-cd "${TRAVIS_BUILD_DIR}/${BUILD_DIR}"
+cd "${BUILD_DIR}"
 
 # set shared library path
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${TRAVIS_BUILD_DIR}/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${BUILD_DIR}/lib
 
 # display contents
 ls ./bin
 ls ./lib
 
 # detect system
+echo "Execute zacc.system.info"
 ./bin/zacc.system.info
 
 # run tests
+echo "Execute tests"
 ctest --output-on-failure
 
 # run examples

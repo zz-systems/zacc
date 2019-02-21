@@ -304,31 +304,44 @@ namespace zacc { namespace math
     {
         USING_ZTYPE(izcomplex<T>);
 
-        //using zval<izcomplex<T>>::zval;
+        using zval<izcomplex<T>>::zval;
 
-         constexpr zcomplex() 
-            : zval<izcomplex<T>>()
-         {}
+        constexpr zcomplex() noexcept = default;
+        
+        // constexpr zcomplex() 
+        //     : zval<izcomplex<T>>()
+        // {}
 
-         constexpr zcomplex(const zcomplex& other) noexcept
-            : zval<izcomplex<T>> { other._value }
-         {}
+        // constexpr zcomplex(const zcomplex& other) noexcept
+        //     : zval<izcomplex<T>> { other._value }
+        // {}
 
-         constexpr zcomplex(zcomplex&& other) noexcept
-            : zcomplex()
-         {
-             swap(*this, other);
-         }
+        // constexpr zcomplex(zcomplex&& other) noexcept
+        //     : zcomplex()
+        // {
+        // swap(*this, other);
+        // }
 
-         constexpr zcomplex& operator=(zcomplex other) noexcept
-         {
-             swap(*this, other);
-             return *this;
-         }
+        // constexpr zcomplex& operator=(zcomplex other) noexcept
+        // {
+        //     swap(*this, other);
+        //     return *this;
+        // }
 
-         constexpr zcomplex(const storage_t<izcomplex<T>>& other) noexcept
-            : zval<izcomplex<T>> { other }
-         {}
+        // template<typename U = T, typename std::enable_if<!is_vector_v<U> && std::is_fundamental<storage_t<U>>::value, void**>::type = nullptr>
+        // constexpr zcomplex(storage_t<izcomplex<U>> other) noexcept
+        //     : zval<izcomplex<T>> { other }
+        // {}
+        
+        // template<typename U = T, typename std::enable_if<!std::is_fundamental<storage_t<U>>::value, void**>::type = nullptr>
+        //  constexpr zcomplex(const storage_t<izcomplex<U>>& other) noexcept
+        //     : zval<izcomplex<T>> { other }
+        //  {}
+
+        // template<typename U = T, typename std::enable_if<!std::is_fundamental<storage_t<U>>::value, void**>::type = nullptr>
+        //  constexpr zcomplex(storage_t<izcomplex<U>>&& other) noexcept
+        //     : zval<izcomplex<T>> { other }
+        //  {}
 
          // =============================================================================================================
 
@@ -341,8 +354,14 @@ namespace zacc { namespace math
 
         template<typename U>
         constexpr zcomplex(const math::vec2<U>& other) noexcept
-                : zval<izcomplex<T>>(other)
+            : zval<izcomplex<T>>(other)
         {}
+
+        template<typename U>
+        constexpr zcomplex(math::vec2<U>&& other) noexcept
+            : zval<izcomplex<T>>(other)
+        {}
+       
 
         // template<typename U>
         // constexpr zcomplex(std::initializer_list<U> init_list)

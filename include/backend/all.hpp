@@ -24,7 +24,6 @@
 
 #pragma once
 
-#include "intrin.hpp"
 #include "zval.hpp"
 
 #if defined(ZACC_AVX)
