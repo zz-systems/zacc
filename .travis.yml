@@ -96,7 +96,7 @@ smoke_stage: &_smoke_stage
   after_script: 
     - source ci/run-pack-release.sh
   after_success:
-    #- aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://${bucket}/$TRAVIS_BUILD_NUMBER
+    #- aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://${AWS_BUCKET}/$TRAVIS_BUILD_NUMBER
 
 # _deploy_stage: &_deploy_stage
 #   install: *_install
@@ -109,6 +109,7 @@ jobs:
       <<: *linux_gcc7
       install: 
         - source ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
+        - source ci/travis/setup-aws.sh
       before_script: *_before_script
       script: 
         - source ci/travis/run-smoke.sh
