@@ -62,16 +62,16 @@ matrix:
       osx_image: xcode10.1
 
 
-# before_install: &_before_install
-#   - eval "${MATRIX_EVAL}"
-#   - export CC=${CC}
-#   - export CXX=${CXX}
+before_install: &_before_install
+  - eval "${MATRIX_EVAL}"
+  - export CC=${CC}
+  - export CXX=${CXX}
 
-# install: &_install
-#   - source ci/travis/install-$TRAVIS_OS_NAME.sh
+install: &_install
+  - source ci/travis/install-$TRAVIS_OS_NAME.sh
 
-# script: &_script
-#   - source ./ci/travis/run-build.sh
+script: &_script
+  - source ./ci/travis/run-build.sh
 
 # build_stage: &build_stage
 #   before_install:
