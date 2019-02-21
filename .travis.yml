@@ -146,6 +146,8 @@ jobs:
             - ~/package/release.linux.zip
             - ~/package/release.osx.zip
           draft: true  
+          on:
+            all_branches: true
       after_deploy:
         - aws s3 rm --recursive s3://${AWS_BUCKET}/package
 
