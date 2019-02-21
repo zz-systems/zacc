@@ -70,7 +70,7 @@ before_script: &_before_script
   - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY}
 
 install: &_install
-  - ./ci/travis/install-$TRAVIS_OS_NAME.sh
+  - source ./ci/travis/install-$TRAVIS_OS_NAME.sh
 
 script: &_script
   - ./ci/travis/run-build.sh
@@ -89,7 +89,7 @@ build_stage: &_build_stage
   script: *_script
 
 smoke_stage: &_smoke_stage
-  install: ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
+  install: source ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
   before_script: *_before_script
   script: 
     - ./ci/travis/run-smoke.sh
@@ -108,8 +108,8 @@ jobs:
     - stage: smoke
       <<: *linux_gcc7
       install: 
-        - ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
-        - ./ci/travis/setup-aws.sh
+        - source ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
+        - source ./ci/travis/setup-aws.sh
       before_script: *_before_script
       script: 
         - ./ci/travis/run-smoke.sh
