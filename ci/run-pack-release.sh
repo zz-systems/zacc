@@ -27,5 +27,5 @@ cp ${TRAVIS_BUILD_DIR}/README.md ${RELEASE_NAME}/README.md
 # compress
 zip -r release.${RELEASE_NAME}.zip ${RELEASE_NAME}
 
-cp ./release.${RELEASE_NAME}.zip ~/$TRAVIS_BUILD_NUMBER/release.${RELEASE_NAME}.zip
+cp ./release.${RELEASE_NAME}.zip ~/$TRAVIS_BUILD_NUMBER
 

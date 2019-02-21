@@ -94,7 +94,6 @@ smoke_stage: &_smoke_stage
   before_script: *_before_script
   script: 
     - ./ci/travis/run-smoke.sh
-  after_script: 
     - ./ci/run-pack-release.sh
   after_success:
     #- aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://${AWS_BUCKET}/$TRAVIS_BUILD_NUMBER
