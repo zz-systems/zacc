@@ -133,6 +133,8 @@ jobs:
     #   <<: *_build_stage
 
     - stage: deploy
+      install:
+        - source ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
       before_script: 
         - source ./ci/travis/setup-aws.sh
       deploy:
