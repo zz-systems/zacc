@@ -29,6 +29,7 @@
 #include "util/type/type_composition.hpp"
 #include "util/type/type_casts.hpp"
 #include "util/type/type_traits.hpp"
+#include "util/algorithm.hpp"
 
 namespace zacc { namespace math {
 
@@ -754,23 +755,6 @@ namespace zacc { namespace math {
 //        return result;
 //    };
 
-
-
-    template <char C>
-    std::istream& expect(std::istream& in)
-    {
-        if ((in >> std::skipws).peek() == C) 
-        {
-            in.ignore();
-        }
-        else 
-        {
-            in.setstate(std::ios_base::failbit);
-        }
-
-        return in;
-    }
-
     template<typename T, size_t elems>
     inline std::ostream& operator<<(std::ostream& out, const vec<T, elems> &other)
     {
@@ -809,8 +793,6 @@ namespace zacc { namespace math {
             in.setstate(std::ios_base::failbit);
         }        
 
-        std::cout << temp;
-        
         other = temp;
 
         return in;

@@ -3,7 +3,7 @@ set(doc.deps
         "zacc.codegen")
 
 
-if(BUILD_DOCUMENTATION)
+#if(BUILD_DOCUMENTATION)
     find_package(Doxygen)
     find_package(Sphinx)
 
@@ -56,4 +56,4 @@ if(BUILD_DOCUMENTATION)
                 COMMENT "Building HTML documentation with Sphinx")
 
     endif()
-endif()
+#endif()

@@ -64,7 +64,7 @@ namespace zacc { namespace system {
                 throw std::logic_error("can't load library named \"" + library_path + "\": " + error);
             }
 
-            std::cerr << "[MANAGED LIBRARY][LOAD] " << _library_name << std::endl;
+            std::clog << "[MANAGED LIBRARY][LOAD] " << _library_name << std::endl;
         }
 
         /**

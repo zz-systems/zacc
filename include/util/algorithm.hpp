@@ -109,6 +109,20 @@ namespace zacc {
         return target;
     }
 
+    template <char C>
+    std::istream& expect(std::istream& in)
+    {
+        if ((in >> std::skipws).peek() == C) 
+        {
+            in.ignore();
+        }
+        else 
+        {
+            in.setstate(std::ios_base::failbit);
+        }
+
+        return in;
+    }
 
     /**
      * Transforms a string to lower case
