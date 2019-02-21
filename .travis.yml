@@ -87,7 +87,7 @@ smoke_stage: &_smoke_stage
   script: 
     - ./ci/travis/run-smoke.sh
     - ./ci/run-pack-release.sh
-  after_success:
+  #after_success:
     - aws s3 sync ~/package s3://${AWS_BUCKET}/package
 
 # _deploy_stage: &_deploy_stage
