@@ -73,13 +73,13 @@ install: &_install
 script: &_script
   - source ./ci/travis/run-build.sh
 
-build_stage: &_build_stage
-  before_install:
-    <<: *_before_install
-  install:
-    <<: *_install
-  script:
-    <<: *_script
+# build_stage: &_build_stage
+#   before_install:
+#     <<: *_before_install
+#   install:
+#     <<: *_install
+#   script:
+#     <<: *_script
 
 #before_script:
   #- cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY} -DBUILD_DOCUMENTATION=${DOC_BUILDER}
