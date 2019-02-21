@@ -18,4 +18,8 @@ echo "Execute tests"
 ctest --output-on-failure
 
 # run examples
-# TODO
+echo "Execute zacc.examples.julia"
+xvfb-run ./zacc.examples.julia
+
+echo "Execute zacc.examples.mandelbrot"
+xvfb-run ./zacc.examples.mandelbrot
