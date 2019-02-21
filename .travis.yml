@@ -70,10 +70,10 @@ before_script: &_before_script
   - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY}
 
 install: &_install
-  - source ci/travis/install-$TRAVIS_OS_NAME.sh
+  - ./ci/travis/install-$TRAVIS_OS_NAME.sh
 
 script: &_script
-  - source ./ci/travis/run-build.sh
+  - ./ci/travis/run-build.sh
 #   - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY}
 
 #   - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.system.info -- -j $JOBS
@@ -89,12 +89,12 @@ build_stage: &_build_stage
   script: *_script
 
 smoke_stage: &_smoke_stage
-  install: source ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
+  install: ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
   before_script: *_before_script
   script: 
-    - source ci/travis/run-smoke.sh
+    - ./ci/travis/run-smoke.sh
   after_script: 
-    - source ci/run-pack-release.sh
+    - ./ci/run-pack-release.sh
   after_success:
     #- aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://${AWS_BUCKET}/$TRAVIS_BUILD_NUMBER
 
@@ -108,11 +108,11 @@ jobs:
     - stage: smoke
       <<: *linux_gcc7
       install: 
-        - source ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
-        - source ci/travis/setup-aws.sh
+        - ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
+        - ./ci/travis/setup-aws.sh
       before_script: *_before_script
       script: 
-        - source ci/travis/run-smoke.sh
+        - ./ci/travis/run-smoke.sh
 
     - stage: smoke
       <<: *linux_clang5
