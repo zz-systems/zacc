@@ -16,6 +16,7 @@ env:
     - BUILD_DIR=Build
     - BUILD_TYPE='Release'
     - JOBS=2
+    - PATH=$HOME/.local/bin:$PATH
 
 git:
   depth: 1
@@ -62,26 +63,17 @@ matrix:
       osx_image: xcode10.1
 
 
-before_install: &_before_install
+before_script: &_before_script
   - eval "${MATRIX_EVAL}"
   - export CC=${CC}
   - export CXX=${CXX}
+  - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY}
 
 install: &_install
   - source ci/travis/install-$TRAVIS_OS_NAME.sh
 
 script: &_script
   - source ./ci/travis/run-build.sh
-
-build_stage: &_build_stage
-  before_install: *_before_install
-  install: *_install
-  script: *_script
-
-#before_script:
-  #- cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY} -DBUILD_DOCUMENTATION=${DOC_BUILDER}
-
-# script:  
 #   - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY}
 
 #   - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.system.info -- -j $JOBS
@@ -91,37 +83,79 @@ build_stage: &_build_stage
 
 #   - source ci/travis/run-test.sh
 
+build_stage: &_build_stage
+  install: *_install
+  before_script: *_before_script
+  script: *_script
+
+smoke_stage: &_smoke_stage
+  install: source ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
+  before_script: *_before_script
+  script: 
+    - source ci/travis/run-smoke.sh
+  after_script: 
+    - source ci/run-pack-release.sh
+  after_success:
+    #- aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://${bucket}/$TRAVIS_BUILD_NUMBER
+
+# _deploy_stage: &_deploy_stage
+#   install: *_install
+#   before_script: *_before_script
+#   script: *_script
+
 jobs:
   include: 
-    - stage: build
+    - stage: smoke
+      <<: *linux_gcc7
+      install: 
+        - source ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
+      before_script: *_before_script
+      script: 
+        - source ci/travis/run-smoke.sh
+
+    - stage: smoke
+      <<: *linux_clang5
+      <<: *_smoke_stage
+
+    - stage: smoke
+      <<: *osx_xcode101
+      <<: *_smoke_stage
+
+    - stage: test
       <<: *linux_gcc6
       <<: *_build_stage
 
-    - stage: build
+    - stage: test
       <<: *linux_gcc7
       <<: *_build_stage
       
-    - stage: build
+    - stage: test
       <<: *linux_clang4
       <<: *_build_stage
 
-    - stage: build
+    - stage: test
       <<: *linux_clang5
       <<: *_build_stage
     
-    - stage: build
+    - stage: test
       <<: *osx_xcode9
       <<: *_build_stage
 
-    - stage: build
+    - stage: test
       <<: *osx_xcode94
       <<: *_build_stage
 
-    - stage: build
-      <<: *osx_xcode101
-      <<: *_build_stage
+    # - stage: deploy
+    #   <<: *linux_clang5
+    #   <<: *_deploy_stage
+
+    # - stage: deploy
+    #   <<: *osx_xcode101
+    #   <<: *_deploy_stage
 
     - stage: documentation
+      before_script: 
+        - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} 
       script: 
         - cmake --build ${BUILD_DIR} --target zacc.documentation
 
