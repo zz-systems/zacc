@@ -114,29 +114,29 @@ jobs:
       <<: *osx_xcode101
       <<: *_smoke_stage
 
-    - stage: test
-      <<: *linux_gcc6
-      <<: *_build_stage
+    # - stage: test
+    #   <<: *linux_gcc6
+    #   <<: *_build_stage
 
-    - stage: test
-      <<: *linux_gcc7
-      <<: *_build_stage
+    # - stage: test
+    #   <<: *linux_gcc7
+    #   <<: *_build_stage
       
-    - stage: test
-      <<: *linux_clang4
-      <<: *_build_stage
+    # - stage: test
+    #   <<: *linux_clang4
+    #   <<: *_build_stage
 
-    - stage: test
-      <<: *linux_clang5
-      <<: *_build_stage
+    # - stage: test
+    #   <<: *linux_clang5
+    #   <<: *_build_stage
     
-    - stage: test
-      <<: *osx_xcode9
-      <<: *_build_stage
+    # - stage: test
+    #   <<: *osx_xcode9
+    #   <<: *_build_stage
 
-    - stage: test
-      <<: *osx_xcode94
-      <<: *_build_stage
+    # - stage: test
+    #   <<: *osx_xcode94
+    #   <<: *_build_stage
 
     - stage: deploy
         before_script: 
