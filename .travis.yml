@@ -25,64 +25,52 @@ branches:
     - develop
     - ci
 
-# matrix:
-#   include:
-#     - os: linux
-#       sudo: false
-#       dist: xenial
-#       addons:
-#         apt:
-#           sources:
-#             - ubuntu-toolchain-r-test
-#           packages:
-#             - g++-6
-#       env:
-#         - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
 
-#     - os: linux
-#       sudo: false
-#       dist: xenial
-#       addons:
-#         apt:
-#           sources:
-#             - ubuntu-toolchain-r-test
-#           packages:
-#             - g++-7
-#       env:
-#         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+os_linux: &os_linux
+  os: linux
+  sudo: false
+  dist: xenial
+  addons:
+    apt:
+      sources:
+        - ubuntu-toolchain-r-test
 
-#     - os: linux
-#       sudo: false
-#       dist: xenial
-#       addons:
-#         apt:
-#           sources:
-#             - ubuntu-toolchain-r-test
-#           packages:
-#             - clang-4.0
-#       env:
-#         - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
+os_osx: &os_osx
+  os: osx
 
-#     - os: linux
-#       sudo: false
-#       dist: xenial
-#       addons:
-#         apt:
-#           sources:
-#             - ubuntu-toolchain-r-test
-#           packages:
-#             - clang-5.0
-#       env:
-#         - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
+matrix:
+  include:
+    - &linux_gcc6
+      <<: *os_linux
+      addons: { apt: { packages: g++-6 }}
+      env: MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+    
+    - &linux_gcc7
+      <<: *os_linux
+      addons: { apt: { packages: g++-7 }}
+      env: MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
-#     - os: osx
-#       osx_image: xcode9
+    - &linux_clang4
+      <<: *os_linux
+      addons: { apt: { packages: clang-4.0 }}
+      env: MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
 
-#     - os: osx
-#       osx_image: xcode9.4
+    - &linux_clang5
+      <<: *os_linux
+      addons: { apt: { packages: clang-5.0 }}
+      env: MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
 
-#     - os: osx
-#       osx_image: xcode10.1
+    - &osx_xcode9
+      <<: *os_osx
+      osx_image: xcode9
+
+    - &osx_xcode94
+      <<: *os_osx
+      osx_image: xcode9.4
+
+    - &osx_xcode101
+      <<: *os_osx
+      osx_image: xcode10.1
 
 
 before_install: &before_install
@@ -93,29 +81,16 @@ before_install: &before_install
 install: &install
   - source ci/travis/install-$TRAVIS_OS_NAME.sh
 
-build_script: &build_script
-  script: ./ci/travis/run-build.sh
+script: &build_script
+  - source ./ci/travis/run-build.sh
 
-os_linux: &os_linux
-  os: linux
-  sudo: false
-  dist: xenial
-  addons:
-    apt:
-      sources:
-        - ubuntu-toolchain-r-test
-  env:
-    - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"    
-  <<: *before_install
-  <<: *install
-  <<: *build_script
-
-os_osx: &os_osx
-  os: osx
-  <<: *install
-  <<: *build_script
-
-
+build_stage: &build_stage
+  before_install:
+    <<: *before_install
+  install:
+    <<: *install
+  script:
+    <<: *build_script
 
 
 #before_script:
@@ -134,50 +109,32 @@ os_osx: &os_osx
 jobs:
   include: 
     - stage: build
-      <<: *os_linux
-      addons:
-        apt:
-          packages:
-            - g++-6
-      env:
-        - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
-    - stage: build
-      <<: *os_linux
-      addons:
-        apt:
-          packages:
-            - g++-7
-      env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-    - stage: build
-      <<: *os_linux
-      addons:
-        apt:
-          packages:
-            - clang-4.0
-      env:
-        - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
+      <<: *linux_gcc6
+      <<: *build_stage
 
     - stage: build
-      <<: *os_linux
-      addons:
-        apt:
-          packages:
-            - clang-5.0
-      env:
-        - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
+      <<: *linux_gcc7
+      <<: *build_stage
+      
+    - stage: build
+      <<: *linux_clang4
+      <<: *build_stage
+
+    - stage: build
+      <<: *linux_clang5
+      <<: *build_stage
     
     - stage: build
-      <<: *os_osx
-      osx_image: xcode9
+      <<: *osx_xcode9
+      <<: *build_stage
 
     - stage: build
-      <<: *os_osx
-      osx_image: xcode9.4
+      <<: *osx_xcode94
+      <<: *build_stage
 
     - stage: build
-      <<: *os_osx
-      osx_image: xcode10.1
+      <<: *osx_xcode101
+      <<: *build_stage
 
     - stage: documentation
       script: 
