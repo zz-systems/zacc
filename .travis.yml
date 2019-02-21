@@ -73,13 +73,13 @@ install: &_install
 script: &_script
   - source ./ci/travis/run-build.sh
 
-# build_stage: &build_stage
-#   before_install:
-#     <<: *_before_install
-#   install:
-#     <<: *_install
-#   script:
-#     <<: *_script
+build_stage: &_build_stage
+  before_install:
+    <<: *_before_install
+  install:
+    <<: *_install
+  script:
+    <<: *_script
 
 #before_script:
   #- cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY} -DBUILD_DOCUMENTATION=${DOC_BUILDER}
@@ -94,43 +94,39 @@ script: &_script
 
 #   - source ci/travis/run-test.sh
 
-# jobs:
-#   include: 
-#     - stage: build
-#       <<: *linux_gcc6
-#       <<: *build_stage
+jobs:
+  include: 
+    - stage: build
+      <<: *linux_gcc6
+      <<: *_build_stage
 
-#     - stage: build
-#       <<: *linux_gcc7
-#       <<: *build_stage
+    - stage: build
+      <<: *linux_gcc7
+      <<: *_build_stage
       
-#     - stage: build
-#       <<: *linux_clang4
+    - stage: build
+      <<: *linux_clang4
+      <<: *_build_stage
 
-
-
-
-#       <<: *build_stage
-
-#     - stage: build
-#       <<: *linux_clang5
-#       <<: *build_stage
+    - stage: build
+      <<: *linux_clang5
+      <<: *_build_stage
     
-#     - stage: build
-#       <<: *osx_xcode9
-#       <<: *build_stage
+    - stage: build
+      <<: *osx_xcode9
+      <<: *_build_stage
 
-#     - stage: build
-#       <<: *osx_xcode94
-#       <<: *build_stage
+    - stage: build
+      <<: *osx_xcode94
+      <<: *_build_stage
 
-#     - stage: build
-#       <<: *osx_xcode101
-#       <<: *build_stage
+    - stage: build
+      <<: *osx_xcode101
+      <<: *_build_stage
 
-#     - stage: documentation
-#       script: 
-#         - cmake --build ${BUILD_DIR} --target zacc.documentation
+    - stage: documentation
+      script: 
+        - cmake --build ${BUILD_DIR} --target zacc.documentation
 
 
 #after_success:
