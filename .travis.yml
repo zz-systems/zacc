@@ -142,16 +142,18 @@ jobs:
           skip-cleanup: true
           api_key: $GITHUB_TOKEN
           file_glob: true
-          file: 
-            - ~/package/release.linux.zip
-            - ~/package/release.osx.zip
+          file: ~/package/*
           draft: true  
           on:
             all_branches: true
+            tags: false
       after_deploy:
         - aws s3 rm --recursive s3://${AWS_BUCKET}/package
 
     - stage: documentation
+      addons: { apt: { packages: [doxygen] }}
+      install: 
+        - source ./ci/travis/install-$TRAVIS_OS_NAME.sh
       before_script: 
         - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} 
       script: 
