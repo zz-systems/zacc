@@ -118,7 +118,7 @@ namespace zacc { namespace examples {
             using namespace std;
 
             cout << endl << string(83, '-') << endl;
-            cout << setw(30) << "" << setw(15) << "_mask" << setw(10) << "Time (ms)" << setw(15) << "Min" << setw(15) << "Max" << endl;
+            cout << setw(30) << "" << setw(15) << "Mask" << setw(10) << "Time (ms)" << setw(15) << "Min" << setw(15) << "Max" << endl;
             cout << string(83, '-') << endl;
             cout << scalar << endl;
             cout << simd << endl;

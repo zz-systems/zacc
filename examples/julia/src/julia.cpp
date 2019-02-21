@@ -38,6 +38,24 @@ int main(int argc, char** argv)
     std::cout << "Your system supports: " << std::endl;
     std::cout << zacc::sysinfo() << std::endl;
 
-    zacc::examples::julia_host host(sysinfo);
-    host.run();
+
+    zacc::math::vec2<int> dim       = { 2048, 2048 };
+    zacc::math::vec2<float> offset  = { 0, 0 };
+    zacc::math::vec2<float> c       = { -0.7, 0.27015 };
+    float zoom                      = 1;
+    size_t max_iterations           = 2048;
+    bool headless                   = false;
+
+    options["dim"] >> dim;
+    options["offset"] >> offset;
+    options["c"] >> c;
+    options["czoommax"] >> zoom;
+    options["max_iterations"] >> max_iterations;
+    options["headless"] >> headless;
+
+    zacc::examples::julia_host host(sysinfo, dim, offset, c, zoom, max_iterations);
+
+    host.run(!headless);
+
+    return 0;
 }

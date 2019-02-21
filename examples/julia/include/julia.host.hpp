@@ -44,10 +44,15 @@ namespace zacc { namespace examples {
         using input_container     = typename system::kernel_traits<julia>::input_container;
         using output_container    = typename system::kernel_traits<julia>::output_container;
 
+        vec2<float> _offset;
+        vec2<float> _c;
+        float _zoom;
+        size_t _max_iterations;
+
     public:
 
-        julia_host(const sysinfo& sysinfo)
-                : host(sysinfo, {2048, 2048})
+        julia_host(const sysinfo& sysinfo, vec2<int> dim = { 2048, 2048 }, vec2<float> offset = { 0, 0 }, vec2<float> c = { -0.7, 0.27015 }, float zoom = 1, size_t max_iterations = 2048)
+                : host(sysinfo, dim), _offset { offset }, _c { c }, _zoom { zoom }, _max_iterations { max_iterations }
         {
             using namespace util;
             std::vector<std::pair<const float, color_rgb>> colors;
@@ -64,12 +69,7 @@ namespace zacc { namespace examples {
 
         virtual void configure() override
         {
-            vec2<float> offset = { 0, 0 };
-            vec2<float> c = { -0.7, 0.27015 };
-            float zoom = 1;
-            size_t max_iterations = 2048;
-
-            configure_kernels(_dim, offset, c, zoom, max_iterations);
+            configure_kernels(_dim, _offset, _c, _zoom, _max_iterations);
         }
 
         virtual util::color_rgb map_value(typename output_container::value_type value) override

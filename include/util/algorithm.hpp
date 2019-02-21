@@ -33,6 +33,8 @@
 #include <iterator>
 #include <utility>
 #include <iostream>
+#include <regex>
+
 #include "util/type/type_traits.hpp"
 
 #include "backend/zval.hpp"
@@ -124,6 +126,18 @@ namespace zacc {
      */
     inline std::string  toupper(const std::string& source) {
         return transform(source, [](auto c){ return std::toupper(c); });
+    }
+
+    inline std::string ltrim(const std::string& s) {
+        return std::regex_replace(s, std::regex("^\\s+"), std::string(""));
+    }
+
+    inline std::string rtrim(const std::string& s) {
+        return std::regex_replace(s, std::regex("\\s+$"), std::string(""));
+    }
+
+    inline std::string trim(const std::string& s) {
+        return ltrim(rtrim(s));
     }
 
     /**

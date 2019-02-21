@@ -30,24 +30,9 @@
 #include <algorithm>
 #include <vector>
 #include <map>
-#include <regex>
 #include "util/algorithm.hpp"
 
 namespace zacc {
-
-    std::string ltrim(const std::string& s) {
-        return std::regex_replace(s, std::regex("^\\s+"), std::string(""));
-    }
-
-    std::string rtrim(const std::string& s) {
-        return std::regex_replace(s, std::regex("\\s+$"), std::string(""));
-    }
-
-    std::string trim(const std::string& s) {
-        return ltrim(rtrim(s));
-    }
-
-
     struct option 
     {
         std::string key;
@@ -135,15 +120,15 @@ namespace zacc {
                     continue;
                 }                
 
-                auto value_pos = iter->find_first_of('=', key_pos);
+                auto value_pos = iter->find_first_of("=", key_pos);
                 if (value_pos == std::string::npos)
                 {
                     key = iter->substr(key_pos);
 
                     // check next item
-                    if(!is_param(*(iter + 1)))
+                    if((iter + 1) != options.end() && !is_param(*(iter + 1)))
                     {
-                        value = *(iter + 1);
+                        value = *(++iter);
                     }
                 }
                 else

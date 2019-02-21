@@ -19,7 +19,7 @@ ctest --output-on-failure
 
 # run examples
 echo "Execute zacc.examples.julia"
-./bin/zacc.examples.julia --dim="[256, 256]" --headless     
+./bin/zacc.examples.julia --dim="[1024, 1024]" --headless     
 
 echo "Execute zacc.examples.mandelbrot"
-./bin/zacc.examples.mandelbrot --dim="[256, 256]" --headless     
+./bin/zacc.examples.mandelbrot --dim="[1024, 1024]" --headless     
