@@ -146,7 +146,9 @@ jobs:
           skip-cleanup: true
           api_key: $GITHUB_TOKEN
           file_glob: true
-          file: ~/$TRAVIS_BUILD_NUMBER/${RELEASE_NAME}.zip
+          file: 
+            - ~/$TRAVIS_BUILD_NUMBER/$release.linux.zip
+            - ~/$TRAVIS_BUILD_NUMBER/$release.osx.zip
           draft: true  
 
     - stage: documentation
