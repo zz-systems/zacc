@@ -17,6 +17,7 @@ env:
     - BUILD_TYPE='Release'
     - JOBS=2
     - PATH=$HOME/.local/bin:$PATH
+    - RELEASE_NAME=release.${TRAVIS_OS_NAME}
 
 git:
   depth: 1
