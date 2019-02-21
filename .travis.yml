@@ -139,15 +139,15 @@ jobs:
     #   <<: *_build_stage
 
     - stage: deploy
-        before_script: 
-          - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://${AWS_BUCKET}/$TRAVIS_BUILD_NUMBER
-        deploy:
-          - provider: releases
-            skip-cleanup: true
-            api_key: $GITHUB_TOKEN
-            file_glob: true
-            file: ~/$TRAVIS_BUILD_NUMBER/${RELEASE_NAME}.zip
-            draft: true  
+      before_script: 
+        - aws s3 sync ~/$TRAVIS_BUILD_NUMBER s3://${AWS_BUCKET}/$TRAVIS_BUILD_NUMBER
+      deploy:
+        - provider: releases
+          skip-cleanup: true
+          api_key: $GITHUB_TOKEN
+          file_glob: true
+          file: ~/$TRAVIS_BUILD_NUMBER/${RELEASE_NAME}.zip
+          draft: true  
 
     - stage: documentation
       before_script: 
