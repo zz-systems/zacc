@@ -75,7 +75,7 @@ script: &_script
 
 build_stage: &_build_stage
   before_install:
-    <<: *_before_install
+  <<: *_before_install
 #   install:
 #     <<: *_install
 #   script:
