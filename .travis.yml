@@ -74,11 +74,11 @@ script: &_script
   - source ./ci/travis/run-build.sh
 
 build_stage: &_build_stage
-  # before_install:
+  before_install:
     # <<: *_before_install
-#   install:
+  install:
 #     <<: *_install
-#   script:
+  script:
 #     <<: *_script
 
 #before_script:
