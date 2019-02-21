@@ -82,7 +82,9 @@ build_stage: &_build_stage
   script: *_script
 
 smoke_stage: &_smoke_stage
-  install: source ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
+  install: 
+    - source ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
+    - source ./ci/travis/setup-aws.sh
   before_script: *_before_script
   script: 
     - ./ci/travis/run-smoke.sh
