@@ -179,7 +179,6 @@ jobs:
       <<: *os_osx
       osx_image: xcode10.1
 
-
     - stage: documentation
       script: 
         - cmake --build ${BUILD_DIR} --target zacc.documentation
