@@ -25,96 +25,161 @@ branches:
     - develop
     - ci
 
-matrix:
-  include:
-    - os: linux
-      sudo: false
-      dist: xenial
+# matrix:
+#   include:
+#     - os: linux
+#       sudo: false
+#       dist: xenial
+#       addons:
+#         apt:
+#           sources:
+#             - ubuntu-toolchain-r-test
+#           packages:
+#             - g++-6
+#       env:
+#         - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+
+#     - os: linux
+#       sudo: false
+#       dist: xenial
+#       addons:
+#         apt:
+#           sources:
+#             - ubuntu-toolchain-r-test
+#           packages:
+#             - g++-7
+#       env:
+#         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+
+#     - os: linux
+#       sudo: false
+#       dist: xenial
+#       addons:
+#         apt:
+#           sources:
+#             - ubuntu-toolchain-r-test
+#           packages:
+#             - clang-4.0
+#       env:
+#         - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
+
+#     - os: linux
+#       sudo: false
+#       dist: xenial
+#       addons:
+#         apt:
+#           sources:
+#             - ubuntu-toolchain-r-test
+#           packages:
+#             - clang-5.0
+#       env:
+#         - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
+
+#     - os: osx
+#       osx_image: xcode9
+
+#     - os: osx
+#       osx_image: xcode9.4
+
+#     - os: osx
+#       osx_image: xcode10.1
+
+
+before_install: &before_install
+  - eval "${MATRIX_EVAL}"
+  - export CC=${CC}
+  - export CXX=${CXX}
+
+install: &install
+  - source ci/travis/install-$TRAVIS_OS_NAME.sh
+
+build_script: &build_script
+  script: ./ci/travis/run-build.sh
+
+os_linux: &os_linux
+  os: linux
+  sudo: false
+  dist: xenial
+  addons:
+    apt:
+      sources:
+        - ubuntu-toolchain-r-test
+  env:
+    - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"    
+  <<: *before_install
+  <<: *install
+  <<: *build_script
+
+os_osx: &os_osx
+  os: osx
+  <<: *install
+  <<: *build_script
+
+
+
+
+#before_script:
+  #- cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY} -DBUILD_DOCUMENTATION=${DOC_BUILDER}
+
+# script:  
+#   - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY}
+
+#   - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.system.info -- -j $JOBS
+#   - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.tests.all -- -j $JOBS
+#   - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.examples.mandelbrot -- -j $JOBS
+#   - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.examples.julia -- -j $JOBS
+
+#   - source ci/travis/run-test.sh
+
+jobs:
+  include: 
+    - stage: build
+      <<: *os_linux
       addons:
         apt:
-          sources:
-            - ubuntu-toolchain-r-test
           packages:
             - g++-6
       env:
         - MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
-
-    - os: linux
-      sudo: false
-      dist: xenial
+    - stage: build
+      <<: *os_linux
       addons:
         apt:
-          sources:
-            - ubuntu-toolchain-r-test
           packages:
             - g++-7
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
-
-    - os: linux
-      sudo: false
-      dist: xenial
+    - stage: build
+      <<: *os_linux
       addons:
         apt:
-          sources:
-            - ubuntu-toolchain-r-test
           packages:
             - clang-4.0
       env:
         - MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
 
-    - os: linux
-      sudo: false
-      dist: xenial
+    - stage: build
+      <<: *os_linux
       addons:
         apt:
-          sources:
-            - ubuntu-toolchain-r-test
           packages:
             - clang-5.0
       env:
         - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
-
-    - os: osx
+    
+    - stage: build
+      <<: *os_osx
       osx_image: xcode9
 
-    - os: osx
+    - stage: build
+      <<: *os_osx
       osx_image: xcode9.4
 
-    - os: osx
+    - stage: build
+      <<: *os_osx
       osx_image: xcode10.1
 
-before_install:
-  - eval "${MATRIX_EVAL}"
-  - export CC=${CC}
-  - export CXX=${CXX}
 
-install:
-  - source ci/travis/install-$TRAVIS_OS_NAME.sh
-
-before_script:
-  #- cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY} -DBUILD_DOCUMENTATION=${DOC_BUILDER}
-
-script:  
-  - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY}
-
-  - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.system.info -- -j $JOBS
-  - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.tests.all -- -j $JOBS
-  - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.examples.mandelbrot -- -j $JOBS
-  - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.examples.julia -- -j $JOBS
-
-  - source ci/travis/run-test.sh
-
-jobs:
-  include: 
-    - stage: compile
-      script: 
-        - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY}
-        - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.system.info -- -j $JOBS
-        - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.tests.all -- -j $JOBS
-        - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.examples.mandelbrot -- -j $JOBS
-        - cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.examples.julia -- -j $JOBS
-        - source ci/travis/run-test.sh
     - stage: documentation
       script: 
         - cmake --build ${BUILD_DIR} --target zacc.documentation
