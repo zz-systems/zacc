@@ -142,7 +142,7 @@ jobs:
 
     - stage: deploy
       before_script: 
-        - aws s3 sync ~/package s3://${AWS_BUCKET}/package
+        - source ./ci/travis/setup-aws.sh
       deploy:
         - provider: releases
           skip-cleanup: true
