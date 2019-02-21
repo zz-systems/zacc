@@ -25,10 +25,78 @@
 
 #pragma once
 #include <string>
+#include <iostream>
+#include <sstream>
 #include <algorithm>
 #include <vector>
+#include <map>
+#include <regex>
+#include "util/algorithm.hpp"
 
 namespace zacc {
+
+    std::string ltrim(const std::string& s) {
+        return std::regex_replace(s, std::regex("^\\s+"), std::string(""));
+    }
+
+    std::string rtrim(const std::string& s) {
+        return std::regex_replace(s, std::regex("\\s+$"), std::string(""));
+    }
+
+    std::string trim(const std::string& s) {
+        return ltrim(rtrim(s));
+    }
+
+
+    struct option 
+    {
+        std::string key;
+        std::string value;
+    };
+
+    inline std::ostream& operator<<(std::ostream& os, const option& option)
+    {
+        os << option.key << ":" << option.value;
+
+        return os;
+    }
+    
+    template<typename T>
+    inline const option& operator>>(const option& option, T& target)
+    {
+        if(!option.key.empty() && !option.value.empty())        
+        {
+            std::stringstream ss;
+            ss << option.value;
+            ss >> target;    
+        }
+
+        return option;
+    }
+
+    template<>
+    inline const option& operator>>(const option& option, bool& target)
+    { 
+        if(option.key.empty())
+        {
+            target = false;
+        }
+        else if(option.value.empty())
+        {
+            // assume flag
+            target = true;
+        }
+        else
+        {
+            // parse boolean
+            std::stringstream ss;
+            ss << zacc::tolower(option.value);
+            ss >> target;
+        }
+
+        return option;
+    }
+
     /**
      * @brief Simple commandline option parser
      * @authors iain, s.zuyev
@@ -36,6 +104,10 @@ namespace zacc {
      */
     class option_parser
     {
+        bool is_param(const std::string& str)
+        {
+            return str.find_first_of("-/\\") == 0;
+        }
     public:
         /**
          * @brief accepts main() args
@@ -43,17 +115,68 @@ namespace zacc {
          * @param argv argument array
          */
         option_parser(const int argc, char** argv)
-            : _options(argv + 1, argv + argc)
-        { }
+        {
+            std::vector<std::string> options(argv + 1, argv + argc);
+
+            for(auto iter = options.begin(); iter != options.end(); ++iter)
+            {                
+                if(!is_param(*iter))
+                {
+                    // not a param 
+                    continue;
+                }     
+
+                std::string key, value;
+
+                auto key_pos = iter->find_first_not_of("-/\\");
+                if (key_pos == std::string::npos)
+                {
+                    // invalid key
+                    continue;
+                }                
+
+                auto value_pos = iter->find_first_of('=', key_pos);
+                if (value_pos == std::string::npos)
+                {
+                    key = iter->substr(key_pos);
+
+                    // check next item
+                    if(!is_param(*(iter + 1)))
+                    {
+                        value = *(iter + 1);
+                    }
+                }
+                else
+                {
+                    key = iter->substr(key_pos, value_pos - key_pos);
+                    value = iter->substr(value_pos + 1);
+                }
+
+                key = trim(key);
+                value = trim(value);
+
+                _options[key] = { key, value };
+            }
+        }
+        
+        const option& operator[] (const std::string& key) const
+        {
+            auto iter = _options.find(key);
+
+            if(iter != _options.end())
+                return iter->second;
+
+            return _empty;
+        }
 
         /**
          * @brief checks if an option is set
          * @param option option name
          * @return true if the option exists, false otherwise
          */
-        bool has_option(const std::string& option) const
+        bool has_option(const std::string& key) const
         {
-            return std::find(_options.begin(), _options.end(), option) != _options.end();
+            return _options.find(key) != _options.end();
         }
 
         /**
@@ -61,18 +184,13 @@ namespace zacc {
          * @param option
          * @return option value if option exists, otherwise an empty string
          */
-        const std::string& get_option(const std::string& option) const
+        const std::string& get_option(const std::string& key) const
         {
-            auto iter = std::find(_options.begin(), _options.end(), option);
-
-            if(iter != _options.end() && ++ iter != _options.end())
-                return *iter;
-
-            return _empty;
+            return this->operator[](key).value;
         }
 
     private:
-        std::vector<std::string> _options;
-        const std::string _empty;
+        std::map<std::string, option> _options;
+        option _empty;
     };
 }

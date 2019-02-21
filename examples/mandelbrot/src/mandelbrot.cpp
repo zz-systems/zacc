@@ -40,8 +40,21 @@ int main(int argc, char** argv)
     std::cout << "Your system supports: " << std::endl;
     std::cout << zacc::sysinfo() << std::endl;
 
-    zacc::examples::mandelbrot_host host(sysinfo);
-    host.run();
+    zacc::math::vec2<int> dim       = { 2048, 2048 };
+    zacc::math::vec2<float> cmin    = { -2, -2 };
+    zacc::math::vec2<float> cmax    = { 2, 2 };
+    size_t max_iterations           = 2048;
+    bool headless                   = false;
+
+    options["dim"] >> dim;
+    options["cmin"] >> cmin;
+    options["cmax"] >> cmax;
+    options["max_iterations"] >> max_iterations;
+    options["headless"] >> headless;
+
+    zacc::examples::mandelbrot_host host(sysinfo, dim, cmin, cmax, max_iterations);
+
+    host.run(!headless);
 
     return 0;
 }

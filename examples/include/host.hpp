@@ -84,7 +84,7 @@ namespace zacc { namespace examples {
 
         virtual ~host() {}
 
-        virtual void run()
+        virtual void run(bool display_image = true)
         {
             this->configure();
 
@@ -101,15 +101,16 @@ namespace zacc { namespace examples {
                 auto r = this->execute(d);
                 results.push_back(r);
                 stats.push_back(stat("REF: ", r));
-
-                //display_image("REF: " + r.kernel_name, r);
             });
 
             display_stat(stat("SISD: ", scalar), stat("SIMD: ", simd), stats);
 
 
-            display_image("SIMD: ", simd);
-            display_image("SISD: ", scalar);
+            if(display_image)
+            {
+                this->display_image("SIMD: ", simd);
+                this->display_image("SISD: ", scalar);
+            }
         }
 
         virtual void display_stat(stat scalar, stat simd, const std::vector<stat>& refs)

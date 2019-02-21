@@ -42,12 +42,17 @@ namespace zacc { namespace examples {
         using input_container     = typename system::kernel_traits<mandelbrot>::input_container;
         using output_container    = typename system::kernel_traits<mandelbrot>::output_container;
 
+        vec2<float> _cmin;
+        vec2<float> _cmax;
+
+        size_t _max_iterations;
     public:
 
-        mandelbrot_host(const sysinfo& sysinfo)
-                : host(sysinfo, {2048, 2048})
+        mandelbrot_host(const sysinfo& sysinfo, vec2<int> dim = { 2048, 2048 }, vec2<float> cmin = { -2, -2 }, vec2<float> cmax = { 2, 2 }, size_t max_iterations = 2048)
+                : host(sysinfo, dim), _cmin { cmin }, _cmax { cmax }, _max_iterations { max_iterations }
         {
             using namespace util;
+
             _gradient = {
                     { -1, color_rgb(0, 0, 0 ) },
                     { 0, color_rgb(66, 30, 15 ) },
@@ -73,12 +78,7 @@ namespace zacc { namespace examples {
 
         virtual void configure() override
         {
-            vec2<float> cmin = {-2, -2};
-            vec2<float> cmax = { 2, 2 };
-
-            size_t max_iterations = 2048;
-
-            configure_kernels(_dim, cmin, cmax, max_iterations);
+            configure_kernels(_dim, _cmin, _cmax, _max_iterations);
         }
 
         virtual util::color_rgb map_value(typename output_container::value_type value) override

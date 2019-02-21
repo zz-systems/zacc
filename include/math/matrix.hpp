@@ -756,6 +756,21 @@ namespace zacc { namespace math {
 
 
 
+    template <char C>
+    std::istream& expect(std::istream& in)
+    {
+        if ((in >> std::skipws).peek() == C) 
+        {
+            in.ignore();
+        }
+        else 
+        {
+            in.setstate(std::ios_base::failbit);
+        }
+
+        return in;
+    }
+
     template<typename T, size_t elems>
     inline std::ostream& operator<<(std::ostream& out, const vec<T, elems> &other)
     {
@@ -770,6 +785,35 @@ namespace zacc { namespace math {
         out << "]";
 
         return out;
+    }
+
+    template<typename T, size_t elems>
+    inline std::istream& operator>>(std::istream& in, vec<T, elems> &other)
+    {
+        if(!(in >> expect<'['>))
+        {
+            in.setstate(std::ios_base::failbit);
+            return in;
+        }
+        
+        vec<T, elems> temp;
+
+        for(size_t i = 0; i < elems; i++)
+        {
+            if(!(in >> std::skipws >> temp.at(i) >> expect<','>))
+                break;
+        }
+
+        if(!(in >> expect<']'>))
+        {
+            in.setstate(std::ios_base::failbit);
+        }        
+
+        std::cout << temp;
+        
+        other = temp;
+
+        return in;
     }
 
     template<typename T, size_t rows, size_t cols>
