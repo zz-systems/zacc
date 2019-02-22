@@ -31,41 +31,41 @@ branches:
     - /^v.*$/
 
 os_templates:
-    - &linux
-      os: linux
-      dist: xenial
+  - &linux
+    os: linux
+    dist: xenial
 
-    - &linux_gcc6
-      <<: *linux
-      addons: { apt: { sources: [ ubuntu-toolchain-r-test ], packages: [g++-6] } }
-      env: MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
-    
-    - &linux_gcc7
-      <<: *linux
-      addons: { apt: { sources: [ ubuntu-toolchain-r-test ], packages: [g++-7] }}
-      env: MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+  - &linux_gcc6
+    <<: *linux
+    addons: { apt: { sources: [ ubuntu-toolchain-r-test ], packages: [g++-6] } }
+    env: MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
+  
+  - &linux_gcc7
+    <<: *linux
+    addons: { apt: { sources: [ ubuntu-toolchain-r-test ], packages: [g++-7] }}
+    env: MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
-    - &linux_clang4
-      <<: *linux
-      addons: { apt: { sources: [ ubuntu-toolchain-r-test ], packages: [clang-4.0] }}
-      env: MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
+  - &linux_clang4
+    <<: *linux
+    addons: { apt: { sources: [ ubuntu-toolchain-r-test ], packages: [clang-4.0] }}
+    env: MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
 
-    - &linux_clang5
-      <<: *linux
-      addons: { apt: { sources: [ ubuntu-toolchain-r-test ], packages: [clang-5.0] }}
-      env: MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
+  - &linux_clang5
+    <<: *linux
+    addons: { apt: { sources: [ ubuntu-toolchain-r-test ], packages: [clang-5.0] }}
+    env: MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
 
-    - &osx_xcode9
-      os: osx
-      osx_image: xcode9
+  - &osx_xcode9
+    os: osx
+    osx_image: xcode9
 
-    - &osx_xcode94
-      <<: *osx_xcode9
-      osx_image: xcode9.4
+  - &osx_xcode94
+    <<: *osx_xcode9
+    osx_image: xcode9.4
 
-    - &osx_xcode101
-      <<: *osx_xcode9
-      osx_image: xcode10.1
+  - &osx_xcode101
+    <<: *osx_xcode9
+    osx_image: xcode10.1
 
 stage_templates:
   - &smoke_stage
