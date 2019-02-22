@@ -12,4 +12,5 @@ fi
 virtualenv -p python3 venv
 source venv/bin/activate
 
-pip install --user -r ${SCRIPT_STAGE_DIR}/requirements.txt
+pip install -r ${SCRIPT_STAGE_DIR}/requirements.txt
+#pip install --user -r ${SCRIPT_STAGE_DIR}/requirements.txt
