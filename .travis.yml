@@ -17,12 +17,13 @@ env:
     - BUILD_TYPE='Release'
     - JOBS=2
     - PATH=$HOME/.local/bin:$PATH
+
     - SCRIPTS_BASE_DIR=${TRAVIS_BUILD_DIR}/ci/travis
-    - SCRIPTS_STAGE_DIR=${CI_BASE_DIR}/$(echo "$a" | tr '[:upper:]' '[:lower:]')
+    - SCRIPTS_STAGE_DIR=${SCRIPTS_BASE_DIR}/$(echo "$a" | tr '[:upper:]' '[:lower:]')
     - SCRIPTS_SHARED_DIR=${SCRIPTS_BASE_DIR}/shared
+    
     - PKG_DIR=${TRAVIS_BUILD_DIR}/package
     - SHARE_DIR=${TRAVIS_BUILD_DIR}/share
-    - 
 
 git:
   depth: 1
