@@ -17,7 +17,7 @@ env:
     - BUILD_TYPE='Release'
     - JOBS=2
     - PATH=$HOME/.local/bin:$PATH
-    - RELEASE_NAME=release.${TRAVIS_OS_NAME}
+    - RELEASE_NAME=zacc.${TRAVIS_OS_NAME}
 
 git:
   depth: 1
@@ -84,7 +84,7 @@ smoke_stage: &_smoke_stage
     - ./ci/travis/run-smoke.sh
     - ./ci/run-pack-release.sh
   #after_success:
-    - aws s3 sync ~/package s3://${AWS_BUCKET}/package
+    - aws s3 sync ${TRAVIS_BUILD_DIR}/package s3://${AWS_BUCKET}/package
 
 # _deploy_stage: &_deploy_stage
 #   install: *_install
@@ -144,7 +144,7 @@ jobs:
           api_key: $GITHUB_TOKEN
           file_glob: true
           file: 
-            - ~/package/release.linux.zip
+            - package/zacc.*.zip
           draft: true  
           on:
             all_branches: true
