@@ -75,17 +75,17 @@ os_templates:
 stage_templates:
   - &default_stage
     install: 
-      - source ${SCRIPTS_STAGE_DIR}/install.sh
+      - source ${SCRIPT_STAGE_DIR}/install.sh
     before_script: 
-      - source ${SCRIPTS_SHARED_DIR}/before_script.sh
+      - source ${SCRIPT_SHARED_DIR}/before_script.sh
     script: 
-      - ${SCRIPTS_STAGE_DIR}/script.sh
+      - ${SCRIPT_STAGE_DIR}/script.sh
 
   - &smoke_stage
     after_success:
-      - source ${SCRIPTS_SHARED_DIR}/aws-init.sh
-      - source ${SCRIPTS_STAGE_DIR}/pack.sh
-      - source ${SCRIPTS_SHARED_DIR}/aws-sync.sh
+      - source ${SCRIPT_SHARED_DIR}/aws-init.sh
+      - source ${SCRIPT_STAGE_DIR}/pack.sh
+      - source ${SCRIPT_SHARED_DIR}/aws-sync.sh
 
   - &build_stage
     <<: *default_stage
@@ -98,10 +98,10 @@ stage_templates:
     before_script:
     script:
     before_deploy:
-      - source ${SCRIPTS_SHARED_DIR}/aws-init.sh
-      - source ${SCRIPTS_SHARED_DIR}/aws-sync.sh
+      - source ${SCRIPT_SHARED_DIR}/aws-init.sh
+      - source ${SCRIPT_SHARED_DIR}/aws-sync.sh
     after_deploy:
-      - source ${SCRIPTS_SHARED_DIR}/aws-clean.sh
+      - source ${SCRIPT_SHARED_DIR}/aws-clean.sh
 
   - &docs_stage
     <<: *default_stage
@@ -109,8 +109,8 @@ stage_templates:
       depth: 1
       submodules: false
     # after_success:
-    #   - source ${SCRIPTS_STAGE_DIR}/pack.sh
-    #   - source ${SCRIPTS_SHARED_DIR}/aws-sync.sh
+    #   - source ${SCRIPT_STAGE_DIR}/pack.sh
+    #   - source ${SCRIPT_SHARED_DIR}/aws-sync.sh
 
   
 # stages:
@@ -127,7 +127,7 @@ jobs:
     #   install: 
     #     - source ./ci/travis/smoke/install.sh
     #   before_script:
-    #     - source ${SCRIPTS_SHARED_DIR}/before_script.sh
+    #     - source ${SCRIPT_SHARED_DIR}/before_script.sh
     #   script: 
     #     - ./ci/travis/smoke/script.sh
 
