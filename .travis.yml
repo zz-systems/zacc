@@ -27,6 +27,7 @@ branches:
     - master
     - develop
     - ci
+    - /^v.*$/
 
 matrix:
   include:
