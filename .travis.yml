@@ -159,11 +159,11 @@ jobs:
     - stage: documentation
       <<: *linux
       addons: { apt: { packages: [doxygen] }}
-      <<: *_docs_stage
+      <<: *docs_stage
 
     # - stage: deploy
     #   <<: *linux
-    #   <<: *_deploy_stage
+    #   <<: *deploy_stage
     #   deploy:
     #     - provider: releases
     #       skip-cleanup: true
