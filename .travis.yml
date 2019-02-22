@@ -18,8 +18,9 @@ env:
     - JOBS=2
     - PATH=$HOME/.local/bin:$PATH
 
+    - STAGE_NAME=$(echo "$TRAVIS_BUILD_STAGE_NAME" | tr '[:upper:]' '[:lower:]')
     - SCRIPT_BASE_DIR=${TRAVIS_BUILD_DIR}/ci/travis
-    - SCRIPT_STAGE_DIR=${SCRIPT_BASE_DIR}/$(echo "$TRAVIS_BUILD_STAGE_NAME" | tr '[:upper:]' '[:lower:]')
+    - SCRIPT_STAGE_DIR=${SCRIPT_BASE_DIR}/$STAGE_NAME
     - SCRIPT_SHARED_DIR=${SCRIPT_BASE_DIR}/shared
 
     - PKG_DIR=${TRAVIS_BUILD_DIR}/package
