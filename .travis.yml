@@ -136,23 +136,18 @@ jobs:
       install:
         - source ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
       before_script: 
-        - source ./ci/travis/setup-aws.sh
-      before_deploy:
-        # Set up git user name and tag this commit
-        - git config --local user.name "zz-systems"
-        - git config --local user.email "sergej.zuyev@zz-systems.net"
-        - export TRAVIS_TAG=${TRAVIS_TAG:-$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)}
-        - git tag $TRAVIS_TAG
+        - source ./ci/travis/setup-aws.sh      
       deploy:
         - provider: releases
           skip-cleanup: true
           api_key: $GITHUB_TOKEN
           file_glob: true
-          file: ~/package/*
+          file: 
+            - ~/package/release.*.zip
           draft: true  
           on:
             all_branches: true
-            tags: false
+            tags: true
       after_deploy:
         - aws s3 rm --recursive s3://${AWS_BUCKET}/package
 
