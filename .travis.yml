@@ -176,6 +176,13 @@ jobs:
       <<: *linux
       addons: { apt: { packages: [doxygen, graphviz, python3, python3-pip] }}
       <<: *docs_stage
+      deploy:
+        - provider: pages
+          skip-cleanup: true
+          github-token: $GITHUB_TOKEN
+          local-dir: $BUILD_DIR/docs/html                  
+          on:
+            all_branches: true
 
     # - stage: deploy
     #   <<: *linux

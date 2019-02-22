@@ -86,7 +86,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'ZACC'
-copyright = '2018, Sergej Zuyev'
+copyright = '2019, Sergej Zuyev'
 author = 'Sergej Zuyev'
 
 # The version info for the project you're documenting, acts as replacement for
