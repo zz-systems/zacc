@@ -1,0 +1,4 @@
+pyopenssl
+ndg-httpsclient
+pyasn1
+awscli

@@ -1,5 +1,0 @@
-brew upgrade python3
-brew install doxygen
-brew install sphinx-doc
-brew link sphinx-doc --force
-brew cask install xquartz

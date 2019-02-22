@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.system.info -- -j $JOBS
+cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.examples.mandelbrot -- -j $JOBS
+cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.examples.julia -- -j $JOBS
+cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.tests.all -- -j $JOBS
+
 cd "${BUILD_DIR}"
 
 # set shared library path

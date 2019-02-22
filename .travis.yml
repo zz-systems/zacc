@@ -18,6 +18,7 @@ env:
     - JOBS=2
     - PATH=$HOME/.local/bin:$PATH
     - RELEASE_NAME=zacc.${TRAVIS_OS_NAME}
+    - STAGE=$(echo "$TRAVIS_BUILD_STAGE_NAME" | tr '[:upper:]' '[:lower:]')
 
 git:
   depth: 1
@@ -29,26 +30,28 @@ branches:
     - ci
     - /^v.*$/
 
-matrix:
-  include:
-    - &linux_gcc6
+os_templates:
+    - &linux
       os: linux
       dist: xenial
+
+    - &linux_gcc6
+      <<: *linux
       addons: { apt: { sources: [ ubuntu-toolchain-r-test ], packages: [g++-6] } }
       env: MATRIX_EVAL="CC=gcc-6 && CXX=g++-6"
     
     - &linux_gcc7
-      <<: *linux_gcc6
+      <<: *linux
       addons: { apt: { sources: [ ubuntu-toolchain-r-test ], packages: [g++-7] }}
       env: MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
     - &linux_clang4
-      <<: *linux_gcc6
+      <<: *linux
       addons: { apt: { sources: [ ubuntu-toolchain-r-test ], packages: [clang-4.0] }}
       env: MATRIX_EVAL="CC=clang-4.0 && CXX=clang++-4.0"
 
     - &linux_clang5
-      <<: *linux_gcc6
+      <<: *linux
       addons: { apt: { sources: [ ubuntu-toolchain-r-test ], packages: [clang-5.0] }}
       env: MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
 
@@ -64,136 +67,117 @@ matrix:
       <<: *osx_xcode9
       osx_image: xcode10.1
 
-build_stage: &_build_stage
-  install: 
-    - source ./ci/travis/install-$TRAVIS_OS_NAME.sh
-  before_script: &_before_script
-    - eval "${MATRIX_EVAL}"
-    - export CC=${CC}
-    - export CXX=${CXX}
-    - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DBUILD_SANITIZE_MEMORY=${BUILD_SANITIZE_MEMORY}
-  script: 
-    - ./ci/travis/run-build.sh
+stage_templates:
+  - &smoke_stage
+    install: 
+      - source ./ci/travis/$STAGE/install.sh
+      - source ./ci/travis/shared/aws-init.sh
+      - source ./ci/travis/shared/aws-sync.sh
+    before_script: 
+      - source ./ci/travis/shared/before_script.sh
+    script: 
+      - ./ci/travis/$STAGE/script.sh
+      - ./ci/run-pack-release.sh
+    #after_success:
+      - source ./ci/travis/shared/aws-sync.sh
 
-smoke_stage: &_smoke_stage
-  install: 
-    - source ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
-    - source ./ci/travis/setup-aws.sh
-  before_script: *_before_script
-  script: 
-    - ./ci/travis/run-smoke.sh
-    - ./ci/run-pack-release.sh
-  #after_success:
-    - aws s3 sync ${TRAVIS_BUILD_DIR}/package s3://${AWS_BUCKET}/package
+  - &build_stage
+    install: 
+      - source ./ci/travis/$STAGE/install.sh
+    before_script: 
+      - source ./ci/travis/shared/before_script.sh
+    script: 
+      - ./ci/travis/$STAGE/script.sh
 
-# _deploy_stage: &_deploy_stage
-#   install: *_install
-#   before_script: *_before_script
-#   script: *_script
+  - &deploy_stage
+    install: 
+      - source ./ci/travis/$STAGE/install.sh
+      - source ./ci/travis/shared/aws-init.sh
+      - source ./ci/travis/shared/aws-sync.sh
+    after_deploy:
+      - source ./ci/travis/shared/aws-clean.sh
+
+  - &docs_stage
+    install: 
+      - source ./ci/travis/$STAGE/install.sh
+    before_script: 
+      - source ./ci/travis/shared/before_script.sh
+    script: 
+      - ./ci/travis/$STAGE/script.sh
+
+  
+# stages:
+#   - smoke
+#   - test
+#   - name: documentation
+#     if: branch = master
+#   - deploy
 
 jobs:
   include: 
     # - stage: smoke
     #   <<: *linux_gcc7
     #   install: 
-    #     - source ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
-    #   before_script: *_before_script
+    #     - ssource ./ci/travis/$STAGE/install.sh
+    #   before_script:
+    #     - source ./ci/travis/shared/before_script.sh
     #   script: 
-    #     - ./ci/travis/run-smoke.sh
+    #     - ./ci/travis/$STAGE/script.sh
 
-    - stage: smoke
-      <<: *linux_clang5
-      <<: *_smoke_stage
+    # - stage: smoke
+    #   <<: *linux_clang5
+    #   <<: *smoke_stage
 
     # - stage: smoke
     #   <<: *osx_xcode101
-    #   <<: *_smoke_stage
+    #   <<: *smoke_stage
 
     # - stage: test
     #   <<: *linux_gcc6
-    #   <<: *_build_stage
+    #   <<: *build_stage
 
     # - stage: test
     #   <<: *linux_gcc7
-    #   <<: *_build_stage
+    #   <<: *build_stage
       
     # - stage: test
     #   <<: *linux_clang4
-    #   <<: *_build_stage
+    #   <<: *build_stage
 
     # - stage: test
     #   <<: *linux_clang5
-    #   <<: *_build_stage
+    #   <<: *build_stage
     
     # - stage: test
     #   <<: *osx_xcode9
-    #   <<: *_build_stage
+    #   <<: *build_stage
 
     # - stage: test
     #   <<: *osx_xcode94
-    #   <<: *_build_stage
-
-    - stage: deploy
-      install:
-        - source ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
-      before_deploy: 
-        - source ./ci/travis/setup-aws.sh      
-      deploy:
-        - provider: releases
-          skip-cleanup: true
-          api_key: $GITHUB_TOKEN
-          file_glob: true
-          file: 
-            - package/zacc.*.zip
-          draft: true  
-          on:
-            all_branches: true
-            tags: true
-      after_deploy:
-        - aws s3 rm --recursive s3://${AWS_BUCKET}/package
+    #   <<: *build_stage
 
     - stage: documentation
+      <<: *linux
       addons: { apt: { packages: [doxygen] }}
-      install: 
-        - source ./ci/travis/install-$TRAVIS_OS_NAME.sh
-      before_script: 
-        - cmake -H../zacc -B${BUILD_DIR} -DCMAKE_BUILD_TYPE=${BUILD_TYPE} 
-      script: 
-        - cmake --build ${BUILD_DIR} --target zacc.documentation
+      <<: *_docs_stage
 
-
-#after_success:
-#  - ./ci/run-build-documentation.sh
-
-#before_deploy:
-#  - ./ci/run-pack-documentation.sh
-#  - ./ci/run-pack-release.sh
-#  - export RELEASES=$(ls ${TRAVIS_BUILD_DIR}/*.zip)
-
-# deploy:
-#   - provider: pages
-#     skip-cleanup: true
-#     github-token: $GITHUB_TOKEN
-#     local-dir: ${TRAVIS_BUILD_DIR}/${BUILD_DIR}/docs/html
-#     on:
-#       branch: master
-#       condition: "$DOC_BUILDER = 1"
-
-#  - provider: releases
-#    skip-cleanup: true
-#    api_key: $GITHUB_TOKEN
-#    file_glob: true
-#    file: ${TRAVIS_BUILD_DIR}/${RELEASE_NAME}.zip
-#    on:
-#      branch: master
-#      tags: true
-#      condition: "$RELEASE_BUILDER = 1"
-#
-#  - provider: releases
-#    skip-cleanup: true
-#    api_key: $GITHUB_TOKEN
-#    file_glob: true
-#    file: ${TRAVIS_BUILD_DIR}/${RELEASE_NAME}.zip
-#    on:
-#      branch: develop
-#      condition: "$RELEASE_BUILDER = 1"
+    # - stage: deploy
+    #   <<: *linux
+    #   <<: *_deploy_stage
+    #   deploy:
+    #     - provider: releases
+    #       skip-cleanup: true
+    #       api_key: $GITHUB_TOKEN
+    #       file_glob: true
+    #       file: 
+    #         - share/zacc.*.zip
+    #       draft: true  
+    #       on:
+    #         all_branches: true
+    #         tags: true
+    #     - provider: pages
+    #       skip-cleanup: true
+    #       github-token: $GITHUB_TOKEN
+    #       local-dir: share/doc
+    #       on:
+    #         branch: master
