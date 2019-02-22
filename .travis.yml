@@ -174,7 +174,7 @@ jobs:
 
     - stage: documentation
       <<: *linux
-      addons: { apt: { packages: [doxygen, graphviz] }}
+      addons: { apt: { packages: [doxygen, graphviz, python3.6] }}
       <<: *docs_stage
 
     # - stage: deploy
