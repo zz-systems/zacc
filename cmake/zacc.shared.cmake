@@ -25,15 +25,6 @@ option(BUILD_SANITIZE_UNDEFINED "Build with clang undefined behavior sanitizer" 
 
 option(BUILD_ENABLE_INSTRUMENTATION "Enable instrumentation build")
 
-# testing ==============================================================================================================
-
-option(BUILD_TEST "Build the tests" ON)
-option(BUILD_CI_TEST "Build tests for CI environments" Off)
-
-# documentation ========================================================================================================
-
-option(BUILD_DOC "Build the documentation" OFF)
-
 # compiler config ======================================================================================================
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")

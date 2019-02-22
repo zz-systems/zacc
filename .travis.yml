@@ -74,41 +74,49 @@ os_templates:
     osx_image: xcode10.1
 
 stage_templates:
-  - &default_stage
+
+  - &smoke_stage
     install: 
       - source ${SCRIPT_STAGE_DIR}/install.sh
     before_script: 
-      - source ${SCRIPT_SHARED_DIR}/before_script.sh
+      - source ${SCRIPT_STAGE_DIR}/before_script.sh
     script: 
       - ${SCRIPT_STAGE_DIR}/script.sh
-
-  - &smoke_stage
     after_success:
       - source ${SCRIPT_SHARED_DIR}/aws-init.sh
       - source ${SCRIPT_STAGE_DIR}/pack.sh
       - source ${SCRIPT_SHARED_DIR}/aws-sync.sh
 
   - &build_stage
-    <<: *default_stage
+    install: 
+      - source ${SCRIPT_STAGE_DIR}/install.sh
+    before_script: 
+      - source ${SCRIPT_STAGE_DIR}/before_script.sh
+    script: 
+      - ${SCRIPT_STAGE_DIR}/script.sh
 
-  - &deploy_stage
-    <<: *default_stage         
+  - &deploy_stage      
     git:
       depth: 1
       submodules: false
-    before_script:
-    script:
+    install: 
+      - source ${SCRIPT_STAGE_DIR}/install.sh
     before_deploy:
       - source ${SCRIPT_SHARED_DIR}/aws-init.sh
       - source ${SCRIPT_SHARED_DIR}/aws-sync.sh
     after_deploy:
       - source ${SCRIPT_SHARED_DIR}/aws-clean.sh
 
-  - &docs_stage
-    <<: *default_stage
-    #git:
-    #  depth: 1
-    #  submodules: false
+  - &docs_stage    
+    git:
+     depth: 1
+     submodules: false
+    install: 
+      - source ${SCRIPT_STAGE_DIR}/install.sh
+    before_script: 
+      - source ${SCRIPT_STAGE_DIR}/before_script.sh
+    script: 
+      - ${SCRIPT_STAGE_DIR}/script.sh
     # after_success:
     #   - source ${SCRIPT_STAGE_DIR}/pack.sh
     #   - source ${SCRIPT_SHARED_DIR}/aws-sync.sh
