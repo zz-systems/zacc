@@ -18,7 +18,6 @@ env:
     - JOBS=2
     - PATH=$HOME/.local/bin:$PATH
     - RELEASE_NAME=zacc.${TRAVIS_OS_NAME}
-    - STAGE=$(echo "$TRAVIS_BUILD_STAGE_NAME" | tr '[:upper:]' '[:lower:]')
 
 git:
   depth: 1
@@ -70,40 +69,46 @@ os_templates:
 stage_templates:
   - &smoke_stage
     install: 
-      - source ./ci/travis/$STAGE/install.sh
+      - source ./ci/travis/smoke/install.sh
       - source ./ci/travis/shared/aws-init.sh
       - source ./ci/travis/shared/aws-sync.sh
     before_script: 
       - source ./ci/travis/shared/before_script.sh
     script: 
-      - ./ci/travis/$STAGE/script.sh
-      - ./ci/run-pack-release.sh
+      - ./ci/travis/smoke/script.sh
+      - ./ci/travis/smoke/pack.sh
     #after_success:
       - source ./ci/travis/shared/aws-sync.sh
 
   - &build_stage
     install: 
-      - source ./ci/travis/$STAGE/install.sh
+      - source ./ci/travis/test/install.sh
     before_script: 
       - source ./ci/travis/shared/before_script.sh
     script: 
-      - ./ci/travis/$STAGE/script.sh
+      - ./ci/travis/test/script.sh
 
   - &deploy_stage
+    git:
+      depth: 1
+      submodules: false
     install: 
-      - source ./ci/travis/$STAGE/install.sh
+      - source ./ci/travis/deploy/install.sh
       - source ./ci/travis/shared/aws-init.sh
       - source ./ci/travis/shared/aws-sync.sh
     after_deploy:
       - source ./ci/travis/shared/aws-clean.sh
 
   - &docs_stage
+    git:
+      depth: 1
+      submodules: false
     install: 
-      - source ./ci/travis/$STAGE/install.sh
+      - source ./ci/travis/docs/install.sh
     before_script: 
       - source ./ci/travis/shared/before_script.sh
     script: 
-      - ./ci/travis/$STAGE/script.sh
+      - ./ci/travis/docs/script.sh
 
   
 # stages:
@@ -118,11 +123,11 @@ jobs:
     # - stage: smoke
     #   <<: *linux_gcc7
     #   install: 
-    #     - ssource ./ci/travis/$STAGE/install.sh
+    #     - source ./ci/travis/smoke/install.sh
     #   before_script:
     #     - source ./ci/travis/shared/before_script.sh
     #   script: 
-    #     - ./ci/travis/$STAGE/script.sh
+    #     - ./ci/travis/smoke/script.sh
 
     # - stage: smoke
     #   <<: *linux_clang5
