@@ -17,8 +17,12 @@ env:
     - BUILD_TYPE='Release'
     - JOBS=2
     - PATH=$HOME/.local/bin:$PATH
+    - SCRIPTS_BASE_DIR=${TRAVIS_BUILD_DIR}/ci/travis
+    - SCRIPTS_STAGE_DIR=${CI_BASE_DIR}/$(echo "$a" | tr '[:upper:]' '[:lower:]')
+    - SCRIPTS_SHARED_DIR=${SCRIPTS_BASE_DIR}/shared
     - PKG_DIR=${TRAVIS_BUILD_DIR}/package
     - SHARE_DIR=${TRAVIS_BUILD_DIR}/share
+    - 
 
 git:
   depth: 1
@@ -68,48 +72,44 @@ os_templates:
     osx_image: xcode10.1
 
 stage_templates:
-  - &smoke_stage
+  - &default_stage
     install: 
-      - source ./ci/travis/smoke/install.sh
-      - source ./ci/travis/shared/aws-init.sh
-      - source ./ci/travis/shared/aws-sync.sh
+      - source ${SCRIPTS_STAGE_DIR}/install.sh
     before_script: 
-      - source ./ci/travis/shared/before_script.sh
+      - source ${SCRIPTS_SHARED_DIR}/before_script.sh
     script: 
-      - ./ci/travis/smoke/script.sh
-      - ./ci/travis/smoke/pack.sh
-    #after_success:
-      - source ./ci/travis/shared/aws-sync.sh
+      - ${SCRIPTS_STAGE_DIR}/script.sh
+
+  - &smoke_stage
+    after_success:
+      - source ${SCRIPTS_SHARED_DIR}/aws-init.sh
+      - source ${SCRIPTS_STAGE_DIR}/pack.sh
+      - source ${SCRIPTS_SHARED_DIR}/aws-sync.sh
 
   - &build_stage
-    install: 
-      - source ./ci/travis/test/install.sh
-    before_script: 
-      - source ./ci/travis/shared/before_script.sh
-    script: 
-      - ./ci/travis/test/script.sh
+    <<: *default_stage
 
   - &deploy_stage
+    <<: *default_stage         
     git:
       depth: 1
       submodules: false
-    install: 
-      - source ./ci/travis/deploy/install.sh
-      - source ./ci/travis/shared/aws-init.sh
-      - source ./ci/travis/shared/aws-sync.sh
+    before_script:
+    script:
+    before_deploy:
+      - source ${SCRIPTS_SHARED_DIR}/aws-init.sh
+      - source ${SCRIPTS_SHARED_DIR}/aws-sync.sh
     after_deploy:
-      - source ./ci/travis/shared/aws-clean.sh
+      - source ${SCRIPTS_SHARED_DIR}/aws-clean.sh
 
   - &docs_stage
+    <<: *default_stage
     git:
       depth: 1
       submodules: false
-    install: 
-      - source ./ci/travis/docs/install.sh
-    before_script: 
-      - source ./ci/travis/shared/before_script.sh
-    script: 
-      - ./ci/travis/docs/script.sh
+    # after_success:
+    #   - source ${SCRIPTS_STAGE_DIR}/pack.sh
+    #   - source ${SCRIPTS_SHARED_DIR}/aws-sync.sh
 
   
 # stages:
@@ -126,7 +126,7 @@ jobs:
     #   install: 
     #     - source ./ci/travis/smoke/install.sh
     #   before_script:
-    #     - source ./ci/travis/shared/before_script.sh
+    #     - source ${SCRIPTS_SHARED_DIR}/before_script.sh
     #   script: 
     #     - ./ci/travis/smoke/script.sh
 
