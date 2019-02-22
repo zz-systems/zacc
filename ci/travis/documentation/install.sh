@@ -10,4 +10,5 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     source venv/bin/activate
 fi
 
+virtualenv -p python$PYTHON venv
 pip install --user -r ${SCRIPT_STAGE_DIR}/requirements.txt

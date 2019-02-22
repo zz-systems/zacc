@@ -1,7 +1,5 @@
 language: generic
 
-python: 3.6
-
 cache:
   ccache: true
 
@@ -25,6 +23,8 @@ env:
 
     - PKG_DIR=${TRAVIS_BUILD_DIR}/package
     - SHARE_DIR=${TRAVIS_BUILD_DIR}/share
+
+    - PYTHON=3.6
 
 git:
   depth: 1
