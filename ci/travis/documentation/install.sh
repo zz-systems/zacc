@@ -8,8 +8,8 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
     brew link sphinx-doc --force    
 fi
 
-pip install --user --upgrade pip virtualenv
-virtualenv -p python$PYTHON venv
+#pip install --user --upgrade pip virtualenv
+virtualenv -p python3 venv
 source venv/bin/activate
 
 pip install --user -r ${SCRIPT_STAGE_DIR}/requirements.txt
