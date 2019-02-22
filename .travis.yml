@@ -136,7 +136,7 @@ jobs:
     - stage: deploy
       install:
         - source ./ci/travis/install-$TRAVIS_OS_NAME.smoke.sh
-      before_script: 
+      before_deploy: 
         - source ./ci/travis/setup-aws.sh      
       deploy:
         - provider: releases
@@ -144,7 +144,7 @@ jobs:
           api_key: $GITHUB_TOKEN
           file_glob: true
           file: 
-            - ~/package/release.*.zip
+            - ~/package/release.linux.zip
           draft: true  
           on:
             all_branches: true
