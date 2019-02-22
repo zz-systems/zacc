@@ -106,9 +106,9 @@ stage_templates:
 
   - &docs_stage
     <<: *default_stage
-    git:
-      depth: 1
-      submodules: false
+    #git:
+    #  depth: 1
+    #  submodules: false
     # after_success:
     #   - source ${SCRIPT_STAGE_DIR}/pack.sh
     #   - source ${SCRIPT_SHARED_DIR}/aws-sync.sh
@@ -166,7 +166,7 @@ jobs:
 
     - stage: documentation
       <<: *linux
-      addons: { apt: { packages: [doxygen] }}
+      addons: { apt: { packages: [doxygen, graphviz] }}
       <<: *docs_stage
 
     # - stage: deploy
