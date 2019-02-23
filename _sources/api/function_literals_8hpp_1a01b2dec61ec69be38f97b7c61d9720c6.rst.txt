@@ -1,0 +1,13 @@
+.. _exhale_function_literals_8hpp_1a01b2dec61ec69be38f97b7c61d9720c6:
+
+Function operator""_int16
+=========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_literals.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: operator""_int16(unsigned long long)

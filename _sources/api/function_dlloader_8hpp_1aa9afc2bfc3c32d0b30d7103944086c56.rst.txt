@@ -1,0 +1,13 @@
+.. _exhale_function_dlloader_8hpp_1aa9afc2bfc3c32d0b30d7103944086c56:
+
+Function zacc_dlerror
+=====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_dlloader.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc_dlerror()

@@ -1,0 +1,13 @@
+.. _exhale_typedef_scalar_2int32_8impl_8hpp_1acd37d1f2b9882bec0fa43eb9d01683d4:
+
+Typedef zacc::backend::scalar::ibint32
+======================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int32.impl.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::backend::scalar::ibint32

@@ -1,0 +1,31 @@
+.. _dir__home_travis_build_zz-systems_zacc_include_system:
+
+
+Directory system
+================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include>` (``/home/travis/build/zz-systems/zacc/include``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/travis/build/zz-systems/zacc/include/system``
+
+
+Files
+-----
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_arch.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_cpuid.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatcher.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_dlloader.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_entrypoint.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_feature.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel_activator.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel_dispatcher.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_managed_library.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_sysinfo.hpp`
+
+

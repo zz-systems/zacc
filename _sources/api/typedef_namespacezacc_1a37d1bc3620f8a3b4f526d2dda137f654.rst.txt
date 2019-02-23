@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a37d1bc3620f8a3b4f526d2dda137f654:
+
+Typedef zacc::enable_if_not_same2
+=================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::enable_if_not_same2

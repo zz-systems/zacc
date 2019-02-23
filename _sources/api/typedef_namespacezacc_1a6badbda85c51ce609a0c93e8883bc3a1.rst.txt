@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a6badbda85c51ce609a0c93e8883bc3a1:
+
+Typedef zacc::bfloat32
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::bfloat32

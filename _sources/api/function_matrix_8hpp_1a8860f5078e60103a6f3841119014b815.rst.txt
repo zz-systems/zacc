@@ -1,0 +1,13 @@
+.. _exhale_function_matrix_8hpp_1a8860f5078e60103a6f3841119014b815:
+
+Template Function zacc::math::clamp_int32(const mat<T, Rows, Cols>&)
+====================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::clamp_int32(const mat<T, Rows, Cols>&)

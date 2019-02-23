@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1scabcdb6130758062e44072eddef0f3e823:
+
+Template Struct ztraits< T, std::enable_if_t< std::is_base_of< backend::scalar::izfloat64< std::decay_t< T >::feature_mask >, std::decay_t< T > >::value||std::is_base_of< backend::scalar::ibfloat64< std::decay_t< T >::feature_mask >, std::decay_t< T > >::value > >
+========================================================================================================================================================================================================================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float64.impl.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::ztraits< T, std::enable_if_t< std::is_base_of< backend::scalar::izfloat64< std::decay_t< T >::feature_mask >, std::decay_t< T > >::value||std::is_base_of< backend::scalar::ibfloat64< std::decay_t< T >::feature_mask >, std::decay_t< T > >::value > >
+   :members:
+   :protected-members:
+   :undoc-members:

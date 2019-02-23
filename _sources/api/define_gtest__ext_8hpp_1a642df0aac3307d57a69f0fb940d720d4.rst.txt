@@ -1,0 +1,13 @@
+.. _exhale_define_gtest__ext_8hpp_1a642df0aac3307d57a69f0fb940d720d4:
+
+Define REQUIRES
+===============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_testing_gtest_ext.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: REQUIRES

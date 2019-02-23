@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a0c6128e2cc764c08459be7cb40258310:
+
+Function zacc::ltrim
+====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::ltrim(const std::string&)

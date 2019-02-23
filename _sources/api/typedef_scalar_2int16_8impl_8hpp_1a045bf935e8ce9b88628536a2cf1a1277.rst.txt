@@ -1,0 +1,13 @@
+.. _exhale_typedef_scalar_2int16_8impl_8hpp_1a045bf935e8ce9b88628536a2cf1a1277:
+
+Typedef zacc::backend::scalar::ibint16
+======================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int16.impl.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::backend::scalar::ibint16

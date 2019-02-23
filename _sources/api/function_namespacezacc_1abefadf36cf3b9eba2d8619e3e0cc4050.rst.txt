@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1abefadf36cf3b9eba2d8619e3e0cc4050:
+
+Template Function zacc::to_underlying
+=====================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_casts.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::to_underlying(E)

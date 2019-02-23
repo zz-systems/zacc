@@ -1,0 +1,13 @@
+.. _exhale_typedef_avx2_2int8_8impl_8hpp_1a0ed2f7ae416f5f32b8cfc53c355398e9:
+
+Typedef zacc::backend::avx2::izint8
+===================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int8.impl.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::backend::avx2::izint8

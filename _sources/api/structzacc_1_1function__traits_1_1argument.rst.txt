@@ -1,0 +1,22 @@
+.. _exhale_struct_structzacc_1_1function__traits_1_1argument:
+
+Template Struct function_traits::argument
+=========================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_struct_structzacc_1_1function__traits`.
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::function_traits::argument
+   :members:
+   :protected-members:
+   :undoc-members:

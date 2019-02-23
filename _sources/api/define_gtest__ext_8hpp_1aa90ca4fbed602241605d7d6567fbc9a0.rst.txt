@@ -1,0 +1,13 @@
+.. _exhale_define_gtest__ext_8hpp_1aa90ca4fbed602241605d7d6567fbc9a0:
+
+Define VEXPECT_NEAR
+===================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_testing_gtest_ext.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: VEXPECT_NEAR

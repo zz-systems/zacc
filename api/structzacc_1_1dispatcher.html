@@ -1,0 +1,168 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Template Struct dispatcher &#8212; ZACC  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Template Struct divides" href="structzacc_1_1divides.html" />
+    <link rel="prev" title="Struct dispatched_arch" href="structzacc_1_1dispatched__arch.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="structzacc_1_1divides.html" title="Template Struct divides"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structzacc_1_1dispatched__arch.html" title="Struct dispatched_arch"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" accesskey="U">ZACC API</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-struct-dispatcher">
+<span id="exhale-struct-structzacc-1-1dispatcher"></span><h1>Template Struct dispatcher<a class="headerlink" href="#template-struct-dispatcher" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Defined in <a class="reference internal" href="file__home_travis_build_zz-systems_zacc_include_system_feature.hpp.html#file-home-travis-build-zz-systems-zacc-include-system-feature-hpp"><span class="std std-ref">File feature.hpp</span></a></li>
+</ul>
+<div class="section" id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4N4zacc10dispatcherE">
+<span id="_CPPv3N4zacc10dispatcherE"></span><span id="_CPPv2N4zacc10dispatcherE"></span><span id="zacc::dispatcher"></span><span class="target" id="structzacc_1_1dispatcher"></span><em class="property">template </em>&lt;uint64_t <em>Arch</em> = 0&gt;<br /><em class="property">struct </em><code class="descname">dispatcher</code><a class="headerlink" href="#_CPPv4N4zacc10dispatcherE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>arch dispatcher. from aggregated integer representation one can extract specific features </p>
+<p><dl class="docutils">
+<dt><strong>Template Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">arch</span></code>: aggregated integer representation </li>
+</ul>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="function">
+<dt id="_CPPv4N4zacc10dispatcher6is_setE7feature">
+<span id="_CPPv3N4zacc10dispatcher6is_setE7feature"></span><span id="_CPPv2N4zacc10dispatcher6is_setE7feature"></span><span id="zacc::dispatcher::is_set__featureCE"></span><span class="target" id="structzacc_1_1dispatcher_1aa1a824ca192fa19b2f45c813bc190a3c"></span><em class="property">static</em> <em class="property">constexpr</em> bool <code class="descname">is_set</code><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4zacc10dispatcher6is_setE7feature" title="zacc::dispatcher::is_set::feature">feature</a> <em>feature</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4zacc10dispatcher6is_setE7feature" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>checks if a particular arch is set </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>true if arch is set </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">flag</span></code>: arch to check </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
+<dl class="member">
+<dt id="_CPPv4N4zacc10dispatcher8featuresE">
+<span id="_CPPv3N4zacc10dispatcher8featuresE"></span><span id="_CPPv2N4zacc10dispatcher8featuresE"></span><span id="zacc::dispatcher::features__feature"></span><span class="target" id="structzacc_1_1dispatcher_1a3f64266f2331662f6d21b5bbafac4d6e"></span><em class="property">constexpr</em> <a class="reference internal" href="structzacc_1_1feature.html#_CPPv4N4zacc7featureE" title="zacc::feature">feature</a> <code class="descname">features</code> = { Arch }<a class="headerlink" href="#_CPPv4N4zacc10dispatcher8featuresE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N4zacc10dispatcher18has_floating_typesE">
+<span id="_CPPv3N4zacc10dispatcher18has_floating_typesE"></span><span id="_CPPv2N4zacc10dispatcher18has_floating_typesE"></span><span id="zacc::dispatcher::has_floating_types__b"></span><span class="target" id="structzacc_1_1dispatcher_1ac017ee8af6685781cc774ff085440ab7"></span><em class="property">constexpr</em> bool <code class="descname">has_floating_types</code> = true<a class="headerlink" href="#_CPPv4N4zacc10dispatcher18has_floating_typesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>current capabilities </p>
+<p>usually all branches provide floating types </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N4zacc10dispatcher17has_integer_typesE">
+<span id="_CPPv3N4zacc10dispatcher17has_integer_typesE"></span><span id="_CPPv2N4zacc10dispatcher17has_integer_typesE"></span><span id="zacc::dispatcher::has_integer_types__b"></span><span class="target" id="structzacc_1_1dispatcher_1a68d3a90c886311078407590002f1d4f1"></span><em class="property">constexpr</em> bool <code class="descname">has_integer_types</code> = !<a class="reference internal" href="#structzacc_1_1dispatcher_1aa1a824ca192fa19b2f45c813bc190a3c"><span class="std std-ref">is_set</span></a>(feature::avx1()) || <a class="reference internal" href="#structzacc_1_1dispatcher_1aa1a824ca192fa19b2f45c813bc190a3c"><span class="std std-ref">is_set</span></a>(feature::avx2())<a class="headerlink" href="#_CPPv4N4zacc10dispatcher17has_integer_typesE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>AVX 1 does not provide operations on integer types. </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N4zacc10dispatcher14use_fast_floatE">
+<span id="_CPPv3N4zacc10dispatcher14use_fast_floatE"></span><span id="_CPPv2N4zacc10dispatcher14use_fast_floatE"></span><span id="zacc::dispatcher::use_fast_float__b"></span><span class="target" id="structzacc_1_1dispatcher_1ac224edf0981e5ee11346c457005e40c4"></span><em class="property">constexpr</em> bool <code class="descname">use_fast_float</code> = <a class="reference internal" href="#structzacc_1_1dispatcher_1aa1a824ca192fa19b2f45c813bc190a3c"><span class="std std-ref">is_set</span></a>(feature::fastfloat())<a class="headerlink" href="#_CPPv4N4zacc10dispatcher14use_fast_floatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>fast (lower precision) float enabled? </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="structzacc_1_1dispatched__arch.html"
+                        title="previous chapter">Struct dispatched_arch</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="structzacc_1_1divides.html"
+                        title="next chapter">Template Struct divides</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="structzacc_1_1divides.html" title="Template Struct divides"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="structzacc_1_1dispatched__arch.html" title="Struct dispatched_arch"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Sergej Zuyev.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,33 @@
+.. _dir__home_travis_build_zz-systems_zacc_include_backend:
+
+
+Directory backend
+=================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include>` (``/home/travis/build/zz-systems/zacc/include``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/travis/build/zz-systems/zacc/include/backend``
+
+Subdirectories
+--------------
+
+- :ref:`dir__home_travis_build_zz-systems_zacc_include_backend_avx`
+- :ref:`dir__home_travis_build_zz-systems_zacc_include_backend_avx2`
+- :ref:`dir__home_travis_build_zz-systems_zacc_include_backend_avx512`
+- :ref:`dir__home_travis_build_zz-systems_zacc_include_backend_scalar`
+- :ref:`dir__home_travis_build_zz-systems_zacc_include_backend_sse`
+
+
+Files
+-----
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_all.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_intrin.ext.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_intrin.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_ztype.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_zval.hpp`
+
+

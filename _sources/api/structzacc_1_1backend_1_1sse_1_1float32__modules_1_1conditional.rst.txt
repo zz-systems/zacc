@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1backend_1_1sse_1_1float32__modules_1_1conditional:
+
+Template Struct conditional
+===========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float32.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::traits::conditional< Interface, Composed, Boolean >`` (:ref:`exhale_struct_structzacc_1_1traits_1_1conditional`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::sse::float32_modules::conditional
+   :members:
+   :protected-members:
+   :undoc-members:

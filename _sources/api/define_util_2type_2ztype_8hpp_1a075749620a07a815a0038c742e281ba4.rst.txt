@@ -1,0 +1,13 @@
+.. _exhale_define_util_2type_2ztype_8hpp_1a075749620a07a815a0038c742e281ba4:
+
+Define USING_ZTYPE
+==================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztype.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: USING_ZTYPE

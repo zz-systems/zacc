@@ -1,0 +1,36 @@
+
+.. _namespace_zacc__backend__avx2__float32_modules:
+
+Namespace zacc::backend::avx2::float32_modules
+==============================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1arithmetic`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1bitwise`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1comparable`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1conditional`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1equatable`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1io`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1logical`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1math`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1numeric`

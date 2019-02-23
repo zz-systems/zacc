@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a6bf91677ef0efee233396f1ced350c49:
+
+Typedef zacc::bshort
+====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::bshort

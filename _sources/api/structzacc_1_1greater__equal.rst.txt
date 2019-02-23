@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1greater__equal:
+
+Template Struct greater_equal
+=============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_operators.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::greater_equal
+   :members:
+   :protected-members:
+   :undoc-members:

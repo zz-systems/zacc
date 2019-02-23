@@ -1,0 +1,35 @@
+.. _exhale_struct_structzacc_1_1backend_1_1sse_1_1zint32:
+
+Template Struct zint32
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int32.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Types
+**********
+
+- ``public zacc::zval< izint32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1zval`)
+- ``public zacc::printable< izint32< FeatureMask >, zint32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1printable`)
+- ``public zacc::backend::sse::int32_modules::io< izint32< FeatureMask >, zint32< FeatureMask >, bint32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int32__modules_1_1io`)
+- ``public zacc::backend::sse::int32_modules::math< izint32< FeatureMask >, zint32< FeatureMask >, bint32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int32__modules_1_1math`)
+- ``public zacc::backend::sse::int32_modules::numeric< izint32< FeatureMask >, zint32< FeatureMask >, bint32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int32__modules_1_1numeric`)
+- ``public zacc::backend::sse::int32_modules::arithmetic< izint32< FeatureMask >, zint32< FeatureMask >, bint32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int32__modules_1_1arithmetic`)
+- ``public zacc::backend::sse::int32_modules::bitwise< izint32< FeatureMask >, zint32< FeatureMask >, bint32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int32__modules_1_1bitwise`)
+- ``public zacc::backend::sse::int32_modules::bitwise_shift< izint32< FeatureMask >, zint32< FeatureMask >, bint32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int32__modules_1_1bitwise__shift`)
+- ``public zacc::backend::sse::int32_modules::comparable< izint32< FeatureMask >, zint32< FeatureMask >, bint32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int32__modules_1_1comparable`)
+- ``public zacc::backend::sse::int32_modules::equatable< izint32< FeatureMask >, zint32< FeatureMask >, bint32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int32__modules_1_1equatable`)
+- ``public zacc::backend::sse::int32_modules::conditional< izint32< FeatureMask >, zint32< FeatureMask >, bint32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int32__modules_1_1conditional`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::sse::zint32
+   :members:
+   :protected-members:
+   :undoc-members:

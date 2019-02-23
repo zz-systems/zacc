@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1ab4f27d4b65ebbfe22cdb2437d67ddf4f:
+
+Typedef zacc::bbyte
+===================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::bbyte

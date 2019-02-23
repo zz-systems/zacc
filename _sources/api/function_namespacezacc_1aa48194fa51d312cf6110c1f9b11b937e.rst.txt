@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1aa48194fa51d312cf6110c1f9b11b937e:
+
+Function zacc::toupper
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::toupper(const std::string&)

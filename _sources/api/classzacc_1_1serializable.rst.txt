@@ -1,0 +1,16 @@
+.. _exhale_class_classzacc_1_1serializable:
+
+Template Class serializable
+===========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_serializable.h`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: zacc::serializable
+   :members:
+   :protected-members:
+   :undoc-members:

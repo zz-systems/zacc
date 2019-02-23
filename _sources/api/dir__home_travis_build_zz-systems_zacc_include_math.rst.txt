@@ -1,0 +1,25 @@
+.. _dir__home_travis_build_zz-systems_zacc_include_math:
+
+
+Directory math
+==============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include>` (``/home/travis/build/zz-systems/zacc/include``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/travis/build/zz-systems/zacc/include/math``
+
+
+Files
+-----
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_complex.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_constants.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_fundamental.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_interpolation.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_trigonometry.hpp`
+
+

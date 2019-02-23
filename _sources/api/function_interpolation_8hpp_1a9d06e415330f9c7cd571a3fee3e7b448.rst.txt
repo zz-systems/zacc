@@ -1,0 +1,13 @@
+.. _exhale_function_interpolation_8hpp_1a9d06e415330f9c7cd571a3fee3e7b448:
+
+Template Function zacc::math::scurve5
+=====================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_interpolation.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::scurve5(vreal_t)

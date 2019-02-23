@@ -1,0 +1,13 @@
+.. _exhale_union_unionzacc_1_1twiddler:
+
+Union twiddler
+==============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_bithacks.hpp`
+
+
+Union Documentation
+-------------------
+
+
+.. doxygenunion:: zacc::twiddler

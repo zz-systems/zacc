@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a56215121e2ed74515a849a65a549f828:
+
+Template Function zacc::generate(const InputContainer&, Generator)
+==================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::generate(const InputContainer&, Generator)

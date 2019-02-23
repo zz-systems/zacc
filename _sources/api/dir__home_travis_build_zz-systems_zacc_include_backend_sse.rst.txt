@@ -1,0 +1,25 @@
+.. _dir__home_travis_build_zz-systems_zacc_include_backend_sse:
+
+
+Directory sse
+=============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_backend>` (``/home/travis/build/zz-systems/zacc/include/backend``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/travis/build/zz-systems/zacc/include/backend/sse``
+
+
+Files
+-----
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float32.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float64.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int16.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int32.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int8.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_types.hpp`
+
+

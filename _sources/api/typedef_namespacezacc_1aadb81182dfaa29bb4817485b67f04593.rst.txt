@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1aadb81182dfaa29bb4817485b67f04593:
+
+Typedef zacc::tuple_size
+========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::tuple_size

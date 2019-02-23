@@ -1,0 +1,13 @@
+.. _exhale_function_kernel__dispatcher_8hpp_1a115bca3e15e7d143bac428e236b26b00:
+
+Template Function zacc::system::make_dispatcher
+===============================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel_dispatcher.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::system::make_dispatcher(Args&&...)

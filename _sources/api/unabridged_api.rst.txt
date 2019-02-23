@@ -1,0 +1,5009 @@
+
+Full API
+--------
+
+
+Namespaces
+**********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__@65.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__@82.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__avx.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__avx2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__avx2__float32_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__avx2__float64_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__avx2__int16_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__avx2__int32_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__avx2__int8_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__avx512.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__scalar.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__scalar__float32_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__scalar__float64_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__scalar__int16_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__scalar__int32_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__scalar__int8_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__sse.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__sse__float32_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__sse__float64_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__sse__int16_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__sse__int32_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__backend__sse__int8_modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__detail.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__math__modules.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__system.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__test.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__traits.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_zacc__util.rst
+
+Classes and Structs
+*******************
+
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1____all.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1____all_3_01Rule_00_01T_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1____all_3_01Rule_00_01T_00_01Ts_8_8_8_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1____any.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1____any_3_01Rule_00_01T_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1____any_3_01Rule_00_01T_00_01Ts_8_8_8_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1____is.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1__is.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1aligned__allocator.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1aligned__allocator_1_1rebind.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1allocatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1arch.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1arch_1_1avx1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1arch_1_1avx1__fma3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1arch_1_1avx2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1arch_1_1avx512.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1arch_1_1opencl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1arch_1_1scalar.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1arch_1_1sse2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1arch_1_1sse3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1arch_1_1sse41.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1arch_1_1sse41__fma3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1arch_1_1sse41__fma4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1bfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1bfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1bint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1bint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1bint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float32__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int16__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int16__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int16__modules_1_1bitwise__shift.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int16__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int16__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int16__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int16__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int16__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int16__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int16__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int32__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int32__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int32__modules_1_1bitwise__shift.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int32__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int32__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int32__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int32__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int32__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int32__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int32__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1zfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1zfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1zint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1zint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx2_1_1zint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____bfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____bfloat32_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____bfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____bfloat64_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____bint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____bint16_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____bint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____bint32_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____bint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____bint8_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zfloat32_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zfloat64_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zint16_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zint32_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zint8_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zval__float32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zval__float32_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zval__float64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zval__float64_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zval__int16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zval__int16_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zval__int32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zval__int32_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zval__int8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1____zval__int8_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1bfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1bfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1bint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1bint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1bint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__arithmetic_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__bitwise_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__comparison.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__comparison_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__conditional_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__construction.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__construction_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__io_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float32__logical_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__arithmetic_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__bitwise_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__comparison.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__comparison_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__conditional_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__construction.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__construction_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__io_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1float64__logical_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__arithmetic_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__bitwise_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__comparison.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__comparison_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__conditional_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__construction.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__construction_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__io_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int16__logical_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__arithmetic_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__bitwise_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__comparison.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__comparison_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__conditional_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__construction.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__construction_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__io_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int32__logical_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__arithmetic_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__bitwise_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__comparison.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__comparison_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__conditional_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__construction.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__construction_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__io_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1int8__logical_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1zfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1zfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1zint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1zint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx512_1_1zint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____bfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____bfloat32_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____bfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____bfloat64_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____bint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____bint16_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____bint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____bint32_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____bint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____bint8_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zfloat32_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zfloat64_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zint16_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zint32_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zint8_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zval__float32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zval__float32_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zval__float64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zval__float64_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zval__int16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zval__int16_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zval__int32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zval__int32_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zval__int8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1____zval__int8_1_1impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1bfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1bfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1bint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1bint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1bint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__arithmetic_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__bitwise_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__comparison.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__comparison_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__conditional_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__construction.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__construction_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__io_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__logical_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__math_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float32__numeric_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__arithmetic_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__bitwise_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__comparison.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__comparison_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__conditional_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__construction.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__construction_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__io_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__logical_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__math_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1float64__numeric_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__arithmetic_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__bitwise_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__bitwise__shift.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__bitwise__shift_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__comparison.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__comparison_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__conditional_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__construction.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__construction_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__io_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__logical_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__math_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int16__numeric_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__arithmetic_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__bitwise_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__bitwise__shift.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__bitwise__shift_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__comparison.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__comparison_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__conditional_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__construction.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__construction_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__io_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__logical_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__math_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int32__numeric_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__arithmetic_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__bitwise_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__comparison.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__comparison_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__conditional_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__construction.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__construction_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__io_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__logical_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__math_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1int8__numeric_1_1____impl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1zfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1zfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1zint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1zint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1avx_1_1zint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1bfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1bfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1bint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1bint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1bint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float64__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float64__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float64__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float64__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float64__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float64__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float64__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float64__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1float64__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1bitwise__shift.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int32__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int32__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int32__modules_1_1bitwise__shift.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int32__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int32__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int32__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int32__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int32__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int32__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int32__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int8__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int8__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int8__modules_1_1bitwise__shift.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int8__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int8__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int8__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int8__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int8__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int8__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1int8__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1zfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1zfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1zint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1zint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1scalar_1_1zint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1bfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1bfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1bint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1bint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1bint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float32__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float32__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float32__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float32__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float32__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float32__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float32__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float32__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float32__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float64__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float64__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float64__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float64__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float64__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float64__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float64__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float64__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1float64__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int16__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int16__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int16__modules_1_1bitwise__shift.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int16__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int16__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int16__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int16__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int16__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int16__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int16__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int32__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int32__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int32__modules_1_1bitwise__shift.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int32__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int32__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int32__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int32__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int32__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int32__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int32__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int8__modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int8__modules_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int8__modules_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int8__modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int8__modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int8__modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int8__modules_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int8__modules_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1int8__modules_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1zfloat32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1zfloat64.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1zint16.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1zint32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1backend_1_1sse_1_1zint8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1bit__and.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1bit__or.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1bit__shl.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1bit__shr.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1bit__xor.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1blue__t.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1bool__pack.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1boolcolor.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1bval__tag.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1color.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1composable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1composable_1_1type.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1compose.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1compose_3_01Tail_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1compose_3_01Tail_01_4_1_1terminator.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1cpuid.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1cval__tag.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1decrement.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1def__t.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1detail_1_1build__indices.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1detail_1_1build__indices_3_010_00_01Is_8_8_8_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1detail_1_1indices.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1dispatched__arch.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1dispatcher.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1divides.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1equal__to.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1feature.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1function__traits.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1function__traits_1_1argument.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1function__traits_3_01F_01_6_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1function__traits_3_01F_01_6_6_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1function__traits_3_01R_07_5_08_07Args_8_8_8_08_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1function__traits_3_01R_07Args_8_8_8_08_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1function__traits_3_01R_07Args_8_8_8_08_4_1_1argument.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1function__traits_3_01R_07C_1_1_5_08_07Args_8_8_8_08_01const_01_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1function__traits_3_01R_07C_1_1_5_08_07Args_8_8_8_08_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1function__traits_3_01R_07C_1_1_5_08_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1greater.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1greater__equal.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1green__t.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1identity.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1increment.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1indent__t.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1inherit.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1iterable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1less.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1less__equal.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1logical__and.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1logical__or.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1____mat.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1is__scalar.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1make__vec.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1mat.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1mat_3_01T_00_011_00_011_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1mat_3_01T_00_012_00_011_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1mat_3_01T_00_013_00_011_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1modules_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1modules_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1modules_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1modules_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1modules_1_1printable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1math_1_1zcomplex.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1measurable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1minus.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1modulus.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1multiplies.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1not__equal__to.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1option.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1plus.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1printable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1red__t.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1requires.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1resizable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1resolve__iterator.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1resolve__reference.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1select.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1select_3_01Head_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1sink.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1string__view.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1swappable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1sysinfo.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1system_1_1entrypoint.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1system_1_1kernel.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1system_1_1kernel__activator.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1system_1_1kernel__traits.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1system_1_1kernel__traits_1_1kt.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1system_1_1kernel__traits_1_1kt_3_01T_00_01void__t_3_01decltype_07T_1_1compatible_08_4_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1system_1_1make__void.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1system_1_1managed__library.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1traits_1_1arithmetic.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1traits_1_1bitwise.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1traits_1_1bitwise__shift.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1traits_1_1comparable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1traits_1_1conditional.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1traits_1_1conditional_1_1else__branch.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1traits_1_1equatable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1traits_1_1io.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1traits_1_1logical.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1traits_1_1math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1traits_1_1numeric.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1type__sink.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1util_1_1gradient1D.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1when.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1yellow__t.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1avx3096a7539a6e45eccd68d0e8a0a38213.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1avx75e0cb02e1994fda8ea039a0f167dd0e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1avx01d33cddd064c7fec914df8b1752beee.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1avxb805c312d86dcfba425dcea3de140179.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1avx2a642e5097888f82a7e235fbc9154145.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sca4070329dbeab0758a950658579dbdd61.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1scabcdb6130758062e44072eddef0f3e823.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1scaed7c05a7f5c453f8ef44f6ca359c474e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sca90cd038736869fe6e6862ba34640bf32.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sca15e51c6e93723fd3f7cc1c47109a120f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1ssef16e757f61a52332ca4edada0500a6be.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sse031cb061ae3ec4c5e36eda53f5ed3e40.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sse710b8947de68d4519d00487ce933d128.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sse6d74e9c9b3c572dbc52f3359b1b159e9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1ssedc98983ac7b85ecd2a1975e9759335bc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01math_1_1izcompc01421659fa20eb5d1b6e0bf2a1fc1f7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1ztype.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1zval.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   structzacc_1_1zval__tag.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classzacc_1_1cloneable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classzacc_1_1get__sysinfo.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classzacc_1_1option__parser.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classzacc_1_1put__sysinfo.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classzacc_1_1serializable.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classzacc_1_1system_1_1kernel__dispatcher.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classzacc_1_1zip__container.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classzacc_1_1zip__iterator.rst
+
+Enums
+*****
+
+
+.. toctree::
+   :maxdepth: 5
+
+   enum_namespacezacc_1abf341fc8b3c69b755df2d2168e943b30.rst
+
+Unions
+******
+
+
+.. toctree::
+   :maxdepth: 5
+
+   unionzacc_1_1twiddler.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   unionzacc_1_1twiddler_3_01double_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   unionzacc_1_1twiddler_3_01float_01_4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   unionzacc_1_1util_1_1color__rgb.rst
+
+Functions
+*********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   function_intrin_8hpp_1a320b5870464c95af14510ee6daffc7f1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_literals_8hpp_1a01b2dec61ec69be38f97b7c61d9720c6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_literals_8hpp_1a77d77432c47ce22e943749e4fc8b3330.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_literals_8hpp_1a7bc0fe693f3c8fb3877029dd465c101d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_literals_8hpp_1a323ff9d3d79c0ecb3f3b9aaf9d04d21e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_literals_8hpp_1a28a9c4209209a0a74c272ba76dc45737.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_literals_8hpp_1a2cca32446effe68e37d3667aa8a26ea5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_literals_8hpp_1aca49ef01334ab74d4df3f1d2bc819caa.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_literals_8hpp_1a849cd5603a37ab66cb32deecd6966001.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_literals_8hpp_1a749d470a8d0268529a09029b7012ddaa.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_literals_8hpp_1ac35d3c3cdf03264ed94dcd4c3ddf5302.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_literals_8hpp_1a7544c41380e311e02132af8b0d14a465.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_literals_8hpp_1ab28856e7ab3d845433aeceec388704a8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a7ecbf8461f94e1dbe324e6bbb9c08e2c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1ad8f23038a68d6b3b591e402e8519872d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a268a850d941e0f6c31de50d394cbd533.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a485babbe5a27184374d47f014bbf2770.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1acff1f94f6a7bbff68dc59941cc662b3a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a79b1c90c9328ba09526454d8b3bbcaf1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a1fde5d6846292d20f7138df920e9a900.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1abec355180711f1f46727f2555524fb8b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a4230241e2aa4d71a52a01c42d0407a9b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a823d1111581b1fe918b2f3012122f4ee.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1_1detail_1ac520ec6c8a6e8448a4d80518f40f3229.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1_1detail_1ae0129d12aff803c20b6f9288d9594028.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1_1detail_1a7ff3420b70d90502e5c3418fbc546794.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a3145c14fa2be2afd026c6aaca2b59395.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a133fc1c398772a83d02c37866e933d5e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a1654f1a12d1c90e115442fefbde68132.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1aea1b9fd8d56c9adac4193e7776164605.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a56215121e2ed74515a849a65a549f828.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1ace8b4a21f1caeb4ded334127ecec2cbe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1acebcbb7d38ceabebc9e5377b5cf4f610.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1acd62b432b6a46fd771d9baa68fca4cbd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1ab5aa1723d27d002bd7e0119e76ee326f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a3bc9ce8c211670f8986a33a8d00b5bbd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a6c4b4bd10c444d48d50d91aacb66210e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1ae4fd8cab8c7c40a375fcee129cd9da1e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1aac7dad1cac616b49e6abcde7b25828f5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a0c6128e2cc764c08459be7cb40258310.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a0fc7fbe23b1809ceebff22198550eabe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a8a8ca0bde9aea348096faf563deb85cd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1adeb5d12dd87eeae5cad8ab226a66cbc5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a6f2a67c7e8369ac628b57e344a124be6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a50e1936ad6ca2099a1309a3428b64703.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a1e2c5ee4637387ca248e9c915fecc19a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a8ced9b9eb065da78ce4720513882e744.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1ab11ba0bb7b24eb4e357708fe8a24786f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1aa5d7ea986378159fdd37287f5f826c41.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_interpolation_8hpp_1a1b745760d51b6281138f36ed962aa11a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_fundamental_8hpp_1a5aadc6b3acd595a9eb04fc2b0dc2fa97.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a8860f5078e60103a6f3841119014b815.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_interpolation_8hpp_1aa24e72648ddb02c857238a48c6fe8d6b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1afe9643ab2331622b9db5e4f54df797fd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a9b2ea6f99667e6e8d2ae39b1e3b65f3f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1adc3b8084b3a37caec475152a011913fb.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1aa3f90c08d6fd185a34c974d48bea188a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1af11a4d9f0992fb155420ae6fabd37e81.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1abbd3101dc9d5fe77eccf8cdbd5638397.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a5bde58fe5df7668ba96508b33c506bcf.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a4ee88d1a32750aa32ecb75cf1a2404d7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a9c6c7cc7015134ca02ef171359009faa.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a40fc368e8de4be0369118a4ee2e7487c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a28fbcb5a1da4cda94b0bca2099a051fb.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a25ffe2057ae2755eb45d51675e5459b3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a6f1765d4dd3ac229a4f6e97149d97af2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a72e44af56d9b9a1e27dad59bd86f8b46.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1afd4855559e142a2f784b5c069e5776fd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a971e8c4f52a838c826bf5662f2995190.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a536d0d3816b72a0a3bc4f1c98cbf5a35.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1ac0b1c261a3f21a1fe34a36b34286975c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a815860bce2568b7b5ecd15d687219412.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1ab758acad2701555bc391b5b54ba2b751.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1aac8bca984c5f124bf9199c2ffb7c6295.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a1cface03674d9b2f7785e3cedca1eb79.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1a1d387a93e26845f06381a51295f5e041.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_interpolation_8hpp_1aba7261f3ecb6d439552cdbad7fa55fe4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_interpolation_8hpp_1a9d06e415330f9c7cd571a3fee3e7b448.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_trigonometry_8hpp_1a287b087396248f1bde0f7944b3b39543.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_fundamental_8hpp_1aa0c0837de3b1fbfec3605d3e40855d0a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_trigonometry_8hpp_1a510dba2cbdd1cdf1d721e96614a6d15d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_fundamental_8hpp_1a9010bb059b05b1b2b9b20f1bf31a53a0.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_fundamental_8hpp_1a94abb0fbaefd46c9c4dbf6f4e281d9af.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_matrix_8hpp_1ac723b9619b59909bdb28d3ad83160a4a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_trigonometry_8hpp_1a3305f7ca8c1193d343282ed8fd874d11.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_trigonometry_8hpp_1a52fa5925d802747d7d1af5df6d637296.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a519db820618d86e9b1436dd01a5d6634.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1addc218dcf92a00d9f86089973f0c4dfd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1ab0c2384d754ac9cc7c6104bb8b6688ca.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a8f8815170b382e3f785e793b970ee26f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a0b8f397c37ca9af59642dcfa3d342de5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a99865060166832692c0f34d62bc8e103.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a495a2ce5fc80c9468ddff00be5402760.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1aa4efe88d50a085e7dc4d72adb134f011.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1acdd2e572c9083b987dc3b5fdc7bc5944.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a448a8bae09fbd5a15ae6b42ad5a11c1a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_kernel__dispatcher_8hpp_1a115bca3e15e7d143bac428e236b26b00.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_gtest__ext_8hpp_1a8c9b7e2ce1f49413058328c7164ee9dd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_gtest__ext_8hpp_1a9eafd37ec3e8e24223c1e0e6bb2bb741.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_gtest__ext_8hpp_1afd3cfea9c0d5354b127a13de8a047079.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_gtest__ext_8hpp_1abc57f10e9a5469c554fdd7b591ac573d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_gtest__ext_8hpp_1a45eddba3db0879dbfb5805c632e46b92.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1abefadf36cf3b9eba2d8619e3e0cc4050.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a70ed796a6d977d3f0e78dd5c38475013.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1aa48194fa51d312cf6110c1f9b11b937e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a10b849b069ed8b36195928c9d19fbf8b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a46c91bcd94986229a3182f0b9cd0bc1b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a9d577106b455ef1f9e7ac9e34f12b8ce.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a59104b5729849b91172ef83b915c9ba5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a52aef3e92e069f9661067a9a73f8fef7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1aa90ff09026c4a01beb3d0b6cd1e9f79c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a9f1baa271f559b32e2549db0b35684fa.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a88032d5a444918b487fa4956ff3f95b7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_namespacezacc_1a3601279da7e2b56e3b464dd407427f93.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_dlloader_8hpp_1a9aefa5e136812ca059acdd8373596304.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_dlloader_8hpp_1aa9afc2bfc3c32d0b30d7103944086c56.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_dlloader_8hpp_1a5beebfdecc618660e920914893fba90b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_dlloader_8hpp_1a46483a191023bcece282f405c80189c4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   function_test__entry__point_8hpp_1aab1ae95ccd3fb100c2540c491866ab82.rst
+
+Variables
+*********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespacezacc_1ace0ea40ca12c71f36351408d152ef07f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespacezacc_1a6d12363d4954f7940f826e51dac83873.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespacezacc_1a736aeae43ad353fff1d0ce772bcd08c5.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespacezacc_1ae818aaa74011bbd626c314dd483507de.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespacezacc_1a60d28c2da862513e9e4c6af43482f3dc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespacezacc_1a1a5308b49fec38a00c1849dcd47e65e8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespacezacc_1a00d53f85e84020b4a3b93b3b4eecae14.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespacezacc_1aa02a512ec2b24bd8ad74d9f02aeec4be.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1a942f6ada53667d4a012ca56554f65dcf.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1ab65a8d6483d2771b6df787cc0a9c3a33.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1a2a4d9dbe481565d451e425a6cd5f1005.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1abc1597eecb3e252759cd5b7f39675c1a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1a7a05e2692d6f9e33ced95f57a277a6fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1ae26ca8aeeed03b451525d89e71b5a868.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1a924d61f23990843e7132643ff0871f14.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1a5ab96c0ad7a6c90a7d43f18b0f7741cd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1a858f1dccc0d5e59865e7ad712ad579e0.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1a003890f5861741bb647928444fa7a2f2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1a77c8407159aa15bd904d3a7a6e313c50.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1ac814b81cf0362fa98d274ab68aaf6205.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1a062f1d61a8fda76c95b6d46940260f07.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1a338bc3f1d35a513d88ffd92fabe5e086.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1a79866e3d30fb9fbbed4e8d6655032c2d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_trigonometry_8hpp_1af740d44216aa97195d994ebeb5a4f120.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   variable_namespacezacc_1abaf9416716cedb6b9c286ece9a264672.rst
+
+Defines
+*******
+
+
+.. toctree::
+   :maxdepth: 5
+
+   define_zacc_8hpp_1a28fa0088bd4a129507814c3366c60bb6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_macros_8hpp_1a505436832669a2a70176f662d7715702.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_macros_8hpp_1a9331ff479824c7ae6f531145ec2c82d4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_macros_8hpp_1ab16f8465cc38c4e7365402fbc6c32548.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_macros_8hpp_1a330c737bc94416f366a7a6b408bca838.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_kernel_8hpp_1a628ddb591fd5db4ae9e7de66ffbeffa2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_avx2_2float32_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_scalar_2float32_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_sse_2float32_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_avx2_2float64_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_scalar_2float64_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_sse_2float64_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_avx2_2int16_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_scalar_2int16_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_sse_2int16_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_avx2_2int32_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_scalar_2int32_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_sse_2int32_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_avx2_2int8_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_scalar_2int8_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_sse_2int8_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_kernel_8hpp_1a260eb5f463389a75025dacdd2e3793e0.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_macros_8hpp_1af1eaa3905124fe7b60060df0466e230f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_gtest__ext_8hpp_1a642df0aac3307d57a69f0fb940d720d4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_macros_8hpp_1a3428692efe6051ef30016ffde1a9f7bb.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_macros_8hpp_1a9a63ce5ce3b143f8df9df20769c2ab86.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_macros_8hpp_1afa3b777da32e2e44bf6a1be104cf8aba.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_macros_8hpp_1aa6d5042a0ebcb5e8b1da5fd92d93c14a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_macros_8hpp_1a85d942a7aa8b718de83d06343f12aa8a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_macros_8hpp_1a5eb66637d81ad7882eab8526b0c46572.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_util_2type_2ztype_8hpp_1a075749620a07a815a0038c742e281ba4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_gtest__ext_8hpp_1a4cfcd12f60d27c7c7589d3e7d5faf30a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_gtest__ext_8hpp_1a70e340267c9817cf7a5eded065fd2160.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_gtest__ext_8hpp_1afa348d4e6ae076622019fdd3bb26f8a4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_gtest__ext_8hpp_1aa90ca4fbed602241605d7d6567fbc9a0.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_test__entry__point_8hpp_1aae31d42d887d41df8e766726607055e3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_util_2io_8hpp_1a705dec460ea8c884175cb47939c26952.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_util_2io_8hpp_1a6c9203d5d8d486f076e6020e32a5f44b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_util_2io_8hpp_1acf4975c012c6f6871b569e8e8e5025c8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_util_2io_8hpp_1a9df875f9b572b3de8bc42d686f76680b.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   define_gtest__ext_8hpp_1ad9f15ce3dd7b6de1034193c782de75a3.rst
+
+Typedefs
+********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a64c37f2b00192a0a5e51189966eb8557.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1af0fda6b8bd620233947c805230dd185c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a4966288edc686a2ae38f1dec49c19623.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_avx2_2float32_8impl_8hpp_1aace45b537919cf0866bb06c29dcdb891.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_avx2_2float64_8impl_8hpp_1afa58ad1154d7618c179b65a29cfd50ec.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_avx2_2int16_8impl_8hpp_1ae0c76fb57c89253852a06bf96a9cfab6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_avx2_2int32_8impl_8hpp_1a03c2283bd1d0d2d37aab68a4c15637c7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_avx2_2int8_8impl_8hpp_1a604eb2c71ce4590b67748f7fba098445.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_avx2_2float32_8impl_8hpp_1a562e68dcb4093c7adfb8c0dbe7cdf7df.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_avx2_2float64_8impl_8hpp_1a0d8c89af24cde886d3b7a6f92b9ab2fe.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_avx2_2int16_8impl_8hpp_1a6eb636b2fa1dd226fb1f26fd1d420c52.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_avx2_2int32_8impl_8hpp_1af6ac665c82e64e12e29d19b52ae57425.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_avx2_2int8_8impl_8hpp_1a0ed2f7ae416f5f32b8cfc53c355398e9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_scalar_2float32_8impl_8hpp_1ae2e981bc37f2313bec9aff747a0a2ead.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_scalar_2float64_8impl_8hpp_1a0ec86d15bef65a835fb45feeec7b1452.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_scalar_2int16_8impl_8hpp_1a045bf935e8ce9b88628536a2cf1a1277.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_scalar_2int32_8impl_8hpp_1acd37d1f2b9882bec0fa43eb9d01683d4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_scalar_2int8_8impl_8hpp_1aecfe55d9ac090b9e28d24ef5f676e724.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_scalar_2float32_8impl_8hpp_1a456e0e41eac464c9b130911c5f5950ed.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_scalar_2float64_8impl_8hpp_1a988d33bd98fc01b8edbf2c428a39045d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_scalar_2int16_8impl_8hpp_1a751b075075db9b18dcf61edd7adf5429.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_scalar_2int32_8impl_8hpp_1ab9063d86b9c9045acf2e5e47e64000ca.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_scalar_2int8_8impl_8hpp_1a1c73a8d1d759d30924851fea32910994.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_sse_2float32_8impl_8hpp_1a84b4ac21e04fb2be15e680eaa2798481.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_sse_2float64_8impl_8hpp_1ab7702e459ed105879ed01c4638ab3151.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_sse_2int16_8impl_8hpp_1a8084a477c53b4e1b1d9903a98edeaaa3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_sse_2int32_8impl_8hpp_1a9a99a82f4b2b3697b3272d9a50903aa8.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_sse_2int8_8impl_8hpp_1ae242817de2dbd7fff389a3650bdeb07f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_sse_2float32_8impl_8hpp_1a14f8d270e9783b79aec126e14f96d89a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_sse_2float64_8impl_8hpp_1ab9933fc6830e207094e509f569ada2a1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_sse_2int16_8impl_8hpp_1a5dc9b6759b79372dda3353410346c50e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_sse_2int32_8impl_8hpp_1a0c13693cc2648d88076d5555f253e36d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_sse_2int8_8impl_8hpp_1a87c9a4fab931c758cab04dc56bb5d508.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1ab4f27d4b65ebbfe22cdb2437d67ddf4f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a032c2c7c491158f8ae31b2877b3c1676.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a73620a6fce21004a58bd5673a4284d12.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a6badbda85c51ce609a0c93e8883bc3a1.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1ad5e3533ea31f860deb9aad56eb1a5abc.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1aec4e0028a596659ca67c906f2b8485b3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a00352e61b2d9940ea7ab3e12adf602ee.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a00ad98e611fbe51bd9bdfd5dd7c06a7d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a334be59cdc3427aa7a94a23d924410fa.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a6bf91677ef0efee233396f1ced350c49.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1acea1c0758fb09dfa5e21b2bda0026015.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1abd5f316879131c0cdf736e0dca8e9cdd.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a0f2ebe290789f0fdc943938f1c3209ee.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1ab6fc7632db6573584e215eb07c08c65c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a4a0154af66617edd63ebda4ab5889329.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a22578a294d8d4fc53f7d258822540a2a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a1a74928342d394bce381e4814dfb4981.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a37d1bc3620f8a3b4f526d2dda137f654.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1ad596219e7df5c0eb5222b3b3e0a68f8f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a7b3ddc71f75621c6729cca10356fa1e2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a1f6b41812b473b1618d8ab83accfd30a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1ab4ac3d835e33df3bd745c2d16300beac.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a26fadf170b688d5574eff0cb2635a5d2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a704b7f5ed81710d97b131ea5a1693752.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1aba0624cd37d19d1e10aed71b6f084865.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a31b8642d4ca96943a462d518f9d1633d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a1f326c9a83839050eba1ee9329a4f725.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a10a4d8a63fcb8d5abb2fb7e87c68cba3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a9f47a630a39b7e1201fe56c1953df507.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1afe5b2d4314c0813c1ad84e533642edba.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_complex_8hpp_1a42e3b19aba74a9f5b42fe0ce76cd6b01.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_matrix_8hpp_1a3393eccdd0687046894bc0cc8d63ca9d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_matrix_8hpp_1aafaf09993ac777433f8025569aab37fa.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_matrix_8hpp_1a471043c945e78a0f0838ee7005f86544.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_matrix_8hpp_1ac2874d3c451c1a9077d5836787acb334.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_matrix_8hpp_1af4d582775d36c2e21bd9eed6c19b995d.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_matrix_8hpp_1a928564b2a161169e9c8f42c089f07bce.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_matrix_8hpp_1af93bb8811b0119a144fe0fc73ac9436f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_matrix_8hpp_1a312bdaf3916ce5ef6dcf171134aaa3e4.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1ac0b51085f79eb12d49b191afc9266a6f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a754f551e5c3afb1ecac2605d710d975f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1afdfd49db0cb58d431968092eb0c107b3.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a74065a57a3402051af8cd054ef62fa02.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1ab2c8a046702fddb620eb7c478e01ebe9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a079993d2cb7af7f0b14967ceeba138af.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a469ad6f75dde604eb8f0d03077d4b2f0.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1aba8eb8df04e5191c62355552d491dfd7.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_kernel_8hpp_1a7125b638a6c4661bc6aaf5e6251b651f.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a0f550eabad9e73899c04dee2e14158b9.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a32a1dd16c2aca7ef796545b16887dc0e.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a993097c6032c36fe97a6a60da6875a0a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1aadb81182dfaa29bb4817485b67f04593.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1af905cd88bda5352679dfd173fbad4a67.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1ac06f6428209b1f0b54d31729a8a7c1f6.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a17745b26faa83262fa9b85fdd686033a.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a2bc7481bdeff9a5251bfb16462436c46.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1aab0a722c0b2aae52d71106e44ba7d335.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1ac6cdb651125538c46c979c61ddf30d58.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a8e51aae9f4be04b0e9db788c0dde2068.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a156693baeed51e491661c6998a30d143.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1abfd1b07af984ab42fcf65fcc7731d922.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1ab206c81b13dd1ea0fef16a6e6d47bfee.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1af968c513f7ebfad516e571b6136a1d96.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1ae77a7b0e3e09612fa4efabcba7bde81c.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a33236a1ae908016103b8c83cd5e399da.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a62928ee1712d1b071cf793d49131bc23.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   typedef_namespacezacc_1a4a865f5e7809bf8dfd73aa6f40a3f50d.rst
+
+Directories
+***********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include_backend.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include_backend_avx.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include_backend_avx2.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include_backend_avx512.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include_backend_scalar.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include_backend_sse.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include_math.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include_system.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include_traits.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include_util.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include_util_testing.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   dir__home_travis_build_zz-systems_zacc_include_util_type.rst
+
+Files
+*****
+
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_all.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_traits_allocatable.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_system_arch.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_traits_arithmetic.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_bithacks.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_traits_bitwise.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_traits_bitwise_shift.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_cloneable.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_collections.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_color.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_traits_comparable.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_math_complex.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_traits_conditional.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_math_constants.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_system_cpuid.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_delegate.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_system_dispatcher.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_system_dlloader.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_system_entrypoint.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_traits_equatable.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_system_feature.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx_float32.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx2_float32.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx512_float32.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_scalar_float32.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_sse_float32.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx_float64.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx2_float64.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx512_float64.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_scalar_float64.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_sse_float64.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_math_fundamental.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_testing_gtest_ext.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx_int16.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx2_int16.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx512_int16.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_scalar_int16.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_sse_int16.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx_int32.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx2_int32.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx512_int32.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_scalar_int32.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_sse_int32.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx_int8.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx2_int8.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx512_int8.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_sse_int8.impl.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_math_interpolation.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_intrin.ext.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_intrin.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_traits_io.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_io.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_system_kernel_activator.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_system_kernel_dispatcher.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_literals.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_traits_logical.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_macros.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_system_managed_library.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_traits_math.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_memory.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_traits_numeric.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_operators.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_option_parser.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_traits_printable.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_serializable.h.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_system_sysinfo.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_testing_test_entry_point.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_math_trigonometry.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_type_type_casts.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_type_type_composition.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx_types.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx2_types.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_avx512_types.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_scalar_types.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_sse_types.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_uuid.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_vector.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_zacc.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_ztype.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_util_type_ztype.hpp.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   file__home_travis_build_zz-systems_zacc_include_backend_zval.hpp.rst

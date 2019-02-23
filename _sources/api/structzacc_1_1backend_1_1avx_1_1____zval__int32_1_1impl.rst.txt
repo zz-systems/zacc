@@ -1,0 +1,31 @@
+.. _exhale_struct_structzacc_1_1backend_1_1avx_1_1____zval__int32_1_1impl:
+
+Struct __zval_int32::impl
+=========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int32.impl.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zval__int32`.
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::zval< arch >, 2 >, int32_t, 8, 32, arch >`` (:ref:`exhale_struct_structzacc_1_1zval`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::avx::__zval_int32::impl
+   :members:
+   :protected-members:
+   :undoc-members:

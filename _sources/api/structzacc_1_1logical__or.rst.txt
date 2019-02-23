@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1logical__or:
+
+Template Struct logical_or
+==========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_operators.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::logical_or
+   :members:
+   :protected-members:
+   :undoc-members:

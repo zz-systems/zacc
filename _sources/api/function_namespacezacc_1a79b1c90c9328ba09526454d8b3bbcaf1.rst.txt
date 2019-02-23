@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a79b1c90c9328ba09526454d8b3bbcaf1:
+
+Template Function zacc::array_cast
+==================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_casts.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::array_cast(const std::array<U, i>&)

@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1system_1_1entrypoint:
+
+Struct entrypoint
+=================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_entrypoint.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public zacc::system::kernel< KernelInterface >`` (:ref:`exhale_struct_structzacc_1_1system_1_1kernel`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::system::entrypoint
+   :members:
+   :protected-members:
+   :undoc-members:

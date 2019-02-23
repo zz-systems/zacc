@@ -1,0 +1,184 @@
+
+.. _namespace_zacc__math:
+
+Namespace zacc::math
+====================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc__math__modules`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1____mat`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1is__scalar`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1make__vec`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1mat`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1mat_3_01T_00_011_00_011_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1mat_3_01T_00_012_00_011_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1mat_3_01T_00_013_00_011_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1zcomplex`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_matrix_8hpp_1ab11ba0bb7b24eb4e357708fe8a24786f`
+
+- :ref:`exhale_function_matrix_8hpp_1aa5d7ea986378159fdd37287f5f826c41`
+
+- :ref:`exhale_function_interpolation_8hpp_1a1b745760d51b6281138f36ed962aa11a`
+
+- :ref:`exhale_function_matrix_8hpp_1a8860f5078e60103a6f3841119014b815`
+
+- :ref:`exhale_function_fundamental_8hpp_1a5aadc6b3acd595a9eb04fc2b0dc2fa97`
+
+- :ref:`exhale_function_interpolation_8hpp_1aa24e72648ddb02c857238a48c6fe8d6b`
+
+- :ref:`exhale_function_matrix_8hpp_1afe9643ab2331622b9db5e4f54df797fd`
+
+- :ref:`exhale_function_matrix_8hpp_1adc3b8084b3a37caec475152a011913fb`
+
+- :ref:`exhale_function_matrix_8hpp_1a9b2ea6f99667e6e8d2ae39b1e3b65f3f`
+
+- :ref:`exhale_function_matrix_8hpp_1af11a4d9f0992fb155420ae6fabd37e81`
+
+- :ref:`exhale_function_matrix_8hpp_1aa3f90c08d6fd185a34c974d48bea188a`
+
+- :ref:`exhale_function_matrix_8hpp_1a4ee88d1a32750aa32ecb75cf1a2404d7`
+
+- :ref:`exhale_function_matrix_8hpp_1abbd3101dc9d5fe77eccf8cdbd5638397`
+
+- :ref:`exhale_function_matrix_8hpp_1a5bde58fe5df7668ba96508b33c506bcf`
+
+- :ref:`exhale_function_matrix_8hpp_1a9c6c7cc7015134ca02ef171359009faa`
+
+- :ref:`exhale_function_matrix_8hpp_1a40fc368e8de4be0369118a4ee2e7487c`
+
+- :ref:`exhale_function_matrix_8hpp_1a28fbcb5a1da4cda94b0bca2099a051fb`
+
+- :ref:`exhale_function_matrix_8hpp_1a25ffe2057ae2755eb45d51675e5459b3`
+
+- :ref:`exhale_function_matrix_8hpp_1a6f1765d4dd3ac229a4f6e97149d97af2`
+
+- :ref:`exhale_function_matrix_8hpp_1a72e44af56d9b9a1e27dad59bd86f8b46`
+
+- :ref:`exhale_function_matrix_8hpp_1afd4855559e142a2f784b5c069e5776fd`
+
+- :ref:`exhale_function_matrix_8hpp_1a971e8c4f52a838c826bf5662f2995190`
+
+- :ref:`exhale_function_matrix_8hpp_1a536d0d3816b72a0a3bc4f1c98cbf5a35`
+
+- :ref:`exhale_function_matrix_8hpp_1ac0b1c261a3f21a1fe34a36b34286975c`
+
+- :ref:`exhale_function_matrix_8hpp_1a815860bce2568b7b5ecd15d687219412`
+
+- :ref:`exhale_function_matrix_8hpp_1ab758acad2701555bc391b5b54ba2b751`
+
+- :ref:`exhale_function_matrix_8hpp_1aac8bca984c5f124bf9199c2ffb7c6295`
+
+- :ref:`exhale_function_matrix_8hpp_1a1cface03674d9b2f7785e3cedca1eb79`
+
+- :ref:`exhale_function_matrix_8hpp_1a1d387a93e26845f06381a51295f5e041`
+
+- :ref:`exhale_function_interpolation_8hpp_1aba7261f3ecb6d439552cdbad7fa55fe4`
+
+- :ref:`exhale_function_interpolation_8hpp_1a9d06e415330f9c7cd571a3fee3e7b448`
+
+- :ref:`exhale_function_trigonometry_8hpp_1a287b087396248f1bde0f7944b3b39543`
+
+- :ref:`exhale_function_fundamental_8hpp_1aa0c0837de3b1fbfec3605d3e40855d0a`
+
+- :ref:`exhale_function_trigonometry_8hpp_1a510dba2cbdd1cdf1d721e96614a6d15d`
+
+- :ref:`exhale_function_fundamental_8hpp_1a9010bb059b05b1b2b9b20f1bf31a53a0`
+
+- :ref:`exhale_function_fundamental_8hpp_1a94abb0fbaefd46c9c4dbf6f4e281d9af`
+
+- :ref:`exhale_function_matrix_8hpp_1ac723b9619b59909bdb28d3ad83160a4a`
+
+- :ref:`exhale_function_trigonometry_8hpp_1a3305f7ca8c1193d343282ed8fd874d11`
+
+- :ref:`exhale_function_trigonometry_8hpp_1a52fa5925d802747d7d1af5df6d637296`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_complex_8hpp_1a42e3b19aba74a9f5b42fe0ce76cd6b01`
+
+- :ref:`exhale_typedef_matrix_8hpp_1a3393eccdd0687046894bc0cc8d63ca9d`
+
+- :ref:`exhale_typedef_matrix_8hpp_1aafaf09993ac777433f8025569aab37fa`
+
+- :ref:`exhale_typedef_matrix_8hpp_1a471043c945e78a0f0838ee7005f86544`
+
+- :ref:`exhale_typedef_matrix_8hpp_1ac2874d3c451c1a9077d5836787acb334`
+
+- :ref:`exhale_typedef_matrix_8hpp_1af4d582775d36c2e21bd9eed6c19b995d`
+
+- :ref:`exhale_typedef_matrix_8hpp_1a928564b2a161169e9c8f42c089f07bce`
+
+- :ref:`exhale_typedef_matrix_8hpp_1af93bb8811b0119a144fe0fc73ac9436f`
+
+- :ref:`exhale_typedef_matrix_8hpp_1a312bdaf3916ce5ef6dcf171134aaa3e4`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a942f6ada53667d4a012ca56554f65dcf`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1ab65a8d6483d2771b6df787cc0a9c3a33`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a2a4d9dbe481565d451e425a6cd5f1005`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1abc1597eecb3e252759cd5b7f39675c1a`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a7a05e2692d6f9e33ced95f57a277a6fe`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1ae26ca8aeeed03b451525d89e71b5a868`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a924d61f23990843e7132643ff0871f14`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a5ab96c0ad7a6c90a7d43f18b0f7741cd`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a858f1dccc0d5e59865e7ad712ad579e0`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a003890f5861741bb647928444fa7a2f2`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a77c8407159aa15bd904d3a7a6e313c50`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1ac814b81cf0362fa98d274ab68aaf6205`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a062f1d61a8fda76c95b6d46940260f07`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a338bc3f1d35a513d88ffd92fabe5e086`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a79866e3d30fb9fbbed4e8d6655032c2d`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1af740d44216aa97195d994ebeb5a4f120`

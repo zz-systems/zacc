@@ -1,0 +1,13 @@
+.. _exhale_typedef_matrix_8hpp_1af93bb8811b0119a144fe0fc73ac9436f:
+
+Typedef zacc::math::vec2
+========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::math::vec2

@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1math_1_1is__scalar:
+
+Template Struct is_scalar
+=========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::math::is_scalar
+   :members:
+   :protected-members:
+   :undoc-members:

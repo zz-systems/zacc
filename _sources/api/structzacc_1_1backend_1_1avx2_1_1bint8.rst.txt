@@ -1,0 +1,30 @@
+.. _exhale_struct_structzacc_1_1backend_1_1avx2_1_1bint8:
+
+Template Struct bint8
+=====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int8.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Types
+**********
+
+- ``public zacc::zval< ibint8< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1zval`)
+- ``public zacc::printable< bint8< FeatureMask >, bint8< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1printable`)
+- ``public zacc::backend::avx2::int8_modules::io< ibint8< FeatureMask >, bint8< FeatureMask >, bint8< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1io`)
+- ``public zacc::backend::avx2::int8_modules::bitwise< ibint8< FeatureMask >, bint8< FeatureMask >, bint8< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1bitwise`)
+- ``public zacc::backend::avx2::int8_modules::logical< ibint8< FeatureMask >, bint8< FeatureMask >, bint8< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1logical`)
+- ``public zacc::backend::avx2::int8_modules::equatable< ibint8< FeatureMask >, bint8< FeatureMask >, bint8< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1int8__modules_1_1equatable`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::avx2::bint8
+   :members:
+   :protected-members:
+   :undoc-members:

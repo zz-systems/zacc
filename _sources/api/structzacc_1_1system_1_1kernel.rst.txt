@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1system_1_1kernel:
+
+Template Struct kernel
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::system::entrypoint`` (:ref:`exhale_struct_structzacc_1_1system_1_1entrypoint`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::system::kernel
+   :members:
+   :protected-members:
+   :undoc-members:

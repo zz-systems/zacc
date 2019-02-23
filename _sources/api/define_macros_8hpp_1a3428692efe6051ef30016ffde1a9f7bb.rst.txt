@@ -1,0 +1,13 @@
+.. _exhale_define_macros_8hpp_1a3428692efe6051ef30016ffde1a9f7bb:
+
+Define STRINGIZE
+================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_macros.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: STRINGIZE

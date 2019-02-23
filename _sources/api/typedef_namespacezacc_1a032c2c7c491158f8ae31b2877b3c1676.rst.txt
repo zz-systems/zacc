@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a032c2c7c491158f8ae31b2877b3c1676:
+
+Typedef zacc::bdouble
+=====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::bdouble

@@ -1,0 +1,152 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Program Listing for File cloneable.h &#8212; ZACC  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="File collections.hpp" href="file__home_travis_build_zz-systems_zacc_include_util_collections.hpp.html" />
+    <link rel="prev" title="File cloneable.h" href="file__home_travis_build_zz-systems_zacc_include_util_cloneable.h.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_util_collections.hpp.html" title="File collections.hpp"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_util_cloneable.h.html" title="File cloneable.h"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="file__home_travis_build_zz-systems_zacc_include_util_cloneable.h.html" accesskey="U">File cloneable.h</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-cloneable-h">
+<span id="program-listing-file-home-travis-build-zz-systems-zacc-include-util-cloneable-h"></span><h1>Program Listing for File cloneable.h<a class="headerlink" href="#program-listing-for-file-cloneable-h" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_travis_build_zz-systems_zacc_include_util_cloneable.h.html#file-home-travis-build-zz-systems-zacc-include-util-cloneable-h"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/travis/build/zz-systems/zacc/include/util/cloneable.h</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//</span>
+<span class="c1">// Vectorized and parallelized version of libnoise using the zacc SIMD toolkit</span>
+<span class="c1">// Copyright (C) 2015-2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)</span>
+<span class="c1">//</span>
+<span class="c1">// Original libnoise:</span>
+<span class="c1">// Copyright (C) 2003, 2004 Jason Bevins</span>
+<span class="c1">// The developer&#39;s email is jlbezigvins@gmzigail.com (for great email, take</span>
+<span class="c1">// off every &#39;zig&#39;.)</span>
+<span class="c1">//</span>
+<span class="c1">// This library is free software; you can redistribute it and/or modify it</span>
+<span class="c1">// under the terms of the GNU Lesser General Public License as published by</span>
+<span class="c1">// the Free Software Foundation; either version 2.1 of the License, or (at</span>
+<span class="c1">// your option) any later version.</span>
+<span class="c1">//</span>
+<span class="c1">// This library is distributed in the hope that it will be useful, but WITHOUT</span>
+<span class="c1">// ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or</span>
+<span class="c1">// FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public</span>
+<span class="c1">// License (COPYING.txt) for more details.</span>
+<span class="c1">//</span>
+<span class="c1">// You should have received a copy of the GNU Lesser General Public License</span>
+<span class="c1">// along with this library; if not, write to the Free Software Foundation,</span>
+<span class="c1">// Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA</span>
+<span class="c1">//</span>
+
+<span class="cp">#pragma once</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;thread&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;mutex&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;util/memory.hpp&quot;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">zacc</span> <span class="p">{</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Base</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Concrete</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">cloneable</span> <span class="o">:</span> <span class="k">public</span> <span class="n">Base</span> <span class="p">{</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="n">FORWARD</span><span class="p">(</span><span class="n">cloneable</span><span class="p">);</span>
+
+        <span class="k">virtual</span> <span class="o">~</span><span class="n">cloneable</span><span class="p">()</span> <span class="p">{</span>
+        <span class="p">}</span>
+
+        <span class="k">virtual</span> <span class="n">std</span><span class="o">::</span><span class="n">shared_ptr</span><span class="o">&lt;</span><span class="n">Base</span><span class="o">&gt;</span> <span class="n">clone</span><span class="p">()</span> <span class="k">const</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">zacc</span><span class="o">::</span><span class="n">make_shared</span><span class="o">&lt;</span><span class="n">Concrete</span><span class="o">&gt;</span><span class="p">(</span><span class="k">static_cast</span><span class="o">&lt;</span><span class="n">Concrete</span> <span class="k">const</span> <span class="o">&amp;&gt;</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">));</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="file__home_travis_build_zz-systems_zacc_include_util_cloneable.h.html"
+                        title="previous chapter">File cloneable.h</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="file__home_travis_build_zz-systems_zacc_include_util_collections.hpp.html"
+                        title="next chapter">File collections.hpp</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_util_collections.hpp.html" title="File collections.hpp"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_util_cloneable.h.html" title="File cloneable.h"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="file__home_travis_build_zz-systems_zacc_include_util_cloneable.h.html" >File cloneable.h</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Sergej Zuyev.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+.. _exhale_function_trigonometry_8hpp_1a510dba2cbdd1cdf1d721e96614a6d15d:
+
+Template Function zacc::math::vcos
+==================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_trigonometry.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::vcos(Real)

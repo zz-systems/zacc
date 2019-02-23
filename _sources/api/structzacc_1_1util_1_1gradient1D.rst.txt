@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1util_1_1gradient1D:
+
+Struct gradient1D
+=================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_color.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::util::gradient1D
+   :members:
+   :protected-members:
+   :undoc-members:

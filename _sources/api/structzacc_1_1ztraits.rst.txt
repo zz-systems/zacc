@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1ztraits:
+
+Template Struct ztraits
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::ztraits
+   :members:
+   :protected-members:
+   :undoc-members:

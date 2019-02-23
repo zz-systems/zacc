@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a1654f1a12d1c90e115442fefbde68132:
+
+Template Function zacc::for_each(InputTuple1&&, InputTuple2&&, BinaryOperation&&)
+=================================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::for_each(InputTuple1&&, InputTuple2&&, BinaryOperation&&)

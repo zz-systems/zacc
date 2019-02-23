@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1backend_1_1avx512_1_1bint32:
+
+Template Struct bint32
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int32.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::backend::avx512::__bint32< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bint32_1_1impl`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::avx512::bint32
+   :members:
+   :protected-members:
+   :undoc-members:

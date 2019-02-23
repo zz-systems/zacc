@@ -1,0 +1,13 @@
+.. _exhale_variable_trigonometry_8hpp_1af740d44216aa97195d994ebeb5a4f120:
+
+Variable zacc::math::Z_SQRT_3
+=============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_trigonometry.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: zacc::math::Z_SQRT_3

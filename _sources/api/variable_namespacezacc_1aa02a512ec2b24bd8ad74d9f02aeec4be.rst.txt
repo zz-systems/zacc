@@ -1,0 +1,13 @@
+.. _exhale_variable_namespacezacc_1aa02a512ec2b24bd8ad74d9f02aeec4be:
+
+Variable zacc::is_vector_v
+==========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: zacc::is_vector_v

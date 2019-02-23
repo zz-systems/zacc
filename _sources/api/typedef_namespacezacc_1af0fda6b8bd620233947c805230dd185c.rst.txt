@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1af0fda6b8bd620233947c805230dd185c:
+
+Typedef zacc::aligned_vector
+============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_collections.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::aligned_vector

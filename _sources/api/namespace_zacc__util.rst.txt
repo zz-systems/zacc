@@ -1,0 +1,27 @@
+
+.. _namespace_zacc__util:
+
+Namespace zacc::util
+====================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1util_1_1gradient1D`
+
+
+Unions
+------
+
+
+- :ref:`exhale_union_unionzacc_1_1util_1_1color__rgb`

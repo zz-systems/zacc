@@ -1,0 +1,24 @@
+.. _dir__home_travis_build_zz-systems_zacc_include_util_type:
+
+
+Directory type
+==============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_util>` (``/home/travis/build/zz-systems/zacc/include/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/travis/build/zz-systems/zacc/include/util/type``
+
+
+Files
+-----
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_casts.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_composition.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztype.hpp`
+
+

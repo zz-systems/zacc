@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1aba8eb8df04e5191c62355552d491dfd7:
+
+Typedef zacc::storage_t
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::storage_t

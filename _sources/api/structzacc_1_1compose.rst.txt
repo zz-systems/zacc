@@ -1,0 +1,34 @@
+.. _exhale_struct_structzacc_1_1compose:
+
+Template Struct compose
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_composition.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public zacc::backend::avx512::__zfloat32< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zfloat32_1_1impl`)
+- ``public zacc::backend::avx512::__zfloat64< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zfloat64_1_1impl`)
+- ``public zacc::backend::avx512::__zint16< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zint16_1_1impl`)
+- ``public zacc::backend::avx512::__zint32< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zint32_1_1impl`)
+- ``public zacc::backend::avx512::__zint8< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zint8_1_1impl`)
+- ``public zacc::backend::avx::__zfloat32< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zfloat32_1_1impl`)
+- ``public zacc::backend::avx::__zfloat64< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zfloat64_1_1impl`)
+- ``public zacc::backend::avx::__zint16< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zint16_1_1impl`)
+- ``public zacc::backend::avx::__zint32< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zint32_1_1impl`)
+- ``public zacc::backend::avx::__zint8< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zint8_1_1impl`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::compose
+   :members:
+   :protected-members:
+   :undoc-members:

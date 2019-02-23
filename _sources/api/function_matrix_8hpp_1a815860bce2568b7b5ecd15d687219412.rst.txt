@@ -1,0 +1,13 @@
+.. _exhale_function_matrix_8hpp_1a815860bce2568b7b5ecd15d687219412:
+
+Template Function zacc::math::reshape_i_xy(T, T)
+================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::reshape_i_xy(T, T)

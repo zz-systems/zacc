@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1_1detail_1ae0129d12aff803c20b6f9288d9594028:
+
+Function zacc::detail::_aligned_malloc
+======================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_memory.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::detail::_aligned_malloc(size_t, size_t)

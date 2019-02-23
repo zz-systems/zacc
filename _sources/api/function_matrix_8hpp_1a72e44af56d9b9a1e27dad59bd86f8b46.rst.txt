@@ -1,0 +1,13 @@
+.. _exhale_function_matrix_8hpp_1a72e44af56d9b9a1e27dad59bd86f8b46:
+
+Function zacc::math::reshape()
+==============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::reshape()

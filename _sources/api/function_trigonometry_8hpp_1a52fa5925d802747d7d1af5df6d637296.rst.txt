@@ -1,0 +1,13 @@
+.. _exhale_function_trigonometry_8hpp_1a52fa5925d802747d7d1af5df6d637296:
+
+Template Function zacc::math::vtan
+==================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_trigonometry.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::vtan(Real)

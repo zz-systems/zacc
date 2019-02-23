@@ -1,0 +1,13 @@
+.. _exhale_function_fundamental_8hpp_1a94abb0fbaefd46c9c4dbf6f4e281d9af:
+
+Template Function zacc::math::vfmsub
+====================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_fundamental.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::vfmsub(const T&, const T&, const T&)

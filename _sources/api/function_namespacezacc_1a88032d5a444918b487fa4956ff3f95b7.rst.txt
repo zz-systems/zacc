@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a88032d5a444918b487fa4956ff3f95b7:
+
+Function zacc::yellow
+=====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_io.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::yellow(std::ostream&)

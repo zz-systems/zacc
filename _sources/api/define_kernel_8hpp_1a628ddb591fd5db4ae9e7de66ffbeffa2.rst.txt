@@ -1,0 +1,13 @@
+.. _exhale_define_kernel_8hpp_1a628ddb591fd5db4ae9e7de66ffbeffa2:
+
+Define KERNEL_IMPL
+==================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: KERNEL_IMPL

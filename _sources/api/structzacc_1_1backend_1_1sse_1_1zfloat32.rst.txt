@@ -1,0 +1,34 @@
+.. _exhale_struct_structzacc_1_1backend_1_1sse_1_1zfloat32:
+
+Template Struct zfloat32
+========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float32.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Types
+**********
+
+- ``public zacc::zval< izfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1zval`)
+- ``public zacc::printable< izfloat32< FeatureMask >, zfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1printable`)
+- ``public zacc::backend::sse::float32_modules::io< izfloat32< FeatureMask >, zfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1float32__modules_1_1io`)
+- ``public zacc::backend::sse::float32_modules::math< izfloat32< FeatureMask >, zfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1float32__modules_1_1math`)
+- ``public zacc::backend::sse::float32_modules::numeric< izfloat32< FeatureMask >, zfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1float32__modules_1_1numeric`)
+- ``public zacc::backend::sse::float32_modules::arithmetic< izfloat32< FeatureMask >, zfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1float32__modules_1_1arithmetic`)
+- ``public zacc::backend::sse::float32_modules::bitwise< izfloat32< FeatureMask >, zfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1float32__modules_1_1bitwise`)
+- ``public zacc::backend::sse::float32_modules::comparable< izfloat32< FeatureMask >, zfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1float32__modules_1_1comparable`)
+- ``public zacc::backend::sse::float32_modules::equatable< izfloat32< FeatureMask >, zfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1float32__modules_1_1equatable`)
+- ``public zacc::backend::sse::float32_modules::conditional< izfloat32< FeatureMask >, zfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1float32__modules_1_1conditional`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::sse::zfloat32
+   :members:
+   :protected-members:
+   :undoc-members:

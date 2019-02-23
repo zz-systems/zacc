@@ -1,0 +1,13 @@
+.. _exhale_typedef_kernel_8hpp_1a7125b638a6c4661bc6aaf5e6251b651f:
+
+Typedef zacc::system::void_t
+============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::system::void_t

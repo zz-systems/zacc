@@ -1,0 +1,28 @@
+
+.. _namespace_zacc__backend:
+
+Namespace zacc::backend
+=======================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc__backend__avx`
+
+- :ref:`namespace_zacc__backend__avx2`
+
+- :ref:`namespace_zacc__backend__avx512`
+
+- :ref:`namespace_zacc__backend__scalar`
+
+- :ref:`namespace_zacc__backend__sse`

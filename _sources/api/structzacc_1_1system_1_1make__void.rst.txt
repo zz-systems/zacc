@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1system_1_1make__void:
+
+Template Struct make_void
+=========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::system::make_void
+   :members:
+   :protected-members:
+   :undoc-members:

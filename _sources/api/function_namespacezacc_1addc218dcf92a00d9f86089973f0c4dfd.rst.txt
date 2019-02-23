@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1addc218dcf92a00d9f86089973f0c4dfd:
+
+Template Function zacc::ntz
+===========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_bithacks.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::ntz(T)

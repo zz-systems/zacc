@@ -1,0 +1,13 @@
+.. _exhale_typedef_sse_2float64_8impl_8hpp_1ab9933fc6830e207094e509f569ada2a1:
+
+Typedef zacc::backend::sse::izfloat64
+=====================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float64.impl.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::backend::sse::izfloat64

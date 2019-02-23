@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a469ad6f75dde604eb8f0d03077d4b2f0:
+
+Typedef zacc::select_t
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::select_t

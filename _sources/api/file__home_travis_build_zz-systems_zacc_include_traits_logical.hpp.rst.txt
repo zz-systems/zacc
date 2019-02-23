@@ -1,0 +1,107 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_traits_logical.hpp:
+
+File logical.hpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_traits>` (``/home/travis/build/zz-systems/zacc/include/traits``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/traits/logical.hpp``)
+------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_traits_logical.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``util/operators.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_operators.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int8.impl.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__traits`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1traits_1_1logical`
+

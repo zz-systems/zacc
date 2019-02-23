@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1afe5b2d4314c0813c1ad84e533642edba:
+
+Typedef zacc::make_tuple_index
+==============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::make_tuple_index

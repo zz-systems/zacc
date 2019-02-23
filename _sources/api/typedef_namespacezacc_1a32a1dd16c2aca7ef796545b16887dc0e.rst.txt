@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a32a1dd16c2aca7ef796545b16887dc0e:
+
+Typedef zacc::terminator
+========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_composition.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::terminator

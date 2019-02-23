@@ -1,0 +1,13 @@
+.. _exhale_function_matrix_8hpp_1a6f1765d4dd3ac229a4f6e97149d97af2:
+
+Template Function zacc::math::operator>>
+========================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::operator>>(std::istream&, vec<T, elems>&)

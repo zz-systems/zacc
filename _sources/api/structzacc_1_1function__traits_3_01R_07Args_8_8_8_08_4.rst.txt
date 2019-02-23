@@ -1,0 +1,35 @@
+.. _exhale_struct_structzacc_1_1function__traits_3_01R_07Args_8_8_8_08_4:
+
+Template Struct function_traits< R(Args...)>
+============================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07Args_8_8_8_08_4_1_1argument`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public zacc::function_traits< R(*)(Args...)>`` (:ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07_5_08_07Args_8_8_8_08_4`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::function_traits< R(Args...)>
+   :members:
+   :protected-members:
+   :undoc-members:

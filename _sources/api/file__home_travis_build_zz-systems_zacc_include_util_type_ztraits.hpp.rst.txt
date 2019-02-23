@@ -1,0 +1,119 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp:
+
+File ztraits.hpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_util_type>` (``/home/travis/build/zz-systems/zacc/include/util/type``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/util/type/ztraits.hpp``)
+---------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``array``
+
+- ``util/collections.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_collections.hpp`)
+
+- ``util/macros.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_macros.hpp`)
+
+- ``util/type/type_casts.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_casts.hpp`)
+
+- ``util/type/type_traits.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+- ``util/type/ztype.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztype.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_zval.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1ztraits`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacezacc_1acea1c0758fb09dfa5e21b2bda0026015`
+
+- :ref:`exhale_typedef_namespacezacc_1a0f2ebe290789f0fdc943938f1c3209ee`
+
+- :ref:`exhale_typedef_namespacezacc_1a7b3ddc71f75621c6729cca10356fa1e2`
+
+- :ref:`exhale_typedef_namespacezacc_1a1f6b41812b473b1618d8ab83accfd30a`
+
+- :ref:`exhale_typedef_namespacezacc_1ab4ac3d835e33df3bd745c2d16300beac`
+
+- :ref:`exhale_typedef_namespacezacc_1a26fadf170b688d5574eff0cb2635a5d2`
+
+- :ref:`exhale_typedef_namespacezacc_1a704b7f5ed81710d97b131ea5a1693752`
+
+- :ref:`exhale_typedef_namespacezacc_1aba0624cd37d19d1e10aed71b6f084865`
+
+- :ref:`exhale_typedef_namespacezacc_1a31b8642d4ca96943a462d518f9d1633d`
+
+- :ref:`exhale_typedef_namespacezacc_1a1f326c9a83839050eba1ee9329a4f725`
+
+- :ref:`exhale_typedef_namespacezacc_1a10a4d8a63fcb8d5abb2fb7e87c68cba3`
+
+- :ref:`exhale_typedef_namespacezacc_1a9f47a630a39b7e1201fe56c1953df507`
+
+- :ref:`exhale_typedef_namespacezacc_1aba8eb8df04e5191c62355552d491dfd7`
+
+- :ref:`exhale_typedef_namespacezacc_1a0f550eabad9e73899c04dee2e14158b9`
+
+- :ref:`exhale_typedef_namespacezacc_1a17745b26faa83262fa9b85fdd686033a`
+
+- :ref:`exhale_typedef_namespacezacc_1a2bc7481bdeff9a5251bfb16462436c46`
+
+- :ref:`exhale_typedef_namespacezacc_1a4a865f5e7809bf8dfd73aa6f40a3f50d`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespacezacc_1ace0ea40ca12c71f36351408d152ef07f`
+
+- :ref:`exhale_variable_namespacezacc_1ae818aaa74011bbd626c314dd483507de`
+
+- :ref:`exhale_variable_namespacezacc_1aa02a512ec2b24bd8ad74d9f02aeec4be`
+
+- :ref:`exhale_variable_namespacezacc_1abaf9416716cedb6b9c286ece9a264672`
+

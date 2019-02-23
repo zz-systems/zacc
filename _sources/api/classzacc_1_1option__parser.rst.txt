@@ -1,0 +1,16 @@
+.. _exhale_class_classzacc_1_1option__parser:
+
+Class option_parser
+===================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_option_parser.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: zacc::option_parser
+   :members:
+   :protected-members:
+   :undoc-members:

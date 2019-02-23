@@ -1,0 +1,13 @@
+.. _exhale_function_matrix_8hpp_1a9c6c7cc7015134ca02ef171359009faa:
+
+Template Function zacc::math::operator/
+=======================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::operator/(const mat<T, Rows, Cols>&, param_t<T>)

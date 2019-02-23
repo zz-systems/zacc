@@ -1,0 +1,13 @@
+.. _exhale_function_interpolation_8hpp_1aa24e72648ddb02c857238a48c6fe8d6b:
+
+Template Function zacc::math::lerp
+==================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_interpolation.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::lerp(vreal_t, vreal_t, vreal_t)

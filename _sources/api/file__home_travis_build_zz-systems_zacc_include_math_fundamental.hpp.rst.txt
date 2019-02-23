@@ -1,0 +1,71 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_math_fundamental.hpp:
+
+File fundamental.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_math>` (``/home/travis/build/zz-systems/zacc/include/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/math/fundamental.hpp``)
+--------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_math_fundamental.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`)
+
+- ``numeric`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_numeric.hpp`)
+
+- ``type_traits`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_interpolation.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_trigonometry.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__math`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_fundamental_8hpp_1a5aadc6b3acd595a9eb04fc2b0dc2fa97`
+
+- :ref:`exhale_function_fundamental_8hpp_1aa0c0837de3b1fbfec3605d3e40855d0a`
+
+- :ref:`exhale_function_fundamental_8hpp_1a9010bb059b05b1b2b9b20f1bf31a53a0`
+
+- :ref:`exhale_function_fundamental_8hpp_1a94abb0fbaefd46c9c4dbf6f4e281d9af`
+

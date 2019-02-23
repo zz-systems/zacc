@@ -1,0 +1,13 @@
+.. _exhale_define_gtest__ext_8hpp_1afa348d4e6ae076622019fdd3bb26f8a4:
+
+Define VEXPECT_EQ
+=================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_testing_gtest_ext.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: VEXPECT_EQ

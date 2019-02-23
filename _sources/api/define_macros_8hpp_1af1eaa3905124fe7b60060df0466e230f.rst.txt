@@ -1,0 +1,13 @@
+.. _exhale_define_macros_8hpp_1af1eaa3905124fe7b60060df0466e230f:
+
+Define REQUIRE
+==============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_macros.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: REQUIRE

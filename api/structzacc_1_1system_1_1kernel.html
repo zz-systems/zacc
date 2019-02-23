@@ -1,0 +1,178 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Template Struct kernel &#8212; ZACC  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Struct kernel_activator" href="structzacc_1_1system_1_1kernel__activator.html" />
+    <link rel="prev" title="Struct entrypoint" href="structzacc_1_1system_1_1entrypoint.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="structzacc_1_1system_1_1kernel__activator.html" title="Struct kernel_activator"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structzacc_1_1system_1_1entrypoint.html" title="Struct entrypoint"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" accesskey="U">ZACC API</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-struct-kernel">
+<span id="exhale-struct-structzacc-1-1system-1-1kernel"></span><h1>Template Struct kernel<a class="headerlink" href="#template-struct-kernel" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Defined in <a class="reference internal" href="file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp.html#file-home-travis-build-zz-systems-zacc-include-system-kernel-hpp"><span class="std std-ref">File kernel.hpp</span></a></li>
+</ul>
+<div class="section" id="inheritance-relationships">
+<h2>Inheritance Relationships<a class="headerlink" href="#inheritance-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="base-type">
+<h3>Base Type<a class="headerlink" href="#base-type" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">public</span> <span class="pre">zacc::system::entrypoint</span></code> (<a class="reference internal" href="structzacc_1_1system_1_1entrypoint.html#exhale-struct-structzacc-1-1system-1-1entrypoint"><span class="std std-ref">Struct entrypoint</span></a>)</li>
+</ul>
+</div>
+</div>
+<div class="section" id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4N4zacc6system6kernelE">
+<span id="_CPPv3N4zacc6system6kernelE"></span><span id="_CPPv2N4zacc6system6kernelE"></span><span id="zacc::system::kernel"></span><span class="target" id="structzacc_1_1system_1_1kernel"></span><em class="property">template </em>&lt;<em class="property">typename</em> KernelInterface&gt;<br /><em class="property">struct </em><code class="descname">kernel</code> : <em class="property">public</em> zacc::system::<a class="reference internal" href="structzacc_1_1system_1_1entrypoint.html#_CPPv4N4zacc6system10entrypointE" title="zacc::system::entrypoint">entrypoint</a><a class="headerlink" href="#_CPPv4N4zacc6system6kernelE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Public kernel interface wrapper. Provides basic operator() implementations for the dispatcher <dl class="docutils">
+<dt><strong>Template Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">KernelInterface</span></code>: </li>
+</ul>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv4N4zacc6system6kernelclEDpRR4Args">
+<span id="_CPPv3N4zacc6system6kernelclEDpRR4Args"></span><span id="_CPPv2N4zacc6system6kernelclEDpRR4Args"></span><span id="zacc::system::kernel::call-operator__ArgsRRDp"></span><em class="property">template </em>&lt;typename... <em>Args</em>&gt;<br /><span class="target" id="structzacc_1_1system_1_1kernel_1a169abfd244c784cfd9228653bdcb9d66"></span>void <code class="descname">operator()</code><span class="sig-paren">(</span>Args&amp;&amp;... <em>args</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4zacc6system6kernelclEDpRR4Args" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Configure kernel (Any argument) <dl class="docutils">
+<dt><strong>Template Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">Args</span></code>: any </li>
+</ul>
+</dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">args</span></code>: any </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4zacc6system6kernelclER15OutputContainerRK14InputContainer">
+<span id="_CPPv3N4zacc6system6kernelclER15OutputContainerRK14InputContainer"></span><span id="_CPPv2N4zacc6system6kernelclER15OutputContainerRK14InputContainer"></span><span id="zacc::system::kernel::call-operator__OutputContainerR.InputContainerCR"></span><em class="property">template </em>&lt;<em class="property">typename</em> InputContainer, <em class="property">typename</em> OutputContainer&gt;<br /><span class="target" id="structzacc_1_1system_1_1kernel_1a14ece19abc469768570969403d0b2be4"></span>void <code class="descname">operator()</code><span class="sig-paren">(</span>OutputContainer &amp;<em>output</em>, <em class="property">const</em> InputContainer &amp;<em>input</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4zacc6system6kernelclER15OutputContainerRK14InputContainer" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Process (process input, produce output) <dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">input</span></code>: </li>
+<li><code class="docutils literal notranslate"><span class="pre">output</span></code>: </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4zacc6system6kernelclER15OutputContainer">
+<span id="_CPPv3N4zacc6system6kernelclER15OutputContainer"></span><span id="_CPPv2N4zacc6system6kernelclER15OutputContainer"></span><span id="zacc::system::kernel::call-operator__OutputContainerR"></span><em class="property">template </em>&lt;<em class="property">typename</em> OutputContainer&gt;<br /><span class="target" id="structzacc_1_1system_1_1kernel_1aa2aea1df33f6f13901849b5e8744d3af"></span>void <code class="descname">operator()</code><span class="sig-paren">(</span>OutputContainer &amp;<em>output</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4zacc6system6kernelclER15OutputContainer" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Generate (output only) <dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">output</span></code>: </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="structzacc_1_1system_1_1entrypoint.html"
+                        title="previous chapter">Struct entrypoint</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="structzacc_1_1system_1_1kernel__activator.html"
+                        title="next chapter">Struct kernel_activator</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="structzacc_1_1system_1_1kernel__activator.html" title="Struct kernel_activator"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="structzacc_1_1system_1_1entrypoint.html" title="Struct entrypoint"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Sergej Zuyev.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

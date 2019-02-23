@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a754f551e5c3afb1ecac2605d710d975f:
+
+Typedef zacc::ops_meta
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_operators.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::ops_meta

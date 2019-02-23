@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a50e1936ad6ca2099a1309a3428b64703:
+
+Template Function zacc::make_mask
+=================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_operators.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::make_mask(const T&)

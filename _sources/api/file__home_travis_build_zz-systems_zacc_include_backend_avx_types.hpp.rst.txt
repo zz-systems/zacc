@@ -1,0 +1,55 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_backend_avx_types.hpp:
+
+File types.hpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_backend_avx>` (``/home/travis/build/zz-systems/zacc/include/backend/avx``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/backend/avx/types.hpp``)
+---------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_backend_avx_types.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``backend/avx/float32.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float32.impl.hpp`)
+
+- ``backend/avx/float64.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float64.impl.hpp`)
+
+- ``backend/avx/int16.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int16.impl.hpp`)
+
+- ``backend/avx/int32.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int32.impl.hpp`)
+
+- ``backend/avx/int8.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int8.impl.hpp`)
+
+- ``backend/sse/float32.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float32.impl.hpp`)
+
+- ``backend/sse/float64.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float64.impl.hpp`)
+
+- ``backend/sse/int16.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int16.impl.hpp`)
+
+- ``backend/sse/int32.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int32.impl.hpp`)
+
+- ``backend/sse/int8.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int8.impl.hpp`)
+
+
+
+
+

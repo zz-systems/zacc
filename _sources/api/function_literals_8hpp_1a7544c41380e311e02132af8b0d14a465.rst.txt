@@ -1,0 +1,13 @@
+.. _exhale_function_literals_8hpp_1a7544c41380e311e02132af8b0d14a465:
+
+Function operator""_uint_fast16
+===============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_literals.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: operator""_uint_fast16(unsigned long long)

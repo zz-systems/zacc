@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1adeb5d12dd87eeae5cad8ab226a66cbc5:
+
+Template Function zacc::make_iterable(const T&)
+===============================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::make_iterable(const T&)

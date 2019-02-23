@@ -1,0 +1,13 @@
+.. _exhale_variable_namespacezacc_1a60d28c2da862513e9e4c6af43482f3dc:
+
+Variable zacc::has_floating_types_v
+===================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_feature.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: zacc::has_floating_types_v

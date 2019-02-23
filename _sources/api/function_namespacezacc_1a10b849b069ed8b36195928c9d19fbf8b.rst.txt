@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a10b849b069ed8b36195928c9d19fbf8b:
+
+Template Function zacc::transform(const std::string&, UnaryOperation)
+=====================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::transform(const std::string&, UnaryOperation)

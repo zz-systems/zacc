@@ -1,0 +1,16 @@
+.. _exhale_class_classzacc_1_1system_1_1kernel__dispatcher:
+
+Template Class kernel_dispatcher
+================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel_dispatcher.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: zacc::system::kernel_dispatcher
+   :members:
+   :protected-members:
+   :undoc-members:

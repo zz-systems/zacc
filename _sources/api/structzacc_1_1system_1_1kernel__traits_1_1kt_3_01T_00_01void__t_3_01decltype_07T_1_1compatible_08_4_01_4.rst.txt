@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1system_1_1kernel__traits_1_1kt_3_01T_00_01void__t_3_01decltype_07T_1_1compatible_08_4_01_4:
+
+Template Struct kt< T, void_t< decltype(T::compatible)> >
+=========================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::system::kernel_traits::kt< T, void_t< decltype(T::compatible)> >
+   :members:
+   :protected-members:
+   :undoc-members:

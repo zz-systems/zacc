@@ -1,0 +1,13 @@
+.. _exhale_variable_namespacezacc_1ae818aaa74011bbd626c314dd483507de:
+
+Variable zacc::feature_mask_v
+=============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: zacc::feature_mask_v

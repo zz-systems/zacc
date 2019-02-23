@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a1f6b41812b473b1618d8ab83accfd30a:
+
+Typedef zacc::is_bval
+=====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::is_bval

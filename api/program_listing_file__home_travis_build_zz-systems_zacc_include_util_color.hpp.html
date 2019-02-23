@@ -1,0 +1,237 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Program Listing for File color.hpp &#8212; ZACC  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="File comparable.hpp" href="file__home_travis_build_zz-systems_zacc_include_traits_comparable.hpp.html" />
+    <link rel="prev" title="File color.hpp" href="file__home_travis_build_zz-systems_zacc_include_util_color.hpp.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_traits_comparable.hpp.html" title="File comparable.hpp"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_util_color.hpp.html" title="File color.hpp"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="file__home_travis_build_zz-systems_zacc_include_util_color.hpp.html" accesskey="U">File color.hpp</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-color-hpp">
+<span id="program-listing-file-home-travis-build-zz-systems-zacc-include-util-color-hpp"></span><h1>Program Listing for File color.hpp<a class="headerlink" href="#program-listing-for-file-color-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_travis_build_zz-systems_zacc_include_util_color.hpp.html#file-home-travis-build-zz-systems-zacc-include-util-color-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/travis/build/zz-systems/zacc/include/util/color.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//---------------------------------------------------------------------------------</span>
+<span class="c1">// The MIT License (MIT)</span>
+<span class="c1">//</span>
+<span class="c1">// Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)</span>
+<span class="c1">//</span>
+<span class="c1">// Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="c1">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1">// in the Software without restriction, including without limitation the rights</span>
+<span class="c1">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="c1">// copies of the Software, and to permit persons to whom the Software is</span>
+<span class="c1">// furnished to do so, subject to the following conditions:</span>
+<span class="c1">//</span>
+<span class="c1">// The above copyright notice and this permission notice shall be included in all</span>
+<span class="c1">// copies or substantial portions of the Software.</span>
+<span class="c1">//</span>
+<span class="c1">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c1">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c1">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c1">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c1">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span class="c1">// SOFTWARE.</span>
+<span class="c1">//---------------------------------------------------------------------------------</span>
+
+
+<span class="cp">#pragma once</span>
+
+
+<span class="cp">#include</span> <span class="cpf">&quot;math/interpolation.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;util/algorithm.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;vector&gt;</span><span class="cp"></span>
+
+
+<span class="k">namespace</span> <span class="n">zacc</span> <span class="p">{</span> <span class="k">namespace</span> <span class="n">util</span> <span class="p">{</span>
+    <span class="k">using</span> <span class="k">namespace</span> <span class="n">math</span><span class="p">;</span>
+
+    <span class="k">union</span> <span class="n">color_rgb</span>
+    <span class="p">{</span>
+        <span class="kt">uint8_t</span> <span class="n">components</span><span class="p">[</span><span class="mi">4</span><span class="p">];</span>
+        <span class="kt">uint32_t</span> <span class="n">integral</span><span class="p">;</span>
+        <span class="k">struct</span> <span class="p">{</span> <span class="kt">uint8_t</span> <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">a</span><span class="p">;</span> <span class="p">};</span>
+
+        <span class="n">color_rgb</span><span class="p">(</span><span class="kt">uint8_t</span> <span class="n">r</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">g</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">b</span><span class="p">,</span> <span class="kt">uint8_t</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">255</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">r</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">g</span><span class="p">(</span><span class="n">g</span><span class="p">),</span> <span class="n">b</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">a</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="p">{}</span>
+    <span class="p">};</span>
+
+    <span class="c1">//ALIGN(32) union color_hsv</span>
+    <span class="c1">//{</span>
+    <span class="c1">//  uint8 components[4];</span>
+    <span class="c1">//  struct { uint8 a, r, g, b; };</span>
+
+    <span class="c1">//  color_hsv(uint8 r, uint8 g, uint8 b, uint8 a = 255)</span>
+    <span class="c1">//      : r(r), g(g), b(b), a(a)</span>
+    <span class="c1">//  {}</span>
+    <span class="c1">//};</span>
+
+    <span class="k">struct</span> <span class="n">gradient1D</span>
+    <span class="p">{</span>
+        <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">float</span><span class="p">,</span> <span class="n">color_rgb</span><span class="o">&gt;&gt;</span> <span class="n">colors</span><span class="p">;</span>
+
+        <span class="n">gradient1D</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="n">gradient1D</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">float</span><span class="p">,</span> <span class="n">color_rgb</span><span class="o">&gt;&gt;</span> <span class="n">init</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">colors</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">init</span><span class="p">))</span>
+        <span class="p">{}</span>
+
+        <span class="n">gradient1D</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">initializer_list</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="k">const</span> <span class="kt">float</span><span class="p">,</span> <span class="n">color_rgb</span><span class="o">&gt;&gt;&amp;</span> <span class="n">init</span><span class="p">)</span>
+            <span class="o">:</span> <span class="n">colors</span><span class="p">(</span><span class="n">init</span><span class="p">)</span>
+        <span class="p">{}</span>
+
+        <span class="n">color_rgb</span> <span class="n">getColor</span><span class="p">(</span><span class="k">const</span> <span class="kt">float</span> <span class="n">value</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">v</span> <span class="o">=</span> <span class="n">value</span><span class="p">;</span><span class="c1">//zzsystems::zacc::clamp(value, -1.01f, 1.01f);</span>
+
+            <span class="kt">int</span> <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="k">for</span> <span class="p">(</span><span class="k">auto</span> <span class="o">&amp;</span><span class="nl">iter</span> <span class="p">:</span> <span class="n">colors</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">index</span><span class="o">++</span><span class="p">;</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="n">iter</span><span class="p">.</span><span class="n">first</span><span class="p">)</span>
+                    <span class="k">break</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="k">auto</span> <span class="n">i0</span> <span class="o">=</span> <span class="n">vclamp</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">colors</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="k">auto</span> <span class="n">i1</span> <span class="o">=</span> <span class="n">vclamp</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="p">(</span><span class="n">index</span><span class="p">,</span>     <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">colors</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+
+            <span class="c1">//auto i0 = std::max(0, std::min(index - 1, (int)colors.size() - 1));</span>
+            <span class="c1">//auto i1 = std::max(0, std::min(index    , (int)colors.size() - 1));</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">i0</span> <span class="o">==</span> <span class="n">i1</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">colors</span><span class="p">[</span><span class="n">i1</span><span class="p">].</span><span class="n">second</span><span class="p">;</span>
+
+            <span class="k">auto</span> <span class="n">k0</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">i0</span><span class="p">].</span><span class="n">first</span><span class="p">;</span>
+            <span class="k">auto</span> <span class="n">c0</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">i0</span><span class="p">].</span><span class="n">second</span><span class="p">;</span>
+
+
+            <span class="k">auto</span> <span class="n">k1</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">i1</span><span class="p">].</span><span class="n">first</span><span class="p">;</span>
+            <span class="k">auto</span> <span class="n">c1</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">i1</span><span class="p">].</span><span class="n">second</span><span class="p">;</span>
+            <span class="c1">//auto i0 = colors.lower_bound(v);</span>
+
+            <span class="cm">/*if (v0 == v1)</span>
+<span class="cm">                return v1-&gt;second;*/</span>
+
+            <span class="cm">/*auto k0 = i0-&gt;first;</span>
+<span class="cm">            auto c0 = i0-&gt;second;</span>
+
+<span class="cm">            if (i0 == colors.end())</span>
+<span class="cm">                return color_rgb(0xFF, 0, 0xFF, 0xFF);</span>
+
+<span class="cm">            i0++;</span>
+
+<span class="cm">            if (i0 == colors.end())</span>
+<span class="cm">                return c0;</span>
+
+<span class="cm">            auto k1 = i0-&gt;first;</span>
+<span class="cm">            auto c1 = i0-&gt;second;*/</span>
+
+            <span class="k">auto</span> <span class="n">alpha</span> <span class="o">=</span> <span class="p">((</span><span class="n">v</span> <span class="o">-</span> <span class="n">k0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">k1</span> <span class="o">-</span> <span class="n">k0</span><span class="p">));</span>
+
+            <span class="n">color_rgb</span> <span class="nf">result</span><span class="p">(</span>
+                <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">vclamp</span><span class="p">(</span><span class="n">lerp</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">c0</span><span class="p">.</span><span class="n">r</span><span class="p">,</span> <span class="n">c1</span><span class="p">.</span><span class="n">r</span><span class="p">,</span> <span class="n">alpha</span><span class="p">),</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">255.0f</span><span class="p">)),</span>
+                <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">vclamp</span><span class="p">(</span><span class="n">lerp</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">c0</span><span class="p">.</span><span class="n">g</span><span class="p">,</span> <span class="n">c1</span><span class="p">.</span><span class="n">g</span><span class="p">,</span> <span class="n">alpha</span><span class="p">),</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">255.0f</span><span class="p">)),</span>
+                <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">vclamp</span><span class="p">(</span><span class="n">lerp</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">c0</span><span class="p">.</span><span class="n">b</span><span class="p">,</span> <span class="n">c1</span><span class="p">.</span><span class="n">b</span><span class="p">,</span> <span class="n">alpha</span><span class="p">),</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">255.0f</span><span class="p">)),</span>
+                <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">vclamp</span><span class="p">(</span><span class="n">lerp</span><span class="o">&lt;</span><span class="kt">float</span><span class="o">&gt;</span><span class="p">(</span><span class="n">c0</span><span class="p">.</span><span class="n">a</span><span class="p">,</span> <span class="n">c1</span><span class="p">.</span><span class="n">a</span><span class="p">,</span> <span class="n">alpha</span><span class="p">),</span> <span class="mf">0.0f</span><span class="p">,</span> <span class="mf">255.0f</span><span class="p">))</span>
+            <span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+<span class="p">}}</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="file__home_travis_build_zz-systems_zacc_include_util_color.hpp.html"
+                        title="previous chapter">File color.hpp</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="file__home_travis_build_zz-systems_zacc_include_traits_comparable.hpp.html"
+                        title="next chapter">File comparable.hpp</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_traits_comparable.hpp.html" title="File comparable.hpp"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_util_color.hpp.html" title="File color.hpp"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="file__home_travis_build_zz-systems_zacc_include_util_color.hpp.html" >File color.hpp</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Sergej Zuyev.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

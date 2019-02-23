@@ -1,0 +1,147 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_backend_sse_int16.impl.hpp:
+
+File int16.impl.hpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_backend_sse>` (``/home/travis/build/zz-systems/zacc/include/backend/sse``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/backend/sse/int16.impl.hpp``)
+--------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_backend_sse_int16.impl.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``backend/intrin.ext.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_intrin.ext.hpp`)
+
+- ``backend/intrin.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_intrin.hpp`)
+
+- ``backend/zval.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_zval.hpp`)
+
+- ``cmath``
+
+- ``system/feature.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_feature.hpp`)
+
+- ``traits/arithmetic.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_arithmetic.hpp`)
+
+- ``traits/bitwise.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_bitwise.hpp`)
+
+- ``traits/bitwise_shift.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_bitwise_shift.hpp`)
+
+- ``traits/comparable.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_comparable.hpp`)
+
+- ``traits/conditional.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_conditional.hpp`)
+
+- ``traits/equatable.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_equatable.hpp`)
+
+- ``traits/io.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_io.hpp`)
+
+- ``traits/logical.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_logical.hpp`)
+
+- ``traits/math.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_math.hpp`)
+
+- ``traits/numeric.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_numeric.hpp`)
+
+- ``traits/printable.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_printable.hpp`)
+
+- ``type_traits`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+- ``util/macros.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_macros.hpp`)
+
+- ``util/memory.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_memory.hpp`)
+
+- ``util/type/type_composition.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_composition.hpp`)
+
+- ``util/type/type_traits.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_types.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_types.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_types.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__backend`
+
+- :ref:`namespace_zacc__backend__sse`
+
+- :ref:`namespace_zacc__backend__sse__int16_modules`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1bint16`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int16__modules_1_1arithmetic`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int16__modules_1_1bitwise`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int16__modules_1_1bitwise__shift`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int16__modules_1_1comparable`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int16__modules_1_1conditional`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int16__modules_1_1equatable`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int16__modules_1_1io`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int16__modules_1_1logical`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int16__modules_1_1math`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1int16__modules_1_1numeric`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1zint16`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sse710b8947de68d4519d00487ce933d128`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_sse_2int16_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_sse_2int16_8impl_8hpp_1a8084a477c53b4e1b1d9903a98edeaaa3`
+
+- :ref:`exhale_typedef_sse_2int16_8impl_8hpp_1a5dc9b6759b79372dda3353410346c50e`
+

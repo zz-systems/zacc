@@ -1,0 +1,76 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_util_bithacks.hpp:
+
+File bithacks.hpp
+=================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_util>` (``/home/travis/build/zz-systems/zacc/include/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/util/bithacks.hpp``)
+-----------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_util_bithacks.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``type/type_traits.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+- ``type_traits`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_arch.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_feature.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacezacc_1a1fde5d6846292d20f7138df920e9a900`
+
+- :ref:`exhale_function_namespacezacc_1abec355180711f1f46727f2555524fb8b`
+
+- :ref:`exhale_function_namespacezacc_1addc218dcf92a00d9f86089973f0c4dfd`
+
+
+Unions
+------
+
+
+- :ref:`exhale_union_unionzacc_1_1twiddler`
+
+- :ref:`exhale_union_unionzacc_1_1twiddler_3_01double_01_4`
+
+- :ref:`exhale_union_unionzacc_1_1twiddler_3_01float_01_4`
+

@@ -1,0 +1,78 @@
+
+.. _namespace_zacc__backend__avx2:
+
+Namespace zacc::backend::avx2
+=============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc__backend__avx2__float32_modules`
+
+- :ref:`namespace_zacc__backend__avx2__float64_modules`
+
+- :ref:`namespace_zacc__backend__avx2__int16_modules`
+
+- :ref:`namespace_zacc__backend__avx2__int32_modules`
+
+- :ref:`namespace_zacc__backend__avx2__int8_modules`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1bfloat32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1bfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1bint16`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1bint32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1bint8`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1zfloat32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1zfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1zint16`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1zint32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1zint8`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_avx2_2float32_8impl_8hpp_1aace45b537919cf0866bb06c29dcdb891`
+
+- :ref:`exhale_typedef_avx2_2float64_8impl_8hpp_1afa58ad1154d7618c179b65a29cfd50ec`
+
+- :ref:`exhale_typedef_avx2_2int16_8impl_8hpp_1ae0c76fb57c89253852a06bf96a9cfab6`
+
+- :ref:`exhale_typedef_avx2_2int32_8impl_8hpp_1a03c2283bd1d0d2d37aab68a4c15637c7`
+
+- :ref:`exhale_typedef_avx2_2int8_8impl_8hpp_1a604eb2c71ce4590b67748f7fba098445`
+
+- :ref:`exhale_typedef_avx2_2float32_8impl_8hpp_1a562e68dcb4093c7adfb8c0dbe7cdf7df`
+
+- :ref:`exhale_typedef_avx2_2float64_8impl_8hpp_1a0d8c89af24cde886d3b7a6f92b9ab2fe`
+
+- :ref:`exhale_typedef_avx2_2int16_8impl_8hpp_1a6eb636b2fa1dd226fb1f26fd1d420c52`
+
+- :ref:`exhale_typedef_avx2_2int32_8impl_8hpp_1af6ac665c82e64e12e29d19b52ae57425`
+
+- :ref:`exhale_typedef_avx2_2int8_8impl_8hpp_1a0ed2f7ae416f5f32b8cfc53c355398e9`

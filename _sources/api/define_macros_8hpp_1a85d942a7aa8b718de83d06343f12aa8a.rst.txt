@@ -1,0 +1,13 @@
+.. _exhale_define_macros_8hpp_1a85d942a7aa8b718de83d06343f12aa8a:
+
+Define TYPES
+============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_macros.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: TYPES

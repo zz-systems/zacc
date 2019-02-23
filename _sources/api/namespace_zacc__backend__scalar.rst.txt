@@ -1,0 +1,78 @@
+
+.. _namespace_zacc__backend__scalar:
+
+Namespace zacc::backend::scalar
+===============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc__backend__scalar__float32_modules`
+
+- :ref:`namespace_zacc__backend__scalar__float64_modules`
+
+- :ref:`namespace_zacc__backend__scalar__int16_modules`
+
+- :ref:`namespace_zacc__backend__scalar__int32_modules`
+
+- :ref:`namespace_zacc__backend__scalar__int8_modules`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1bfloat32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1bfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1bint16`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1bint32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1bint8`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1zfloat32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1zfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1zint16`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1zint32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1zint8`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_scalar_2float32_8impl_8hpp_1ae2e981bc37f2313bec9aff747a0a2ead`
+
+- :ref:`exhale_typedef_scalar_2float64_8impl_8hpp_1a0ec86d15bef65a835fb45feeec7b1452`
+
+- :ref:`exhale_typedef_scalar_2int16_8impl_8hpp_1a045bf935e8ce9b88628536a2cf1a1277`
+
+- :ref:`exhale_typedef_scalar_2int32_8impl_8hpp_1acd37d1f2b9882bec0fa43eb9d01683d4`
+
+- :ref:`exhale_typedef_scalar_2int8_8impl_8hpp_1aecfe55d9ac090b9e28d24ef5f676e724`
+
+- :ref:`exhale_typedef_scalar_2float32_8impl_8hpp_1a456e0e41eac464c9b130911c5f5950ed`
+
+- :ref:`exhale_typedef_scalar_2float64_8impl_8hpp_1a988d33bd98fc01b8edbf2c428a39045d`
+
+- :ref:`exhale_typedef_scalar_2int16_8impl_8hpp_1a751b075075db9b18dcf61edd7adf5429`
+
+- :ref:`exhale_typedef_scalar_2int32_8impl_8hpp_1ab9063d86b9c9045acf2e5e47e64000ca`
+
+- :ref:`exhale_typedef_scalar_2int8_8impl_8hpp_1a1c73a8d1d759d30924851fea32910994`

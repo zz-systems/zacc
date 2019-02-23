@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a448a8bae09fbd5a15ae6b42ad5a11c1a:
+
+Function zacc::rtrim
+====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::rtrim(const std::string&)

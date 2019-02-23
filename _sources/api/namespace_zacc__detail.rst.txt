@@ -1,0 +1,44 @@
+
+.. _namespace_zacc__detail:
+
+Namespace zacc::detail
+======================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+Detailed Description
+--------------------
+
+Array casting functionality @ Compiletime. : http://stackoverflow.com/a/14280396 
+http://loungecpp.wikidot.com/tips-and-tricks%3aindices 
+
+ 
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1detail_1_1build__indices`
+
+- :ref:`exhale_struct_structzacc_1_1detail_1_1build__indices_3_010_00_01Is_8_8_8_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1detail_1_1indices`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacezacc_1_1detail_1ac520ec6c8a6e8448a4d80518f40f3229`
+
+- :ref:`exhale_function_namespacezacc_1_1detail_1ae0129d12aff803c20b6f9288d9594028`
+
+- :ref:`exhale_function_namespacezacc_1_1detail_1a7ff3420b70d90502e5c3418fbc546794`

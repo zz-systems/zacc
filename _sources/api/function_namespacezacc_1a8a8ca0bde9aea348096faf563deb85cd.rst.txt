@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a8a8ca0bde9aea348096faf563deb85cd:
+
+Template Function zacc::make_index(T)
+=====================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::make_index(T)

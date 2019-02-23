@@ -1,0 +1,13 @@
+.. _exhale_variable_namespacezacc_1a00d53f85e84020b4a3b93b3b4eecae14:
+
+Variable zacc::is
+=================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: zacc::is

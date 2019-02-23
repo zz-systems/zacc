@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1____any_3_01Rule_00_01T_01_4:
+
+Template Struct __any< Rule, T >
+================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public std::integral_constant< bool, __is< Rule, T >::value >``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::__any< Rule, T >
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,32 @@
+.. _exhale_struct_structzacc_1_1backend_1_1scalar_1_1int32__modules_1_1io:
+
+Template Struct io
+==================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int32.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::traits::io< Interface, Composed, Boolean >`` (:ref:`exhale_struct_structzacc_1_1traits_1_1io`)
+
+
+Derived Types
+*************
+
+- ``public zacc::backend::scalar::bint32< FeatureMask >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1bint32`)
+- ``public zacc::backend::scalar::zint32< FeatureMask >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1zint32`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::scalar::int32_modules::io
+   :members:
+   :protected-members:
+   :undoc-members:

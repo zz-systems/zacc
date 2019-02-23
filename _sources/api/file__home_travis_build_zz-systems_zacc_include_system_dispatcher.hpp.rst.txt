@@ -1,0 +1,49 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_system_dispatcher.hpp:
+
+File dispatcher.hpp
+===================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_system>` (``/home/travis/build/zz-systems/zacc/include/system``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/system/dispatcher.hpp``)
+---------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_system_dispatcher.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``backend/intrin.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_intrin.hpp`)
+
+- ``system/dlloader.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_dlloader.hpp`)
+
+- ``system/feature.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_feature.hpp`)
+
+- ``util/algorithm.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel_dispatcher.hpp`
+
+
+

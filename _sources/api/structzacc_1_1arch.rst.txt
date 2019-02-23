@@ -1,0 +1,36 @@
+.. _exhale_struct_structzacc_1_1arch:
+
+Struct arch
+===========
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_arch.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1avx1`
+- :ref:`exhale_struct_structzacc_1_1arch_1_1avx1__fma3`
+- :ref:`exhale_struct_structzacc_1_1arch_1_1avx2`
+- :ref:`exhale_struct_structzacc_1_1arch_1_1avx512`
+- :ref:`exhale_struct_structzacc_1_1arch_1_1opencl`
+- :ref:`exhale_struct_structzacc_1_1arch_1_1scalar`
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse2`
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse3`
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse41`
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse41__fma3`
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse41__fma4`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::arch
+   :members:
+   :protected-members:
+   :undoc-members:

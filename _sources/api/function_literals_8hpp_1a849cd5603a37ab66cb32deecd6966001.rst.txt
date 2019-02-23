@@ -1,0 +1,13 @@
+.. _exhale_function_literals_8hpp_1a849cd5603a37ab66cb32deecd6966001:
+
+Function operator""_uint32
+==========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_literals.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: operator""_uint32(unsigned long long)

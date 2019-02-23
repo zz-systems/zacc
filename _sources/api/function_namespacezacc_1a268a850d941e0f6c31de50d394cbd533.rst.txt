@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a268a850d941e0f6c31de50d394cbd533:
+
+Template Function zacc::accumulate(InputTuple1&&, InputTuple2&&, Acc, TernaryOperation&&)
+=========================================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::accumulate(InputTuple1&&, InputTuple2&&, Acc, TernaryOperation&&)

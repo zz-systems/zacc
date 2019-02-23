@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1resolve__reference:
+
+Template Struct resolve_reference
+=================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::resolve_reference
+   :members:
+   :protected-members:
+   :undoc-members:

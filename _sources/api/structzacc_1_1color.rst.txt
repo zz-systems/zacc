@@ -1,0 +1,29 @@
+.. _exhale_struct_structzacc_1_1color:
+
+Struct color
+============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_io.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Types
+*************
+
+- ``public zacc::blue_t`` (:ref:`exhale_struct_structzacc_1_1blue__t`)
+- ``public zacc::def_t`` (:ref:`exhale_struct_structzacc_1_1def__t`)
+- ``public zacc::green_t`` (:ref:`exhale_struct_structzacc_1_1green__t`)
+- ``public zacc::red_t`` (:ref:`exhale_struct_structzacc_1_1red__t`)
+- ``public zacc::yellow_t`` (:ref:`exhale_struct_structzacc_1_1yellow__t`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::color
+   :members:
+   :protected-members:
+   :undoc-members:

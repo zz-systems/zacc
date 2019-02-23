@@ -1,0 +1,13 @@
+.. _exhale_define_util_2io_8hpp_1acf4975c012c6f6871b569e8e8e5025c8:
+
+Define ZTRACE_INTERNAL
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_io.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ZTRACE_INTERNAL

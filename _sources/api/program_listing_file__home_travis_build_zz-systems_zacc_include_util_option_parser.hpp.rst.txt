@@ -1,0 +1,173 @@
+
+.. _program_listing_file__home_travis_build_zz-systems_zacc_include_util_option_parser.hpp:
+
+Program Listing for File option_parser.hpp
+==========================================
+
+|exhale_lsh| :ref:`Return to documentation for file <file__home_travis_build_zz-systems_zacc_include_util_option_parser.hpp>` (``/home/travis/build/zz-systems/zacc/include/util/option_parser.hpp``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. code-block:: cpp
+
+   //---------------------------------------------------------------------------------
+   // The MIT License (MIT)
+   // 
+   // Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
+   //
+   // Permission is hereby granted, free of charge, to any person obtaining a copy
+   // of this software and associated documentation files (the "Software"), to deal
+   // in the Software without restriction, including without limitation the rights
+   // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+   // copies of the Software, and to permit persons to whom the Software is
+   // furnished to do so, subject to the following conditions:
+   //
+   // The above copyright notice and this permission notice shall be included in all
+   // copies or substantial portions of the Software.
+   // 
+   // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   // AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+   // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+   // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+   // SOFTWARE.
+   //---------------------------------------------------------------------------------
+   
+   
+   #pragma once
+   #include <string>
+   #include <iostream>
+   #include <sstream>
+   #include <algorithm>
+   #include <vector>
+   #include <map>
+   #include "util/algorithm.hpp"
+   
+   namespace zacc {
+       struct option 
+       {
+           std::string key;
+           std::string value;
+       };
+   
+       inline std::ostream& operator<<(std::ostream& os, const option& option)
+       {
+           os << option.key << ":" << option.value;
+   
+           return os;
+       }
+       
+       template<typename T>
+       inline const option& operator>>(const option& option, T& target)
+       {
+           if(!option.key.empty() && !option.value.empty())        
+           {
+               std::stringstream ss;
+               ss << option.value;
+               ss >> target;    
+           }
+   
+           return option;
+       }
+   
+       template<>
+       inline const option& operator>>(const option& option, bool& target)
+       { 
+           if(option.key.empty())
+           {
+               target = false;
+           }
+           else if(option.value.empty())
+           {
+               // assume flag
+               target = true;
+           }
+           else
+           {
+               // parse boolean
+               std::stringstream ss;
+               ss << zacc::tolower(option.value);
+               ss >> target;
+           }
+   
+           return option;
+       }
+   
+       class option_parser
+       {
+           bool is_param(const std::string& str)
+           {
+               return str.find_first_of("-/\\") == 0;
+           }
+       public:
+           option_parser(const int argc, char** argv)
+           {
+               std::vector<std::string> options(argv + 1, argv + argc);
+   
+               for(auto iter = options.begin(); iter != options.end(); ++iter)
+               {                
+                   if(!is_param(*iter))
+                   {
+                       // not a param 
+                       continue;
+                   }     
+   
+                   std::string key, value;
+   
+                   auto key_pos = iter->find_first_not_of("-/\\");
+                   if (key_pos == std::string::npos)
+                   {
+                       // invalid key
+                       continue;
+                   }                
+   
+                   auto value_pos = iter->find_first_of("=", key_pos);
+                   if (value_pos == std::string::npos)
+                   {
+                       key = iter->substr(key_pos);
+   
+                       // check next item
+                       if((iter + 1) != options.end() && !is_param(*(iter + 1)))
+                       {
+                           value = *(++iter);
+                       }
+                   }
+                   else
+                   {
+                       key = iter->substr(key_pos, value_pos - key_pos);
+                       value = iter->substr(value_pos + 1);
+                   }
+   
+                   key = trim(key);
+                   value = trim(value);
+   
+                   _options[key] = { key, value };
+               }
+           }
+           
+           const option& operator[] (const std::string& key) const
+           {
+               auto iter = _options.find(key);
+   
+               if(iter != _options.end())
+                   return iter->second;
+   
+               return _empty;
+           }
+   
+           bool has_option(const std::string& key) const
+           {
+               return _options.find(key) != _options.end();
+           }
+   
+           const std::string& get_option(const std::string& key) const
+           {
+               return this->operator[](key).value;
+           }
+   
+       private:
+           std::map<std::string, option> _options;
+           option _empty;
+       };
+   }

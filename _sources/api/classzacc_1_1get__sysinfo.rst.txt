@@ -1,0 +1,16 @@
+.. _exhale_class_classzacc_1_1get__sysinfo:
+
+Class get_sysinfo
+=================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_sysinfo.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: zacc::get_sysinfo
+   :members:
+   :protected-members:
+   :undoc-members:

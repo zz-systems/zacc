@@ -1,0 +1,22 @@
+.. _exhale_struct_structzacc_1_1system_1_1kernel__traits_1_1kt:
+
+Template Struct kernel_traits::kt
+=================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_struct_structzacc_1_1system_1_1kernel__traits`.
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::system::kernel_traits::kt
+   :members:
+   :protected-members:
+   :undoc-members:

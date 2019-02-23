@@ -1,0 +1,13 @@
+.. _exhale_function_fundamental_8hpp_1a9010bb059b05b1b2b9b20f1bf31a53a0:
+
+Template Function zacc::math::vfmadd
+====================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_fundamental.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::vfmadd(const T&, const T&, const T&)

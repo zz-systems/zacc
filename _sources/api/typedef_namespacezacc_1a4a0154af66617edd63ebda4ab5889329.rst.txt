@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a4a0154af66617edd63ebda4ab5889329:
+
+Typedef zacc::enable_if_convertible2
+====================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::enable_if_convertible2

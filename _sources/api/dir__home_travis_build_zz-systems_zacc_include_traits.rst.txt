@@ -1,0 +1,31 @@
+.. _dir__home_travis_build_zz-systems_zacc_include_traits:
+
+
+Directory traits
+================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include>` (``/home/travis/build/zz-systems/zacc/include``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/travis/build/zz-systems/zacc/include/traits``
+
+
+Files
+-----
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_allocatable.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_arithmetic.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_bitwise.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_bitwise_shift.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_comparable.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_conditional.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_equatable.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_io.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_logical.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_math.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_numeric.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_printable.hpp`
+
+

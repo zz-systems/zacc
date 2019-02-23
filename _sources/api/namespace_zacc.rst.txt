@@ -1,0 +1,576 @@
+
+.. _namespace_zacc:
+
+Namespace zacc
+==============
+
+
+float32 implementation for the avx arch provides unified access to 8 'float' values 
+ 
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+Detailed Description
+--------------------
+
+https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Hierarchy_Generation
+int8 implementation for the avx512 arch provides unified access to 64 'int8_t' values
+int32 implementation for the avx512 arch provides unified access to 16 'int32_t' values
+int16 implementation for the avx512 arch provides unified access to 32 'int16_t' values
+float64 implementation for the avx512 arch provides unified access to 8 'double' values
+float32 implementation for the avx512 arch provides unified access to 16 'float' values
+int8 implementation for the avx arch provides unified access to 32 'int8_t' values
+int32 implementation for the avx arch provides unified access to 8 'int32_t' values
+int16 implementation for the avx arch provides unified access to 16 'int16_t' values
+float64 implementation for the avx arch provides unified access to 4 'double' values
+http://stackoverflow.com/questions/543306/platform-independent-guid-generation-in-c 
+
+ 
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc__@65`
+
+- :ref:`namespace_zacc__@82`
+
+- :ref:`namespace_zacc__backend`
+
+- :ref:`namespace_zacc__detail`
+
+- :ref:`namespace_zacc__math`
+
+- :ref:`namespace_zacc__system`
+
+- :ref:`namespace_zacc__test`
+
+- :ref:`namespace_zacc__traits`
+
+- :ref:`namespace_zacc__util`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1____all`
+
+- :ref:`exhale_struct_structzacc_1_1____all_3_01Rule_00_01T_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1____all_3_01Rule_00_01T_00_01Ts_8_8_8_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1____any`
+
+- :ref:`exhale_struct_structzacc_1_1____any_3_01Rule_00_01T_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1____any_3_01Rule_00_01T_00_01Ts_8_8_8_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1____is`
+
+- :ref:`exhale_struct_structzacc_1_1__is`
+
+- :ref:`exhale_struct_structzacc_1_1aligned__allocator`
+
+- :ref:`exhale_struct_structzacc_1_1aligned__allocator_1_1rebind`
+
+- :ref:`exhale_struct_structzacc_1_1allocatable`
+
+- :ref:`exhale_struct_structzacc_1_1arch`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1avx1`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1avx1__fma3`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1avx2`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1avx512`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1opencl`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1scalar`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse2`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse3`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse41`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse41__fma3`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse41__fma4`
+
+- :ref:`exhale_struct_structzacc_1_1bit__and`
+
+- :ref:`exhale_struct_structzacc_1_1bit__or`
+
+- :ref:`exhale_struct_structzacc_1_1bit__shl`
+
+- :ref:`exhale_struct_structzacc_1_1bit__shr`
+
+- :ref:`exhale_struct_structzacc_1_1bit__xor`
+
+- :ref:`exhale_struct_structzacc_1_1blue__t`
+
+- :ref:`exhale_struct_structzacc_1_1bool__pack`
+
+- :ref:`exhale_struct_structzacc_1_1boolcolor`
+
+- :ref:`exhale_struct_structzacc_1_1bval__tag`
+
+- :ref:`exhale_struct_structzacc_1_1color`
+
+- :ref:`exhale_struct_structzacc_1_1composable`
+
+- :ref:`exhale_struct_structzacc_1_1composable_1_1type`
+
+- :ref:`exhale_struct_structzacc_1_1compose`
+
+- :ref:`exhale_struct_structzacc_1_1compose_3_01Tail_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1compose_3_01Tail_01_4_1_1terminator`
+
+- :ref:`exhale_struct_structzacc_1_1cpuid`
+
+- :ref:`exhale_struct_structzacc_1_1cval__tag`
+
+- :ref:`exhale_struct_structzacc_1_1decrement`
+
+- :ref:`exhale_struct_structzacc_1_1def__t`
+
+- :ref:`exhale_struct_structzacc_1_1dispatched__arch`
+
+- :ref:`exhale_struct_structzacc_1_1dispatcher`
+
+- :ref:`exhale_struct_structzacc_1_1divides`
+
+- :ref:`exhale_struct_structzacc_1_1equal__to`
+
+- :ref:`exhale_struct_structzacc_1_1feature`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_1_1argument`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01F_01_6_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01F_01_6_6_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07_5_08_07Args_8_8_8_08_4`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07Args_8_8_8_08_4`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07Args_8_8_8_08_4_1_1argument`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07C_1_1_5_08_07Args_8_8_8_08_01const_01_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07C_1_1_5_08_07Args_8_8_8_08_4`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07C_1_1_5_08_4`
+
+- :ref:`exhale_struct_structzacc_1_1greater`
+
+- :ref:`exhale_struct_structzacc_1_1greater__equal`
+
+- :ref:`exhale_struct_structzacc_1_1green__t`
+
+- :ref:`exhale_struct_structzacc_1_1identity`
+
+- :ref:`exhale_struct_structzacc_1_1increment`
+
+- :ref:`exhale_struct_structzacc_1_1indent__t`
+
+- :ref:`exhale_struct_structzacc_1_1inherit`
+
+- :ref:`exhale_struct_structzacc_1_1iterable`
+
+- :ref:`exhale_struct_structzacc_1_1less`
+
+- :ref:`exhale_struct_structzacc_1_1less__equal`
+
+- :ref:`exhale_struct_structzacc_1_1logical__and`
+
+- :ref:`exhale_struct_structzacc_1_1logical__or`
+
+- :ref:`exhale_struct_structzacc_1_1measurable`
+
+- :ref:`exhale_struct_structzacc_1_1minus`
+
+- :ref:`exhale_struct_structzacc_1_1modulus`
+
+- :ref:`exhale_struct_structzacc_1_1multiplies`
+
+- :ref:`exhale_struct_structzacc_1_1not__equal__to`
+
+- :ref:`exhale_struct_structzacc_1_1option`
+
+- :ref:`exhale_struct_structzacc_1_1plus`
+
+- :ref:`exhale_struct_structzacc_1_1printable`
+
+- :ref:`exhale_struct_structzacc_1_1red__t`
+
+- :ref:`exhale_struct_structzacc_1_1requires`
+
+- :ref:`exhale_struct_structzacc_1_1resizable`
+
+- :ref:`exhale_struct_structzacc_1_1resolve__iterator`
+
+- :ref:`exhale_struct_structzacc_1_1resolve__reference`
+
+- :ref:`exhale_struct_structzacc_1_1select`
+
+- :ref:`exhale_struct_structzacc_1_1select_3_01Head_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1sink`
+
+- :ref:`exhale_struct_structzacc_1_1string__view`
+
+- :ref:`exhale_struct_structzacc_1_1swappable`
+
+- :ref:`exhale_struct_structzacc_1_1sysinfo`
+
+- :ref:`exhale_struct_structzacc_1_1type__sink`
+
+- :ref:`exhale_struct_structzacc_1_1when`
+
+- :ref:`exhale_struct_structzacc_1_1yellow__t`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1avx3096a7539a6e45eccd68d0e8a0a38213`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1avx75e0cb02e1994fda8ea039a0f167dd0e`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1avx01d33cddd064c7fec914df8b1752beee`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1avxb805c312d86dcfba425dcea3de140179`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1avx2a642e5097888f82a7e235fbc9154145`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sca4070329dbeab0758a950658579dbdd61`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1scabcdb6130758062e44072eddef0f3e823`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1scaed7c05a7f5c453f8ef44f6ca359c474e`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sca90cd038736869fe6e6862ba34640bf32`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sca15e51c6e93723fd3f7cc1c47109a120f`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1ssef16e757f61a52332ca4edada0500a6be`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sse031cb061ae3ec4c5e36eda53f5ed3e40`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sse710b8947de68d4519d00487ce933d128`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1sse6d74e9c9b3c572dbc52f3359b1b159e9`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1ssedc98983ac7b85ecd2a1975e9759335bc`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01math_1_1izcompc01421659fa20eb5d1b6e0bf2a1fc1f7`
+
+- :ref:`exhale_struct_structzacc_1_1ztype`
+
+- :ref:`exhale_struct_structzacc_1_1zval`
+
+- :ref:`exhale_struct_structzacc_1_1zval__tag`
+
+- :ref:`exhale_class_classzacc_1_1cloneable`
+
+- :ref:`exhale_class_classzacc_1_1get__sysinfo`
+
+- :ref:`exhale_class_classzacc_1_1option__parser`
+
+- :ref:`exhale_class_classzacc_1_1put__sysinfo`
+
+- :ref:`exhale_class_classzacc_1_1serializable`
+
+- :ref:`exhale_class_classzacc_1_1zip__container`
+
+- :ref:`exhale_class_classzacc_1_1zip__iterator`
+
+
+Enums
+-----
+
+
+- :ref:`exhale_enum_namespacezacc_1abf341fc8b3c69b755df2d2168e943b30`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacezacc_1ad8f23038a68d6b3b591e402e8519872d`
+
+- :ref:`exhale_function_namespacezacc_1a7ecbf8461f94e1dbe324e6bbb9c08e2c`
+
+- :ref:`exhale_function_namespacezacc_1a268a850d941e0f6c31de50d394cbd533`
+
+- :ref:`exhale_function_namespacezacc_1a485babbe5a27184374d47f014bbf2770`
+
+- :ref:`exhale_function_namespacezacc_1acff1f94f6a7bbff68dc59941cc662b3a`
+
+- :ref:`exhale_function_namespacezacc_1a79b1c90c9328ba09526454d8b3bbcaf1`
+
+- :ref:`exhale_function_namespacezacc_1a1fde5d6846292d20f7138df920e9a900`
+
+- :ref:`exhale_function_namespacezacc_1abec355180711f1f46727f2555524fb8b`
+
+- :ref:`exhale_function_namespacezacc_1a4230241e2aa4d71a52a01c42d0407a9b`
+
+- :ref:`exhale_function_namespacezacc_1a823d1111581b1fe918b2f3012122f4ee`
+
+- :ref:`exhale_function_namespacezacc_1a3145c14fa2be2afd026c6aaca2b59395`
+
+- :ref:`exhale_function_namespacezacc_1a133fc1c398772a83d02c37866e933d5e`
+
+- :ref:`exhale_function_namespacezacc_1a1654f1a12d1c90e115442fefbde68132`
+
+- :ref:`exhale_function_namespacezacc_1aea1b9fd8d56c9adac4193e7776164605`
+
+- :ref:`exhale_function_namespacezacc_1a56215121e2ed74515a849a65a549f828`
+
+- :ref:`exhale_function_namespacezacc_1ace8b4a21f1caeb4ded334127ecec2cbe`
+
+- :ref:`exhale_function_namespacezacc_1acebcbb7d38ceabebc9e5377b5cf4f610`
+
+- :ref:`exhale_function_namespacezacc_1acd62b432b6a46fd771d9baa68fca4cbd`
+
+- :ref:`exhale_function_namespacezacc_1ab5aa1723d27d002bd7e0119e76ee326f`
+
+- :ref:`exhale_function_namespacezacc_1a3bc9ce8c211670f8986a33a8d00b5bbd`
+
+- :ref:`exhale_function_namespacezacc_1a6c4b4bd10c444d48d50d91aacb66210e`
+
+- :ref:`exhale_function_namespacezacc_1ae4fd8cab8c7c40a375fcee129cd9da1e`
+
+- :ref:`exhale_function_namespacezacc_1aac7dad1cac616b49e6abcde7b25828f5`
+
+- :ref:`exhale_function_namespacezacc_1a0c6128e2cc764c08459be7cb40258310`
+
+- :ref:`exhale_function_namespacezacc_1a0fc7fbe23b1809ceebff22198550eabe`
+
+- :ref:`exhale_function_namespacezacc_1a8a8ca0bde9aea348096faf563deb85cd`
+
+- :ref:`exhale_function_namespacezacc_1adeb5d12dd87eeae5cad8ab226a66cbc5`
+
+- :ref:`exhale_function_namespacezacc_1a6f2a67c7e8369ac628b57e344a124be6`
+
+- :ref:`exhale_function_namespacezacc_1a50e1936ad6ca2099a1309a3428b64703`
+
+- :ref:`exhale_function_namespacezacc_1a1e2c5ee4637387ca248e9c915fecc19a`
+
+- :ref:`exhale_function_namespacezacc_1a8ced9b9eb065da78ce4720513882e744`
+
+- :ref:`exhale_function_namespacezacc_1a519db820618d86e9b1436dd01a5d6634`
+
+- :ref:`exhale_function_namespacezacc_1addc218dcf92a00d9f86089973f0c4dfd`
+
+- :ref:`exhale_function_namespacezacc_1ab0c2384d754ac9cc7c6104bb8b6688ca`
+
+- :ref:`exhale_function_namespacezacc_1a8f8815170b382e3f785e793b970ee26f`
+
+- :ref:`exhale_function_namespacezacc_1a0b8f397c37ca9af59642dcfa3d342de5`
+
+- :ref:`exhale_function_namespacezacc_1a99865060166832692c0f34d62bc8e103`
+
+- :ref:`exhale_function_namespacezacc_1a495a2ce5fc80c9468ddff00be5402760`
+
+- :ref:`exhale_function_namespacezacc_1aa4efe88d50a085e7dc4d72adb134f011`
+
+- :ref:`exhale_function_namespacezacc_1acdd2e572c9083b987dc3b5fdc7bc5944`
+
+- :ref:`exhale_function_namespacezacc_1a448a8bae09fbd5a15ae6b42ad5a11c1a`
+
+- :ref:`exhale_function_namespacezacc_1abefadf36cf3b9eba2d8619e3e0cc4050`
+
+- :ref:`exhale_function_namespacezacc_1a70ed796a6d977d3f0e78dd5c38475013`
+
+- :ref:`exhale_function_namespacezacc_1aa48194fa51d312cf6110c1f9b11b937e`
+
+- :ref:`exhale_function_namespacezacc_1a10b849b069ed8b36195928c9d19fbf8b`
+
+- :ref:`exhale_function_namespacezacc_1a46c91bcd94986229a3182f0b9cd0bc1b`
+
+- :ref:`exhale_function_namespacezacc_1a9d577106b455ef1f9e7ac9e34f12b8ce`
+
+- :ref:`exhale_function_namespacezacc_1a59104b5729849b91172ef83b915c9ba5`
+
+- :ref:`exhale_function_namespacezacc_1a52aef3e92e069f9661067a9a73f8fef7`
+
+- :ref:`exhale_function_namespacezacc_1aa90ff09026c4a01beb3d0b6cd1e9f79c`
+
+- :ref:`exhale_function_namespacezacc_1a9f1baa271f559b32e2549db0b35684fa`
+
+- :ref:`exhale_function_namespacezacc_1a88032d5a444918b487fa4956ff3f95b7`
+
+- :ref:`exhale_function_namespacezacc_1a3601279da7e2b56e3b464dd407427f93`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacezacc_1a64c37f2b00192a0a5e51189966eb8557`
+
+- :ref:`exhale_typedef_namespacezacc_1af0fda6b8bd620233947c805230dd185c`
+
+- :ref:`exhale_typedef_namespacezacc_1a4966288edc686a2ae38f1dec49c19623`
+
+- :ref:`exhale_typedef_namespacezacc_1ab4f27d4b65ebbfe22cdb2437d67ddf4f`
+
+- :ref:`exhale_typedef_namespacezacc_1a032c2c7c491158f8ae31b2877b3c1676`
+
+- :ref:`exhale_typedef_namespacezacc_1a73620a6fce21004a58bd5673a4284d12`
+
+- :ref:`exhale_typedef_namespacezacc_1a6badbda85c51ce609a0c93e8883bc3a1`
+
+- :ref:`exhale_typedef_namespacezacc_1ad5e3533ea31f860deb9aad56eb1a5abc`
+
+- :ref:`exhale_typedef_namespacezacc_1aec4e0028a596659ca67c906f2b8485b3`
+
+- :ref:`exhale_typedef_namespacezacc_1a00352e61b2d9940ea7ab3e12adf602ee`
+
+- :ref:`exhale_typedef_namespacezacc_1a00ad98e611fbe51bd9bdfd5dd7c06a7d`
+
+- :ref:`exhale_typedef_namespacezacc_1a334be59cdc3427aa7a94a23d924410fa`
+
+- :ref:`exhale_typedef_namespacezacc_1a6bf91677ef0efee233396f1ced350c49`
+
+- :ref:`exhale_typedef_namespacezacc_1acea1c0758fb09dfa5e21b2bda0026015`
+
+- :ref:`exhale_typedef_namespacezacc_1abd5f316879131c0cdf736e0dca8e9cdd`
+
+- :ref:`exhale_typedef_namespacezacc_1a0f2ebe290789f0fdc943938f1c3209ee`
+
+- :ref:`exhale_typedef_namespacezacc_1ab6fc7632db6573584e215eb07c08c65c`
+
+- :ref:`exhale_typedef_namespacezacc_1a4a0154af66617edd63ebda4ab5889329`
+
+- :ref:`exhale_typedef_namespacezacc_1a22578a294d8d4fc53f7d258822540a2a`
+
+- :ref:`exhale_typedef_namespacezacc_1a1a74928342d394bce381e4814dfb4981`
+
+- :ref:`exhale_typedef_namespacezacc_1a37d1bc3620f8a3b4f526d2dda137f654`
+
+- :ref:`exhale_typedef_namespacezacc_1ad596219e7df5c0eb5222b3b3e0a68f8f`
+
+- :ref:`exhale_typedef_namespacezacc_1a7b3ddc71f75621c6729cca10356fa1e2`
+
+- :ref:`exhale_typedef_namespacezacc_1a1f6b41812b473b1618d8ab83accfd30a`
+
+- :ref:`exhale_typedef_namespacezacc_1ab4ac3d835e33df3bd745c2d16300beac`
+
+- :ref:`exhale_typedef_namespacezacc_1a26fadf170b688d5574eff0cb2635a5d2`
+
+- :ref:`exhale_typedef_namespacezacc_1a704b7f5ed81710d97b131ea5a1693752`
+
+- :ref:`exhale_typedef_namespacezacc_1aba0624cd37d19d1e10aed71b6f084865`
+
+- :ref:`exhale_typedef_namespacezacc_1a31b8642d4ca96943a462d518f9d1633d`
+
+- :ref:`exhale_typedef_namespacezacc_1a1f326c9a83839050eba1ee9329a4f725`
+
+- :ref:`exhale_typedef_namespacezacc_1a10a4d8a63fcb8d5abb2fb7e87c68cba3`
+
+- :ref:`exhale_typedef_namespacezacc_1a9f47a630a39b7e1201fe56c1953df507`
+
+- :ref:`exhale_typedef_namespacezacc_1afe5b2d4314c0813c1ad84e533642edba`
+
+- :ref:`exhale_typedef_namespacezacc_1ac0b51085f79eb12d49b191afc9266a6f`
+
+- :ref:`exhale_typedef_namespacezacc_1a754f551e5c3afb1ecac2605d710d975f`
+
+- :ref:`exhale_typedef_namespacezacc_1afdfd49db0cb58d431968092eb0c107b3`
+
+- :ref:`exhale_typedef_namespacezacc_1a74065a57a3402051af8cd054ef62fa02`
+
+- :ref:`exhale_typedef_namespacezacc_1ab2c8a046702fddb620eb7c478e01ebe9`
+
+- :ref:`exhale_typedef_namespacezacc_1a079993d2cb7af7f0b14967ceeba138af`
+
+- :ref:`exhale_typedef_namespacezacc_1a469ad6f75dde604eb8f0d03077d4b2f0`
+
+- :ref:`exhale_typedef_namespacezacc_1aba8eb8df04e5191c62355552d491dfd7`
+
+- :ref:`exhale_typedef_namespacezacc_1a0f550eabad9e73899c04dee2e14158b9`
+
+- :ref:`exhale_typedef_namespacezacc_1a32a1dd16c2aca7ef796545b16887dc0e`
+
+- :ref:`exhale_typedef_namespacezacc_1a993097c6032c36fe97a6a60da6875a0a`
+
+- :ref:`exhale_typedef_namespacezacc_1aadb81182dfaa29bb4817485b67f04593`
+
+- :ref:`exhale_typedef_namespacezacc_1af905cd88bda5352679dfd173fbad4a67`
+
+- :ref:`exhale_typedef_namespacezacc_1ac06f6428209b1f0b54d31729a8a7c1f6`
+
+- :ref:`exhale_typedef_namespacezacc_1a17745b26faa83262fa9b85fdd686033a`
+
+- :ref:`exhale_typedef_namespacezacc_1a2bc7481bdeff9a5251bfb16462436c46`
+
+- :ref:`exhale_typedef_namespacezacc_1aab0a722c0b2aae52d71106e44ba7d335`
+
+- :ref:`exhale_typedef_namespacezacc_1ac6cdb651125538c46c979c61ddf30d58`
+
+- :ref:`exhale_typedef_namespacezacc_1a8e51aae9f4be04b0e9db788c0dde2068`
+
+- :ref:`exhale_typedef_namespacezacc_1a156693baeed51e491661c6998a30d143`
+
+- :ref:`exhale_typedef_namespacezacc_1abfd1b07af984ab42fcf65fcc7731d922`
+
+- :ref:`exhale_typedef_namespacezacc_1ab206c81b13dd1ea0fef16a6e6d47bfee`
+
+- :ref:`exhale_typedef_namespacezacc_1af968c513f7ebfad516e571b6136a1d96`
+
+- :ref:`exhale_typedef_namespacezacc_1ae77a7b0e3e09612fa4efabcba7bde81c`
+
+- :ref:`exhale_typedef_namespacezacc_1a33236a1ae908016103b8c83cd5e399da`
+
+- :ref:`exhale_typedef_namespacezacc_1a62928ee1712d1b071cf793d49131bc23`
+
+- :ref:`exhale_typedef_namespacezacc_1a4a865f5e7809bf8dfd73aa6f40a3f50d`
+
+
+Unions
+------
+
+
+- :ref:`exhale_union_unionzacc_1_1twiddler`
+
+- :ref:`exhale_union_unionzacc_1_1twiddler_3_01double_01_4`
+
+- :ref:`exhale_union_unionzacc_1_1twiddler_3_01float_01_4`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespacezacc_1ace0ea40ca12c71f36351408d152ef07f`
+
+- :ref:`exhale_variable_namespacezacc_1a6d12363d4954f7940f826e51dac83873`
+
+- :ref:`exhale_variable_namespacezacc_1a736aeae43ad353fff1d0ce772bcd08c5`
+
+- :ref:`exhale_variable_namespacezacc_1ae818aaa74011bbd626c314dd483507de`
+
+- :ref:`exhale_variable_namespacezacc_1a60d28c2da862513e9e4c6af43482f3dc`
+
+- :ref:`exhale_variable_namespacezacc_1a1a5308b49fec38a00c1849dcd47e65e8`
+
+- :ref:`exhale_variable_namespacezacc_1a00d53f85e84020b4a3b93b3b4eecae14`
+
+- :ref:`exhale_variable_namespacezacc_1aa02a512ec2b24bd8ad74d9f02aeec4be`
+
+- :ref:`exhale_variable_namespacezacc_1abaf9416716cedb6b9c286ece9a264672`

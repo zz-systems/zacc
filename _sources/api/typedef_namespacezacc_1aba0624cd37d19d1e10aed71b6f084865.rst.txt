@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1aba0624cd37d19d1e10aed71b6f084865:
+
+Typedef zacc::is_floating_point
+===============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::is_floating_point

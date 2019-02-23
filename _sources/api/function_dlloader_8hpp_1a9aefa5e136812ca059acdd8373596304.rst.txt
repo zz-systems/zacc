@@ -1,0 +1,13 @@
+.. _exhale_function_dlloader_8hpp_1a9aefa5e136812ca059acdd8373596304:
+
+Function zacc_dlclose
+=====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_dlloader.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc_dlclose(void *)

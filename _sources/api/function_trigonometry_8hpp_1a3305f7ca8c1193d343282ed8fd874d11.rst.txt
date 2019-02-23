@@ -1,0 +1,13 @@
+.. _exhale_function_trigonometry_8hpp_1a3305f7ca8c1193d343282ed8fd874d11:
+
+Template Function zacc::math::vsin
+==================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_trigonometry.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::vsin(Real)

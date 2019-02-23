@@ -1,0 +1,84 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_math_complex.hpp:
+
+File complex.hpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_math>` (``/home/travis/build/zz-systems/zacc/include/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/math/complex.hpp``)
+----------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_math_complex.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``array``
+
+- ``complex`` (:ref:`file__home_travis_build_zz-systems_zacc_include_math_complex.hpp`)
+
+- ``initializer_list``
+
+- ``math/matrix.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`)
+
+- ``traits/arithmetic.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_arithmetic.hpp`)
+
+- ``util/type/type_traits.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__math`
+
+- :ref:`namespace_zacc__math__modules`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1modules_1_1arithmetic`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1modules_1_1conditional`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1modules_1_1equatable`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1modules_1_1io`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1modules_1_1printable`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1zcomplex`
+
+- :ref:`exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01math_1_1izcompc01421659fa20eb5d1b6e0bf2a1fc1f7`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_complex_8hpp_1a42e3b19aba74a9f5b42fe0ce76cd6b01`
+

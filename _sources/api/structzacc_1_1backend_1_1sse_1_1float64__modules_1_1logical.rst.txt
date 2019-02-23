@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1backend_1_1sse_1_1float64__modules_1_1logical:
+
+Template Struct logical
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float64.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::traits::logical< Interface, Composed, Boolean >`` (:ref:`exhale_struct_structzacc_1_1traits_1_1logical`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::sse::float64_modules::logical
+   :members:
+   :protected-members:
+   :undoc-members:

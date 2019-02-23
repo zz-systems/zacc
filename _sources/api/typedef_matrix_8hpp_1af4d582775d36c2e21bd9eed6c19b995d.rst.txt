@@ -1,0 +1,13 @@
+.. _exhale_typedef_matrix_8hpp_1af4d582775d36c2e21bd9eed6c19b995d:
+
+Typedef zacc::math::scalar
+==========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::math::scalar

@@ -1,0 +1,66 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_system_kernel_dispatcher.hpp:
+
+File kernel_dispatcher.hpp
+==========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_system>` (``/home/travis/build/zz-systems/zacc/include/system``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/system/kernel_dispatcher.hpp``)
+----------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_system_kernel_dispatcher.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``dispatcher.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatcher.hpp`)
+
+- ``entrypoint.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_entrypoint.hpp`)
+
+- ``kernel_activator.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel_activator.hpp`)
+
+- ``zacc.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_zacc.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__system`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_class_classzacc_1_1system_1_1kernel__dispatcher`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_kernel__dispatcher_8hpp_1a115bca3e15e7d143bac428e236b26b00`
+

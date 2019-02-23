@@ -1,0 +1,13 @@
+.. _exhale_function_intrin_8hpp_1a320b5870464c95af14510ee6daffc7f1:
+
+Function adjust_rounding_mode
+=============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_intrin.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: adjust_rounding_mode()

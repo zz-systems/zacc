@@ -1,0 +1,99 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_system_arch.hpp:
+
+File arch.hpp
+=============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_system>` (``/home/travis/build/zz-systems/zacc/include/system``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/system/arch.hpp``)
+---------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_system_arch.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`)
+
+- ``functional``
+
+- ``iostream``
+
+- ``system/feature.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_feature.hpp`)
+
+- ``util/algorithm.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`)
+
+- ``util/bithacks.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_bithacks.hpp`)
+
+- ``util/io.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_io.hpp`)
+
+- ``util/type/type_casts.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_casts.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel_activator.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_sysinfo.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1arch`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1avx1`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1avx1__fma3`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1avx2`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1avx512`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1opencl`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1scalar`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse2`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse3`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse41`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse41__fma3`
+
+- :ref:`exhale_struct_structzacc_1_1arch_1_1sse41__fma4`
+
+- :ref:`exhale_struct_structzacc_1_1string__view`
+

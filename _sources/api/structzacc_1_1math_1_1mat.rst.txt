@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1math_1_1mat:
+
+Template Struct mat
+===================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::math::__mat< T, Rows, Cols >`` (:ref:`exhale_struct_structzacc_1_1math_1_1____mat`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::math::mat
+   :members:
+   :protected-members:
+   :undoc-members:

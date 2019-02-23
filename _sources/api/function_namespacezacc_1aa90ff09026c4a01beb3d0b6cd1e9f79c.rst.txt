@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1aa90ff09026c4a01beb3d0b6cd1e9f79c:
+
+Template Function zacc::transform_if
+====================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::transform_if(InputIt, InputIt, OutputIt, UnaryOperation, UnaryPredicate)

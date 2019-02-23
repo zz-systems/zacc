@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a8ced9b9eb065da78ce4720513882e744:
+
+Template Function zacc::make_zip_iter
+=====================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::make_zip_iter(Args&&...)

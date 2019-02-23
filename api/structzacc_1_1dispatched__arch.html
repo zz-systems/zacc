@@ -1,0 +1,205 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Struct dispatched_arch &#8212; ZACC  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Template Struct dispatcher" href="structzacc_1_1dispatcher.html" />
+    <link rel="prev" title="Template Struct indices" href="structzacc_1_1detail_1_1indices.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="structzacc_1_1dispatcher.html" title="Template Struct dispatcher"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structzacc_1_1detail_1_1indices.html" title="Template Struct indices"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" accesskey="U">ZACC API</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="struct-dispatched-arch">
+<span id="exhale-struct-structzacc-1-1dispatched-arch"></span><h1>Struct dispatched_arch<a class="headerlink" href="#struct-dispatched-arch" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Defined in <a class="reference internal" href="file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp.html#file-home-travis-build-zz-systems-zacc-include-system-dispatched-arch-hpp"><span class="std std-ref">File dispatched_arch.hpp</span></a></li>
+</ul>
+<div class="section" id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4N4zacc15dispatched_archE">
+<span id="_CPPv3N4zacc15dispatched_archE"></span><span id="_CPPv2N4zacc15dispatched_archE"></span><span id="zacc::dispatched_arch"></span><span class="target" id="structzacc_1_1dispatched__arch"></span><em class="property">struct </em><code class="descname">dispatched_arch</code><a class="headerlink" href="#_CPPv4N4zacc15dispatched_archE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>provides all necessary types for the current arch at compile time </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="type">
+<dt id="_CPPv4N4zacc15dispatched_arch6arch_tE">
+<span id="_CPPv3N4zacc15dispatched_arch6arch_tE"></span><span id="_CPPv2N4zacc15dispatched_arch6arch_tE"></span><span class="target" id="structzacc_1_1dispatched__arch_1a4b9be1e2f631c077b5c63957c424ea65"></span><em class="property">using </em><code class="descname">arch_t</code> = <a class="reference internal" href="structzacc_1_1arch.html#_CPPv4N4zacc4archE" title="zacc::arch">arch</a>::ZACC_ARCH<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch6arch_tE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N4zacc15dispatched_arch8zfloat32E">
+<span id="_CPPv3N4zacc15dispatched_arch8zfloat32E"></span><span id="_CPPv2N4zacc15dispatched_arch8zfloat32E"></span><span class="target" id="structzacc_1_1dispatched__arch_1a8ef5175364e772f43352ee51bf630c9e"></span><em class="property">using </em><code class="descname">zfloat32</code> = backend::ZACC_MAJOR_ARCH::zfloat32&lt;<a class="reference internal" href="#_CPPv4N4zacc15dispatched_arch6arch_tE" title="zacc::dispatched_arch::arch_t">arch_t</a>::value&gt;<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch8zfloat32E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>exposed dispatched implementation of zfloat32 </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N4zacc15dispatched_arch8zfloat64E">
+<span id="_CPPv3N4zacc15dispatched_arch8zfloat64E"></span><span id="_CPPv2N4zacc15dispatched_arch8zfloat64E"></span><span class="target" id="structzacc_1_1dispatched__arch_1a39a0b3f75a787908adefb926246571b3"></span><em class="property">using </em><code class="descname">zfloat64</code> = backend::ZACC_MAJOR_ARCH::zfloat64&lt;<a class="reference internal" href="#_CPPv4N4zacc15dispatched_arch6arch_tE" title="zacc::dispatched_arch::arch_t">arch_t</a>::value&gt;<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch8zfloat64E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>exposed dispatched implementation of zfloat64 </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N4zacc15dispatched_arch5zint8E">
+<span id="_CPPv3N4zacc15dispatched_arch5zint8E"></span><span id="_CPPv2N4zacc15dispatched_arch5zint8E"></span><span class="target" id="structzacc_1_1dispatched__arch_1a9482e2e2b990c476d913d16a82c38462"></span><em class="property">using </em><code class="descname">zint8</code> = backend::ZACC_MAJOR_ARCH::zint8&lt;<a class="reference internal" href="#_CPPv4N4zacc15dispatched_arch6arch_tE" title="zacc::dispatched_arch::arch_t">arch_t</a>::value&gt;<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch5zint8E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>exposed dispatched implementation of zint8 </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N4zacc15dispatched_arch6zint16E">
+<span id="_CPPv3N4zacc15dispatched_arch6zint16E"></span><span id="_CPPv2N4zacc15dispatched_arch6zint16E"></span><span class="target" id="structzacc_1_1dispatched__arch_1a2455d639cb26fe2c451890d5c2b5d459"></span><em class="property">using </em><code class="descname">zint16</code> = backend::ZACC_MAJOR_ARCH::zint16&lt;<a class="reference internal" href="#_CPPv4N4zacc15dispatched_arch6arch_tE" title="zacc::dispatched_arch::arch_t">arch_t</a>::value&gt;<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch6zint16E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>exposed dispatched implementation of zint16 </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N4zacc15dispatched_arch6zint32E">
+<span id="_CPPv3N4zacc15dispatched_arch6zint32E"></span><span id="_CPPv2N4zacc15dispatched_arch6zint32E"></span><span class="target" id="structzacc_1_1dispatched__arch_1a646bcd38f3ececb1a0aaa708ed8155f5"></span><em class="property">using </em><code class="descname">zint32</code> = backend::ZACC_MAJOR_ARCH::zint32&lt;<a class="reference internal" href="#_CPPv4N4zacc15dispatched_arch6arch_tE" title="zacc::dispatched_arch::arch_t">arch_t</a>::value&gt;<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch6zint32E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>exposed dispatched implementation of zint32 </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N4zacc15dispatched_arch8bfloat32E">
+<span id="_CPPv3N4zacc15dispatched_arch8bfloat32E"></span><span id="_CPPv2N4zacc15dispatched_arch8bfloat32E"></span><span class="target" id="structzacc_1_1dispatched__arch_1afba1e5ee10db95ccf3ab71b2054ac83c"></span><em class="property">using </em><code class="descname">bfloat32</code> = backend::ZACC_MAJOR_ARCH::bfloat32&lt;<a class="reference internal" href="#_CPPv4N4zacc15dispatched_arch6arch_tE" title="zacc::dispatched_arch::arch_t">arch_t</a>::value&gt;<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch8bfloat32E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>exposed dispatched implementation of boolean vector for zfloat32 </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N4zacc15dispatched_arch8bfloat64E">
+<span id="_CPPv3N4zacc15dispatched_arch8bfloat64E"></span><span id="_CPPv2N4zacc15dispatched_arch8bfloat64E"></span><span class="target" id="structzacc_1_1dispatched__arch_1ad088d2b6a568653f97b794451145a311"></span><em class="property">using </em><code class="descname">bfloat64</code> = backend::ZACC_MAJOR_ARCH::bfloat64&lt;<a class="reference internal" href="#_CPPv4N4zacc15dispatched_arch6arch_tE" title="zacc::dispatched_arch::arch_t">arch_t</a>::value&gt;<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch8bfloat64E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>exposed dispatched implementation of boolean vector for zfloat64 </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N4zacc15dispatched_arch5bint8E">
+<span id="_CPPv3N4zacc15dispatched_arch5bint8E"></span><span id="_CPPv2N4zacc15dispatched_arch5bint8E"></span><span class="target" id="structzacc_1_1dispatched__arch_1a75c7453668975faf939ef832c8e3eb13"></span><em class="property">using </em><code class="descname">bint8</code> = backend::ZACC_MAJOR_ARCH::bint8&lt;<a class="reference internal" href="#_CPPv4N4zacc15dispatched_arch6arch_tE" title="zacc::dispatched_arch::arch_t">arch_t</a>::value&gt;<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch5bint8E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>exposed dispatched implementation of boolean vector for zint8 </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N4zacc15dispatched_arch6bint16E">
+<span id="_CPPv3N4zacc15dispatched_arch6bint16E"></span><span id="_CPPv2N4zacc15dispatched_arch6bint16E"></span><span class="target" id="structzacc_1_1dispatched__arch_1a75a63099e4adafcd21ccd3d7cb8a8f3c"></span><em class="property">using </em><code class="descname">bint16</code> = backend::ZACC_MAJOR_ARCH::bint16&lt;<a class="reference internal" href="#_CPPv4N4zacc15dispatched_arch6arch_tE" title="zacc::dispatched_arch::arch_t">arch_t</a>::value&gt;<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch6bint16E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>exposed dispatched implementation of boolean vector for zint16 </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4N4zacc15dispatched_arch6bint32E">
+<span id="_CPPv3N4zacc15dispatched_arch6bint32E"></span><span id="_CPPv2N4zacc15dispatched_arch6bint32E"></span><span class="target" id="structzacc_1_1dispatched__arch_1ae097aab272e7ddc50a81dc0f7db039c7"></span><em class="property">using </em><code class="descname">bint32</code> = backend::ZACC_MAJOR_ARCH::bint32&lt;<a class="reference internal" href="#_CPPv4N4zacc15dispatched_arch6arch_tE" title="zacc::dispatched_arch::arch_t">arch_t</a>::value&gt;<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch6bint32E" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>exposed dispatched implementation of boolean vector for zint32 </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="function">
+<dt id="_CPPv4N4zacc15dispatched_arch4nameEv">
+<span id="_CPPv3N4zacc15dispatched_arch4nameEv"></span><span id="_CPPv2N4zacc15dispatched_arch4nameEv"></span><span id="zacc::dispatched_arch::name"></span><span class="target" id="structzacc_1_1dispatched__arch_1a204cfad1f3a063cba3a0119c95ea197c"></span><em class="property">static</em> <em class="property">const</em> std::string <code class="descname">name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch4nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Attributes</p>
+<dl class="member">
+<dt id="_CPPv4N4zacc15dispatched_arch14use_fast_floatE">
+<span id="_CPPv3N4zacc15dispatched_arch14use_fast_floatE"></span><span id="_CPPv2N4zacc15dispatched_arch14use_fast_floatE"></span><span id="zacc::dispatched_arch::use_fast_float__b"></span><span class="target" id="structzacc_1_1dispatched__arch_1a7d475f1fda7eb25d4cceaa30d2de37ae"></span><em class="property">constexpr</em> bool <code class="descname">use_fast_float</code> = ZACC_FAST_FLOAT<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch14use_fast_floatE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>fast float enabled? used for faster and less precise computations </p>
+</dd></dl>
+
+<dl class="member">
+<dt id="_CPPv4N4zacc15dispatched_arch9alignmentE">
+<span id="_CPPv3N4zacc15dispatched_arch9alignmentE"></span><span id="_CPPv2N4zacc15dispatched_arch9alignmentE"></span><span id="zacc::dispatched_arch::alignment__s"></span><span class="target" id="structzacc_1_1dispatched__arch_1a31b128640e91cd6bac1917f260b2d838"></span><em class="property">constexpr</em> size_t <code class="descname">alignment</code> = <a class="reference internal" href="structzacc_1_1ztraits.html#structzacc_1_1ztraits"><span class="std std-ref">ztraits</span></a>&lt;backend::ZACC_MAJOR_ARCH::zfloat32&lt;arch_t::value&gt;&gt;::alignment<a class="headerlink" href="#_CPPv4N4zacc15dispatched_arch9alignmentE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>memory alignment </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="structzacc_1_1detail_1_1indices.html"
+                        title="previous chapter">Template Struct indices</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="structzacc_1_1dispatcher.html"
+                        title="next chapter">Template Struct dispatcher</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="structzacc_1_1dispatcher.html" title="Template Struct dispatcher"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="structzacc_1_1detail_1_1indices.html" title="Template Struct indices"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Sergej Zuyev.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1aac7dad1cac616b49e6abcde7b25828f5:
+
+Template Function zacc::join(const InputContainer&, const std::string&)
+=======================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::join(const InputContainer&, const std::string&)

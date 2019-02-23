@@ -1,0 +1,26 @@
+.. _exhale_struct_structzacc_1_1compose_3_01Tail_01_4:
+
+Template Struct compose< Tail >
+===============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_composition.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structzacc_1_1compose_3_01Tail_01_4_1_1terminator`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::compose< Tail >
+   :members:
+   :protected-members:
+   :undoc-members:

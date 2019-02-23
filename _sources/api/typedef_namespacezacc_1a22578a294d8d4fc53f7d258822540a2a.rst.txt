@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a22578a294d8d4fc53f7d258822540a2a:
+
+Typedef zacc::enable_if_is_base_of
+==================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::enable_if_is_base_of

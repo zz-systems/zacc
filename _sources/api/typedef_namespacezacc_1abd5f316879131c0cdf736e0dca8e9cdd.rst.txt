@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1abd5f316879131c0cdf736e0dca8e9cdd:
+
+Typedef zacc::compose_t
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_composition.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::compose_t

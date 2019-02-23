@@ -1,0 +1,25 @@
+.. _dir__home_travis_build_zz-systems_zacc_include_backend_avx2:
+
+
+Directory avx2
+==============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_backend>` (``/home/travis/build/zz-systems/zacc/include/backend``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/travis/build/zz-systems/zacc/include/backend/avx2``
+
+
+Files
+-----
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float32.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float64.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int16.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int32.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int8.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_types.hpp`
+
+

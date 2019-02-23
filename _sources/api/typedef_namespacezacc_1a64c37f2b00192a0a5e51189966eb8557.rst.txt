@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a64c37f2b00192a0a5e51189966eb8557:
+
+Typedef zacc::aligned_map
+=========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_collections.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::aligned_map

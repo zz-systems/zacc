@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a10a4d8a63fcb8d5abb2fb7e87c68cba3:
+
+Typedef zacc::is_vector
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::is_vector

@@ -1,0 +1,16 @@
+.. _exhale_class_classzacc_1_1zip__container:
+
+Template Class zip_container
+============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Class Documentation
+-------------------
+
+
+.. doxygenclass:: zacc::zip_container
+   :members:
+   :protected-members:
+   :undoc-members:

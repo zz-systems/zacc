@@ -1,0 +1,13 @@
+.. _exhale_define_sse_2int32_8impl_8hpp_1ab7aad87de8aebd7dc52af2fc4c8bc520:
+
+Define params
+=============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int32.impl.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: params

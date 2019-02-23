@@ -1,0 +1,13 @@
+.. _exhale_typedef_scalar_2float32_8impl_8hpp_1ae2e981bc37f2313bec9aff747a0a2ead:
+
+Typedef zacc::backend::scalar::ibfloat32
+========================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float32.impl.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::backend::scalar::ibfloat32

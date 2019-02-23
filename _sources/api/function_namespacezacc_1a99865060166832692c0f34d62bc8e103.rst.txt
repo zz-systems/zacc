@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a99865060166832692c0f34d62bc8e103:
+
+Template Function zacc::or_reduce(T&&, Args&&...)
+=================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_feature.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::or_reduce(T&&, Args&&...)

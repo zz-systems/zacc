@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01math_1_1izcompc01421659fa20eb5d1b6e0bf2a1fc1f7:
+
+Template Struct ztraits< T, std::enable_if_t< std::is_base_of< math::izcomplex< typename std::decay_t< T >::element_type >, std::decay_t< T > >::value > >
+==========================================================================================================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_complex.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::ztraits< T, std::enable_if_t< std::is_base_of< math::izcomplex< typename std::decay_t< T >::element_type >, std::decay_t< T > >::value > >
+   :members:
+   :protected-members:
+   :undoc-members:

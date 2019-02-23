@@ -1,0 +1,580 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Program Listing for File int8.impl.hpp &#8212; ZACC  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="File int8.impl.hpp" href="file__home_travis_build_zz-systems_zacc_include_backend_sse_int8.impl.hpp.html" />
+    <link rel="prev" title="File int8.impl.hpp" href="file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_backend_sse_int8.impl.hpp.html" title="File int8.impl.hpp"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp.html" title="File int8.impl.hpp"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp.html" accesskey="U">File int8.impl.hpp</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-int8-impl-hpp">
+<span id="program-listing-file-home-travis-build-zz-systems-zacc-include-backend-scalar-int8-impl-hpp"></span><h1>Program Listing for File int8.impl.hpp<a class="headerlink" href="#program-listing-for-file-int8-impl-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp.html#file-home-travis-build-zz-systems-zacc-include-backend-scalar-int8-impl-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/travis/build/zz-systems/zacc/include/backend/scalar/int8.impl.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//---------------------------------------------------------------------------------</span>
+<span class="c1">// The MIT License (MIT)</span>
+<span class="c1">//</span>
+<span class="c1">// Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)</span>
+<span class="c1">//</span>
+<span class="c1">// Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="c1">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1">// in the Software without restriction, including without limitation the rights</span>
+<span class="c1">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="c1">// copies of the Software, and to permit persons to whom the Software is</span>
+<span class="c1">// furnished to do so, subject to the following conditions:</span>
+<span class="c1">//</span>
+<span class="c1">// The above copyright notice and this permission notice shall be included in all</span>
+<span class="c1">// copies or substantial portions of the Software.</span>
+<span class="c1">//</span>
+<span class="c1">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c1">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c1">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c1">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c1">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span class="c1">// SOFTWARE.</span>
+<span class="c1">//---------------------------------------------------------------------------------</span>
+
+<span class="cp">#pragma once</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;type_traits&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;cmath&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;backend/intrin.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;backend/intrin.ext.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;backend/zval.hpp&quot;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;util/type/type_composition.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;util/type/type_traits.hpp&quot;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;util/memory.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;util/macros.hpp&quot;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;system/feature.hpp&quot;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;traits/printable.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;traits/math.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;traits/conditional.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;traits/arithmetic.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;traits/logical.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;traits/bitwise.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;traits/bitwise_shift.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;traits/comparable.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;traits/equatable.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;traits/io.hpp&quot;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&quot;traits/numeric.hpp&quot;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">zacc</span> <span class="p">{</span> <span class="k">namespace</span> <span class="n">backend</span> <span class="p">{</span> <span class="k">namespace</span> <span class="n">scalar</span>
+<span class="p">{</span>
+    <span class="k">template</span><span class="o">&lt;</span><span class="kt">uint64_t</span> <span class="n">FeatureMask</span><span class="o">&gt;</span><span class="c1">// = last_operation::undefined&gt;</span>
+    <span class="k">struct</span> <span class="n">bint8</span><span class="p">;</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="kt">uint64_t</span> <span class="n">FeatureMask</span><span class="o">&gt;</span><span class="c1">// = last_operation::undefined&gt;</span>
+    <span class="k">struct</span> <span class="n">zint8</span><span class="p">;</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="kt">uint64_t</span> <span class="n">FeatureMask</span><span class="o">&gt;</span><span class="c1">// = last_operation::undefined&gt;</span>
+    <span class="k">using</span> <span class="n">izint8</span> <span class="o">=</span> <span class="n">ztype</span><span class="o">&lt;</span><span class="n">zval_tag</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="kt">int8_t</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">;</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="kt">uint64_t</span> <span class="n">FeatureMask</span><span class="o">&gt;</span><span class="c1">// = last_operation::undefined&gt;</span>
+    <span class="k">using</span> <span class="n">ibint8</span> <span class="o">=</span> <span class="n">ztype</span><span class="o">&lt;</span><span class="n">bval_tag</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">,</span> <span class="kt">int8_t</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">;</span>
+<span class="p">}}}</span>
+
+<span class="k">namespace</span> <span class="n">zacc</span> <span class="p">{</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="n">ztraits</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">backend</span><span class="o">::</span><span class="n">scalar</span><span class="o">::</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">feature_mask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;::</span><span class="n">value</span>
+            <span class="o">||</span> <span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">backend</span><span class="o">::</span><span class="n">scalar</span><span class="o">::</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">feature_mask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="o">&gt;&gt;</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">size</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">uint64_t</span> <span class="n">feature_mask</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">feature_mask</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">alignment</span> <span class="o">=</span> <span class="mi">16</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="k">constexpr</span> <span class="kt">bool</span> <span class="n">is_vector</span> <span class="o">=</span> <span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">;</span>
+
+        <span class="k">using</span> <span class="n">vector_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="k">using</span> <span class="n">element_type</span> <span class="o">=</span> <span class="kt">int8_t</span><span class="p">;</span>
+
+        <span class="k">using</span> <span class="n">extracted_type</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="n">element_type</span><span class="p">,</span> <span class="n">size</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="k">using</span> <span class="n">zval_type</span> <span class="o">=</span> <span class="n">backend</span><span class="o">::</span><span class="n">scalar</span><span class="o">::</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">feature_mask</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">bval_type</span> <span class="o">=</span> <span class="n">backend</span><span class="o">::</span><span class="n">scalar</span><span class="o">::</span><span class="n">bint8</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">feature_mask</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="k">using</span> <span class="n">tag</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">decay_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">tag</span><span class="p">;</span>
+    <span class="p">};</span>
+<span class="p">}</span>
+
+<span class="k">namespace</span> <span class="n">zacc</span> <span class="p">{</span> <span class="k">namespace</span> <span class="n">backend</span> <span class="p">{</span> <span class="k">namespace</span> <span class="n">scalar</span>
+<span class="p">{</span>
+    <span class="k">namespace</span> <span class="n">int8_modules</span>
+    <span class="p">{</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Interface</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Composed</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="k">struct</span> <span class="nl">math</span> <span class="p">:</span> <span class="n">traits</span><span class="o">::</span><span class="n">math</span><span class="o">&lt;</span><span class="n">Interface</span><span class="p">,</span> <span class="n">Composed</span><span class="p">,</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="p">{</span>
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vabs</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">abs</span><span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vmin</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">min</span><span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">(),</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vmax</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">max</span><span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">(),</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vclamp</span><span class="p">(</span><span class="n">Composed</span> <span class="n">self</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">from</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">to</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">vmin</span><span class="p">(</span><span class="n">to</span><span class="p">,</span> <span class="n">vmax</span><span class="p">(</span><span class="n">from</span><span class="p">,</span> <span class="n">self</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="c1">// =============================================================================================================</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Interface</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Composed</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="k">struct</span> <span class="nl">conditional</span> <span class="p">:</span> <span class="n">traits</span><span class="o">::</span><span class="n">conditional</span><span class="o">&lt;</span><span class="n">Interface</span><span class="p">,</span> <span class="n">Composed</span><span class="p">,</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="p">{</span>
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vsel</span><span class="p">(</span><span class="n">Boolean</span> <span class="n">condition</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">if_value</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">else_value</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">condition</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">?</span> <span class="nl">if_value</span> <span class="p">:</span> <span class="n">else_value</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="c1">// =============================================================================================================</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Interface</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Composed</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="k">struct</span> <span class="nl">arithmetic</span> <span class="p">:</span> <span class="n">traits</span><span class="o">::</span><span class="n">arithmetic</span><span class="o">&lt;</span><span class="n">Interface</span><span class="p">,</span> <span class="n">Composed</span><span class="p">,</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="p">{</span>
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vneg</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="o">-</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vadd</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">+</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vsub</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">-</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vmul</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">*</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vdiv</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">/</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vmod</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">%</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="c1">// =============================================================================================================</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Interface</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Composed</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="k">struct</span> <span class="nl">logical</span> <span class="p">:</span> <span class="n">traits</span><span class="o">::</span><span class="n">logical</span><span class="o">&lt;</span><span class="n">Interface</span><span class="p">,</span> <span class="n">Composed</span><span class="p">,</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="p">{</span>
+            <span class="k">friend</span> <span class="n">Boolean</span> <span class="n">vlneg</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="o">!</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Boolean</span> <span class="n">vlor</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">||</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Boolean</span> <span class="n">vland</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="c1">// =============================================================================================================</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Interface</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Composed</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="k">struct</span> <span class="nl">bitwise</span> <span class="p">:</span> <span class="n">traits</span><span class="o">::</span><span class="n">bitwise</span><span class="o">&lt;</span><span class="n">Interface</span><span class="p">,</span> <span class="n">Composed</span><span class="p">,</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="p">{</span>
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vbneg</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="o">~</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vband</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vbor</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">|</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vbxor</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">^</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="kt">bool</span> <span class="n">vis_set</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="c1">// =============================================================================================================</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Interface</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Composed</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="k">struct</span> <span class="nl">bitwise_shift</span> <span class="p">:</span> <span class="n">traits</span><span class="o">::</span><span class="n">bitwise_shift</span><span class="o">&lt;</span><span class="n">Interface</span><span class="p">,</span> <span class="n">Composed</span><span class="p">,</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="p">{</span>
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vbsll</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vbsrl</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vbslli</span><span class="p">(</span><span class="k">const</span> <span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="k">const</span> <span class="kt">size_t</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">other</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Composed</span> <span class="n">vbsrli</span><span class="p">(</span><span class="k">const</span> <span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="k">const</span> <span class="kt">size_t</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&gt;&gt;</span> <span class="n">other</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="c1">// =============================================================================================================</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Interface</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Composed</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="k">struct</span> <span class="nl">comparable</span> <span class="p">:</span> <span class="n">traits</span><span class="o">::</span><span class="n">comparable</span><span class="o">&lt;</span><span class="n">Interface</span><span class="p">,</span> <span class="n">Composed</span><span class="p">,</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="p">{</span>
+            <span class="k">friend</span> <span class="n">Boolean</span> <span class="n">vgt</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Boolean</span> <span class="n">vlt</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Boolean</span> <span class="n">vge</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Boolean</span> <span class="n">vle</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="c1">// =============================================================================================================</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Interface</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Composed</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="k">struct</span> <span class="nl">equatable</span> <span class="p">:</span> <span class="n">traits</span><span class="o">::</span><span class="n">equatable</span><span class="o">&lt;</span><span class="n">Interface</span><span class="p">,</span> <span class="n">Composed</span><span class="p">,</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="p">{</span>
+            <span class="k">friend</span> <span class="n">Boolean</span> <span class="n">veq</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">==</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+
+            <span class="k">friend</span> <span class="n">Boolean</span> <span class="n">vneq</span><span class="p">(</span><span class="n">Composed</span> <span class="n">one</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">other</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">one</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">!=</span> <span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">());</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="c1">// =============================================================================================================</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Interface</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Composed</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="k">struct</span> <span class="nl">io</span> <span class="p">:</span> <span class="n">traits</span><span class="o">::</span><span class="n">io</span><span class="o">&lt;</span><span class="n">Interface</span><span class="p">,</span> <span class="n">Composed</span><span class="p">,</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="p">{</span>
+            <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">OutputIt</span><span class="o">&gt;</span> <span class="k">friend</span> <span class="kt">void</span> <span class="n">vstore</span><span class="p">(</span><span class="n">OutputIt</span> <span class="n">result</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">input</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>
+            <span class="p">}</span>
+
+            <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">OutputIt</span><span class="o">&gt;</span> <span class="k">friend</span> <span class="kt">void</span> <span class="n">vstream</span><span class="p">(</span><span class="n">OutputIt</span> <span class="n">result</span><span class="p">,</span> <span class="n">Composed</span> <span class="n">input</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">input</span><span class="p">.</span><span class="n">value</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">};</span>
+
+        <span class="c1">// =============================================================================================================</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Interface</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Composed</span><span class="p">,</span> <span class="k">typename</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="k">struct</span> <span class="nl">numeric</span> <span class="p">:</span> <span class="n">traits</span><span class="o">::</span><span class="n">numeric</span><span class="o">&lt;</span><span class="n">Interface</span><span class="p">,</span> <span class="n">Composed</span><span class="p">,</span> <span class="n">Boolean</span><span class="o">&gt;</span>
+        <span class="p">{</span>
+        <span class="p">};</span>
+    <span class="p">}</span> <span class="c1">// end int8_modules</span>
+
+    <span class="c1">// =================================================================================================================</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="kt">uint64_t</span> <span class="n">FeatureMask</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="nl">zint8</span> <span class="p">:</span> <span class="k">public</span> <span class="n">zval</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+
+        <span class="c1">// generic traits</span>
+        <span class="n">printable</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+
+        <span class="c1">// int8 traits</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">io</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">math</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">numeric</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">arithmetic</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">bitwise</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">bitwise_shift</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">comparable</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">equatable</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">conditional</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span>
+    <span class="p">{</span>
+        <span class="n">USING_ZTYPE</span><span class="p">(</span><span class="n">zval</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">);</span>
+        <span class="k">using</span> <span class="n">zval</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;::</span><span class="n">zval</span><span class="p">;</span>
+
+        <span class="k">constexpr</span> <span class="nf">zint8</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="c1">// =============================================================================================================</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">view_t</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;&gt;::</span><span class="n">value</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">is_vector</span><span class="p">,</span> <span class="kt">void</span><span class="o">**&gt;</span> <span class="o">=</span> <span class="k">nullptr</span><span class="o">&gt;</span>
+        <span class="k">constexpr</span> <span class="n">zint8</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">view</span><span class="p">)</span> <span class="k">noexcept</span>
+                <span class="o">:</span> <span class="n">zint8</span><span class="p">(</span><span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="p">{}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if</span><span class="o">&lt;</span><span class="n">is_zval</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="kt">void</span><span class="o">**&gt;::</span><span class="n">type</span> <span class="o">=</span> <span class="k">nullptr</span><span class="o">&gt;</span>
+        <span class="k">constexpr</span> <span class="n">zint8</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span>
+                <span class="o">:</span> <span class="n">zint8</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="p">{}</span>
+
+        <span class="k">explicit</span> <span class="k">constexpr</span> <span class="n">zint8</span><span class="p">(</span><span class="k">const</span> <span class="n">bval_t</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span>
+                <span class="o">:</span> <span class="n">zint8</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="p">{}</span>
+
+    <span class="p">};</span>
+
+    <span class="c1">// =================================================================================================================</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="kt">uint64_t</span> <span class="n">FeatureMask</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="nl">bint8</span> <span class="p">:</span> <span class="k">public</span> <span class="n">zval</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+
+        <span class="c1">// generic traits</span>
+        <span class="n">printable</span><span class="o">&lt;</span><span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+
+        <span class="c1">// int8 traits</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">io</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">bitwise</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">logical</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+        <span class="n">int8_modules</span><span class="o">::</span><span class="n">equatable</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span>
+    <span class="p">{</span>
+        <span class="n">USING_ZTYPE</span><span class="p">(</span><span class="n">zval</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">);</span>
+        <span class="k">using</span> <span class="n">zval</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;::</span><span class="n">zval</span><span class="p">;</span>
+
+        <span class="k">constexpr</span> <span class="nf">bint8</span><span class="p">()</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+
+        <span class="c1">// =============================================================================================================</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">view_t</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;&gt;::</span><span class="n">value</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">is_vector</span><span class="p">,</span> <span class="kt">void</span><span class="o">**&gt;</span> <span class="o">=</span> <span class="k">nullptr</span><span class="o">&gt;</span>
+        <span class="k">constexpr</span> <span class="n">bint8</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">view</span><span class="p">)</span> <span class="k">noexcept</span>
+                <span class="o">:</span> <span class="n">bint8</span><span class="p">((</span><span class="n">view</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="p">{}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if</span><span class="o">&lt;</span><span class="n">is_zval</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">||</span> <span class="n">is_bval</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="kt">void</span><span class="o">**&gt;::</span><span class="n">type</span> <span class="o">=</span> <span class="k">nullptr</span><span class="o">&gt;</span>
+        <span class="k">constexpr</span> <span class="n">bint8</span><span class="p">(</span><span class="k">const</span> <span class="n">T</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span>
+                <span class="o">:</span> <span class="n">bint8</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">value</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="c1">//static_assert(size_v&lt;T&gt; == 1, &quot;Dimension mismatch&quot;);</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">bint8</span><span class="p">(</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;</span> <span class="n">value</span><span class="p">)</span> <span class="k">noexcept</span>
+            <span class="o">:</span> <span class="n">zval</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">FeatureMask</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">value</span><span class="p">.</span><span class="n">value</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">{</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="c1">// Validate zint8 ===================================================================================</span>
+
+<span class="cp">#define params 0</span>
+
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">is_vector_v</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;</span> <span class="o">==</span> <span class="nb">false</span><span class="p">,</span>    <span class="s">&quot;is_vector_v&lt;izint8&gt; != false.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">is_vector_v</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;</span> <span class="o">==</span> <span class="nb">false</span><span class="p">,</span>    <span class="s">&quot;is_vector_v&lt;ibint8&gt; != false.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">element_t</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="kt">int8_t</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span>    <span class="s">&quot;element_t&lt;ibint8&gt; != int8_t.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">element_t</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="kt">int8_t</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span>    <span class="s">&quot;element_t&lt;izint8&gt; != int8_t.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">element_t</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="kt">int8_t</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span>    <span class="s">&quot;element_t&lt;ibint8&gt; != int8_t.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">vector_t</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span>    <span class="s">&quot;vector_t&lt;izint8&gt; != std::array&lt;int8_t, 1&gt;.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">vector_t</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span>    <span class="s">&quot;vector_t&lt;ibint8&gt; != std::array&lt;int8_t, 1&gt;.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">view_t</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span>    <span class="s">&quot;view_t&lt;izint8&gt; != std::array&lt;int8_t, 1&gt;.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">view_t</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">bool</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span>                        <span class="s">&quot;view_t&lt;ibint8&gt; != std::array&lt;bool, 1&gt;.&quot;</span><span class="p">);</span>
+
+<span class="c1">//</span>
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">izint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;base_of&lt;izint8&gt; != izint8.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">izint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;base_of&lt;izint8&gt; == ibint8.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">is_zval</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_zval&lt;izint8&gt; == false.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">is_bval</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_bval&lt;izint8&gt; != false.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;base_of&lt;zint8&gt; != izint8.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;base_of&lt;zint8&gt; == ibint8.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;zint8::size != 1.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">alignment</span> <span class="o">==</span> <span class="mi">16</span><span class="p">,</span> <span class="s">&quot;zint8::alignment != 16.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">is_vector</span> <span class="o">==</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;zint8::is_vector != false.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">tag</span><span class="p">,</span> <span class="n">zval_tag</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;zint8::tag != zval_tag.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">vector_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;zint8::vector_type != std::array&lt;int8_t, 1&gt;.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">element_type</span><span class="p">,</span> <span class="kt">int8_t</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;zint8::element_type != int8_t.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">extracted_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;zint8::extracted_type != std::array&lt;int8_t, 1&gt;.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">is_zval</span><span class="o">&lt;</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_zval&lt;zint8&gt; == false.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">is_bval</span><span class="o">&lt;</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_bval&lt;zint8&gt; != false.&quot;</span><span class="p">);</span>
+
+    <span class="c1">// Validate bint8 ===================================================================================</span>
+
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;base_of&lt;izint8&gt; != izint8.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;base_of&lt;izint8&gt; == ibint8.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">is_bval</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_bval&lt;ibint8&gt; == false.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">is_zval</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_zval&lt;ibint8&gt; != false.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">ibint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;base_of&lt;bint8&gt; != ibint8.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_base_of</span><span class="o">&lt;</span><span class="n">izint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">bint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;base_of&lt;bint8&gt; == izint8.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">bint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;bint8::size != 1.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">bint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">alignment</span> <span class="o">==</span> <span class="mi">16</span><span class="p">,</span> <span class="s">&quot;bint8::alignment != 16.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">bint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">is_vector</span> <span class="o">==</span> <span class="nb">false</span><span class="p">,</span> <span class="s">&quot;bint8::is_vector != false.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">bint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">tag</span><span class="p">,</span> <span class="n">bval_tag</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;bint8::tag != zval_tag.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">bint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">vector_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;bint8::vector_type != std::array&lt;int8_t, 1&gt;.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">bint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">element_type</span><span class="p">,</span> <span class="kt">int8_t</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;bint8::element_type != int8_t.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="n">bint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;::</span><span class="n">extracted_type</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">array</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="mi">1</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;bint8::extracted_type != std::array&lt;int8_t, 1&gt;.&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span> <span class="n">is_bval</span><span class="o">&lt;</span><span class="n">bint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_bval&lt;bint8&gt; == false.&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">is_zval</span><span class="o">&lt;</span><span class="n">bint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_zval&lt;bint8&gt; != false.&quot;</span><span class="p">);</span>
+
+    <span class="c1">// Validate integral, float, double traits =========================================================================</span>
+
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_floating_point</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">||</span> <span class="n">is_floating_point</span> <span class="o">&lt;</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_floating_point&lt;zint8&gt; == false. [scalar = int8_t]&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_floating_point</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">||</span> <span class="o">!</span><span class="n">is_integral</span><span class="o">&lt;</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_integral&lt;zint8&gt; != false. [scalar = int8_t]&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="kt">float</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">||</span> <span class="n">is_float</span> <span class="o">&lt;</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_float&lt;zint8&gt; == false. [scalar = int8_t]&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="kt">float</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">||</span> <span class="o">!</span><span class="n">is_double</span> <span class="o">&lt;</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_double&lt;zint8&gt; != false. [scalar = int8_t]&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">||</span> <span class="n">is_double</span> <span class="o">&lt;</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_double&lt;zint8&gt; == false. [scalar = int8_t]&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_same</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="p">,</span> <span class="kt">double</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">||</span> <span class="o">!</span><span class="n">is_float</span> <span class="o">&lt;</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_float&lt;zint8&gt; != false. [scalar = int8_t]&quot;</span><span class="p">);</span>
+
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_integral</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">||</span> <span class="n">is_integral</span><span class="o">&lt;</span><span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span><span class="s">&quot;is_integral&lt;zint8&gt; == false. [scalar = int8_t]&quot;</span><span class="p">);</span>
+    <span class="k">static_assert</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_integral</span><span class="o">&lt;</span><span class="kt">int8_t</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">||</span> <span class="o">!</span><span class="n">is_floating_point</span> <span class="o">&lt;</span> <span class="n">zint8</span><span class="o">&lt;</span><span class="n">params</span><span class="o">&gt;&gt;::</span><span class="n">value</span><span class="p">,</span> <span class="s">&quot;is_floating_point&lt;zint8&gt; != false. [scalar = int8_t]&quot;</span><span class="p">);</span>
+<span class="p">}}}</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp.html"
+                        title="previous chapter">File int8.impl.hpp</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="file__home_travis_build_zz-systems_zacc_include_backend_sse_int8.impl.hpp.html"
+                        title="next chapter">File int8.impl.hpp</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_backend_sse_int8.impl.hpp.html" title="File int8.impl.hpp"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp.html" title="File int8.impl.hpp"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp.html" >File int8.impl.hpp</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Sergej Zuyev.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

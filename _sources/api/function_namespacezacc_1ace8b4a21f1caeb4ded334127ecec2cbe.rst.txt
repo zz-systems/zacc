@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1ace8b4a21f1caeb4ded334127ecec2cbe:
+
+Function zacc::green
+====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_io.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::green(std::ostream&)

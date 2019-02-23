@@ -1,0 +1,34 @@
+.. _exhale_struct_structzacc_1_1backend_1_1avx2_1_1zfloat64:
+
+Template Struct zfloat64
+========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float64.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Types
+**********
+
+- ``public zacc::zval< izfloat64< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1zval`)
+- ``public zacc::printable< izfloat64< FeatureMask >, zfloat64< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1printable`)
+- ``public zacc::backend::avx2::float64_modules::io< izfloat64< FeatureMask >, zfloat64< FeatureMask >, bfloat64< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1io`)
+- ``public zacc::backend::avx2::float64_modules::math< izfloat64< FeatureMask >, zfloat64< FeatureMask >, bfloat64< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1math`)
+- ``public zacc::backend::avx2::float64_modules::numeric< izfloat64< FeatureMask >, zfloat64< FeatureMask >, bfloat64< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1numeric`)
+- ``public zacc::backend::avx2::float64_modules::arithmetic< izfloat64< FeatureMask >, zfloat64< FeatureMask >, bfloat64< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1arithmetic`)
+- ``public zacc::backend::avx2::float64_modules::bitwise< izfloat64< FeatureMask >, zfloat64< FeatureMask >, bfloat64< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1bitwise`)
+- ``public zacc::backend::avx2::float64_modules::comparable< izfloat64< FeatureMask >, zfloat64< FeatureMask >, bfloat64< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1comparable`)
+- ``public zacc::backend::avx2::float64_modules::equatable< izfloat64< FeatureMask >, zfloat64< FeatureMask >, bfloat64< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1equatable`)
+- ``public zacc::backend::avx2::float64_modules::conditional< izfloat64< FeatureMask >, zfloat64< FeatureMask >, bfloat64< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx2_1_1float64__modules_1_1conditional`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::avx2::zfloat64
+   :members:
+   :protected-members:
+   :undoc-members:

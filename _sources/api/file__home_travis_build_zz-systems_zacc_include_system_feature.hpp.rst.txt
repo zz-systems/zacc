@@ -1,0 +1,129 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_system_feature.hpp:
+
+File feature.hpp
+================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_system>` (``/home/travis/build/zz-systems/zacc/include/system``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/system/feature.hpp``)
+------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_system_feature.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`)
+
+- ``functional``
+
+- ``iostream``
+
+- ``util/algorithm.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`)
+
+- ``util/bithacks.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_bithacks.hpp`)
+
+- ``util/io.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_io.hpp`)
+
+- ``util/type/type_casts.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_casts.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_arch.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatcher.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_sysinfo.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_zacc.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1dispatcher`
+
+- :ref:`exhale_struct_structzacc_1_1feature`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacezacc_1acebcbb7d38ceabebc9e5377b5cf4f610`
+
+- :ref:`exhale_function_namespacezacc_1a99865060166832692c0f34d62bc8e103`
+
+- :ref:`exhale_function_namespacezacc_1a495a2ce5fc80c9468ddff00be5402760`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespacezacc_1a60d28c2da862513e9e4c6af43482f3dc`
+
+- :ref:`exhale_variable_namespacezacc_1a1a5308b49fec38a00c1849dcd47e65e8`
+

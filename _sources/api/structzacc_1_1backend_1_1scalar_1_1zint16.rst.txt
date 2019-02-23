@@ -1,0 +1,35 @@
+.. _exhale_struct_structzacc_1_1backend_1_1scalar_1_1zint16:
+
+Template Struct zint16
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int16.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Types
+**********
+
+- ``public zacc::zval< izint16< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1zval`)
+- ``public zacc::printable< izint16< FeatureMask >, zint16< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1printable`)
+- ``public zacc::backend::scalar::int16_modules::io< izint16< FeatureMask >, zint16< FeatureMask >, bint16< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1io`)
+- ``public zacc::backend::scalar::int16_modules::math< izint16< FeatureMask >, zint16< FeatureMask >, bint16< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1math`)
+- ``public zacc::backend::scalar::int16_modules::numeric< izint16< FeatureMask >, zint16< FeatureMask >, bint16< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1numeric`)
+- ``public zacc::backend::scalar::int16_modules::arithmetic< izint16< FeatureMask >, zint16< FeatureMask >, bint16< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1arithmetic`)
+- ``public zacc::backend::scalar::int16_modules::bitwise< izint16< FeatureMask >, zint16< FeatureMask >, bint16< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1bitwise`)
+- ``public zacc::backend::scalar::int16_modules::bitwise_shift< izint16< FeatureMask >, zint16< FeatureMask >, bint16< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1bitwise__shift`)
+- ``public zacc::backend::scalar::int16_modules::comparable< izint16< FeatureMask >, zint16< FeatureMask >, bint16< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1comparable`)
+- ``public zacc::backend::scalar::int16_modules::equatable< izint16< FeatureMask >, zint16< FeatureMask >, bint16< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1equatable`)
+- ``public zacc::backend::scalar::int16_modules::conditional< izint16< FeatureMask >, zint16< FeatureMask >, bint16< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1int16__modules_1_1conditional`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::scalar::zint16
+   :members:
+   :protected-members:
+   :undoc-members:

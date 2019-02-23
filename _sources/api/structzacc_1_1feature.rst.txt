@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1feature:
+
+Struct feature
+==============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_feature.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Derived Type
+************
+
+- ``public zacc::sysinfo`` (:ref:`exhale_struct_structzacc_1_1sysinfo`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::feature
+   :members:
+   :protected-members:
+   :undoc-members:

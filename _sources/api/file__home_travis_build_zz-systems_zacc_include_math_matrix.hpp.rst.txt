@@ -1,0 +1,159 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp:
+
+File matrix.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_math>` (``/home/travis/build/zz-systems/zacc/include/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/math/matrix.hpp``)
+---------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``util/algorithm.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`)
+
+- ``util/operators.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_operators.hpp`)
+
+- ``util/type/type_casts.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_casts.hpp`)
+
+- ``util/type/type_composition.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_composition.hpp`)
+
+- ``util/type/type_traits.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_complex.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__math`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1____mat`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1is__scalar`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1make__vec`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1mat`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1mat_3_01T_00_011_00_011_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1mat_3_01T_00_012_00_011_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1math_1_1mat_3_01T_00_013_00_011_01_4`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_matrix_8hpp_1ab11ba0bb7b24eb4e357708fe8a24786f`
+
+- :ref:`exhale_function_matrix_8hpp_1aa5d7ea986378159fdd37287f5f826c41`
+
+- :ref:`exhale_function_matrix_8hpp_1a8860f5078e60103a6f3841119014b815`
+
+- :ref:`exhale_function_matrix_8hpp_1afe9643ab2331622b9db5e4f54df797fd`
+
+- :ref:`exhale_function_matrix_8hpp_1a9b2ea6f99667e6e8d2ae39b1e3b65f3f`
+
+- :ref:`exhale_function_matrix_8hpp_1adc3b8084b3a37caec475152a011913fb`
+
+- :ref:`exhale_function_matrix_8hpp_1af11a4d9f0992fb155420ae6fabd37e81`
+
+- :ref:`exhale_function_matrix_8hpp_1aa3f90c08d6fd185a34c974d48bea188a`
+
+- :ref:`exhale_function_matrix_8hpp_1a4ee88d1a32750aa32ecb75cf1a2404d7`
+
+- :ref:`exhale_function_matrix_8hpp_1abbd3101dc9d5fe77eccf8cdbd5638397`
+
+- :ref:`exhale_function_matrix_8hpp_1a5bde58fe5df7668ba96508b33c506bcf`
+
+- :ref:`exhale_function_matrix_8hpp_1a9c6c7cc7015134ca02ef171359009faa`
+
+- :ref:`exhale_function_matrix_8hpp_1a40fc368e8de4be0369118a4ee2e7487c`
+
+- :ref:`exhale_function_matrix_8hpp_1a28fbcb5a1da4cda94b0bca2099a051fb`
+
+- :ref:`exhale_function_matrix_8hpp_1a25ffe2057ae2755eb45d51675e5459b3`
+
+- :ref:`exhale_function_matrix_8hpp_1a6f1765d4dd3ac229a4f6e97149d97af2`
+
+- :ref:`exhale_function_matrix_8hpp_1a72e44af56d9b9a1e27dad59bd86f8b46`
+
+- :ref:`exhale_function_matrix_8hpp_1afd4855559e142a2f784b5c069e5776fd`
+
+- :ref:`exhale_function_matrix_8hpp_1a971e8c4f52a838c826bf5662f2995190`
+
+- :ref:`exhale_function_matrix_8hpp_1a536d0d3816b72a0a3bc4f1c98cbf5a35`
+
+- :ref:`exhale_function_matrix_8hpp_1ac0b1c261a3f21a1fe34a36b34286975c`
+
+- :ref:`exhale_function_matrix_8hpp_1a815860bce2568b7b5ecd15d687219412`
+
+- :ref:`exhale_function_matrix_8hpp_1ab758acad2701555bc391b5b54ba2b751`
+
+- :ref:`exhale_function_matrix_8hpp_1aac8bca984c5f124bf9199c2ffb7c6295`
+
+- :ref:`exhale_function_matrix_8hpp_1a1cface03674d9b2f7785e3cedca1eb79`
+
+- :ref:`exhale_function_matrix_8hpp_1a1d387a93e26845f06381a51295f5e041`
+
+- :ref:`exhale_function_matrix_8hpp_1ac723b9619b59909bdb28d3ad83160a4a`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_matrix_8hpp_1a3393eccdd0687046894bc0cc8d63ca9d`
+
+- :ref:`exhale_typedef_matrix_8hpp_1aafaf09993ac777433f8025569aab37fa`
+
+- :ref:`exhale_typedef_matrix_8hpp_1a471043c945e78a0f0838ee7005f86544`
+
+- :ref:`exhale_typedef_matrix_8hpp_1ac2874d3c451c1a9077d5836787acb334`
+
+- :ref:`exhale_typedef_matrix_8hpp_1af4d582775d36c2e21bd9eed6c19b995d`
+
+- :ref:`exhale_typedef_matrix_8hpp_1a928564b2a161169e9c8f42c089f07bce`
+
+- :ref:`exhale_typedef_matrix_8hpp_1af93bb8811b0119a144fe0fc73ac9436f`
+
+- :ref:`exhale_typedef_matrix_8hpp_1a312bdaf3916ce5ef6dcf171134aaa3e4`
+

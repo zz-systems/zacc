@@ -1,0 +1,13 @@
+.. _exhale_typedef_avx2_2float32_8impl_8hpp_1aace45b537919cf0866bb06c29dcdb891:
+
+Typedef zacc::backend::avx2::ibfloat32
+======================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float32.impl.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::backend::avx2::ibfloat32

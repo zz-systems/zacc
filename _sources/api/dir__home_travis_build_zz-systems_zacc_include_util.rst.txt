@@ -1,0 +1,40 @@
+.. _dir__home_travis_build_zz-systems_zacc_include_util:
+
+
+Directory util
+==============
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include>` (``/home/travis/build/zz-systems/zacc/include``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/travis/build/zz-systems/zacc/include/util``
+
+Subdirectories
+--------------
+
+- :ref:`dir__home_travis_build_zz-systems_zacc_include_util_testing`
+- :ref:`dir__home_travis_build_zz-systems_zacc_include_util_type`
+
+
+Files
+-----
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_bithacks.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_cloneable.h`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_collections.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_color.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_delegate.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_io.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_literals.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_macros.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_memory.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_operators.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_option_parser.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_serializable.h`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_uuid.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_vector.hpp`
+
+

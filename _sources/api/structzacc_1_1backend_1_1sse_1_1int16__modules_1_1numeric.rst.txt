@@ -1,0 +1,31 @@
+.. _exhale_struct_structzacc_1_1backend_1_1sse_1_1int16__modules_1_1numeric:
+
+Template Struct numeric
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int16.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::traits::numeric< Interface, Composed, Boolean >`` (:ref:`exhale_struct_structzacc_1_1traits_1_1numeric`)
+
+
+Derived Type
+************
+
+- ``public zacc::backend::sse::zint16< FeatureMask >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1zint16`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::sse::int16_modules::numeric
+   :members:
+   :protected-members:
+   :undoc-members:

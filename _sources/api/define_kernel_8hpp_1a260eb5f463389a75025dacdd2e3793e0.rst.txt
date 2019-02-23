@@ -1,0 +1,13 @@
+.. _exhale_define_kernel_8hpp_1a260eb5f463389a75025dacdd2e3793e0:
+
+Define REGISTER_KERNEL
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: REGISTER_KERNEL

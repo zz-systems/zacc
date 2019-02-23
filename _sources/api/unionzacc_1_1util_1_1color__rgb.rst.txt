@@ -1,0 +1,13 @@
+.. _exhale_union_unionzacc_1_1util_1_1color__rgb:
+
+Union color_rgb
+===============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_color.hpp`
+
+
+Union Documentation
+-------------------
+
+
+.. doxygenunion:: zacc::util::color_rgb

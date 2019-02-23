@@ -1,0 +1,13 @@
+.. _exhale_function_gtest__ext_8hpp_1a45eddba3db0879dbfb5805c632e46b92:
+
+Template Function zacc::test::vexpect_near
+==========================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_testing_gtest_ext.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::test::vexpect_near(const char *, const char *, const char *, const T&, const U&, double)

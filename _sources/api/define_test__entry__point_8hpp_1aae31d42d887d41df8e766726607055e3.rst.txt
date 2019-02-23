@@ -1,0 +1,13 @@
+.. _exhale_define_test__entry__point_8hpp_1aae31d42d887d41df8e766726607055e3:
+
+Define ZACC_DLL_API
+===================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_testing_test_entry_point.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ZACC_DLL_API

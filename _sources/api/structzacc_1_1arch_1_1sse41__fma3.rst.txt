@@ -1,0 +1,31 @@
+.. _exhale_struct_structzacc_1_1arch_1_1sse41__fma3:
+
+Struct arch::sse41_fma3
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_arch.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_struct_structzacc_1_1arch`.
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public std::integral_constant< uint64_t, feature(feature::sse2(), feature::sse3(), feature::ssse3(), feature::sse41(), feature::fma3())>``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::arch::sse41_fma3
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1acebcbb7d38ceabebc9e5377b5cf4f610:
+
+Template Function zacc::has_feature_v
+=====================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_feature.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::has_feature_v(feature)

@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1bit__shl:
+
+Template Struct bit_shl
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_operators.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::bit_shl
+   :members:
+   :protected-members:
+   :undoc-members:

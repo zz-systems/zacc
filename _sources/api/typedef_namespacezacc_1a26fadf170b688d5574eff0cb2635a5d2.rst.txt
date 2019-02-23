@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a26fadf170b688d5574eff0cb2635a5d2:
+
+Typedef zacc::is_double
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::is_double

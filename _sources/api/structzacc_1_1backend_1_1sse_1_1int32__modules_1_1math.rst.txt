@@ -1,0 +1,31 @@
+.. _exhale_struct_structzacc_1_1backend_1_1sse_1_1int32__modules_1_1math:
+
+Template Struct math
+====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int32.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::traits::math< Interface, Composed, Boolean >`` (:ref:`exhale_struct_structzacc_1_1traits_1_1math`)
+
+
+Derived Type
+************
+
+- ``public zacc::backend::sse::zint32< FeatureMask >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1zint32`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::sse::int32_modules::math
+   :members:
+   :protected-members:
+   :undoc-members:

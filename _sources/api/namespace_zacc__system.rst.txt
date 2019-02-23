@@ -1,0 +1,48 @@
+
+.. _namespace_zacc__system:
+
+Namespace zacc::system
+======================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1entrypoint`
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1kernel`
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1kernel__activator`
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1kernel__traits`
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1kernel__traits_1_1kt`
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1make__void`
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1managed__library`
+
+- :ref:`exhale_class_classzacc_1_1system_1_1kernel__dispatcher`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_kernel__dispatcher_8hpp_1a115bca3e15e7d143bac428e236b26b00`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_kernel_8hpp_1a7125b638a6c4661bc6aaf5e6251b651f`

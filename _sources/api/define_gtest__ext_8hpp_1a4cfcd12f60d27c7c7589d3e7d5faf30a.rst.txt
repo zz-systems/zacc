@@ -1,0 +1,13 @@
+.. _exhale_define_gtest__ext_8hpp_1a4cfcd12f60d27c7c7589d3e7d5faf30a:
+
+Define VASSERT_EQ
+=================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_testing_gtest_ext.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: VASSERT_EQ

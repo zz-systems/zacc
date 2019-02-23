@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1abec355180711f1f46727f2555524fb8b:
+
+Template Function zacc::bitsof(T&&)
+===================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_bithacks.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::bitsof(T&&)

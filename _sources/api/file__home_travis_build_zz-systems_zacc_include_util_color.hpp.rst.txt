@@ -1,0 +1,64 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_util_color.hpp:
+
+File color.hpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_util>` (``/home/travis/build/zz-systems/zacc/include/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/util/color.hpp``)
+--------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_util_color.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``math/interpolation.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_math_interpolation.hpp`)
+
+- ``util/algorithm.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`)
+
+- ``vector`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_vector.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__util`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1util_1_1gradient1D`
+
+
+Unions
+------
+
+
+- :ref:`exhale_union_unionzacc_1_1util_1_1color__rgb`
+

@@ -1,0 +1,81 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp:
+
+File kernel.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_system>` (``/home/travis/build/zz-systems/zacc/include/system``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/system/kernel.hpp``)
+-----------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``system/entrypoint.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_entrypoint.hpp`)
+
+- ``traits/allocatable.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_allocatable.hpp`)
+
+- ``zacc.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_zacc.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__system`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1kernel`
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1kernel__traits`
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1kernel__traits_1_1kt`
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1kernel__traits_1_1kt_3_01T_00_01void__t_3_01decltype_07T_1_1compatible_08_4_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1make__void`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_kernel_8hpp_1a628ddb591fd5db4ae9e7de66ffbeffa2`
+
+- :ref:`exhale_define_kernel_8hpp_1a260eb5f463389a75025dacdd2e3793e0`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_kernel_8hpp_1a7125b638a6c4661bc6aaf5e6251b651f`
+

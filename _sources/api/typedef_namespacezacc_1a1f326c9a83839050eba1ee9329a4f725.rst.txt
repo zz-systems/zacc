@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a1f326c9a83839050eba1ee9329a4f725:
+
+Typedef zacc::is_scalar
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::is_scalar

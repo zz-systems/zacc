@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1backend_1_1avx_1_1zfloat64:
+
+Template Struct zfloat64
+========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float64.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::backend::avx::__zfloat64< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zfloat64_1_1impl`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::avx::zfloat64
+   :members:
+   :protected-members:
+   :undoc-members:

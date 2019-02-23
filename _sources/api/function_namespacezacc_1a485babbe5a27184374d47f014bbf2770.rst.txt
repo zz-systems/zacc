@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a485babbe5a27184374d47f014bbf2770:
+
+Function zacc::aligned_free
+===========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_memory.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::aligned_free(void *)

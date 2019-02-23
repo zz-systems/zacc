@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1system_1_1kernel__activator:
+
+Struct kernel_activator
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel_activator.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::system::kernel_activator
+   :members:
+   :protected-members:
+   :undoc-members:

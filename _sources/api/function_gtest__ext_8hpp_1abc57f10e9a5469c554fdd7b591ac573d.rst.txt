@@ -1,0 +1,13 @@
+.. _exhale_function_gtest__ext_8hpp_1abc57f10e9a5469c554fdd7b591ac573d:
+
+Template Function zacc::test::vassert_eq(const char \*, const char \*, const T&, const U&)
+==========================================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_testing_gtest_ext.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::test::vassert_eq(const char *, const char *, const T&, const U&)

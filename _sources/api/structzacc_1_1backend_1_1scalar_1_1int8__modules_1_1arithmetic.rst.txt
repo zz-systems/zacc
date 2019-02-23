@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1backend_1_1scalar_1_1int8__modules_1_1arithmetic:
+
+Template Struct arithmetic
+==========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::traits::arithmetic< Interface, Composed, Boolean >`` (:ref:`exhale_struct_structzacc_1_1traits_1_1arithmetic`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::scalar::int8_modules::arithmetic
+   :members:
+   :protected-members:
+   :undoc-members:

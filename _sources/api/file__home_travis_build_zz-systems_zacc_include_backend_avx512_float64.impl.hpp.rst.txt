@@ -1,0 +1,133 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_backend_avx512_float64.impl.hpp:
+
+File float64.impl.hpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_backend_avx512>` (``/home/travis/build/zz-systems/zacc/include/backend/avx512``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/backend/avx512/float64.impl.hpp``)
+-------------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_backend_avx512_float64.impl.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``backend/intrin.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_intrin.hpp`)
+
+- ``backend/zval.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_zval.hpp`)
+
+- ``cmath``
+
+- ``traits/arithmetic.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_arithmetic.hpp`)
+
+- ``traits/bitwise.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_bitwise.hpp`)
+
+- ``traits/common.hpp``
+
+- ``traits/comparable.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_comparable.hpp`)
+
+- ``traits/conditional.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_conditional.hpp`)
+
+- ``traits/constructable.hpp``
+
+- ``traits/io.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_io.hpp`)
+
+- ``traits/logical.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_logical.hpp`)
+
+- ``type_traits`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+- ``util/macros.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_macros.hpp`)
+
+- ``util/memory.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_memory.hpp`)
+
+- ``util/type/type_composition.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_composition.hpp`)
+
+- ``util/type/type_traits.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_types.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__backend`
+
+- :ref:`namespace_zacc__backend__avx512`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bfloat64_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zfloat64_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__float64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__float64_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1bfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__arithmetic`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__arithmetic_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__bitwise`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__bitwise_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__comparison`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__comparison_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__conditional`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__conditional_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__construction`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__construction_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__io`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__io_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__logical`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__logical_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1zfloat64`
+

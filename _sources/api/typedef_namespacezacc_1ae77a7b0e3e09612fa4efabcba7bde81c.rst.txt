@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1ae77a7b0e3e09612fa4efabcba7bde81c:
+
+Typedef zacc::zint32
+====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::zint32

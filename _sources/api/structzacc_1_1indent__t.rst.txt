@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1indent__t:
+
+Struct indent_t
+===============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_io.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::indent_t
+   :members:
+   :protected-members:
+   :undoc-members:

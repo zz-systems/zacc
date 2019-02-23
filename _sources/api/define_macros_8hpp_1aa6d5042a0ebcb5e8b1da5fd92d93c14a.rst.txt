@@ -1,0 +1,13 @@
+.. _exhale_define_macros_8hpp_1aa6d5042a0ebcb5e8b1da5fd92d93c14a:
+
+Define TRAIT2
+=============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_macros.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: TRAIT2

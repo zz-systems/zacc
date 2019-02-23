@@ -1,0 +1,30 @@
+.. _exhale_struct_structzacc_1_1math_1_1zcomplex:
+
+Template Struct zcomplex
+========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_complex.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Types
+**********
+
+- ``public zacc::zval< izcomplex< T > >`` (:ref:`exhale_struct_structzacc_1_1zval`)
+- ``public zacc::math::modules::printable< izcomplex< T >, zcomplex< T >, bval_t< T > >`` (:ref:`exhale_struct_structzacc_1_1math_1_1modules_1_1printable`)
+- ``public zacc::math::modules::io< izcomplex< T >, zcomplex< T >, bval_t< T > >`` (:ref:`exhale_struct_structzacc_1_1math_1_1modules_1_1io`)
+- ``public zacc::math::modules::arithmetic< izcomplex< T >, zcomplex< T >, bval_t< T > >`` (:ref:`exhale_struct_structzacc_1_1math_1_1modules_1_1arithmetic`)
+- ``public zacc::math::modules::equatable< izcomplex< T >, zcomplex< T >, bval_t< T > >`` (:ref:`exhale_struct_structzacc_1_1math_1_1modules_1_1equatable`)
+- ``public zacc::math::modules::conditional< izcomplex< T >, zcomplex< T >, bval_t< T > >`` (:ref:`exhale_struct_structzacc_1_1math_1_1modules_1_1conditional`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::math::zcomplex
+   :members:
+   :protected-members:
+   :undoc-members:

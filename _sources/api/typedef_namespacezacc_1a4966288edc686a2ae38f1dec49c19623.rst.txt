@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a4966288edc686a2ae38f1dec49c19623:
+
+Typedef zacc::all_true
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::all_true

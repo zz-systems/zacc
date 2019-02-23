@@ -1,0 +1,13 @@
+.. _exhale_function_interpolation_8hpp_1a1b745760d51b6281138f36ed962aa11a:
+
+Template Function zacc::math::cerp
+==================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_interpolation.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::cerp(vreal_t, vreal_t, vreal_t, vreal_t, vreal_t)

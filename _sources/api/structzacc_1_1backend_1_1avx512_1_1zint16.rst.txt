@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1backend_1_1avx512_1_1zint16:
+
+Template Struct zint16
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int16.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::backend::avx512::__zint16< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zint16_1_1impl`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::avx512::zint16
+   :members:
+   :protected-members:
+   :undoc-members:

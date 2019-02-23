@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1____is:
+
+Template Struct __is
+====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public decltype_is::template test< T >``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::__is
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,13 @@
+.. _exhale_define_gtest__ext_8hpp_1ad9f15ce3dd7b6de1034193c782de75a3:
+
+Define ZTRACE_TEST_OUTPUT
+=========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_testing_gtest_ext.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ZTRACE_TEST_OUTPUT

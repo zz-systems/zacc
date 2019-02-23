@@ -1,0 +1,13 @@
+.. _exhale_variable_trigonometry_8hpp_1a2a4d9dbe481565d451e425a6cd5f1005:
+
+Variable zacc::math::Z_L2L
+==========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_trigonometry.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: zacc::math::Z_L2L

@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a519db820618d86e9b1436dd01a5d6634:
+
+Function zacc::newUUID
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_uuid.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::newUUID()

@@ -1,0 +1,13 @@
+.. _exhale_variable_namespacezacc_1abaf9416716cedb6b9c286ece9a264672:
+
+Variable zacc::size_v
+=====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: zacc::size_v

@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a2bc7481bdeff9a5251bfb16462436c46:
+
+Typedef zacc::view_t
+====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::view_t

@@ -1,0 +1,13 @@
+.. _exhale_typedef_sse_2int16_8impl_8hpp_1a5dc9b6759b79372dda3353410346c50e:
+
+Typedef zacc::backend::sse::izint16
+===================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int16.impl.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::backend::sse::izint16

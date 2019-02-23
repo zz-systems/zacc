@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a1e2c5ee4637387ca248e9c915fecc19a:
+
+Template Function zacc::make_shared
+===================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_memory.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::make_shared(Args&&...)

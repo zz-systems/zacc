@@ -1,0 +1,67 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_util_collections.hpp:
+
+File collections.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_util>` (``/home/travis/build/zz-systems/zacc/include/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/util/collections.hpp``)
+--------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_util_collections.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``map``
+
+- ``util/memory.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_memory.hpp`)
+
+- ``util/type/type_casts.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_casts.hpp`)
+
+- ``vector`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_vector.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_zval.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacezacc_1a64c37f2b00192a0a5e51189966eb8557`
+
+- :ref:`exhale_typedef_namespacezacc_1af0fda6b8bd620233947c805230dd185c`
+

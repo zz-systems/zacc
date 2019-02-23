@@ -1,0 +1,13 @@
+.. _exhale_typedef_matrix_8hpp_1ac2874d3c451c1a9077d5836787acb334:
+
+Typedef zacc::math::mat3x3
+==========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::math::mat3x3

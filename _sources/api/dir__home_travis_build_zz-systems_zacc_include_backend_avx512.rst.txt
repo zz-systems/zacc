@@ -1,0 +1,25 @@
+.. _dir__home_travis_build_zz-systems_zacc_include_backend_avx512:
+
+
+Directory avx512
+================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_backend>` (``/home/travis/build/zz-systems/zacc/include/backend``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/travis/build/zz-systems/zacc/include/backend/avx512``
+
+
+Files
+-----
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_float32.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_float64.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int16.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int32.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int8.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_types.hpp`
+
+

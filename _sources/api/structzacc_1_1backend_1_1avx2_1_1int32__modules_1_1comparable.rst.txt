@@ -1,0 +1,25 @@
+.. _exhale_struct_structzacc_1_1backend_1_1avx2_1_1int32__modules_1_1comparable:
+
+Template Struct comparable
+==========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int32.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::traits::comparable< Interface, Composed, Boolean >`` (:ref:`exhale_struct_structzacc_1_1traits_1_1comparable`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::avx2::int32_modules::comparable
+   :members:
+   :protected-members:
+   :undoc-members:

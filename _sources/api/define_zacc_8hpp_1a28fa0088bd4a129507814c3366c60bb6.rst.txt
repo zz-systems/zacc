@@ -1,0 +1,13 @@
+.. _exhale_define_zacc_8hpp_1a28fa0088bd4a129507814c3366c60bb6:
+
+Define ALIGNED
+==============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_zacc.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ALIGNED

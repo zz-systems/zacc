@@ -1,0 +1,238 @@
+
+.. _namespace_zacc__backend__avx512:
+
+Namespace zacc::backend::avx512
+===============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bfloat32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bfloat32_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bfloat64_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bint16`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bint16_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bint32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bint32_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bint8`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____bint8_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zfloat32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zfloat32_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zfloat64_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zint16`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zint16_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zint32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zint32_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zint8`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zint8_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__float32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__float32_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__float64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__float64_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__int16`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__int16_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__int32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__int32_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__int8`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__int8_1_1impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1bfloat32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1bfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1bint16`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1bint32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1bint8`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__arithmetic`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__arithmetic_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__bitwise`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__bitwise_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__comparison`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__comparison_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__conditional`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__conditional_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__construction`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__construction_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__io`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__io_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__logical`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__logical_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__arithmetic`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__arithmetic_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__bitwise`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__bitwise_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__comparison`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__comparison_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__conditional`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__conditional_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__construction`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__construction_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__io`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__io_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__logical`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float64__logical_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__arithmetic`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__arithmetic_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__bitwise`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__bitwise_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__comparison`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__comparison_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__conditional`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__conditional_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__construction`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__construction_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__io`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__io_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__logical`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int16__logical_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__arithmetic`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__arithmetic_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__bitwise`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__bitwise_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__comparison`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__comparison_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__conditional`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__conditional_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__construction`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__construction_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__io`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__io_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__logical`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int32__logical_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__arithmetic`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__arithmetic_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__bitwise`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__bitwise_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__comparison`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__comparison_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__conditional`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__conditional_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__construction`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__construction_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__io`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__io_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__logical`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1int8__logical_1_1____impl`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1zfloat32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1zfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1zint16`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1zint32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1zint8`

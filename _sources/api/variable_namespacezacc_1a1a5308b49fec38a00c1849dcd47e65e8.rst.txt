@@ -1,0 +1,13 @@
+.. _exhale_variable_namespacezacc_1a1a5308b49fec38a00c1849dcd47e65e8:
+
+Variable zacc::has_integer_types_v
+==================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_feature.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: zacc::has_integer_types_v

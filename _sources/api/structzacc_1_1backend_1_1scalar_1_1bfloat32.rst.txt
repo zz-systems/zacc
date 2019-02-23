@@ -1,0 +1,30 @@
+.. _exhale_struct_structzacc_1_1backend_1_1scalar_1_1bfloat32:
+
+Template Struct bfloat32
+========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float32.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Types
+**********
+
+- ``public zacc::zval< ibfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1zval`)
+- ``public zacc::printable< bfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1printable`)
+- ``public zacc::backend::scalar::float32_modules::io< ibfloat32< FeatureMask >, bfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1io`)
+- ``public zacc::backend::scalar::float32_modules::bitwise< ibfloat32< FeatureMask >, bfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1bitwise`)
+- ``public zacc::backend::scalar::float32_modules::logical< ibfloat32< FeatureMask >, bfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1logical`)
+- ``public zacc::backend::scalar::float32_modules::equatable< ibfloat32< FeatureMask >, bfloat32< FeatureMask >, bfloat32< FeatureMask > >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1scalar_1_1float32__modules_1_1equatable`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::scalar::bfloat32
+   :members:
+   :protected-members:
+   :undoc-members:

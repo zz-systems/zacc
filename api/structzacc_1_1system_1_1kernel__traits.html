@@ -1,0 +1,190 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Template Struct kernel_traits &#8212; ZACC  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Template Struct kernel_traits::kt" href="structzacc_1_1system_1_1kernel__traits_1_1kt.html" />
+    <link rel="prev" title="Struct kernel_activator" href="structzacc_1_1system_1_1kernel__activator.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="structzacc_1_1system_1_1kernel__traits_1_1kt.html" title="Template Struct kernel_traits::kt"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="structzacc_1_1system_1_1kernel__activator.html" title="Struct kernel_activator"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" accesskey="U">ZACC API</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-struct-kernel-traits">
+<span id="exhale-struct-structzacc-1-1system-1-1kernel-traits"></span><h1>Template Struct kernel_traits<a class="headerlink" href="#template-struct-kernel-traits" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Defined in <a class="reference internal" href="file__home_travis_build_zz-systems_zacc_include_system_kernel.hpp.html#file-home-travis-build-zz-systems-zacc-include-system-kernel-hpp"><span class="std std-ref">File kernel.hpp</span></a></li>
+</ul>
+<div class="section" id="nested-relationships">
+<h2>Nested Relationships<a class="headerlink" href="#nested-relationships" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="nested-types">
+<h3>Nested Types<a class="headerlink" href="#nested-types" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference internal" href="structzacc_1_1system_1_1kernel__traits_1_1kt.html#exhale-struct-structzacc-1-1system-1-1kernel-traits-1-1kt"><span class="std std-ref">Template Struct kernel_traits::kt</span></a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="struct-documentation">
+<h2>Struct Documentation<a class="headerlink" href="#struct-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4N4zacc6system13kernel_traitsE">
+<span id="_CPPv3N4zacc6system13kernel_traitsE"></span><span id="_CPPv2N4zacc6system13kernel_traitsE"></span><span id="zacc::system::kernel_traits"></span><span class="target" id="structzacc_1_1system_1_1kernel__traits"></span><em class="property">template </em>&lt;<em class="property">typename</em> KernelInterface&gt;<br /><em class="property">struct </em><code class="descname">kernel_traits</code><a class="headerlink" href="#_CPPv4N4zacc6system13kernel_traitsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Kernel traits - extract information from kernel <dl class="docutils">
+<dt><strong>Template Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">KernelInterface</span></code>: </li>
+</ul>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Types</p>
+<dl class="type">
+<dt id="_CPPv4IEN4zacc6system13kernel_traitsI15KernelInterfaceE6traitsE">
+<span id="_CPPv3IEN4zacc6system13kernel_traitsI15KernelInterfaceE6traitsE"></span><span id="_CPPv2IEN4zacc6system13kernel_traitsI15KernelInterfaceE6traitsE"></span>template&lt;&gt;<br /><span class="target" id="structzacc_1_1system_1_1kernel__traits_1a237e629fdb2480b20748c49cc4078837"></span><em class="property">using </em><code class="descname">traits</code> = <a class="reference internal" href="structzacc_1_1function__traits.html#_CPPv4N4zacc15function_traitsE" title="zacc::function_traits">function_traits</a>&lt;decltype(&amp;KernelInterface::run)&gt;<a class="headerlink" href="#_CPPv4IEN4zacc6system13kernel_traitsI15KernelInterfaceE6traitsE" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IEN4zacc6system13kernel_traitsI15KernelInterfaceE16output_containerE">
+<span id="_CPPv3IEN4zacc6system13kernel_traitsI15KernelInterfaceE16output_containerE"></span><span id="_CPPv2IEN4zacc6system13kernel_traitsI15KernelInterfaceE16output_containerE"></span>template&lt;&gt;<br /><span class="target" id="structzacc_1_1system_1_1kernel__traits_1a24100928232bfa999e0cfb28d4db2b76"></span><em class="property">using </em><code class="descname">output_container</code> = std::remove_reference_t&lt;<em class="property">typename</em> <a class="reference internal" href="#_CPPv4IEN4zacc6system13kernel_traitsI15KernelInterfaceE6traitsE" title="zacc::system::kernel_traits&lt;KernelInterface&gt;::traits">traits</a>::template argument&lt;1&gt;::type&gt;<a class="headerlink" href="#_CPPv4IEN4zacc6system13kernel_traitsI15KernelInterfaceE16output_containerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Output container. </p>
+</dd></dl>
+
+<dl class="type">
+<dt id="_CPPv4IEN4zacc6system13kernel_traitsI15KernelInterfaceE15input_containerE">
+<span id="_CPPv3IEN4zacc6system13kernel_traitsI15KernelInterfaceE15input_containerE"></span><span id="_CPPv2IEN4zacc6system13kernel_traitsI15KernelInterfaceE15input_containerE"></span>template&lt;&gt;<br /><span class="target" id="structzacc_1_1system_1_1kernel__traits_1a71eac7bcf7a59020546dd41a6cf75121"></span><em class="property">using </em><code class="descname">input_container</code> = std::remove_reference_t&lt;<em class="property">typename</em> <a class="reference internal" href="#_CPPv4IEN4zacc6system13kernel_traitsI15KernelInterfaceE6traitsE" title="zacc::system::kernel_traits&lt;KernelInterface&gt;::traits">traits</a>::template argument&lt;(traits::arity &gt; 2 ? 2 : 1)&gt;::type&gt;<a class="headerlink" href="#_CPPv4IEN4zacc6system13kernel_traitsI15KernelInterfaceE15input_containerE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Input container (same as output container if not specified) </p>
+</dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="function">
+<dt id="_CPPv4N4zacc6system13kernel_traits11kernel_nameEv">
+<span id="_CPPv3N4zacc6system13kernel_traits11kernel_nameEv"></span><span id="_CPPv2N4zacc6system13kernel_traits11kernel_nameEv"></span><span id="zacc::system::kernel_traits::kernel_nameCE"></span><span class="target" id="structzacc_1_1system_1_1kernel__traits_1ac91d9c081d1ef6537568dd3fe9681358"></span><em class="property">static</em> <em class="property">constexpr</em> auto <code class="descname">kernel_name</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4zacc6system13kernel_traits11kernel_nameEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>Kernel name. </p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4zacc6system13kernel_traits10compatibleEv">
+<span id="_CPPv3N4zacc6system13kernel_traits10compatibleEv"></span><span id="_CPPv2N4zacc6system13kernel_traits10compatibleEv"></span><span id="zacc::system::kernel_traits::compatibleCE"></span><span class="target" id="structzacc_1_1system_1_1kernel__traits_1a203084eb5e4190ffcb6b0d6f419e13e2"></span><em class="property">static</em> <em class="property">constexpr</em> <a class="reference internal" href="structzacc_1_1feature.html#_CPPv4N4zacc7featureE" title="zacc::feature">feature</a> <code class="descname">compatible</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4zacc6system13kernel_traits10compatibleEv" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<dl class="class">
+<dt id="_CPPv4N4zacc6system13kernel_traits2ktE">
+<span id="_CPPv3N4zacc6system13kernel_traits2ktE"></span><span id="_CPPv2N4zacc6system13kernel_traits2ktE"></span><span id="zacc::system::kernel_traits::kt"></span><span class="target" id="structzacc_1_1system_1_1kernel__traits_1_1kt"></span><em class="property">template </em>&lt;<em class="property">typename</em> T, typename = void&gt;<br /><em class="property">struct </em><code class="descname">kt</code><a class="headerlink" href="#_CPPv4N4zacc6system13kernel_traits2ktE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="function">
+<dt id="_CPPv4IEN4zacc6system13kernel_traitsI15KernelInterfaceE2kt10compatibleE7featurev">
+<span id="_CPPv3IEN4zacc6system13kernel_traitsI15KernelInterfaceE2kt10compatibleEv"></span><span id="_CPPv2IEN4zacc6system13kernel_traitsI15KernelInterfaceE2kt10compatibleEv"></span><span class="target" id="structzacc_1_1system_1_1kernel__traits_1_1kt_1a58a563dc62edf8b124ed984b36684cea"></span>template&lt;&gt;<br /><em class="property">static</em> <em class="property">constexpr</em> <a class="reference internal" href="structzacc_1_1feature.html#_CPPv4N4zacc7featureE" title="zacc::feature">feature</a> <code class="descname">compatible</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4IEN4zacc6system13kernel_traitsI15KernelInterfaceE2kt10compatibleE7featurev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="_CPPv4IEN4zacc6system13kernel_traits2ktI1T6void_tIDTN1T10compatibleEEEEE">
+<span id="_CPPv3IEN4zacc6system13kernel_traits2ktI1T6void_tIDTN1T10compatibleEEEEE"></span><span id="_CPPv2IEN4zacc6system13kernel_traits2ktI1T6void_tIDTN1T10compatibleEEEEE"></span><span class="target" id="structzacc_1_1system_1_1kernel__traits_1_1kt_3_01T_00_01void__t_3_01decltype_07T_1_1compatible_08_4_01_4"></span><em class="property">template </em>&lt;<em class="property">typename</em> T&gt;<br />template&lt;&gt;<br /><em class="property">struct </em><code class="descname">kt</code>&lt;T, void_t&lt;decltype(T::compatible)&gt;&gt;<a class="headerlink" href="#_CPPv4IEN4zacc6system13kernel_traits2ktI1T6void_tIDTN1T10compatibleEEEEE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Static Functions</p>
+<dl class="function">
+<dt id="_CPPv4IEN4zacc6system13kernel_traitsI15KernelInterfaceE2kt10compatibleE7featurev">
+<span id="_CPPv3IEN4zacc6system13kernel_traitsI15KernelInterfaceE2kt10compatibleEv"></span><span class="target" id="structzacc_1_1system_1_1kernel__traits_1_1kt_3_01T_00_01void__t_3_01decltype_07T_1_1compatible_08_4_01_4_1aaca55a03b7d9046110936bfc348ecff7"></span>template&lt;&gt;<br /><em class="property">static</em> <em class="property">constexpr</em> <a class="reference internal" href="structzacc_1_1feature.html#_CPPv4N4zacc7featureE" title="zacc::feature">feature</a> <code class="descname">compatible</code><span class="sig-paren">(</span><span class="sig-paren">)</span><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="structzacc_1_1system_1_1kernel__activator.html"
+                        title="previous chapter">Struct kernel_activator</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="structzacc_1_1system_1_1kernel__traits_1_1kt.html"
+                        title="next chapter">Template Struct kernel_traits::kt</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="structzacc_1_1system_1_1kernel__traits_1_1kt.html" title="Template Struct kernel_traits::kt"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="structzacc_1_1system_1_1kernel__activator.html" title="Struct kernel_activator"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Sergej Zuyev.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,22 @@
+.. _exhale_struct_structzacc_1_1aligned__allocator_1_1rebind:
+
+Template Struct aligned_allocator::rebind
+=========================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_memory.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_struct_structzacc_1_1aligned__allocator`.
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::aligned_allocator::rebind
+   :members:
+   :protected-members:
+   :undoc-members:

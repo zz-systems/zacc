@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1ab2c8a046702fddb620eb7c478e01ebe9:
+
+Typedef zacc::resolve_reference_t
+=================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::resolve_reference_t

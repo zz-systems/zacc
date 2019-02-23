@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a8f8815170b382e3f785e793b970ee26f:
+
+Template Function zacc::operator>>(const option&, T&)
+=====================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_option_parser.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::operator>>(const option&, T&)

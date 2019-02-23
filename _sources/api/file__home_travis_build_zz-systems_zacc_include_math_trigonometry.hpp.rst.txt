@@ -1,0 +1,102 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_math_trigonometry.hpp:
+
+File trigonometry.hpp
+=====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_math>` (``/home/travis/build/zz-systems/zacc/include/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/math/trigonometry.hpp``)
+---------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_math_trigonometry.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``math/constants.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_math_constants.hpp`)
+
+- ``math/fundamental.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_math_fundamental.hpp`)
+
+- ``system/dispatched_arch.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`)
+
+- ``util/algorithm.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__math`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_trigonometry_8hpp_1a287b087396248f1bde0f7944b3b39543`
+
+- :ref:`exhale_function_trigonometry_8hpp_1a510dba2cbdd1cdf1d721e96614a6d15d`
+
+- :ref:`exhale_function_trigonometry_8hpp_1a3305f7ca8c1193d343282ed8fd874d11`
+
+- :ref:`exhale_function_trigonometry_8hpp_1a52fa5925d802747d7d1af5df6d637296`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a942f6ada53667d4a012ca56554f65dcf`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1ab65a8d6483d2771b6df787cc0a9c3a33`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a2a4d9dbe481565d451e425a6cd5f1005`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1abc1597eecb3e252759cd5b7f39675c1a`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a7a05e2692d6f9e33ced95f57a277a6fe`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1ae26ca8aeeed03b451525d89e71b5a868`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a924d61f23990843e7132643ff0871f14`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a5ab96c0ad7a6c90a7d43f18b0f7741cd`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a858f1dccc0d5e59865e7ad712ad579e0`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a003890f5861741bb647928444fa7a2f2`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a77c8407159aa15bd904d3a7a6e313c50`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1ac814b81cf0362fa98d274ab68aaf6205`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a062f1d61a8fda76c95b6d46940260f07`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a338bc3f1d35a513d88ffd92fabe5e086`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1a79866e3d30fb9fbbed4e8d6655032c2d`
+
+- :ref:`exhale_variable_trigonometry_8hpp_1af740d44216aa97195d994ebeb5a4f120`
+

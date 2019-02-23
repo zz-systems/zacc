@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1string__view:
+
+Struct string_view
+==================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_arch.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::string_view
+   :members:
+   :protected-members:
+   :undoc-members:

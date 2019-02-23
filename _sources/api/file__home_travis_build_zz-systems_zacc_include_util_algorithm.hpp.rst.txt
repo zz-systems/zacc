@@ -1,0 +1,167 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp:
+
+File algorithm.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_util>` (``/home/travis/build/zz-systems/zacc/include/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/util/algorithm.hpp``)
+------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``algorithm`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`)
+
+- ``backend/zval.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_zval.hpp`)
+
+- ``functional``
+
+- ``iostream``
+
+- ``iterator``
+
+- ``numeric`` (:ref:`file__home_travis_build_zz-systems_zacc_include_traits_numeric.hpp`)
+
+- ``regex``
+
+- ``string``
+
+- ``type_traits`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+- ``util/type/type_traits.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+- ``utility``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_trigonometry.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_arch.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatcher.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_feature.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_color.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_option_parser.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_testing_gtest_ext.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_zacc.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1resolve__iterator`
+
+- :ref:`exhale_struct_structzacc_1_1resolve__reference`
+
+- :ref:`exhale_class_classzacc_1_1zip__container`
+
+- :ref:`exhale_class_classzacc_1_1zip__iterator`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacezacc_1a7ecbf8461f94e1dbe324e6bbb9c08e2c`
+
+- :ref:`exhale_function_namespacezacc_1ad8f23038a68d6b3b591e402e8519872d`
+
+- :ref:`exhale_function_namespacezacc_1a268a850d941e0f6c31de50d394cbd533`
+
+- :ref:`exhale_function_namespacezacc_1a3145c14fa2be2afd026c6aaca2b59395`
+
+- :ref:`exhale_function_namespacezacc_1a133fc1c398772a83d02c37866e933d5e`
+
+- :ref:`exhale_function_namespacezacc_1a1654f1a12d1c90e115442fefbde68132`
+
+- :ref:`exhale_function_namespacezacc_1aea1b9fd8d56c9adac4193e7776164605`
+
+- :ref:`exhale_function_namespacezacc_1a56215121e2ed74515a849a65a549f828`
+
+- :ref:`exhale_function_namespacezacc_1aac7dad1cac616b49e6abcde7b25828f5`
+
+- :ref:`exhale_function_namespacezacc_1ae4fd8cab8c7c40a375fcee129cd9da1e`
+
+- :ref:`exhale_function_namespacezacc_1a0c6128e2cc764c08459be7cb40258310`
+
+- :ref:`exhale_function_namespacezacc_1a0fc7fbe23b1809ceebff22198550eabe`
+
+- :ref:`exhale_function_namespacezacc_1a8a8ca0bde9aea348096faf563deb85cd`
+
+- :ref:`exhale_function_namespacezacc_1a8ced9b9eb065da78ce4720513882e744`
+
+- :ref:`exhale_function_namespacezacc_1a448a8bae09fbd5a15ae6b42ad5a11c1a`
+
+- :ref:`exhale_function_namespacezacc_1a70ed796a6d977d3f0e78dd5c38475013`
+
+- :ref:`exhale_function_namespacezacc_1aa48194fa51d312cf6110c1f9b11b937e`
+
+- :ref:`exhale_function_namespacezacc_1a46c91bcd94986229a3182f0b9cd0bc1b`
+
+- :ref:`exhale_function_namespacezacc_1a9d577106b455ef1f9e7ac9e34f12b8ce`
+
+- :ref:`exhale_function_namespacezacc_1a59104b5729849b91172ef83b915c9ba5`
+
+- :ref:`exhale_function_namespacezacc_1a52aef3e92e069f9661067a9a73f8fef7`
+
+- :ref:`exhale_function_namespacezacc_1a10b849b069ed8b36195928c9d19fbf8b`
+
+- :ref:`exhale_function_namespacezacc_1aa90ff09026c4a01beb3d0b6cd1e9f79c`
+
+- :ref:`exhale_function_namespacezacc_1a9f1baa271f559b32e2549db0b35684fa`
+
+- :ref:`exhale_function_namespacezacc_1a3601279da7e2b56e3b464dd407427f93`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacezacc_1afe5b2d4314c0813c1ad84e533642edba`
+
+- :ref:`exhale_typedef_namespacezacc_1ab2c8a046702fddb620eb7c478e01ebe9`
+
+- :ref:`exhale_typedef_namespacezacc_1a993097c6032c36fe97a6a60da6875a0a`
+
+- :ref:`exhale_typedef_namespacezacc_1aadb81182dfaa29bb4817485b67f04593`
+

@@ -1,0 +1,25 @@
+.. _dir__home_travis_build_zz-systems_zacc_include_backend_scalar:
+
+
+Directory scalar
+================
+
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_backend>` (``/home/travis/build/zz-systems/zacc/include/backend``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+*Directory path:* ``/home/travis/build/zz-systems/zacc/include/backend/scalar``
+
+
+Files
+-----
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float32.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float64.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int16.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int32.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp`
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_types.hpp`
+
+

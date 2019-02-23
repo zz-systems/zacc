@@ -1,0 +1,22 @@
+.. _exhale_struct_structzacc_1_1traits_1_1conditional_1_1else__branch:
+
+Struct conditional::else_branch
+===============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_traits_conditional.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_struct_structzacc_1_1traits_1_1conditional`.
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::traits::conditional::else_branch
+   :members:
+   :protected-members:
+   :undoc-members:

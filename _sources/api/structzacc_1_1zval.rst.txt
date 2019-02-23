@@ -1,0 +1,40 @@
+.. _exhale_struct_structzacc_1_1zval:
+
+Template Struct zval
+====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_zval.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public Interface``
+
+
+Derived Types
+*************
+
+- ``public zacc::backend::avx512::__zval_float32< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__float32_1_1impl`)
+- ``public zacc::backend::avx512::__zval_float64< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__float64_1_1impl`)
+- ``public zacc::backend::avx512::__zval_int16< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__int16_1_1impl`)
+- ``public zacc::backend::avx512::__zval_int32< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__int32_1_1impl`)
+- ``public zacc::backend::avx512::__zval_int8< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1____zval__int8_1_1impl`)
+- ``public zacc::backend::avx::__zval_float32< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zval__float32_1_1impl`)
+- ``public zacc::backend::avx::__zval_float64< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zval__float64_1_1impl`)
+- ``public zacc::backend::avx::__zval_int16< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zval__int16_1_1impl`)
+- ``public zacc::backend::avx::__zval_int32< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zval__int32_1_1impl`)
+- ``public zacc::backend::avx::__zval_int8< arch >::impl`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zval__int8_1_1impl`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::zval
+   :members:
+   :protected-members:
+   :undoc-members:

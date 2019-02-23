@@ -1,0 +1,13 @@
+.. _exhale_define_util_2io_8hpp_1a6c9203d5d8d486f076e6020e32a5f44b:
+
+Define ZTRACE_BACKEND
+=====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_io.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: ZTRACE_BACKEND

@@ -1,0 +1,13 @@
+.. _exhale_typedef_complex_8hpp_1a42e3b19aba74a9f5b42fe0ce76cd6b01:
+
+Typedef zacc::math::izcomplex
+=============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_complex.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::math::izcomplex

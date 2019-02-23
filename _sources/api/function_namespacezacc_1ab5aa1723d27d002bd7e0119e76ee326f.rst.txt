@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1ab5aa1723d27d002bd7e0119e76ee326f:
+
+Function zacc::indent(std::ostream&, indent_t::indentation_t)
+=============================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_io.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::indent(std::ostream&, indent_t::indentation_t)

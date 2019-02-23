@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a9f47a630a39b7e1201fe56c1953df507:
+
+Typedef zacc::is_zval
+=====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::is_zval

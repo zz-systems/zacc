@@ -1,0 +1,144 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Program Listing for File intrin.ext.hpp &#8212; ZACC  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="File intrin.hpp" href="file__home_travis_build_zz-systems_zacc_include_backend_intrin.hpp.html" />
+    <link rel="prev" title="File intrin.ext.hpp" href="file__home_travis_build_zz-systems_zacc_include_backend_intrin.ext.hpp.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_backend_intrin.hpp.html" title="File intrin.hpp"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_backend_intrin.ext.hpp.html" title="File intrin.ext.hpp"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="file__home_travis_build_zz-systems_zacc_include_backend_intrin.ext.hpp.html" accesskey="U">File intrin.ext.hpp</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-intrin-ext-hpp">
+<span id="program-listing-file-home-travis-build-zz-systems-zacc-include-backend-intrin-ext-hpp"></span><h1>Program Listing for File intrin.ext.hpp<a class="headerlink" href="#program-listing-for-file-intrin-ext-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_travis_build_zz-systems_zacc_include_backend_intrin.ext.hpp.html#file-home-travis-build-zz-systems-zacc-include-backend-intrin-ext-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/travis/build/zz-systems/zacc/include/backend/intrin.ext.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#pragma once</span>
+
+<span class="cp">#if defined(__clang__)</span>
+
+<span class="cp">#elif defined(__GNUC__) || defined(__GNUG__)</span>
+
+<span class="cp">#if defined(ZACC_AVX) || defined(ZACC_AVX2)</span>
+<span class="kr">inline</span> <span class="n">__m256</span> <span class="nf">_mm256_set_m128</span><span class="p">(</span><span class="kr">__m128</span> <span class="n">hi</span><span class="p">,</span> <span class="kr">__m128</span> <span class="n">lo</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">_mm256_insertf128_ps</span><span class="p">(</span><span class="n">_mm256_castps128_ps256</span><span class="p">(</span><span class="n">hi</span><span class="p">),</span> <span class="p">(</span><span class="n">lo</span><span class="p">),</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+
+<span class="kr">inline</span> <span class="n">__m256d</span> <span class="nf">_mm256_set_m128d</span><span class="p">(</span><span class="kr">__m128d</span> <span class="n">hi</span><span class="p">,</span> <span class="kr">__m128d</span> <span class="n">lo</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">_mm256_insertf128_pd</span><span class="p">(</span><span class="n">_mm256_castpd128_pd256</span><span class="p">(</span><span class="n">hi</span><span class="p">),</span> <span class="p">(</span><span class="n">lo</span><span class="p">),</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="cp">#endif</span>
+
+<span class="cp">#elif defined(_MSC_VER)</span>
+
+<span class="cp">#endif</span>
+
+<span class="cp">#if !defined(_MSC_VER) &amp;&amp; (defined(ZACC_AVX) || defined(ZACC_AVX2))</span>
+
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">_mm256_test_all_ones</span><span class="p">(</span><span class="n">__m256</span> <span class="n">val</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">auto</span> <span class="n">ival</span> <span class="o">=</span> <span class="n">_mm256_castps_si256</span><span class="p">(</span><span class="n">val</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">_mm256_testc_si256</span><span class="p">(</span><span class="n">ival</span><span class="p">,</span> <span class="n">_mm256_cmpeq_epi32</span><span class="p">(</span><span class="n">ival</span><span class="p">,</span> <span class="n">ival</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="kr">inline</span> <span class="kt">bool</span> <span class="nf">_mm256_test_all_ones</span><span class="p">(</span><span class="n">__m256i</span> <span class="n">val</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">return</span> <span class="n">_mm256_testc_si256</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">_mm256_cmpeq_epi32</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="n">val</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="cp">#endif</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="file__home_travis_build_zz-systems_zacc_include_backend_intrin.ext.hpp.html"
+                        title="previous chapter">File intrin.ext.hpp</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="file__home_travis_build_zz-systems_zacc_include_backend_intrin.hpp.html"
+                        title="next chapter">File intrin.hpp</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_backend_intrin.hpp.html" title="File intrin.hpp"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_backend_intrin.ext.hpp.html" title="File intrin.ext.hpp"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="file__home_travis_build_zz-systems_zacc_include_backend_intrin.ext.hpp.html" >File intrin.ext.hpp</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Sergej Zuyev.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

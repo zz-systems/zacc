@@ -1,0 +1,84 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_util_testing_gtest_ext.hpp:
+
+File gtest_ext.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_util_testing>` (``/home/travis/build/zz-systems/zacc/include/util/testing``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/util/testing/gtest_ext.hpp``)
+--------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_util_testing_gtest_ext.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``gtest/gtest.h``
+
+- ``system/dispatched_arch.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`)
+
+- ``system/sysinfo.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_sysinfo.hpp`)
+
+- ``util/algorithm.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`)
+
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__test`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_gtest__ext_8hpp_1afd3cfea9c0d5354b127a13de8a047079`
+
+- :ref:`exhale_function_gtest__ext_8hpp_1abc57f10e9a5469c554fdd7b591ac573d`
+
+- :ref:`exhale_function_gtest__ext_8hpp_1a9eafd37ec3e8e24223c1e0e6bb2bb741`
+
+- :ref:`exhale_function_gtest__ext_8hpp_1a8c9b7e2ce1f49413058328c7164ee9dd`
+
+- :ref:`exhale_function_gtest__ext_8hpp_1a45eddba3db0879dbfb5805c632e46b92`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_gtest__ext_8hpp_1a642df0aac3307d57a69f0fb940d720d4`
+
+- :ref:`exhale_define_gtest__ext_8hpp_1a4cfcd12f60d27c7c7589d3e7d5faf30a`
+
+- :ref:`exhale_define_gtest__ext_8hpp_1a70e340267c9817cf7a5eded065fd2160`
+
+- :ref:`exhale_define_gtest__ext_8hpp_1afa348d4e6ae076622019fdd3bb26f8a4`
+
+- :ref:`exhale_define_gtest__ext_8hpp_1aa90ca4fbed602241605d7d6567fbc9a0`
+
+- :ref:`exhale_define_gtest__ext_8hpp_1ad9f15ce3dd7b6de1034193c782de75a3`
+

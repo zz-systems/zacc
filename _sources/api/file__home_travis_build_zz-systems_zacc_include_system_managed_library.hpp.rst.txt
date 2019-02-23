@@ -1,0 +1,71 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_system_managed_library.hpp:
+
+File managed_library.hpp
+========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_system>` (``/home/travis/build/zz-systems/zacc/include/system``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/system/managed_library.hpp``)
+--------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_system_managed_library.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``chrono``
+
+- ``functional``
+
+- ``iostream``
+
+- ``memory`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_memory.hpp`)
+
+- ``string``
+
+- ``system/dlloader.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_dlloader.hpp`)
+
+- ``thread``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel_activator.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__system`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1managed__library`
+

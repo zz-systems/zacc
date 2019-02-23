@@ -1,0 +1,31 @@
+.. _exhale_struct_structzacc_1_1arch_1_1avx1__fma3:
+
+Struct arch::avx1_fma3
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_arch.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_struct_structzacc_1_1arch`.
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public std::integral_constant< uint64_t, feature(feature::avx1(), feature::fma3())>``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::arch::avx1_fma3
+   :members:
+   :protected-members:
+   :undoc-members:

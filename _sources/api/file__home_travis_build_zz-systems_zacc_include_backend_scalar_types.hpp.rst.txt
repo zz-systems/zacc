@@ -1,0 +1,47 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_backend_scalar_types.hpp:
+
+File types.hpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_backend_scalar>` (``/home/travis/build/zz-systems/zacc/include/backend/scalar``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/backend/scalar/types.hpp``)
+------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_backend_scalar_types.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cmath``
+
+- ``float32.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float32.impl.hpp`)
+
+- ``float64.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float64.impl.hpp`)
+
+- ``int16.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int16.impl.hpp`)
+
+- ``int32.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int32.impl.hpp`)
+
+- ``int8.impl.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int8.impl.hpp`)
+
+
+
+
+

@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a9f1baa271f559b32e2549db0b35684fa:
+
+Function zacc::trim
+===================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::trim(const std::string&)

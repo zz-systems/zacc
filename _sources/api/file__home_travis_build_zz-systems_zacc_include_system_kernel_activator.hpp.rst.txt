@@ -1,0 +1,73 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_system_kernel_activator.hpp:
+
+File kernel_activator.hpp
+=========================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_system>` (``/home/travis/build/zz-systems/zacc/include/system``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/system/kernel_activator.hpp``)
+---------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_system_kernel_activator.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``cassert``
+
+- ``map``
+
+- ``memory`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_memory.hpp`)
+
+- ``string``
+
+- ``system/arch.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_arch.hpp`)
+
+- ``system/entrypoint.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_entrypoint.hpp`)
+
+- ``system/managed_library.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_managed_library.hpp`)
+
+- ``utility``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_system_kernel_dispatcher.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__system`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1system_1_1kernel__activator`
+

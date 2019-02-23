@@ -1,0 +1,134 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_util_memory.hpp:
+
+File memory.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_util>` (``/home/travis/build/zz-systems/zacc/include/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/util/memory.hpp``)
+---------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_util_memory.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``memory`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_memory.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_allocatable.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_cloneable.h`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_collections.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_vector.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_zacc.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__detail`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1aligned__allocator`
+
+- :ref:`exhale_struct_structzacc_1_1aligned__allocator_1_1rebind`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacezacc_1a485babbe5a27184374d47f014bbf2770`
+
+- :ref:`exhale_function_namespacezacc_1acff1f94f6a7bbff68dc59941cc662b3a`
+
+- :ref:`exhale_function_namespacezacc_1_1detail_1ac520ec6c8a6e8448a4d80518f40f3229`
+
+- :ref:`exhale_function_namespacezacc_1_1detail_1ae0129d12aff803c20b6f9288d9594028`
+
+- :ref:`exhale_function_namespacezacc_1a1e2c5ee4637387ca248e9c915fecc19a`
+

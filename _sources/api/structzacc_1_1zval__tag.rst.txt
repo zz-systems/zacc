@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1zval__tag:
+
+Struct zval_tag
+===============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztype.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::zval_tag
+   :members:
+   :protected-members:
+   :undoc-members:

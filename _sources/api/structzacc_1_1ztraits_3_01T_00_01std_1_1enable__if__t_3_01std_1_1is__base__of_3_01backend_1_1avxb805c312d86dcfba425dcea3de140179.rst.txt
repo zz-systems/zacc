@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1ztraits_3_01T_00_01std_1_1enable__if__t_3_01std_1_1is__base__of_3_01backend_1_1avxb805c312d86dcfba425dcea3de140179:
+
+Template Struct ztraits< T, std::enable_if_t< std::is_base_of< backend::avx2::izint32< std::decay_t< T >::feature_mask >, std::decay_t< T > >::value||std::is_base_of< backend::avx2::ibint32< std::decay_t< T >::feature_mask >, std::decay_t< T > >::value > >
+================================================================================================================================================================================================================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int32.impl.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::ztraits< T, std::enable_if_t< std::is_base_of< backend::avx2::izint32< std::decay_t< T >::feature_mask >, std::decay_t< T > >::value||std::is_base_of< backend::avx2::ibint32< std::decay_t< T >::feature_mask >, std::decay_t< T > >::value > >
+   :members:
+   :protected-members:
+   :undoc-members:

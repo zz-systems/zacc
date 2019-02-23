@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a70ed796a6d977d3f0e78dd5c38475013:
+
+Function zacc::tolower
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::tolower(const std::string&)

@@ -1,0 +1,240 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp:
+
+File type_traits.hpp
+====================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_util_type>` (``/home/travis/build/zz-systems/zacc/include/util/type``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/util/type/type_traits.hpp``)
+-------------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``array``
+
+- ``backend/ztype.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_backend_ztype.hpp`)
+
+- ``type_traits`` (:ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_zval.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_ztype.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_complex.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_printable.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_bithacks.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_operators.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_zacc.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1____all`
+
+- :ref:`exhale_struct_structzacc_1_1____all_3_01Rule_00_01T_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1____all_3_01Rule_00_01T_00_01Ts_8_8_8_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1____any`
+
+- :ref:`exhale_struct_structzacc_1_1____any_3_01Rule_00_01T_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1____any_3_01Rule_00_01T_00_01Ts_8_8_8_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1____is`
+
+- :ref:`exhale_struct_structzacc_1_1__is`
+
+- :ref:`exhale_struct_structzacc_1_1bool__pack`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_1_1argument`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01F_01_6_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01F_01_6_6_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07_5_08_07Args_8_8_8_08_4`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07Args_8_8_8_08_4`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07Args_8_8_8_08_4_1_1argument`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07C_1_1_5_08_07Args_8_8_8_08_01const_01_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07C_1_1_5_08_07Args_8_8_8_08_4`
+
+- :ref:`exhale_struct_structzacc_1_1function__traits_3_01R_07C_1_1_5_08_4`
+
+- :ref:`exhale_struct_structzacc_1_1identity`
+
+- :ref:`exhale_struct_structzacc_1_1iterable`
+
+- :ref:`exhale_struct_structzacc_1_1measurable`
+
+- :ref:`exhale_struct_structzacc_1_1requires`
+
+- :ref:`exhale_struct_structzacc_1_1resizable`
+
+- :ref:`exhale_struct_structzacc_1_1select`
+
+- :ref:`exhale_struct_structzacc_1_1select_3_01Head_01_4`
+
+- :ref:`exhale_struct_structzacc_1_1sink`
+
+- :ref:`exhale_struct_structzacc_1_1swappable`
+
+- :ref:`exhale_struct_structzacc_1_1type__sink`
+
+- :ref:`exhale_struct_structzacc_1_1when`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_namespacezacc_1a3bc9ce8c211670f8986a33a8d00b5bbd`
+
+- :ref:`exhale_function_namespacezacc_1a6c4b4bd10c444d48d50d91aacb66210e`
+
+- :ref:`exhale_function_namespacezacc_1adeb5d12dd87eeae5cad8ab226a66cbc5`
+
+- :ref:`exhale_function_namespacezacc_1a6f2a67c7e8369ac628b57e344a124be6`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_namespacezacc_1a4966288edc686a2ae38f1dec49c19623`
+
+- :ref:`exhale_typedef_namespacezacc_1ab6fc7632db6573584e215eb07c08c65c`
+
+- :ref:`exhale_typedef_namespacezacc_1a4a0154af66617edd63ebda4ab5889329`
+
+- :ref:`exhale_typedef_namespacezacc_1a22578a294d8d4fc53f7d258822540a2a`
+
+- :ref:`exhale_typedef_namespacezacc_1a1a74928342d394bce381e4814dfb4981`
+
+- :ref:`exhale_typedef_namespacezacc_1a37d1bc3620f8a3b4f526d2dda137f654`
+
+- :ref:`exhale_typedef_namespacezacc_1ad596219e7df5c0eb5222b3b3e0a68f8f`
+
+- :ref:`exhale_typedef_namespacezacc_1afdfd49db0cb58d431968092eb0c107b3`
+
+- :ref:`exhale_typedef_namespacezacc_1a74065a57a3402051af8cd054ef62fa02`
+
+- :ref:`exhale_typedef_namespacezacc_1a079993d2cb7af7f0b14967ceeba138af`
+
+- :ref:`exhale_typedef_namespacezacc_1a469ad6f75dde604eb8f0d03077d4b2f0`
+
+- :ref:`exhale_typedef_namespacezacc_1af905cd88bda5352679dfd173fbad4a67`
+
+
+Variables
+---------
+
+
+- :ref:`exhale_variable_namespacezacc_1a6d12363d4954f7940f826e51dac83873`
+
+- :ref:`exhale_variable_namespacezacc_1a736aeae43ad353fff1d0ce772bcd08c5`
+
+- :ref:`exhale_variable_namespacezacc_1a00d53f85e84020b4a3b93b3b4eecae14`
+

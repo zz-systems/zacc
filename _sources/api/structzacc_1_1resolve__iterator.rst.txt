@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1resolve__iterator:
+
+Template Struct resolve_iterator
+================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::resolve_iterator
+   :members:
+   :protected-members:
+   :undoc-members:

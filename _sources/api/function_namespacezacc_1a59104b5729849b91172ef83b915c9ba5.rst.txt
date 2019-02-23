@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a59104b5729849b91172ef83b915c9ba5:
+
+Template Function zacc::transform(InputTuple&&, UnaryOperation&&)
+=================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::transform(InputTuple&&, UnaryOperation&&)

@@ -1,0 +1,37 @@
+.. _exhale_struct_structzacc_1_1backend_1_1avx_1_1____zint32_1_1impl:
+
+Struct __zint32::impl
+=====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int32.impl.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zint32`.
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::compose< Head, Tail >`` (:ref:`exhale_struct_structzacc_1_1compose`)
+
+
+Derived Type
+************
+
+- ``public zacc::backend::avx::zint32< arch >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1zint32`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::avx::__zint32::impl
+   :members:
+   :protected-members:
+   :undoc-members:

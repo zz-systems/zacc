@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a079993d2cb7af7f0b14967ceeba138af:
+
+Typedef zacc::resolve_uint_t
+============================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::resolve_uint_t

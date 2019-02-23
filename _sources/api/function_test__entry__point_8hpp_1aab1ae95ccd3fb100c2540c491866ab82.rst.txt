@@ -1,0 +1,13 @@
+.. _exhale_function_test__entry__point_8hpp_1aab1ae95ccd3fb100c2540c491866ab82:
+
+Function zacc_run_gtests
+========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_testing_test_entry_point.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc_run_gtests(int, char **)

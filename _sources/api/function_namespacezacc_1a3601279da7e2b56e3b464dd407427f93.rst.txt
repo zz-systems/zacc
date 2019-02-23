@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a3601279da7e2b56e3b464dd407427f93:
+
+Template Function zacc::zip
+===========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::zip(Containers&&...)

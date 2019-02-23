@@ -1,0 +1,13 @@
+.. _exhale_define_gtest__ext_8hpp_1a70e340267c9817cf7a5eded065fd2160:
+
+Define VASSERT_NEAR
+===================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_testing_gtest_ext.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: VASSERT_NEAR

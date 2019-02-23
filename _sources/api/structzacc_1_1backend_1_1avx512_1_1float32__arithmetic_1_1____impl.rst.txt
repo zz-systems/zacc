@@ -1,0 +1,31 @@
+.. _exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__arithmetic_1_1____impl:
+
+Template Struct float32_arithmetic::__impl
+==========================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_float32.impl.hpp`
+
+
+Nested Relationships
+--------------------
+
+This struct is a nested type of :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__arithmetic`.
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public Base``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::avx512::float32_arithmetic::__impl
+   :members:
+   :protected-members:
+   :undoc-members:

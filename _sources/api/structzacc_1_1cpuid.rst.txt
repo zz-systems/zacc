@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1cpuid:
+
+Struct cpuid
+============
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_cpuid.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::cpuid
+   :members:
+   :protected-members:
+   :undoc-members:

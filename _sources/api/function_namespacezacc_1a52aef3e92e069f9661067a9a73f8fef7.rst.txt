@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a52aef3e92e069f9661067a9a73f8fef7:
+
+Template Function zacc::transform(InputTuple1&&, InputTuple2&&, BinaryOperation&&)
+==================================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::transform(InputTuple1&&, InputTuple2&&, BinaryOperation&&)

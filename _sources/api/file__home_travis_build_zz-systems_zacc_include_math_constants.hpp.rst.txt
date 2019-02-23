@@ -1,0 +1,52 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_math_constants.hpp:
+
+File constants.hpp
+==================
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_math>` (``/home/travis/build/zz-systems/zacc/include/math``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/math/constants.hpp``)
+------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_math_constants.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``system/dispatched_arch.hpp`` (:ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`)
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_math_trigonometry.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+- :ref:`namespace_zacc__math`
+

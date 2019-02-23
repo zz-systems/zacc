@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a334be59cdc3427aa7a94a23d924410fa:
+
+Typedef zacc::bint8
+===================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::bint8

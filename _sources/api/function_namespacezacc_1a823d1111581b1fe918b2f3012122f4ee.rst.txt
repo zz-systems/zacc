@@ -1,0 +1,13 @@
+.. _exhale_function_namespacezacc_1a823d1111581b1fe918b2f3012122f4ee:
+
+Function zacc::def
+==================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_io.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::def(std::ostream&)

@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a0f550eabad9e73899c04dee2e14158b9:
+
+Typedef zacc::tag_t
+===================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::tag_t

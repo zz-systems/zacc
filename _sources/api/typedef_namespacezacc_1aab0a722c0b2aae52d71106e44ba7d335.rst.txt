@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1aab0a722c0b2aae52d71106e44ba7d335:
+
+Typedef zacc::zbyte
+===================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_dispatched_arch.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::zbyte

@@ -1,0 +1,16 @@
+.. _exhale_struct_structzacc_1_1system_1_1managed__library:
+
+Struct managed_library
+======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_system_managed_library.hpp`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::system::managed_library
+   :members:
+   :protected-members:
+   :undoc-members:

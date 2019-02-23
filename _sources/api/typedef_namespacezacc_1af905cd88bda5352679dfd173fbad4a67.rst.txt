@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1af905cd88bda5352679dfd173fbad4a67:
+
+Typedef zacc::type_sink_t
+=========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::type_sink_t

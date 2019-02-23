@@ -1,0 +1,13 @@
+.. _exhale_function_fundamental_8hpp_1a5aadc6b3acd595a9eb04fc2b0dc2fa97:
+
+Template Function zacc::math::clamp_int32(const T&)
+===================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_fundamental.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::clamp_int32(const T&)

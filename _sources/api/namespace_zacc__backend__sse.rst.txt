@@ -1,0 +1,78 @@
+
+.. _namespace_zacc__backend__sse:
+
+Namespace zacc::backend::sse
+============================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc__backend__sse__float32_modules`
+
+- :ref:`namespace_zacc__backend__sse__float64_modules`
+
+- :ref:`namespace_zacc__backend__sse__int16_modules`
+
+- :ref:`namespace_zacc__backend__sse__int32_modules`
+
+- :ref:`namespace_zacc__backend__sse__int8_modules`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1bfloat32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1bfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1bint16`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1bint32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1bint8`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1zfloat32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1zfloat64`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1zint16`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1zint32`
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1zint8`
+
+
+Typedefs
+--------
+
+
+- :ref:`exhale_typedef_sse_2float32_8impl_8hpp_1a84b4ac21e04fb2be15e680eaa2798481`
+
+- :ref:`exhale_typedef_sse_2float64_8impl_8hpp_1ab7702e459ed105879ed01c4638ab3151`
+
+- :ref:`exhale_typedef_sse_2int16_8impl_8hpp_1a8084a477c53b4e1b1d9903a98edeaaa3`
+
+- :ref:`exhale_typedef_sse_2int32_8impl_8hpp_1a9a99a82f4b2b3697b3272d9a50903aa8`
+
+- :ref:`exhale_typedef_sse_2int8_8impl_8hpp_1ae242817de2dbd7fff389a3650bdeb07f`
+
+- :ref:`exhale_typedef_sse_2float32_8impl_8hpp_1a14f8d270e9783b79aec126e14f96d89a`
+
+- :ref:`exhale_typedef_sse_2float64_8impl_8hpp_1ab9933fc6830e207094e509f569ada2a1`
+
+- :ref:`exhale_typedef_sse_2int16_8impl_8hpp_1a5dc9b6759b79372dda3353410346c50e`
+
+- :ref:`exhale_typedef_sse_2int32_8impl_8hpp_1a0c13693cc2648d88076d5555f253e36d`
+
+- :ref:`exhale_typedef_sse_2int8_8impl_8hpp_1a87c9a4fab931c758cab04dc56bb5d508`

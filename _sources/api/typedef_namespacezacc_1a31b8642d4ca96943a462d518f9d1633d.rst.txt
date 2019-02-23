@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a31b8642d4ca96943a462d518f9d1633d:
+
+Typedef zacc::is_integral
+=========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::is_integral

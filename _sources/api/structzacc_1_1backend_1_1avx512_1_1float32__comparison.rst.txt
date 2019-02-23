@@ -1,0 +1,26 @@
+.. _exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__comparison:
+
+Template Struct float32_comparison
+==================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_float32.impl.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx512_1_1float32__comparison_1_1____impl`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::avx512::float32_comparison
+   :members:
+   :protected-members:
+   :undoc-members:

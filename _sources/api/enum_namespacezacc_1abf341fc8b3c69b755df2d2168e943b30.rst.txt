@@ -1,0 +1,13 @@
+.. _exhale_enum_namespacezacc_1abf341fc8b3c69b755df2d2168e943b30:
+
+Enum color_codes
+================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_io.hpp`
+
+
+Enum Documentation
+------------------
+
+
+.. doxygenenum:: zacc::color_codes

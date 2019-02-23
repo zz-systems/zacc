@@ -1,0 +1,13 @@
+.. _exhale_function_matrix_8hpp_1ab11ba0bb7b24eb4e357708fe8a24786f:
+
+Template Function zacc::math::apply(const Container&, UnaryOperation)
+=====================================================================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_math_matrix.hpp`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: zacc::math::apply(const Container&, UnaryOperation)

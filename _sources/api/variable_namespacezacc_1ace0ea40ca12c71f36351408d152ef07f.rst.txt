@@ -1,0 +1,13 @@
+.. _exhale_variable_namespacezacc_1ace0ea40ca12c71f36351408d152ef07f:
+
+Variable zacc::alignment_v
+==========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+Variable Documentation
+----------------------
+
+
+.. doxygenvariable:: zacc::alignment_v

@@ -1,0 +1,32 @@
+.. _exhale_struct_structzacc_1_1backend_1_1sse_1_1float32__modules_1_1equatable:
+
+Template Struct equatable
+=========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float32.impl.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Type
+*********
+
+- ``public zacc::traits::equatable< Interface, Composed, Boolean >`` (:ref:`exhale_struct_structzacc_1_1traits_1_1equatable`)
+
+
+Derived Types
+*************
+
+- ``public zacc::backend::sse::bfloat32< FeatureMask >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1bfloat32`)
+- ``public zacc::backend::sse::zfloat32< FeatureMask >`` (:ref:`exhale_struct_structzacc_1_1backend_1_1sse_1_1zfloat32`)
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::sse::float32_modules::equatable
+   :members:
+   :protected-members:
+   :undoc-members:

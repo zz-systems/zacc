@@ -1,0 +1,26 @@
+.. _exhale_struct_structzacc_1_1backend_1_1avx_1_1____zint16:
+
+Template Struct __zint16
+========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int16.impl.hpp`
+
+
+Nested Relationships
+--------------------
+
+
+Nested Types
+************
+
+- :ref:`exhale_struct_structzacc_1_1backend_1_1avx_1_1____zint16_1_1impl`
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::backend::avx::__zint16
+   :members:
+   :protected-members:
+   :undoc-members:

@@ -1,0 +1,13 @@
+.. _exhale_define_macros_8hpp_1a9331ff479824c7ae6f531145ec2c82d4:
+
+Define DISPATCHED
+=================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_macros.hpp`
+
+
+Define Documentation
+--------------------
+
+
+.. doxygendefine:: DISPATCHED

@@ -1,0 +1,190 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Template Class serializable &#8212; ZACC  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Template Class kernel_dispatcher" href="classzacc_1_1system_1_1kernel__dispatcher.html" />
+    <link rel="prev" title="Class put_sysinfo" href="classzacc_1_1put__sysinfo.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="classzacc_1_1system_1_1kernel__dispatcher.html" title="Template Class kernel_dispatcher"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="classzacc_1_1put__sysinfo.html" title="Class put_sysinfo"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" accesskey="U">ZACC API</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="template-class-serializable">
+<span id="exhale-class-classzacc-1-1serializable"></span><h1>Template Class serializable<a class="headerlink" href="#template-class-serializable" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li>Defined in <a class="reference internal" href="file__home_travis_build_zz-systems_zacc_include_util_serializable.h.html#file-home-travis-build-zz-systems-zacc-include-util-serializable-h"><span class="std std-ref">File serializable.h</span></a></li>
+</ul>
+<div class="section" id="class-documentation">
+<h2>Class Documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="_CPPv4N4zacc12serializableE">
+<span id="_CPPv3N4zacc12serializableE"></span><span id="_CPPv2N4zacc12serializableE"></span><span id="zacc::serializable"></span><span class="target" id="classzacc_1_1serializable"></span><em class="property">template </em>&lt;<em class="property">typename</em> tserializer&gt;<br /><em class="property">class </em><code class="descname">serializable</code><a class="headerlink" href="#_CPPv4N4zacc12serializableE" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>interface for serializable types </p>
+<p><dl class="docutils">
+<dt><strong>Template Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">tserializer</span></code>: used serializer instance </li>
+</ul>
+</dd>
+</dl>
+</p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric">Public Functions</p>
+<dl class="function">
+<dt id="_CPPv4N4zacc12serializableD0Ev">
+<span id="_CPPv3N4zacc12serializableD0Ev"></span><span id="_CPPv2N4zacc12serializableD0Ev"></span><span id="zacc::serializable::~serializable"></span><span class="target" id="classzacc_1_1serializable_1a477a31de00eb3431b6dbb4cbf55b21b2"></span><em class="property">virtual</em> <code class="descname">~serializable</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4zacc12serializableD0Ev" title="Permalink to this definition">¶</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4zacc12serializablelsERK11tserializer">
+<span id="_CPPv3N4zacc12serializablelsERK11tserializer"></span><span id="_CPPv2N4zacc12serializablelsERK11tserializer"></span><span id="zacc::serializable::lshift-operator__tserializerCR"></span><span class="target" id="classzacc_1_1serializable_1ab9688e296a4130acc0190a360f82f4e3"></span><em class="property">const</em> tserializer &amp;<code class="descname">operator&lt;&lt;</code><span class="sig-paren">(</span><em class="property">const</em> tserializer &amp;<em>serializer</em><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4zacc12serializablelsERK11tserializer" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>read data from serializer </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>serializer </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">serializer</span></code>: </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4zacc12serializablersER11tserializer">
+<span id="_CPPv3NK4zacc12serializablersER11tserializer"></span><span id="_CPPv2NK4zacc12serializablersER11tserializer"></span><span id="zacc::serializable::rshift-operator__tserializerRC"></span><span class="target" id="classzacc_1_1serializable_1a1daac991c2378af47d6e01465699a98b"></span>tserializer &amp;<code class="descname">operator&gt;&gt;</code><span class="sig-paren">(</span>tserializer &amp;<em>serializer</em><span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4zacc12serializablersER11tserializer" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>write data to serializer </p>
+<p><dl class="docutils">
+<dt><strong>Return</strong></dt>
+<dd>serializer </dd>
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">serializer</span></code>: </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4N4zacc12serializable11deserializeERK11tserializer">
+<span id="_CPPv3N4zacc12serializable11deserializeERK11tserializer"></span><span id="_CPPv2N4zacc12serializable11deserializeERK11tserializer"></span><span id="zacc::serializable::deserialize__tserializerCR"></span><span class="target" id="classzacc_1_1serializable_1a1a128077419052eb29160300fdcd9b84"></span><em class="property">virtual</em> void <code class="descname">deserialize</code><span class="sig-paren">(</span><em class="property">const</em> tserializer&amp;<span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4zacc12serializable11deserializeERK11tserializer" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>read data from serializer </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">serializer</span></code>: </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="_CPPv4NK4zacc12serializable9serializeER11tserializer">
+<span id="_CPPv3NK4zacc12serializable9serializeER11tserializer"></span><span id="_CPPv2NK4zacc12serializable9serializeER11tserializer"></span><span id="zacc::serializable::serialize__tserializerRC"></span><span class="target" id="classzacc_1_1serializable_1a28738dd9e9d59a1f93ed838e2be5584c"></span><em class="property">virtual</em> void <code class="descname">serialize</code><span class="sig-paren">(</span>tserializer&amp;<span class="sig-paren">)</span> <em class="property">const</em><a class="headerlink" href="#_CPPv4NK4zacc12serializable9serializeER11tserializer" title="Permalink to this definition">¶</a><br /></dt>
+<dd><p>write data to serializer </p>
+<p><dl class="docutils">
+<dt><strong>Parameters</strong></dt>
+<dd><ul class="breatheparameterlist first last simple">
+<li><code class="docutils literal notranslate"><span class="pre">serializer</span></code>: </li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="classzacc_1_1put__sysinfo.html"
+                        title="previous chapter">Class put_sysinfo</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="classzacc_1_1system_1_1kernel__dispatcher.html"
+                        title="next chapter">Template Class kernel_dispatcher</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="classzacc_1_1system_1_1kernel__dispatcher.html" title="Template Class kernel_dispatcher"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="classzacc_1_1put__sysinfo.html" title="Class put_sysinfo"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Sergej Zuyev.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

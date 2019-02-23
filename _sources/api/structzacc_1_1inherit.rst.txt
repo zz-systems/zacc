@@ -1,0 +1,26 @@
+.. _exhale_struct_structzacc_1_1inherit:
+
+Template Struct inherit
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_composition.hpp`
+
+
+Inheritance Relationships
+-------------------------
+
+Base Types
+**********
+
+- ``public Part< Meta >``
+- ``public Parts< Meta >``
+
+
+Struct Documentation
+--------------------
+
+
+.. doxygenstruct:: zacc::inherit
+   :members:
+   :protected-members:
+   :undoc-members:

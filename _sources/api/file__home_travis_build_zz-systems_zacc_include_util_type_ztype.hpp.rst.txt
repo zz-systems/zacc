@@ -1,0 +1,72 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_util_type_ztype.hpp:
+
+File ztype.hpp
+==============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_util_type>` (``/home/travis/build/zz-systems/zacc/include/util/type``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/util/type/ztype.hpp``)
+-------------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_util_type_ztype.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``array``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_operators.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+
+
+
+Namespaces
+----------
+
+
+- :ref:`namespace_zacc`
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structzacc_1_1bval__tag`
+
+- :ref:`exhale_struct_structzacc_1_1cval__tag`
+
+- :ref:`exhale_struct_structzacc_1_1ztype`
+
+- :ref:`exhale_struct_structzacc_1_1zval__tag`
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_util_2type_2ztype_8hpp_1a075749620a07a815a0038c742e281ba4`
+

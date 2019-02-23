@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1afdfd49db0cb58d431968092eb0c107b3:
+
+Typedef zacc::param_t
+=====================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::param_t

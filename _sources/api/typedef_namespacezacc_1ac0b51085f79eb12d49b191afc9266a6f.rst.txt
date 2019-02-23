@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1ac0b51085f79eb12d49b191afc9266a6f:
+
+Typedef zacc::op_enable
+=======================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_operators.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::op_enable

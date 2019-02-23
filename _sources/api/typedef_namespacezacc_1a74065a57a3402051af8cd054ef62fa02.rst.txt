@@ -1,0 +1,13 @@
+.. _exhale_typedef_namespacezacc_1a74065a57a3402051af8cd054ef62fa02:
+
+Typedef zacc::requires_t
+========================
+
+- Defined in :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_traits.hpp`
+
+
+Typedef Documentation
+---------------------
+
+
+.. doxygentypedef:: zacc::requires_t

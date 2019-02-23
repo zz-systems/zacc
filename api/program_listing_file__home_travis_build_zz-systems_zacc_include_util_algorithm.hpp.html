@@ -1,0 +1,807 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Program Listing for File algorithm.hpp &#8212; ZACC  documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script type="text/javascript" src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="File all.hpp" href="file__home_travis_build_zz-systems_zacc_include_backend_all.hpp.html" />
+    <link rel="prev" title="File algorithm.hpp" href="file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_backend_all.hpp.html" title="File all.hpp"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp.html" title="File algorithm.hpp"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp.html" accesskey="U">File algorithm.hpp</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-algorithm-hpp">
+<span id="program-listing-file-home-travis-build-zz-systems-zacc-include-util-algorithm-hpp"></span><h1>Program Listing for File algorithm.hpp<a class="headerlink" href="#program-listing-for-file-algorithm-hpp" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp.html#file-home-travis-build-zz-systems-zacc-include-util-algorithm-hpp"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">/home/travis/build/zz-systems/zacc/include/util/algorithm.hpp</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">//---------------------------------------------------------------------------------</span>
+<span class="c1">// The MIT License (MIT)</span>
+<span class="c1">//</span>
+<span class="c1">// Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)</span>
+<span class="c1">//</span>
+<span class="c1">// Permission is hereby granted, free of charge, to any person obtaining a copy</span>
+<span class="c1">// of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="c1">// in the Software without restriction, including without limitation the rights</span>
+<span class="c1">// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
+<span class="c1">// copies of the Software, and to permit persons to whom the Software is</span>
+<span class="c1">// furnished to do so, subject to the following conditions:</span>
+<span class="c1">//</span>
+<span class="c1">// The above copyright notice and this permission notice shall be included in all</span>
+<span class="c1">// copies or substantial portions of the Software.</span>
+<span class="c1">//</span>
+<span class="c1">// THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="c1">// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
+<span class="c1">// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
+<span class="c1">// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
+<span class="c1">// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c1">// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span>
+<span class="c1">// SOFTWARE.</span>
+<span class="c1">//---------------------------------------------------------------------------------</span>
+
+
+<span class="cp">#pragma once</span>
+
+<span class="cp">#include</span> <span class="cpf">&lt;functional&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;algorithm&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;string&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;numeric&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;type_traits&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iterator&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;utility&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp"></span>
+<span class="cp">#include</span> <span class="cpf">&lt;regex&gt;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;util/type/type_traits.hpp&quot;</span><span class="cp"></span>
+
+<span class="cp">#include</span> <span class="cpf">&quot;backend/zval.hpp&quot;</span><span class="cp"></span>
+
+<span class="k">namespace</span> <span class="n">zacc</span> <span class="p">{</span>
+
+    <span class="k">template</span><span class="o">&lt;</span> <span class="k">class</span> <span class="nc">InputIt</span><span class="p">,</span> <span class="k">class</span> <span class="nc">OutputIt</span><span class="p">,</span> <span class="k">class</span> <span class="nc">UnaryOperation</span><span class="p">,</span> <span class="k">class</span> <span class="nc">UnaryPredicate</span><span class="o">&gt;</span>
+    <span class="n">OutputIt</span> <span class="n">transform_if</span><span class="p">(</span><span class="n">InputIt</span> <span class="n">first</span><span class="p">,</span> <span class="n">InputIt</span> <span class="n">last</span><span class="p">,</span>
+                        <span class="n">OutputIt</span> <span class="n">d_first</span><span class="p">,</span> <span class="n">UnaryOperation</span> <span class="n">unary_op</span><span class="p">,</span> <span class="n">UnaryPredicate</span> <span class="n">pred</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">first</span> <span class="o">!=</span> <span class="n">last</span><span class="p">;</span> <span class="o">++</span><span class="n">first</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">pred</span><span class="p">(</span><span class="o">*</span><span class="n">first</span><span class="p">))</span>
+                <span class="o">*</span><span class="n">d_first</span><span class="o">++</span> <span class="o">=</span> <span class="n">unary_op</span><span class="p">(</span><span class="o">*</span><span class="n">first</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">d_first</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span> <span class="k">class</span> <span class="nc">InputIt</span> <span class="o">&gt;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">join</span><span class="p">(</span><span class="n">InputIt</span> <span class="n">first</span><span class="p">,</span> <span class="n">InputIt</span> <span class="n">last</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">separator</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">first</span> <span class="o">==</span> <span class="n">last</span><span class="p">)</span>
+            <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">accumulate</span><span class="p">(</span><span class="n">first</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">last</span><span class="p">,</span> <span class="n">first</span><span class="o">-&gt;</span><span class="n">to_string</span><span class="p">(),</span>
+                        <span class="p">[</span><span class="n">separator</span><span class="p">](</span><span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">acc</span><span class="p">,</span> <span class="k">auto</span> <span class="o">&amp;</span><span class="n">part</span><span class="p">)</span> <span class="p">{</span>
+                            <span class="k">return</span> <span class="n">acc</span> <span class="o">+</span> <span class="n">separator</span> <span class="o">+</span> <span class="n">part</span><span class="p">.</span><span class="n">to_string</span><span class="p">();</span>
+            <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">UnaryOperation</span><span class="o">&gt;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">transform</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">source</span><span class="p">,</span> <span class="n">UnaryOperation</span> <span class="n">unary_op</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span>
+            <span class="k">return</span> <span class="s">&quot;&quot;</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">target</span><span class="p">;</span>
+        <span class="n">target</span><span class="p">.</span><span class="n">resize</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">size</span><span class="p">());</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">source</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span>
+                       <span class="n">source</span><span class="p">.</span><span class="n">end</span><span class="p">(),</span>
+                       <span class="n">target</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span>
+                       <span class="n">unary_op</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">target</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="kt">char</span> <span class="n">C</span><span class="o">&gt;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="o">&amp;</span> <span class="n">expect</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">istream</span><span class="o">&amp;</span> <span class="n">in</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">in</span> <span class="o">&gt;&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">skipws</span><span class="p">).</span><span class="n">peek</span><span class="p">()</span> <span class="o">==</span> <span class="n">C</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">in</span><span class="p">.</span><span class="n">ignore</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="n">in</span><span class="p">.</span><span class="n">setstate</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">ios_base</span><span class="o">::</span><span class="n">failbit</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">in</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">tolower</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">source</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">transform</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="p">[](</span><span class="k">auto</span> <span class="n">c</span><span class="p">){</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">tolower</span><span class="p">(</span><span class="n">c</span><span class="p">);</span> <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span>  <span class="n">toupper</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">source</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">transform</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="p">[](</span><span class="k">auto</span> <span class="n">c</span><span class="p">){</span> <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">toupper</span><span class="p">(</span><span class="n">c</span><span class="p">);</span> <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">ltrim</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">regex_replace</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">regex</span><span class="p">(</span><span class="s">&quot;^</span><span class="se">\\</span><span class="s">s+&quot;</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">rtrim</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">regex_replace</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">regex</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\\</span><span class="s">s+$&quot;</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="kr">inline</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">trim</span><span class="p">(</span><span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">s</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">ltrim</span><span class="p">(</span><span class="n">rtrim</span><span class="p">(</span><span class="n">s</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span> <span class="k">class</span> <span class="nc">InputContainer</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;</span><span class="n">is</span><span class="o">&lt;</span><span class="n">iterable</span><span class="p">,</span> <span class="n">InputContainer</span><span class="o">&gt;&gt;&gt;</span>
+    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">join</span><span class="p">(</span><span class="k">const</span> <span class="n">InputContainer</span> <span class="o">&amp;</span><span class="n">container</span><span class="p">,</span> <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&amp;</span> <span class="n">separator</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">join</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">container</span><span class="p">),</span>
+                    <span class="n">std</span><span class="o">::</span><span class="n">end</span><span class="p">(</span><span class="n">container</span><span class="p">),</span>
+                    <span class="n">separator</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputIt1</span><span class="p">,</span> <span class="k">class</span> <span class="nc">InputIt2</span><span class="p">,</span> <span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">TernaryOperation</span><span class="o">&gt;</span>
+    <span class="n">T</span> <span class="n">accumulate</span><span class="p">(</span> <span class="n">InputIt1</span> <span class="n">first1</span><span class="p">,</span> <span class="n">InputIt1</span> <span class="n">last1</span><span class="p">,</span> <span class="n">InputIt2</span> <span class="n">first2</span><span class="p">,</span> <span class="n">T</span> <span class="n">init</span><span class="p">,</span> <span class="n">TernaryOperation</span> <span class="n">ternary_op</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(;</span> <span class="n">first1</span> <span class="o">!=</span> <span class="n">last1</span><span class="p">;</span> <span class="o">++</span><span class="n">first1</span><span class="p">,</span> <span class="o">++</span><span class="n">first2</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">init</span> <span class="o">=</span> <span class="n">ternary_op</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">init</span><span class="p">),</span> <span class="o">*</span><span class="n">first1</span><span class="p">,</span> <span class="o">*</span><span class="n">first2</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">init</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">ForwardIt</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Generator</span><span class="o">&gt;</span><span class="c1">//, std::enable_if_t&lt;is_zval&lt;T&gt;::value, void**&gt; = nullptr&gt;</span>
+    <span class="kt">void</span> <span class="n">generate</span><span class="p">(</span><span class="n">ForwardIt</span> <span class="n">first</span><span class="p">,</span> <span class="n">ForwardIt</span> <span class="n">last</span><span class="p">,</span> <span class="n">Generator</span> <span class="n">g</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">auto</span> <span class="n">dim</span>        <span class="o">=</span> <span class="n">size_v</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="kt">size_t</span> <span class="n">real_size</span>  <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">distance</span><span class="p">(</span><span class="n">first</span><span class="p">,</span> <span class="n">last</span><span class="p">);</span>
+        <span class="kt">size_t</span> <span class="n">remainder</span>  <span class="o">=</span> <span class="n">real_size</span> <span class="o">%</span> <span class="n">dim</span><span class="p">;</span>
+        <span class="kt">size_t</span> <span class="n">fake_size</span>  <span class="o">=</span> <span class="n">real_size</span> <span class="o">+</span> <span class="n">remainder</span><span class="p">;</span>
+
+        <span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">fake_size</span><span class="p">;</span> <span class="n">i</span> <span class="o">+=</span> <span class="n">dim</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="n">g</span><span class="p">(</span><span class="n">i</span><span class="p">).</span><span class="n">data</span><span class="p">();</span>
+
+            <span class="k">auto</span> <span class="n">to_fetch</span> <span class="o">=</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">real_size</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">?</span> <span class="nl">dim</span> <span class="p">:</span> <span class="n">remainder</span><span class="p">;</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">copy</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">result</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">+</span> <span class="n">to_fetch</span><span class="p">,</span> <span class="n">first</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+<span class="c1">//    /**</span>
+<span class="c1">//     * @brief Applies a generator function to container</span>
+<span class="c1">//     * @tparam T element type</span>
+<span class="c1">//     * @tparam ForwardIt container iterator type</span>
+<span class="c1">//     * @tparam Generator generator function type</span>
+<span class="c1">//     * @param first first iterator</span>
+<span class="c1">//     * @param last last iterator</span>
+<span class="c1">//     * @param g generator</span>
+<span class="c1">//     */</span>
+<span class="c1">//    template&lt;class T, class ForwardIt, class Generator, std::enable_if_t&lt;!is_zval&lt;T&gt;::value, void**&gt; = nullptr&gt;</span>
+<span class="c1">//    void generate(ForwardIt first, ForwardIt last, Generator g)</span>
+<span class="c1">//    {</span>
+<span class="c1">//        size_t real_size  = std::distance(first, last);</span>
+<span class="c1">//</span>
+<span class="c1">//        for (size_t i = 0; i &lt; real_size; i++)</span>
+<span class="c1">//        {</span>
+<span class="c1">//            *(first++) = g(i);</span>
+<span class="c1">//        }</span>
+<span class="c1">//    };</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputContainer</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Generator</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;</span><span class="n">is</span><span class="o">&lt;</span><span class="n">iterable</span><span class="p">,</span> <span class="n">InputContainer</span><span class="o">&gt;&gt;&gt;</span>
+    <span class="kt">void</span> <span class="n">generate</span><span class="p">(</span><span class="k">const</span> <span class="n">InputContainer</span> <span class="o">&amp;</span><span class="n">container</span><span class="p">,</span> <span class="n">Generator</span> <span class="n">g</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">generate</span><span class="o">&lt;</span><span class="n">InputContainer</span><span class="o">::</span><span class="n">value_type</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">container</span><span class="p">),</span>
+                                        <span class="n">std</span><span class="o">::</span><span class="n">end</span><span class="p">(</span><span class="n">container</span><span class="p">),</span>
+                                        <span class="n">g</span><span class="p">);</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputContainer</span><span class="p">,</span> <span class="k">class</span> <span class="nc">OutputContainer</span><span class="p">,</span> <span class="k">class</span> <span class="nc">UnaryOperation</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;</span><span class="n">all</span><span class="o">&lt;</span><span class="n">iterable</span><span class="p">,</span> <span class="n">InputContainer</span><span class="p">,</span> <span class="n">OutputContainer</span><span class="o">&gt;&gt;&gt;</span>
+    <span class="k">auto</span> <span class="n">transform</span><span class="p">(</span><span class="k">const</span> <span class="n">InputContainer</span><span class="o">&amp;</span> <span class="n">container</span><span class="p">,</span> <span class="n">UnaryOperation</span> <span class="n">unary_op</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">alignas</span><span class="p">(</span><span class="n">ztraits</span><span class="o">&lt;</span><span class="n">InputContainer</span><span class="o">&gt;::</span><span class="n">alignment</span><span class="p">)</span> <span class="n">OutputContainer</span> <span class="n">output</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">container</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">end</span><span class="p">(</span><span class="n">container</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">unary_op</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">output</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputContainer</span><span class="p">,</span> <span class="k">class</span> <span class="nc">UnaryOperation</span><span class="p">,</span> <span class="k">typename</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;</span><span class="n">all</span><span class="o">&lt;</span><span class="n">iterable</span><span class="p">,</span> <span class="n">InputContainer</span><span class="o">&gt;&gt;&gt;</span>
+    <span class="k">auto</span> <span class="n">transform</span><span class="p">(</span><span class="k">const</span> <span class="n">InputContainer</span><span class="o">&amp;</span> <span class="n">container</span><span class="p">,</span> <span class="n">UnaryOperation</span> <span class="n">func</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">//alignas(ztraits&lt;InputContainer&gt;::alignment) typename ztraits&lt;InputContainer&gt;::extracted_t output;</span>
+
+        <span class="n">InputContainer</span> <span class="n">output</span><span class="p">;</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">transform</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">container</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">end</span><span class="p">(</span><span class="n">container</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">output</span><span class="p">),</span> <span class="n">func</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">output</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">namespace</span>
+    <span class="p">{</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">...</span> <span class="n">seq</span><span class="o">&gt;</span>
+        <span class="k">constexpr</span> <span class="n">T</span> <span class="n">make_index_impl</span><span class="p">(</span><span class="n">T</span> <span class="n">index</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">seq</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">index</span> <span class="o">+</span> <span class="n">T</span><span class="p">{</span> <span class="n">seq</span><span class="p">...</span> <span class="p">};</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;</span><span class="n">ztraits</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">is_vector</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">make_index</span><span class="p">(</span><span class="n">T</span> <span class="n">index</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">make_index_impl</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">make_integer_sequence</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">ztraits</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">size</span><span class="o">&gt;</span><span class="p">());</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="k">constexpr</span> <span class="n">std</span><span class="o">::</span><span class="n">enable_if_t</span><span class="o">&lt;!</span><span class="n">ztraits</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">is_vector</span><span class="p">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">make_index</span><span class="p">(</span><span class="n">T</span> <span class="n">index</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">index</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Tuple</span><span class="o">&gt;</span>
+    <span class="k">using</span> <span class="n">tuple_size</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple_size</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">Tuple</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">Tuple</span><span class="o">&gt;</span>
+    <span class="k">using</span> <span class="n">make_tuple_index</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">make_integer_sequence</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">,</span> <span class="n">tuple_size</span><span class="o">&lt;</span><span class="n">Tuple</span><span class="o">&gt;::</span><span class="n">value</span><span class="o">&gt;</span><span class="p">;</span>
+
+
+    <span class="k">namespace</span>
+    <span class="p">{</span>
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputTuple</span><span class="p">,</span> <span class="k">class</span> <span class="nc">UnaryOperation</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">...</span> <span class="n">index</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">for_each_impl</span><span class="p">(</span><span class="n">InputTuple</span><span class="o">&amp;&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">UnaryOperation</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">index</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">sink</span> <span class="p">{</span> <span class="nb">true</span><span class="p">,</span> <span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input</span><span class="p">))),</span>
+                    <span class="kt">void</span><span class="p">(),</span> <span class="nb">true</span><span class="p">)...</span> <span class="p">};</span>
+        <span class="p">};</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputTuple1</span><span class="p">,</span> <span class="k">class</span> <span class="nc">InputTuple2</span><span class="p">,</span> <span class="k">class</span> <span class="nc">BinaryOperation</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">...</span> <span class="n">index</span><span class="o">&gt;</span>
+        <span class="kt">void</span> <span class="n">for_each_impl</span><span class="p">(</span><span class="n">InputTuple1</span><span class="o">&amp;&amp;</span> <span class="n">input1</span><span class="p">,</span> <span class="n">InputTuple2</span><span class="o">&amp;&amp;</span> <span class="n">input2</span><span class="p">,</span> <span class="n">BinaryOperation</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">index</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">sink</span> <span class="p">{</span> <span class="nb">true</span><span class="p">,</span> <span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input1</span><span class="p">)),</span>
+                               <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input2</span><span class="p">))),</span>
+                    <span class="kt">void</span><span class="p">(),</span> <span class="nb">true</span><span class="p">)...</span> <span class="p">};</span>
+        <span class="p">};</span>
+
+<span class="c1">//        template&lt;class InputTuple, class OutputTuple, class UnaryOperation, size_t... index&gt;</span>
+<span class="c1">//        auto transform_impl(InputTuple&amp;&amp; input, OutputTuple&amp;&amp; output, UnaryOperation&amp;&amp; func, std::index_sequence&lt;index...&gt;)</span>
+<span class="c1">//            -&gt; decltype(output)</span>
+<span class="c1">//        {</span>
+<span class="c1">//            auto dummy = { (std::get&lt;index&gt;(output) = func(std::get&lt;index&gt;(std::forward&lt;InputTuple&gt;(input))))... };</span>
+<span class="c1">//</span>
+<span class="c1">//            return output;</span>
+<span class="c1">//        };</span>
+<span class="c1">//</span>
+<span class="c1">//        template&lt;class InputTuple1, class InputTuple2, class OutputTuple, class BinaryOperation, size_t... index&gt;</span>
+<span class="c1">//        auto transform_impl(InputTuple1&amp;&amp; input1, InputTuple2&amp;&amp; input2, OutputTuple&amp;&amp; output, BinaryOperation&amp;&amp; func, std::index_sequence&lt;index...&gt;)</span>
+<span class="c1">//            -&gt; decltype(output)</span>
+<span class="c1">//        {</span>
+<span class="c1">//            auto dummy = { (std::get&lt;index&gt;(output) = func(std::get&lt;index&gt;(std::forward&lt;InputTuple1&gt;(input1)),</span>
+<span class="c1">//                                                           std::get&lt;index&gt;(std::forward&lt;InputTuple2&gt;(input2))))... };</span>
+<span class="c1">//</span>
+<span class="c1">//            return output;</span>
+<span class="c1">//        };</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputTuple</span><span class="p">,</span> <span class="k">class</span> <span class="nc">UnaryOperation</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">...</span> <span class="n">index</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">transform_impl</span><span class="p">(</span><span class="n">InputTuple</span><span class="o">&amp;&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">UnaryOperation</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">index</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span> <span class="n">func</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input</span><span class="p">)))...</span> <span class="p">);</span>
+        <span class="p">};</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputTuple1</span><span class="p">,</span> <span class="k">class</span> <span class="nc">InputTuple2</span><span class="p">,</span> <span class="k">class</span> <span class="nc">BinaryOperation</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">...</span> <span class="n">index</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">transform_impl</span><span class="p">(</span><span class="n">InputTuple1</span><span class="o">&amp;&amp;</span> <span class="n">input1</span><span class="p">,</span> <span class="n">InputTuple2</span><span class="o">&amp;&amp;</span> <span class="n">input2</span><span class="p">,</span> <span class="n">BinaryOperation</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">index</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">make_tuple</span><span class="p">(</span> <span class="n">func</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input1</span><span class="p">)),</span>
+                                         <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input2</span><span class="p">)))...</span> <span class="p">);</span>
+        <span class="p">};</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputTuple</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Acc</span><span class="p">,</span> <span class="k">class</span> <span class="nc">BinaryOperation</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">...</span> <span class="n">index</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">accumulate_impl</span><span class="p">(</span><span class="n">InputTuple</span><span class="o">&amp;&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">Acc</span> <span class="n">accumulator</span><span class="p">,</span> <span class="n">BinaryOperation</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">index</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">sink</span> <span class="p">{</span> <span class="nb">true</span><span class="p">,</span> <span class="p">((</span><span class="n">accumulator</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">accumulator</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input</span><span class="p">)))),</span>
+                    <span class="kt">void</span><span class="p">(),</span> <span class="nb">true</span><span class="p">)...</span> <span class="p">};</span>
+
+            <span class="k">return</span> <span class="n">accumulator</span><span class="p">;</span>
+        <span class="p">};</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputTuple1</span><span class="p">,</span> <span class="k">class</span> <span class="nc">InputTuple2</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Acc</span><span class="p">,</span> <span class="k">class</span> <span class="nc">TernaryOperation</span><span class="p">,</span> <span class="kt">size_t</span><span class="p">...</span> <span class="n">index</span><span class="o">&gt;</span>
+        <span class="k">auto</span> <span class="n">accumulate_impl</span><span class="p">(</span><span class="n">InputTuple1</span><span class="o">&amp;&amp;</span> <span class="n">input1</span><span class="p">,</span> <span class="n">InputTuple2</span><span class="o">&amp;&amp;</span> <span class="n">input2</span><span class="p">,</span> <span class="n">Acc</span> <span class="n">accumulator</span><span class="p">,</span> <span class="n">TernaryOperation</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">index</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">sink</span> <span class="p">{</span> <span class="nb">true</span><span class="p">,</span> <span class="p">((</span><span class="n">accumulator</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="n">accumulator</span><span class="p">,</span>
+                                              <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input1</span><span class="p">)),</span>
+                                              <span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input2</span><span class="p">)))),</span>
+                    <span class="kt">void</span><span class="p">(),</span> <span class="nb">true</span><span class="p">)...</span> <span class="p">};</span>
+
+            <span class="k">return</span> <span class="n">accumulator</span><span class="p">;</span>
+        <span class="p">};</span>
+    <span class="p">}</span>
+
+
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputTuple</span><span class="p">,</span> <span class="k">class</span> <span class="nc">UnaryOperation</span><span class="o">&gt;</span>
+    <span class="kt">void</span> <span class="n">for_each</span><span class="p">(</span><span class="n">InputTuple</span><span class="o">&amp;&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">UnaryOperation</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">for_each_impl</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">UnaryOperation</span><span class="o">&gt;</span><span class="p">(</span><span class="n">func</span><span class="p">),</span>
+                      <span class="n">make_tuple_index</span><span class="o">&lt;</span><span class="n">InputTuple</span><span class="o">&gt;</span><span class="p">());</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputTuple1</span><span class="p">,</span> <span class="k">class</span> <span class="nc">InputTuple2</span><span class="p">,</span> <span class="k">class</span> <span class="nc">BinaryOperation</span><span class="cm">/*, typename = std::enable_if_t&lt;(tuple_size&lt;InputTuple1&gt;::value &gt; 1) &amp;&amp; (tuple_size&lt;InputTuple2&gt;::value &gt; 1)&gt;*/</span><span class="o">&gt;</span>
+    <span class="kt">void</span> <span class="n">for_each</span><span class="p">(</span><span class="n">InputTuple1</span><span class="o">&amp;&amp;</span> <span class="n">input1</span><span class="p">,</span> <span class="n">InputTuple2</span><span class="o">&amp;&amp;</span> <span class="n">input2</span><span class="p">,</span> <span class="n">BinaryOperation</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">for_each_impl</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input1</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input2</span><span class="p">),</span>
+                      <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">BinaryOperation</span><span class="o">&gt;</span><span class="p">(</span><span class="n">func</span><span class="p">),</span>  <span class="n">make_tuple_index</span><span class="o">&lt;</span><span class="n">InputTuple1</span><span class="o">&gt;</span><span class="p">());</span>
+    <span class="p">};</span>
+
+<span class="c1">//    template&lt;class InputTuple, class OutputTuple, class UnaryOperation&gt;</span>
+<span class="c1">//    auto transform(InputTuple&amp;&amp; input, OutputTuple&amp;&amp; output, UnaryOperation&amp;&amp; func)</span>
+<span class="c1">//    {</span>
+<span class="c1">//        return transform_impl(std::forward&lt;InputTuple&gt;(input), std::forward&lt;OutputTuple&gt;(output),</span>
+<span class="c1">//                              std::forward&lt;UnaryOperation&gt;(func), make_tuple_index&lt;InputTuple&gt;());</span>
+<span class="c1">//    };</span>
+<span class="c1">//</span>
+<span class="c1">//    template&lt;class InputTuple1, class InputTuple2, class OutputTuple, class BinaryOperation&gt;</span>
+<span class="c1">//    auto transform(InputTuple1&amp;&amp; input1, InputTuple2&amp;&amp; input2, OutputTuple&amp;&amp; output, BinaryOperation&amp;&amp; func)</span>
+<span class="c1">//    {</span>
+<span class="c1">//        return transform_impl(std::forward&lt;InputTuple1&gt;(input1), std::forward&lt;InputTuple2&gt;(input2),</span>
+<span class="c1">//                              std::forward&lt;OutputTuple&gt;(output), std::forward&lt;BinaryOperation&gt;(func),</span>
+<span class="c1">//                              make_tuple_index&lt;InputTuple1&gt;());</span>
+<span class="c1">//    };</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputTuple</span><span class="p">,</span> <span class="k">class</span> <span class="nc">UnaryOperation</span><span class="cm">/*, typename = std::enable_if_t&lt;(tuple_size&lt;InputTuple&gt;::value &gt; 1)&gt;*/</span><span class="o">&gt;</span>
+    <span class="k">auto</span> <span class="n">transform</span><span class="p">(</span><span class="n">InputTuple</span><span class="o">&amp;&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">UnaryOperation</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">transform_impl</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">UnaryOperation</span><span class="o">&gt;</span><span class="p">(</span><span class="n">func</span><span class="p">),</span>
+                              <span class="n">make_tuple_index</span><span class="o">&lt;</span><span class="n">InputTuple</span><span class="o">&gt;</span><span class="p">());</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputTuple1</span><span class="p">,</span> <span class="k">class</span> <span class="nc">InputTuple2</span><span class="p">,</span> <span class="k">class</span> <span class="nc">BinaryOperation</span><span class="o">&gt;</span><span class="c1">//, typename = std::enable_if_t&lt;(tuple_size&lt;InputTuple1&gt;::value &gt; 1) &amp;&amp; (tuple_size&lt;InputTuple2&gt;::value &gt; 1)&gt;&gt;</span>
+    <span class="k">auto</span> <span class="n">transform</span><span class="p">(</span><span class="n">InputTuple1</span><span class="o">&amp;&amp;</span> <span class="n">input1</span><span class="p">,</span> <span class="n">InputTuple2</span><span class="o">&amp;&amp;</span> <span class="n">input2</span><span class="p">,</span> <span class="n">BinaryOperation</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">transform_impl</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input1</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input2</span><span class="p">),</span>
+                              <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">BinaryOperation</span><span class="o">&gt;</span><span class="p">(</span><span class="n">func</span><span class="p">),</span> <span class="n">make_tuple_index</span><span class="o">&lt;</span><span class="n">InputTuple1</span><span class="o">&gt;</span><span class="p">());</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputTuple</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Acc</span><span class="p">,</span> <span class="k">class</span> <span class="nc">BinaryOperation</span><span class="o">&gt;</span><span class="c1">//, typename = std::enable_if_t&lt;(tuple_size&lt;InputTuple&gt;::value &gt; 1)&gt;&gt;</span>
+    <span class="n">Acc</span> <span class="n">accumulate</span><span class="p">(</span><span class="n">InputTuple</span><span class="o">&amp;&amp;</span> <span class="n">input</span><span class="p">,</span> <span class="n">Acc</span> <span class="n">accumulator</span><span class="p">,</span> <span class="n">BinaryOperation</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">accumulate_impl</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Acc</span><span class="o">&gt;</span><span class="p">(</span><span class="n">accumulator</span><span class="p">),</span>
+                               <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">BinaryOperation</span><span class="o">&gt;</span><span class="p">(</span><span class="n">func</span><span class="p">),</span> <span class="n">make_tuple_index</span><span class="o">&lt;</span><span class="n">InputTuple</span><span class="o">&gt;</span><span class="p">());</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">class</span> <span class="nc">InputTuple1</span><span class="p">,</span> <span class="k">class</span> <span class="nc">InputTuple2</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Acc</span><span class="p">,</span> <span class="k">class</span> <span class="nc">TernaryOperation</span><span class="o">&gt;</span><span class="c1">//, typename = std::enable_if_t&lt;(tuple_size&lt;InputTuple1&gt;::value &gt; 1) &amp;&amp; (tuple_size&lt;InputTuple2&gt;::value &gt; 1)&gt;&gt;</span>
+    <span class="n">Acc</span> <span class="n">accumulate</span><span class="p">(</span><span class="n">InputTuple1</span><span class="o">&amp;&amp;</span> <span class="n">input1</span><span class="p">,</span> <span class="n">InputTuple2</span><span class="o">&amp;&amp;</span> <span class="n">input2</span><span class="p">,</span> <span class="n">Acc</span> <span class="n">accumulator</span><span class="p">,</span> <span class="n">TernaryOperation</span><span class="o">&amp;&amp;</span> <span class="n">func</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">accumulate_impl</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple1</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input1</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">InputTuple2</span><span class="o">&gt;</span><span class="p">(</span><span class="n">input2</span><span class="p">),</span>
+                               <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Acc</span><span class="o">&gt;</span><span class="p">(</span><span class="n">accumulator</span><span class="p">),</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">TernaryOperation</span><span class="o">&gt;</span><span class="p">(</span><span class="n">func</span><span class="p">),</span>
+                               <span class="n">make_tuple_index</span><span class="o">&lt;</span><span class="n">InputTuple1</span><span class="o">&gt;</span><span class="p">());</span>
+    <span class="p">};</span>
+
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">Iterator</span><span class="o">&gt;</span>
+    <span class="k">using</span> <span class="n">tuple_iterator</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">iterator</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">random_access_iterator_tag</span><span class="p">,</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">iterator_traits</span><span class="o">&lt;</span><span class="n">Iterator</span><span class="o">&gt;::</span><span class="n">value_type</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">common_type_t</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">iterator_traits</span><span class="o">&lt;</span><span class="n">Iterator</span><span class="o">&gt;::</span><span class="n">difference_type</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">iterator_traits</span><span class="o">&lt;</span><span class="n">Iterator</span><span class="o">&gt;::</span><span class="n">pointer</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span>
+            <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">iterator_traits</span><span class="o">&lt;</span><span class="n">Iterator</span><span class="o">&gt;::</span><span class="n">reference</span><span class="p">...</span><span class="o">&gt;&gt;</span><span class="p">;</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Iterator</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">zip_iterator</span> <span class="o">:</span>
+            <span class="k">public</span> <span class="n">tuple_iterator</span><span class="o">&lt;</span><span class="n">Iterator</span><span class="p">...</span><span class="o">&gt;</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">Base</span> <span class="o">=</span> <span class="n">tuple_iterator</span><span class="o">&lt;</span><span class="n">Iterator</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">trait_t</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">iterator_traits</span><span class="o">&lt;</span><span class="n">zip_iterator</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="k">using</span> <span class="n">value_type</span>        <span class="o">=</span> <span class="k">typename</span> <span class="n">trait_t</span><span class="o">::</span><span class="n">value_type</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">difference_type</span>   <span class="o">=</span> <span class="k">typename</span> <span class="n">trait_t</span><span class="o">::</span><span class="n">difference_type</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">pointer</span>           <span class="o">=</span> <span class="k">typename</span> <span class="n">trait_t</span><span class="o">::</span><span class="n">pointer</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">reference</span>         <span class="o">=</span> <span class="k">typename</span> <span class="n">trait_t</span><span class="o">::</span><span class="n">reference</span><span class="p">;</span>
+
+        <span class="k">static</span> <span class="k">const</span> <span class="n">difference_type</span> <span class="n">diff_max</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="n">difference_type</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">();</span>
+        <span class="k">static</span> <span class="k">const</span> <span class="n">difference_type</span> <span class="n">diff_min</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="n">difference_type</span><span class="o">&gt;::</span><span class="n">min</span><span class="p">();</span>
+
+        <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Iterator</span><span class="p">...</span><span class="o">&gt;</span> <span class="n">_iterators</span><span class="p">;</span>
+
+    <span class="k">public</span><span class="o">:</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span><span class="p">(</span><span class="n">Iterator</span><span class="o">&amp;&amp;</span> <span class="p">...</span><span class="n">arg</span><span class="p">)</span>
+                <span class="o">:</span> <span class="n">_iterators</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Iterator</span><span class="o">&gt;</span><span class="p">(</span><span class="n">arg</span><span class="p">)...)</span>
+        <span class="p">{}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Iterator</span><span class="p">...</span><span class="o">&gt;&amp;&amp;</span> <span class="n">tuple</span><span class="p">)</span> <span class="k">noexcept</span>
+                <span class="o">:</span> <span class="n">_iterators</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">tuple</span><span class="p">))</span>
+        <span class="p">{}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span><span class="p">(</span><span class="k">const</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+                <span class="o">:</span> <span class="n">_iterators</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">_iterators</span><span class="p">)</span>
+        <span class="p">{}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span><span class="p">(</span><span class="n">zip_iterator</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span>
+                <span class="o">:</span> <span class="n">_iterators</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">_iterators</span><span class="p">))</span>
+        <span class="p">{}</span>
+
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_iterators</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">_iterators</span><span class="p">;</span>
+
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">zip_iterator</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span>
+        <span class="p">{</span>
+            <span class="n">_iterators</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">_iterators</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">++</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">for_each</span><span class="p">(</span><span class="n">_iterators</span><span class="p">,</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">](</span><span class="k">auto</span> <span class="o">&amp;</span><span class="n">iterator</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="o">++</span><span class="n">iterator</span><span class="p">;</span>
+            <span class="p">});</span>
+
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span> <span class="k">operator</span><span class="o">++</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+
+            <span class="o">++</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">==</span><span class="p">(</span><span class="k">const</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span> <span class="o">-</span> <span class="n">other</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">!=</span>  <span class="p">(</span><span class="k">const</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span> <span class="o">-</span> <span class="n">other</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">reference</span> <span class="k">operator</span><span class="o">*</span><span class="p">()</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">transform</span><span class="p">(</span><span class="n">_iterators</span><span class="p">,</span> <span class="p">[](</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">iterator</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="k">const</span> <span class="n">reference</span> <span class="k">operator</span><span class="o">*</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">transform</span><span class="p">(</span><span class="n">_iterators</span><span class="p">,</span> <span class="p">[](</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">iterator</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">ref</span><span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">pointer</span> <span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">transform</span><span class="p">(</span><span class="n">_iterators</span><span class="p">,</span> <span class="p">[](</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">iterator</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">addressof</span><span class="p">(</span><span class="o">*</span><span class="n">iterator</span><span class="p">);</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">--</span> <span class="p">()</span>
+        <span class="p">{</span>
+            <span class="n">for_each</span><span class="p">(</span><span class="n">_iterators</span><span class="p">,</span> <span class="p">[](</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">iterator</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="o">--</span><span class="n">iterator</span><span class="p">;</span>
+            <span class="p">});</span>
+
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span> <span class="k">operator</span><span class="o">--</span> <span class="p">(</span><span class="kt">int</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+
+            <span class="o">--</span><span class="p">(</span><span class="o">*</span><span class="k">this</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">+=</span><span class="p">(</span><span class="n">difference_type</span> <span class="n">offset</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">for_each</span><span class="p">(</span><span class="n">_iterators</span><span class="p">,</span> <span class="p">[</span><span class="n">offset</span><span class="p">](</span><span class="k">auto</span><span class="o">&amp;</span> <span class="n">iterator</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">iterator</span> <span class="o">+=</span> <span class="n">offset</span><span class="p">;</span>
+            <span class="p">});</span>
+
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">-=</span><span class="p">(</span><span class="n">difference_type</span> <span class="n">offset</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">operator</span><span class="o">+=</span><span class="p">(</span><span class="o">-</span><span class="n">offset</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">difference_type</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="k">const</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">zacc</span><span class="o">::</span><span class="n">accumulate</span><span class="p">(</span><span class="n">_iterators</span><span class="p">,</span> <span class="n">other</span><span class="p">.</span><span class="n">_iterators</span><span class="p">,</span> <span class="n">diff_max</span><span class="p">,</span> <span class="p">[](</span><span class="k">auto</span> <span class="n">acc</span><span class="p">,</span> <span class="k">auto</span> <span class="n">iterator1</span><span class="p">,</span> <span class="k">auto</span> <span class="n">iterator2</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">diff</span> <span class="o">=</span> <span class="n">iterator1</span> <span class="o">-</span> <span class="n">iterator2</span><span class="p">;</span>
+                <span class="k">return</span> <span class="n">diff</span> <span class="o">&lt;</span> <span class="n">acc</span>
+                       <span class="o">?</span> <span class="nl">diff</span>
+                       <span class="p">:</span> <span class="n">acc</span><span class="p">;</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span> <span class="k">operator</span><span class="o">+</span><span class="p">(</span><span class="n">difference_type</span> <span class="n">offset</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="n">offset</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_iterator</span> <span class="k">operator</span><span class="o">-</span><span class="p">(</span><span class="n">difference_type</span> <span class="n">offset</span><span class="p">)</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">auto</span> <span class="n">result</span> <span class="o">=</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+            <span class="n">result</span> <span class="o">-=</span> <span class="n">offset</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">&lt;</span><span class="p">(</span><span class="k">const</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span> <span class="o">-</span> <span class="n">other</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">&gt;</span>  <span class="p">(</span><span class="k">const</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span> <span class="o">-</span> <span class="n">other</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">&lt;=</span> <span class="p">(</span><span class="k">const</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span> <span class="o">-</span> <span class="n">other</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="kt">bool</span> <span class="k">operator</span><span class="o">&gt;=</span> <span class="p">(</span><span class="k">const</span> <span class="n">zip_iterator</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="p">(</span><span class="o">*</span><span class="k">this</span> <span class="o">-</span> <span class="n">other</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">Args</span><span class="o">&gt;</span>
+    <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">make_zip_iter</span><span class="p">(</span><span class="n">Args</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">arg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">zip_iterator</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">arg</span><span class="p">)...);</span>
+    <span class="p">}</span>
+
+    <span class="k">template</span> <span class="o">&lt;</span><span class="k">typename</span> <span class="n">Container</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="n">resolve_iterator</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">conditional</span><span class="o">&lt;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">is_const</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;::</span><span class="n">value</span> <span class="o">||</span> <span class="n">std</span><span class="o">::</span><span class="n">is_rvalue_reference</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span>
+                <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">::</span><span class="n">const_iterator</span><span class="p">,</span>
+                <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">::</span><span class="n">iterator</span>
+        <span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="k">struct</span> <span class="n">resolve_reference</span> <span class="p">{</span>
+        <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">conditional</span><span class="o">&lt;</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">is_rvalue_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">value</span><span class="p">,</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">,</span>
+                <span class="n">std</span><span class="o">::</span><span class="n">add_lvalue_reference_t</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span>
+        <span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">T</span><span class="o">&gt;</span>
+    <span class="k">using</span> <span class="n">resolve_reference_t</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">resolve_reference</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="p">...</span> <span class="n">Container</span><span class="o">&gt;</span>
+    <span class="k">class</span> <span class="nc">zip_container</span>
+    <span class="p">{</span>
+        <span class="k">using</span> <span class="n">containers_t</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">resolve_reference_t</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">indices_t</span> <span class="o">=</span> <span class="n">make_tuple_index</span><span class="o">&lt;</span><span class="n">containers_t</span><span class="o">&gt;</span><span class="p">;</span>
+
+
+        <span class="n">containers_t</span> <span class="n">_containers</span><span class="p">;</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">...</span> <span class="n">index</span><span class="o">&gt;</span>
+        <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">begins</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">index</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">make_zip_iter</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">begin</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_containers</span><span class="p">))...);}</span>
+
+        <span class="k">template</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="p">...</span> <span class="n">index</span><span class="o">&gt;</span>
+        <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">ends</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">index</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span> <span class="k">return</span> <span class="n">make_zip_iter</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">end</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">get</span><span class="o">&lt;</span><span class="n">index</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_containers</span><span class="p">))...);}</span>
+
+               <span class="c1">//constexpr auto begins(std::index_sequence&lt;index...&gt;)</span>
+    <span class="k">public</span><span class="o">:</span>
+        <span class="k">using</span> <span class="n">iterator</span>          <span class="o">=</span> <span class="n">zip_iterator</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;::</span><span class="n">iterator</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+        <span class="k">using</span> <span class="n">const_iterator</span>    <span class="o">=</span> <span class="k">const</span> <span class="n">zip_iterator</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">std</span><span class="o">::</span><span class="n">remove_reference_t</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;::</span><span class="n">const_iterator</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+
+        <span class="c1">//template&lt;template&lt;class...&gt; class Func&gt;</span>
+        <span class="c1">//using _iterator = zip_iterator&lt;decltype(Func(std::declval&lt;resolve_reference_t&lt;Container&gt;&gt;()))...&gt;;</span>
+
+
+        <span class="c1">//using begin_iter_t = zip_iterator&lt;decltype(std::begin(std::remove_reference_t&lt;Container&gt;()))...&gt;;</span>
+        <span class="c1">//using end_iter_t = zip_iterator&lt;decltype(std::end(std::remove_reference_t&lt;Container&gt;()))...&gt;;</span>
+
+        <span class="c1">//using begin_iter_t = zip_iterator&lt;decltype(begins(indices_t()))...&gt;;</span>
+        <span class="c1">//using end_iter_t = zip_iterator&lt;decltype(std::end(std::remove_reference_t&lt;Container&gt;()))...&gt;;</span>
+
+
+        <span class="c1">//template&lt;size_t... index&gt;</span>
+        <span class="c1">//using begin_iter_t = zip_iterator&lt;decltype(std::begin(std::get&lt;index&gt;(_containers)))...&gt;;</span>
+        <span class="c1">//using end_iter_t = zip_iterator&lt;decltype(std::end(std::remove_reference_t&lt;Container&gt;()))...&gt;;</span>
+
+        <span class="c1">//using _begin_iter_t = begin_iter_t&lt;indices&gt;</span>
+
+        <span class="c1">//template&lt;typename Func&gt;</span>
+        <span class="c1">//using iter_t = zip_iterator&lt;decltype(Func(std::remove_reference_t&lt;Container&gt;()))...&gt;;</span>
+
+        <span class="k">constexpr</span> <span class="nf">zip_container</span><span class="p">(</span><span class="n">Container</span><span class="o">&amp;&amp;</span> <span class="p">...</span><span class="n">arg</span><span class="p">)</span>
+                <span class="o">:</span> <span class="n">_containers</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Container</span><span class="o">&gt;</span><span class="p">(</span><span class="n">arg</span><span class="p">)...)</span>
+        <span class="p">{}</span>
+
+        <span class="k">constexpr</span> <span class="nf">zip_container</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">tuple</span><span class="o">&lt;</span><span class="n">Container</span><span class="p">...</span><span class="o">&gt;&amp;&amp;</span> <span class="n">tuple</span><span class="p">)</span> <span class="k">noexcept</span>
+                <span class="o">:</span> <span class="n">_containers</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">tuple</span><span class="p">))</span>
+        <span class="p">{}</span>
+
+        <span class="k">constexpr</span> <span class="nf">zip_container</span><span class="p">(</span><span class="k">const</span> <span class="n">zip_container</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+                <span class="o">:</span> <span class="n">_containers</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">_containers</span><span class="p">)</span>
+        <span class="p">{}</span>
+
+        <span class="k">constexpr</span> <span class="nf">zip_container</span><span class="p">(</span><span class="n">zip_container</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span>
+                <span class="o">:</span> <span class="n">_containers</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">_containers</span><span class="p">))</span>
+        <span class="p">{}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_container</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="k">const</span> <span class="n">zip_container</span><span class="o">&amp;</span> <span class="n">other</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_containers</span> <span class="o">=</span> <span class="n">other</span><span class="p">.</span><span class="n">_containers</span><span class="p">;</span>
+
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">zip_container</span><span class="o">&amp;</span> <span class="k">operator</span><span class="o">=</span><span class="p">(</span><span class="n">zip_container</span><span class="o">&amp;&amp;</span> <span class="n">other</span><span class="p">)</span> <span class="k">noexcept</span>
+        <span class="p">{</span>
+            <span class="n">_containers</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">other</span><span class="p">.</span><span class="n">_containers</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="o">*</span><span class="k">this</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">begin</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">begins</span><span class="p">(</span><span class="n">indices_t</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">end</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">ends</span><span class="p">(</span><span class="n">indices_t</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">const_iterator</span> <span class="n">cbegin</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">begin</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="n">const_iterator</span> <span class="n">cend</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">end</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">begin</span><span class="p">()</span> <span class="c1">//-&gt; decltype(begins(indices_t()))</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">begins</span><span class="p">(</span><span class="n">indices_t</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="k">auto</span> <span class="n">end</span><span class="p">()</span> <span class="c1">//-&gt; decltype(ends(indices_t()))</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">ends</span><span class="p">(</span><span class="n">indices_t</span><span class="p">());</span>
+        <span class="p">}</span>
+
+        <span class="k">constexpr</span> <span class="kt">size_t</span> <span class="n">size</span><span class="p">()</span> <span class="k">const</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">zacc</span><span class="o">::</span><span class="n">accumulate</span><span class="p">(</span><span class="n">_containers</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">size_t</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">(),</span> <span class="p">[](</span><span class="k">auto</span> <span class="n">acc</span><span class="p">,</span> <span class="k">auto</span> <span class="n">container</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">auto</span> <span class="n">size</span> <span class="o">=</span> <span class="n">container</span><span class="p">.</span><span class="n">size</span><span class="p">();</span>
+                <span class="k">return</span> <span class="n">size</span> <span class="o">&lt;</span> <span class="n">acc</span>
+                       <span class="o">?</span> <span class="nl">size</span>
+                       <span class="p">:</span> <span class="n">acc</span><span class="p">;</span>
+            <span class="p">});</span>
+        <span class="p">}</span>
+
+    <span class="k">private</span><span class="o">:</span>
+        <span class="c1">//containers_t _containers;</span>
+    <span class="p">};</span>
+
+    <span class="k">template</span><span class="o">&lt;</span><span class="n">class</span><span class="p">...</span> <span class="n">Containers</span><span class="o">&gt;</span>
+    <span class="k">auto</span> <span class="n">zip</span><span class="p">(</span><span class="n">Containers</span><span class="o">&amp;&amp;</span><span class="p">...</span> <span class="n">arg</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">zip_container</span><span class="o">&lt;</span><span class="n">Containers</span><span class="o">&amp;&amp;</span><span class="p">...</span><span class="o">&gt;</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Containers</span><span class="o">&gt;</span><span class="p">(</span><span class="n">arg</span><span class="p">)...);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp.html"
+                        title="previous chapter">File algorithm.hpp</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="file__home_travis_build_zz-systems_zacc_include_backend_all.hpp.html"
+                        title="next chapter">File all.hpp</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_backend_all.hpp.html" title="File all.hpp"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp.html" title="File algorithm.hpp"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">ZACC  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="zacc_root.html" >ZACC API</a> &#187;</li>
+          <li class="nav-item nav-item-2"><a href="file__home_travis_build_zz-systems_zacc_include_util_algorithm.hpp.html" >File algorithm.hpp</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Sergej Zuyev.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

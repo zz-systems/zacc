@@ -1,0 +1,128 @@
+
+.. _file__home_travis_build_zz-systems_zacc_include_util_macros.hpp:
+
+File macros.hpp
+===============
+
+|exhale_lsh| :ref:`Parent directory <dir__home_travis_build_zz-systems_zacc_include_util>` (``/home/travis/build/zz-systems/zacc/include/util``)
+
+.. |exhale_lsh| unicode:: U+021B0 .. UPWARDS ARROW WITH TIP LEFTWARDS
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+Definition (``/home/travis/build/zz-systems/zacc/include/util/macros.hpp``)
+---------------------------------------------------------------------------
+
+
+.. toctree::
+   :maxdepth: 1
+
+   program_listing_file__home_travis_build_zz-systems_zacc_include_util_macros.hpp.rst
+
+
+
+
+
+Includes
+--------
+
+
+- ``utility``
+
+
+
+Included By
+-----------
+
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_zval.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx2_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_avx512_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_scalar_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_float64.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int16.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int32.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_backend_sse_int8.impl.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_traits_printable.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_type_composition.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_util_type_ztraits.hpp`
+
+- :ref:`file__home_travis_build_zz-systems_zacc_include_zacc.hpp`
+
+
+
+
+Defines
+-------
+
+
+- :ref:`exhale_define_macros_8hpp_1a505436832669a2a70176f662d7715702`
+
+- :ref:`exhale_define_macros_8hpp_1a9331ff479824c7ae6f531145ec2c82d4`
+
+- :ref:`exhale_define_macros_8hpp_1ab16f8465cc38c4e7365402fbc6c32548`
+
+- :ref:`exhale_define_macros_8hpp_1a330c737bc94416f366a7a6b408bca838`
+
+- :ref:`exhale_define_macros_8hpp_1af1eaa3905124fe7b60060df0466e230f`
+
+- :ref:`exhale_define_macros_8hpp_1a3428692efe6051ef30016ffde1a9f7bb`
+
+- :ref:`exhale_define_macros_8hpp_1a9a63ce5ce3b143f8df9df20769c2ab86`
+
+- :ref:`exhale_define_macros_8hpp_1afa3b777da32e2e44bf6a1be104cf8aba`
+
+- :ref:`exhale_define_macros_8hpp_1aa6d5042a0ebcb5e8b1da5fd92d93c14a`
+
+- :ref:`exhale_define_macros_8hpp_1a85d942a7aa8b718de83d06343f12aa8a`
+
+- :ref:`exhale_define_macros_8hpp_1a5eb66637d81ad7882eab8526b0c46572`
+
