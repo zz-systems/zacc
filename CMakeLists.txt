@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.3.2)
-project(zacc VERSION 1.0.0)
+project(zacc VERSION 0.5.0)
 
 include(GNUInstallDirs)
 

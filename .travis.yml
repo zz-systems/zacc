@@ -22,7 +22,7 @@ env:
     - SCRIPT_STAGE_DIR=${SCRIPT_BASE_DIR}/$STAGE_NAME
     - SCRIPT_SHARED_DIR=${SCRIPT_BASE_DIR}/shared
 
-    - PKG_DIR=${TRAVIS_BUILD_DIR}/package
+    - PKG_DIR=${TRAVIS_BUILD_DIR}/packages
     - SHARE_DIR=${TRAVIS_BUILD_DIR}/share
 
     - PYTHON=3.6
@@ -34,7 +34,6 @@ branches:
   only:
     - master
     - develop
-    - ci
     - /^v.*$/
 
 os_templates:
@@ -127,11 +126,33 @@ jobs:
 
     - stage: smoke
       <<: *linux_clang5
-      <<: *smoke_stage
+      install: 
+        - source ${SCRIPT_STAGE_DIR}/install.sh
+        - source ${SCRIPT_STAGE_DIR}/before_script.sh
+      before_script: 
+        - source ${SCRIPT_SHARED_DIR}/aws-init.sh
+      script: 
+        - ${SCRIPT_STAGE_DIR}/script.sh
+        - cd $BUILD_DIR
+        - cpack -P ${RELEASE_NAME} -G ZIP
+        - cp ./${RELEASE_NAME}.zip ${SHARE_DIR}
+      #after_success:                
+        - source ${SCRIPT_SHARED_DIR}/aws-sync.sh
 
     - stage: smoke
       <<: *osx_xcode101
-      <<: *smoke_stage
+      install: 
+        - source ${SCRIPT_STAGE_DIR}/install.sh
+        - source ${SCRIPT_SHARED_DIR}/aws-init.sh
+      before_script: 
+        - source ${SCRIPT_STAGE_DIR}/before_script.sh
+      script: 
+        - ${SCRIPT_STAGE_DIR}/script.sh
+        - cd $BUILD_DIR
+        - cpack -P ${RELEASE_NAME} -G ZIP
+        - cp ./${RELEASE_NAME}.zip ${SHARE_DIR} 
+      #after_success:        
+        - source ${SCRIPT_SHARED_DIR}/aws-sync.sh
 
     - stage: test
       <<: *linux_gcc6
