@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.system.info -- -j $JOBS
-cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.examples.mandelbrot -- -j $JOBS
-cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.examples.julia -- -j $JOBS
+cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc_cpuid -- -j $JOBS
+cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target mandelbrot -- -j $JOBS
+cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target julia -- -j $JOBS
 cmake --build ${BUILD_DIR} --config ${BUILD_TYPE} --target zacc.tests.all -- -j $JOBS
 
 cd "${BUILD_DIR}"
@@ -16,15 +16,15 @@ ls ./lib
 
 # detect system
 echo "Execute zacc.system.info"
-./bin/zacc.system.info
+./bin/zacc_cpuid
 
 # run tests
 echo "Execute tests"
 ctest --output-on-failure
 
 # run examples
-echo "Execute zacc.examples.julia"
-./bin/zacc.examples.julia --dim="[1024, 1024]" --headless     
+echo "Execute julia"
+./bin/julia --dim="[1024, 1024]" --headless
 
-echo "Execute zacc.examples.mandelbrot"
-./bin/zacc.examples.mandelbrot --dim="[1024, 1024]" --headless     
+echo "Execute mandelbrot"
+./bin/mandelbrot --dim="[1024, 1024]" --headless
