@@ -3,8 +3,6 @@ project(zacc VERSION 1.0.0)
 
 include(GNUInstallDirs)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
-
 include(cmake/zacc.shared.cmake)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
@@ -46,12 +44,51 @@ endif()
 
 add_library(zacc INTERFACE)
 add_library(zacc::zacc ALIAS zacc)
+
 target_include_directories(zacc INTERFACE 
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>)
 
-install(TARGETS zacc EXPORT zacc)
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/zacc")
+set(INSTALL_CONFIGDIR ${CMAKE_INSTALL_LIBDIR}/cmake/zacc)
+
+install(TARGETS zacc 
+    EXPORT zacc-targets
+    RUNTIME DESTINATION     "${CMAKE_INSTALL_BINDIR}"       COMPONENT bin
+    ARCHIVE DESTINATION     "${CMAKE_INSTALL_LIBDIR}"       COMPONENT lib
+    LIBRARY DESTINATION     "${CMAKE_INSTALL_LIBDIR}"       COMPONENT shlib
+    INCLUDES DESTINATION    "${CMAKE_INSTALL_INCLUDEDIR}"   COMPONENT dev)
+
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+install(EXPORT zacc-targets
+    FILE zaccTargets.cmake
+    NAMESPACE zacc::
+    DESTINATION ${INSTALL_CONFIGDIR}
+)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    ${CMAKE_CURRENT_BINARY_DIR}/zaccConfigVersion.cmake
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file(${CMAKE_CURRENT_LIST_DIR}/cmake/zaccConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/zaccConfig.cmake
+    INSTALL_DESTINATION ${INSTALL_CONFIGDIR}
+)
+
+#Install the config, configversion and custom find modules
+install(FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/zaccConfigVersion.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/zaccConfig.cmake
+    DESTINATION ${INSTALL_CONFIGDIR}
+)
+
+export(EXPORT zacc-targets FILE ${CMAKE_CURRENT_BINARY_DIR}/zaccTargets.cmake NAMESPACE zacc::)
+
+export(PACKAGE zacc)
+
 
 set(CPACK_PACKAGE_DESCRIPTION "PROJECT_NAME")
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")

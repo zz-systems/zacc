@@ -4,6 +4,12 @@ project(zacc.examples.mandelbrot)
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
 add_executable(mandelbrot src/mandelbrot.cpp)
+
+set_target_properties(mandelbrot
+    PROPERTIES
+    INSTALL_RPATH "@loader_path/../lib;@loader_path/../thirdparty/lib"
+)
+
 zacc_link_kernels(mandelbrot
     BRANCHES "${branches}"
     KERNELS src/kernels.cpp)

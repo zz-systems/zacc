@@ -13,11 +13,10 @@ if(CMAKE_SYSTEM_NAME MATCHES "Linux")
 endif()
 
 install(TARGETS zacc_dl
-        EXPORT  zacc
+        EXPORT  zacc-targets
         LIBRARY       DESTINATION "${CMAKE_INSTALL_LIBDIR}"                            COMPONENT shlib
         ARCHIVE       DESTINATION "${CMAKE_INSTALL_LIBDIR}"                            COMPONENT lib
-        RUNTIME       DESTINATION "${CMAKE_INSTALL_BINDIR}"                            COMPONENT bin
-        PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/${LIBRARY_TARGET_NAME}" COMPONENT dev)
+        RUNTIME       DESTINATION "${CMAKE_INSTALL_BINDIR}"                            COMPONENT bin)
 
 add_executable(zacc_cpuid WIN32 src/platform_detector.cpp)
 

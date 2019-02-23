@@ -5,6 +5,12 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 
 
 add_executable(julia src/julia.cpp)
+
+set_target_properties(julia
+    PROPERTIES
+    INSTALL_RPATH "@loader_path/../lib;@loader_path/../thirdparty/lib"
+)
+
 zacc_link_kernels(julia
     BRANCHES "${branches}"
     KERNELS src/kernels.cpp)

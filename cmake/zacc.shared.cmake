@@ -204,7 +204,7 @@ function(zacc_link_kernels target_name)
     message(STATUS "[LINK] ${target_name}")
 
     target_link_libraries(${target_name} PUBLIC zacc_dl)
-    target_compile_definitions(${target_name} PUBLIC ZACC_DYLIBNAME="${CMAKE_SHARED_LIBRARY_PREFIX}${target_name}.impl${CMAKE_SHARED_LIBRARY_SUFFIX}")
+    target_compile_definitions(${target_name} PUBLIC ZACC_DYLIBNAME="${CMAKE_SHARED_LIBRARY_PREFIX}${target_name}${CMAKE_SHARED_LIBRARY_SUFFIX}")
 
     foreach(branch ${target_BRANCHES})
         message(STATUS "[LINK] ${target_name}.${branch}")
