@@ -105,7 +105,7 @@ namespace zacc {
         {
             for(auto feature : sysinfo::available())
             {
-                if(parser.has_option("-mno-" + tolower(feature.to_string())))
+                if(parser.has_option("mno-" + tolower(feature.to_string())))
                 {
                     sysinfo._sysinfo.reset(feature);
                 }
