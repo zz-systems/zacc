@@ -2,6 +2,7 @@ language: generic
 
 cache:
   ccache: true
+  pip: true
 
 addons: {apt: {sources: [ ubuntu-toolchain-r-test ]}}
 env:

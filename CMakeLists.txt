@@ -12,7 +12,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 option(BUILD_TESTS "Build unit tests" ON)
 option(BUILD_EXAMPLES "Build examples" ON)
-option(BUILD_DOCS "Build documentation" ON)
 
 # include branched code generation config
 add_subdirectory(codegen/backend)
@@ -37,9 +36,4 @@ endif()
 # add example targets
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)
-endif()
-
-# add documentation targets
-if(BUILD_DOCS)
-    include(docs/CMakeLists.txt)
 endif()
