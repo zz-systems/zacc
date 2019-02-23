@@ -48,9 +48,16 @@
 #include "system/feature.hpp"
 
 #include "traits/printable.hpp"
-{% for module in Traits.render(ast.modules) %}
-#include "traits/{{ module }}.hpp"
-{% endfor %}
+#include "traits/io.hpp"
+#include "traits/math.hpp"
+#include "traits/numeric.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/bitwise_shift.hpp"
+#include "traits/comparable.hpp"
+#include "traits/logical.hpp"
+#include "traits/equatable.hpp"
+#include "traits/conditional.hpp"
+#include "traits/arithmetic.hpp"
 
 namespace zacc { namespace backend { namespace {{ ast.type.target }}
 {

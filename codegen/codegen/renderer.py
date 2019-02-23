@@ -71,7 +71,9 @@ class ModuleMangledNameRenderer(Renderable):
 
 class UniqueModuleNamesRenderer(Renderable):
     def render(self, renderer: Renderer, node: ModulesNode, params):
-        return set([item.name for item in node.modules])
+        seen = set()
+        seen_add = seen.add
+        return [x for x in [item.name for item in node.modules] if not (x in seen or seen_add(x))]
 
 class TraitCompositionRenderer(Renderable):
     def render(self, renderer: Renderer, node: AstRoot, type):

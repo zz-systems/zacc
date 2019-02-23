@@ -2,7 +2,7 @@ from yasha.parsers import PARSERS
 import os, sys
 
 
-print(">>>Current PATH:", os.getcwd())
+#print(">>>Current PATH:", os.getcwd())
 sys.path.append("codegen")
 from codegen.lexer import LexerV1
 from codegen.parser import *

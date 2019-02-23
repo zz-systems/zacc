@@ -48,15 +48,16 @@
 #include "system/feature.hpp"
 
 #include "traits/printable.hpp"
-#include "traits/math.hpp"
 #include "traits/io.hpp"
-#include "traits/arithmetic.hpp"
+#include "traits/math.hpp"
+#include "traits/numeric.hpp"
+#include "traits/bitwise.hpp"
+#include "traits/bitwise_shift.hpp"
 #include "traits/comparable.hpp"
-#include "traits/conditional.hpp"
 #include "traits/logical.hpp"
 #include "traits/equatable.hpp"
-#include "traits/bitwise.hpp"
-#include "traits/numeric.hpp"
+#include "traits/conditional.hpp"
+#include "traits/arithmetic.hpp"
 
 namespace zacc { namespace backend { namespace scalar
 {
@@ -118,6 +119,149 @@ namespace zacc { namespace backend { namespace scalar
 {
     namespace float32_modules
     {
+        /**
+         * @brief arithmetic mixin implementation [scalar branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vneg(Composed one) 
+            {
+                return (-one.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vadd(Composed one, Composed other) 
+            {
+                return (one.value() + other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vsub(Composed one, Composed other) 
+            {
+                return (one.value() - other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vmul(Composed one, Composed other) 
+            {
+                return (one.value() * other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vdiv(Composed one, Composed other) 
+            {
+                return (one.value() / other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return multiplicand.value() * multiplier.value() + addendum.value();
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
+            {
+                return multiplicand.value() * multiplier.value() - addendum.value();
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief bitwise mixin implementation [scalar branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vbneg(Composed one) 
+            {
+                auto _one = one.value();
+                float result;
+                bitsof(result) = ~bitsof(_one);
+                return result;
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vband(Composed one, Composed other) 
+            {
+                auto _one = one.value();
+                auto _other = other.value();
+                float result;
+                bitsof(result) = bitsof(_one) & bitsof(_other);
+                return result;
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vbor(Composed one, Composed other) 
+            {
+                auto _one = one.value();
+                auto _other = other.value();
+                float result;
+                bitsof(result) = bitsof(_one) | bitsof(_other);
+                return result;
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend Composed vbxor(Composed one, Composed other) 
+            {
+                auto _one = one.value();
+                auto _other = other.value();
+                float result;
+                bitsof(result) = bitsof(_one) ^ bitsof(_other);
+                return result;
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates float32
+             */
+            friend bool vis_set(Composed one) 
+            {
+                return one.value() != 0;
+            }
+        };
+
+        // =============================================================================================================
+
         /**
          * @brief math mixin implementation [scalar branch]
          * @relates float32
@@ -256,73 +400,56 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief arithmetic mixin implementation [scalar branch]
+         * @brief logical mixin implementation [scalar branch]
          * @relates float32
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend Composed vneg(Composed one) 
+            friend Boolean vlneg(Composed one) 
             {
-                return (-one.value());
+                return !one.value();
             }
 
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend Composed vadd(Composed one, Composed other) 
+            friend Boolean vlor(Composed one, Composed other) 
             {
-                return (one.value() + other.value());
+                return (one.value() || other.value());
             }
 
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend Composed vsub(Composed one, Composed other) 
+            friend Boolean vland(Composed one, Composed other) 
             {
-                return (one.value() - other.value());
+                return (one.value() && other.value());
             }
+        };
 
+        // =============================================================================================================
+
+        /**
+         * @brief conditional mixin implementation [scalar branch]
+         * @relates float32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
+        {
             /**
              * @brief  [default branch]
              * @relates float32
              */
-            friend Composed vmul(Composed one, Composed other) 
+            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
             {
-                return (one.value() * other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vdiv(Composed one, Composed other) 
-            {
-                return (one.value() / other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vfmadd(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return multiplicand.value() * multiplier.value() + addendum.value();
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vfmsub(Composed multiplicand, Composed multiplier, Composed addendum) 
-            {
-                return multiplicand.value() * multiplier.value() - addendum.value();
+                return (condition.value() ? if_value : else_value);
             }
         };
 
@@ -375,57 +502,12 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief conditional mixin implementation [scalar branch]
+         * @brief numeric mixin implementation [scalar branch]
          * @relates float32
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct conditional : traits::conditional<Interface, Composed, Boolean>
+        struct numeric : traits::numeric<Interface, Composed, Boolean>
         {
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vsel(Boolean condition, Composed if_value, Composed else_value) 
-            {
-                return (condition.value() ? if_value : else_value);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief logical mixin implementation [scalar branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct logical : traits::logical<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Boolean vlneg(Composed one) 
-            {
-                return !one.value();
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Boolean vlor(Composed one, Composed other) 
-            {
-                return (one.value() || other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Boolean vland(Composed one, Composed other) 
-            {
-                return (one.value() && other.value());
-            }
         };
 
         // =============================================================================================================
@@ -454,87 +536,6 @@ namespace zacc { namespace backend { namespace scalar
             {
                 return (one.value() != other.value());
             }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief bitwise mixin implementation [scalar branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct bitwise : traits::bitwise<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vbneg(Composed one) 
-            {
-                auto _one = one.value();
-                float result;
-                bitsof(result) = ~bitsof(_one);
-                return result;
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vband(Composed one, Composed other) 
-            {
-                auto _one = one.value();
-                auto _other = other.value();
-                float result;
-                bitsof(result) = bitsof(_one) & bitsof(_other);
-                return result;
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vbor(Composed one, Composed other) 
-            {
-                auto _one = one.value();
-                auto _other = other.value();
-                float result;
-                bitsof(result) = bitsof(_one) | bitsof(_other);
-                return result;
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend Composed vbxor(Composed one, Composed other) 
-            {
-                auto _one = one.value();
-                auto _other = other.value();
-                float result;
-                bitsof(result) = bitsof(_one) ^ bitsof(_other);
-                return result;
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates float32
-             */
-            friend bool vis_set(Composed one) 
-            {
-                return one.value() != 0;
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief numeric mixin implementation [scalar branch]
-         * @relates float32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct numeric : traits::numeric<Interface, Composed, Boolean>
-        {
         };
     } // end float32_modules
 

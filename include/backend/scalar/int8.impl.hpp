@@ -48,16 +48,16 @@
 #include "system/feature.hpp"
 
 #include "traits/printable.hpp"
+#include "traits/io.hpp"
 #include "traits/math.hpp"
-#include "traits/conditional.hpp"
-#include "traits/arithmetic.hpp"
-#include "traits/logical.hpp"
+#include "traits/numeric.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/bitwise_shift.hpp"
 #include "traits/comparable.hpp"
+#include "traits/logical.hpp"
 #include "traits/equatable.hpp"
-#include "traits/io.hpp"
-#include "traits/numeric.hpp"
+#include "traits/conditional.hpp"
+#include "traits/arithmetic.hpp"
 
 namespace zacc { namespace backend { namespace scalar
 {
@@ -119,6 +119,127 @@ namespace zacc { namespace backend { namespace scalar
 {
     namespace int8_modules
     {
+        /**
+         * @brief numeric mixin implementation [scalar branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct numeric : traits::numeric<Interface, Composed, Boolean>
+        {
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief bitwise_shift mixin implementation [scalar branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise_shift : traits::bitwise_shift<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vbsll(Composed one, Composed other) 
+            {
+                return (one.value() << other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vbsrl(Composed one, Composed other) 
+            {
+                return (one.value() >> other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vbslli(const Composed one, const size_t other) 
+            {
+                return (one.value() << other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vbsrli(const Composed one, const size_t other) 
+            {
+                return (one.value() >> other);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief arithmetic mixin implementation [scalar branch]
+         * @relates int8
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vneg(Composed one) 
+            {
+                return (-one.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vadd(Composed one, Composed other) 
+            {
+                return (one.value() + other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vsub(Composed one, Composed other) 
+            {
+                return (one.value() - other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vmul(Composed one, Composed other) 
+            {
+                return (one.value() * other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vdiv(Composed one, Composed other) 
+            {
+                return (one.value() / other.value());
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int8
+             */
+            friend Composed vmod(Composed one, Composed other) 
+            {
+                return (one.value() % other.value());
+            }
+        };
+
+        // =============================================================================================================
+
         /**
          * @brief math mixin implementation [scalar branch]
          * @relates int8
@@ -185,64 +306,28 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief arithmetic mixin implementation [scalar branch]
+         * @brief equatable mixin implementation [scalar branch]
          * @relates int8
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
+        struct equatable : traits::equatable<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend Composed vneg(Composed one) 
+            friend Boolean veq(Composed one, Composed other) 
             {
-                return (-one.value());
+                return (one.value() == other.value());
             }
 
             /**
              * @brief  [default branch]
              * @relates int8
              */
-            friend Composed vadd(Composed one, Composed other) 
+            friend Boolean vneq(Composed one, Composed other) 
             {
-                return (one.value() + other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vsub(Composed one, Composed other) 
-            {
-                return (one.value() - other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vmul(Composed one, Composed other) 
-            {
-                return (one.value() * other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vdiv(Composed one, Composed other) 
-            {
-                return (one.value() / other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vmod(Composed one, Composed other) 
-            {
-                return (one.value() % other.value());
+                return (one.value() != other.value());
             }
         };
 
@@ -341,52 +426,6 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief bitwise_shift mixin implementation [scalar branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct bitwise_shift : traits::bitwise_shift<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vbsll(Composed one, Composed other) 
-            {
-                return (one.value() << other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vbsrl(Composed one, Composed other) 
-            {
-                return (one.value() >> other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vbslli(const Composed one, const size_t other) 
-            {
-                return (one.value() << other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Composed vbsrli(const Composed one, const size_t other) 
-            {
-                return (one.value() >> other);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
          * @brief comparable mixin implementation [scalar branch]
          * @relates int8
          */
@@ -433,34 +472,6 @@ namespace zacc { namespace backend { namespace scalar
         // =============================================================================================================
 
         /**
-         * @brief equatable mixin implementation [scalar branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct equatable : traits::equatable<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Boolean veq(Composed one, Composed other) 
-            {
-                return (one.value() == other.value());
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int8
-             */
-            friend Boolean vneq(Composed one, Composed other) 
-            {
-                return (one.value() != other.value());
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
          * @brief io mixin implementation [scalar branch]
          * @relates int8
          */
@@ -484,17 +495,6 @@ namespace zacc { namespace backend { namespace scalar
             {
                 result[0] = input.value();
             }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief numeric mixin implementation [scalar branch]
-         * @relates int8
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct numeric : traits::numeric<Interface, Composed, Boolean>
-        {
         };
     } // end int8_modules
 

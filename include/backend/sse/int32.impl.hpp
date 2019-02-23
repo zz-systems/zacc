@@ -49,15 +49,15 @@
 
 #include "traits/printable.hpp"
 #include "traits/io.hpp"
-#include "traits/numeric.hpp"
-#include "traits/comparable.hpp"
 #include "traits/math.hpp"
-#include "traits/conditional.hpp"
-#include "traits/arithmetic.hpp"
+#include "traits/numeric.hpp"
 #include "traits/bitwise.hpp"
 #include "traits/bitwise_shift.hpp"
+#include "traits/comparable.hpp"
 #include "traits/logical.hpp"
 #include "traits/equatable.hpp"
+#include "traits/conditional.hpp"
+#include "traits/arithmetic.hpp"
 
 namespace zacc { namespace backend { namespace sse
 {
@@ -119,101 +119,6 @@ namespace zacc { namespace backend { namespace sse
 {
     namespace int32_modules
     {
-        /**
-         * @brief io mixin implementation [sse branch]
-         * @relates int32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct io : traits::io<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
-            {
-                _mm_store_si128((__m128i*)&(*result), input);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
-            {
-                _mm_stream_si128((__m128i*)&(*result), input);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            template<typename RandomIt> friend Composed vgather(RandomIt input, const zint32<Interface::feature_mask> &index, Composed) 
-            {
-                auto i = index.data();
-                return _mm_set_epi32(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
-            }
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief numeric mixin implementation [sse branch]
-         * @relates int32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct numeric : traits::numeric<Interface, Composed, Boolean>
-        {
-        };
-
-        // =============================================================================================================
-
-        /**
-         * @brief comparable mixin implementation [sse branch]
-         * @relates int32
-         */
-        template<typename Interface, typename Composed, typename Boolean>
-        struct comparable : traits::comparable<Interface, Composed, Boolean>
-        {
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Boolean vgt(Composed one, Composed other) 
-            {
-                return _mm_cmpgt_epi32(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Boolean vlt(Composed one, Composed other) 
-            {
-                return _mm_cmplt_epi32(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Boolean vge(Composed one, Composed other) 
-            {
-                return !(one < other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Boolean vle(Composed one, Composed other) 
-            {
-                return !(one > other);
-            }
-        };
-
-        // =============================================================================================================
-
         /**
          * @brief math mixin implementation [sse branch]
          * @relates int32
@@ -309,111 +214,149 @@ namespace zacc { namespace backend { namespace sse
         // =============================================================================================================
 
         /**
-         * @brief conditional mixin implementation [sse branch]
+         * @brief logical mixin implementation [sse branch]
          * @relates int32
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct conditional : traits::conditional<Interface, Composed, Boolean>
+        struct logical : traits::logical<Interface, Composed, Boolean>
         {
             /**
-             * @brief  [sse4 branch]
+             * @brief  [default branch]
              * @relates int32
              */
-            template<typename T = Composed>
-            friend std::enable_if_t<has_feature_v<Interface>(feature::sse41()), T>
-            vsel(Boolean condition, Composed if_value, Composed else_value) 
+            friend Boolean vlneg(Composed one) 
             {
-                return _mm_blendv_epi8(else_value, if_value, condition);
+                return _mm_cmpeq_epi32(one, _mm_setzero_si128());
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            template<typename T = Composed>
-            friend std::enable_if_t<!has_feature_v<Interface>(feature::sse41()), T>
-            vsel(Boolean condition, Composed if_value, Composed else_value) 
+            friend Boolean vlor(Composed one, Composed other) 
             {
-                return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value));
+                return _mm_or_si128(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Boolean vland(Composed one, Composed other) 
+            {
+                return _mm_and_si128(one, other);
             }
         };
 
         // =============================================================================================================
 
         /**
-         * @brief arithmetic mixin implementation [sse branch]
+         * @brief io mixin implementation [sse branch]
          * @relates int32
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
+        struct io : traits::io<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Composed vneg(Composed one) 
+            template<typename OutputIt> friend void vstore(OutputIt result, Composed input) 
             {
-                return _mm_sub_epi32(_mm_setzero_si128(), one);
+                _mm_store_si128((__m128i*)&(*result), input);
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Composed vadd(Composed one, Composed other) 
+            template<typename OutputIt> friend void vstream(OutputIt result, Composed input) 
             {
-                return _mm_add_epi32(one, other);
+                _mm_stream_si128((__m128i*)&(*result), input);
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Composed vsub(Composed one, Composed other) 
+            template<typename RandomIt> friend Composed vgather(RandomIt input, const zint32<Interface::feature_mask> &index, Composed) 
             {
-                return _mm_sub_epi32(one, other);
+                auto i = index.data();
+                return _mm_set_epi32(input[i[3]], input[i[2]], input[i[1]], input[i[0]]);
             }
+        };
 
+        // =============================================================================================================
+
+        /**
+         * @brief equatable mixin implementation [sse branch]
+         * @relates int32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct equatable : traits::equatable<Interface, Composed, Boolean>
+        {
             /**
-             * @brief  [sse4 branch]
+             * @brief  [default branch]
              * @relates int32
              */
-            template<typename T = Composed>
-            friend std::enable_if_t<has_feature_v<Interface>(feature::sse41()), T>
-            vmul(Composed one, Composed other) 
+            friend Boolean veq(Composed one, Composed other) 
             {
-                return _mm_mullo_epi32(one, other);
+                return _mm_cmpeq_epi32(one, other);
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            template<typename T = Composed>
-            friend std::enable_if_t<!has_feature_v<Interface>(feature::sse41()), T>
-            vmul(Composed one, Composed other) 
+            friend Boolean vneq(Composed one, Composed other) 
             {
-                __m128i tmp1 = _mm_mul_epu32(one,other); /* mul 2,0*/;
-                __m128i tmp2 = _mm_mul_epu32( _mm_srli_si128(one,4), _mm_srli_si128(other,4)); /* mul 3,1 */;
-                return _mm_unpacklo_epi32(_mm_shuffle_epi32(tmp1, _MM_SHUFFLE (0,0,2,0)), _mm_shuffle_epi32(tmp2, _MM_SHUFFLE (0,0,2,0)));
+                return !(one == other);
+            }
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief bitwise_shift mixin implementation [sse branch]
+         * @relates int32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct bitwise_shift : traits::bitwise_shift<Interface, Composed, Boolean>
+        {
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vbsll(Composed one, Composed other) 
+            {
+                return _mm_sll_epi32(one, other);
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Composed vdiv(Composed one, Composed other) 
+            friend Composed vbsrl(Composed one, Composed other) 
             {
-                return _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));
+                return _mm_srl_epi32(one, other);
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Composed vmod(Composed one, Composed other) 
+            friend Composed vbslli(const Composed one, const size_t other) 
             {
-                return vsub(one, vmul(other, vdiv(one, other)));
+                return _mm_slli_epi32(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vbsrli(const Composed one, const size_t other) 
+            {
+                return _mm_srli_epi32(one, other);
             }
         };
 
@@ -492,111 +435,168 @@ namespace zacc { namespace backend { namespace sse
         // =============================================================================================================
 
         /**
-         * @brief bitwise_shift mixin implementation [sse branch]
+         * @brief comparable mixin implementation [sse branch]
          * @relates int32
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct bitwise_shift : traits::bitwise_shift<Interface, Composed, Boolean>
+        struct comparable : traits::comparable<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Composed vbsll(Composed one, Composed other) 
+            friend Boolean vgt(Composed one, Composed other) 
             {
-                return _mm_sll_epi32(one, other);
+                return _mm_cmpgt_epi32(one, other);
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Composed vbsrl(Composed one, Composed other) 
+            friend Boolean vlt(Composed one, Composed other) 
             {
-                return _mm_srl_epi32(one, other);
+                return _mm_cmplt_epi32(one, other);
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Composed vbslli(const Composed one, const size_t other) 
+            friend Boolean vge(Composed one, Composed other) 
             {
-                return _mm_slli_epi32(one, other);
+                return !(one < other);
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Composed vbsrli(const Composed one, const size_t other) 
+            friend Boolean vle(Composed one, Composed other) 
             {
-                return _mm_srli_epi32(one, other);
+                return !(one > other);
             }
         };
 
         // =============================================================================================================
 
         /**
-         * @brief logical mixin implementation [sse branch]
+         * @brief conditional mixin implementation [sse branch]
          * @relates int32
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct logical : traits::logical<Interface, Composed, Boolean>
+        struct conditional : traits::conditional<Interface, Composed, Boolean>
         {
             /**
-             * @brief  [default branch]
+             * @brief  [sse4 branch]
              * @relates int32
              */
-            friend Boolean vlneg(Composed one) 
+            template<typename T = Composed>
+            friend std::enable_if_t<has_feature_v<Interface>(feature::sse41()), T>
+            vsel(Boolean condition, Composed if_value, Composed else_value) 
             {
-                return _mm_cmpeq_epi32(one, _mm_setzero_si128());
+                return _mm_blendv_epi8(else_value, if_value, condition);
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Boolean vlor(Composed one, Composed other) 
+            template<typename T = Composed>
+            friend std::enable_if_t<!has_feature_v<Interface>(feature::sse41()), T>
+            vsel(Boolean condition, Composed if_value, Composed else_value) 
             {
-                return _mm_or_si128(one, other);
-            }
-
-            /**
-             * @brief  [default branch]
-             * @relates int32
-             */
-            friend Boolean vland(Composed one, Composed other) 
-            {
-                return _mm_and_si128(one, other);
+                return _mm_or_si128(_mm_andnot_si128(condition, else_value), _mm_and_si128(condition, if_value));
             }
         };
 
         // =============================================================================================================
 
         /**
-         * @brief equatable mixin implementation [sse branch]
+         * @brief numeric mixin implementation [sse branch]
          * @relates int32
          */
         template<typename Interface, typename Composed, typename Boolean>
-        struct equatable : traits::equatable<Interface, Composed, Boolean>
+        struct numeric : traits::numeric<Interface, Composed, Boolean>
+        {
+        };
+
+        // =============================================================================================================
+
+        /**
+         * @brief arithmetic mixin implementation [sse branch]
+         * @relates int32
+         */
+        template<typename Interface, typename Composed, typename Boolean>
+        struct arithmetic : traits::arithmetic<Interface, Composed, Boolean>
         {
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Boolean veq(Composed one, Composed other) 
+            friend Composed vneg(Composed one) 
             {
-                return _mm_cmpeq_epi32(one, other);
+                return _mm_sub_epi32(_mm_setzero_si128(), one);
             }
 
             /**
              * @brief  [default branch]
              * @relates int32
              */
-            friend Boolean vneq(Composed one, Composed other) 
+            friend Composed vadd(Composed one, Composed other) 
             {
-                return !(one == other);
+                return _mm_add_epi32(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vsub(Composed one, Composed other) 
+            {
+                return _mm_sub_epi32(one, other);
+            }
+
+            /**
+             * @brief  [sse4 branch]
+             * @relates int32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<has_feature_v<Interface>(feature::sse41()), T>
+            vmul(Composed one, Composed other) 
+            {
+                return _mm_mullo_epi32(one, other);
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            template<typename T = Composed>
+            friend std::enable_if_t<!has_feature_v<Interface>(feature::sse41()), T>
+            vmul(Composed one, Composed other) 
+            {
+                __m128i tmp1 = _mm_mul_epu32(one,other); /* mul 2,0*/;
+                __m128i tmp2 = _mm_mul_epu32( _mm_srli_si128(one,4), _mm_srli_si128(other,4)); /* mul 3,1 */;
+                return _mm_unpacklo_epi32(_mm_shuffle_epi32(tmp1, _MM_SHUFFLE (0,0,2,0)), _mm_shuffle_epi32(tmp2, _MM_SHUFFLE (0,0,2,0)));
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vdiv(Composed one, Composed other) 
+            {
+                return _mm_div_ps(_mm_cvtepi32_ps(one), _mm_cvtepi32_ps(other));
+            }
+
+            /**
+             * @brief  [default branch]
+             * @relates int32
+             */
+            friend Composed vmod(Composed one, Composed other) 
+            {
+                return vsub(one, vmul(other, vdiv(one, other)));
             }
         };
     } // end int32_modules
