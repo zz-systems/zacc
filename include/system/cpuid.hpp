@@ -32,6 +32,13 @@
 
 #include "util/type/type_casts.hpp"
 
+#if !defined(_MSC_VER)
+//  GCC Intrinsics
+#include <cpuid.h>
+#else 
+#include <intrin.h>
+#endif
+
 namespace zacc 
 {
     struct cpuid
@@ -67,56 +74,137 @@ namespace zacc
          * @param flag cpuid flag
          * @return register values
          */
-        static std::array<int, 4> get_cpuid_raw(int function_id, int sub_function_id = 0);
+        std::array<int, 4> get_cpuid_raw(int function_id, int sub_function_id = 0)
+        {
+            std::array<int, 4> regs;
+
+        #ifdef _MSC_VER
+            // MSVC CPUID
+            __cpuidex(regs.data(), function_id, sub_function_id);
+        #else
+            // gcc / clang CPUID
+            __cpuid_count(function_id, sub_function_id, regs[0], regs[1], regs[2], regs[3]);
+        #endif
+
+            return regs;
+        }
 
         /**
          * @brief cpuid wrapper
          * @param flag cpuid flag
          * @return register values
          */
-        static data_entry_t get_cpuid(int function_id, int sub_function_id = 0);
+        data_entry_t get_cpuid(int function_id, int sub_function_id = 0)
+        {
+            return array_cast<reg_t>(get_cpuid_raw(function_id, sub_function_id));
+        }
 
         /**
          * constructor
          */
-        cpuid();
+        cpuid()
+        {
+            _vendor_str.reserve(0x20);
+            _brand_str.reserve(0x40);
+
+             _vendor_mapping = {
+                {"AuthenticAMD", vendors::AMD},
+                {"GenuineIntel", vendors::INTEL},
+
+                {"KVMKVMKVM",    vendors::VIRTUAL},
+                {"Microsoft Hv", vendors::VIRTUAL},
+                {" lrpepyh vr",  vendors::VIRTUAL},
+                {"VMwareVMware", vendors::VIRTUAL},
+                {"XenVMMXenVMM", vendors::VIRTUAL}
+            };
+
+            auto highestId = get_cpuid(0)[0].to_ulong();
+
+            for (auto i = 0; i < highestId; i++)
+                _data.push_back(get_cpuid(i, 0));
+
+
+            append(_vendor_str, std::array<reg_t, 3>{{_data[0][EBX], _data[0][EDX], _data[0][ECX]}});
+
+            _vendor = _vendor_mapping[_vendor_str];
+
+            highestId = get_cpuid(0x80000000)[0].to_ulong();
+
+            // EAX=80000000h: Get Highest Extended Function Supported
+            highestId = get_cpuid(0x80000000)[0].to_ulong();
+            _ext_data.push_back(get_cpuid(0x80000000, 0));
+
+            // EAX=80000001h: Extended Processor Info and Feature Bits
+            _ext_data.push_back(get_cpuid(0x80000001, 0));
+
+            //EAX=80000002h,80000003h,80000004h: Processor Brand String
+            if (highestId >= 0x80000004) {
+                for (auto i = 0x80000002; i <= 0x80000004; i++) {
+                    auto data = get_cpuid(i, 0);
+
+                    _ext_data.push_back(data);
+                    append(_brand_str, data);
+                }
+            }
+        }
 
         /**
          * Returns the vendor
          */
-        vendors vendor()                            const;
+        vendors vendor() const 
+        {
+            return _vendor; 
+        }
 
         /**
          * Returns the vendor name
          */
-        const std::string &vendor_str()             const;
+        const std::string &vendor_str() const
+        {
+            return _vendor_str;
+        }
 
         /**
          * Returns the brand string
          */
-        const std::string &brand_str()              const;
+        const std::string &brand_str() const
+        {
+            return _brand_str; 
+        }
 
         /**
          * Returns CPUID data
          */
-        const data_t &data()                        const;
+        const data_t &data() const
+        {
+            return _data; 
+        }
 
         /**
          * Returns CPUID extended data
          */
-        const data_t &ext_data()                    const;
+        const data_t &ext_data() const
+        {
+            return _ext_data; 
+        }
 
         /**
          * @brief gets register at index
          * @param index
          */
-        const data_entry_t &reg(size_t index)       const;
+        const data_entry_t &reg(size_t index) const
+        {
+            return _data[index]; 
+        }
 
         /**
          * @brief gets extended register at index
          * @param index
          */
-        const data_entry_t &ext_reg(size_t index)   const;
+        const data_entry_t &ext_reg(size_t index) const
+        {
+            return _ext_data[index]; 
+        }
 
     private:
 
@@ -125,7 +213,16 @@ namespace zacc
          * @param target target string
          * @param reg source register
          */
-        void append(std::string &target, const reg_t& reg);
+        void append(std::string &target, const reg_t& reg)
+        {
+            char temp[5];
+
+            *reinterpret_cast<uint32_t *>(temp) = reg.to_ulong();
+
+            temp[4] = '\0';
+
+            target += temp;
+        }
 
         /**
          * @brief Appends string value in registers to string

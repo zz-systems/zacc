@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
-    
-fi
-
 virtualenv -p python3 venv
 source venv/bin/activate
 

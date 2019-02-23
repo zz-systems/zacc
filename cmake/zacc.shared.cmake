@@ -212,7 +212,7 @@ function(zacc_add_dispatched_library target_name)
 
 
     add_library(${target_name} SHARED  ${target_sources})
-    target_link_libraries(${target_name} PUBLIC zacc.system.info zacc.system.loader ${target_libraries})
+    target_link_libraries(${target_name} PUBLIC zacc_dl ${target_libraries})
 
     string(REPLACE "." "_" macro_target_name "${macro_target_name}")
     string(TOUPPER ${target_name} macro_target_name)
@@ -230,7 +230,7 @@ function(zacc_add_dispatched_library target_name)
         message(STATUS "Adding dispatched vectorized branch ${target_name}.${branch}")
 
         add_library("${target_name}.${branch}" SHARED ${target_kernels})
-        target_link_libraries("${target_name}.${branch}" PRIVATE zacc.system.info zacc.dispatch.${branch})
+        target_link_libraries("${target_name}.${branch}" PRIVATE zacc.dispatch.${branch})
         target_link_libraries("${target_name}.${branch}" PUBLIC zacc.dispatch.${branch}.dynamic)
 
 
@@ -271,7 +271,7 @@ function(zacc_add_dispatched_executable target_name)
 
     add_library(${target_name}.impl SHARED ${SHARED_LIB_DUMMY})
     add_executable(${target_name} ${target_sources})
-    target_link_libraries(${target_name} PUBLIC zacc.system.cpuid zacc.system.loader ${target_libraries} ${target_name}.impl)
+    target_link_libraries(${target_name} PUBLIC zacc_dl ${target_libraries} ${target_name}.impl)
 
     string(REPLACE "." "_" macro_target_name "${macro_target_name}")
     string(TOUPPER ${target_name} macro_target_name)
@@ -289,7 +289,7 @@ function(zacc_add_dispatched_executable target_name)
         message(STATUS "Adding dispatched vectorized branch ${target_name}.${branch}")
 
         add_library("${target_name}.impl.${branch}" SHARED ${target_kernels})
-        target_link_libraries("${target_name}.impl.${branch}" PRIVATE zacc.system.cpuid zacc.dispatch.${branch})
+        target_link_libraries("${target_name}.impl.${branch}" PRIVATE zacc.dispatch.${branch})
         target_link_libraries("${target_name}.impl.${branch}" PUBLIC zacc.dispatch.${branch}.dynamic)
 
 
@@ -351,13 +351,13 @@ function(zacc_add_dispatched_tests target_name)
                 )
 
         target_link_libraries("${target_name}.${branch}.impl" PRIVATE gtest zacc.dispatch.${branch})
-        target_link_libraries("${target_name}.${branch}.impl" PUBLIC zacc.system.cpuid zacc.dispatch.${branch}.dynamic)
+        target_link_libraries("${target_name}.${branch}.impl" PUBLIC zacc.dispatch.${branch}.dynamic)
 
         add_executable("${target_name}.${branch}" ${test_main})
 
         target_compile_definitions(${target_name}.${branch} PRIVATE ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}.${branch}.impl>")
 
-        target_link_libraries("${target_name}.${branch}" ${target_libraries} zacc.system.cpuid zacc.system.loader zacc.dispatch.${branch}.static)
+        target_link_libraries("${target_name}.${branch}" ${target_libraries} zacc_dl zacc.dispatch.${branch}.static)
         add_dependencies("${target_name}.${branch}" "${target_name}.${branch}.impl")
 
         add_test(

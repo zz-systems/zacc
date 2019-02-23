@@ -29,12 +29,12 @@
 #include <string>
 #include <iostream>
 
-#include "zacc_systemloader_export.hpp"
+#include "zacc_dl_export.h"
 
 extern "C"
 {
-    ZACC_LOADER_EXPORT void *               zacc_dlopen(const char *path);
-    ZACC_LOADER_EXPORT const char *         zacc_dlerror();
-    ZACC_LOADER_EXPORT void *               zacc_dlsym(void *handle, const char *member);
-    ZACC_LOADER_EXPORT bool                 zacc_dlclose(void *handle);
+    ZACC_DL_EXPORT void *               zacc_dlopen(const char *path);
+    ZACC_DL_EXPORT const char *         zacc_dlerror();
+    ZACC_DL_EXPORT void *               zacc_dlsym(void *handle, const char *member);
+    ZACC_DL_EXPORT bool                 zacc_dlclose(void *handle);
 }
