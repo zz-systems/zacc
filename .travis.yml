@@ -107,100 +107,66 @@ stage_templates:
     after_deploy:
       - source ${SCRIPT_SHARED_DIR}/aws-clean.sh
 
-  - &docs_stage    
-    git:
-     depth: 1
-     submodules: false
-    install: 
-      - source ${SCRIPT_STAGE_DIR}/install.sh
-    before_script: 
-      - source ${SCRIPT_STAGE_DIR}/before_script.sh
-    script: 
-      - ${SCRIPT_STAGE_DIR}/script.sh
-    # after_success:
-    #   - source ${SCRIPT_STAGE_DIR}/pack.sh
-    #   - source ${SCRIPT_SHARED_DIR}/aws-sync.sh
-
   
-# stages:
-#   - smoke
-#   - test
-#   - name: documentation
-#     if: branch = master
-#   - deploy
+stages:
+  - smoke
+  - test
+  - deploy
 
 jobs:
   include: 
-    # - stage: smoke
-    #   <<: *linux_gcc7
-    #   install: 
-    #     - source ./ci/travis/smoke/install.sh
-    #   before_script:
-    #     - source ${SCRIPT_SHARED_DIR}/before_script.sh
-    #   script: 
-    #     - ./ci/travis/smoke/script.sh
+    - stage: smoke
+      <<: *linux_gcc7
+      install: 
+        - source ${SCRIPT_STAGE_DIR}/install.sh
+      before_script:
+        - source ${SCRIPT_SHARED_DIR}/before_script.sh
+      script: 
+        - ${SCRIPT_STAGE_DIR}/script.sh
 
-    # - stage: smoke
-    #   <<: *linux_clang5
-    #   <<: *smoke_stage
+    - stage: smoke
+      <<: *linux_clang5
+      <<: *smoke_stage
 
-    # - stage: smoke
-    #   <<: *osx_xcode101
-    #   <<: *smoke_stage
+    - stage: smoke
+      <<: *osx_xcode101
+      <<: *smoke_stage
 
-    # - stage: test
-    #   <<: *linux_gcc6
-    #   <<: *build_stage
+    - stage: test
+      <<: *linux_gcc6
+      <<: *build_stage
 
-    # - stage: test
-    #   <<: *linux_gcc7
-    #   <<: *build_stage
+    - stage: test
+      <<: *linux_gcc7
+      <<: *build_stage
       
-    # - stage: test
-    #   <<: *linux_clang4
-    #   <<: *build_stage
+    - stage: test
+      <<: *linux_clang4
+      <<: *build_stage
 
-    # - stage: test
-    #   <<: *linux_clang5
-    #   <<: *build_stage
+    - stage: test
+      <<: *linux_clang5
+      <<: *build_stage
     
-    # - stage: test
-    #   <<: *osx_xcode9
-    #   <<: *build_stage
+    - stage: test
+      <<: *osx_xcode9
+      <<: *build_stage
 
-    # - stage: test
-    #   <<: *osx_xcode94
-    #   <<: *build_stage
+    - stage: test
+      <<: *osx_xcode94
+      <<: *build_stage
 
-    - stage: documentation
+    - stage: deploy
       <<: *linux
-      addons: { apt: { packages: [doxygen, graphviz, python3, python3-pip] }}
-      <<: *docs_stage
+      <<: *deploy_stage
       deploy:
-        - provider: pages
+        - provider: releases
           skip-cleanup: true
-          github-token: $GITHUB_TOKEN
-          local-dir: $BUILD_DIR/docs/html                  
+          api_key: $GITHUB_TOKEN
+          file_glob: true
+          file: 
+            - share/zacc.*.zip
+          draft: true  
           on:
             all_branches: true
-
-    # - stage: deploy
-    #   <<: *linux
-    #   <<: *deploy_stage
-    #   deploy:
-    #     - provider: releases
-    #       skip-cleanup: true
-    #       api_key: $GITHUB_TOKEN
-    #       file_glob: true
-    #       file: 
-    #         - share/zacc.*.zip
-    #       draft: true  
-    #       on:
-    #         all_branches: true
-    #         tags: true
-    #     - provider: pages
-    #       skip-cleanup: true
-    #       github-token: $GITHUB_TOKEN
-    #       local-dir: share/doc
-    #       on:
-    #         branch: master
+            tags: true
