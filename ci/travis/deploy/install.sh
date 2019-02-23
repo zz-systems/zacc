@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
-    source venv/bin/activate
+    
 fi
 
-pip install --user -r ${SCRIPT_STAGE_DIR}/requirements.txt
+virtualenv -p python3 venv
+source venv/bin/activate
+
+pip install -r ${SCRIPT_STAGE_DIR}/requirements.txt

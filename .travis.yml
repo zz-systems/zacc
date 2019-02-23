@@ -120,7 +120,7 @@ jobs:
       install: 
         - source ${SCRIPT_STAGE_DIR}/install.sh
       before_script:
-        - source ${SCRIPT_SHARED_DIR}/before_script.sh
+        - source ${SCRIPT_STAGE_DIR}/before_script.sh
       script: 
         - ${SCRIPT_STAGE_DIR}/script.sh
 
