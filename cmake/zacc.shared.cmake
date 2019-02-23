@@ -195,126 +195,49 @@ endif()
 # build helpers ========================================================================================================
 include (GenerateExportHeader)
 
-include_directories(${CMAKE_BINARY_DIR}/exports)
+function(zacc_link_kernels target_name)
 
-function(zacc_add_dispatched_library target_name)
-    set(options OPTIONAL ZACC_FAST_FLOAT)
     set(multiValueArgs INCLUDES KERNELS SOURCES LIBRARIES BRANCHES)
 
-    cmake_parse_arguments(add_dispatched_vectorized_target "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
+    cmake_parse_arguments(target "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
-    #set(target_name ${add_dispatched_vectorized_target_TARGET})
-    set(target_includes ${add_dispatched_vectorized_target_INCLUDES})
-    set(target_kernels ${add_dispatched_vectorized_target_KERNELS})
-    set(target_sources ${add_dispatched_vectorized_target_SOURCES})
-    set(target_branches ${add_dispatched_vectorized_target_BRANCHES})
-    set(target_libraries ${add_dispatched_vectorized_target_LIBRARIES})
+    message(STATUS "[LINK] ${target_name}")
 
+    target_link_libraries(${target_name} PUBLIC zacc_dl)
+    target_compile_definitions(${target_name} PUBLIC ZACC_DYLIBNAME="${CMAKE_SHARED_LIBRARY_PREFIX}${target_name}.impl${CMAKE_SHARED_LIBRARY_SUFFIX}")
 
-    add_library(${target_name} SHARED  ${target_sources})
-    target_link_libraries(${target_name} PUBLIC zacc_dl ${target_libraries})
+    foreach(branch ${target_BRANCHES})
+        message(STATUS "[LINK] ${target_name}.${branch}")
 
-    string(REPLACE "." "_" macro_target_name "${macro_target_name}")
-    string(TOUPPER ${target_name} macro_target_name)
+        add_library(${target_name}.${branch} SHARED ${SHARED_LIB_DUMMY} ${target_KERNELS})
+        target_link_libraries(${target_name}.${branch}            
+            PRIVATE zacc.dispatch.${branch} 
+            PUBLIC  zacc.dispatch.${branch}.dynamic)
 
-    generate_export_header(${target_name}
-            BASE_NAME ${target_name}
-            EXPORT_MACRO_NAME ${macro_target_name}_EXPORT
-            EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/${target_name}_export.hpp
-            STATIC_DEFINE ${macro_target_name}_BUILT_AS_STATIC
-            )
+        generate_export_header(${target_name}.${branch})
 
-    target_compile_definitions(${target_name} PUBLIC ZACC_FAST_FLOAT=false ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}>")
-
-    foreach(branch ${target_branches})
-        message(STATUS "Adding dispatched vectorized branch ${target_name}.${branch}")
-
-        add_library("${target_name}.${branch}" SHARED ${target_kernels})
-        target_link_libraries("${target_name}.${branch}" PRIVATE zacc.dispatch.${branch})
-        target_link_libraries("${target_name}.${branch}" PUBLIC zacc.dispatch.${branch}.dynamic)
-
-
-        generate_export_header(${target_name}.${branch}
-                BASE_NAME ${target_name}
-                EXPORT_MACRO_NAME ${macro_target_name}_BRANCH_EXPORT
-                EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/${target_name}_branch_export.hpp
-                STATIC_DEFINE ${macro_target_name}_BRANCH_BUILT_AS_STATIC
-                )
-
-        #add_dependencies("${target_name}.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
-
-        target_include_directories(${target_name}.${branch} PRIVATE ${target_includes})
-
-        target_link_libraries(${target_name} PRIVATE zacc.dispatch.${branch}.dynamic ${target_libraries})
-        list(APPEND branch_objects ${target_name}.${branch})
+        target_link_libraries(${target_name} PRIVATE ${target_name}.${branch})
     endforeach()
-
-    message(STATUS "Combining dispatched branches to ${target_name}")
-
-    add_dependencies("${target_name}" ${branch_objects})
 endfunction()
 
+function(zacc_install target_name)
 
-function(zacc_add_dispatched_executable target_name)
+    set(multiValueArgs BRANCHES)
 
-    set(options OPTIONAL ZACC_FAST_FLOAT)
-    set(multiValueArgs INCLUDES KERNELS SOURCES LIBRARIES BRANCHES)
+    cmake_parse_arguments(target "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
 
-    cmake_parse_arguments(add_dispatched_vectorized_target "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
+    message(STATUS "[INSTALL] ${target_name}")
 
-    #set(target_name ${add_dispatched_vectorized_target_TARGET})
-    set(target_includes ${add_dispatched_vectorized_target_INCLUDES})
-    set(target_kernels ${add_dispatched_vectorized_target_KERNELS})
-    set(target_sources ${add_dispatched_vectorized_target_SOURCES})
-    set(target_branches ${add_dispatched_vectorized_target_BRANCHES})
-    set(target_libraries ${add_dispatched_vectorized_target_LIBRARIES})
+    install(TARGETS ${target_name} DESTINATION bin)
 
-    add_library(${target_name}.impl SHARED ${SHARED_LIB_DUMMY})
-    add_executable(${target_name} ${target_sources})
-    target_link_libraries(${target_name} PUBLIC zacc_dl ${target_libraries} ${target_name}.impl)
+    foreach(branch ${target_BRANCHES})
+        message(STATUS "[INSTALL] ${target_name}.${branch}")
 
-    string(REPLACE "." "_" macro_target_name "${macro_target_name}")
-    string(TOUPPER ${target_name} macro_target_name)
-
-#    generate_export_header(${target_name}
-#            BASE_NAME ${target_name}
-#            EXPORT_MACRO_NAME ${macro_target_name}_EXPORT
-#            EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/${target_name}_export.hpp
-#            STATIC_DEFINE ${macro_target_name}_BUILT_AS_STATIC
-#            )
-#
-    target_compile_definitions(${target_name} PUBLIC ZACC_FAST_FLOAT=false ZACC_DYLIBNAME="${search_prefix}$<TARGET_FILE_NAME:${target_name}.impl>")
-
-    foreach(branch ${target_branches})
-        message(STATUS "Adding dispatched vectorized branch ${target_name}.${branch}")
-
-        add_library("${target_name}.impl.${branch}" SHARED ${target_kernels})
-        target_link_libraries("${target_name}.impl.${branch}" PRIVATE zacc.dispatch.${branch})
-        target_link_libraries("${target_name}.impl.${branch}" PUBLIC zacc.dispatch.${branch}.dynamic)
-
-
-        generate_export_header(${target_name}.impl.${branch}
-                BASE_NAME ${target_name}
-                EXPORT_MACRO_NAME ${macro_target_name}_BRANCH_EXPORT
-                EXPORT_FILE_NAME ${CMAKE_BINARY_DIR}/exports/${target_name}_branch_export.hpp
-                STATIC_DEFINE ${macro_target_name}_BRANCH_BUILT_AS_STATIC
-                )
-
-        #add_dependencies("${target_name}.${branch}" "zacc.generate.${branch}.types" "zacc.generate.${branch}.tests" )
-
-        target_include_directories(${target_name}.impl.${branch} PRIVATE ${target_includes})
-
-        target_link_libraries(${target_name}.impl PRIVATE zacc.dispatch.${branch}.dynamic ${target_libraries})
-        target_link_libraries(${target_name} PRIVATE zacc.dispatch.${branch}.dynamic ${target_libraries})
-
-        list(APPEND branch_objects ${target_name}.impl.${branch})
+        install(TARGETS ${target_name}.${branch}
+            RUNTIME DESTINATION bin
+            LIBRARY DESTINATION lib
+            ARCHIVE DESTINATION lib/static)
     endforeach()
-
-    message(STATUS "Combining dispatched branches to ${target_name}")
-
-    add_dependencies("${target_name}.impl" ${branch_objects})
-    add_dependencies("${target_name}" ${branch_objects})
-
 endfunction()
 
 function(zacc_add_dispatched_tests target_name)
@@ -350,8 +273,9 @@ function(zacc_add_dispatched_tests target_name)
                 STATIC_DEFINE ${macro_target_name}_BRANCH_BUILT_AS_STATIC
                 )
 
-        target_link_libraries("${target_name}.${branch}.impl" PRIVATE gtest zacc.dispatch.${branch})
-        target_link_libraries("${target_name}.${branch}.impl" PUBLIC zacc.dispatch.${branch}.dynamic)
+        target_link_libraries("${target_name}.${branch}.impl" 
+            PRIVATE gtest zacc.dispatch.${branch} 
+            PUBLIC zacc.dispatch.${branch}.dynamic)
 
         add_executable("${target_name}.${branch}" ${test_main})
 

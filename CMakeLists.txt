@@ -13,14 +13,18 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 option(BUILD_TESTS "Build unit tests" OFF)
-option(BUILD_EXAMPLES "Build examples" OFF)
+option(BUILD_EXAMPLES "Build examples" ON)
 
 # include branched code generation config
 add_subdirectory(codegen/backend)
 
 # fetch dependencies
-if(BUILD_EXAMPLES OR BUILD_TESTS)
-    add_subdirectory(dependencies)
+if(BUILD_EXAMPLES)
+    include_directories(dependencies/CImg)
+endif()
+
+if(BUILD_TESTS)
+    add_subdirectory(dependencies/googletest)
 endif()
 
 # add codegen targets
@@ -40,7 +44,6 @@ if(BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-
 add_library(zacc INTERFACE)
 add_library(zacc::zacc ALIAS zacc)
 target_include_directories(zacc INTERFACE 
@@ -50,12 +53,11 @@ target_include_directories(zacc INTERFACE
 install(TARGETS zacc EXPORT zacc)
 install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/zacc")
 
-
 set(CPACK_PACKAGE_DESCRIPTION "PROJECT_NAME")
 set(CPACK_PACKAGE_VERSION_MAJOR "${PROJECT_VERSION_MAJOR}")
 set(CPACK_PACKAGE_VERSION_MINOR "${PROJECT_VERSION_MINOR}")
 set(CPACK_PACKAGE_VERSION_PATCH "${PROJECT_VERSION_PATCH}")
 set(CPACK_PACKAGE_VENDOR "ZZ-SYSTEMS")
-set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}")
+set(CPACK_PACKAGE_FILE_NAME "${CMAKE_PROJECT_NAME}-${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}")
 
 include(CPack)

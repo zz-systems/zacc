@@ -3,13 +3,13 @@ project(zacc.examples.mandelbrot)
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
 
-zacc_add_dispatched_executable(zacc.examples.mandelbrot
-        BRANCHES "${branches}"
-        KERNELS
-        ${PROJECT_SOURCE_DIR}/src/kernels.cpp
-        SOURCES
-        ${PROJECT_SOURCE_DIR}/src/mandelbrot.cpp
-        )
+add_executable(mandelbrot src/mandelbrot.cpp)
+zacc_link_kernels(mandelbrot
+    BRANCHES "${branches}"
+    KERNELS src/kernels.cpp)
+
+zacc_install(mandelbrot BRANCHES "${branches}")
+
 
 if(NOT WIN32)
     find_package(X11 REQUIRED)
@@ -22,11 +22,11 @@ if(NOT WIN32)
 
     link_directories(${X11_LIBRARIES})
 
-    target_link_libraries(zacc.examples.mandelbrot PRIVATE ${X11_LIBRARIES})
+    target_link_libraries(mandelbrot PRIVATE ${X11_LIBRARIES})
 
     link_directories("/usr/X11/lib" "/usr/X11R6/lib")
 
     if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-        target_link_libraries(zacc.examples.mandelbrot PRIVATE jpeg png m pthread)
+        target_link_libraries(mandelbrot PRIVATE jpeg png m pthread)
     endif()
 endif()
