@@ -1,0 +1,9 @@
+get_filename_component(ZACC_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+include(CMakeFindDependencyMacro)
+
+if(NOT TARGET zacc::zacc)
+    include("${ZACC_CMAKE_DIR}/ZaccTargets.cmake")
+endif()
+
+# Add the targets file
+#include("${CMAKE_CURRENT_LIST_DIR}/ZaccTargets.cmake")

@@ -26,15 +26,15 @@
 #pragma once
 
 
-#include "zacc.hpp"
+#include <zacc.hpp>
 
-#include "system/dispatched_arch.hpp"
+#include <zacc/system/dispatched_arch.hpp>
 
-#include "math/complex.hpp"
-#include "math/matrix.hpp"
-#include "util/algorithm.hpp"
+#include <zacc/math/complex.hpp>
+#include <zacc/math/matrix.hpp>
+#include <zacc/util/algorithm.hpp>
 
-#include "interfaces/mandelbrot.vanilla.hpp"
+#include <interfaces/mandelbrot.vanilla.hpp>
 
 namespace zacc { namespace examples {
 

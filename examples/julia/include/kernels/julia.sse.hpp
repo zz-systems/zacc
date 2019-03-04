@@ -25,13 +25,13 @@
 
 #pragma once
 
-#include "system/dispatched_arch.hpp"
+#include <zacc/system/dispatched_arch.hpp>
 
-#include "math/complex.hpp"
-#include "math/matrix.hpp"
-#include "util/algorithm.hpp"
+#include <zacc/math/complex.hpp>
+#include <zacc/math/matrix.hpp>
+#include <zacc/util/algorithm.hpp>
 
-#include "interfaces/julia.sse.hpp"
+#include <interfaces/julia.sse.hpp>
 
 namespace zacc { namespace examples {
 

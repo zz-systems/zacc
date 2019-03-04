@@ -27,15 +27,15 @@
 
 #include <chrono>
 
-#include "interfaces/julia.hpp"
-#include "interfaces/julia.vanilla.hpp"
+#include <interfaces/julia.hpp>
+#include <interfaces/julia.vanilla.hpp>
 
-#include "system/kernel_dispatcher.hpp"
-#include "math/matrix.hpp"
-#include "util/color.hpp"
-#include "util/vector.hpp"
+#include <zacc/system/kernel_dispatcher.hpp>
+#include <zacc/math/matrix.hpp>
+#include <zacc/util/color.hpp>
+#include <zacc/util/vector.hpp>
 
-#include "host.hpp"
+#include <host.hpp>
 
 namespace zacc { namespace examples {
 

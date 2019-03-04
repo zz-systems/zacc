@@ -27,9 +27,9 @@
 
 #include <vector>
 
-#include "zacc.hpp"
-#include "math/matrix.hpp"
-#include "system/kernel.hpp"
+#include <zacc.hpp>
+#include <zacc/math/matrix.hpp>
+#include <zacc/system/kernel.hpp>
 
 namespace zacc { namespace examples {
 

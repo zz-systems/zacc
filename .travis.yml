@@ -27,7 +27,7 @@ env:
     - PKG_DIR=${TRAVIS_BUILD_DIR}/packages
     - SHARE_DIR=${TRAVIS_BUILD_DIR}/share
 
-    - PYTHON=3.6
+    - PYTHON=3.6 
 
 git:
   depth: 1

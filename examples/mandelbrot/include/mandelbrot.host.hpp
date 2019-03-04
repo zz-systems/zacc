@@ -25,16 +25,16 @@
 
 #pragma once
 
-#include<chrono>
+#include <chrono>
 
-#include "interfaces/mandelbrot.hpp"
-#include "interfaces/mandelbrot.vanilla.hpp"
+#include <interfaces/mandelbrot.hpp>
+#include <interfaces/mandelbrot.vanilla.hpp>
 
-#include "system/kernel_dispatcher.hpp"
-#include "math/matrix.hpp"
-#include "util/color.hpp"
+#include <zacc/system/kernel_dispatcher.hpp>
+#include <zacc/math/matrix.hpp>
+#include <zacc/util/color.hpp>
 
-#include "host.hpp"
+#include <host.hpp>
 
 namespace zacc { namespace examples {
     class mandelbrot_host : public host<mandelbrot, mandelbrot_vanilla>

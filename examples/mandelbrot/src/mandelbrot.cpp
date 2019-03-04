@@ -24,9 +24,9 @@
 
 #include <iostream>
 
-#include "mandelbrot.host.hpp"
+#include <mandelbrot.host.hpp>
 
-#include "system/sysinfo.hpp"
+#include <zacc/system/sysinfo.hpp>
 
 int main(int argc, char** argv)
 {

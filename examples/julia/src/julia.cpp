@@ -24,7 +24,7 @@
 
 #include <iostream>
 
-#include "julia.host.hpp"
+#include <julia.host.hpp>
 
 int main(int argc, char** argv)
 {

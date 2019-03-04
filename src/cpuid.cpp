@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,4 +22,32 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-#include "system/cpuid.hpp"
+
+#include <zacc/system/sysinfo.hpp>
+#include <zacc/util/option_parser.hpp>
+#include <zacc/util/algorithm.hpp>
+
+using namespace zacc;
+
+#if defined(_MSC_VER)
+	#pragma comment(linker, "/SUBSYSTEM:CONSOLE")
+#endif
+
+int main(int argc, char** argv) {
+
+    option_parser parser(argc, argv);
+    sysinfo sysinfo;
+
+    if(parser.has_option("CMAKE_OUTPUT"))
+    {
+        auto c = sysinfo.active();
+
+        std::cout << join(std::begin(c), std::end(c), ";");
+    }
+    else
+    {
+        std::cout << sysinfo;
+    }
+
+    return 0;
+}

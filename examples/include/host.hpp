@@ -29,10 +29,10 @@
 
 #include "../../dependencies/CImg/CImg.h"
 
-#include "system/sysinfo.hpp"
-#include "system/kernel_dispatcher.hpp"
-#include "math/matrix.hpp"
-#include "util/color.hpp"
+#include <zacc/system/sysinfo.hpp>
+#include <zacc/system/kernel_dispatcher.hpp>
+#include <zacc/math/matrix.hpp>
+#include <zacc/util/color.hpp>
 
 namespace zacc { namespace examples {
 

@@ -1,21 +1,37 @@
 cmake_minimum_required(VERSION 3.3.2)
 project(zacc.examples.mandelbrot)
 
-include_directories("${PROJECT_SOURCE_DIR}/include")
+find_package(zacc REQUIRED)
 
-add_executable(mandelbrot src/mandelbrot.cpp)
-
-set_target_properties(mandelbrot
-    PROPERTIES
-    INSTALL_RPATH "@loader_path/../lib;@loader_path/../thirdparty/lib"
+set(include_directories
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+        $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>
 )
 
-zacc_link_kernels(mandelbrot
-    BRANCHES "${branches}"
-    KERNELS src/kernels.cpp)
+add_executable(mandelbrot src/mandelbrot.cpp)
+target_include_directories(mandelbrot PUBLIC
+        ${include_directories}
+)
 
-zacc_install(mandelbrot BRANCHES "${branches}")
+add_kernel(mandelbrot_kernel src/kernels.cpp)
+kernel_include_directories(mandelbrot_kernel PUBLIC
+        ${include_directories}
+)
 
+target_link_libraries(mandelbrot PRIVATE host mandelbrot_kernel zacc::zacc)
+
+set_target_properties(mandelbrot
+        PROPERTIES
+        INSTALL_RPATH "@loader_path/../lib "
+)
+
+install(TARGETS mandelbrot DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT zacc-examples)
+
+install_kernel(TARGETS mandelbrot_kernel
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT zacc-examples
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT zacc-examples
+)
 
 if(NOT WIN32)
     find_package(X11 REQUIRED)

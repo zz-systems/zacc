@@ -22,6 +22,6 @@
 // Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //
 
-#include "kernels/julia.hpp"
-#include "kernels/julia.vanilla.hpp"
-#include "kernels/julia.sse.hpp"
+#include <kernels/julia.hpp>
+#include <kernels/julia.vanilla.hpp>
+#include <kernels/julia.sse.hpp>
