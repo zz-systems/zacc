@@ -22,51 +22,58 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-#include "gtest/gtest.h"
-#include "system/dispatched_arch.hpp"
-#include "util/testing/gtest_ext.hpp"
+#include <gtest/gtest.h>
+#include <zacc/system/dispatched_arch.hpp>
+#include <gtest_extensions.hpp>
 #include <type_traits>
 
 namespace zacc { namespace test {
 
         template <typename T>
-        class bitwise_shift_test : public ::testing::Test { };
-        TYPED_TEST_CASE_P(bitwise_shift_test);
+        class io_test : public ::testing::Test { };
+        TYPED_TEST_CASE_P(io_test);
+
+        template <typename T>
+        class gather_test : public ::testing::Test { };
+        TYPED_TEST_CASE_P(gather_test);
 
 
-        TYPED_TEST_P(bitwise_shift_test, shift_left_immediate)
+        TYPED_TEST_P(io_test, store)
         {
-            TypeParam value = 5;
-            TypeParam actual= value << 5;
+            alignas(alignment_v<TypeParam>) view_t<TypeParam> data;
+            std::iota(data.begin(), data.end(), 10);
 
-            VASSERT_EQ(actual, 5 << 5);
+            TypeParam actual(data);
+
+            auto result = actual.data();
+
+            for(size_t i = 0; i < TypeParam::size; i++)
+                VASSERT_EQ(result[i], data[i]);
         }
 
-        TYPED_TEST_P(bitwise_shift_test, shift_right_immediate)
+        TYPED_TEST_P(gather_test, gather)
         {
-            TypeParam value = 1024;
-            TypeParam actual= value >> 3;
+            alignas(alignment_v<TypeParam>) view_t<TypeParam> data;
+            std::iota(data.begin(), data.end(), 10);
 
-            VASSERT_EQ(actual, 1024 >> 3);
-        }
+            TypeParam result = TypeParam::gather(std::begin(data), zint32(0));
 
-        TYPED_TEST_P(bitwise_shift_test, shift_left_byval)
-        {
-        }
-
-        TYPED_TEST_P(bitwise_shift_test, shift_right_byval)
-        {
+            VASSERT_EQ(result, 10);
         }
 
 
-        REGISTER_TYPED_TEST_CASE_P(bitwise_shift_test,
-                                   shift_left_immediate,
-                                   shift_right_immediate,
-                                   shift_left_byval,
-                                   shift_right_byval);
+        REGISTER_TYPED_TEST_CASE_P(io_test,
+                                   store);
 
-        typedef ::testing::Types<zint16, zint32> bitwise_shift_test_types;
+        typedef ::testing::Types<zfloat, zdouble, zint8, zint16, zint32> io_test_types;
 
-        INSTANTIATE_TYPED_TEST_CASE_P(zacc, bitwise_shift_test, bitwise_shift_test_types);
+        INSTANTIATE_TYPED_TEST_CASE_P(zacc, io_test, io_test_types);
+
+        REGISTER_TYPED_TEST_CASE_P(gather_test,
+                                   gather);
+
+        typedef ::testing::Types<zfloat, zdouble, zint32> gather_test_types;
+
+        INSTANTIATE_TYPED_TEST_CASE_P(zacc, gather_test, gather_test_types);
 
     }}

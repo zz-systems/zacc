@@ -4,10 +4,8 @@ project(zacc.examples)
 find_package(ZACC REQUIRED)
 
 add_library(host INTERFACE)
-target_include_directories(host INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
-        $<INSTALL_INTERFACE:$<INSTALL_PREFIX>/${CMAKE_INSTALL_INCLUDEDIR}>)
+target_include_directories(host INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(host INTERFACE cimg)
 
 add_subdirectory(julia)
 add_subdirectory(mandelbrot)

@@ -22,9 +22,10 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-#include "gtest/gtest.h"
-#include "system/dispatched_arch.hpp"
-#include "util/testing/gtest_ext.hpp"
+#include <gtest/gtest.h>
+#include <zacc/system/dispatched_arch.hpp>
+
+#include <gtest_extensions.hpp>
 #include <type_traits>
 
 namespace zacc { namespace test {

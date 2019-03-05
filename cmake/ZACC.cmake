@@ -128,55 +128,100 @@ option(BUILD_OPENCL "Build the OpenCL branch" OFF)
 
 add_library(zacc.kernel.host INTERFACE)
 
+set(architectures "")
+set(feature_groups "")
+set(features "")
+
 if(BUILD_SCALAR)
-    set(branches ${branches} scalar)    
+    list(APPEND architectures   scalar)
+    list(APPEND feature_groups  DEFAULT)
+    list(APPEND features        DEFAULT scalar)
 
     target_compile_definitions(zacc.kernel.host INTERFACE ZACC_SCALAR=1)
 endif()
 
 if(BUILD_SSE)
-    set(branches ${branches} sse2 sse3 sse41 sse41.fma3 sse41.fma4)
+    list(APPEND architectures   sse2 sse3 sse41 sse41.fma3 sse41.fma4)
+    list(APPEND feature_groups  SSE)
+    list(APPEND features        SSE sse2 sse3 ssse3 sse41 sse42 fma3 fma4)
 
     target_compile_definitions(zacc.kernel.host INTERFACE ZACC_SSE=1)
 endif()
 
 if(BUILD_AVX)
-    set(branches ${branches} avx1 avx1.fma3)
+    list(APPEND architectures   avx1 avx1.fma3)
+    list(APPEND feature_groups  AVX1)
+    list(APPEND features        AVX1 avx1 fma3)
 
     target_compile_definitions(zacc.kernel.host INTERFACE ZACC_AVX=1)
 endif()
 
 if(BUILD_AVX2)
-    set(branches ${branches} avx2)
+    list(APPEND architectures   avx2)
+    list(APPEND feature_groups  AVX2)
+    list(APPEND features        AVX2 avx2 fma3)
+
 
     target_compile_definitions(zacc.kernel.host INTERFACE ZACC_AVX2=1)
 endif()
 
 if(BUILD_AVX512)
-    set(branches ${branches} avx512)
+    list(APPEND architectures   avx512)
+    list(APPEND feature_groups  AVX512)
+    list(APPEND features        AVX512 avx512)
 
     target_compile_definitions(zacc.kernel.host INTERFACE ZACC_AVX512=1)
 endif()
 
 if(BUILD_OPENCL)
-    set(branches ${branches} opencl)
+    list(APPEND architectures   opencl)
+    list(APPEND feature_groups  GPGPU)
+    #list(APPEND features       GPGPU opencl)
+
+
 
     target_compile_definitions(zacc.kernel.host INTERFACE ZACC_OPENCL=1)
 endif()
 # ------------------------------------------------------------------------------
 
+function(add_permuted_tests target_name)
+    set(multiValueArgs DEFAULT SSE AVX1 AVX2 AVX512 GPGPU)
+    cmake_parse_arguments(F "${options}" "${oneValueArgs}" "${multiValueArgs}" ${features})
+
+    foreach(group ${feature_groups})
+        set(test_suffix "")
+        set(test_features "")
+
+        foreach(feature ${F_${group}})
+            set(test_suffix "${test_suffix}.${feature}")
+            list(APPEND test_features "--m${feature}")
+
+            add_test(
+                NAME ${target_name}${test_suffix}
+                COMMAND $<TARGET_FILE:${target_name}> --mask=0 ${test_features}
+            )
+        endforeach()
+    endforeach()
+endfunction(add_permuted_tests)
 
 function(add_kernel kernel_name)
+    set(options LINK NOLINK)
+    cmake_parse_arguments(F "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
     add_library(${kernel_name} INTERFACE)
     target_link_libraries(${kernel_name} INTERFACE zacc zacc.kernel.host zacc_dl)
     target_compile_definitions(${kernel_name} INTERFACE ZACC_DYLIBNAME="${CMAKE_SHARED_LIBRARY_PREFIX}${kernel_name}${CMAKE_SHARED_LIBRARY_SUFFIX}")
     
-    foreach(branch ${branches})
-        add_library(${kernel_name}.${branch} SHARED ${ARGN})
+    foreach(architecture ${architectures})
+        add_library(${kernel_name}.${architecture} SHARED ${F_UNPARSED_ARGUMENTS})
 
-        target_link_libraries(${kernel_name}.${branch} PRIVATE zacc zacc.arch.${branch})
+        target_link_libraries(${kernel_name}.${architecture} PRIVATE zacc zacc.arch.${architecture})
 
-        target_link_libraries(${kernel_name} INTERFACE ${kernel_name}.${branch})
+        add_dependencies(${kernel_name} INTERFACE ${kernel_name}.${architecture})
+
+        if(F_LINK OR (NOT F_NOLINK))
+            target_link_libraries(${kernel_name} INTERFACE ${kernel_name}.${architecture})
+        endif()
     endforeach()
 endfunction(add_kernel)
 
@@ -191,8 +236,8 @@ function(install_kernel)
     endforeach()
     
     foreach(target ${F_TARGETS})
-        foreach(branch ${branches})
-            install(TARGETS ${target}.${branch} ${install_args})
+        foreach(architecture ${architectures})
+            install(TARGETS ${target}.${architecture} ${install_args})
         endforeach()
     endforeach()
 endfunction(install_kernel)
@@ -203,7 +248,18 @@ function(kernel_include_directories kernel_name)
     cmake_parse_arguments(F "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     set(include_directories_args ${ARGN})
-    foreach(branch ${branches})
-        target_include_directories(${kernel_name}.${branch} ${include_directories_args})
+    foreach(architecture ${architectures})
+        target_include_directories(${kernel_name}.${architecture} ${include_directories_args})
     endforeach()
 endfunction(kernel_include_directories)
+
+function(kernel_link_libraries kernel_name)
+    set(oneValueArgs debug optimized general)
+    set(multiValueArgs INTERFACE PUBLIC PRIVATE)
+    cmake_parse_arguments(F "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+    set(link_libraries_args ${ARGN})
+    foreach(architecture ${architectures})
+        target_link_libraries(${kernel_name}.${architecture} ${link_libraries_args})
+    endforeach()
+endfunction(kernel_link_libraries)

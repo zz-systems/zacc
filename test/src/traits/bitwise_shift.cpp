@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
+// 
 // Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,36 +22,51 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
+#include <gtest/gtest.h>
+#include <zacc/system/dispatched_arch.hpp>
+#include <gtest_extensions.hpp>
+#include <type_traits>
 
-#pragma once
+namespace zacc { namespace test {
 
-#include <zacc/system/sysinfo.hpp>
-#include <zacc/system/kernel_dispatcher.hpp>
+        template <typename T>
+        class bitwise_shift_test : public ::testing::Test { };
+        TYPED_TEST_CASE_P(bitwise_shift_test);
 
-namespace zacc { namespace testing {
 
-    template<typename Kernel, typename... ReferenceKernels>
-    class host
-    {  
-        host(const sysinfo& sysinfo)
-            : _sysinfo(sysinfo)
-        {}
-
-        virtual ~host() {}
-
-        virtual void run(int argc, char** argv)
+        TYPED_TEST_P(bitwise_shift_test, shift_left_immediate)
         {
-            _dispatcher.features() = _sysinfo;
-            _dispatcher.dispatch_some(argc, argv);
+            TypeParam value = 5;
+            TypeParam actual= value << 5;
 
-            _dispatcher.dispatch_one();
+            VASSERT_EQ(actual, 5 << 5);
         }
 
-    protected:
+        TYPED_TEST_P(bitwise_shift_test, shift_right_immediate)
+        {
+            TypeParam value = 1024;
+            TypeParam actual= value >> 3;
 
-        system::dispatcher<system::kernel_dispatcher<Kernel>> _dispatcher;
+            VASSERT_EQ(actual, 1024 >> 3);
+        }
 
-        sysinfo _sysinfo;
-    };
+        TYPED_TEST_P(bitwise_shift_test, shift_left_byval)
+        {
+        }
 
-}}
+        TYPED_TEST_P(bitwise_shift_test, shift_right_byval)
+        {
+        }
+
+
+        REGISTER_TYPED_TEST_CASE_P(bitwise_shift_test,
+                                   shift_left_immediate,
+                                   shift_right_immediate,
+                                   shift_left_byval,
+                                   shift_right_byval);
+
+        typedef ::testing::Types<zint16, zint32> bitwise_shift_test_types;
+
+        INSTANTIATE_TYPED_TEST_CASE_P(zacc, bitwise_shift_test, bitwise_shift_test_types);
+
+    }}

@@ -1,16 +1,17 @@
+cmake_minimum_required(VERSION 3.3.2)
+project(zacc.test NONE)
+
 enable_testing()
 
-file(GLOB test.core "casting.cpp")
-file(GLOB test.traits "traits/*.cpp")
-file(GLOB test.math "math/*.cpp")
-file(GLOB_RECURSE test.util "util/*.cpp")
+find_package(zacc REQUIRED)
 
-set(testsources 
-    ${test.core}
-    ${test.traits}
-    ${test.math}
-    ${test.util}
-)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+file(GLOB test.algorithm    "src/algorithm/*.cpp")
+file(GLOB test.core         "src/casting.cpp")
+file(GLOB test.traits       "src/traits/*.cpp")
+file(GLOB test.math         "src/math/*.cpp")
+file(GLOB_RECURSE test.util "src/util/*.cpp")
 
 #
 #if(BUILD_SANITIZE_MEMORY)
@@ -18,33 +19,21 @@ set(testsources
 #    link_libraries(-fsanitize=address)
 #endif()
 
-# zacc_add_dispatched_tests(zacc.tests
-#         TEST_MAIN ${ZACC_TEST_MAIN}
-#         TEST_ENTRYPOINT ${ZACC_TEST_ENTRYPOINT}
-#         BRANCHES "${branches}"
-#         INCLUDES ${CMAKE_SOURCE_DIR}/include
-#         SOURCES
-#             ${test.core}
-#             ${test.traits}
-#             ${test.math}
-#             ${test.util}
 
-#             #"${CMAKE_CURRENT_LIST_DIR}/traits/conditional.cpp"
-#         )
+add_custom_target(zacc_test)
+set(test_categories traits math util algorithm)
 
+foreach(category ${test_categories})
+    set(test_name zacc_test_${category})
+    set(kernel_name zacc_test_${category}_kernel)
 
-add_custom_target(zacc.tests)
+    add_executable(${test_name} src/test_host.cpp)
+    add_kernel(${kernel_name} src/kernels.cpp ${test.${category}} NOLINK)
 
-add_kernel(test_kernel test_entry_point.cpp ${testsources})
+    target_link_libraries(${test_name} PRIVATE ${kernel_name})
+    kernel_link_libraries(${kernel_name} PRIVATE gtest)
 
-foreach(branch ${branches})    
-    add_executable(zacc.tests.${branch} test_main.cpp)
-    target_link_libraries(zacc.tests.${branch} PRIVATE test_kernel)
+    add_permuted_tests(${test_name})
 
-    add_dependencies(zacc.tests zacc.tests.${branch})
-    
-    add_test(
-                NAME zacc.tests.${branch}
-                COMMAND $<TARGET_FILE:zacc.tests.${branch}>
-            )
+    add_dependencies(zacc_test ${test_name})
 endforeach()

@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-//
-// Copyright (c) 2015-2016 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
+// 
+// Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -12,7 +12,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,17 +22,37 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-#pragma once
+#include <gtest/gtest.h>
+#include <zacc/system/dispatched_arch.hpp>
+#include <zacc/util/algorithm.hpp>
 
-#ifdef WIN32
-#ifdef ZACC_EXPORTS
-        #define ZACC_DLL_API extern "C" __declspec(dllexport)
-    #else
-        #define ZACC_DLL_API extern "C" __declspec(dllimport)
-    #endif
-#else
-#define ZACC_DLL_API extern "C"
-#endif
+#include <cmath>
+#include <gtest_extensions.hpp>
+
+namespace zacc { namespace test {
+
+        TEST(type_traits_test, is_iterable_trait) {
+            REQUIRES(ZACC_ARCH);
+
+                EXPECT_TRUE((is<measurable, std::array<int, 10>>));
+                EXPECT_FALSE((is<measurable, int>));
+
+                EXPECT_TRUE((is<iterable, std::array<int, 10>>));
+                EXPECT_FALSE((is<iterable, int>));
+
+                EXPECT_FALSE((is<resizable, std::array<int, 10>>));
+                EXPECT_FALSE((is<resizable, int>));
+                EXPECT_TRUE((is<resizable, std::vector<int>>));
+
+                EXPECT_FALSE((all<measurable, std::array<int, 10>, std::vector<float>, double>));
+                EXPECT_TRUE((all<measurable, std::array<int, 10>, std::vector<float>>));
+
+                EXPECT_TRUE((any<measurable, std::array<int, 10>, std::vector<float>, double>));
+
+                EXPECT_TRUE((is<swappable, std::tuple<int, float>>));
+        }
 
 
-ZACC_DLL_API int zacc_run_gtests(int argc, char **argv);
+
+
+}}

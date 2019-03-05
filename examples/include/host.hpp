@@ -27,7 +27,7 @@
 
 #include<chrono>
 
-#include "../../dependencies/CImg/CImg.h"
+#include <CImg.h>
 
 #include <zacc/system/sysinfo.hpp>
 #include <zacc/system/kernel_dispatcher.hpp>

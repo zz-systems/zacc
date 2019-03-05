@@ -146,7 +146,7 @@ namespace zacc {
             return *this;
         }
 
-        constexpr bool test( feature feature ) const
+        constexpr bool test(const feature& feature ) const
         {
             return (_mask & feature.mask()) != 0;
         }
@@ -159,6 +159,11 @@ namespace zacc {
         }
 
         constexpr uint64_t mask() const
+        {
+            return _mask;
+        }
+
+        uint64_t& mask()
         {
             return _mask;
         }

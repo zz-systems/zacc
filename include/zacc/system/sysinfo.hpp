@@ -84,9 +84,11 @@ namespace zacc {
 
         friend std::ostream& operator<<(std::ostream& os, put_sysinfo)
         {
+            os << "-mask" << std::left << std::setw(15) << "0xFFFF'FFFF" << " - set features via integer mask" << std::endl;
+
             for(auto feature : sysinfo::available())
             {
-                os << " -mno-" << std::left << std::setw(15) <<  tolower(feature.to_string()) << " Disable " << toupper(feature.to_string()) << " feature" << std::endl;
+                os << std::left << std::setw(15) << ("-m" + tolower(feature.to_string()) + ", ") << std::left << std::setw(15) << ("-mno-" + tolower(feature.to_string())) << " Enable/Disable " << toupper(feature.to_string()) << " feature" << std::endl;
             }
 
             return os;
@@ -103,11 +105,21 @@ namespace zacc {
 
         friend option_parser& operator>>(option_parser& parser, get_sysinfo sysinfo)
         {
+            if(parser.has_option("mask"))
+            {
+                parser["mask"] >> sysinfo._sysinfo.mask();
+            }
+
             for(auto feature : sysinfo::available())
             {
                 if(parser.has_option("mno-" + tolower(feature.to_string())))
                 {
                     sysinfo._sysinfo.reset(feature);
+                }
+
+                if(parser.has_option("m" + tolower(feature.to_string())))
+                {
+                    sysinfo._sysinfo.set(feature);
                 }
             }
 

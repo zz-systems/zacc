@@ -83,12 +83,12 @@ target_link_libraries(zacc_cpuid PRIVATE zacc)
 install(TARGETS zacc_cpuid DESTINATION "${CMAKE_INSTALL_BINDIR}")
 
 
-option(BUILD_TESTS "Build unit tests" OFF)
+option(BUILD_TESTS "Build unit tests" ON)
 option(BUILD_EXAMPLES "Build examples" ON)
 
 # fetch dependencies
 if(BUILD_EXAMPLES)
-    include_directories(dependencies/CImg)
+    add_subdirectory(dependencies)
 endif()
 
 # if(BUILD_TESTS)
@@ -102,10 +102,11 @@ endif()
 #include(src/CMakeLists.txt)
 
 # add test targets
-# if(BUILD_TESTS)
-#     enable_testing()
-#     add_subdirectory(test)
-# endif()
+if(BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
+    #add_subdirectory(dependencies/googletest)
+endif()
 
 # add example targets
 if(BUILD_EXAMPLES)

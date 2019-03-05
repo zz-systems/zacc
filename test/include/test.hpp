@@ -30,13 +30,11 @@
 
 namespace zacc { namespace testing {
 
-    using namespace math;
-
     struct test : system::kernel<test>
     {
         static constexpr auto name() { return "test"; }
 
         virtual void configure(int argc, char **argv) = 0;
-        virtual void run() = 0;
+        virtual void run(int& return_code) = 0;
     };
 }}

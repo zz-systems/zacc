@@ -28,7 +28,8 @@
 #include <zacc/system/sysinfo.hpp>
 #include <zacc/system/dispatched_arch.hpp>
 #include <zacc/util/algorithm.hpp>
-#include "gtest/gtest.h"
+
+#include <gtest/gtest.h>
 
 namespace zacc { namespace test {
 

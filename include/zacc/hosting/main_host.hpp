@@ -1,6 +1,8 @@
+#include <utility>
+
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
-// 
+//
 // Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12,7 +14,7 @@
 //
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,37 +24,37 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-#include "gtest/gtest.h"
-#include "system/dispatched_arch.hpp"
-#include "util/algorithm.hpp"
+#pragma once
 
-#include <cmath>
-#include "util/testing/gtest_ext.hpp"
+#include <zacc/system/sysinfo.hpp>
+#include <zacc/system/kernel_dispatcher.hpp>
 
-namespace zacc { namespace test {
+namespace zacc { namespace hosting {
 
-        TEST(type_traits_test, is_iterable_trait) {
-            REQUIRES(ZACC_ARCH);
+    template<typename Kernel>
+    class main_host
+    {
+    public:
+        explicit main_host(sysinfo sysinfo)
+            : _sysinfo(std::move(sysinfo))
+        {}
 
-                EXPECT_TRUE((is<measurable, std::array<int, 10>>));
-                EXPECT_FALSE((is<measurable, int>));
+        virtual ~main_host() = default;
 
-                EXPECT_TRUE((is<iterable, std::array<int, 10>>));
-                EXPECT_FALSE((is<iterable, int>));
+        virtual int run(int argc, char** argv)
+        {
+            int return_code;
 
-                EXPECT_FALSE((is<resizable, std::array<int, 10>>));
-                EXPECT_FALSE((is<resizable, int>));
-                EXPECT_TRUE((is<resizable, std::vector<int>>));
+            _dispatcher.features() = _sysinfo;
+            _dispatcher.dispatch_one(argc, argv);
+            _dispatcher.dispatch_one(return_code);
 
-                EXPECT_FALSE((all<measurable, std::array<int, 10>, std::vector<float>, double>));
-                EXPECT_TRUE((all<measurable, std::array<int, 10>, std::vector<float>>));
-
-                EXPECT_TRUE((any<measurable, std::array<int, 10>, std::vector<float>, double>));
-
-                EXPECT_TRUE((is<swappable, std::tuple<int, float>>));
+            return return_code;
         }
 
+    protected:
+        system::dispatcher<system::kernel_dispatcher<Kernel>> _dispatcher;
 
-
-
+        sysinfo _sysinfo;
+    };
 }}

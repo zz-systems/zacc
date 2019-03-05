@@ -25,26 +25,25 @@
 
 #include <iostream>
 
-#include "util/testing/test_entry_point.hpp"
+#include <zacc/system/sysinfo.hpp>
+#include <zacc/hosting/main_host.hpp>
+#include <test.hpp>
 
-#include "system/managed_library.hpp"
-#include "system/sysinfo.hpp"
+int main(int argc, char** argv)
+{
+    using namespace zacc::testing;
+    using namespace zacc::hosting;
 
-int main(int argc, char **argv) {
-    std::cout << "Running main() from test_main.cpp" << std::endl;
+    zacc::option_parser options(argc, argv);
+    zacc::sysinfo sysinfo;
 
-    auto c = zacc::sysinfo().match(zacc::feature(zacc::arch::ZACC_ARCH::value));
-    std::string str;
+    options >> zacc::get_sysinfo(sysinfo);
 
-    if(c.size() != 0) {
-        str = join(std::begin(c), std::end(c), ", ");
-        ZTRACE_INTERNAL("SKIPPED: Features [" << str << "] not supported");
-        return 0;
-    }
+    std::cout << zacc::put_sysinfo(sysinfo) << std::endl;
 
-    auto loader = zacc::system::managed_library(ZACC_DYLIBNAME);
+    std::cout << "Your system supports: " << std::endl;
+    std::cout << zacc::sysinfo() << std::endl;
 
-    auto zacc_run_gtests = loader.resolve_symbol<int(int, char**)>("zacc_run_gtests");
-
-    return zacc_run_gtests(argc, argv);
+    return main_host<test>(sysinfo)
+        .run(argc, argv);
 }

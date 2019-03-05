@@ -22,12 +22,12 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-#include "gtest/gtest.h"
-#include "system/dispatched_arch.hpp"
-#include "math/trigonometry.hpp"
+#include <gtest/gtest.h>
+#include <zacc/system/dispatched_arch.hpp>
+#include <zacc/math/trigonometry.hpp>
 
 #include <cmath>
-#include "util/testing/gtest_ext.hpp"
+#include <gtest_extensions.hpp>
 
 namespace zacc { namespace test {
 
