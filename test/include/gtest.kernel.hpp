@@ -25,16 +25,33 @@
 
 #pragma once
 
+#include <gtest/gtest.h>
+
 #include <zacc.hpp>
 #include <zacc/system/kernel.hpp>
+#include <zacc/system/dispatched_arch.hpp>
+
+#include <gtest.hpp>
 
 namespace zacc { namespace testing {
 
-    struct test : system::kernel<test>
+    KERNEL_IMPL(gtest)
     {
-        static constexpr auto name() { return "test"; }
+        int _argc;
+        char **_argv;
 
-        virtual void configure(int argc, char **argv) = 0;
-        virtual void run(int& return_code) = 0;
+        void configure(int argc, char **argv) override
+        {
+            _argc = argc;
+            _argv = argv;
+        }
+
+        void run(int& return_code) override
+        {
+            ::testing::InitGoogleTest(&_argc, _argv);
+            return_code = RUN_ALL_TESTS();
+        }
     };
+    
+    REGISTER_KERNEL(gtest);
 }}

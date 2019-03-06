@@ -33,7 +33,7 @@
 
 #include <map>
 #include <vector>
-#include <zacc/util/type/type_casts.hpp>
+#include <zacc/util/type/cast.hpp>
 #include <zacc/util/memory.hpp>
 
 

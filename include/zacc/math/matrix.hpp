@@ -26,8 +26,8 @@
 #pragma once
 
 #include <zacc/util/operators.hpp>
-#include <zacc/util/type/type_composition.hpp>
-#include <zacc/util/type/type_casts.hpp>
+#include <zacc/util/type/compose.hpp>
+#include <zacc/util/type/cast.hpp>
 #include <zacc/util/type/type_traits.hpp>
 #include <zacc/util/algorithm.hpp>
 
@@ -118,7 +118,7 @@ namespace zacc { namespace math {
     /// @brief matrix
     template<typename T, size_t Rows, size_t Cols>
     struct alignas(alignof(T)) __mat
-            : inherit<ops_meta<mat<T, Rows, Cols>, T, true>, plus, minus, multiplies, divides, modulus, increment, decrement>
+            : compose<ops_meta<mat<T, Rows, Cols>, T, true>, plus, minus, multiplies, divides, modulus, increment, decrement>
             //: compose_t<plus, minus, multiplies, divides, composable<mat<T, Rows, Cols>>::template type>
     {
         static_assert(Rows * Cols > 0, "Wrong dimensions for a matrix");

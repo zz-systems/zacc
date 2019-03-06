@@ -36,7 +36,7 @@ namespace zacc { namespace traits {
      */
     template<typename Interface, typename Composed, typename Boolean>
     struct logical
-            : inherit<ops_meta<Composed, Interface>, logical_and, logical_or>
+            : compose<ops_meta<Composed, Interface>, logical_and, logical_or>
     {
         friend Boolean operator!(Composed self) {
             return vlneg(self);

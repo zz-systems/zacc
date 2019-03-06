@@ -31,7 +31,7 @@
 
 #include <zacc/util/type/ztraits.hpp>
 #include <zacc/util/type/type_traits.hpp>
-#include <zacc/util/type/type_casts.hpp>
+#include <zacc/util/type/cast.hpp>
 
 #include <zacc/util/macros.hpp>
 #include <zacc/util/collections.hpp>

@@ -36,7 +36,7 @@ namespace zacc { namespace traits {
      */
     template<typename Interface, typename Composed, typename Boolean>
     struct comparable
-            : inherit<ops_meta<Composed, Interface>, greater, greater_equal, less, less_equal>
+            : compose<ops_meta<Composed, Interface>, greater, greater_equal, less, less_equal>
     {
 
         friend Boolean operator>(const Composed one, const Composed other) {

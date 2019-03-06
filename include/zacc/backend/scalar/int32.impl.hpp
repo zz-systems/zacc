@@ -39,7 +39,7 @@
 #include <zacc/backend/intrin.ext.hpp>
 #include <zacc/backend/zval.hpp>
 
-#include <zacc/util/type/type_composition.hpp>
+#include <zacc/util/type/compose.hpp>
 #include <zacc/util/type/type_traits.hpp>
 
 #include <zacc/util/memory.hpp>

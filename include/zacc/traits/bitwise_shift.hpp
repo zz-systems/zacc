@@ -37,7 +37,7 @@ namespace zacc { namespace traits {
      */
     template<typename Interface, typename Composed, typename Boolean>
     struct bitwise_shift
-            //: inherit<Composed, bit_shl, bit_shr>
+            //: compose<Composed, bit_shl, bit_shr>
     {
 
         friend Composed operator<<(Composed one, const size_t immediate) {

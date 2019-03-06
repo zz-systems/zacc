@@ -24,7 +24,7 @@
 
 #include <gtest/gtest.h>
 #include <zacc/system/dispatched_arch.hpp>
-#include <gtest_extensions.hpp>
+#include <gtest.extensions.hpp>
 #include <type_traits>
 
 namespace zacc { namespace test {

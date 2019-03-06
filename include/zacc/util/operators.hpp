@@ -27,7 +27,6 @@
 
 #include <tuple>
 #include <zacc/util/type/type_traits.hpp>
-#include <zacc/util/type/ztype.hpp>
 
 namespace zacc
 {

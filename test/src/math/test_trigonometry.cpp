@@ -27,7 +27,7 @@
 #include <zacc/math/trigonometry.hpp>
 
 #include <cmath>
-#include <gtest_extensions.hpp>
+#include <gtest.extensions.hpp>
 
 namespace zacc { namespace test {
 

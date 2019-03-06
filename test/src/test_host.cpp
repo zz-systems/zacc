@@ -27,7 +27,7 @@
 
 #include <zacc/system/sysinfo.hpp>
 #include <zacc/hosting/main_host.hpp>
-#include <test.hpp>
+#include <gtest.hpp>
 
 int main(int argc, char** argv)
 {
@@ -44,6 +44,6 @@ int main(int argc, char** argv)
     std::cout << "Your system supports: " << std::endl;
     std::cout << zacc::sysinfo() << std::endl;
 
-    return main_host<test>(sysinfo)
+    return main_host<gtest>(sysinfo)
         .run(argc, argv);
 }

@@ -35,7 +35,7 @@ namespace zacc { namespace traits {
      * @tparam Composed final composed type (e.g zint32)
      */
     template<typename Interface, typename Composed, typename Boolean>
-    struct bitwise : inherit<ops_meta<Composed, Interface>, bit_and, bit_or, bit_xor>
+    struct bitwise : compose<ops_meta<Composed, Interface>, bit_and, bit_or, bit_xor>
     {
         friend Composed operator~(Composed one)
         {

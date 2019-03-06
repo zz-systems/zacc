@@ -28,68 +28,11 @@
 
 #pragma once
 
-#include <utility>
-#include <zacc/util/macros.hpp>
-
 namespace zacc {
 
-    template<typename Base>
-    struct composable
-    {
-        template<typename Terminator>
-        struct type :
-                public Base,
-                public Terminator
-        {
-
-            FORWARD(type);
-        };
-    };
-
-    template<typename Base>
-    using terminator = typename composable<Base>::type;
-
-    template<template<class> class Head, template<class> class... Tail>
-    struct compose
-    {
-        using type = Head<typename compose<Tail...>::type>;
-    };
-
-    template<template<class> class Tail>
-    struct compose<Tail>
-    {
-        struct terminator
-        {};
-
-        using type = Tail<terminator>;
-    };
-
-
-
-
     template<typename Meta, template<class...> class Part, template<class...> class... Parts>
-    struct inherit : public Part<Meta>, public Parts<Meta>...
+    struct compose : public Part<Meta>, public Parts<Meta>...
     {
     };
-
-//
-//    template<template<class> class Tail>
-//    struct inherit<Tail>
-//    {
-//        struct terminator
-//        {};
-//
-//        using type = Tail<terminator>;
-//    };
-
-//    template<typename Tail>
-//    struct compose<composable<Tail>::template type>
-//    {
-//        using type = Tail;
-//    };
-
-    template<template<class> class Head, template<class> class... Tail>
-    using compose_t = typename compose<Head, Tail...>::type;
-
 
 }

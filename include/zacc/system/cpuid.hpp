@@ -30,7 +30,7 @@
 #include <vector>
 #include <string>
 
-#include <zacc/util/type/type_casts.hpp>
+#include <zacc/util/type/cast.hpp>
 
 #if !defined(_MSC_VER)
 //  GCC Intrinsics
@@ -76,7 +76,7 @@ namespace zacc
          */
         std::array<int, 4> get_cpuid_raw(int function_id, int sub_function_id = 0)
         {
-            std::array<int, 4> regs;
+            std::array<int, 4> regs {{ 0 }};
 
         #ifdef _MSC_VER
             // MSVC CPUID
@@ -120,7 +120,7 @@ namespace zacc
 
             auto highestId = get_cpuid(0)[0].to_ulong();
 
-            for (auto i = 0; i < highestId; i++)
+            for (u_long i = 0; i < highestId; i++)
                 _data.push_back(get_cpuid(i, 0));
 
 

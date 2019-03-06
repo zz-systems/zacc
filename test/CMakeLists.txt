@@ -8,7 +8,7 @@ find_package(zacc REQUIRED)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 file(GLOB test.algorithm    "src/algorithm/*.cpp")
-file(GLOB test.core         "src/casting.cpp")
+file(GLOB test.core         "src/cast.cpp")
 file(GLOB test.traits       "src/traits/*.cpp")
 file(GLOB test.math         "src/math/*.cpp")
 file(GLOB_RECURSE test.util "src/util/*.cpp")

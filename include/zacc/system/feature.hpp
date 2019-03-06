@@ -27,7 +27,7 @@
 
 #include <iostream>
 #include <zacc/util/io.hpp>
-#include <zacc/util/type/type_casts.hpp>
+#include <zacc/util/type/cast.hpp>
 #include <zacc/util/bithacks.hpp>
 #include <zacc/util/algorithm.hpp>
 #include <functional>

@@ -27,7 +27,7 @@
 #include <zacc/math/complex.hpp>
 
 #include <cmath>
-#include <gtest_extensions.hpp>
+#include <gtest.extensions.hpp>
 namespace zacc { namespace test {
 
     using namespace math;
