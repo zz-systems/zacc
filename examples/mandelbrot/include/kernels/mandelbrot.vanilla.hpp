@@ -48,6 +48,13 @@ namespace zacc { namespace examples {
 
         size_t _max_iterations;
 
+        mandelbrot_vanilla_kernel() = default;
+
+        mandelbrot_vanilla_kernel(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations)
+            : _dim { dim }, _cmin { cmin }, _cmax { cmax }, _max_iterations { max_iterations }
+        {
+        }
+
         virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) override
         {
             _dim = dim;

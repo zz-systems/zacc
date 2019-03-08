@@ -25,22 +25,43 @@
 
 #pragma once
 
-#include <vector>
+#include <string>
 
-#include <zacc.hpp>
-#include <zacc/math/matrix.hpp>
-#include <zacc/system/kernel.hpp>
+#if defined(__clang__) || defined(__GNUC__)
+#include <cxxabi.h>
+#endif
 
-namespace zacc { namespace examples {
+namespace zacc {
 
-    using namespace math;
-
-    struct mandelbrot_vanilla : system::kernel<mandelbrot_vanilla>
+    template<typename T>
+    struct type_of
     {
-        //static constexpr auto name() { return "mandelbrot_vanilla"; }
-        static constexpr auto compatible() { return feature::scalar(); }
+        type_of(const type_of&) = delete;
+        type_of(type_of&&) = delete;
 
-        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
-        virtual void run(std::vector<int> &output) = 0;
+        static std::string name()
+        {
+            auto name = full_name();
+
+            size_t colon = name.find_last_of(':');
+            if(colon != std::string::npos)
+            {
+                return name.substr().substr(colon + 1);
+            }
+
+            return name;
+        }
+
+        static std::string full_name()
+        {
+            std::string name = typeid(T).name();
+
+#if defined(__clang__) || defined(__GNUC__)
+            int status;
+            name = abi::__cxa_demangle(name.c_str(), 0, 0, &status);
+#endif
+
+            return name;
+        }
     };
-}}
+}

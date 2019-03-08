@@ -23,24 +23,18 @@
 //---------------------------------------------------------------------------------
 
 
-#pragma once
+#include <iostream>
 
-#include <vector>
+#include <zacc/expressions/expression.hpp>
+#include <functional>
 
-#include <zacc.hpp>
-#include <zacc/math/matrix.hpp>
-#include <zacc/system/kernel.hpp>
+int main(int argc, char** argv)
+{
+    using namespace zacc;
 
-namespace zacc { namespace examples {
+    auto e = bin_expr<std::plus<>, lit<int>, lit<int>>(lit<int>(1), lit<int>(2));
 
-    using namespace math;
+    std::cout << e() << std::endl;
 
-    struct mandelbrot_vanilla : system::kernel<mandelbrot_vanilla>
-    {
-        //static constexpr auto name() { return "mandelbrot_vanilla"; }
-        static constexpr auto compatible() { return feature::scalar(); }
-
-        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
-        virtual void run(std::vector<int> &output) = 0;
-    };
-}}
+    return 0;
+}

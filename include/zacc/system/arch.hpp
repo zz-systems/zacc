@@ -96,6 +96,7 @@ namespace zacc {
             return os;
         }
 
+        static constexpr size_t size = 11;
 
         struct scalar : public std::integral_constant<uint64_t, feature::scalar()>
         {
@@ -158,5 +159,68 @@ namespace zacc {
         {
             static constexpr string_view name() { return "opencl"; }
         };
+
+        static constexpr std::array<arch, size> available()
+        {
+            return {{
+                        opencl(),
+                        avx512(), avx2(), avx1_fma3(), avx1(),
+                        sse41_fma4(), sse41_fma3(), sse41(), sse3(), sse2(),
+                        scalar()
+                    }};
+        }
+
+        static constexpr arch select(feature mask)
+        {
+            arch result = arch::scalar();
+
+            for(auto a : arch::available())
+            {
+                if(a.mask.test(mask))
+                {
+                    result = a;
+                    break;
+                }
+            }
+
+            std::clog << "[ARCH][SELECT][" << join(result.mask.active(), ", ") << "] ->"
+                      << " [" << result.name << "]"
+                      << std::endl;
+
+            return result;
+        }
+    };
+
+
+
+//    template<typename T>
+//    struct arch_of
+//    {
+//    };
+//
+//    template<template<typename> class X, typename T>
+//    struct arch_of<X<T>> : arch
+//    {
+//        constexpr arch_of()
+//            : arch(T())
+//        {}
+//    };
+
+    struct arch_of : arch
+    {
+        template<template<typename> class X, typename T>
+        constexpr arch_of()
+            : arch(T())
+        {}
+
+        template<template<typename> class X, typename T>
+        constexpr arch_of(T)
+            : arch(T())
+        {}
+
+//        template<typename T>
+//        constexpr arch_of()
+//            : arch(arch_of<T>())
+//        {}
     };
 }

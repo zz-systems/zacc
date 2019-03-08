@@ -25,22 +25,59 @@
 
 #pragma once
 
-#include <vector>
+namespace zacc {
 
-#include <zacc.hpp>
-#include <zacc/math/matrix.hpp>
-#include <zacc/system/kernel.hpp>
-
-namespace zacc { namespace examples {
-
-    using namespace math;
-
-    struct mandelbrot_vanilla : system::kernel<mandelbrot_vanilla>
+    template<typename Expr>
+    struct expr
     {
-        //static constexpr auto name() { return "mandelbrot_vanilla"; }
-        static constexpr auto compatible() { return feature::scalar(); }
-
-        virtual void configure(vec2<int> dim, vec2<float> cmin, vec2<float> cmax, size_t max_iterations) = 0;
-        virtual void run(std::vector<int> &output) = 0;
+        //auto operator()() { return static_cast<const Expr*>(this)->operator(); }
     };
-}}
+
+    template<typename T>
+    struct arg : expr<arg<T>>
+    {
+        T operator() (T val)
+        {
+            return val;
+        }
+    };
+
+    template<typename T>
+    struct lit : expr<lit<T>>
+    {
+        T _val;
+
+        lit(T val) : _val(val)
+        {}
+
+        T operator()()
+        {
+            return _val;
+        }
+    };
+
+    template<typename BinOp, typename Left, typename Right>
+    struct bin_expr : expr<bin_expr<BinOp, Left, Right>>
+    {
+        Left _left;
+        Right _right;
+
+        bin_expr(Left left, Right right)
+            : _left(left), _right(right)
+        {}
+
+        auto operator()() { return BinOp()(_left(), _right()); }
+    };
+
+    template<typename UnOp, typename Expr>
+    struct un_expr : expr<un_expr<UnOp, Expr>>
+    {
+        Expr _expr;
+
+        un_expr(Expr expr)
+            : _expr(expr)
+        {}
+
+        auto operator()() { return UnOp()(_expr()); }
+    };
+}

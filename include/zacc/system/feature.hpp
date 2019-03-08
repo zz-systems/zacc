@@ -178,6 +178,9 @@ namespace zacc {
                     [](auto i) { return i; },
                     [this](auto i) { return this->test(i); });
 
+            if(result.empty())
+                result.emplace_back(feature::scalar());
+
             return result;
         }
 

@@ -28,6 +28,9 @@
 #include <zacc.hpp>
 #include <zacc/traits/allocatable.hpp>
 #include <zacc/system/entrypoint.hpp>
+#include <zacc/system/kernel_activator.hpp>
+#include <zacc/system/sysinfo.hpp>
+#include <zacc/util/type/typeid.hpp>
 
 namespace zacc { namespace system {
 
@@ -47,10 +50,6 @@ namespace zacc { namespace system {
         using output_container = std::remove_reference_t<typename traits::template argument<1>::type>;
         /// Input container (same as output container if not specified)
         using input_container  = std::remove_reference_t<typename traits::template argument<(traits::arity > 2 ? 2 : 1)>::type>;
-
-        /// Kernel name
-        static constexpr auto kernel_name() { return KernelInterface::name(); }
-
 
         template<typename T, typename = void>
         struct kt
@@ -75,6 +74,28 @@ namespace zacc { namespace system {
         {
             return kt<KernelInterface>::compatible();
         }
+
+        template<typename T, typename = void>
+        struct kn
+        {
+            static auto kernel_name()
+            {
+                return type_of<T>::name();
+            }
+        };
+
+
+        template<typename T>
+        struct kn<T, void_t< decltype( T::name )> >
+        {
+            static constexpr auto kernel_name()
+            {
+                return T::name();
+            }
+        };
+
+        /// Kernel name
+        static constexpr auto kernel_name() { return kn<KernelInterface>::kernel_name(); }
     };
 
     /**
@@ -114,6 +135,7 @@ namespace zacc { namespace system {
         template<typename OutputContainer>
         void operator()(OutputContainer &output)
         {
+
             static_cast<KernelInterface*>(this)->run(output);
         }
     };

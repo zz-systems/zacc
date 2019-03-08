@@ -69,7 +69,36 @@ namespace zacc { namespace system {
         template<typename Arch, typename KernelImpl, template<class> class Kernel, typename ...Args>
         std::shared_ptr<KernelImpl> create_instance(Args&&... args)
         {
-            auto loader  = this->select_implementation<Arch>();
+            return this->create_instance<KernelImpl, Kernel, Args...>(Arch{}, std::forward<Args>(args)...);
+        }
+
+        /**
+        * Instantiate a kernel
+        * @tparam Arch selected architecture
+        * @tparam KernelImpl kernel implementation
+        * @tparam Args
+        * @param args
+        * @return pointer to kernel instance
+        */
+        template<typename Arch, typename KernelImpl, typename ...Args>
+        std::shared_ptr<KernelImpl> create_instance(Args&&... args)
+        {
+            return this->create_instance<KernelImpl, Args...>(Arch{}, std::forward<Args>(args)...);
+        }
+
+        /**
+         * Instantiate a kernel
+         * @tparam Arch selected architecture
+         * @tparam KernelImpl kernel implementation
+         * @tparam Kernel kernel
+         * @tparam Args
+         * @param args
+         * @return pointer to kernel instance
+         */
+        template<typename KernelImpl, template<class> class Kernel, typename ...Args>
+        std::shared_ptr<KernelImpl> create_instance(arch a, Args&&... args)
+        {
+            auto loader  = this->select_implementation(a);
 
             assert(loader != nullptr);
             // Pitfall. loader->template ... is required
@@ -92,10 +121,10 @@ namespace zacc { namespace system {
         * @param args
         * @return pointer to kernel instance
         */
-        template<typename Arch, typename KernelImpl, typename ...Args>
-        std::shared_ptr<KernelImpl> create_instance(Args&&... args)
+        template<typename KernelImpl, typename ...Args>
+        std::shared_ptr<KernelImpl> create_instance(arch a, Args&&... args)
         {
-            auto loader  = this->select_implementation<Arch>();
+            auto loader  = this->select_implementation(a);
 
             assert(loader != nullptr);
             // Pitfall. loader->template ... is required
@@ -119,8 +148,11 @@ namespace zacc { namespace system {
         template<typename Arch>
         std::shared_ptr<managed_library> select_implementation()
         {
-            arch a(Arch{});
+            return this->select_implementation(Arch{});
+        }
 
+        std::shared_ptr<managed_library> select_implementation(arch a)
+        {
             auto path = this->_library_name;
             size_t dot = path.find_last_of('.');
 

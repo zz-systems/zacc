@@ -30,7 +30,9 @@
 #include <CImg.h>
 
 #include <zacc/system/sysinfo.hpp>
-#include <zacc/system/kernel_dispatcher.hpp>
+#include <zacc/util/type/typeid.hpp>
+//#include <zacc/system/kernel_dispatcher.hpp>
+#include <zacc/system/dispatcher2.hpp>
 #include <zacc/math/matrix.hpp>
 #include <zacc/util/color.hpp>
 
@@ -88,16 +90,13 @@ namespace zacc { namespace examples {
         {
             this->configure();
 
-            _main_dispatcher.features().reset();
-            auto scalar  = this->execute(_main_dispatcher);
-
-            _main_dispatcher.features() = _sysinfo;
-            auto simd = this->execute(_main_dispatcher);
+            auto scalar  = this->execute(_scalar_impl);
+            auto simd = this->execute(_simd_impl);
 
             std::vector<result> results;
             std::vector<stat> stats;
 
-            zacc::for_each(_reference_dispatchers, [&results, &stats, this](auto& d){
+            zacc::for_each(_reference_kernels, [&results, &stats, this](auto& d){
                 auto r = this->execute(d);
                 results.push_back(r);
                 stats.push_back(stat("REF: ", r));
@@ -155,38 +154,46 @@ namespace zacc { namespace examples {
         }
     protected:
 
-        template<typename Disp>
-        result execute(Disp& dispatcher)//, input_container input)
+        template<typename KernelImpl>
+        result execute(std::tuple<arch, std::shared_ptr<KernelImpl>> kernel)//, input_container input)
         {
             using namespace std::chrono;
 
-            std::clog << "[HOST][EXECUTE] " << Disp::kernel_name() << std::endl;
+            //std::clog << "[HOST][EXECUTE] " << system::kernel_traits<KernelImpl>::kernel_name() << std::endl;
+            std::clog << "[HOST][EXECUTE] " << type_of<KernelImpl>::name() << std::endl;
 
             output_container data(_dim.x() * _dim.y());
 
             auto start = high_resolution_clock::now();
-            auto arch = dispatcher.dispatch_one(data);
+            //auto arch = dispatcher.select_arch();
+            std::get<1>(kernel)->run(data);
             auto end = high_resolution_clock::now();
 
             auto duration = duration_cast<milliseconds>(end - start);
 
             return {
-                Disp::kernel_name(),
+                type_of<KernelImpl>::name(),
                 data,
                 duration,
-                arch
+                std::get<0>(kernel)
             };
         }
 
         template<typename... Args>
         constexpr void configure_kernels(Args&& ...args)
         {
-            _main_dispatcher.features() = _sysinfo;
-            _main_dispatcher.dispatch_some(std::forward<Args>(args)...);
+            _scalar_impl = system::make_kernel<Kernel>(feature::scalar());
+            _simd_impl = system::make_kernel<Kernel>(_sysinfo);
 
-            zacc::for_each(_reference_dispatchers, [&](auto& k){
-                k.features() = _sysinfo;
-                k.dispatch_some(std::forward<Args>(args)...);
+            std::get<1>(_scalar_impl)->configure(std::forward<Args>(args)...);
+            std::get<1>(_simd_impl)->configure(std::forward<Args>(args)...);
+
+            //std::tuple<std::tuple<arch, std::shared_ptr<ReferenceKernels>>...> kk
+            _reference_kernels
+                = std::make_tuple(system::make_kernel<ReferenceKernels>(_sysinfo/*, std::forward<Args>(args)...*/)...);
+
+            zacc::for_each(_reference_kernels, [&](auto& k){
+                std::get<1>(k)->configure(std::forward<Args>(args)...);
             });
         }
 
@@ -195,8 +202,12 @@ namespace zacc { namespace examples {
 
         math::vec2<int> _dim;
 
-        system::dispatcher<system::kernel_dispatcher<Kernel>> _main_dispatcher;
-        std::tuple<system::dispatcher<system::kernel_dispatcher<ReferenceKernels>>...> _reference_dispatchers;
+        std::tuple<arch, std::shared_ptr<Kernel>> _simd_impl;
+        std::tuple<arch, std::shared_ptr<Kernel>> _scalar_impl;
+        std::tuple<std::tuple<arch, std::shared_ptr<ReferenceKernels>>...> _reference_kernels;
+
+//        system::dispatcher<system::kernel_dispatcher<Kernel>> _main_dispatcher;
+//        std::tuple<system::dispatcher<system::kernel_dispatcher<ReferenceKernels>>...> _reference_dispatchers;
 
         sysinfo _sysinfo;
     };
