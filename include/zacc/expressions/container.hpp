@@ -22,65 +22,67 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-
 #pragma once
 
-#include <string>
-
-#if defined(__clang__) || defined(__GNUC__)
-#include <cxxabi.h>
-#endif
+#include <zacc/system/feature.hpp>
 
 namespace zacc {
 
-    template<typename T = void>
-    struct type_of
+    template<typename T, size_t Size>
+    struct container
     {
-        type_of(const type_of&) = delete;
-        type_of(type_of&&) = delete;
-
-        static std::string name()
-        {
-            auto name = full_name();
-
-            size_t colon = name.find_last_of(':');
-            if(colon != std::string::npos)
-            {
-                return name.substr().substr(colon + 1);
-            }
-
-            return name;
-        }
-
-        static std::string full_name()
-        {
-            std::string name = typeid(T).name();
-
-#if defined(__clang__) || defined(__GNUC__)
-            int status;
-            name = abi::__cxa_demangle(name.c_str(), 0, 0, &status);
-#endif
-
-            return name;
-        }
-    };
-
-    template<>
-    struct type_of<void>
-    {
-        type_of(const type_of&) = delete;
-        type_of(type_of&&) = delete;
-
-        template <typename T>
-        static std::string name(T)
-        {
-            return type_of<T>::name();
-        }
-
-        template <typename T>
-        static std::string full_name(T)
-        {
-            return type_of<T>::full_name();
-        }
+        using type = std::array<T, Size>;
     };
 }
+
+//#if defined(ZACC_SCALAR)
+
+namespace zacc {
+
+    template<typename T>
+    struct container<T, 1>
+    {
+        using type = std::array<T, 1>;//T;
+    };
+}
+
+//#endif
+
+#if defined(ZACC_SSE)
+
+#include <zacc/backend/intrin.hpp>
+
+namespace zacc {
+
+//    template<typename Target>
+//    struct container<std::enable_if_t<Target::value & feature::sse2(), char>, Target, 16>
+//    {
+//        using type = __m128i;
+//    };
+//
+//    template<typename Target>
+//    struct container<std::enable_if_t<Target::value & feature::sse2(), short>, Target, 8>
+//    {
+//        using type = __m128i;
+//    };
+//
+//    template<typename Target>
+//    struct container<std::enable_if_t<Target::value & feature::sse2(), int>, Target, 4>
+//    {
+//        using type = __m128i;
+//    };
+//
+//    template<typename Target>
+//    struct container<std::enable_if_t<Target::value & feature::sse2(), float>, Target, 4>
+//    {
+//        using type = __m128;
+//    };
+//
+//    template<typename Target>
+//    struct container<std::enable_if_t<Target::value & feature::sse2(), double>, Target, 2>
+//    {
+//        using type = __m128d;
+//    };
+}
+
+#endif

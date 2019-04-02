@@ -25,16 +25,179 @@
 
 #include <iostream>
 
+#include <zacc/system/arch.hpp>
+#include <zacc/expressions/zvec.hpp>
 #include <zacc/expressions/expression.hpp>
+#include <zacc/expressions/scope.hpp>
 #include <functional>
 
 int main(int argc, char** argv)
 {
     using namespace zacc;
+    using namespace zacc::expressions;
 
-    auto e = bin_expr<std::plus<>, lit<int>, lit<int>>(lit<int>(1), lit<int>(2));
+//    auto e = bin_expr<std::plus<>, lit<int>, lit<int>>(lit<int>(1), lit<int>(2));
+//
+//    std::cout << e() << std::endl;
 
-    std::cout << e() << std::endl;
+    {
+        std::cout << "arithmetic" << std::endl << std::endl;
+
+        scope<recorder> scope;
+
+        zvec<int, 2> a{{1, 2}};
+        zvec<int, 2> b{{2, 4}};
+
+        zvec<int, 2> basic;
+
+        basic = a + b;
+        basic = b + a;
+
+        basic = a - b;
+        basic = b - a;
+
+        basic = a * b;
+        basic = b * a;
+
+        basic = a / b;
+        basic = b / a;
+
+        basic = a % b;
+        basic = b % a;
+
+        basic = -a;
+        basic = -b;
+
+        basic = -(-a);
+        basic = -(-b);
+
+        basic = +a;
+        basic = +b;
+
+        std::cout << scope << std::endl;
+    }
+
+    {
+        std::cout << "fma" << std::endl << std::endl;
+
+        scope<recorder> scope;
+
+        zvec<int, 2> a{{1, 2}};
+        zvec<int, 2> b{{2, 4}};
+        zvec<int, 2> c{{3, 6}};
+        zvec<int, 2> d{{4, 8}};
+
+        zvec<int, 2> fma;
+
+        fma = a + b * c;
+        fma = a * b + c;
+        fma = a * a + b * b;
+        fma = a * a - b * b;
+        fma = a * a + b * b + c * c;
+        fma = a * a - b * b + c * c;
+
+        std::cout << scope << std::endl;
+    }
+
+    {
+        std::cout << "comparisons" << std::endl << std::endl;
+
+        scope<recorder> scope;
+
+        zvec<int, 2> a{{1, 2}};
+        zvec<int, 2> b{{2, 2}};
+
+        zvec<bool, 2> basic;
+
+        basic = a == b;
+        basic = b == a;
+
+        basic = a != b;
+        basic = b != a;
+
+        basic = a > b;
+        basic = b > a;
+
+        basic = a < b;
+        basic = b < a;
+
+        basic = a >= b;
+        basic = b >= a;
+
+        basic = a <= b;
+        basic = b <= a;
+
+        std::cout << scope << std::endl;
+    }
+
+    {
+        std::cout << "logical operations" << std::endl << std::endl;
+
+        scope<recorder> scope;
+
+        zvec<bool, 2> a{{ false, true}};
+        zvec<bool, 2> b{{ true, true }};
+
+        zvec<bool, 2> basic;
+
+        basic = a && b;
+        basic = b && a;
+
+        basic = a || b;
+        basic = b || a;
+
+        basic = !a;
+        basic = !b;
+
+        basic = !!a;
+        basic = !!b;
+
+       //std::cout << evaluator::current() << b && a << std::endl;
+
+        std::cout << scope << std::endl;
+    }
+
+    {
+        std::cout << "cast" << std::endl << std::endl;
+
+        scope<recorder> scope;
+
+        zvec<int, 2> a{{1, 2}};
+        zvec<int, 2> b{{2, 4}};
+
+        zvec<int, 2> basic;
+
+        basic = a + 1;
+        //basic = 1 + a;
+
+        std::cout << scope << std::endl;
+    }
+
+    {
+        std::cout << "expression output" << std::endl << std::endl;
+
+        scope<recorder> scope;
+
+        zvec<int, 2> a{{1, 2}};
+        zvec<int, 2> b{{2, 4}};
+
+        zvec<int, 2> basic;
+
+        std::cout << (a + b) << std::endl;
+        std::cout << (a - b) << std::endl;
+        std::cout << (a * b) << std::endl;
+        std::cout << (a / b) << std::endl;
+
+        std::cout << (a + b * b) << std::endl;
+        std::cout << (a * a + b * b) << std::endl;
+        std::cout << (a * (a + b) * b) << std::endl;
+
+        std::cout << (basic = a * a + b * b) << std::endl;
+        std::cout << (basic = a * (a + b) * b) << std::endl;
+
+
+        std::cout << scope << std::endl;
+    }
 
     return 0;
 }

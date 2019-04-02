@@ -22,65 +22,49 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-
 #pragma once
 
-#include <string>
+#include <zacc/expressions/expression.hpp>
+#include <zacc/expressions/repr.hpp>
+#include <vector>
 
-#if defined(__clang__) || defined(__GNUC__)
-#include <cxxabi.h>
-#endif
+namespace zacc { namespace expressions {
 
-namespace zacc {
-
-    template<typename T = void>
-    struct type_of
+    template<typename T>
+    struct scope : T
     {
-        type_of(const type_of&) = delete;
-        type_of(type_of&&) = delete;
+        T _previous;
 
-        static std::string name()
+//        constexpr scope()
+//            : _previous()
+//        {
+//            std::swap(_previous, T::current());
+//        }
+//
+//        ~scope()
+//        {
+//            std::swap(_previous, T::current());
+//        }
+
+        constexpr scope()
+            : _previous(T::current())
         {
-            auto name = full_name();
-
-            size_t colon = name.find_last_of(':');
-            if(colon != std::string::npos)
-            {
-                return name.substr().substr(colon + 1);
-            }
-
-            return name;
+            T::current() = T();
         }
 
-        static std::string full_name()
+        ~scope()
         {
-            std::string name = typeid(T).name();
+            T::current() = _previous;
+        }
 
-#if defined(__clang__) || defined(__GNUC__)
-            int status;
-            name = abi::__cxa_demangle(name.c_str(), 0, 0, &status);
-#endif
+        friend std::ostream& operator<<(std::ostream& os, const scope<T>&)
+        {
+            os << T::current();
 
-            return name;
+            return os;
         }
     };
 
-    template<>
-    struct type_of<void>
-    {
-        type_of(const type_of&) = delete;
-        type_of(type_of&&) = delete;
 
-        template <typename T>
-        static std::string name(T)
-        {
-            return type_of<T>::name();
-        }
-
-        template <typename T>
-        static std::string full_name(T)
-        {
-            return type_of<T>::full_name();
-        }
-    };
-}
+    // =================================================================================================================
+}}

@@ -30,6 +30,17 @@
 
 namespace zacc {
 
+    template<typename... Ts> struct make_void { typedef void type;};
+    template<typename... Ts> using void_t = typename make_void<Ts...>::type;
+
+
+    template<typename T, typename HasCallOp = void>
+    struct is_functor : std::false_type
+    {};
+
+    template<typename T>
+    struct is_functor<T, void_t<decltype(T::operator())>> : std::false_type
+    {};
 
     template<typename From, typename To>
     using enable_if_convertible = std::enable_if_t<std::is_convertible<From, To>::value, From>;
@@ -45,6 +56,9 @@ namespace zacc {
     template<bool... bs>
     using all_true = std::is_same<bool_pack<bs..., true>, bool_pack<true, bs...>>;
 
+    template<bool... bs>
+    using all_false = std::is_same<bool_pack<bs..., false>, bool_pack<false, bs...>>;
+
     // =============================================================================================================
 
     template<bool Condition, typename T>
@@ -54,16 +68,28 @@ namespace zacc {
         using type = T;
     };
 
-    template<typename Head, typename... Tail>
-    struct select
+    template<typename... Cases>
+    struct select;
+
+    template<bool Bs, typename Head, typename... Tail>
+    struct select_impl
     {
         using type = typename std::conditional_t<Head::value, Head, select<Tail...>>::type;
     };
 
-    template<typename Head>
-    struct select<Head>
+    template<typename Head, typename... Tail>
+    struct select_impl<true, Head, Tail...>
+    {};
+
+    template<typename... Cases>
+    struct select : select_impl<all_false<Cases::value...>::value, Cases...>
     {
-        using type = typename std::conditional_t<Head::value, Head, void>::type;
+    };
+
+    template<typename Head>
+    struct select<Head> : std::enable_if<Head::value, typename Head::type>
+    {
+        //using type = typename std::conditional_t<Head::value, Head, void>::type;
     };
 
 //    template<typename Head>
@@ -80,8 +106,8 @@ namespace zacc {
 //        using type = typename std::conditional_t<terminator<Head>::value, terminator<Head>, void>::type;
 //    };
 
-    template<typename Head, typename... Tail>
-    using select_t = typename select<Head, Tail...>::type;
+    template<typename... Cases>
+    using select_t = typename select<Cases...>::type;
 
     namespace
     {

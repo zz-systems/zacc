@@ -22,65 +22,60 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-
 #pragma once
 
-#include <string>
+#include <zacc/expressions/expression.hpp>
+#include <zacc/expressions/repr.hpp>
+#include <vector>
 
-#if defined(__clang__) || defined(__GNUC__)
-#include <cxxabi.h>
-#endif
+namespace zacc { namespace expressions {
 
-namespace zacc {
-
-    template<typename T = void>
-    struct type_of
+    struct recorder
     {
-        type_of(const type_of&) = delete;
-        type_of(type_of&&) = delete;
-
-        static std::string name()
+        template<typename Target>
+        recorder& operator<<(declare_expr<Target> expr)
         {
-            auto name = full_name();
+            declarations.emplace_back([expr]() { return expr_visitor<tokenizer>::visit(expr);  });
 
-            size_t colon = name.find_last_of(':');
-            if(colon != std::string::npos)
+            return *this;
+        }
+
+        template<typename Target, typename Expr>
+        recorder& operator<<(assign_expr<Target, Expr> expr)
+        {
+            declarations.emplace_back([expr]() { return expr_visitor<tokenizer>::visit(expr);  });
+
+            return *this;
+        }
+
+        std::vector<std::function<generator()>> declarations;
+        std::vector<std::function<generator()>> expressions;
+
+        static recorder& current(){
+
+            static recorder instance;
+
+            return instance;
+        }
+
+
+        friend std::ostream& operator<<(std::ostream& os, const recorder& recorder)
+        {
+            for(auto d : recorder.declarations)
             {
-                return name.substr().substr(colon + 1);
+                os << d() << std::endl;
             }
 
-            return name;
-        }
+            for(auto e : recorder.expressions)
+            {
+                os << e() << std::endl;
+            }
 
-        static std::string full_name()
-        {
-            std::string name = typeid(T).name();
-
-#if defined(__clang__) || defined(__GNUC__)
-            int status;
-            name = abi::__cxa_demangle(name.c_str(), 0, 0, &status);
-#endif
-
-            return name;
+            return os;
         }
     };
 
-    template<>
-    struct type_of<void>
-    {
-        type_of(const type_of&) = delete;
-        type_of(type_of&&) = delete;
 
-        template <typename T>
-        static std::string name(T)
-        {
-            return type_of<T>::name();
-        }
+    // =================================================================================================================
 
-        template <typename T>
-        static std::string full_name(T)
-        {
-            return type_of<T>::full_name();
-        }
-    };
-}
+}}

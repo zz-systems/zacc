@@ -22,65 +22,28 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-
 #pragma once
 
-#include <string>
+#include <zacc/expressions/expression.hpp>
 
-#if defined(__clang__) || defined(__GNUC__)
-#include <cxxabi.h>
-#endif
+namespace zacc { namespace expressions {
 
-namespace zacc {
+//    template<typename To = void, typename From = void>
+//    struct cast : un_expr<cast<To>, From>
+//    {
+//        using un_expr<cast<To>, From>::un_expr;
+//    };
+//
+//    template<typename To>
+//    struct cast<To, void>
+//    {
+//        template<typename From>
+//        static auto apply(From right)
+//        {
+//            return static_cast<To>(right);
+//        }
+//    };
 
-    template<typename T = void>
-    struct type_of
-    {
-        type_of(const type_of&) = delete;
-        type_of(type_of&&) = delete;
+    // =================================================================================================================
 
-        static std::string name()
-        {
-            auto name = full_name();
-
-            size_t colon = name.find_last_of(':');
-            if(colon != std::string::npos)
-            {
-                return name.substr().substr(colon + 1);
-            }
-
-            return name;
-        }
-
-        static std::string full_name()
-        {
-            std::string name = typeid(T).name();
-
-#if defined(__clang__) || defined(__GNUC__)
-            int status;
-            name = abi::__cxa_demangle(name.c_str(), 0, 0, &status);
-#endif
-
-            return name;
-        }
-    };
-
-    template<>
-    struct type_of<void>
-    {
-        type_of(const type_of&) = delete;
-        type_of(type_of&&) = delete;
-
-        template <typename T>
-        static std::string name(T)
-        {
-            return type_of<T>::name();
-        }
-
-        template <typename T>
-        static std::string full_name(T)
-        {
-            return type_of<T>::full_name();
-        }
-    };
-}
+}}
