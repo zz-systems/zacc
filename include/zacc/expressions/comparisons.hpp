@@ -138,4 +138,48 @@ namespace zacc { namespace expressions {
     };
 
     // =================================================================================================================
+
+    template<typename Left, typename Right>
+    bin_expr_t<equal_to, lit, Left, Right>
+    operator==(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<not_equal_to, lit, Left, Right>
+    operator!=(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<greater, lit, Left, Right>
+    operator>(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<less, lit, Left, Right>
+    operator<(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<greater_equal, lit, Left, Right>
+    operator>=(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<less_equal, lit, Left, Right>
+    operator<=(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    // =================================================================================================================
 }}

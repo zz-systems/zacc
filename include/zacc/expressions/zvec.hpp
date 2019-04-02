@@ -28,6 +28,9 @@
 #include <functional>
 #include <zacc/system/feature.hpp>
 #include <zacc/util/type/typeid.hpp>
+#include <zacc/expressions/expression.hpp>
+#include <zacc/expressions/pipe.hpp>
+#include <zacc/expressions/expression_traits.hpp>
 #include <zacc/expressions/container.hpp>
 #include <zacc/expressions/arithmetic.hpp>
 #include <zacc/expressions/comparisons.hpp>
@@ -56,7 +59,6 @@ namespace zacc { namespace expressions {
         {
             return _data[i];
         }
-
 
         constexpr zvec() noexcept
         {
@@ -91,218 +93,10 @@ namespace zacc { namespace expressions {
             return *this;
         }
 
-        void print_data() const
-        {
-            std::cout << "[ ";
-
-            for(size_t i = 0; i < size(); ++i)
-            {
-                std::cout << _data[i] << " ";
-            }
-
-            std::cout << "]";
-        }
-
     private:
         alignas(T) typename container<T, Size>::type _data;
     };
 
     // =================================================================================================================
 
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    bin_expr_t<plus, lit, Left, Right>
-    operator+(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<minus, lit, Left, Right>
-    operator-(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<multiplies, lit, Left, Right>
-    operator*(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<divides, lit, Left, Right>
-    operator/(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<modulus, lit, Left, Right>
-    operator%(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Right>
-    un_expr_t<negate, Right>
-    operator-(const Right& right)
-    {
-        return { right };
-    }
-
-    template<typename Right>
-    un_expr_t<promote, Right>
-    operator+(const Right& right)
-    {
-        return { right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    bin_expr_t<equal_to, lit, Left, Right>
-    operator==(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<not_equal_to, lit, Left, Right>
-    operator!=(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<greater, lit, Left, Right>
-    operator>(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<less, lit, Left, Right>
-    operator<(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<greater_equal, lit, Left, Right>
-    operator>=(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<less_equal, lit, Left, Right>
-    operator<=(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    bin_expr_t<logical_and, lit, Left, Right>
-    operator&&(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<logical_or, lit, Left, Right>
-    operator||(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Right>
-    un_expr_t<logical_not, Right>
-    operator!(const Right& right)
-    {
-        return { right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    bin_expr_t<bit_and, lit, Left, Right>
-    operator&(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<bit_or, lit, Left, Right>
-    operator|(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<bit_xor, lit, Left, Right>
-    operator^(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<bit_shl, lit, Left, Right>
-    operator<<(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<bit_shr, lit, Left, Right>
-    operator>>(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Right>
-    un_expr_t<bit_not, Right>
-    operator~(const Right& right)
-    {
-        return { right };
-    }
-
-    // =================================================================================================================
-
-//    template<typename Left, typename Right>
-//    std::enable_if_t<is_functor<Left>::value && !is_pipe<Left>::value, pipe<Left, Right>>
-//    operator<<(Left left, const Right& right)
-//    {
-//        return { left, right };
-//    }
-
-    template<typename Left, typename Right>
-    std::enable_if_t<is_pipe<Left>::value, pipe<decltype(Left::_left), pipe<decltype(Left::_right), Right>>>
-    operator<<(Left left, Right right)
-    {
-        return { left._left, {left._right, right} };
-    }
-
-    template<typename Expr>
-    std::enable_if_t<is_expr<Expr>::value, std::ostream>&
-    operator<<(std::ostream& os, const Expr& expr)
-    {
-        auto p = evaluator::current() << [&os](auto item)
-        {
-            os << item << " ";
-            return item;
-        } << expr;
-
-        os << "[ ";
-
-        p();
-
-        os << "]";
-        return os;
-    }
 }}

@@ -22,58 +22,33 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
+
 #pragma once
 
 #include <zacc/expressions/expression.hpp>
 #include <zacc/expressions/pipe.hpp>
+#include <zacc/expressions/expression_traits.hpp>
+#include <zacc/expressions/evaluator.hpp>
 
-namespace zacc { namespace expressions {
-
-    struct evaluator
-    {
-        template<typename Target>
-        pipe<evaluator, declare_expr<Target>> operator<<(declare_expr<Target> expr)
-        {
-            return { *this, expr };
-        }
-
-        template<typename Target, typename Expr>
-        evaluator& operator<<(assign_expr<Target, Expr> expr)
-        {
-            eval(expr);
-
-            return *this; //{ *this, expr };
-        }
-
-        template<typename Expr>
-        void operator()(Expr expr) const
-        {
-            eval(expr);
-        }
-
-        template<typename Expr>
-        void eval(Expr expr) const
-        {
-//            for(size_t i = 0; i < Expr::size(); ++i)
-            for(size_t i = 0; i < 2; ++i)
-            {
-                expr(i);
-            };
-        }
-
-        template<typename Func>
-        pipe<evaluator, Func> operator<<(Func func)
-        {
-            return pipe<evaluator, Func>(*this, func);
-        }
-
-        static evaluator& current() {
-            static evaluator instance;
-
-            return instance;
-        }
-    };
+namespace zacc {
 
     // =================================================================================================================
 
-}}
+    template<typename Expr>
+    std::enable_if_t<is_expr<Expr>::value, std::ostream>&
+    operator<<(std::ostream& os, const Expr& expr)
+    {
+        auto p = expressions::evaluator::current() << [&os](auto item)
+        {
+            os << item << " ";
+            return item;
+        } << expr;
+
+        os << "[ ";
+
+        p();
+
+        os << "]";
+        return os;
+    }
+}

@@ -24,18 +24,49 @@
 
 #pragma once
 
-#include <zacc/expressions/expression.hpp>
-#include <zacc/expressions/repr.hpp>
 #include <vector>
 
+#include <zacc/expressions/expression.hpp>
+#include <zacc/expressions/expression_visitor.hpp>
+#include <zacc/expressions/expression_renderer.hpp>
+#include <zacc/expressions/repr.hpp>
+
 namespace zacc { namespace expressions {
+
+    struct null_recorder
+    {
+        template<typename Target>
+        null_recorder& operator<<(declare_expr<Target>)
+        {
+            return *this;
+        }
+
+        template<typename Target, typename Expr>
+        null_recorder& operator<<(assign_expr<Target, Expr>)
+        {
+            return *this;
+        }
+
+        static null_recorder& current(){
+
+            static null_recorder instance;
+
+            return instance;
+        }
+
+
+        friend std::ostream& operator<<(std::ostream& os, const null_recorder&)
+        {
+            return os;
+        }
+    };
 
     struct recorder
     {
         template<typename Target>
         recorder& operator<<(declare_expr<Target> expr)
         {
-            declarations.emplace_back([expr]() { return expr_visitor<tokenizer>::visit(expr);  });
+            declarations.emplace_back([expr]() { return expr_visitor<renderer>::visit(expr);  });
 
             return *this;
         }
@@ -43,7 +74,7 @@ namespace zacc { namespace expressions {
         template<typename Target, typename Expr>
         recorder& operator<<(assign_expr<Target, Expr> expr)
         {
-            declarations.emplace_back([expr]() { return expr_visitor<tokenizer>::visit(expr);  });
+            declarations.emplace_back([expr]() { return expr_visitor<renderer>::visit(expr);  });
 
             return *this;
         }

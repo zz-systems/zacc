@@ -81,4 +81,27 @@ namespace zacc { namespace expressions {
     };
 
     // =================================================================================================================
+
+    template<typename Left, typename Right>
+    bin_expr_t<logical_and, lit, Left, Right>
+    operator&&(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<logical_or, lit, Left, Right>
+    operator||(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Right>
+    un_expr_t<logical_not, Right>
+    operator!(const Right& right)
+    {
+        return { right };
+    }
+
+    // =================================================================================================================
 }}

@@ -27,21 +27,12 @@
 
 namespace zacc {
 
-    //template<typename T>
     struct expr
     {
-//        auto operator()(size_t i)
-//        {
-//            return static_cast<const T*>(this)->operator()(i);
-//        }
     };
 
-//    template<>
-//    struct expr<void>
-//    {};
-
     template<typename T>
-    struct arg : expr//<arg<T>>
+    struct arg : expr
     {
         T operator() (T val)
         {
@@ -74,12 +65,7 @@ namespace zacc {
         lit(const T& val) : _val(val)
         {}
 
-//        T& operator()(size_t i)
-//        {
-//            return _val;
-//        }
-
-        const T& operator()(size_t i) const
+        const T& operator()(size_t) const
         {
             return _val;
         }
@@ -204,55 +190,6 @@ namespace zacc {
         auto operator()(size_t i) { return UnOp::apply(_expr(i)); }
     };
 
-    template<typename Left, typename Right, typename SizeProxy = void>
-    struct pipe : expr
-    {
-        Left _left;
-        Right _right;
-
-        pipe(Left left, Right right)
-            : _left(left), _right(right)
-        {}
-
-        auto operator()() { return _left(_right); }
-
-        template<typename... Args>
-        auto operator()(Args&& ...args) { return _left(_right(std::forward<Args>(args)...)); }
-    };
-
-    template<typename Left, typename Right>
-    struct pipe<Left, Right, void_t<decltype( Right::size )>>
-    {
-        Left _left;
-        Right _right;
-
-        pipe(Left left, Right right)
-            : _left(left), _right(right)
-        {}
-
-        auto operator()() { return _left(_right); }
-
-        template<typename... Args>
-        auto operator()(Args&& ...args) { return _left(_right(std::forward<Args>(args)...)); }
-
-        static constexpr auto size()
-        {
-            return Right::size();
-        }
-    };
-
-    template<typename T>
-    struct is_pipe : std::false_type
-    {};
-
-//    template<typename Left, typename Right>
-//    struct is_pipe<pipe<Left, Right>> : std::true_type
-//    {};
-
-    template<typename Left, typename Right, typename SizeProxy>
-    struct is_pipe<pipe<Left, Right, SizeProxy>> : std::true_type
-    {};
-
     // =================================================================================================================
 
     template<typename LExpr = void, typename RExpr = void>
@@ -325,81 +262,4 @@ namespace zacc {
     struct bit_not;
 
     // =================================================================================================================
-
-
-//    template<template<typename> class Op, typename Head>
-//    struct require_expr<Op<Head>>
-//    {
-//        using type = std::enable_if_t<std::is_base_of<expr, Op<Head>>::value, Op<Head>>;
-//    };
-
-    template<typename T>
-    using is_expr = std::is_base_of<expr, T>;
-
-    template<typename Expr>
-    using expr_t = std::enable_if_t<is_expr<Expr>::value, Expr>;
-
-    template<template<class> class Expr, typename Right>
-    using un_expr_t = std::enable_if_t<is_expr<Right>::value, Expr<Right>>;
-
-    template<typename Left, typename Right>
-    using is_bin_expr = std::integral_constant<bool, is_expr<Left>::value && is_expr<Right>::value && !is_pipe<Left>::value && !is_pipe<Right>::value>;
-
-    template<typename Left, typename Right>
-    using is_lr_cast = std::integral_constant<bool, std::is_arithmetic<Left>::value && is_expr<Right>::value && !is_pipe<Right>::value>; //!is_expr<Left>::value && !is_functor<Left>::value && is_expr<Right>::value>;
-
-    template<typename Left, typename Right>
-    using is_rl_cast = std::integral_constant<bool, is_expr<Left>::value && std::is_arithmetic<Right>::value && !is_pipe<Left>::value>; //is_expr<Left>::value && !is_expr<Right>::value && !is_functor<Right>::value>;
-
-    template<template<class, class> class Expr, template<class> class Cast, typename Left, typename Right>
-    using bin_expr_t = select_t<
-        when<is_bin_expr<Left, Right>::value, Expr<Left, Right>>, //Expr<std::decay<Left>, std::decay<Right>>>,
-        when<is_lr_cast<Left, Right>::value, Expr<Cast<Left>, Right>>,
-        when<is_rl_cast<Left, Right>::value, Expr<Left, Cast<Right>>>>;
-
-//    template<template<class, class> class Expr, typename Left, typename Right>
-//    using bin_expr_t = std::enable_if_t<is_bin_expr<Left, Right>::value, Expr<Left, Right>>;
-//
-//    template<template<class, class> class Expr, template<class> class Cast, typename Left, typename Right>
-//    using lr_cast_expr_t = std::enable_if_t<is_lr_cast<Left, Right>::value, Expr<Cast<Left>, Right>>;
-//
-//    template<template<class, class> class Expr, template<class> class Cast, typename Left, typename Right>
-//    using rl_cast_expr_t = std::enable_if_t<is_rl_cast<Left, Right>::value, Expr<Left, Cast<Right>>>;
-
-
-//    template<typename Expr, typename A, typename B, typename C>
-//    struct require_expr
-//    {
-//        using type = std::enable_if_t<
-//            std::is_base_of<expr, A>::value
-//            && std::is_base_of<expr, B>::value
-//            && std::is_base_of<expr, C>::value,
-//            Expr>;
-//    };
-//
-//    template<class Expr, typename A, typename B>
-//    struct require_expr<Expr, A, B, void>
-//    {
-//        using type = std::enable_if_t<
-//            std::is_base_of<expr, A>::value
-//            && std::is_base_of<expr, B>::value,
-//            Expr>;
-//    };
-//
-//    template<typename Expr, typename A>
-//    struct require_expr<Expr, A, void, void>
-//    {
-//        using type = std::enable_if_t<std::is_base_of<expr, A>::value, Expr>;
-//    };
-//
-//
-//    template<typename Expr>
-//    struct require_expr<Expr, void, void, void>
-//    {
-//        using type = std::enable_if_t<std::is_base_of<expr, Expr>::value, Expr>;
-//    };
-//
-//    template<typename... Expr>
-//    using require_expr_t = typename require_expr<Expr...>::type;
-
 }

@@ -28,6 +28,7 @@
 #include <zacc/system/arch.hpp>
 #include <zacc/expressions/zvec.hpp>
 #include <zacc/expressions/expression.hpp>
+#include <zacc/expressions/expression_stream.hpp>
 #include <zacc/expressions/scope.hpp>
 #include <functional>
 
@@ -174,7 +175,7 @@ int main(int argc, char** argv)
     }
 
     {
-        std::cout << "expression output" << std::endl << std::endl;
+        std::cout << "cout << expression" << std::endl << std::endl;
 
         scope<recorder> scope;
 

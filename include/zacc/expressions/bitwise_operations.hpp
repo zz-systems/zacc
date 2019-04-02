@@ -135,4 +135,48 @@ namespace zacc { namespace expressions {
     };
 
     // =================================================================================================================
+
+    template<typename Left, typename Right>
+    bin_expr_t<bit_and, lit, Left, Right>
+    operator&(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<bit_or, lit, Left, Right>
+    operator|(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<bit_xor, lit, Left, Right>
+    operator^(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<bit_shl, lit, Left, Right>
+    operator<<(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<bit_shr, lit, Left, Right>
+    operator>>(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Right>
+    un_expr_t<bit_not, Right>
+    operator~(const Right& right)
+    {
+        return { right };
+    }
+
+    // =================================================================================================================
 }}

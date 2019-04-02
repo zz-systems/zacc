@@ -231,4 +231,55 @@ namespace zacc { namespace expressions {
     };
 
     // =================================================================================================================
+
+    template<typename Left, typename Right>
+    bin_expr_t<plus, lit, Left, Right>
+    operator+(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<minus, lit, Left, Right>
+    operator-(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<multiplies, lit, Left, Right>
+    operator*(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<divides, lit, Left, Right>
+    operator/(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Left, typename Right>
+    bin_expr_t<modulus, lit, Left, Right>
+    operator%(const Left& left, const Right& right)
+    {
+        return { left, right };
+    }
+
+    template<typename Right>
+    un_expr_t<negate, Right>
+    operator-(const Right& right)
+    {
+        return { right };
+    }
+
+    template<typename Right>
+    un_expr_t<promote, Right>
+    operator+(const Right& right)
+    {
+        return { right };
+    }
+
+    // =================================================================================================================
 }}
