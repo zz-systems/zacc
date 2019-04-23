@@ -192,74 +192,74 @@ namespace zacc {
 
     // =================================================================================================================
 
-    template<typename LExpr = void, typename RExpr = void>
-    struct plus;
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct minus;
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct multiplies;
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct divides;
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct modulus;
-
-    template<typename RExpr = void>
-    struct negate;
-
-    template<typename RExpr = void>
-    struct promote;
-
-    template<typename AExpr = void, typename BExpr = void, typename CExpr = void>
-    struct fmadd;
-
-    // =================================================================================================================
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct equal_to;
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct not_equal_to;
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct greater;
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct less;
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct greater_equal;
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct less_equal;
-
-    // =================================================================================================================
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct logical_and;
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct logical_or;
-
-    template<typename RExpr = void>
-    struct logical_not;
-
-    // =================================================================================================================
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct bit_and;
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct bit_or;
-
-    template<typename LExpr = void, typename RExpr = void>
-    struct bit_xor;
-
-    template<typename RExpr = void>
-    struct bit_not;
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct plus;
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct minus;
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct multiplies;
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct divides;
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct modulus;
+//
+//    template<typename RExpr = void>
+//    struct negate;
+//
+//    template<typename RExpr = void>
+//    struct promote;
+//
+//    template<typename AExpr = void, typename BExpr = void, typename CExpr = void>
+//    struct fmadd;
+//
+//    // =================================================================================================================
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct equal_to;
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct not_equal_to;
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct greater;
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct less;
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct greater_equal;
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct less_equal;
+//
+//    // =================================================================================================================
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct logical_and;
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct logical_or;
+//
+//    template<typename RExpr = void>
+//    struct logical_not;
+//
+//    // =================================================================================================================
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct bit_and;
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct bit_or;
+//
+//    template<typename LExpr = void, typename RExpr = void>
+//    struct bit_xor;
+//
+//    template<typename RExpr = void>
+//    struct bit_not;
 
     // =================================================================================================================
 }

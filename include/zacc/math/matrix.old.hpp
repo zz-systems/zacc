@@ -30,9 +30,6 @@
 #include <zacc/util/type/cast.hpp>
 #include <zacc/util/type/type_traits.hpp>
 #include <zacc/util/algorithm.hpp>
-#include <zacc/expressions/expression.hpp>
-#include <zacc/expressions/arithmetic.hpp>
-#include <zacc/expressions/expression_traits.hpp>
 
 namespace zacc { namespace math {
 
@@ -117,22 +114,11 @@ namespace zacc { namespace math {
 
     /// @}
 
-
-    struct mat_expr : expr
-    {};
-
-    template<typename T>
-    struct mat_term : mat_expr, term<T>
-    {
-
-    };
-
     // @struct mat
     /// @brief matrix
     template<typename T, size_t Rows, size_t Cols>
     struct alignas(alignof(T)) __mat
-            : mat_term<__mat<T, Rows, Cols>>
-            //: compose<ops_meta<mat<T, Rows, Cols>, T, true>, plus, minus, multiplies, divides, modulus, increment, decrement>
+            : compose<ops_meta<mat<T, Rows, Cols>, T, true>, plus, minus, multiplies, divides, modulus, increment, decrement>
             //: compose_t<plus, minus, multiplies, divides, composable<mat<T, Rows, Cols>>::template type>
     {
         static_assert(Rows * Cols > 0, "Wrong dimensions for a matrix");
@@ -460,211 +446,202 @@ namespace zacc { namespace math {
 
 
 
-    // =============================================================================================================
+        // =============================================================================================================
 
-    template<typename T, size_t Rows, size_t Cols>
-    bval_t<T> operator ==(const mat<T, Rows, Cols>& a, const mat<T, Rows, Cols>& b)
-    {
-        for(size_t i = 0; i < Rows * Cols; i++)
+        template<typename T, size_t Rows, size_t Cols>
+        bval_t<T> operator ==(const mat<T, Rows, Cols>& a, const mat<T, Rows, Cols>& b)
         {
-            if(a(i) != b(i))
-                return false;
+            for(size_t i = 0; i < Rows * Cols; i++)
+            {
+                if(a(i) != b(i))
+                    return false;
+            }
+
+            return true;
         }
 
-        return true;
-    }
-
-    template<typename T, size_t Rows, size_t Cols>
-    bval_t<T> operator !=(const mat<T, Rows, Cols>& a, const mat<T, Rows, Cols>& b)
-    {
-        return !(a == b);
-    }
-
-    template<typename Container, typename UnaryOperation>
-    Container apply(const Container& m, UnaryOperation op)
-    {
-        Container result;
-
-        std::transform(m.begin(), m.end(), result.begin(), op);
-
-        return result;
-    }
-
-    template<typename Container, typename BinaryOperation>
-    Container apply(const Container& one, const Container& other, BinaryOperation op)
-    {
-        Container result;
-
-        std::transform(one.begin(), one.end(), other.begin(), result.begin(), op);
-
-        return result;
-    }
-
-    template<typename T>
-    struct is_scalar
-    {
-        static constexpr const bool value = is_zval<T>::value || std::is_floating_point<T>::value || std::is_integral<T>::value || std::is_convertible<T, scalar<T>>::value;
-    };
-
-    template<typename UnOp, typename Expr>
-    struct mat_un_expr : mat_expr
-    {
-        Expr _expr;
-
-        static constexpr size_t rows()     { return Expr::rows(); }
-        static constexpr size_t cols()     { return Expr::cols(); }
-
-        mat_un_expr(Expr expr)
-            : _expr(expr)
-        {}
-
-        auto operator()(size_t i, size_t j) { return UnOp::apply(_expr(i, j)); }
-    };
-
-    template<typename BinOp, typename Left, typename Right>
-    struct mat_bin_expr : mat_expr
-    {
-        Left _left;
-        Right _right;
-
-        static constexpr size_t lrows()     { return Left::rows(); }
-        static constexpr size_t lcols()     { return Left::cols(); }
-
-        static constexpr size_t rrows()     { return Right::rows(); }
-        static constexpr size_t rcols()     { return Right::cols(); }
-
-        mat_bin_expr(Left left, Right right)
-            : _left(left), _right(right)
-        {}
-
-        auto operator()(size_t i, size_t j) { return BinOp::apply(_left(i, j), _right(i, j)); }
-    };
-
-    template<typename BinOp, typename Left, typename Right>
-    struct mat_mul_expr : mat_expr
-    {
-        Left _left;
-        Right _right;
-
-        static constexpr size_t lrows()     { return Left::rows(); }
-        static constexpr size_t lcols()     { return Left::cols(); }
-
-        static constexpr size_t rrows()     { return Right::rows(); }
-        static constexpr size_t rcols()     { return Right::cols(); }
-
-        mat_mul_expr(Left left, Right right)
-            : _left(left), _right(right)
-        {}
-
-        auto operator()(size_t i, size_t k)
+        template<typename T, size_t Rows, size_t Cols>
+        bval_t<T> operator !=(const mat<T, Rows, Cols>& a, const mat<T, Rows, Cols>& b)
         {
-            auto result = _left(i, 0) * _right(0, k);
+            return !(a == b);
+        }
 
-            for(int j = 1; j < Right::rows(); j++)
-            {
-                result += _left(i, j) * _right(j, k);
-            }
+        template<typename Container, typename UnaryOperation>
+        Container apply(const Container& m, UnaryOperation op)
+        {
+            Container result;
+
+            std::transform(m.begin(), m.end(), result.begin(), op);
 
             return result;
         }
-    };
 
-    template<typename Right>
-    std::enable_if_t<std::is_base_of<mat_expr, Right>::value, mat_un_expr<expressions::negate<>, Right>>
-    operator-(const Right& right)
-    {
-        return { right };
-    };
-
-    // Vector + Scalar ================================================================================================
-
-    template<typename T, size_t Rows, size_t Cols>
-    mat<T, Rows, Cols> operator+(const mat<T, Rows, Cols>& one, param_t<T> other)
-    {
-        return apply(one, [&other](auto i) { return i + static_cast<T>(other); });
-    };
-
-    template<typename T, size_t Rows, size_t Cols>
-    mat<T, Rows, Cols> operator-(const mat<T, Rows, Cols>& one, param_t<T> other)
-    {
-        return apply(one, [&other](auto i) { return i - static_cast<T>(other); });
-    };
-
-    template<typename T, size_t Rows, size_t Cols>
-    mat<T, Rows, Cols> operator*(const mat<T, Rows, Cols>& one, param_t<T> other)
-    {
-        return apply(one, [&other](auto i) { return i * static_cast<T>(other); });
-    };
-
-    template<typename T, size_t Rows, size_t Cols>
-    mat<T, Rows, Cols> operator/(const mat<T, Rows, Cols>& one, param_t<T> other)
-    {
-        return apply(one, [&other](auto i) { return i / static_cast<T>(other); });
-    };
-
-
-    /// @brief special case: row-vector * column-vector
-    /// @relates mat
-    template<typename T, size_t Rows>
-    scalar<T> operator*(const __mat<T, 1, Rows>& a, const __mat<T, Rows, 1>& b)
-    {
-        return zacc::accumulate(a.begin(), a.end(), b.begin(), static_cast<T>(0), [](auto acc, auto a, auto b) { return acc + a * b; });
-    };
-
-    template<typename T, size_t Rows, size_t Cols>
-    mat<T, Rows, Cols> operator+(const mat<T, Rows, Cols>& one, const mat<T, Rows, Cols>& other)
-    {
-        return apply(one, other, std::plus<T>());
-    };
-
-    template<typename T, size_t Rows, size_t Cols>
-    mat<T, Rows, Cols> operator-(const mat<T, Rows, Cols>& one, const mat<T, Rows, Cols>& other)
-    {
-        return apply(one, other, std::minus<T>());
-    };
-
-    template<typename T, size_t Rows, size_t Cols, size_t N>
-    mat<T, Rows, Cols> operator*(const mat<T, Rows, N>& a, const mat<T, N, Cols>& b)
-    {
-        mat<T, Rows, Cols> result;
-
-        for (size_t r = 0; r < Rows; r++)
+        template<typename Container, typename BinaryOperation>
+        Container apply(const Container& one, const Container& other, BinaryOperation op)
         {
-            for (size_t c = 0; c < Cols; c++)
-            {
-                T temp = a(r, 0) * b(0, c);
+            Container result;
 
-                for (size_t n = 1; n < N; n++)
-                {
-                    temp = temp + a(r, n) * b(n, c);
-                }
+            std::transform(one.begin(), one.end(), other.begin(), result.begin(), op);
 
-                result(r, c) = temp;
-            }
+            return result;
         }
 
-        return result;
-    };
 
-    template<typename T, size_t Rows, size_t Cols>
-    mat<T, Rows, Cols> clamp_int32(const mat<T, Rows, Cols> &one)
-    {
-        return apply(one, [](auto i) { return i.trunc(); });
-    }
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline mat<T, N, M> &operator +=(mat<T, N, M>& a, const U& b) { return a = (a + b); }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline mat<T, N, M> &operator -=(mat<T, N, M>& a, const U& b) { return a = (a - b); }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline mat<T, N, M> &operator *=(mat<T, N, M>& a, const U& b) { return a = (a * b); }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline mat<T, N, M> &operator /=(mat<T, N, M>& a, const U& b) { return a = (a / b); }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline mat<T, N, M> &operator +=(mat<T, N, M>& a, const mat<U, N, M>& b) { return a = (a + b); }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline mat<T, N, M> &operator -=(mat<T, N, M>& a, const mat<U, N, M>& b) { return a = (a - b); }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline mat<T, N, M> &operator *=(mat<T, N, M>& a, const mat<U, N, M>& b) { return a = (a * b); }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline mat<T, N, M> &operator /=(mat<T, N, M>& a, const mat<U, N, M>& b) { return a = (a / b); }
+
+
+        template<typename T>
+        struct is_scalar
+        {
+            static constexpr const bool value = is_zval<T>::value || std::is_floating_point<T>::value || std::is_integral<T>::value || std::is_convertible<T, scalar<T>>::value;
+        };
+
+
+//        template<typename T, typename U, size_t N, size_t M, typename std::enable_if<std::is_convertible<U, T>::value, void**>::type = nullptr>
+//        inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator +(const mat<T, N, M> &a, const U &b) { return a + static_cast<mat<T, N, M>>(b); }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator +(const U &a, const mat<T, N, M> &b) { return static_cast<mat<T, N, M>>(a) + b; }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator -(const mat<T, N, M> &a, const U &b) { return a - static_cast<mat<T, N, M>>(b); }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator -(const U &a, const mat<T, N, M> &b) { return static_cast<mat<T, N, M>>(a) - b; }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator *(const mat<T, N, M> &a, const U &b) { return a * static_cast<mat<T, N, M>>(b); }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator *(const U &a, const mat<T, N, M> &b) { return static_cast<mat<T, N, M>>(a) * b; }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator /(const mat<T, N, M> &a, const U &b) { return a / static_cast<mat<T, N, M>>(b); }
+//
+//        template<typename T, typename U, size_t N, size_t M>
+//        inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator /(const U &a, const mat<T, N, M> &b) { return static_cast<mat<T, N, M>>(a) / b; }
+
+        template<typename T, size_t Rows, size_t Cols>
+        mat<T, Rows, Cols> operator-(const mat<T, Rows, Cols>& a)
+        {
+            return apply(a, std::negate<T>());
+        };
+
+        // Vector + Scalar ================================================================================================
+
+        template<typename T, size_t Rows, size_t Cols>
+        mat<T, Rows, Cols> operator+(const mat<T, Rows, Cols>& one, param_t<T> other)
+        {
+            return apply(one, [&other](auto i) { return i + static_cast<T>(other); });
+        };
+
+        template<typename T, size_t Rows, size_t Cols>
+        mat<T, Rows, Cols> operator-(const mat<T, Rows, Cols>& one, param_t<T> other)
+        {
+            return apply(one, [&other](auto i) { return i - static_cast<T>(other); });
+        };
+
+        template<typename T, size_t Rows, size_t Cols>
+        mat<T, Rows, Cols> operator*(const mat<T, Rows, Cols>& one, param_t<T> other)
+        {
+            return apply(one, [&other](auto i) { return i * static_cast<T>(other); });
+        };
+
+        template<typename T, size_t Rows, size_t Cols>
+        mat<T, Rows, Cols> operator/(const mat<T, Rows, Cols>& one, param_t<T> other)
+        {
+            return apply(one, [&other](auto i) { return i / static_cast<T>(other); });
+        };
+
+
+        /// @brief special case: row-vector * column-vector
+        /// @relates mat
+        template<typename T, size_t Rows>
+        scalar<T> operator*(const __mat<T, 1, Rows>& a, const __mat<T, Rows, 1>& b)
+        {
+            return zacc::accumulate(a.begin(), a.end(), b.begin(), static_cast<T>(0), [](auto acc, auto a, auto b) { return acc + a * b; });
+        };
+
+        template<typename T, size_t Rows, size_t Cols>
+        mat<T, Rows, Cols> operator+(const mat<T, Rows, Cols>& one, const mat<T, Rows, Cols>& other)
+        {
+            return apply(one, other, std::plus<T>());
+        };
+
+        template<typename T, size_t Rows, size_t Cols>
+        mat<T, Rows, Cols> operator-(const mat<T, Rows, Cols>& one, const mat<T, Rows, Cols>& other)
+        {
+            return apply(one, other, std::minus<T>());
+        };
+
+        template<typename T, size_t Rows, size_t Cols, size_t N>
+        mat<T, Rows, Cols> operator*(const mat<T, Rows, N>& a, const mat<T, N, Cols>& b)
+        {
+            mat<T, Rows, Cols> result;
+
+            for (size_t r = 0; r < Rows; r++)
+            {
+                for (size_t c = 0; c < Cols; c++)
+                {
+                    T temp = a(r, 0) * b(0, c);
+
+                    for (size_t n = 1; n < N; n++)
+                    {
+                        temp = temp + a(r, n) * b(n, c);
+                    }
+
+                    result(r, c) = temp;
+                }
+            }
+
+            return result;
+        };
+
+        template<typename T, size_t Rows, size_t Cols>
+        mat<T, Rows, Cols> clamp_int32(const mat<T, Rows, Cols> &one)
+        {
+            return apply(one, [](auto i) { return i.trunc(); });
+        }
 
 //        friend mat clamp_int32(const mat &one)
 //        {
 //            return apply(one, clamp_int32);
 //        }
 
-    template<typename T, size_t Rows, size_t Cols>
-    mat<T, Rows, Cols> vsel(const bval_t<T> &condition, const mat<T, Rows, Cols> &if_value, const mat<T, Rows, Cols> &else_value)
-    {
-        return apply(if_value, else_value, [&condition](auto i, auto e) { return i.when(condition).otherwise(e); });
-    }
+        template<typename T, size_t Rows, size_t Cols>
+        mat<T, Rows, Cols> vsel(const bval_t<T> &condition, const mat<T, Rows, Cols> &if_value, const mat<T, Rows, Cols> &else_value)
+        {
+            return apply(if_value, else_value, [&condition](auto i, auto e) { return i.when(condition).otherwise(e); });
+        }
+
+
 
 
     /// @}
+
+
 
     /// @name reshape specializations
     /// @{
@@ -690,6 +667,93 @@ namespace zacc { namespace math {
     }
 
     /// @}
+
+//    /// @name operations
+//    /// @{
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline mat<T, N, M> &operator +=(mat<T, N, M>& a, const U& b) { return a = (a + b); }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline mat<T, N, M> &operator -=(mat<T, N, M>& a, const U& b) { return a = (a - b); }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline mat<T, N, M> &operator *=(mat<T, N, M>& a, const U& b) { return a = (a * b); }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline mat<T, N, M> &operator /=(mat<T, N, M>& a, const U& b) { return a = (a / b); }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline mat<T, N, M> &operator +=(mat<T, N, M>& a, const mat<U, N, M>& b) { return a = (a + b); }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline mat<T, N, M> &operator -=(mat<T, N, M>& a, const mat<U, N, M>& b) { return a = (a - b); }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline mat<T, N, M> &operator *=(mat<T, N, M>& a, const mat<U, N, M>& b) { return a = (a * b); }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline mat<T, N, M> &operator /=(mat<T, N, M>& a, const mat<U, N, M>& b) { return a = (a / b); }
+//
+//    template<typename T>
+//    struct is_scalar
+//    {
+//        static constexpr const bool value = is_zval<T>::value || std::is_floating_point<T>::value || std::is_integral<T>::value || std::is_convertible<T, scalar<T>>::value;
+//    };
+//
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator +(const mat<T, N, M> &a, const U &b) { return a + static_cast<mat<T, N, M>>(b); }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator +(const U &a, const mat<T, N, M> &b) { return static_cast<mat<T, N, M>>(a) + b; }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator -(const mat<T, N, M> &a, const U &b) { return a - static_cast<mat<T, N, M>>(b); }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator -(const U &a, const mat<T, N, M> &b) { return static_cast<mat<T, N, M>>(a) - b; }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator *(const mat<T, N, M> &a, const U &b) { return a * static_cast<mat<T, N, M>>(b); }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator *(const U &a, const mat<T, N, M> &b) { return static_cast<mat<T, N, M>>(a) * b; }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator /(const mat<T, N, M> &a, const U &b) { return a / static_cast<mat<T, N, M>>(b); }
+//
+//    template<typename T, typename U, size_t N, size_t M>
+//    inline std::enable_if_t<is_scalar<U>::value, mat<T, N, M>> operator /(const U &a, const mat<T, N, M> &b) { return static_cast<mat<T, N, M>>(a) / b; }
+//
+//
+//
+//
+//
+//
+//    /// @brief scale (mul)
+//    /// @relates mat
+//    template<typename T, typename U, size_t rows>
+//    auto operator*(const vec<T, rows>& a, const vec<U, rows>& b)
+//    {
+//        vec<T, rows> result;
+//
+//        std::transform(a.begin(), a.end(), b.begin(), result.begin(), std::multiplies<T>());
+//
+//        return result;
+//    };
+//
+//    /// @brief scale (div)
+//    /// @relates mat
+//    template<typename T, typename U, size_t rows>
+//    auto operator/(const vec<T, rows>& a, const vec<U, rows>& b)
+//    {
+//        vec<T, rows> result;
+//
+//        std::transform(a.begin(), a.end(), b.begin(), result.begin(), std::divides<T>());
+//
+//        return result;
+//    };
 
     template<typename T, size_t elems>
     inline std::ostream& operator<<(std::ostream& out, const vec<T, elems> &other)

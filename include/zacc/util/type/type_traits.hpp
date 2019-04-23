@@ -213,7 +213,7 @@ namespace zacc {
             when<sizeof(T) == 8, uint64_t>,
             when<sizeof(T) == 4, uint32_t>,
             when<sizeof(T) == 2, uint16_t>,
-            uint8_t>;
+            when<sizeof(T) == 1, uint8_t>>;
 }
 
 namespace zacc
