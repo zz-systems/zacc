@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
 //
-// Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
+// Copyright (c) 2015-2019 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,6 @@
 
 #pragma once
 
-#include <zacc/expressions/expression.hpp>
-
-namespace zacc { namespace expressions {
-
-//    template<typename To = void, typename From = void>
-//    struct cast : un_expr<cast<To>, From>
-//    {
-//        using un_expr<cast<To>, From>::un_expr;
-//    };
-//
-//    template<typename To>
-//    struct cast<To, void>
-//    {
-//        template<typename From>
-//        static auto apply(From right)
-//        {
-//            return static_cast<To>(right);
-//        }
-//    };
-
-    // =================================================================================================================
-
-}}
+#include <zacc/compute/recorder/null_recorder.hpp>
+#include <zacc/compute/recorder/default_recorder.hpp>
+#include <zacc/compute/recorder/scope.hpp>

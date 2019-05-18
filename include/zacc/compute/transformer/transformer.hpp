@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
 //
-// Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
+// Copyright (c) 2015-2019 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,47 +24,6 @@
 
 #pragma once
 
-#include <zacc/expressions/expression.hpp>
-#include <zacc/expressions/repr.hpp>
-#include <vector>
-
-namespace zacc { namespace expressions {
-
-    template<typename T>
-    struct scope : T
-    {
-        T _previous;
-
-//        constexpr scope()
-//            : _previous()
-//        {
-//            std::swap(_previous, T::current());
-//        }
-//
-//        ~scope()
-//        {
-//            std::swap(_previous, T::current());
-//        }
-
-        constexpr scope()
-            : _previous(T::current())
-        {
-            T::current() = T();
-        }
-
-        ~scope()
-        {
-            T::current() = _previous;
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const scope<T>&)
-        {
-            os << T::current();
-
-            return os;
-        }
-    };
-
-
-    // =================================================================================================================
-}}
+#include <zacc/compute/transformer/merge.hpp>
+#include <zacc/compute/transformer/ostream.hpp>
+#include <zacc/compute/transformer/visitor.hpp>

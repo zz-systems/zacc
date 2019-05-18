@@ -1,3 +1,4 @@
+
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
 //
@@ -22,57 +23,54 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
+
 #pragma once
 
-#include <zacc/expressions/expression.hpp>
-#include <zacc/expressions/pipe.hpp>
+#include <zacc/compute/core/expressions.hpp>
 
-namespace zacc { namespace expressions {
+namespace zacc { namespace compute {
 
-    struct evaluator
+    // =================================================================================================================
+
+    template <typename T>
+    struct expr;
+
+    template<typename Left, typename Right, typename SizeProxy = void>
+    struct pipe : expr<pipe<Left, Right, SizeProxy>>
     {
-        template<typename Target>
-        pipe<evaluator, declare_expr<Target>> operator<<(declare_expr<Target> expr)
+        Left _left;
+        Right _right;
+
+        pipe(Left const& left, Right const& right)
+            : _left(left), _right(right)
+        {}
+
+        auto eval() const
         {
-            return { *this, expr };
+            return _left(_right);
         }
 
-        template<typename Target, typename Expr>
-        evaluator& operator<<(assign_expr<Target, Expr> expr)
+        template<typename... Args>
+        auto eval(Args&& ...args) const
         {
-            eval(expr);
-
-            return *this; //{ *this, expr };
-        }
-
-        template<typename Expr>
-        void operator()(Expr expr) const
-        {
-            eval(expr);
-        }
-
-        template<typename Expr>
-        void eval(Expr expr) const
-        {
-//            for(size_t i = 0; i < Expr::size(); ++i)
-            for(size_t i = 0; i < 2; ++i)
-            {
-                expr(i);
-            };
-        }
-
-        template<typename Func>
-        pipe<evaluator, Func> operator<<(Func func)
-        {
-            return pipe<evaluator, Func>(*this, func);
-        }
-
-        static evaluator& current() {
-            static evaluator instance;
-
-            return instance;
+            return _left(_right(std::forward<Args>(args)...));
         }
     };
+
+    template<typename T>
+    struct is_pipe : std::false_type
+    {};
+
+    template<typename Left, typename Right, typename SizeProxy>
+    struct is_pipe<pipe<Left, Right, SizeProxy>> : std::true_type
+    {};
+
+    template<typename Left, typename Right>
+    std::enable_if_t<is_pipe<Left>::value, pipe<decltype(Left::_left), pipe<decltype(Left::_right), Right>>>
+    operator<<(Left const& left, Right const& right)
+    {
+        return { left._left, {left._right, right} };
+    }
 
     // =================================================================================================================
 

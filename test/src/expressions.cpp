@@ -26,16 +26,14 @@
 #include <iostream>
 
 #include <zacc/system/arch.hpp>
-#include <zacc/expressions/zvec.hpp>
-#include <zacc/expressions/expression.hpp>
-#include <zacc/expressions/expression_stream.hpp>
-#include <zacc/expressions/scope.hpp>
+#include <zacc/compute/expressions.hpp>
+
 #include <functional>
 
 int main(int argc, char** argv)
 {
     using namespace zacc;
-    using namespace zacc::expressions;
+    using namespace zacc::compute;
 
 //    auto e = bin_expr<std::plus<>, lit<int>, lit<int>>(lit<int>(1), lit<int>(2));
 //
@@ -46,10 +44,10 @@ int main(int argc, char** argv)
 
         scope<recorder> scope;
 
-        zvec<int, 2> a{{1, 2}};
-        zvec<int, 2> b{{2, 4}};
+        batch<int, 2> a{{1, 2}};
+        batch<int, 2> b{{2, 4}};
 
-        zvec<int, 2> basic;
+        batch<int, 2> basic;
 
         basic = a + b;
         basic = b + a;
@@ -83,12 +81,12 @@ int main(int argc, char** argv)
 
         scope<recorder> scope;
 
-        zvec<int, 2> a{{1, 2}};
-        zvec<int, 2> b{{2, 4}};
-        zvec<int, 2> c{{3, 6}};
-        zvec<int, 2> d{{4, 8}};
+        batch<int, 2> a{{1, 2}};
+        batch<int, 2> b{{2, 4}};
+        batch<int, 2> c{{3, 6}};
+        batch<int, 2> d{{4, 8}};
 
-        zvec<int, 2> fma;
+        batch<int, 2> fma;
 
         fma = a + b * c;
         fma = a * b + c;
@@ -105,10 +103,10 @@ int main(int argc, char** argv)
 
         scope<recorder> scope;
 
-        zvec<int, 2> a{{1, 2}};
-        zvec<int, 2> b{{2, 2}};
+        batch<int, 2> a{{1, 2}};
+        batch<int, 2> b{{2, 2}};
 
-        zvec<bool, 2> basic;
+        batch<bool, 2> basic;
 
         basic = a == b;
         basic = b == a;
@@ -136,10 +134,10 @@ int main(int argc, char** argv)
 
         scope<recorder> scope;
 
-        zvec<bool, 2> a{{ false, true}};
-        zvec<bool, 2> b{{ true, true }};
+        batch<bool, 2> a{{ false, true}};
+        batch<bool, 2> b{{ true, true }};
 
-        zvec<bool, 2> basic;
+        batch<bool, 2> basic;
 
         basic = a && b;
         basic = b && a;
@@ -163,10 +161,10 @@ int main(int argc, char** argv)
 
         scope<recorder> scope;
 
-        zvec<int, 2> a{{1, 2}};
-        zvec<int, 2> b{{2, 4}};
+        batch<int, 2> a{{1, 2}};
+        batch<int, 2> b{{2, 4}};
 
-        zvec<int, 2> basic;
+        batch<int, 2> basic;
 
         basic = a + 1;
         //basic = 1 + a;
@@ -179,10 +177,10 @@ int main(int argc, char** argv)
 
         scope<recorder> scope;
 
-        zvec<int, 2> a{{1, 2}};
-        zvec<int, 2> b{{2, 4}};
+        batch<int, 2> a{{1, 2}};
+        batch<int, 2> b{{2, 4}};
 
-        zvec<int, 2> basic;
+        batch<int, 2> basic;
 
         std::cout << (a + b) << std::endl;
         std::cout << (a - b) << std::endl;

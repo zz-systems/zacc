@@ -26,39 +26,12 @@
 #pragma once
 #include <sstream>
 
-#include <zacc/expressions/expression.hpp>
-#include <zacc/expressions/expression_visitor.hpp>
+#include <zacc/compute/core/core.hpp>
+#include <zacc/compute/renderer/generator.hpp>
 
-namespace zacc { namespace expressions {
+namespace zacc { namespace compute {
 
-    struct renderer;
-
-    struct generator
-    {
-        std::stringstream ss;
-
-        template<typename T>
-        generator& operator<<(const T& data)
-        {
-            ss << data;
-
-            return *this;
-        }
-    };
-
-    generator& operator<<(generator& g, const generator& data)
-    {
-        g << data.ss.str();
-
-        return g;
-    }
-
-    std::ostream& operator<<(std::ostream& os, const generator& data)
-    {
-        os << data.ss.str();
-
-        return os;
-    }
+    // =================================================================================================================
 
     struct renderer
     {
@@ -141,6 +114,7 @@ namespace zacc { namespace expressions {
         }
     };
 
+    // =================================================================================================================
 
     template<typename T>
     generator& operator<<(generator& g, const expr_t<T>& data)
@@ -149,4 +123,6 @@ namespace zacc { namespace expressions {
 
         return g;
     }
+
+    // =================================================================================================================
 }}

@@ -31,37 +31,11 @@
 #include <zacc/util/bithacks.hpp>
 #include <zacc/util/algorithm.hpp>
 #include <zacc/system/feature.hpp>
+#include <zacc/util/string_view.hpp>
 #include <functional>
 #include <algorithm>
 
 namespace zacc {
-
-    struct string_view {
-        const char* str;
-        size_t size;
-
-        constexpr string_view() noexcept
-            : str {nullptr}, size {0}
-        {}
-        // can only construct from a char[] literal
-        template <std::size_t N>
-        constexpr string_view(const char (&s)[N]) noexcept
-            : str(s)
-            , size(N - 1) // not count the trailing nul
-        {}
-
-        operator std::string() const
-        {
-            return std::string(str, size);
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const string_view& str)
-        {
-            os << str.str;
-            return os;
-        }
-    };
-
 
     struct arch {
         feature mask;

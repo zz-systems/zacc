@@ -24,65 +24,36 @@
 
 #pragma once
 
-#include <zacc/system/feature.hpp>
+#include <ostream>
 
-namespace zacc {
+namespace zacc { namespace compute {
 
-    template<typename T, size_t Size>
-    struct container
-    {
-        using type = std::array<T, Size>;
-    };
-}
-
-//#if defined(ZACC_SCALAR)
-
-namespace zacc {
+    // =================================================================================================================
 
     template<typename T>
-    struct container<T, 1>
+    struct scope : T
     {
-        using type = std::array<T, 1>;//T;
+        T _previous;
+
+        constexpr scope()
+            : _previous(T::current())
+        {
+            T::current() = T();
+        }
+
+        ~scope()
+        {
+            T::current() = _previous;
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, const scope<T>&)
+        {
+            os << T::current();
+
+            return os;
+        }
     };
-}
 
-//#endif
+    // =================================================================================================================
 
-#if defined(ZACC_SSE)
-
-#include <zacc/backend/intrin.hpp>
-
-namespace zacc {
-
-//    template<typename Target>
-//    struct container<std::enable_if_t<Target::value & feature::sse2(), char>, Target, 16>
-//    {
-//        using type = __m128i;
-//    };
-//
-//    template<typename Target>
-//    struct container<std::enable_if_t<Target::value & feature::sse2(), short>, Target, 8>
-//    {
-//        using type = __m128i;
-//    };
-//
-//    template<typename Target>
-//    struct container<std::enable_if_t<Target::value & feature::sse2(), int>, Target, 4>
-//    {
-//        using type = __m128i;
-//    };
-//
-//    template<typename Target>
-//    struct container<std::enable_if_t<Target::value & feature::sse2(), float>, Target, 4>
-//    {
-//        using type = __m128;
-//    };
-//
-//    template<typename Target>
-//    struct container<std::enable_if_t<Target::value & feature::sse2(), double>, Target, 2>
-//    {
-//        using type = __m128d;
-//    };
-}
-
-#endif
+}}

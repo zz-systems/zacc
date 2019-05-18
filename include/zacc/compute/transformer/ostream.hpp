@@ -25,12 +25,12 @@
 
 #pragma once
 
-#include <zacc/expressions/expression.hpp>
-#include <zacc/expressions/pipe.hpp>
-#include <zacc/expressions/expression_traits.hpp>
-#include <zacc/expressions/evaluator.hpp>
+#include <zacc/compute/core/expressions.hpp>
+#include <zacc/compute/core/traits.hpp>
+#include <zacc/compute/core/pipe.hpp>
+#include <zacc/compute/eval/batch.hpp>
 
-namespace zacc {
+namespace zacc { namespace compute {
 
     // =================================================================================================================
 
@@ -38,7 +38,7 @@ namespace zacc {
     std::enable_if_t<is_expr<Expr>::value, std::ostream>&
     operator<<(std::ostream& os, const Expr& expr)
     {
-        auto p = expressions::evaluator::current() << [&os](auto item)
+        auto p = batch_evaluator::current() << [&os](auto item)
         {
             os << item << " ";
             return item;
@@ -51,4 +51,7 @@ namespace zacc {
         os << "]";
         return os;
     }
-}
+
+    // =================================================================================================================
+
+}}

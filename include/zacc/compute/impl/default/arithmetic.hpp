@@ -24,159 +24,119 @@
 
 #pragma once
 
-#include <zacc/expressions/expression.hpp>
+#include <zacc/compute/expression.hpp>
 
 namespace zacc { namespace expressions {
 
-    template<typename LExpr = void, typename RExpr = void>
-    struct bit_and : bin_expr<bit_and<>, LExpr, RExpr>
+    // =================================================================================================================
+
+    template<typename Expr>
+    struct identity_impl<Expr, std::enable_if_t<is_scalar_expr_v<Expr>>>
     {
-        using bin_expr<bit_and<>, LExpr, RExpr>::bin_expr;
+        template<typename Arg>
+        static auto apply(Arg arg)
+        {
+            return arg;
+        }
     };
 
-    template<>
-    struct bit_and<void, void>
+    // =================================================================================================================
+
+
+    template<typename LExpr, typename RExpr>
+    struct plus_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
         {
-            return left & right;
+            return left + right;
         }
     };
 
     // =================================================================================================================
 
-    template<typename LExpr = void, typename RExpr = void>
-    struct bit_or : bin_expr<bit_or<>, LExpr, RExpr>
+    template<typename Expr>
+    struct promote_impl<Expr, std::enable_if_t<is_scalar_expr_v<Expr>>>
     {
-        using bin_expr<bit_or<>, LExpr, RExpr>::bin_expr;
+        template<typename Arg>
+        static auto apply(Arg arg)
+        {
+            return +arg;
+        }
     };
 
-    template<>
-    struct bit_or<void, void>
+    // =================================================================================================================
+
+    template<typename LExpr, typename RExpr>
+    struct minus_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
         {
-            return left | right;
+            return left - right;
         }
     };
 
     // =================================================================================================================
 
-    template<typename LExpr = void, typename RExpr = void>
-    struct bit_xor : bin_expr<bit_xor<>, LExpr, RExpr>
-    {
-        using bin_expr<bit_xor<>, LExpr, RExpr>::bin_expr;
-    };
-
-    template<>
-    struct bit_xor<void, void>
+    template<typename LExpr, typename RExpr>
+    struct multiplies_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
         {
-            return left ^ right;
+            return left * right;
         }
     };
 
     // =================================================================================================================
 
-    template<typename LExpr = void, typename RExpr = void>
-    struct bit_shl : bin_expr<bit_shl<>, LExpr, RExpr>
-    {
-        using bin_expr<bit_shl<>, LExpr, RExpr>::bin_expr;
-    };
-
-    template<>
-    struct bit_shl<void, void>
+    template<typename LExpr, typename RExpr>
+    struct divides_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
         {
-            return left << right;
+            return left / right;
         }
     };
 
     // =================================================================================================================
 
-    template<typename LExpr = void, typename RExpr = void>
-    struct bit_shr : bin_expr<bit_shr<>, LExpr, RExpr>
-    {
-        using bin_expr<bit_shr<>, LExpr, RExpr>::bin_expr;
-    };
-
-    template<>
-    struct bit_shr<void, void>
+    template<typename LExpr, typename RExpr>
+    struct modulus_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
         {
-            return left >> right;
+            return left % right;
         }
     };
 
     // =================================================================================================================
 
-    template<typename RExpr = void>
-    struct bit_not : un_expr<bit_not<>, RExpr>
+    template<typename Expr>
+    struct negate_impl<Expr, std::enable_if_t<is_scalar_expr_v<Expr>>>
     {
-        using un_expr<bit_not<>, RExpr>::un_expr;
-    };
-
-    template<>
-    struct bit_not<void>
-    {
-        template<typename RArg>
-        static auto apply(RArg right)
+        template<typename Arg>
+        static auto apply(Arg arg)
         {
-            return ~right;
+            return -arg;
         }
     };
 
     // =================================================================================================================
 
-    template<typename Left, typename Right>
-    bin_expr_t<bit_and, lit, Left, Right>
-    operator&(const Left& left, const Right& right)
+    template<typename AExpr, typename BExpr, typename CExpr>
+    struct fmadd_impl<AExpr, BExpr, CExpr, std::enable_if_t<is_scalar_expr_v<AExpr>>>
     {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<bit_or, lit, Left, Right>
-    operator|(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<bit_xor, lit, Left, Right>
-    operator^(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<bit_shl, lit, Left, Right>
-    operator<<(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Left, typename Right>
-    bin_expr_t<bit_shr, lit, Left, Right>
-    operator>>(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    template<typename Right>
-    un_expr_t<bit_not, Right>
-    operator~(const Right& right)
-    {
-        return { right };
-    }
+        template<typename AArg, typename BArg, typename CArg>
+        static auto apply(AArg a, BArg b, CArg c)
+        {
+            //std::cout << "fma" << std::endl;
+            return a * b + c;
+        }
+    };
 
     // =================================================================================================================
 }}

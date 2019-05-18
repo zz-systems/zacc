@@ -38,5 +38,5 @@ foreach(category ${test_categories})
     add_dependencies(zacc_test ${test_name})
 endforeach()
 
-add_executable(test_expressions src/expression.cpp)
+add_executable(test_expressions src/expressions.cpp)
 target_link_libraries(test_expressions PRIVATE zacc::zacc)

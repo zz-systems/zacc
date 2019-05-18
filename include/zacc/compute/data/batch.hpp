@@ -24,71 +24,74 @@
 
 #pragma once
 
-#include <algorithm>
-#include <functional>
 #include <zacc/system/feature.hpp>
 #include <zacc/util/type/typeid.hpp>
-#include <zacc/expressions/expression.hpp>
-#include <zacc/expressions/pipe.hpp>
-#include <zacc/expressions/expression_traits.hpp>
-#include <zacc/expressions/container.hpp>
-#include <zacc/expressions/arithmetic.hpp>
-#include <zacc/expressions/comparisons.hpp>
-#include <zacc/expressions/logical_operations.hpp>
-#include <zacc/expressions/bitwise_operations.hpp>
-#include <zacc/expressions/conversions.hpp>
-#include <zacc/expressions/repr.hpp>
-#include <zacc/expressions/evaluator.hpp>
-#include <zacc/expressions/recorder.hpp>
+#include <zacc/compute/core/core.hpp>
+#include <zacc/compute/transformer/transformer.hpp>
+#include <zacc/compute/recorder/recorder.hpp>
+#include <zacc/compute/data/container.hpp>
+#include <zacc/compute/eval/batch.hpp>
 
-namespace zacc { namespace expressions {
+#include <algorithm>
+#include <functional>
+
+namespace zacc { namespace compute {
+
+    // =================================================================================================================
 
     template<typename T, size_t Size>
-    struct zvec : term<zvec<T, Size>>
+    struct batch : term<batch<T, Size>>
     {
         using value_type = T;
 
-        static constexpr size_t size() { return Size; }
+        constexpr static size_t size = Size;
+        constexpr static uint64_t mask = 0;
+        constexpr static expr_tag expr_tag = expr_tag::scalar;
 
-        constexpr const value_type&   operator()(size_t i) const
+        constexpr value_type& eval(size_t i)
         {
             return _data[i];
         }
 
-        constexpr value_type& operator()(size_t i)
+        constexpr value_type const& eval(size_t i) const
         {
             return _data[i];
         }
 
-        constexpr zvec() noexcept
+        constexpr batch() noexcept
         {
-            recorder::current() << declare_expr<zvec>(*this);
+            recorder::current() << declare_expr<batch>(*this);
         }
 
-        constexpr zvec(std::initializer_list<T> init_list)
+        constexpr batch(batch const&) = default;
+        constexpr batch(batch&&) = default;
+        constexpr batch& operator=(batch const&) = delete;
+        constexpr batch& operator=(batch&&) = delete;
+
+        constexpr batch(std::initializer_list<T> init_list)
         {
-            recorder::current() << declare_expr<zvec>(*this);
+            recorder::current() << declare_expr<batch>(*this);
 
             std::copy(std::begin(init_list), std::end(init_list), std::begin(_data));
         }
 
         template<typename Expr>
-        constexpr zvec(Expr expr) noexcept
+        constexpr batch(Expr expr) noexcept
         {
-            auto d = declare_expr<zvec>(*this);
-            auto e = assign_expr<zvec, Expr>(*this, expr);
+            auto d = declare_expr<batch>(*this);
+            auto e = assign_expr<batch, Expr>(*this, expr);
 
             recorder::current() << d << e;
-            evaluator::current() << d << e;
+            batch_evaluator::current() << d << e;
         }
 
         template<typename Expr>
-        constexpr zvec& operator=(Expr expr) noexcept
+        constexpr batch& operator=(Expr const& expr) noexcept
         {
-            auto e = assign_expr<zvec, Expr>(*this, expr);
+            auto e = assign_expr<batch, Expr>(*this, expr);
 
             recorder::current() << e;
-            evaluator::current() << e;
+            batch_evaluator::current() << e;
 
             return *this;
         }

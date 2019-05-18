@@ -24,14 +24,15 @@
 
 #pragma once
 
-#include <vector>
 
-#include <zacc/expressions/expression.hpp>
-#include <zacc/expressions/expression_visitor.hpp>
-#include <zacc/expressions/expression_renderer.hpp>
-#include <zacc/expressions/repr.hpp>
 
-namespace zacc { namespace expressions {
+#include <zacc/compute/core/core.hpp>
+
+#include <ostream>
+
+namespace zacc { namespace compute {
+
+    // =================================================================================================================
 
     struct null_recorder
     {
@@ -54,58 +55,11 @@ namespace zacc { namespace expressions {
             return instance;
         }
 
-
         friend std::ostream& operator<<(std::ostream& os, const null_recorder&)
         {
             return os;
         }
     };
-
-    struct recorder
-    {
-        template<typename Target>
-        recorder& operator<<(declare_expr<Target> expr)
-        {
-            declarations.emplace_back([expr]() { return expr_visitor<renderer>::visit(expr);  });
-
-            return *this;
-        }
-
-        template<typename Target, typename Expr>
-        recorder& operator<<(assign_expr<Target, Expr> expr)
-        {
-            declarations.emplace_back([expr]() { return expr_visitor<renderer>::visit(expr);  });
-
-            return *this;
-        }
-
-        std::vector<std::function<generator()>> declarations;
-        std::vector<std::function<generator()>> expressions;
-
-        static recorder& current(){
-
-            static recorder instance;
-
-            return instance;
-        }
-
-
-        friend std::ostream& operator<<(std::ostream& os, const recorder& recorder)
-        {
-            for(auto d : recorder.declarations)
-            {
-                os << d() << std::endl;
-            }
-
-            for(auto e : recorder.expressions)
-            {
-                os << e() << std::endl;
-            }
-
-            return os;
-        }
-    };
-
 
     // =================================================================================================================
 

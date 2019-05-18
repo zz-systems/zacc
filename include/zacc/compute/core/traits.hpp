@@ -25,13 +25,18 @@
 
 #pragma once
 
-#include <zacc/expressions/expression.hpp>
-#include <zacc/expressions/pipe.hpp>
-
-namespace zacc {
+namespace zacc { namespace compute {
 
     // =================================================================================================================
 
+    enum class expr_tag
+    {
+        invalid,
+        scalar,
+        vector,
+        matrix,
+        complex
+    };
 
 //    template<template<typename> class Op, typename Head>
 //    struct require_expr<Op<Head>>
@@ -39,8 +44,63 @@ namespace zacc {
 //        using type = std::enable_if_t<std::is_base_of<expr, Op<Head>>::value, Op<Head>>;
 //    };
 
+    struct __expr;
+
     template<typename T>
-    using is_expr = std::integral_constant<bool, std::is_base_of<expr, T>::value && !is_pipe<T>::value>;
+    struct lit;
+
+//    enum class expr_tag;
+
+    template<typename T>
+    struct is_pipe;
+
+    template<typename T, typename Enable = void>
+    struct expr_traits
+    {
+        using wrapped_type = T;
+        constexpr static size_t size = 0;
+        constexpr static uint64_t mask = 0;
+        constexpr static expr_tag expr_tag = expr_tag::invalid;
+    };
+
+    template<typename T>
+    struct expr_traits<T, std::enable_if_t<std::is_base_of<__expr, T>::value>>
+    {
+        //using wrapped_type = typename T::wrapped_type;
+        constexpr static size_t size = T::size;
+        constexpr static uint64_t mask = T::mask;
+        constexpr static expr_tag expr_tag = T::expr_tag;
+    };
+
+//    template<typename T>
+//    using wrapped_type_t = typename expr_traits<T>::wrapped_type;
+
+    template<typename T>
+    constexpr static uint64_t mask_v = expr_traits<T>::mask;
+
+    template<typename T>
+    constexpr static expr_tag expr_tag_v = expr_traits<T>::expr_tag;
+
+
+
+    template<typename T>
+    constexpr static bool is_invalid_expr_v = expr_tag_v<T> == expr_tag::invalid;
+
+    template<typename T>
+    constexpr static bool is_scalar_expr_v = true;//expr_tag_v<T> == expr_tag::scalar;
+
+    template<typename T>
+    constexpr static bool is_vector_expr_v = expr_tag_v<T> == expr_tag::vector;
+
+    template<typename T>
+    constexpr static bool is_matrix_expr_v = expr_tag_v<T> == expr_tag::matrix;
+
+    template<typename T>
+    constexpr static bool is_complex_expr_v = expr_tag_v<T> == expr_tag::complex;
+
+
+    template<typename T>
+    using is_expr = std::integral_constant<bool, std::is_base_of<__expr, T>::value && !is_pipe<T>::value>;
 
     template<typename Expr>
     using expr_t = std::enable_if_t<is_expr<Expr>::value, Expr>;
@@ -62,6 +122,14 @@ namespace zacc {
         when<is_bin_expr<Left, Right>::value, Expr<Left, Right>>, //Expr<std::decay<Left>, std::decay<Right>>>,
         when<is_lr_cast<Left, Right>::value, Expr<Cast<Left>, Right>>,
         when<is_rl_cast<Left, Right>::value, Expr<Left, Cast<Right>>>>;
+
+    template<typename T>
+    using expr_cast_t = select_t<
+        when<is_expr<T>::value, T>,
+        when<std::is_arithmetic<T>::value, lit<T>>>;
+
+    template<template<class, class...> class Expr, typename T, typename... Ts>
+    using make_expr_t = Expr<expr_cast_t<T>, expr_cast_t<Ts>...>;
 
 //    template<template<class, class> class Expr, typename Left, typename Right>
 //    using bin_expr_t = std::enable_if_t<is_bin_expr<Left, Right>::value, Expr<Left, Right>>;
@@ -108,4 +176,4 @@ namespace zacc {
 //    template<typename... Expr>
 //    using require_expr_t = typename require_expr<Expr...>::type;
 
-}
+}}

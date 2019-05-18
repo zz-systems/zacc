@@ -26,9 +26,11 @@
 #pragma once
 #include <sstream>
 
-#include <zacc/expressions/expression.hpp>
+#include <zacc/compute/core/expressions.hpp>
 
-namespace zacc { namespace expressions {
+namespace zacc { namespace compute {
+
+    // =================================================================================================================
 
     template<typename Visitor>
     struct expr_visitor
@@ -83,4 +85,26 @@ namespace zacc { namespace expressions {
     };
 
     // =================================================================================================================
+
+//    template<typename Impl>
+//    struct expr_visitor
+//    {
+//        void operator()(__expr& expr)
+//        {
+//            static_cast<Impl *const>(this)->ap1ply(expr);
+//        }
+//    };
+//
+//
+//    struct lit_visitor : expr_visitor<lit_visitor>
+//    {
+//        template<typename T>
+//        void apply(lit<T> const& expr)
+//        {
+//
+//        }
+//    };
+
+    // =================================================================================================================
+
 }}
