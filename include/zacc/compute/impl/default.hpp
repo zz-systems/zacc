@@ -99,7 +99,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct divides_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
+    struct divides_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar && expr_traits<RExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -111,7 +111,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct modulus_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
+    struct modulus_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar && expr_traits<RExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)

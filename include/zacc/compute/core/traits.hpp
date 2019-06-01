@@ -246,7 +246,8 @@ namespace zacc { namespace compute {
     template<typename Expr>
     struct expr_traits<Expr, std::enable_if_t<is_bin_expr<Expr>>>
     {
-        using leaf_t = expr_leaf_t<Expr, expr_traits<decltype(Expr::_left)>>;
+        using leaf_t = expr_leaf_t<Expr, std::conditional_t<is_lit_expr<decltype(Expr::_left)>,
+            expr_traits<decltype(Expr::_right)>, expr_traits<decltype(Expr::_left)>>>;
 
         constexpr static size_t size = expr_traits<leaf_t>::size;
         constexpr static uint64_t mask = expr_traits<leaf_t>::mask;
@@ -380,6 +381,10 @@ namespace zacc { namespace compute {
 
     template<typename... Ts>
     struct is_scalar_expr : std::integral_constant<bool, all_true<mat_traits<Ts>::is_scalar...>::value>
+    {};
+
+    template<typename... Ts>
+    struct is_complex_expr : std::integral_constant<bool, all_true<(expr_traits<Ts>::expr_tag == expr_tag::complex)...>::value>
     {};
 
     template<typename LExpr, typename RExpr, typename Enable = void>

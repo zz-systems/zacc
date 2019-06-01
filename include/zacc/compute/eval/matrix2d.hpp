@@ -37,9 +37,9 @@ namespace zacc { namespace compute {
         template<typename Expr>
         void eval(Expr& expr)
         {
-            for(int i = 0; i < rows_v<Expr>; i++)
+            for(size_t i = 0; i < rows_v<Expr>; i++)
             {
-                for(int j = 0; j < cols_v<Expr>; j++)
+                for(size_t j = 0; j < cols_v<Expr>; j++)
                 {
                     expr(i, j);
                 }
@@ -49,9 +49,9 @@ namespace zacc { namespace compute {
         template<typename Expr>
         void eval(Expr const& expr) const
         {
-            for(int i = 0; i < rows_v<Expr>; i++)
+            for(size_t i = 0; i < rows_v<Expr>; i++)
             {
-                for(int j = 0; j < cols_v<Expr>; j++)
+                for(size_t j = 0; j < cols_v<Expr>; j++)
                 {
                     expr(i, j);
                 }

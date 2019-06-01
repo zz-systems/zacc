@@ -89,7 +89,7 @@ namespace zacc { namespace compute {
         {
             auto result = left(i, 0) * right(0, k);
 
-            for(int j = 1; j < rows_v<RExpr>; j++)
+            for(size_t j = 1; j < rows_v<RExpr>; j++)
             {
                 result += left(i, j) * right(j, k);
             }
@@ -120,7 +120,7 @@ namespace zacc { namespace compute {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
         {
-            return 0;
+            return left / right;
         }
     };
 

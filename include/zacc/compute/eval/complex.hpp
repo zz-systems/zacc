@@ -24,6 +24,30 @@
 
 #pragma once
 
+#include <zacc/compute/eval/evaluator.hpp>
+
 namespace zacc { namespace compute {
 
+    // =================================================================================================================
+
+    struct complex_evaluator : evaluator<complex_evaluator>
+    {
+        using evaluator<complex_evaluator>::operator<<;
+
+        template<typename Expr>
+        void eval(Expr& expr)
+        {
+            expr(std::integral_constant<size_t, 0>{});
+            expr(std::integral_constant<size_t, 1>{});
+        }
+
+        template<typename Expr>
+        void eval(Expr const& expr) const
+        {
+            expr(std::integral_constant<size_t, 0>{});
+            expr(std::integral_constant<size_t, 1>{});
+        }
+    };
+
+    // =================================================================================================================
 }}

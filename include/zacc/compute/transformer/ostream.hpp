@@ -54,4 +54,24 @@ namespace zacc { namespace compute {
 
     // =================================================================================================================
 
+//    template<typename Expr>
+//    std::enable_if_t<is_complex_expr<Expr>::value, std::ostream>&
+//    operator<<(std::ostream& os, const Expr& expr)
+//    {
+//        auto p = expr_traits<Expr>::leaf_t::eval_type::current() << [&os](auto item)
+//        {
+//            os << item << " ";
+//            return item;
+//        } << expr;
+//
+//        os << "[ ";
+//
+//        p();
+//
+//        os << "]";
+//        return os;
+//    }
+
+    // =================================================================================================================
+
 }}

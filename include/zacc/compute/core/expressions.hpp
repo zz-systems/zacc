@@ -104,6 +104,20 @@ namespace zacc { namespace compute {
         {
             return apply_t<Op, Expr...>::apply(expr..., std::forward<Args>(args)...);
         }
+
+        template<size_t... Vs>
+        decltype(apply_t<Op, Expr...>::apply(std::declval<Expr>()..., std::integral_constant<size_t, Vs>{}...))
+        static apply(Expr const&... expr, std::integral_constant<size_t, Vs>&&...)
+        {
+            return apply_t<Op, Expr...>::apply(expr..., std::integral_constant<size_t, Vs>{}...);
+        }
+
+        template<size_t... Vs>
+        decltype(apply_t<Op, Expr...>::apply(std::declval<Expr>()(Vs...)...))
+        static apply(Expr const&... expr, std::integral_constant<size_t, Vs>&&...)
+        {
+            return apply_t<Op, Expr...>::apply(expr(Vs...)...);
+        }
     };
 
     // =================================================================================================================

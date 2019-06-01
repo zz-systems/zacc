@@ -29,6 +29,7 @@
 #include <zacc/compute/expressions.hpp>
 #include <zacc/compute/impl/default.hpp>
 #include <zacc/compute/impl/matrix2d.hpp>
+#include <zacc/compute/impl/complex.hpp>
 
 #include <functional>
 
@@ -259,6 +260,34 @@ int main(int argc, char** argv)
         std::cout << (b.transpose() * a) << std::endl;
         std::cout << (b.transpose() * b) << std::endl;
         std::cout << (b * b.transpose()) << std::endl;
+
+
+        std::cout << scope << std::endl;
+    }
+
+    {
+        std::cout << "cout << complex" << std::endl << std::endl;
+
+        scope<recorder> scope;
+
+        complex<float> a{{1, 0}};
+        complex<float> b{{1, 1}};
+        complex<float> c{{2, 4}};
+
+        std::cout << (a + 2) << std::endl;
+        std::cout << (a - 2) << std::endl;
+        std::cout << (a * 2) << std::endl;
+        std::cout << (a / 2) << std::endl;
+
+        std::cout << (2 + b) << std::endl;
+        std::cout << (2 - b) << std::endl;
+        std::cout << (2 * b) << std::endl;
+        std::cout << (2 / b) << std::endl;
+
+        std::cout << (a + b) << std::endl;
+        std::cout << (a - b) << std::endl;
+        std::cout << (a * b) << std::endl;
+        std::cout << (a / b) << std::endl;
 
 
         std::cout << scope << std::endl;
