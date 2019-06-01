@@ -26,6 +26,7 @@
 #pragma once
 
 #include <zacc/compute/core/core.hpp>
+#include <zacc/util/type/typeid.hpp>
 
 #include <sstream>
 

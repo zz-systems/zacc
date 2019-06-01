@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <zacc/compute/core/operators.hpp>
+#include <zacc/compute/core/defs.hpp>
 
 namespace zacc { namespace compute {
 
@@ -33,7 +33,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename Expr>
-    struct identity_impl<Expr, std::enable_if_t<is_scalar_expr_v<Expr>>>
+    struct identity_impl<Expr, std::enable_if_t<expr_traits<Expr>::expr_tag == expr_tag::scalar>>
     {
         template<typename Arg>
         static auto apply(Arg arg)
@@ -44,9 +44,8 @@ namespace zacc { namespace compute {
 
     // =================================================================================================================
 
-
     template<typename LExpr, typename RExpr>
-    struct plus_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct plus_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar && expr_traits<RExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -58,7 +57,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename Expr>
-    struct promote_impl<Expr, std::enable_if_t<is_scalar_expr_v<Expr>>>
+    struct promote_impl<Expr, std::enable_if_t<expr_traits<Expr>::expr_tag == expr_tag::scalar>>
     {
         template<typename Arg>
         static auto apply(Arg arg)
@@ -70,8 +69,11 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct minus_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct minus_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar && expr_traits<RExpr>::expr_tag == expr_tag::scalar>>
     {
+        static_assert(expr_traits<LExpr>::expr_tag == expr_tag::scalar, "LExpr");
+        static_assert(expr_traits<RExpr>::expr_tag == expr_tag::scalar, "RExpr");
+
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
         {
@@ -82,8 +84,11 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct multiplies_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct multiplies_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar && expr_traits<RExpr>::expr_tag == expr_tag::scalar>>
     {
+        static_assert(expr_traits<LExpr>::expr_tag == expr_tag::scalar, "LExpr");
+        static_assert(expr_traits<RExpr>::expr_tag == expr_tag::scalar, "RExpr");
+
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
         {
@@ -94,7 +99,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct divides_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct divides_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -106,7 +111,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct modulus_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct modulus_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -118,7 +123,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename Expr>
-    struct negate_impl<Expr, std::enable_if_t<is_scalar_expr_v<Expr>>>
+    struct negate_impl<Expr, std::enable_if_t<expr_traits<Expr>::expr_tag == expr_tag::scalar>>
     {
         template<typename Arg>
         static auto apply(Arg arg)
@@ -130,8 +135,12 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename AExpr, typename BExpr, typename CExpr>
-    struct fmadd_impl<AExpr, BExpr, CExpr, std::enable_if_t<is_scalar_expr_v<AExpr>>>
+    struct fmadd_impl<AExpr, BExpr, CExpr, std::enable_if_t<expr_traits<AExpr>::expr_tag == expr_tag::scalar>>
     {
+        static_assert(expr_traits<AExpr>::expr_tag == expr_tag::scalar, "AExpr");
+//        static_assert(expr_traits<BExpr>::expr_tag == expr_tag::scalar, "BExpr");
+//        static_assert(expr_traits<CExpr>::expr_tag == expr_tag::scalar, "CExpr");
+
         template<typename AArg, typename BArg, typename CArg>
         static auto apply(AArg a, BArg b, CArg c)
         {
@@ -144,7 +153,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct equal_to_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct equal_to_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -156,7 +165,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct not_equal_to_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct not_equal_to_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -168,7 +177,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct greater_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct greater_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -180,7 +189,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct less_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct less_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -192,7 +201,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct greater_equal_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct greater_equal_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -204,7 +213,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct less_equal_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct less_equal_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -218,7 +227,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct logical_and_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct logical_and_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -230,7 +239,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct logical_or_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct logical_or_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -242,7 +251,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename Expr>
-    struct logical_not_impl<Expr, std::enable_if_t<is_scalar_expr_v<Expr>>>
+    struct logical_not_impl<Expr, std::enable_if_t<expr_traits<Expr>::expr_tag == expr_tag::scalar>>
     {
         template<typename Arg>
         static auto apply(Arg arg)
@@ -256,7 +265,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct bit_and_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct bit_and_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -268,7 +277,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct bit_or_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct bit_or_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -280,7 +289,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct bit_xor_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct bit_xor_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -292,7 +301,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct bit_shl_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct bit_shl_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -304,7 +313,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct bit_shr_impl<LExpr, RExpr, std::enable_if_t<is_scalar_expr_v<LExpr>>>
+    struct bit_shr_impl<LExpr, RExpr, std::enable_if_t<expr_traits<LExpr>::expr_tag == expr_tag::scalar>>
     {
         template<typename LArg, typename RArg>
         static auto apply(LArg left, RArg right)
@@ -316,7 +325,7 @@ namespace zacc { namespace compute {
     // =================================================================================================================
 
     template<typename Expr>
-    struct bit_not_impl<Expr, std::enable_if_t<is_scalar_expr_v<Expr>>>
+    struct bit_not_impl<Expr, std::enable_if_t<expr_traits<Expr>::expr_tag == expr_tag::scalar>>
     {
         template<typename Arg>
         static auto apply(Arg arg)

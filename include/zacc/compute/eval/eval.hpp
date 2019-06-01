@@ -25,5 +25,5 @@
 #pragma once
 
 #include <zacc/compute/eval/batch.hpp>
-#include <zacc/compute/eval/matrix.hpp>
+#include <zacc/compute/eval/matrix2d.hpp>
 #include <zacc/compute/eval/complex.hpp>

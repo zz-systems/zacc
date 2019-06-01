@@ -63,8 +63,8 @@ namespace zacc { namespace compute {
             return scope;
         }
 
-        template<typename T, typename Right>
-        generator operator()(const assign_expr<T, Right>& e, generator right)
+        template<typename T, typename Expr>
+        generator operator()(const assign_expr<T, Expr>& e, generator right)
         {
             generator scope;
 
@@ -73,22 +73,22 @@ namespace zacc { namespace compute {
             return scope;
         }
 
-        template<typename UnOp, typename Right>
-        generator operator()(const un_expr<UnOp, Right>&, generator right)
+        template<typename UnOp, typename Expr>
+        generator operator()(const un_expr<UnOp, Expr>&, generator right)
         {
             generator scope;
 
-            scope << name_of<UnOp> << right;
+            scope << name_of<apply_t<UnOp, Expr>> << right;
 
             return scope;
         }
 
-        template<typename BinOp, typename Left, typename Right>
-        generator operator()(const bin_expr<BinOp, Left, Right>&, generator left, generator right)
+        template<typename BinOp, typename LExpr, typename RExpr>
+        generator operator()(const bin_expr<BinOp, LExpr, RExpr>&, generator left, generator right)
         {
             generator scope;
 
-            scope << left << " " << name_of<BinOp> << " " << right;
+            scope << left << " " << name_of<apply_t<BinOp, LExpr, RExpr>> << " " << right;
 
             return scope;
         }
@@ -98,7 +98,7 @@ namespace zacc { namespace compute {
         {
             generator scope;
 
-            scope << name_of<TriOp> << "(" << a << ", " << b << ", " << c << ")";
+            scope << name_of<apply_t<TriOp, AExpr, BExpr, CExpr>> << "(" << a << ", " << b << ", " << c << ")";
 
             return scope;
         }
@@ -108,7 +108,7 @@ namespace zacc { namespace compute {
         {
             generator scope;
 
-            scope << name_of<FuncOp> << "(" << a << ", " << b << ", " << c << ")";
+            scope << name_of<apply_t<FuncOp, AExpr, BExpr, CExpr>> << "(" << a << ", " << b << ", " << c << ")";
 
             return scope;
         }

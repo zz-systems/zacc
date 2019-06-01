@@ -24,8 +24,6 @@
 
 #pragma once
 
-#include <zacc/system/feature.hpp>
-#include <zacc/util/type/typeid.hpp>
 #include <zacc/compute/core/core.hpp>
 #include <zacc/compute/transformer/transformer.hpp>
 #include <zacc/compute/recorder/recorder.hpp>
@@ -43,6 +41,7 @@ namespace zacc { namespace compute {
     struct batch : term<batch<T, Size>>
     {
         using value_type = T;
+        using eval_type = batch_evaluator;
 
         constexpr static size_t size = Size;
         constexpr static uint64_t mask = 0;
@@ -64,7 +63,7 @@ namespace zacc { namespace compute {
         }
 
         constexpr batch(batch const&) = default;
-        constexpr batch(batch&&) = default;
+        constexpr batch(batch&&) noexcept = default;
         constexpr batch& operator=(batch const&) = delete;
         constexpr batch& operator=(batch&&) = delete;
 
@@ -82,7 +81,7 @@ namespace zacc { namespace compute {
             auto e = assign_expr<batch, Expr>(*this, expr);
 
             recorder::current() << d << e;
-            batch_evaluator::current() << d << e;
+            batch_evaluator::current() << e;
         }
 
         template<typename Expr>
@@ -102,4 +101,12 @@ namespace zacc { namespace compute {
 
     // =================================================================================================================
 
+
+    // =================================================================================================================
+
+    static_assert(expr_traits<batch<int, 2>>::size == 2, "Size is not 2");
+    static_assert(expr_traits<batch<int, 2>>::mask == 0, "Mask is not 0");
+    static_assert(expr_traits<batch<int, 2>>::expr_tag == expr_tag::scalar, "Tag is not 'scalar'");
+
+    // =================================================================================================================
 }}

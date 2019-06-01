@@ -24,47 +24,20 @@
 
 #pragma once
 
-#include <zacc/compute/core/expressions.hpp>
-#include <zacc/compute/core/pipe.hpp>
+#include <zacc/compute/eval/evaluator.hpp>
 
 namespace zacc { namespace compute {
 
     // =================================================================================================================
 
-    struct batch_evaluator : expr<batch_evaluator>
+    struct batch_evaluator : evaluator<batch_evaluator>
     {
-        template<typename Func>
-        pipe<batch_evaluator, Func> operator<<(Func const& func) const
-        {
-            return pipe<batch_evaluator, Func>(*this, func);
-        }
-
-        template<typename Target>
-        pipe<batch_evaluator, declare_expr<Target>> operator<<(declare_expr<Target> const& expr) const
-        {
-            return { *this, expr };
-        }
-
-        template<typename Target, typename Expr>
-        batch_evaluator const& operator<<(assign_expr<Target, Expr> const& expr) const
-        {
-            eval(expr);
-
-            return *this;
-        }
-
-        template<typename Target, typename Expr>
-        batch_evaluator& operator<<(assign_expr<Target, Expr>& expr)
-        {
-            eval(expr);
-
-            return *this;
-        }
+        using evaluator<batch_evaluator>::operator<<;
 
         template<typename Expr>
         void eval(Expr& expr)
         {
-            for(size_t i = 0; i < 2; ++i)
+            for(size_t i = 0; i < expr_traits<Expr>::size; ++i)
             {
                 expr(i);
             };
@@ -73,16 +46,10 @@ namespace zacc { namespace compute {
         template<typename Expr>
         void eval(Expr const& expr) const
         {
-            for(size_t i = 0; i < 2; ++i)
+            for(size_t i = 0; i < expr_traits<Expr>::size; ++i)
             {
                 expr(i);
             };
-        }
-
-        static batch_evaluator& current() {
-            static batch_evaluator instance;
-
-            return instance;
         }
     };
 

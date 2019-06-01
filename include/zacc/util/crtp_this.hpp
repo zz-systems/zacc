@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
 //
-// Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
+// Copyright (c) 2015-2019 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,25 @@
 
 #pragma once
 
-#include <zacc/compute/expression.hpp>
+namespace zacc
+{
 
-namespace zacc { namespace expressions {
+    // =================================================================================================================
 
+    template<typename Impl>
+    struct crtp_this
+    {
+        constexpr Impl* self()
+        {
+            return static_cast<Impl*>(this);
+        }
 
-        
+        constexpr Impl const* self() const
+        {
+            return static_cast<const Impl*>(this);
+        }
+    };
 
-}}
+    // =================================================================================================================
+
+}

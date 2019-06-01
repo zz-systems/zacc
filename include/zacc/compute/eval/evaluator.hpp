@@ -1,8 +1,7 @@
-
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
 //
-// Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
+// Copyright (c) 2015-2019 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -23,51 +22,67 @@
 // SOFTWARE.
 //---------------------------------------------------------------------------------
 
-
 #pragma once
 
 #include <zacc/compute/core/expressions.hpp>
+#include <zacc/compute/core/pipe.hpp>
+#include <zacc/util/crtp_this.hpp>
 
 namespace zacc { namespace compute {
 
     // =================================================================================================================
 
-    template <typename T>
-    struct expr;
-
-    template<typename Left, typename Right, typename SizeProxy = void>
-    struct pipe : expr<pipe<Left, Right, SizeProxy>>
+    template<typename Impl>
+    struct evaluator : expr<evaluator<Impl>>, crtp_this<Impl>
     {
-        Left _left;
-        Right _right;
+        using crtp_this<Impl>::self;
 
-        pipe(Left const& left, Right const& right)
-            : _left(left), _right(right)
-        {}
-
-        auto eval() const
+        template<typename Func>
+        pipe<Impl, Func> operator<<(Func const& func) const
         {
-            return _left(_right);
+            return pipe<Impl, Func>(*self(), func);
+        }
+
+        template<typename Target>
+        pipe<Impl, declare_expr<Target>> operator<<(declare_expr<Target> const& expr) const
+        {
+            return { *self(), expr };
+        }
+
+        template<typename Target, typename Expr>
+        Impl const& operator<<(assign_expr<Target, Expr> const& expr) const
+        {
+            eval(expr);
+
+            return *self();
+        }
+
+        template<typename Target, typename Expr>
+        Impl& operator<<(assign_expr<Target, Expr>& expr)
+        {
+            eval(expr);
+
+            return *self();
+        }
+
+        template<typename... Args>
+        auto eval(Args&& ...args)
+        {
+            return self()->eval(std::forward<Args>(args)...);
         }
 
         template<typename... Args>
         auto eval(Args&& ...args) const
         {
-            return _left(_right(std::forward<Args>(args)...));
+            return self()->eval(std::forward<Args>(args)...);
         }
 
-        constexpr static Tokens type()
-        {
-            return Tokens::PipeExpr;
+        static Impl& current() {
+            static Impl instance;
+
+            return instance;
         }
     };
-
-    template<typename Left, typename Right>
-    std::enable_if_t<is_pipe_expr<Left>, pipe<decltype(Left::_left), pipe<decltype(Left::_right), Right>>>
-    operator<<(Left const& left, Right const& right)
-    {
-        return { left._left, {left._right, right} };
-    }
 
     // =================================================================================================================
 

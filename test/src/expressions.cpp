@@ -27,6 +27,8 @@
 
 #include <zacc/system/arch.hpp>
 #include <zacc/compute/expressions.hpp>
+#include <zacc/compute/impl/default.hpp>
+#include <zacc/compute/impl/matrix2d.hpp>
 
 #include <functional>
 
@@ -193,6 +195,70 @@ int main(int argc, char** argv)
 
         std::cout << (basic = a * a + b * b) << std::endl;
         std::cout << (basic = a * (a + b) * b) << std::endl;
+
+
+        std::cout << scope << std::endl;
+    }
+
+    {
+        std::cout << "cout << matrix / matrix" << std::endl << std::endl;
+
+        scope<recorder> scope;
+
+        mat<int, 2, 2> a{{1, 2, 3, 4}};
+        mat<int, 2, 2> b{{2, 4, 5, 6}};
+
+        mat<int, 2, 2> basic;
+
+        std::cout << (basic = a + b) << std::endl;
+        std::cout << (basic = b + a) << std::endl;
+
+        std::cout << (basic = a - b) << std::endl;
+        std::cout << (basic = b - a) << std::endl;
+
+        std::cout << (basic = -a) << std::endl;
+        std::cout << (basic = -b) << std::endl;
+
+        std::cout << (basic = -(-a)) << std::endl;
+        std::cout << (basic = -(-b)) << std::endl;
+
+        std::cout << (basic = +a) << std::endl;
+        std::cout << (basic = +b) << std::endl;
+
+        std::cout << scope << std::endl;
+    }
+
+    {
+        std::cout << "cout << matrix / vector" << std::endl << std::endl;
+
+        scope<recorder> scope;
+
+        mat<int, 2, 2> a{{1, 2, 3, 4}};
+        mat<int, 2, 1> b{{2, 4}};
+
+        std::cout << (a + 1) << std::endl;
+        std::cout << (a + 2) << std::endl;
+        std::cout << (a + 4) << std::endl;
+
+        std::cout << (a - 1) << std::endl;
+        std::cout << (a - 2) << std::endl;
+        std::cout << (a - 4) << std::endl;
+
+        std::cout << (a * 1) << std::endl;
+        std::cout << (a * 2) << std::endl;
+        std::cout << (a * 4) << std::endl;
+
+        std::cout << (a / 1) << std::endl;
+        std::cout << (a / 2) << std::endl;
+        std::cout << (a / 4) << std::endl;
+
+        std::cout << (a + a) << std::endl;
+        std::cout << (a - a) << std::endl;
+        std::cout << (a * b) << std::endl;
+
+        std::cout << (b.transpose() * a) << std::endl;
+        std::cout << (b.transpose() * b) << std::endl;
+        std::cout << (b * b.transpose()) << std::endl;
 
 
         std::cout << scope << std::endl;

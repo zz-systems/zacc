@@ -25,7 +25,9 @@
 #pragma once
 
 #include <zacc/compute/core/traits.hpp>
+#include <zacc/compute/core/defs.hpp>
 #include <zacc/util/string_view.hpp>
+#include <zacc/compute/impl/default.hpp>
 
 namespace zacc {namespace compute {
 
@@ -33,95 +35,66 @@ namespace zacc {namespace compute {
     // ARITHMETIC
     // =================================================================================================================
 
-    template<typename Expr, typename Enable = void>
-    struct identity_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct plus_impl;
-
-    template<typename Expr, typename Enable = void>
-    struct promote_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct minus_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct multiplies_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct divides_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct modulus_impl;
-
-    template<typename Expr, typename Enable = void>
-    struct negate_impl;
-
-    template<typename AExpr, typename BExpr, typename CExpr, typename Enable = void>
-    struct fmadd_impl;
-
-    // =================================================================================================================
-
     template<typename Expr>
-    struct identity : un_expr<identity_impl<Expr>, Expr>
+    struct identity : un_expr<quote<identity_impl>, Expr>
     {
-        using un_expr<identity_impl<Expr>, Expr>::un_expr;
+        using un_expr<quote<identity_impl>, Expr>::un_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct plus : bin_expr<plus_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct plus : bin_expr<quote<plus_impl>, LExpr, RExpr>
     {
-        using bin_expr<plus_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<plus_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename Expr>
-    struct promote : un_expr<promote_impl<Expr>, Expr>
+    struct promote : un_expr<quote<promote_impl>, Expr>
     {
-        using un_expr<promote_impl<Expr>, Expr>::un_expr;
+        using un_expr<quote<promote_impl>, Expr>::un_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct minus : bin_expr<minus_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct minus : bin_expr<quote<minus_impl>, LExpr, RExpr>
     {
-        using bin_expr<minus_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<minus_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct multiplies : bin_expr<multiplies_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct multiplies : bin_expr<quote<multiplies_impl>, LExpr, RExpr>
     {
-        using bin_expr<multiplies_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<multiplies_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct divides : bin_expr<divides_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct divides : bin_expr<quote<divides_impl>, LExpr, RExpr>
     {
-        using bin_expr<divides_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<divides_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct modulus : bin_expr<modulus_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct modulus : bin_expr<quote<modulus_impl>, LExpr, RExpr>
     {
-        using bin_expr<modulus_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<modulus_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename Expr>
-    struct negate : un_expr<negate_impl<Expr>, Expr>
+    struct negate : un_expr<quote<negate_impl>, Expr>
     {
-        using un_expr<negate_impl<Expr>, Expr>::un_expr;
+        using un_expr<quote<negate_impl>, Expr>::un_expr;
     };
 
     // =================================================================================================================
@@ -136,9 +109,9 @@ namespace zacc {namespace compute {
      * is then evaluated.
      */
     template<typename AExpr, typename BExpr, typename CExpr>
-    struct fmadd : func_expr<fmadd_impl<AExpr, BExpr, CExpr>, AExpr, BExpr, CExpr>
+    struct fmadd : func_expr<quote<fmadd_impl>, AExpr, BExpr, CExpr>
     {
-        using func_expr<fmadd_impl<AExpr, BExpr, CExpr>, AExpr, BExpr, CExpr>::func_expr;
+        using func_expr<quote<fmadd_impl>, AExpr, BExpr, CExpr>::func_expr;
     };
 
     // =================================================================================================================
@@ -208,70 +181,50 @@ namespace zacc {namespace compute {
     // COMPARISON
     // =================================================================================================================
 
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct equal_to_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct not_equal_to_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct greater_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct less_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct greater_equal_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct less_equal_impl;
-
-    // =================================================================================================================
-
     template<typename LExpr, typename RExpr>
-    struct equal_to : bin_expr<equal_to_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct equal_to : bin_expr<quote<equal_to_impl>, LExpr, RExpr>
     {
-        using bin_expr<equal_to_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<equal_to_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct not_equal_to : bin_expr<not_equal_to_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct not_equal_to : bin_expr<quote<not_equal_to_impl>, LExpr, RExpr>
     {
-        using bin_expr<not_equal_to_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<not_equal_to_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct greater : bin_expr<greater_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct greater : bin_expr<quote<greater_impl>, LExpr, RExpr>
     {
-        using bin_expr<greater_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<greater_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct less : bin_expr<less_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct less : bin_expr<quote<less_impl>, LExpr, RExpr>
     {
-        using bin_expr<less_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<less_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct greater_equal : bin_expr<greater_equal_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct greater_equal : bin_expr<quote<greater_equal_impl>, LExpr, RExpr>
     {
-        using bin_expr<greater_equal_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<greater_equal_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct less_equal : bin_expr<less_equal_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct less_equal : bin_expr<quote<less_equal_impl>, LExpr, RExpr>
     {
-        using bin_expr<less_equal_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<less_equal_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
@@ -332,37 +285,26 @@ namespace zacc {namespace compute {
     // BOOLEAN
     // =================================================================================================================
 
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct logical_and_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct logical_or_impl;
-
-    template<typename Expr, typename Enable = void>
-    struct logical_not_impl;
-
-    // =================================================================================================================
-
     template<typename LExpr, typename RExpr>
-    struct logical_and : bin_expr<logical_and_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct logical_and : bin_expr<quote<logical_and_impl>, LExpr, RExpr>
     {
-        using bin_expr<logical_and_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<logical_and_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct logical_or : bin_expr<logical_or_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct logical_or : bin_expr<quote<logical_or_impl>, LExpr, RExpr>
     {
-        using bin_expr<logical_or_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<logical_or_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename Expr>
-    struct logical_not : un_expr<logical_not_impl<Expr>, Expr>
+    struct logical_not : un_expr<quote<logical_not_impl>, Expr>
     {
-        using un_expr<logical_not_impl<Expr>, Expr>::un_expr;
+        using un_expr<quote<logical_not_impl>, Expr>::un_expr;
     };
 
     // =================================================================================================================
@@ -396,70 +338,50 @@ namespace zacc {namespace compute {
     // BITWISE
     // =================================================================================================================
 
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct bit_and_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct bit_or_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct bit_xor_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct bit_shl_impl;
-
-    template<typename LExpr, typename RExpr, typename Enable = void>
-    struct bit_shr_impl;
-
-    template<typename Expr, typename Enable = void>
-    struct bit_not_impl;
-
-    // =================================================================================================================
-
     template<typename LExpr, typename RExpr>
-    struct bit_and : bin_expr<bit_and_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct bit_and : bin_expr<quote<bit_and_impl>, LExpr, RExpr>
     {
-        using bin_expr<bit_and_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<bit_and_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct bit_or : bin_expr<bit_or_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct bit_or : bin_expr<quote<bit_or_impl>, LExpr, RExpr>
     {
-        using bin_expr<bit_or_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<bit_or_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct bit_xor : bin_expr<bit_xor_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct bit_xor : bin_expr<quote<bit_xor_impl>, LExpr, RExpr>
     {
-        using bin_expr<bit_xor_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<bit_xor_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct bit_shl : bin_expr<bit_shl_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct bit_shl : bin_expr<quote<bit_shl_impl>, LExpr, RExpr>
     {
-        using bin_expr<bit_shl_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<bit_shl_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename LExpr, typename RExpr>
-    struct bit_shr : bin_expr<bit_shr_impl<LExpr, RExpr>, LExpr, RExpr>
+    struct bit_shr : bin_expr<quote<bit_shr_impl>, LExpr, RExpr>
     {
-        using bin_expr<bit_shr_impl<LExpr, RExpr>, LExpr, RExpr>::bin_expr;
+        using bin_expr<quote<bit_shr_impl>, LExpr, RExpr>::bin_expr;
     };
 
     // =================================================================================================================
 
     template<typename Expr>
-    struct bit_not : un_expr<bit_not_impl<Expr>, Expr>
+    struct bit_not : un_expr<quote<bit_not_impl>, Expr>
     {
-        using un_expr<bit_not_impl<Expr>, Expr>::un_expr;
+        using un_expr<quote<bit_not_impl>, Expr>::un_expr;
     };
 
     // =================================================================================================================

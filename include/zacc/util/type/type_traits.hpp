@@ -214,6 +214,57 @@ namespace zacc {
             when<sizeof(T) == 4, uint32_t>,
             when<sizeof(T) == 2, uint16_t>,
             when<sizeof(T) == 1, uint8_t>>;
+
+    template<typename T> struct tag
+    {
+        using type = T;
+    };
+
+    template<typename Tag>
+    using type_t = typename Tag::type;
+
+    template<template<class...> class>
+    struct quote {};
+
+    //template<template<class...> class A, template<class...> class B>
+    //struct promote<A<promote<B>> {};
+
+    template<typename T, typename... Ts>
+    struct apply {};
+
+    template<template<class...> class T, typename... Ts>
+    struct apply<quote<T>, Ts...>
+        : tag<T<Ts...>>
+    {};
+
+    template<typename T, typename... Ts>
+    using apply_t = type_t<apply<T, Ts...>>;
+
+    template<typename N, typename n>
+    using promote_num = std::integral_constant<N, n {}>;
+    using promote_num_t = quote<promote_num>;
+
+    template<typename T, typename... Ts>
+    struct bind
+    {
+        template<typename... Tts>
+        using wrap_t = apply_t<T, Ts..., Tts...>;
+
+        using type = quote<wrap_t>;
+    };
+
+    template<typename T, typename... Ts>
+    using bind_t = type_t<bind<T, Ts...>>;
+    using promote_bind = quote<bind_t>;
+
+
+    template<typename...>
+    struct types { using type=types; };
+    using promote_types=quote<types>;
+
+    template<typename... Ts>
+    using prefix = apply_t< promote_bind, promote_types, Ts... >;
+    using promote_prefix = quote<prefix>;
 }
 
 namespace zacc
@@ -263,8 +314,6 @@ namespace zacc
 
     template<typename Rule, typename... Ts>
     constexpr bool any = __any<Rule, Ts...>::value;
-
-
 
 
     struct measurable

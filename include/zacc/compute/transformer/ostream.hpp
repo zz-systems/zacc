@@ -38,7 +38,7 @@ namespace zacc { namespace compute {
     std::enable_if_t<is_expr<Expr>::value, std::ostream>&
     operator<<(std::ostream& os, const Expr& expr)
     {
-        auto p = batch_evaluator::current() << [&os](auto item)
+        auto p = expr_traits<Expr>::leaf_t::eval_type::current() << [&os](auto item)
         {
             os << item << " ";
             return item;

@@ -118,39 +118,25 @@ namespace zacc { namespace math {
         /// @brief matrix
         template<typename T, size_t Rows, size_t Cols>
         struct alignas(alignof(T)) __mat
-            : compose<ops_meta<mat<T, Rows, Cols>, T, true>, plus, minus, multiplies, divides, modulus, increment, decrement>
-            //: compose_t<plus, minus, multiplies, divides, composable<mat<T, Rows, Cols>>::template type>
         {
-            static_assert(Rows * Cols > 0, "Wrong dimensions for a matrix");
+            static_assert(Rows * Cols > 0, "Invalid dimensions");
 
-            static constexpr size_t rows()     { return Rows; }
-            static constexpr size_t cols()     { return Cols; }
-            static constexpr size_t size()     { return Rows * Cols; }
+            static constexpr size_t rows = Rows;
+            static constexpr size_t cols = Cols;
+            static constexpr size_t size = Rows * Cols;
 
             /// data container
             std::array<T, Rows * Cols> data;
 
             // =============================================================================================================
 
-            constexpr __mat() noexcept
-                : data {}
-            {}
+            constexpr __mat() = default;
 
-            constexpr __mat(const __mat& other) noexcept
-                : data { other.data }
-            {}
+            constexpr __mat(const __mat& other) = default;
+            constexpr __mat& operator=(__mat const& other) = default;
 
-            constexpr __mat(__mat&& other) noexcept
-                : __mat()
-            {
-                swap(*this, other);
-            }
-
-            constexpr __mat& operator=(__mat other) noexcept
-            {
-                swap(*this, other);
-                return *this;
-            }
+            constexpr __mat(__mat&& other) = default;
+            constexpr __mat& operator=(__mat&& other) = default;
 
             // =============================================================================================================
 
@@ -265,7 +251,7 @@ namespace zacc { namespace math {
 
             constexpr T& at(size_t i) &
             {
-                if (i >= size())
+                if (i >= size)
                     throw std::out_of_range("mat::at");
 
                 return (*this)(i);
@@ -273,7 +259,7 @@ namespace zacc { namespace math {
 
             constexpr T&& at(size_t i) &&
             {
-                if (i >= size())
+                if (i >= size)
                     throw std::out_of_range("mat::at");
 
                 return std::move((*this)(i));
@@ -281,7 +267,7 @@ namespace zacc { namespace math {
 
             constexpr T const& at(size_t i) const&
             {
-                if (i >= size())
+                if (i >= size)
                     throw std::out_of_range("mat::at");
 
                 return (*this)(i);

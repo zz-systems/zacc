@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
 //
-// Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
+// Copyright (c) 2015-2019 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,41 @@
 
 #pragma once
 
-#include <zacc/compute/expression.hpp>
+#include <zacc/compute/eval/evaluator.hpp>
 
-namespace zacc { namespace expressions {
+namespace zacc { namespace compute {
 
+    // =================================================================================================================
+
+    struct matrix2d_evaluator : evaluator<matrix2d_evaluator>
+    {
+        using evaluator<matrix2d_evaluator>::operator<<;
+
+        template<typename Expr>
+        void eval(Expr& expr)
+        {
+            for(int i = 0; i < rows_v<Expr>; i++)
+            {
+                for(int j = 0; j < cols_v<Expr>; j++)
+                {
+                    expr(i, j);
+                }
+            }
+        }
+
+        template<typename Expr>
+        void eval(Expr const& expr) const
+        {
+            for(int i = 0; i < rows_v<Expr>; i++)
+            {
+                for(int j = 0; j < cols_v<Expr>; j++)
+                {
+                    expr(i, j);
+                }
+            }
+        }
+    };
+
+    // =================================================================================================================
 
 }}
