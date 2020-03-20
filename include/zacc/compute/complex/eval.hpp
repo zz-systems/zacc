@@ -24,44 +24,47 @@
 
 #pragma once
 
-#include <string>
+#include <zacc/algorithm/iterator.hpp>
 
-namespace zacc
-{
-    struct string_view {
-        const char* str;
-        size_t size;
+namespace zacc { namespace compute {
 
-        constexpr string_view() noexcept
-            : str {nullptr}, size {0}
-        {}
+    // =================================================================================================================
 
-        // can only construct from a char[] literal
-        template <std::size_t N>
-        constexpr string_view(const char (&s)[N]) noexcept
-            : str(s)
-            , size(N - 1) // not count the trailing nul
-        {}
+    template<template<typename...> class Visitor, typename Expression, typename... Args>
+    auto visit(Expression&& expression, Args&& ...args);
 
-        constexpr string_view(const char *s, size_t len) noexcept
-            : str(s)
-            , size(len - 1) // not count the trailing nul
-        {}
+    struct complex_evaluator
+    {};
 
-        operator std::string() const
+    template<typename Expression, typename>
+    struct execution_policy;
+
+    template<typename Expression>
+    struct execution_policy<Expression, std::enable_if_t<is_complex_v<Expression>>>
+    {
+        static std::size_t begin()
         {
-            return std::string(str, size);
+            return 0;
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const string_view& str)
+        static std::size_t end()
         {
-            os << str.str;
-            return os;
+            return extent<Expression, 0>::value;
+        }
+
+        static std::size_t step()
+        {
+            return 1;
+        }
+
+        static auto apply(Expression &expression, std::size_t index)
+        {
+            return visit<evaluator>(expression, index);
         }
     };
 
-    constexpr string_view operator "" sv(const char* str, size_t len) noexcept
-    {
-        return { str, len };
-    }
-}
+    // =================================================================================================================
+
+    // =================================================================================================================
+
+}}

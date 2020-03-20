@@ -24,44 +24,48 @@
 
 #pragma once
 
-#include <string>
+namespace zacc { namespace compute {
 
-namespace zacc
-{
-    struct string_view {
-        const char* str;
-        size_t size;
+    // =================================================================================================================
+    template<template<typename...> class Visitor, typename Expression, typename... Args>
+    auto visit(Expression&& expression, Args&& ...args);
 
-        constexpr string_view() noexcept
-            : str {nullptr}, size {0}
-        {}
+    template<typename Expression>
+    class evaluator;
 
-        // can only construct from a char[] literal
-        template <std::size_t N>
-        constexpr string_view(const char (&s)[N]) noexcept
-            : str(s)
-            , size(N - 1) // not count the trailing nul
-        {}
+    template<typename Expression, typename>
+    struct execution_policy;
 
-        constexpr string_view(const char *s, size_t len) noexcept
-            : str(s)
-            , size(len - 1) // not count the trailing nul
-        {}
-
-        operator std::string() const
+    template<typename Expression>
+    struct execution_policy<Expression, std::enable_if_t<is_matrix_v<Expression>, Expression>>
+    {
+        static std::size_t begin()
         {
-            return std::string(str, size);
+            return 0;
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const string_view& str)
+        static std::size_t end()
         {
-            os << str.str;
-            return os;
+            return extent_v<Expression, 0> * extent_v<Expression, 1>;
+        }
+
+        static std::size_t step()
+        {
+            return 1;
+        }
+
+        static auto apply(Expression &expression, std::size_t index)
+        {
+            return visit<evaluator>(expression, reshape_i_xy(index, extent_v<1, Expression>));
         }
     };
 
-    constexpr string_view operator "" sv(const char* str, size_t len) noexcept
-    {
-        return { str, len };
-    }
-}
+    // =================================================================================================================
+
+
+    // =================================================================================================================
+
+
+    // =================================================================================================================
+
+}}

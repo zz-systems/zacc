@@ -52,9 +52,40 @@ namespace zacc {
     using enable_if_not_same = std::enable_if_t<!std::is_same<One, Other>::value, One>;
 
 
+    template<typename...>
+    struct disjunction : std::false_type {};
+
+    template<typename Head>
+    struct disjunction<Head> : Head {};
+
+    template<typename Head, typename... Tail>
+    struct disjunction< Head, Tail...>
+        : std::conditional_t<bool(Head::value), Head, disjunction<Tail...>>
+    {};
+
+    template<typename... Ts>
+    constexpr bool disjunction_v = disjunction<Ts...>::value;
+
+    template<typename...>
+    struct conjunction : std::false_type {};
+
+    template<typename Head>
+    struct conjunction<Head> : Head {};
+
+    template<typename Head, typename... Tail>
+    struct conjunction< Head, Tail...>
+        : std::conditional_t<bool(Head::value), conjunction<Tail...>, Head>
+    {};
+
+    template<typename... Ts>
+    constexpr bool conjunction_v = disjunction<Ts...>::value;
+
     template<bool...> struct bool_pack;
+
     template<bool... bs>
     using all_true = std::is_same<bool_pack<bs..., true>, bool_pack<true, bs...>>;
+
+
 
     template<bool... bs>
     using all_false = std::is_same<bool_pack<bs..., false>, bool_pack<false, bs...>>;
@@ -225,6 +256,19 @@ namespace zacc {
 
     template<template<class...> class>
     struct quote {};
+
+    template<typename T>
+    struct unquote {};
+
+    template<template<class...> class T>
+    struct unquote<quote<T>>
+    {
+        template<typename... Ts>
+        using type = T<Ts...>;
+    };
+
+    template<typename T>
+    using unquote_t = typename unquote<T>::type;
 
     //template<template<class...> class A, template<class...> class B>
     //struct promote<A<promote<B>> {};

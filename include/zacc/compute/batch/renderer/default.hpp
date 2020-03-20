@@ -24,44 +24,68 @@
 
 #pragma once
 
-#include <string>
+#include <zacc/compute/compute.hpp>
 
-namespace zacc
-{
-    struct string_view {
-        const char* str;
-        size_t size;
+namespace zacc { namespace compute {
 
-        constexpr string_view() noexcept
-            : str {nullptr}, size {0}
-        {}
+    template<typename>
+    struct variable;
 
-        // can only construct from a char[] literal
-        template <std::size_t N>
-        constexpr string_view(const char (&s)[N]) noexcept
-            : str(s)
-            , size(N - 1) // not count the trailing nul
-        {}
+    template<typename, size_t>
+    struct batch;
 
-        constexpr string_view(const char *s, size_t len) noexcept
-            : str(s)
-            , size(len - 1) // not count the trailing nul
-        {}
+    template<typename>
+    struct literal;
 
-        operator std::string() const
+    template<typename T>
+    struct type;
+
+    template<typename T>
+    struct initializer;
+
+    class __renderer;
+
+    template<typename Expression>
+    class renderer;
+
+
+    template<typename T, size_t Size>
+    class renderer<type<batch<T, Size>>> : public __renderer
+    {
+        using __renderer::__renderer;
+    public:
+        void visit(type<batch<T, Size>>)
         {
-            return std::string(str, size);
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const string_view& str)
-        {
-            os << str.str;
-            return os;
+            _program << "batch<";
+            next(type<literal<T>>{});
+            _program << ", " << Size << ">";
         }
     };
 
-    constexpr string_view operator "" sv(const char* str, size_t len) noexcept
+    template<typename T, size_t Size>
+    class renderer<initializer<batch<T, Size>>> : public __renderer
     {
-        return { str, len };
-    }
-}
+        using __renderer::__renderer;
+    public:
+        void visit(initializer<batch<T, Size>> const& initializer)
+        {
+            _program << "{ ";
+            for(auto i : initializer.data)
+            {
+                _program << i << " ";
+            }
+            _program << "}";
+        }
+    };
+
+    template<typename T, size_t Size>
+    class renderer<batch<T, Size>> : public __renderer
+    {
+        using __renderer::__renderer;
+    public:
+        void visit(batch<T, Size> const& value)
+        {
+            _program << "b_" << _symbols[value.id()];
+        }
+    };
+}}

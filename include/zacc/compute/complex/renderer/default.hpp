@@ -24,44 +24,33 @@
 
 #pragma once
 
-#include <string>
+namespace zacc { namespace compute {
 
-namespace zacc
-{
-    struct string_view {
-        const char* str;
-        size_t size;
+    template<typename>
+    struct variable;
 
-        constexpr string_view() noexcept
-            : str {nullptr}, size {0}
-        {}
+    template<typename>
+    struct complex;
 
-        // can only construct from a char[] literal
-        template <std::size_t N>
-        constexpr string_view(const char (&s)[N]) noexcept
-            : str(s)
-            , size(N - 1) // not count the trailing nul
-        {}
+    template<typename>
+    struct literal;
 
-        constexpr string_view(const char *s, size_t len) noexcept
-            : str(s)
-            , size(len - 1) // not count the trailing nul
-        {}
+    class __renderer;
 
-        operator std::string() const
+    template<typename Expression>
+    class renderer;
+
+    template<typename T>
+    class renderer<complex<T>> : public __renderer
+    {
+        using __renderer::__renderer;
+    public:
+        template<typename Expression>
+        auto visit(Expression&&)
         {
-            return std::string(str, size);
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const string_view& str)
-        {
-            os << str.str;
-            return os;
+            return _program << "complex<"
+                            << visit(literal<T>(std::declval<T>()), renderer<literal<void>>(_program))
+                            << ">";
         }
     };
-
-    constexpr string_view operator "" sv(const char* str, size_t len) noexcept
-    {
-        return { str, len };
-    }
-}
+}}

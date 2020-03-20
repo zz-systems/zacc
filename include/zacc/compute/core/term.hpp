@@ -24,44 +24,44 @@
 
 #pragma once
 
-#include <string>
-
-namespace zacc
+namespace zacc::compute
 {
-    struct string_view {
-        const char* str;
-        size_t size;
+    template<typename Operator, typename... Ts>
+    auto make_expression(Ts&& ...args);
 
-        constexpr string_view() noexcept
-            : str {nullptr}, size {0}
-        {}
+    template<typename = void>
+    class term;
 
-        // can only construct from a char[] literal
-        template <std::size_t N>
-        constexpr string_view(const char (&s)[N]) noexcept
-            : str(s)
-            , size(N - 1) // not count the trailing nul
-        {}
+    template<>
+    class term<void>
+    {};
 
-        constexpr string_view(const char *s, size_t len) noexcept
-            : str(s)
-            , size(len - 1) // not count the trailing nul
-        {}
+    template<typename Expression>
+    class term
+        : public term<>
+    {
+        using expression_type = std::decay_t<Expression>;
+    public:
 
-        operator std::string() const
+        auto cast() const { return *const_cast<expression_type*>(static_cast<const expression_type*>(this)); }
+        auto cast() { return *const_cast<expression_type*>(static_cast<const expression_type*>(this)); }
+
+        template<typename L, typename R>
+        auto friend operator+(L&& l, R&& r)
         {
-            return std::string(str, size);
+            return make_expression<add_op<>>(std::forward<L>(l), std::forward<R>(r));
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const string_view& str)
+        template<typename L, typename R>
+        auto friend operator-(L&& l, R&& r)
         {
-            os << str.str;
-            return os;
+            return make_expression<sub_op<>>(std::forward<L>(l), std::forward<R>(r));
+        }
+
+        template<typename L, typename R>
+        auto friend operator*(L&& l, R&& r)
+        {
+            return make_expression<mul_op<>>(std::forward<L>(l), std::forward<R>(r));
         }
     };
-
-    constexpr string_view operator "" sv(const char* str, size_t len) noexcept
-    {
-        return { str, len };
-    }
 }

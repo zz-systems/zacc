@@ -24,44 +24,22 @@
 
 #pragma once
 
-#include <string>
-
-namespace zacc
-{
-    struct string_view {
-        const char* str;
-        size_t size;
-
-        constexpr string_view() noexcept
-            : str {nullptr}, size {0}
-        {}
-
-        // can only construct from a char[] literal
-        template <std::size_t N>
-        constexpr string_view(const char (&s)[N]) noexcept
-            : str(s)
-            , size(N - 1) // not count the trailing nul
-        {}
-
-        constexpr string_view(const char *s, size_t len) noexcept
-            : str(s)
-            , size(len - 1) // not count the trailing nul
-        {}
-
-        operator std::string() const
-        {
-            return std::string(str, size);
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const string_view& str)
-        {
-            os << str.str;
-            return os;
-        }
-    };
-
-    constexpr string_view operator "" sv(const char* str, size_t len) noexcept
+namespace zacc {
+    template<typename T>
+    constexpr auto max(T&& a)
     {
-        return { str, len };
+        return a;
+    }
+
+    template<typename T, typename U>
+    constexpr auto max(T&& a, U&& b)
+    {
+        return (a < b) ? b : a;
+    }
+
+    template<typename T, typename... Ts>
+    constexpr auto max(T&& a, Ts&& ...args)
+    {
+        return max(std::forward<T>(a), max(std::forward<Ts>(args)...));
     }
 }

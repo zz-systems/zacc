@@ -38,16 +38,16 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
         set( gtest_force_shared_crt ON CACHE BOOL "Always use msvcrt.dll" FORCE)
 
         if(CMAKE_GENERATOR MATCHES "Visual Studio")
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++14 /GX /wd4996")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17 /GX /wd4996")
         else()
-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -std=c++14 -Xclang -Wno-missing-braces -Xclang -Wmissing-field-initializers -Xclang -Wno-deprecated-declarations")#	-Xclang -fsanitize=alignment")
+            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Xclang -std=c++17 -Xclang -Wno-missing-braces -Xclang -Wmissing-field-initializers -Xclang -Wno-deprecated-declarations")#	-Xclang -fsanitize=alignment")
         endif()
 
         add_definitions(-DNOMINMAX -D_USE_MATH_DEFINES)
     else()
         message("Using clang")
 
-        set(CMAKE_CXX_STANDARD 14)
+        set(CMAKE_CXX_STANDARD 17)
         set(CMAKE_CXX_STANDARD_REQUIRED on)
         set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -81,7 +81,7 @@ if (CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
     message("Using GCC")
 
-    set(CMAKE_CXX_STANDARD 14)
+    set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED on)
     set(CMAKE_CXX_EXTENSIONS ON)
 
@@ -90,19 +90,20 @@ elseif (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "Intel")
     message("Using Intel C++")
 
-    set(CMAKE_CXX_STANDARD 14)
+    set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED on)
     set(CMAKE_CXX_EXTENSIONS ON)
 elseif (CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     message("Using Visual Studio C++")
 
-    set(CMAKE_CXX_STANDARD 14)
+    set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_STANDARD_REQUIRED on)
     set(CMAKE_CXX_EXTENSIONS ON)
 
 
     add_definitions(-DNOMINMAX -D_USE_MATH_DEFINES)
 endif()
+
 
 # config ===============================================================================================================
 

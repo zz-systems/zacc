@@ -24,420 +24,172 @@
 
 #pragma once
 
-#include <zacc/compute/core/traits.hpp>
-#include <zacc/compute/core/defs.hpp>
-#include <zacc/util/string_view.hpp>
-#include <zacc/compute/impl/default.hpp>
+namespace zacc::compute {
 
-namespace zacc {namespace compute {
+    // =================================================================================================================
+
+    struct operator_base
+    {
+        constexpr operator_base() = default;
+    };
+
+    // =================================================================================================================
+
+    template<typename = void, typename...>
+    struct select_op : operator_base
+    {};
+
+    template<typename = void, typename...>
+    struct call_op : operator_base
+    {};
+
+    template<typename = void, typename...>
+    struct init_op : operator_base
+    {};
+
+    template<typename = void, typename...>
+    struct assign_op : operator_base
+    {};
 
     // =================================================================================================================
     // ARITHMETIC
     // =================================================================================================================
 
-    template<typename Expr>
-    struct identity : un_expr<quote<identity_impl>, Expr>
-    {
-        using un_expr<quote<identity_impl>, Expr>::un_expr;
-    };
+    struct arithmetic_op : operator_base
+    {};
 
     // =================================================================================================================
 
-    template<typename LExpr, typename RExpr>
-    struct plus : bin_expr<quote<plus_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<plus_impl>, LExpr, RExpr>::bin_expr;
-    };
+    template<typename = void, typename...>
+    struct identity_op : arithmetic_op
+    {};
 
-    // =================================================================================================================
+    template<typename = void, typename...>
+    struct add_op : arithmetic_op
+    {};
 
-    template<typename Expr>
-    struct promote : un_expr<quote<promote_impl>, Expr>
-    {
-        using un_expr<quote<promote_impl>, Expr>::un_expr;
-    };
+    template<typename = void, typename...>
+    struct promote_op : arithmetic_op
+    {};
 
-    // =================================================================================================================
+    template<typename = void, typename...>
+    struct sub_op : arithmetic_op
+    {};
 
-    template<typename LExpr, typename RExpr>
-    struct minus : bin_expr<quote<minus_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<minus_impl>, LExpr, RExpr>::bin_expr;
-    };
+    template<typename = void, typename...>
+    struct mul_op : arithmetic_op
+    {};
 
-    // =================================================================================================================
+    template<typename = void, typename...>
+    struct div_op : arithmetic_op
+    {};
 
-    template<typename LExpr, typename RExpr>
-    struct multiplies : bin_expr<quote<multiplies_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<multiplies_impl>, LExpr, RExpr>::bin_expr;
-    };
+    template<typename = void, typename...>
+    struct mod_op : arithmetic_op
+    {};
 
-    // =================================================================================================================
-
-    template<typename LExpr, typename RExpr>
-    struct divides : bin_expr<quote<divides_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<divides_impl>, LExpr, RExpr>::bin_expr;
-    };
-
-    // =================================================================================================================
-
-    template<typename LExpr, typename RExpr>
-    struct modulus : bin_expr<quote<modulus_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<modulus_impl>, LExpr, RExpr>::bin_expr;
-    };
-
-    // =================================================================================================================
-
-    template<typename Expr>
-    struct negate : un_expr<quote<negate_impl>, Expr>
-    {
-        using un_expr<quote<negate_impl>, Expr>::un_expr;
-    };
-
-    // =================================================================================================================
-
-    /*
-     * TODO:
-     * Fused multiply–add can usually be relied on to give more accurate results.
-     * However, William Kahan has pointed out that it can give problems if used unthinkingly.[3]
-     * If x2 − y2 is evaluated as ((x×x) − y×y) using fused multiply–add, then the result may
-     * be negative even when x = y due to the first multiplication discarding low significance
-     * bits. This could then lead to an error if, for instance, the square root of the result
-     * is then evaluated.
-     */
-    template<typename AExpr, typename BExpr, typename CExpr>
-    struct fmadd : func_expr<quote<fmadd_impl>, AExpr, BExpr, CExpr>
-    {
-        using func_expr<quote<fmadd_impl>, AExpr, BExpr, CExpr>::func_expr;
-    };
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<plus, Left, Right>
-    operator+(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<minus, Left, Right>
-    operator-(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<multiplies, Left, Right>
-    operator*(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<divides, Left, Right>
-    operator/(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<modulus, Left, Right>
-    operator%(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Right>
-    make_expr_t<negate, Right>
-    operator-(const Right& right)
-    {
-        return { right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Right>
-    make_expr_t<promote, Right>
-    operator+(const Right& right)
-    {
-        return { right };
-    }
+    template<typename = void, typename...>
+    struct neg_op : arithmetic_op
+    {};
 
     // =================================================================================================================
     // COMPARISON
     // =================================================================================================================
 
-    template<typename LExpr, typename RExpr>
-    struct equal_to : bin_expr<quote<equal_to_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<equal_to_impl>, LExpr, RExpr>::bin_expr;
-    };
+    struct comparison_op : operator_base
+    {};
 
     // =================================================================================================================
 
-    template<typename LExpr, typename RExpr>
-    struct not_equal_to : bin_expr<quote<not_equal_to_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<not_equal_to_impl>, LExpr, RExpr>::bin_expr;
-    };
+    template<typename = void, typename...>
+    struct equal_to_op : comparison_op
+    {};
 
-    // =================================================================================================================
+    template<typename = void, typename...>
+    struct not_equal_to_op : comparison_op
+    {};
 
-    template<typename LExpr, typename RExpr>
-    struct greater : bin_expr<quote<greater_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<greater_impl>, LExpr, RExpr>::bin_expr;
-    };
+    template<typename = void, typename...>
+    struct greater_op : comparison_op
+    {};
 
-    // =================================================================================================================
+    template<typename = void, typename...>
+    struct less_op : comparison_op
+    {};
 
-    template<typename LExpr, typename RExpr>
-    struct less : bin_expr<quote<less_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<less_impl>, LExpr, RExpr>::bin_expr;
-    };
+    template<typename = void, typename...>
+    struct greater_equal_op : comparison_op
+    {};
 
-    // =================================================================================================================
-
-    template<typename LExpr, typename RExpr>
-    struct greater_equal : bin_expr<quote<greater_equal_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<greater_equal_impl>, LExpr, RExpr>::bin_expr;
-    };
-
-    // =================================================================================================================
-
-    template<typename LExpr, typename RExpr>
-    struct less_equal : bin_expr<quote<less_equal_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<less_equal_impl>, LExpr, RExpr>::bin_expr;
-    };
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<equal_to, Left, Right>
-    operator==(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<not_equal_to, Left, Right>
-    operator!=(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<greater, Left, Right>
-    operator>(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<less, Left, Right>
-    operator<(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<greater_equal, Left, Right>
-    operator>=(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<less_equal, Left, Right>
-    operator<=(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
+    template<typename = void, typename...>
+    struct less_equal_op : comparison_op
+    {};
 
     // =================================================================================================================
     // BOOLEAN
     // =================================================================================================================
 
-    template<typename LExpr, typename RExpr>
-    struct logical_and : bin_expr<quote<logical_and_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<logical_and_impl>, LExpr, RExpr>::bin_expr;
-    };
+    struct bool_op : operator_base
+    {};
 
     // =================================================================================================================
 
-    template<typename LExpr, typename RExpr>
-    struct logical_or : bin_expr<quote<logical_or_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<logical_or_impl>, LExpr, RExpr>::bin_expr;
-    };
+    template<typename = void, typename...>
+    struct bool_and_op : bool_op
+    {};
 
-    // =================================================================================================================
+    template<typename = void, typename...>
+    struct bool_or_op : bool_op
+    {};
 
-    template<typename Expr>
-    struct logical_not : un_expr<quote<logical_not_impl>, Expr>
-    {
-        using un_expr<quote<logical_not_impl>, Expr>::un_expr;
-    };
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<logical_and, Left, Right>
-    operator&&(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<logical_or, Left, Right>
-    operator||(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Right>
-    make_expr_t<logical_not, Right>
-    operator!(const Right& right)
-    {
-        return { right };
-    }
+    template<typename = void, typename...>
+    struct bool_not_op : bool_op
+    {};
 
     // =================================================================================================================
     // BITWISE
     // =================================================================================================================
 
-    template<typename LExpr, typename RExpr>
-    struct bit_and : bin_expr<quote<bit_and_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<bit_and_impl>, LExpr, RExpr>::bin_expr;
-    };
+    struct bitwise_op : operator_base
+    {};
 
     // =================================================================================================================
 
-    template<typename LExpr, typename RExpr>
-    struct bit_or : bin_expr<quote<bit_or_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<bit_or_impl>, LExpr, RExpr>::bin_expr;
-    };
+    template<typename = void, typename...>
+    struct bit_and_op : bitwise_op
+    {};
+
+    template<typename = void, typename...>
+    struct bit_or_op : bitwise_op
+    {};
+
+    template<typename = void, typename...>
+    struct bit_xor_op : bitwise_op
+    {};
+
+    template<typename = void, typename...>
+    struct bit_not_op : bitwise_op
+    {};
+
+    template<typename = void, typename...>
+    struct bit_shl_op : bitwise_op
+    {};
+
+    template<typename = void, typename...>
+    struct bit_shr_op : bitwise_op
+    {};
 
     // =================================================================================================================
-
-    template<typename LExpr, typename RExpr>
-    struct bit_xor : bin_expr<quote<bit_xor_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<bit_xor_impl>, LExpr, RExpr>::bin_expr;
-    };
-
+    // OTHER
     // =================================================================================================================
 
-    template<typename LExpr, typename RExpr>
-    struct bit_shl : bin_expr<quote<bit_shl_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<bit_shl_impl>, LExpr, RExpr>::bin_expr;
-    };
+    template<typename = void, typename...>
+    struct fmadd_op : operator_base
+    {};
+
+    template<typename = void, typename...>
+    struct fmsub_op : operator_base
+    {};
 
     // =================================================================================================================
-
-    template<typename LExpr, typename RExpr>
-    struct bit_shr : bin_expr<quote<bit_shr_impl>, LExpr, RExpr>
-    {
-        using bin_expr<quote<bit_shr_impl>, LExpr, RExpr>::bin_expr;
-    };
-
-    // =================================================================================================================
-
-    template<typename Expr>
-    struct bit_not : un_expr<quote<bit_not_impl>, Expr>
-    {
-        using un_expr<quote<bit_not_impl>, Expr>::un_expr;
-    };
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<bit_and, Left, Right>
-    operator&(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<bit_or, Left, Right>
-    operator|(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<bit_xor, Left, Right>
-    operator^(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<bit_shl, Left, Right>
-    operator<<(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Left, typename Right>
-    make_expr_t<bit_shr, Left, Right>
-    operator>>(const Left& left, const Right& right)
-    {
-        return { left, right };
-    }
-
-    // =================================================================================================================
-
-    template<typename Right>
-    make_expr_t<bit_not, Right>
-    operator~(const Right& right)
-    {
-        return { right };
-    }
-
-    // =================================================================================================================
-
-}}
+}

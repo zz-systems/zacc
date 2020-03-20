@@ -24,44 +24,47 @@
 
 #pragma once
 
-#include <string>
-
-namespace zacc
+namespace zacc::compute
 {
-    struct string_view {
-        const char* str;
-        size_t size;
+    template<typename...>
+    class func;
 
-        constexpr string_view() noexcept
-            : str {nullptr}, size {0}
-        {}
+    template<>
+    class func<>
+        : public tracking<func<>>
+    {};
 
-        // can only construct from a char[] literal
-        template <std::size_t N>
-        constexpr string_view(const char (&s)[N]) noexcept
-            : str(s)
-            , size(N - 1) // not count the trailing nul
-        {}
-
-        constexpr string_view(const char *s, size_t len) noexcept
-            : str(s)
-            , size(len - 1) // not count the trailing nul
-        {}
-
-        operator std::string() const
-        {
-            return std::string(str, size);
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const string_view& str)
-        {
-            os << str.str;
-            return os;
-        }
-    };
-
-    constexpr string_view operator "" sv(const char* str, size_t len) noexcept
+    template<typename... Statements>
+    class func
+        : public func<>
+        , public term<func<Statements...>>
     {
-        return { str, len };
-    }
+    public:
+        using operator_type = call_op<>;
+        using operands_type = std::tuple<Statements...>;
+
+        constexpr explicit func(Statements ...statements) noexcept
+            : func<>::func()
+              , _statements { statements... }
+        {}
+
+        constexpr explicit func(Statements&& ...statements) noexcept
+            : func<>::func()
+            , _statements { std::forward<Statements>(statements)... }
+        {}
+
+        constexpr auto statements()
+        {
+            return _statements;
+        }
+
+        template<auto I>
+        constexpr auto statement()
+        {
+            return std::get<I>(_statements);
+        }
+
+    private:
+        operands_type _statements;
+    };
 }

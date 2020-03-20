@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------------------
 // The MIT License (MIT)
 //
-// Copyright (c) 2015-2019 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
+// Copyright (c) 2015-2018 Sergej Zuyev (sergej.zuyev - at - zz-systems.net)
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -24,44 +24,61 @@
 
 #pragma once
 
-#include <string>
+#include <ostream>
+#include <stack>
 
-namespace zacc
-{
-    struct string_view {
-        const char* str;
-        size_t size;
+namespace zacc { namespace compute {
 
-        constexpr string_view() noexcept
-            : str {nullptr}, size {0}
-        {}
+    // =================================================================================================================
 
-        // can only construct from a char[] literal
-        template <std::size_t N>
-        constexpr string_view(const char (&s)[N]) noexcept
-            : str(s)
-            , size(N - 1) // not count the trailing nul
-        {}
+    template<typename T>
+    struct scope : T
+    {
+        static std::stack<T> _scope;
 
-        constexpr string_view(const char *s, size_t len) noexcept
-            : str(s)
-            , size(len - 1) // not count the trailing nul
-        {}
-
-        operator std::string() const
+        template<typename... Args>
+        constexpr explicit scope(Args&& ...args)
         {
-            return std::string(str, size);
+            _scope.emplace(T::current());
+            T::current() = T(std::forward<Args>(args)...);
         }
 
-        friend std::ostream& operator<<(std::ostream& os, const string_view& str)
+        ~scope()
         {
-            os << str.str;
+            T::current() = _scope.top();
+            _scope.pop();
+        }
+
+        T const& operator*() const
+        {
+            return T::current();
+        }
+
+        T& operator*()
+        {
+            return T::current();
+        }
+        
+        T const* operator->() const
+        {
+            return &T::current();
+        }
+
+        T* operator->()
+        {
+            return &T::current();
+        }
+
+        friend std::ostream& operator<<(std::ostream& os, scope<T> const& self)
+        {
+            os << *self;
+
             return os;
         }
     };
 
-    constexpr string_view operator "" sv(const char* str, size_t len) noexcept
-    {
-        return { str, len };
-    }
-}
+    template<typename T>
+    std::stack<T> scope<T>::_scope {};
+    // =================================================================================================================
+
+}}

@@ -24,44 +24,36 @@
 
 #pragma once
 
-#include <string>
-
-namespace zacc
+namespace zacc::compute
 {
-    struct string_view {
-        const char* str;
-        size_t size;
-
-        constexpr string_view() noexcept
-            : str {nullptr}, size {0}
-        {}
-
-        // can only construct from a char[] literal
-        template <std::size_t N>
-        constexpr string_view(const char (&s)[N]) noexcept
-            : str(s)
-            , size(N - 1) // not count the trailing nul
-        {}
-
-        constexpr string_view(const char *s, size_t len) noexcept
-            : str(s)
-            , size(len - 1) // not count the trailing nul
-        {}
-
-        operator std::string() const
-        {
-            return std::string(str, size);
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const string_view& str)
-        {
-            os << str.str;
-            return os;
-        }
-    };
-
-    constexpr string_view operator "" sv(const char* str, size_t len) noexcept
+    template<typename For>
+    class tracking
     {
-        return { str, len };
-    }
+    public:
+        constexpr tracking(tracking&& other) noexcept = default;
+
+        constexpr tracking(tracking const& other) = default;
+
+        constexpr tracking& operator=(tracking&&) noexcept
+        {
+            return *this;
+        }
+
+        constexpr tracking& operator=(tracking const&)
+        {
+            return *this;
+        }
+
+        [[nodiscard]] constexpr size_t handle() const
+        {
+            return _handle;
+        }
+    protected:
+        tracking() noexcept
+            : _handle { _handles++ }
+        {}
+
+        size_t _handle;
+        static inline size_t _handles = 0;
+    };
 }

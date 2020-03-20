@@ -305,7 +305,7 @@ namespace zacc {
 
 
     template<typename Tuple>
-    using tuple_size = std::tuple_size<std::remove_reference_t<Tuple>>;
+    using tuple_size = std::tuple_size<std::decay_t<Tuple>>;
 
     template<typename Tuple>
     using make_tuple_index = std::make_integer_sequence<size_t, tuple_size<Tuple>::value>;

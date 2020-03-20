@@ -3,6 +3,9 @@ project(zacc.test NONE)
 
 enable_testing()
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED on)
+
 find_package(zacc REQUIRED)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -38,5 +41,5 @@ foreach(category ${test_categories})
     add_dependencies(zacc_test ${test_name})
 endforeach()
 
-add_executable(test_expressions src/expressions.cpp)
+add_executable(test_expressions src/compute.cpp)
 target_link_libraries(test_expressions PRIVATE zacc::zacc)

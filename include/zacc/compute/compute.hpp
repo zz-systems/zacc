@@ -24,44 +24,17 @@
 
 #pragma once
 
-#include <string>
-
-namespace zacc
-{
-    struct string_view {
-        const char* str;
-        size_t size;
-
-        constexpr string_view() noexcept
-            : str {nullptr}, size {0}
-        {}
-
-        // can only construct from a char[] literal
-        template <std::size_t N>
-        constexpr string_view(const char (&s)[N]) noexcept
-            : str(s)
-            , size(N - 1) // not count the trailing nul
-        {}
-
-        constexpr string_view(const char *s, size_t len) noexcept
-            : str(s)
-            , size(len - 1) // not count the trailing nul
-        {}
-
-        operator std::string() const
-        {
-            return std::string(str, size);
-        }
-
-        friend std::ostream& operator<<(std::ostream& os, const string_view& str)
-        {
-            os << str.str;
-            return os;
-        }
-    };
-
-    constexpr string_view operator "" sv(const char* str, size_t len) noexcept
-    {
-        return { str, len };
-    }
-}
+#include <zacc/compute/core/container.hpp>
+#include <zacc/compute/core/tracking.hpp>
+#include <zacc/compute/core/lazy.hpp>
+#include <zacc/compute/core/recorder.hpp>
+#include <zacc/compute/core/operators.hpp>
+#include <zacc/compute/core/term.hpp>
+#include <zacc/compute/core/literal.hpp>
+#include <zacc/compute/core/expression.hpp>
+#include <zacc/compute/core/var.hpp>
+#include <zacc/compute/core/func.hpp>
+#include <zacc/compute/core/condition.hpp>
+#include <zacc/compute/eval/scalar.hpp>
+#include <zacc/compute/core/eval.hpp>
+#include <zacc/compute/core/print.hpp>
